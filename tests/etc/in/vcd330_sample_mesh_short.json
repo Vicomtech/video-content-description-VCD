@@ -1,0 +1,4148 @@
+{
+	"VCD" : {
+		"annotator" : "",
+		"frameInterval" : {
+			"frameEnd" : 3,
+			"frameStart" : 0
+		},
+		"frames" : [{
+				"frame" : 0,
+				"objects" : [{
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Ego Selected"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 11,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 12,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 13,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 14,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 15,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 16,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 17,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 18,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 19,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 20,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 21,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 22,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 23,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 24,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 25,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 26,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 27,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 28,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 29,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 0
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : true
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [4]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-14.199999999999999, 5.4900000000000002, 0, -13.33, 5.4400000000000004, 0, -13.119999999999999, 10.359999999999999, 0, -14.029999999999999, 10.4, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Crosshatch",
+						"uid" : 1
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Disabled"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 2
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 3
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : true
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [4]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-15.789999999999999, 6.21, 0, -14.44, 6.2000000000000002, 0, -14.380000000000001, 7.9299999999999997, 0, -15.73, 7.9400000000000004, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Image",
+						"uid" : 4
+					}
+				]
+			}, {
+				"frame" : 1,
+				"objects" : [{
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Ego Selected"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 11,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 12,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 13,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 14,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 15,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 16,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 17,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 18,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 19,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 20,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 21,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 22,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 23,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 24,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 25,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 26,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 27,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 28,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 29,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 0
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : false
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [5]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-14.199999999999999, 5.4900000000000002, 0, -13.33, 5.4400000000000004, 0, -13.119999999999999, 10.359999999999999, 0, -14.029999999999999, 10.4, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Crosshatch",
+						"uid" : 1
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Disabled"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 2
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 3
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : false
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [5]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-15.789999999999999, 6.21, 0, -14.44, 6.2000000000000002, 0, -14.380000000000001, 7.9299999999999997, 0, -15.73, 7.9400000000000004, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Image",
+						"uid" : 4
+					}
+				]
+			}, {
+				"frame" : 2,
+				"objects" : [{
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Ego Selected"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 11,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 12,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 13,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 14,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 15,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 16,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 17,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 18,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 19,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 20,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 21,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 22,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 23,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 24,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 25,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 26,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 27,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 28,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 29,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 0
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : false
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [5]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-14.199999999999999, 5.4900000000000002, 0, -13.33, 5.4400000000000004, 0, -13.119999999999999, 10.359999999999999, 0, -14.029999999999999, 10.4, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Crosshatch",
+						"uid" : 1
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Disabled"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 2
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 3
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : false
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [5]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-15.789999999999999, 6.21, 0, -14.44, 6.2000000000000002, 0, -14.380000000000001, 7.9299999999999997, 0, -15.73, 7.9400000000000004, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Image",
+						"uid" : 4
+					}
+				]
+			}, {
+				"frame" : 3,
+				"objects" : [{
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Ego Selected"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 11,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 12,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 13,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 14,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 15,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 16,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 17,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 18,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 19,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 20,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 21,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 22,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 23,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 24,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 25,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 26,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 27,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 28,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 29,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 0
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : false
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [5]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-14.199999999999999, 5.4900000000000002, 0, -13.33, 5.4400000000000004, 0, -13.119999999999999, 10.359999999999999, 0, -14.029999999999999, 10.4, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Crosshatch",
+						"uid" : 1
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Disabled"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 2
+					}, {
+						"name" : "park_mesh_psmd",
+						"objectDataContainer" : {
+							"mesh" : [{
+									"areaReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Vehicle"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_park_slot_content",
+														"val" : "Empty"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Slot",
+											"referenceType" : "lineReference"
+										}
+									],
+									"lineReference" : [{
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 0,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 1,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 2,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 3,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 4,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 5,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 6,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 7,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 8,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "White"
+													}
+												]
+											},
+											"id" : 9,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}, {
+											"attributes" : {
+												"text" : [{
+														"name" : "PM_line_colour",
+														"val" : "not set"
+													}
+												]
+											},
+											"id" : 10,
+											"name" : "Edge",
+											"referenceType" : "point3D"
+										}
+									],
+									"name" : ""
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"uid" : 3
+					}, {
+						"name" : "ignore_area_psmd",
+						"objectDataContainer" : {
+							"poly3D" : [{
+									"attributes" : {
+										"bool" : [{
+												"name" : "locked",
+												"val" : false
+											}
+										],
+										"num" : [{
+												"name" : "frameStatus",
+												"val" : [5]
+											}
+										]
+									},
+									"closed" : true,
+									"name" : "",
+									"val" : [-15.789999999999999, 6.21, 0, -14.44, 6.2000000000000002, 0, -14.380000000000001, 7.9299999999999997, 0, -15.73, 7.9400000000000004, 0]
+								}
+							]
+						},
+						"ontologyUID" : 0,
+						"type" : "Image",
+						"uid" : 4
+					}
+				]
+			}
+		],
+		"name" : "VCD__",
+		"staticAttributes" : {
+			"contexts" : [{
+					"name" : "PM_Country",
+					"ontologyUID" : 0,
+					"type" : "Rest of Europe",
+					"uid" : 0
+				}, {
+					"name" : "PM_Scene_setup",
+					"ontologyUID" : 0,
+					"type" : "false",
+					"uid" : 1
+				}, {
+					"name" : "PM_Road_surface",
+					"ontologyUID" : 0,
+					"type" : "Tarmac/Asphalt",
+					"uid" : 2
+				}, {
+					"name" : "PM_Lighting_conditions",
+					"ontologyUID" : 0,
+					"type" : "Day",
+					"uid" : 3
+				}, {
+					"name" : "PM_Environment",
+					"ontologyUID" : 0,
+					"type" : "Clouds",
+					"uid" : 4
+				}, {
+					"name" : "PM_Upload_Line_Ending",
+					"ontologyUID" : 0,
+					"uid" : 5
+				}, {
+					"name" : "PM_Special_Scene",
+					"ontologyUID" : 0,
+					"uid" : 6
+				}
+			],
+			"objects" : [{
+					"name" : "park_mesh_psmd",
+					"objectDataContainer" : {
+						"mesh" : [{
+								"areaReference" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [0, 19, 20, 21]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [9, 10, 11, 28, 29]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 2,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [4, 18, 21, 22]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 3,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [3, 17, 22, 23]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 4,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [1, 2, 16, 23, 24]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 5,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [5, 15, 24, 25]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 6,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [6, 14, 25, 26]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 7,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [7, 13, 26, 27]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 8,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [8, 12, 27, 28]
+									}
+								],
+								"lineReference" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [1, 4]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [9, 21]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 2,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [10, 21]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 3,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [5, 9]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 4,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [4, 5]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 5,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [10, 12]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 6,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [12, 13]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 7,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [13, 14]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 8,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [14, 15]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 9,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [2, 20]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 10,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [15, 20]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 11,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [3, 16]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 12,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [16, 17]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 13,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [17, 18]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 14,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [18, 19]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 15,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [11, 19]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 16,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [8, 11]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 17,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [7, 8]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 18,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [6, 7]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 19,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [0, 6]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 20,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [0, 1]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 21,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [4, 6]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 22,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [5, 7]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 23,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [8, 9]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 24,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [10, 11]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 25,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [12, 19]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 26,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [13, 18]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 27,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [14, 17]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 28,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [15, 16]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 29,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [2, 3]
+									}
+								],
+								"name" : "",
+								"point3D" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Vertex",
+										"val" : [8.5500000000000007, 8.7300000000000004, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Vertex",
+										"val" : [8.2100000000000009, 3.9700000000000002, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "L Shape"
+												}
+											]
+										},
+										"id" : 2,
+										"name" : "Vertex",
+										"val" : [-13.26, 5.4400000000000004, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 3,
+										"name" : "Vertex",
+										"val" : [-13.08, 10.390000000000001, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 4,
+										"name" : "Vertex",
+										"val" : [5.6900000000000004, 4.2400000000000002, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 5,
+										"name" : "Vertex",
+										"val" : [3.3300000000000001, 4.4400000000000004, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 6,
+										"name" : "Vertex",
+										"val" : [6.1100000000000003, 8.9900000000000002, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 7,
+										"name" : "Vertex",
+										"val" : [3.73, 9.0500000000000007, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 8,
+										"name" : "Vertex",
+										"val" : [1.3200000000000001, 9.3000000000000007, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 9,
+										"name" : "Vertex",
+										"val" : [1.02, 4.6200000000000001, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "L Shape"
+												}
+											]
+										},
+										"id" : 10,
+										"name" : "Vertex",
+										"val" : [-1.3799999999999999, 4.7199999999999998, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 11,
+										"name" : "Vertex",
+										"val" : [-1.0700000000000001, 9.5099999999999998, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 12,
+										"name" : "Vertex",
+										"val" : [-3.7799999999999998, 4.8399999999999999, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 13,
+										"name" : "Vertex",
+										"val" : [-6.1500000000000004, 5.0099999999999998, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 14,
+										"name" : "Vertex",
+										"val" : [-8.5299999999999994, 5.1500000000000004, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 15,
+										"name" : "Vertex",
+										"val" : [-10.869999999999999, 5.3200000000000003, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 16,
+										"name" : "Vertex",
+										"val" : [-10.710000000000001, 10.25, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 17,
+										"name" : "Vertex",
+										"val" : [-8.2799999999999994, 10.07, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 18,
+										"name" : "Vertex",
+										"val" : [-5.8600000000000003, 9.8900000000000006, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 19,
+										"name" : "Vertex",
+										"val" : [-3.46, 9.7200000000000006, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 20,
+										"name" : "Vertex",
+										"val" : [-12.91, 5.4199999999999999, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 21,
+										"name" : "Vertex",
+										"val" : [-0.93999999999999995, 4.7000000000000002, 0]
+									}
+								]
+							}
+						]
+					},
+					"ontologyUID" : 0,
+					"uid" : 0
+				}, {
+					"name" : "ignore_area_psmd",
+					"ontologyUID" : 0,
+					"type" : "Crosshatch",
+					"uid" : 1
+				}, {
+					"name" : "park_mesh_psmd",
+					"objectDataContainer" : {
+						"mesh" : [{
+								"areaReference" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [0, 1, 2, 3, 4]
+									}
+								],
+								"lineReference" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [0, 4]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [1, 4]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 2,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [2, 3]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 3,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [0, 3]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 4,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [1, 2]
+									}
+								],
+								"name" : "",
+								"point3D" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "L Shape"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Vertex",
+										"val" : [-14.25, 5.5, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Vertex",
+										"val" : [-16.550000000000001, 5.6200000000000001, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 2,
+										"name" : "Vertex",
+										"val" : [-16.449999999999999, 10.43, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 3,
+										"name" : "Vertex",
+										"val" : [-14.07, 10.35, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 4,
+										"name" : "Vertex",
+										"val" : [-14.51, 5.5099999999999998, 0]
+									}
+								]
+							}
+						]
+					},
+					"ontologyUID" : 0,
+					"uid" : 2
+				}, {
+					"name" : "park_mesh_psmd",
+					"objectDataContainer" : {
+						"mesh" : [{
+								"areaReference" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [1, 3, 4, 9, 10]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_park_slot_type",
+													"val" : "Perpendicular"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Slot",
+										"referenceType" : "lineReference",
+										"val" : [0, 2, 5, 6, 8, 9]
+									}
+								],
+								"lineReference" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [1, 2]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [1, 5]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 2,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [7, 8]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Open"
+												}
+											]
+										},
+										"id" : 3,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [4, 9]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 4,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [0, 9]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 5,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [0, 8]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 6,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [3, 7]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 7,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [3, 6]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 8,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [2, 3]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Single Solid"
+												}
+											]
+										},
+										"id" : 9,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [0, 1]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_marking_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 10,
+										"name" : "Edge",
+										"referenceType" : "point3D",
+										"val" : [4, 5]
+									}
+								],
+								"name" : "",
+								"point3D" : [{
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "T Shape"
+												}
+											]
+										},
+										"id" : 0,
+										"name" : "Vertex",
+										"val" : [-13.82, -0.63, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 1,
+										"name" : "Vertex",
+										"val" : [-13.949999999999999, -5.5800000000000001, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 2,
+										"name" : "Vertex",
+										"val" : [-16.280000000000001, -5.5700000000000003, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "T Shape"
+												}
+											]
+										},
+										"id" : 3,
+										"name" : "Vertex",
+										"val" : [-16.309999999999999, -0.63, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 4,
+										"name" : "Vertex",
+										"val" : [-11.380000000000001, -0.68000000000000005, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "Kerb"
+												}
+											]
+										},
+										"id" : 5,
+										"name" : "Vertex",
+										"val" : [-11.43, -5.6399999999999997, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 6,
+										"name" : "Vertex",
+										"val" : [-16.59, -0.64000000000000001, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 7,
+										"name" : "Vertex",
+										"val" : [-16.02, -0.64000000000000001, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 8,
+										"name" : "Vertex",
+										"val" : [-14.08, -0.63, 0]
+									}, {
+										"attributes" : {
+											"text" : [{
+													"name" : "PM_line_ending_type",
+													"val" : "I Shape"
+												}
+											]
+										},
+										"id" : 9,
+										"name" : "Vertex",
+										"val" : [-13.550000000000001, -0.63, 0]
+									}
+								]
+							}
+						]
+					},
+					"ontologyUID" : 0,
+					"uid" : 3
+				}, {
+					"name" : "ignore_area_psmd",
+					"ontologyUID" : 0,
+					"type" : "Image",
+					"uid" : 4
+				}
+			]
+		}
+	}
+}

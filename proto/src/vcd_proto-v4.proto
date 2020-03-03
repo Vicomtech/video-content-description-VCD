@@ -1,0 +1,230 @@
+syntax = "proto3";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/empty.proto";
+
+package VCD;
+
+message VCD {
+    message action {
+        repeated frame_interval frame_intervals = 1;
+        string name = 2;
+        int32 ontology_uid = 3;
+        string stream = 4;
+        string type = 5;
+    }
+    message area_reference {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        repeated float val = 4;
+    }
+    message attributes {
+        repeated boolean boolean = 1;
+        repeated num num = 2;
+        repeated text text = 3;
+        repeated vec vec = 4;
+    }
+    message bbox {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        repeated float val = 4;
+    }
+    message binary {
+        attributes attributes = 1;
+        string data_type = 2;
+        string encoding = 3;
+        string name = 4;
+        string stream = 5;
+        string val = 6;
+    }
+    message boolean {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        bool val = 4;
+    }
+    message context {
+        repeated frame_interval frame_intervals = 1;
+        string name = 2;
+        int32 ontology_uid = 3;
+        string stream = 4;
+        string type = 5;
+    }
+    message cuboid {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        repeated float val = 4;
+    }
+    message event {
+        repeated frame_interval frame_intervals = 1;
+        string name = 2;
+        int32 ontology_uid = 3;
+        string stream = 4;
+        string type = 5;
+    }
+    message frame_properties {
+        map<string, stream> streams = 3;
+        google.protobuf.Struct properties = 2;
+    }
+    message frame {
+        map<int32, google.protobuf.Empty> actions = 1;
+        map<int32, google.protobuf.Empty> contexts = 2;
+        map<int32, google.protobuf.Empty> events = 3;
+        google.protobuf.Struct frame_properties = 4;
+        message Objects {
+            object_data object_data = 1;
+        }
+        map<int32, Objects> objects = 5;
+        map<int32, google.protobuf.Empty> relations = 6;
+    }
+    message frame_interval {
+        int32 frame_start = 1;
+        int32 frame_end = 2;
+    }
+    message image {
+        attributes attributes = 1;
+        string encoding = 2;
+        string mime_type = 3;
+        string name = 4;
+        string stream = 5;
+        string val = 6;
+    }
+    message line_reference {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        repeated float number = 4;
+    }
+    message mat {
+        attributes attributes = 1;
+        float channels = 2;
+        string data_type = 3;
+        float height = 4;
+        string name = 5;
+        string stream = 6;
+        repeated float val = 7;
+        float width = 8;
+    }
+    message mesh {
+        map<int32, area_reference> area_reference = 1;
+        map<int32, line_reference> line_reference = 2;
+        string name = 3;
+        map<int32, point3d> point3d = 4;
+        string stream = 5;
+    }
+    message metadata {
+        string annotator = 1;
+        string comment = 2;
+        map<string, stream> streams = 3;
+        google.protobuf.Struct properties = 4;
+    }
+    message num {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        float val = 4;
+    }
+    message object {
+        repeated frame_interval frame_intervals = 1;
+        string name = 2;
+        object_data object_data = 3;
+        int32 ontology_uid = 4;
+        string stream = 5;
+        string type = 6;
+    }
+    message object_data {
+        repeated bbox bbox = 1;
+        repeated binary binary = 2;
+        repeated boolean boolean = 3;
+        repeated cuboid cuboid = 4;
+        repeated image image = 5;
+        repeated mat mat = 6;
+        repeated num num = 7;
+        repeated point2d point2d = 8;
+        repeated point3d point3d = 9;
+        repeated poly2d poly2d = 10;
+        repeated poly3d poly3d = 11;
+        repeated text text = 12;
+        repeated vec vec = 13;
+        repeated area_reference area_reference = 14;
+        repeated line_reference line_reference = 15;
+        repeated mesh mesh = 16;
+    }
+    message point2d {
+        attributes attributes = 1;
+        string name = 3;
+        string stream = 4;
+        repeated float val = 5;
+    }
+    message point3d {
+        attributes attributes = 1;
+        string name = 3;
+        string stream = 4;
+        repeated float val = 5;
+    }
+
+    message poly2d {
+        attributes attributes = 1;
+        bool closed = 2;
+        string mode = 3;
+        string name = 4;
+        string stream = 5;
+        repeated google.protobuf.Value val = 6;
+        repeated int32 hierarchy = 7;
+    }
+    message poly3d {
+        attributes attributes = 1;
+        bool closed = 2;
+        string name = 3;
+        string stream = 4;
+        repeated float val = 5;
+    }
+    message rdf_agent {
+        string type = 1;
+        int32 uid = 2;
+    }
+    message relation {
+        repeated frame_interval frame_intervals = 1;
+        string name = 2;
+        int32 ontology_uid = 3;
+        repeated rdf_agent rdf_objects = 4;
+        repeated rdf_agent rdf_subjects = 5;
+        string stream = 6;
+        string type = 7;
+    }
+    message stream {
+        string description = 1;
+        google.protobuf.Struct stream_properties = 3;
+        string type = 4;
+        string uri = 5;
+    }
+    message text {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        string val = 4;
+    }
+    message Vcd {
+        map<int32, action> actions = 1;
+        map<int32, context> contexts = 2;
+        map<int32, event> events = 3;
+        repeated frame_interval frame_intervals = 4;
+        map<int32, frame> frames = 5;
+        metadata metadata = 6;
+        string name = 7;
+        map<int32, object> objects = 8;
+        map<int32, string> ontologies = 9;
+        map<int32, relation> relations = 10;
+        string version = 11;
+    }
+    message vec {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        repeated float val = 4;
+    }
+    Vcd vcd = 1;
+}

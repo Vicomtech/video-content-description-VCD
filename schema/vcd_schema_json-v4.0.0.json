@@ -1,0 +1,994 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "action": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "integer"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "area_reference": {
+            "properties": {
+                "additionalProperties": false,
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "attributes": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "bbox": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "binary": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "data_type": {
+                    "type": "string"
+                },
+                "encoding": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "encoding",
+                "data_type"
+            ],
+            "type": "object"
+        },
+        "boolean": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "context": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "integer"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "cuboid": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 9,
+                    "minItems": 9,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "event": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "integer"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "frame": {
+            "additionalProperties": false,
+            "properties": {
+                "actions": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {}
+                    },
+                    "type": "object"
+                },
+                "contexts": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {}
+                    },
+                    "type": "object"
+                },
+                "events": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {}
+                    },
+                    "type": "object"
+                },
+                "frame_properties": {
+                    "additionalProperties": false,
+                    "properties": {
+                        "properties": {
+                            "additionalProperties": false,
+                            "patternProperties": {
+                                "^": {}
+                            },
+                            "type": "object"
+                        },
+                        "streams": {
+                            "additionalProperties": false,
+                            "patternProperties": {
+                                "^": {
+                                    "$ref": "#/definitions/stream"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "objects": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/object_data"
+                        }
+                    },
+                    "type": "object"
+                },
+                "relations": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {}
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "frame_interval": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_end": {
+                    "type": "integer"
+                },
+                "frame_start": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "image": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "encoding": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "mime_type",
+                "encoding"
+            ],
+            "type": "object"
+        },
+        "line_reference": {
+            "properties": {
+                "additionalProperties": false,
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2,
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "mat": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "channels": {
+                    "type": "number"
+                },
+                "data_type": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "item": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                },
+                "width": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "channels",
+                "width",
+                "height",
+                "data_type"
+            ],
+            "type": "object"
+        },
+        "mesh": {
+            "properties": {
+                "additionalProperties": false,
+                "area_reference": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/area_reference"
+                        }
+                    },
+                    "type": "object"
+                },
+                "line_reference": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/line_reference"
+                        }
+                    },
+                    "type": "object"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "point3d": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/point3d"
+                        }
+                    },
+                    "type": "object"
+                },
+                "stream": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "metadata": {
+            "additionalProperties": false,
+            "properties": {
+                "annotator": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "properties": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^": {}
+                    },
+                    "type": "object"
+                },
+                "streams": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^": {
+                            "$ref": "#/definitions/stream"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "num": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "object": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "object_data": {
+                    "$ref": "#/definitions/object_data"
+                },
+                "ontology_uid": {
+                    "type": "integer"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "object_data": {
+            "properties": {
+                "area_reference": {
+                    "items": {
+                        "$ref": "#/definitions/area_reference"
+                    },
+                    "type": "array"
+                },
+                "bbox": {
+                    "items": {
+                        "$ref": "#/definitions/bbox"
+                    },
+                    "type": "array"
+                },
+                "binary": {
+                    "items": {
+                        "$ref": "#/definitions/binary"
+                    },
+                    "type": "array"
+                },
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "cuboid": {
+                    "items": {
+                        "$ref": "#/definitions/cuboid"
+                    },
+                    "type": "array"
+                },
+                "image": {
+                    "items": {
+                        "$ref": "#/definitions/image"
+                    },
+                    "type": "array"
+                },
+                "line_reference": {
+                    "items": {
+                        "$ref": "#/definitions/line_reference"
+                    },
+                    "type": "array"
+                },
+                "mat": {
+                    "items": {
+                        "$ref": "#/definitions/mat"
+                    },
+                    "type": "array"
+                },
+                "mesh": {
+                    "items": {
+                        "$ref": "#/definitions/mesh"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "point2d": {
+                    "items": {
+                        "$ref": "#/definitions/point2d"
+                    },
+                    "type": "array"
+                },
+                "point3d": {
+                    "items": {
+                        "$ref": "#/definitions/point3d"
+                    },
+                    "type": "array"
+                },
+                "poly2d": {
+                    "items": {
+                        "$ref": "#/definitions/poly2d"
+                    },
+                    "type": "array"
+                },
+                "poly3d": {
+                    "items": {
+                        "$ref": "#/definitions/poly3d"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "point2d": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "point3d": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 3,
+                    "minItems": 3,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "poly2d": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "closed": {
+                    "type": "boolean"
+                },
+                "hierarchy": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4,
+                    "type": "array"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "items": {
+                                "type": "number"
+                            },
+                            "type": "array"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "mode",
+                "closed"
+            ],
+            "type": "object"
+        },
+        "poly3d": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "closed": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "closed"
+            ],
+            "type": "object"
+        },
+        "rdf_agent": {
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "relation": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "integer"
+                },
+                "rdf_objects": {
+                    "item": {
+                        "$ref": "#/definitions/rdf_agent"
+                    },
+                    "type": "array"
+                },
+                "rdf_subjects": {
+                    "item": {
+                        "$ref": "#/definitions/rdf_agent"
+                    },
+                    "type": "array"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "rdf_objects",
+                "rdf_subjects"
+            ],
+            "type": "object"
+        },
+        "stream": {
+            "additionalProperties": false,
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "stream_properties": {
+                    "$ref": "#/definitions/stream_properties"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "stream_properties": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^": {}
+            },
+            "type": "object"
+        },
+        "text": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "vcd": {
+            "additionalProperties": false,
+            "properties": {
+                "actions": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/action"
+                        }
+                    },
+                    "type": "object"
+                },
+                "contexts": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/context"
+                        }
+                    },
+                    "type": "object"
+                },
+                "events": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/event"
+                        }
+                    },
+                    "type": "object"
+                },
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "frames": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/frame"
+                        }
+                    },
+                    "type": "object"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/metadata"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "objects": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "ontologies": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "relations": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/relation"
+                        }
+                    },
+                    "type": "object"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "version"
+            ],
+            "type": "object"
+        },
+        "vec": {
+            "additionalProperties": false,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "stream": {
+                    "type": "string"
+                },
+                "val": {
+                    "item": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "vcd": {
+            "$ref": "#/definitions/vcd"
+        }
+    },
+    "required": [
+        "vcd"
+    ],
+    "type": "object"
+}
