@@ -16,6 +16,8 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 
 VCD can be use cloning this repository. And adding the files to a location the Python environment recognizes.
 
+A pip install will be added soon.
+
 ## Usage
 
 VCD Python API exposes functions to load, create, manipulate and serialize VCD content. Samples and use cases can be found in [test folder](./tests/).
@@ -107,14 +109,24 @@ VCD has evolved as follows:
     * Google's Protocol Buffer serialization
     * Object data 'num' for single numbers, 'vec' for arrays of numbers
 
+
 ## Credits
 
-Vicomtech created VCD in 2013, and since, has maintained VCD syntax and libraries. Main developers:
+Vicomtech created VCD in 2013, and since, has maintained VCD syntax and libraries. Developments of VCD were supported and funded by the European Commission (EC) Horizon 2020 programme (project [Cloud-LSVA] (http://cloud-lsva.eu), grant agreement 688099).
+
+VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autónoma del País Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
+
+
+Main developers:
 * Marcos Nieto - mnieto@vicomtech.org
 * Orti Senderos - osenderos@vicomtech.org
 
 Contributors:
 Thanks to Peter Leskovsky, Mikel García, Gonzalo Piérola, Stefano Masneri, Lorena García and many others in Vicomtech.
+
+## Related projects
+
+VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART. 
 
 ## License
 
