@@ -17,7 +17,7 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 Using pip:
 
 ```
-pip install vcd 4.0.0
+pip install vcd
 ```
 
 VCD can be also used cloning this repository. And adding the files to a location the Python environment recognizes.

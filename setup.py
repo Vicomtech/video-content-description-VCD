@@ -12,15 +12,20 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Vicomtech/video-content-description-VCD",
+	project_urls={
+		"VCD project": "https://vcd.vicomtech.org"
+	},
     packages=setuptools.find_packages(),
     install_requires=[
-        'json-schema',
-        'protobuf'
+        'jsonschema>=3.2',
+        'protobuf',
+		'numpy'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
+		"Topic :: Scientific/Engineering :: Artificial Intelligence"
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
 )
