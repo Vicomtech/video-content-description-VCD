@@ -15,10 +15,11 @@ VCD is distributed under MIT License. See LICENSE.
 import copy
 import json
 import warnings
-from pathlib import Path
 from jsonschema import validate
 from enum import Enum
+
 import vcd.utils as utils
+import vcd.schema as schema
 
 
 class ElementType(Enum):
@@ -84,8 +85,8 @@ class VCD:
             if validation:
                 json_file = open(file_name)
                 temp_data = json.load(json_file)  # Open without converting strings to integers
-                schema_file = open("../schema/vcd_schema_json-v4.0.0.json", "r")
-                self.schema = json.load(schema_file)
+
+                self.schema = schema.vcd_schema
                 if 'version' in temp_data['vcd']:
                     if temp_data['vcd']['version'] == "4.0.0":
                         validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
@@ -95,7 +96,7 @@ class VCD:
                         warnings.warn("ERROR: Can't read input file: unsupported VCD format")
                 else:
                     warnings.warn("ERROR: Can't read input file: this is not a valid VCD JSON file")
-                schema_file.close()
+
                 json_file.close()
 
             # Proceed normally to open file and load the dictionary, converting strings into integers
@@ -118,10 +119,7 @@ class VCD:
             self.data['vcd']['frame_intervals'] = []
 
             # Schema information
-            base_path = Path(__file__).parents[1]
-            schema_file = open(base_path/"schema/vcd_schema_json-v4.0.0.json", "r")
-            self.schema = json.load(schema_file)
-            schema_file.close()
+            self.schema = schema.vcd_schema
 
             # Additional auxiliary structures
             self.__lastUID = dict()
@@ -697,9 +695,7 @@ class VCD:
     def validate(self, stringified_vcd):
         temp = json.loads(stringified_vcd)
         if not hasattr(self, 'schema'):
-            schema_file = open("../schema/vcd_schema_json-v4.0.0.json", "r")
-            self.schema = json.load(schema_file)
-            schema_file.close()
+            self.schema = schema.vcd_schema
         validate(instance=temp, schema=self.schema)
 
     def stringify(self, pretty=True, validation=True):

@@ -5,7 +5,7 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The [syntax](./schema/vcd_schema_json-v4.0.0.json), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see ./schema/vcd_schema_json-v4.0.0.json), as a JSON Schema file, contains the full description of the VCD structure.
 
 
 ## Details
@@ -14,13 +14,17 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 
 ## Install
 
-VCD can be use cloning this repository. And adding the files to a location the Python environment recognizes.
+Using pip:
 
-A pip install will be added soon.
+```
+pip install vcd
+```
+
+VCD can be also used cloning this repository. And adding the files to a location the Python environment recognizes.
 
 ## Usage
 
-VCD Python API exposes functions to load, create, manipulate and serialize VCD content. Samples and use cases can be found in [test folder](./tests/).
+VCD Python API exposes functions to load, create, manipulate and serialize VCD content. Samples and use cases can be found in the test folder( see ./tests/).
 
 As a basic example, VCD can be used in a Python script as follows:
 
@@ -89,19 +93,19 @@ Main changes at VCD 4.0.0 from VCD 3.3.0 are:
  
 VCD has evolved as follows:
 
-* VCD 1.0 – 2013
-* VCD 2.0 – 2014
+* VCD 1.0 (2013)
+* VCD 2.0 (2014)
     * Integrated into Viulib library (module viulib_evaluation)
     * Element-wise and Frame-wise modes
     * XML and JSON serialization via ASL library
-* VCD 3.0 – 2018
+* VCD 3.0 (2018)
     * Independent C++ library
     * Element-wise and Frame-wise modes
     * Multi-sensor support
     * JSON serialization via ASL library
     * Pixel-wise loss-less compression modes
     * Comparison routines
-* VCD 4.0 – 2019
+* VCD 4.0 (2019)
     * Python library
     * Element and Frame-wise mode simultaneously
     * Multi-sensor and multi-interval
@@ -109,26 +113,41 @@ VCD has evolved as follows:
     * Google's Protocol Buffer serialization
     * Object data 'num' for single numbers, 'vec' for arrays of numbers
 
+## Related projects
+
+VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART.
 
 ## Credits
 
 Vicomtech created VCD in 2013, and since, has maintained VCD syntax and libraries. Developments of VCD were supported and funded by the European Commission (EC) Horizon 2020 programme (project [Cloud-LSVA] (http://cloud-lsva.eu), grant agreement 688099).
 
-VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autónoma del País Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
-
+VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autonoma del Pais Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
 
 Main developers:
 * Marcos Nieto - mnieto@vicomtech.org
 * Orti Senderos - osenderos@vicomtech.org
 
 Contributors:
-Thanks to Peter Leskovsky, Mikel García, Gonzalo Piérola, Stefano Masneri, Lorena García and many others in Vicomtech.
-
-## Related projects
-
-VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART. 
+Thanks to Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia and many others in Vicomtech. 
 
 ## License
 
-See [LICENSE](./LICENSE)
+Copyright (c) 2020 Vicomtech
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
