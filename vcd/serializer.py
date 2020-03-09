@@ -12,16 +12,15 @@ VCD is distributed under MIT License. See LICENSE.
 """
 
 
-
 import sys
 sys.path.insert(0, "..")
-from proto.build.vcd_proto_v4_pb2 import VCD
+import vcd.proto as proto
 from google.protobuf.json_format import Parse
 from google.protobuf.json_format import MessageToJson
 
 
 def json2proto_bin(vcd_json_file_in, vcd_proto_file_out):
-    vcd_message = VCD()
+    vcd_message = proto.VCD()
     with open(vcd_json_file_in, "r") as f:
         Parse(f.read(), vcd_message)
 
@@ -30,7 +29,7 @@ def json2proto_bin(vcd_json_file_in, vcd_proto_file_out):
 
 
 def proto_bin2json(vcd_proto_file_in, vcd_json_file_out):
-    vcd_message = VCD()
+    vcd_message = proto.VCD()
 
     with open(vcd_proto_file_in, "rb") as f:
         vcd_message.ParseFromString(f.read())

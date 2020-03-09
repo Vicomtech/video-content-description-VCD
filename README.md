@@ -89,19 +89,19 @@ Main changes at VCD 4.0.0 from VCD 3.3.0 are:
  
 VCD has evolved as follows:
 
-* VCD 1.0 – 2013
-* VCD 2.0 – 2014
+* VCD 1.0 (2013)
+* VCD 2.0 (2014)
     * Integrated into Viulib library (module viulib_evaluation)
     * Element-wise and Frame-wise modes
     * XML and JSON serialization via ASL library
-* VCD 3.0 – 2018
+* VCD 3.0 (2018)
     * Independent C++ library
     * Element-wise and Frame-wise modes
     * Multi-sensor support
     * JSON serialization via ASL library
     * Pixel-wise loss-less compression modes
     * Comparison routines
-* VCD 4.0 – 2019
+* VCD 4.0 (2019)
     * Python library
     * Element and Frame-wise mode simultaneously
     * Multi-sensor and multi-interval
@@ -114,7 +114,7 @@ VCD has evolved as follows:
 
 Vicomtech created VCD in 2013, and since, has maintained VCD syntax and libraries. Developments of VCD were supported and funded by the European Commission (EC) Horizon 2020 programme (project [Cloud-LSVA] (http://cloud-lsva.eu), grant agreement 688099).
 
-VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autónoma del País Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
+VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autonoma del Pais Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
 
 
 Main developers:
@@ -122,7 +122,7 @@ Main developers:
 * Orti Senderos - osenderos@vicomtech.org
 
 Contributors:
-Thanks to Peter Leskovsky, Mikel García, Gonzalo Piérola, Stefano Masneri, Lorena García and many others in Vicomtech.
+Thanks to Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia and many others in Vicomtech.
 
 ## Related projects
 
