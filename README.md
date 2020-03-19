@@ -14,7 +14,7 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 
 ## Install
 
-Using pip:
+Using pip (Python >3.8)):
 
 ```
 pip install vcd
@@ -33,10 +33,10 @@ import vcd.core as core
 import vcd.types as types
 
 # Create a VCD instance
-myVCD = core.vcd()
+myVCD = core.VCD()
 
 # Add Objects, Actions, etc.
-uid = myVCD.add_object(name='someName', type='#Pedestrian')
+uid = myVCD.add_object(name='someName', semantic_type='#Pedestrian')
 
 ...
 
