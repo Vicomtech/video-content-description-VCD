@@ -18,6 +18,7 @@ sys.path.insert(0, "../..")
 
 import vcd.core as core
 import vcd.types as types
+import vcd.serializer as serializer
 
 
 def convert_town_center_to_VCD4():
@@ -68,7 +69,11 @@ def convert_town_center_to_VCD4():
                 if headValid:
                     vcd.add_object_data(personNumber, head, frameNumber)
 
-    vcd.save('./etc/vcd400_towncenter.json', False)
+    vcd_json_file_name = "./etc/vcd400_towncenter.json"
+    vcd.save(vcd_json_file_name, False)
+
+    vcd_proto_file_name = "./etc/vcd400_proto_towncenter.txt"
+    serializer.json2proto_bin(vcd_json_file_name, vcd_proto_file_name)
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
