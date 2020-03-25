@@ -23,6 +23,9 @@ import vcd.types as types
 import vcd.serializer as serializer
 
 def float_2dec(val):
+    '''
+    This function is useful to print float into JSON with only 2 decimals
+    '''
     return float((int(100*val))/100)
 
 def convert_KITTI_object_to_VCD4():
@@ -59,11 +62,22 @@ def convert_KITTI_object_to_VCD4():
                 rotY = float_2dec(float(row[14]))
 
                 bounding_box = types.bbox(name="", val=(left, top, width, height))
-                cuboid = types.cuboid(name="", val=(locX, locY, locZ, dimHeight, dimWidth, dimLength, 0, rotY, 0))
+                # Note KITTI uses (h, w, l, x, y, z, ry) for cuboids, in camera coordinates (X-to-right, Y-to-bottom, Z-to-front)
+                # while in VCD (x,y,z, rx, ry, rz, sx, sy, sz) is defined as a dextrogire system
+
+                # In addition, cameras are 1.65 m height wrt ground
+                # and cameras are 1.03 meters wrt to rear axle
+                cam_wrt_rear_axle_z = 1.03
+                cam_height = 1.65
+                cuboid = types.cuboid(name="",
+                                      val=(float_2dec(locZ + cam_wrt_rear_axle_z), float_2dec(-locX),
+                                           float_2dec(-locY + cam_height), 0, 0, float_2dec(rotY),
+                                           float_2dec(dimWidth), float_2dec(dimLength), float_2dec(dimHeight)))
 
                 uid = vcd.add_object(name="", semantic_type=semantic_class)
                 vcd.add_object_data(uid, bounding_box, frameNum)
-                vcd.add_object_data(uid, cuboid, frameNum)
+                if semantic_class != "DontCare":
+                    vcd.add_object_data(uid, cuboid, frameNum)
                 vcd.add_object_data(uid, types.num(name="truncated", val=truncated), frameNum)
                 vcd.add_object_data(uid, types.num(name="occluded", val=occluded), frameNum)
                 vcd.add_object_data(uid, types.num(name="alpha", val=alpha), frameNum)
@@ -107,13 +121,24 @@ def convert_KITTI_tracking_to_VCD4():
                 rotY = float_2dec(float(row[16]))
 
                 bounding_box = types.bbox(name="", val=(left, top, width, height))
-                cuboid = types.cuboid(name="", val=(locX, locY, locZ, dimHeight, dimWidth, dimLength, 0, rotY, 0))
+                # Note KITTI uses (h, w, l, x, y, z, ry) for cuboids, in camera coordinates (X-to-right, Y-to-bottom, Z-to-front)
+                # while in VCD (x,y,z, rx, ry, rz, sx, sy, sz) is defined as a dextrogire system
+
+                # In addition, cameras are 1.65 m height wrt ground
+                # and cameras are 1.03 meters wrt to rear axle
+                cam_wrt_rear_axle_z = 1.03
+                cam_height = 1.65
+                cuboid = types.cuboid(name="",
+                                      val=(float_2dec(locZ + cam_wrt_rear_axle_z), float_2dec(-locX),
+                                           float_2dec(-locY + cam_height), 0, 0, float_2dec(rotY),
+                                           float_2dec(dimWidth), float_2dec(dimLength), float_2dec(dimHeight)))
 
                 if not vcd.has(core.ElementType.object, trackID):
                     vcd.add_object(name="", semantic_type=semantic_class, uid=trackID)
 
                 vcd.add_object_data(trackID, bounding_box, frameNum)
-                vcd.add_object_data(trackID, cuboid, frameNum)
+                if semantic_class != "DontCare":
+                    vcd.add_object_data(trackID, cuboid, frameNum)
                 vcd.add_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
                 vcd.add_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
                 vcd.add_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
@@ -127,6 +152,6 @@ def convert_KITTI_tracking_to_VCD4():
         count += 1
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
-    convert_KITTI_object_to_VCD4()
     convert_KITTI_tracking_to_VCD4()
+    convert_KITTI_object_to_VCD4()
 
