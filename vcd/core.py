@@ -707,13 +707,17 @@ class VCD:
             self.validate(stringified_vcd)
         return stringified_vcd
 
-    def stringify_frame(self, frame_num, dynamic_only=True):
+    def stringify_frame(self, frame_num, dynamic_only=True, pretty=False):
         if frame_num not in self.data['vcd']['frames']:
             warnings.warn("WARNING: Trying to stringify a non-existing frame.")
             return ''
 
         if dynamic_only:
-            return json.dumps(self.data['vcd']['frames'][frame_num])
+            if pretty:
+                return json.dumps(self.data['vcd']['frames'][frame_num], indent=4, sort_keys=True)
+            else:
+                return json.dumps(self.data['vcd']['frames'][frame_num])
+
         else:
             # Need to compose dynamic and static information into a new structure
             # Copy the dynamic info first
@@ -728,8 +732,10 @@ class VCD:
                         )
                         # Remove frameInterval entry
                         del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
-
-            return json.dumps(frame_static_dynamic)
+            if pretty:
+                return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
+            else:
+                return json.dumps(frame_static_dynamic)
 
     def update_object(self, uid, frame_value):
         # This function is only needed if no add_object_data calls are used, but the object needs to be kept alive
