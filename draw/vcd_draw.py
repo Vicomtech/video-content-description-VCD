@@ -16,6 +16,7 @@ import sys
 sys.path.insert(0, "..")
 import screeninfo
 import cv2 as cv
+import numpy as np
 from vcd import core
 from vcd import draw
 
@@ -32,54 +33,70 @@ def draw_kitti_tracking(num):
     screen = screeninfo.get_monitors()[0]
 
     # Get video
-    video_file_name = "../../../../data/kitti/tracking/" + str(num).zfill(4) + ".avi"
+    video_file_name = "../../../../data/kitti/tracking/" + str(num).zfill(4) + ".mp4"
     video_cap = cv.VideoCapture(video_file_name)
+    video_width = int(video_cap.get(cv.CAP_PROP_FRAME_WIDTH))
+    video_height = int(video_cap.get(cv.CAP_PROP_FRAME_HEIGHT))
 
-    # Prepare Top View image
-    cv.namedWindow('Top view', cv.WINDOW_NORMAL)
-    cv.moveWindow('Top view', screen.x + screen.width//8, screen.y + screen.height // 8)
-    cv.resizeWindow('Top view', (int(3 * screen.width / 4), int(3 * screen.height / 4)))
-
-    #cv.namedWindow('Camera', cv.WINDOW_NORMAL)
-    #cv.moveWindow('Camera', screen.x + screen.width // 8, screen.y + screen.height // 8)
-    #cv.resizeWindow('Camera', (int(3 * screen.width / 4), int(3 * screen.height / 4)))
+    cv.namedWindow('KITTI Tracking', cv.WINDOW_NORMAL)
+    cv.moveWindow('KITTI Tracking', screen.x + screen.width // 8, screen.y + screen.height // 8)
+    cv.resizeWindow('KITTI Tracking', (int(3 * screen.width / 4), int(3 * screen.height / 4)))
 
     # Prepare color map
     colorMap = {'Car': (0, 0, 255), 'Van': (255, 0, 0), 'Truck': (127, 127, 0),
                  'Pedestrian': (0, 255, 0), 'Person_sitting': (0, 127, 127),
                  'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (255, 255, 255)}
     imageParams = draw.Image.Params(_colorMap=colorMap)
-    topviewParams = draw.TopView.Params(_colorMap=colorMap)
+    ar = video_width/(video_height*2)
+    rangeX = (-5.0, 55.0)
+    rangeY = (-((rangeX[1] - rangeX[0])/ar)/2, ((rangeX[1] - rangeX[0])/ar)/2)
+    topviewParams = draw.TopView.Params(_colorMap=colorMap,
+                                        _imgSize=(video_width, video_height*2),
+                                        _rangeX=rangeX,
+                                        _rangeY=rangeY)
+
+    # Video record
+    record_video = True
+    if record_video:
+        video_writer = cv.VideoWriter("kitti_tracking_vcd_" + str(num).zfill(4) + '.mp4',
+                                      cv.VideoWriter_fourcc(*'mp4v'), 30.0, (video_width + 400, video_height*3))
 
     # Loop over video
     f = 0
     while(True):
         # Capture frame
         ret, img = video_cap.read()
-        if ret != True:
+        if ret is not True:
             break
-
-        rows, cols, depth = img.shape
 
         # Camera
         drawerCamera.draw(img, f, _params=imageParams)
-        cv.imshow('Camera', img)
 
         # Top View
         topView = drawerTopView.draw(f, _params=topviewParams)
-        cv.imshow('Top view', topView)
+        drawerTopView.drawEgoCar(topView, size=(4.5, 1.8, 1.5), wheelbase=2.71)  # (sx, sy, sz) = (l, w, h)
 
         # VCD text viewer
-        textImg = textDrawer.draw(vcd.stringify_frame(f, pretty=False))
-        cv.imshow('VCD Frame', textImg)
-        cv.waitKey(0)
+        textImg = textDrawer.draw(vcd.stringify_frame(f, pretty=False), cols=400, rows=video_height*3)
+
+        # Stack
+        stack1 = np.vstack((img, topView))
+        outImg = np.hstack((stack1, textImg))
+        cv.imshow('KITTI Tracking', outImg)
+        cv.waitKey(1)
+
+        if record_video:
+            video_writer.write(outImg)
 
         # Update frame num
         f += 1
 
+    video_cap.release()
+    if record_video:
+        video_writer.release()
     cv.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    draw_kitti_tracking(2)
+    draw_kitti_tracking(1)
 

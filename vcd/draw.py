@@ -39,7 +39,7 @@ class TopView:
         For Vehicle cases, we adopt ISO8855: origin at rear axle at ground, x-to-front, y-to-left
         '''
 
-        def __init__(self, _imgSize=None, _rangeX=None, _colorMap=None):
+        def __init__(self, _imgSize=None, _rangeX=None, _rangeY=None, _colorMap=None):
             self.imgSize = (1920, 1080)  # width, height
             if _imgSize is not None:
                 assert (isinstance(_imgSize, tuple))
@@ -53,15 +53,18 @@ class TopView:
                 self.rangeX = _rangeX
 
             self.rangeY = (self.rangeX[0] / self.ar, self.rangeX[1] / self.ar)
+            if _rangeY is not None:
+                assert (isinstance(_rangeX, tuple))
+                self.rangeY = _rangeY
 
             self.scaleX = self.imgSize[0] / (self.rangeX[1] - self.rangeX[0])
             self.scaleY = -self.imgSize[1] / (self.rangeY[1] - self.rangeY[0])
 
             self.offsetX = round(-self.rangeX[0] * self.scaleX)
-            self.offsetY = round(self.rangeY[0] * self.scaleY)
+            self.offsetY = round(-self.rangeY[1] * self.scaleY)
 
-            self.stepX = 5.0
-            self.stepY = 5.0
+            self.stepX = 1.0
+            self.stepY = 1.0
 
             self.gridLinesThickness = 1
             self.backgroundColor = 255
@@ -85,12 +88,17 @@ class TopView:
             self.params = _params
 
         # Base
-        self.topView = np.zeros((_params.imgSize[1], _params.imgSize[0], 3), np.uint8) # Needs to be here
+        self.topView = np.zeros((_params.imgSize[1], _params.imgSize[0], 3), np.uint8)  # Needs to be here
         self.drawTopViewBase(self.topView, self.params)
 
         # Draw objects
         self.drawObjectsAtFrame(self.topView, self.vcd, uid, frameNum, _drawTrajectory, _params)
         return self.topView
+
+    def drawEgoCar(self, _topView, size, wheelbase):
+        cuboid = [wheelbase/2, 0, 0, 0, 0, 0, size[0], size[1], size[2]]
+        self.drawCuboidTopView(_topView, cuboid, "", (0, 0, 0), 3)
+        self.drawCuboidTopView(_topView, cuboid, "", (127, 127, 127), 2)
 
     def drawTopViewBase(self, _topView, _params):
 
@@ -134,7 +142,7 @@ class TopView:
 
     def drawCuboidTopView(self, _img, _cuboid, _class, _color, _thick, _ID=""):
         assert(isinstance(_cuboid, list))
-        assert(len(_cuboid) == 9) # (X, Y, Z, RX, RY, RZ, SX, SY, SZ)
+        assert(len(_cuboid) == 9)  # (X, Y, Z, RX, RY, RZ, SX, SY, SZ)
 
         locX = _cuboid[0]
         locY = _cuboid[1]
@@ -220,7 +228,7 @@ class TopView:
                                                         cv.line(_img, prev_center[name], center_pix, (0,0,0),
                                                                 1, cv.LINE_AA)
 
-                                                    cv.circle(_img, center_pix, 3,
+                                                    cv.circle(_img, center_pix, 2,
                                                                   self.params.colorMap[object_class], -1)
 
                                                     prev_center[name] = center_pix
@@ -292,17 +300,18 @@ class TextDrawer:
 
     def draw(self, _str, cols=600, rows=1200):
         img = np.zeros((rows, cols, 3), np.uint8)
-        #text_rows = _str.split("\n")
         count = 0
 
         # Split into pieces
-        chars_per_line = 60
+        chars_per_line = cols//8  # fits well with 0.4 fontsize
         text_rows = [_str[i:i + chars_per_line] for i in range(0, len(_str), chars_per_line)]
 
         margin = 20
         jump = 20
         for text_row in text_rows:
-            cv.putText(img, text_row, (margin , margin  + count*jump), cv.FONT_HERSHEY_DUPLEX, 0.5, (255, 255, 255), 1, cv.LINE_AA)
+            cv.putText(img, text_row,
+                       (margin, margin + count*jump),
+                       cv.FONT_HERSHEY_DUPLEX, 0.4, (255, 255, 255), 1, cv.LINE_AA)
             count += 1
 
         return img
