@@ -1,5 +1,5 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
@@ -14,6 +14,113 @@ VCD is distributed under MIT License. See LICENSE.
 from builtins import bool
 from enum import Enum
 import vcd.poly2d as poly
+
+
+class Intrinsics():
+    def __init__(self, width_px, height_px):
+        self.data = dict()
+
+
+class IntrinsicsPinhole(Intrinsics):
+    def __init__(self, width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items):
+        Intrinsics.__init__(self, width_px, height_px)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data['intrinsics_pinhole'] = dict()
+        self.data['intrinsics_pinhole']['width_px'] = width_px
+        self.data['intrinsics_pinhole']['height_px'] = height_px
+        assert (isinstance(camera_matrix_3x4, list))
+
+        assert(len(camera_matrix_3x4) == 12)
+        self.data['intrinsics_pinhole']['camera_matrix_3x4'] = camera_matrix_3x4
+
+        if distortion_coeffs_1xN is None:
+            distortion_coeffs_1xN = []
+        else:
+            assert (isinstance(distortion_coeffs_1xN, list))
+            num_coeffs = len(distortion_coeffs_1xN)
+            assert(5 <= num_coeffs <= 14)
+        self.data['intrinsics_pinhole']['distortion_coeffs_1xN'] = distortion_coeffs_1xN
+
+        if additional_items is not None:
+            self.data['intrinsics_pinhole'].update(additional_items)
+
+
+
+class IntrinsicsFisheye():
+    def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
+                 radius_x, radius_y, **additional_items):
+        Intrinsics.__init__(self, width_px, height_px)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data['intrinsics_fisheye'] = dict()
+        self.data['intrinsics_fisheye']['width_px'] = width_px
+        self.data['intrinsics_fisheye']['height_px'] = height_px
+        assert (isinstance(lens_coeffs_1x4, list))
+        assert (isinstance(center_x, float))
+        assert (isinstance(center_y, float))
+        assert (isinstance(radius_x, float))
+        assert (isinstance(radius_y, float))
+        assert (isinstance(fov_deg, float))
+
+        self.data['intrinsics_fisheye']['center_x'] = center_x
+        self.data['intrinsics_fisheye']['center_y'] = center_y
+        self.data['intrinsics_fisheye']['radius_x'] = radius_x
+        self.data['intrinsics_fisheye']['radius_y'] = radius_y
+        self.data['intrinsics_fisheye']['fov_deg'] = fov_deg
+
+        assert (len(lens_coeffs_1x4) == 4)
+        self.data['intrinsics_fisheye']['lens_coeffs_1x4'] = lens_coeffs_1x4
+
+        if additional_items is not None:
+            self.data['intrinsics_fisheye'].update(additional_items)
+
+
+class Extrinsics():
+    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
+        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
+        assert (len(pose_scs_wrt_lcs_4x4) == 16)
+        self.data = dict()
+        self.data['extrinsics'] = dict()
+        self.data['extrinsics']['pose_scs_wrt_lcs_4x4'] = pose_scs_wrt_lcs_4x4
+
+        if additional_items is not None:
+            self.data['extrinsics'].update(additional_items)
+
+
+class StreamSync():
+    def __init__(self, frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items):
+        self.data = dict()
+        self.data['sync'] = dict()
+        self.frame_vcd = frame_vcd  # This is the master frame at vcd (if it is None, frame_shift specifies constant shift
+
+        if frame_shift is not None:
+            assert(isinstance(frame_shift, int))
+            assert(frame_stream is None and timestamp_ISO8601 is None and frame_vcd is None)
+            self.data['sync']['frame_shift'] = frame_shift
+        else:
+            assert (isinstance(frame_vcd, int))
+            if frame_stream is not None:
+                assert(isinstance(frame_stream, int))
+                self.data['sync']['frame_stream'] = frame_stream
+            if timestamp_ISO8601 is not None:
+                assert(isinstance(timestamp_ISO8601, str))
+                self.data['sync']['timestamp'] = timestamp_ISO8601
+        if additional_items is not None:
+            self.data['sync'].update(additional_items)
+
+
+class Odometry():
+    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
+        self.data = dict()
+        self.data['odometry'] = dict()
+        assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
+        assert (len(pose_lcs_wrt_wcs_4x4) == 16)
+
+        self.data['odometry']['pose_lcs_wrt_wcs_4x4'] = pose_lcs_wrt_wcs_4x4
+
+        if additional_properties is not None:
+            self.data['odometry'].update(additional_properties)
 
 
 class ObjectDataType(Enum):

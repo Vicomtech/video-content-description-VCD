@@ -1,5 +1,5 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
@@ -215,55 +215,6 @@ class TestBasic(unittest.TestCase):
         if not os.path.isfile('./etc/test_add_metadata.json'):
             vcd.save('./etc/test_add_metadata.json')
 
-    # Timestamps & Metadata
-    def test_timestamps_metadata(self):
-        vcd = core.VCD()
-
-        # 1.- Create two cameras
-        vcd.add_stream('Camera1', './somePath/someVideo1.mp4', 'Description 1', core.SensorType.video)
-        vcd.add_stream('Camera2', './somePath/someVideo2.mp4', 'Description 2', core.SensorType.video)
-        vcd.add_stream_properties('Camera1', {'resolution': (640, 480)})
-        vcd.add_stream_properties('Camera1', {'intrinsics': (1000.0, 0.0, 500.0, 0.0, 1000.0, 500.0, 0.0, 0.0, 1.0)})
-
-        # print(vcd.stringify(True))
-
-        # 2.- Add timestamps and other properties for frames
-        frame_num = 0  # this is the master index
-        vcd.add_frame_properties(
-            frame_num, {'timestamp': '2007-11-03T13:18:05', 'chunktime': '2007-11-03T13:18:05.000', 'someOtherNum': 34}
-        )
-
-        # Stream properties can also be defined for specific frame_nums, for instance frame syncing info
-        vcd.add_stream_properties('Camera1', {'frame_idx': 0}, frame_num=frame_num)
-        # So, frame_num = 0 in VCD corresponds to 'Camera1's frame_idx 0
-        # (meaning Camera1 is aligned and synced with the master frame sequence)
-        vcd.add_stream_properties('Camera2', {'frame_idx': 2}, frame_num=frame_num)
-
-        frame_num = 1
-        # Frame properties can be added one by one as well
-        vcd.add_frame_properties(frame_num, {'timestamp': '2007-11-03T13:18:25'})
-        vcd.add_frame_properties(frame_num, {'chunktime': '2007-11-03T13:18:25'})
-        # Additional info can be added to the frame_sync, such as the timestamp of a particular other stream
-        vcd.add_stream_properties('Camera1', {'frame_idx': 1}, frame_num=frame_num)
-        vcd.add_stream_properties(
-            'Camera2', {'frame_idx': 3, 'timestamp': '2007-11-03T13:18:25.003'}, frame_num=frame_num
-        )
-
-        # Add some data with stream info
-        some_uid = vcd.add_object('anyname', '#Anytype')
-        vcd.add_object_data(some_uid, types.bbox('bbox1', (0, 0, 10, 10), stream='Camera1'), (0, 0))
-        vcd.add_object_data(some_uid, types.bbox('bbox2', (0, 0, 30, 40), stream='Camera2'), (0, 1))
-
-        # Stream info also can be added to Elements
-        vcd.add_object("someOtherObject", '#Anytype', stream='Camera1')
-        vcd.add_action("someOtherAction", '#Anytype', stream='Camera2')
-
-        if not os.path.isfile('./etc/test_timestamp_metadata.json'):
-            vcd.save('./etc/test_timestamp_metadata.json', True)
-
-        vcd_read = core.VCD('./etc/test_timestamp_metadata.json', validation=True)
-        self.assertEqual(vcd_read.stringify(), vcd.stringify())
-
     # Ontology links
     def test_ontology_list(self):
         vcd = core.VCD()
@@ -423,7 +374,7 @@ class TestBasic(unittest.TestCase):
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
-    print("Running test_basic.py...")
+    print("Running " + os.path.basename(__file__))
     unittest.main()
 
 

@@ -1,5 +1,5 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
@@ -23,8 +23,6 @@ import vcd.utils as utils
 import numpy as np
 import cv2 as cv
 import warnings
-
-
 
 
 class TopView:
@@ -93,6 +91,12 @@ class TopView:
 
         # Draw objects
         self.drawObjectsAtFrame(self.topView, self.vcd, uid, frameNum, _drawTrajectory, _params)
+
+        # Draw frame info
+        cv.putText(self.topView, "Frame: " + str(frameNum),
+                   (_params.imgSize[0] - 100, _params.imgSize[1] - 20),
+                   cv.FONT_HERSHEY_PLAIN, 1.0, (0,0,0), 1, cv.LINE_AA)
+
         return self.topView
 
     def drawEgoCar(self, _topView, size, wheelbase):
@@ -234,7 +238,8 @@ class TopView:
                                                     prev_center[name] = center_pix
 
     def size2Pixel(self, _size):
-        return (int(round(_size[0] * self.params.scaleX)), int(round(_size[1] * self.params.scaleY)))
+        return (int(round(_size[0] * abs(self.params.scaleX))),
+                int(round(_size[1] * abs(self.params.scaleY))))
 
     def point2Pixel(self, _point):
         pixel = (int(round(_point[0]*self.params.scaleX + self.params.offsetX)),

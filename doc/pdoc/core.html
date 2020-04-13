@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>vcd.core API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.0.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.1.0 …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
 <h1 class="title">Module <code>vcd.core</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.0.0</p>
+<p>VCD (Video Content Description) library v4.1.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
@@ -31,7 +31,7 @@ VCD is distributed under MIT License. See LICENSE.</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
@@ -47,10 +47,12 @@ VCD is distributed under MIT License. See LICENSE.
 import copy
 import json
 import warnings
-from pathlib import Path
 from jsonschema import validate
 from enum import Enum
+
+import vcd.types as types
 import vcd.utils as utils
+import vcd.schema as schema
 
 
 class ElementType(Enum):
@@ -64,13 +66,14 @@ class ElementType(Enum):
     relation = 5
 
 
-class SensorType(Enum):
+class StreamType(Enum):
     &#34;&#34;&#34;
-    Type of sensor.
+    Type of stream (sensor).
     &#34;&#34;&#34;
-    video = 1
-    pointCloud = 2
-    other = 3
+    camera = 1
+    lidar = 2
+    radar = 3
+    other = 4
 
 
 class RDF(Enum):
@@ -116,8 +119,8 @@ class VCD:
             if validation:
                 json_file = open(file_name)
                 temp_data = json.load(json_file)  # Open without converting strings to integers
-                schema_file = open(&#34;../schema/vcd_schema_json-v4.0.0.json&#34;, &#34;r&#34;)
-                self.schema = json.load(schema_file)
+
+                self.schema = schema.vcd_schema
                 if &#39;version&#39; in temp_data[&#39;vcd&#39;]:
                     if temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.0.0&#34;:
                         validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
@@ -127,7 +130,7 @@ class VCD:
                         warnings.warn(&#34;ERROR: Can&#39;t read input file: unsupported VCD format&#34;)
                 else:
                     warnings.warn(&#34;ERROR: Can&#39;t read input file: this is not a valid VCD JSON file&#34;)
-                schema_file.close()
+
                 json_file.close()
 
             # Proceed normally to open file and load the dictionary, converting strings into integers
@@ -150,10 +153,7 @@ class VCD:
             self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;] = []
 
             # Schema information
-            base_path = Path(__file__).parents[1]
-            schema_file = open(base_path/&#34;schema/vcd_schema_json-v4.0.0.json&#34;, &#34;r&#34;)
-            self.schema = json.load(schema_file)
-            schema_file.close()
+            self.schema = schema.vcd_schema
 
             # Additional auxiliary structures
             self.__lastUID = dict()
@@ -669,7 +669,8 @@ class VCD:
         self.data[&#39;vcd&#39;][&#39;ontologies&#39;][length] = ontology_name
         return length
 
-    def add_stream(self, stream_name, uri, description, sensor_type):
+
+    def add_stream(self, stream_name, uri, description, stream_type):
         assert(isinstance(stream_name, str))
         assert(isinstance(uri, str))
         assert(isinstance(description, str))
@@ -677,28 +678,61 @@ class VCD:
         self.data[&#39;vcd&#39;].setdefault(&#39;metadata&#39;, dict())
         self.data[&#39;vcd&#39;][&#39;metadata&#39;].setdefault(&#39;streams&#39;, dict())
         self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;].setdefault(stream_name, dict())
-        if isinstance(sensor_type, SensorType):
+        if isinstance(stream_type, StreamType):
             self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name] = {
-                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: sensor_type.name
+                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: stream_type.name
             }
-        elif isinstance(sensor_type, str):
+        elif isinstance(stream_type, str):
             self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name] = {
-                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: sensor_type
+                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: stream_type
             }
 
-    def add_frame_properties(self, frame_num, properties):
-        assert(isinstance(properties, dict))
+    def add_frame_properties(self, frame_num, timestamp=None, properties=None):
         self.__add_frame(frame_num)  # this function internally checks if the frame already exists
         self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num].setdefault(&#39;frame_properties&#39;, dict())
-        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].setdefault(&#39;properties&#39;, dict())
-        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;][&#39;properties&#39;].update(properties)
+        if timestamp is not None:
+            assert (isinstance(timestamp, str))
+            self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;][&#39;timestamp&#39;] = timestamp
 
-    def add_stream_properties(self, stream_name, properties, frame_num=None):
+        if properties is not None:
+            assert (isinstance(properties, dict))
+            self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].update(properties)
+
+    def add_odometry(self, frame_num, odometry):
+        assert(isinstance(frame_num, int))
+        assert(isinstance(odometry, types.Odometry))
+
+        self.__add_frame(frame_num)  # this function internally checks if the frame already exists
+        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num].setdefault(&#39;frame_properties&#39;, dict())
+        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].update(odometry.data)
+
+    def add_stream_properties(self, stream_name, properties=None, intrinsics=None, extrinsics=None, stream_sync=None):
+        has_arguments = False
+        if intrinsics is not None:
+            assert(isinstance(intrinsics, types.Intrinsics))
+            has_arguments = True
+        if extrinsics is not None:
+            assert(isinstance(extrinsics, types.Extrinsics))
+            has_arguments = True
+        if properties is not None:
+            assert(isinstance(properties, dict))  # &#34;Properties of Stream should be defined as a dictionary&#34;
+            has_arguments = True
+        if stream_sync is not None:
+            assert(isinstance(stream_sync, types.StreamSync))
+            has_arguments = True
+            if stream_sync.frame_vcd is not None:
+                frame_num = stream_sync.frame_vcd
+            else:
+                frame_num = None
+        else:
+            frame_num = None
+
+        if not has_arguments:
+            return
+
         # This function can be used to add stream properties. If frame_num is defined, the information is embedded
         # inside &#39;frame_properties&#39; of the specified frame. Otherwise, the information is embedded into
         # &#39;stream_properties&#39; inside &#39;metadata&#39;.
-
-        assert isinstance(properties, dict), &#34;Properties of Stream should be defined as a dictionary&#34;
 
         # Find if this stream is declared
         if &#39;metadata&#39; in self.data[&#39;vcd&#39;]:
@@ -707,7 +741,14 @@ class VCD:
                     if frame_num is None:
                         # This information is static
                         self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name].setdefault(&#39;stream_properties&#39;, dict())
-                        self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if properties is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if intrinsics is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(intrinsics.data)
+                        if extrinsics is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(extrinsics.data)
+                        if stream_sync is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(stream_sync.data)
                     else:
                         # This is information of the stream for a specific frame
                         self.__add_frame(frame_num)  # to add the frame in case it does not exist
@@ -716,9 +757,17 @@ class VCD:
                         frame[&#39;frame_properties&#39;].setdefault(&#39;streams&#39;, dict())
                         frame[&#39;frame_properties&#39;][&#39;streams&#39;].setdefault(stream_name, dict())
                         frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name].setdefault(&#39;stream_properties&#39;, dict())
-                        frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if properties is not None:
+                            frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if intrinsics is not None:
+                            frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(intrinsics.data)
+                        if extrinsics is not None:
+                            frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(extrinsics.data)
+
+                        frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(stream_sync.data)
                 else:
-                    warnings.warn(&#39;WARNING: Trying to add frame sync about non-existing stream&#39;)
+                    warnings.warn(&#39;WARNING: Trying to add stream properties for non-existing stream. &#39;
+                                  &#39;Use add_stream first.&#39;)
 
     def save(self, file_name, pretty=False):
         string = self.stringify(pretty)
@@ -729,9 +778,7 @@ class VCD:
     def validate(self, stringified_vcd):
         temp = json.loads(stringified_vcd)
         if not hasattr(self, &#39;schema&#39;):
-            schema_file = open(&#34;../schema/vcd_schema_json-v4.0.0.json&#34;, &#34;r&#34;)
-            self.schema = json.load(schema_file)
-            schema_file.close()
+            self.schema = schema.vcd_schema
         validate(instance=temp, schema=self.schema)
 
     def stringify(self, pretty=True, validation=True):
@@ -743,13 +790,17 @@ class VCD:
             self.validate(stringified_vcd)
         return stringified_vcd
 
-    def stringify_frame(self, frame_num, dynamic_only=True):
+    def stringify_frame(self, frame_num, dynamic_only=True, pretty=False):
         if frame_num not in self.data[&#39;vcd&#39;][&#39;frames&#39;]:
             warnings.warn(&#34;WARNING: Trying to stringify a non-existing frame.&#34;)
             return &#39;&#39;
 
         if dynamic_only:
-            return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num])
+            if pretty:
+                return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num], indent=4, sort_keys=True)
+            else:
+                return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num])
+
         else:
             # Need to compose dynamic and static information into a new structure
             # Copy the dynamic info first
@@ -764,8 +815,10 @@ class VCD:
                         )
                         # Remove frameInterval entry
                         del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
-
-            return json.dumps(frame_static_dynamic)
+            if pretty:
+                return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
+            else:
+                return json.dumps(frame_static_dynamic)
 
     def update_object(self, uid, frame_value):
         # This function is only needed if no add_object_data calls are used, but the object needs to be kept alive
@@ -1228,23 +1281,24 @@ class VCD:
 </dd>
 </dl>
 </dd>
-<dt id="vcd.core.SensorType"><code class="flex name class">
-<span>class <span class="ident">SensorType</span></span>
+<dt id="vcd.core.StreamType"><code class="flex name class">
+<span>class <span class="ident">StreamType</span></span>
 <span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Type of sensor.</p></section>
+<section class="desc"><p>Type of stream (sensor).</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class SensorType(Enum):
+<pre><code class="python">class StreamType(Enum):
     &#34;&#34;&#34;
-    Type of sensor.
+    Type of stream (sensor).
     &#34;&#34;&#34;
-    video = 1
-    pointCloud = 2
-    other = 3</code></pre>
+    camera = 1
+    lidar = 2
+    radar = 3
+    other = 4</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1252,17 +1306,21 @@ class VCD:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="vcd.core.SensorType.other"><code class="name">var <span class="ident">other</span></code></dt>
+<dt id="vcd.core.StreamType.camera"><code class="name">var <span class="ident">camera</span></code></dt>
 <dd>
-<section class="desc"><p>Type of sensor.</p></section>
+<section class="desc"><p>Type of stream (sensor).</p></section>
 </dd>
-<dt id="vcd.core.SensorType.pointCloud"><code class="name">var <span class="ident">pointCloud</span></code></dt>
+<dt id="vcd.core.StreamType.lidar"><code class="name">var <span class="ident">lidar</span></code></dt>
 <dd>
-<section class="desc"><p>Type of sensor.</p></section>
+<section class="desc"><p>Type of stream (sensor).</p></section>
 </dd>
-<dt id="vcd.core.SensorType.video"><code class="name">var <span class="ident">video</span></code></dt>
+<dt id="vcd.core.StreamType.other"><code class="name">var <span class="ident">other</span></code></dt>
 <dd>
-<section class="desc"><p>Type of sensor.</p></section>
+<section class="desc"><p>Type of stream (sensor).</p></section>
+</dd>
+<dt id="vcd.core.StreamType.radar"><code class="name">var <span class="ident">radar</span></code></dt>
+<dd>
+<section class="desc"><p>Type of stream (sensor).</p></section>
 </dd>
 </dl>
 </dd>
@@ -1314,8 +1372,8 @@ data into JSON strings.</p></section>
             if validation:
                 json_file = open(file_name)
                 temp_data = json.load(json_file)  # Open without converting strings to integers
-                schema_file = open(&#34;../schema/vcd_schema_json-v4.0.0.json&#34;, &#34;r&#34;)
-                self.schema = json.load(schema_file)
+
+                self.schema = schema.vcd_schema
                 if &#39;version&#39; in temp_data[&#39;vcd&#39;]:
                     if temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.0.0&#34;:
                         validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
@@ -1325,7 +1383,7 @@ data into JSON strings.</p></section>
                         warnings.warn(&#34;ERROR: Can&#39;t read input file: unsupported VCD format&#34;)
                 else:
                     warnings.warn(&#34;ERROR: Can&#39;t read input file: this is not a valid VCD JSON file&#34;)
-                schema_file.close()
+
                 json_file.close()
 
             # Proceed normally to open file and load the dictionary, converting strings into integers
@@ -1348,10 +1406,7 @@ data into JSON strings.</p></section>
             self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;] = []
 
             # Schema information
-            base_path = Path(__file__).parents[1]
-            schema_file = open(base_path/&#34;schema/vcd_schema_json-v4.0.0.json&#34;, &#34;r&#34;)
-            self.schema = json.load(schema_file)
-            schema_file.close()
+            self.schema = schema.vcd_schema
 
             # Additional auxiliary structures
             self.__lastUID = dict()
@@ -1867,7 +1922,8 @@ data into JSON strings.</p></section>
         self.data[&#39;vcd&#39;][&#39;ontologies&#39;][length] = ontology_name
         return length
 
-    def add_stream(self, stream_name, uri, description, sensor_type):
+
+    def add_stream(self, stream_name, uri, description, stream_type):
         assert(isinstance(stream_name, str))
         assert(isinstance(uri, str))
         assert(isinstance(description, str))
@@ -1875,28 +1931,61 @@ data into JSON strings.</p></section>
         self.data[&#39;vcd&#39;].setdefault(&#39;metadata&#39;, dict())
         self.data[&#39;vcd&#39;][&#39;metadata&#39;].setdefault(&#39;streams&#39;, dict())
         self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;].setdefault(stream_name, dict())
-        if isinstance(sensor_type, SensorType):
+        if isinstance(stream_type, StreamType):
             self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name] = {
-                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: sensor_type.name
+                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: stream_type.name
             }
-        elif isinstance(sensor_type, str):
+        elif isinstance(stream_type, str):
             self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name] = {
-                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: sensor_type
+                &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: stream_type
             }
 
-    def add_frame_properties(self, frame_num, properties):
-        assert(isinstance(properties, dict))
+    def add_frame_properties(self, frame_num, timestamp=None, properties=None):
         self.__add_frame(frame_num)  # this function internally checks if the frame already exists
         self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num].setdefault(&#39;frame_properties&#39;, dict())
-        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].setdefault(&#39;properties&#39;, dict())
-        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;][&#39;properties&#39;].update(properties)
+        if timestamp is not None:
+            assert (isinstance(timestamp, str))
+            self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;][&#39;timestamp&#39;] = timestamp
 
-    def add_stream_properties(self, stream_name, properties, frame_num=None):
+        if properties is not None:
+            assert (isinstance(properties, dict))
+            self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].update(properties)
+
+    def add_odometry(self, frame_num, odometry):
+        assert(isinstance(frame_num, int))
+        assert(isinstance(odometry, types.Odometry))
+
+        self.__add_frame(frame_num)  # this function internally checks if the frame already exists
+        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num].setdefault(&#39;frame_properties&#39;, dict())
+        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].update(odometry.data)
+
+    def add_stream_properties(self, stream_name, properties=None, intrinsics=None, extrinsics=None, stream_sync=None):
+        has_arguments = False
+        if intrinsics is not None:
+            assert(isinstance(intrinsics, types.Intrinsics))
+            has_arguments = True
+        if extrinsics is not None:
+            assert(isinstance(extrinsics, types.Extrinsics))
+            has_arguments = True
+        if properties is not None:
+            assert(isinstance(properties, dict))  # &#34;Properties of Stream should be defined as a dictionary&#34;
+            has_arguments = True
+        if stream_sync is not None:
+            assert(isinstance(stream_sync, types.StreamSync))
+            has_arguments = True
+            if stream_sync.frame_vcd is not None:
+                frame_num = stream_sync.frame_vcd
+            else:
+                frame_num = None
+        else:
+            frame_num = None
+
+        if not has_arguments:
+            return
+
         # This function can be used to add stream properties. If frame_num is defined, the information is embedded
         # inside &#39;frame_properties&#39; of the specified frame. Otherwise, the information is embedded into
         # &#39;stream_properties&#39; inside &#39;metadata&#39;.
-
-        assert isinstance(properties, dict), &#34;Properties of Stream should be defined as a dictionary&#34;
 
         # Find if this stream is declared
         if &#39;metadata&#39; in self.data[&#39;vcd&#39;]:
@@ -1905,7 +1994,14 @@ data into JSON strings.</p></section>
                     if frame_num is None:
                         # This information is static
                         self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name].setdefault(&#39;stream_properties&#39;, dict())
-                        self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if properties is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if intrinsics is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(intrinsics.data)
+                        if extrinsics is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(extrinsics.data)
+                        if stream_sync is not None:
+                            self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(stream_sync.data)
                     else:
                         # This is information of the stream for a specific frame
                         self.__add_frame(frame_num)  # to add the frame in case it does not exist
@@ -1914,9 +2010,17 @@ data into JSON strings.</p></section>
                         frame[&#39;frame_properties&#39;].setdefault(&#39;streams&#39;, dict())
                         frame[&#39;frame_properties&#39;][&#39;streams&#39;].setdefault(stream_name, dict())
                         frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name].setdefault(&#39;stream_properties&#39;, dict())
-                        frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if properties is not None:
+                            frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                        if intrinsics is not None:
+                            frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(intrinsics.data)
+                        if extrinsics is not None:
+                            frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(extrinsics.data)
+
+                        frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(stream_sync.data)
                 else:
-                    warnings.warn(&#39;WARNING: Trying to add frame sync about non-existing stream&#39;)
+                    warnings.warn(&#39;WARNING: Trying to add stream properties for non-existing stream. &#39;
+                                  &#39;Use add_stream first.&#39;)
 
     def save(self, file_name, pretty=False):
         string = self.stringify(pretty)
@@ -1927,9 +2031,7 @@ data into JSON strings.</p></section>
     def validate(self, stringified_vcd):
         temp = json.loads(stringified_vcd)
         if not hasattr(self, &#39;schema&#39;):
-            schema_file = open(&#34;../schema/vcd_schema_json-v4.0.0.json&#34;, &#34;r&#34;)
-            self.schema = json.load(schema_file)
-            schema_file.close()
+            self.schema = schema.vcd_schema
         validate(instance=temp, schema=self.schema)
 
     def stringify(self, pretty=True, validation=True):
@@ -1941,13 +2043,17 @@ data into JSON strings.</p></section>
             self.validate(stringified_vcd)
         return stringified_vcd
 
-    def stringify_frame(self, frame_num, dynamic_only=True):
+    def stringify_frame(self, frame_num, dynamic_only=True, pretty=False):
         if frame_num not in self.data[&#39;vcd&#39;][&#39;frames&#39;]:
             warnings.warn(&#34;WARNING: Trying to stringify a non-existing frame.&#34;)
             return &#39;&#39;
 
         if dynamic_only:
-            return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num])
+            if pretty:
+                return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num], indent=4, sort_keys=True)
+            else:
+                return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num])
+
         else:
             # Need to compose dynamic and static information into a new structure
             # Copy the dynamic info first
@@ -1962,8 +2068,10 @@ data into JSON strings.</p></section>
                         )
                         # Remove frameInterval entry
                         del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
-
-            return json.dumps(frame_static_dynamic)
+            if pretty:
+                return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
+            else:
+                return json.dumps(frame_static_dynamic)
 
     def update_object(self, uid, frame_value):
         # This function is only needed if no add_object_data calls are used, but the object needs to be kept alive
@@ -2409,7 +2517,7 @@ data into JSON strings.</p></section>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_frame_properties"><code class="name flex">
-<span>def <span class="ident">add_frame_properties</span></span>(<span>self, frame_num, properties)</span>
+<span>def <span class="ident">add_frame_properties</span></span>(<span>self, frame_num, timestamp=None, properties=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -2417,12 +2525,16 @@ data into JSON strings.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_frame_properties(self, frame_num, properties):
-    assert(isinstance(properties, dict))
+<pre><code class="python">def add_frame_properties(self, frame_num, timestamp=None, properties=None):
     self.__add_frame(frame_num)  # this function internally checks if the frame already exists
     self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num].setdefault(&#39;frame_properties&#39;, dict())
-    self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].setdefault(&#39;properties&#39;, dict())
-    self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;][&#39;properties&#39;].update(properties)</code></pre>
+    if timestamp is not None:
+        assert (isinstance(timestamp, str))
+        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;][&#39;timestamp&#39;] = timestamp
+
+    if properties is not None:
+        assert (isinstance(properties, dict))
+        self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].update(properties)</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_metadata_properties"><code class="name flex">
@@ -2489,6 +2601,24 @@ data into JSON strings.</p></section>
     # 3/3 Update auxiliary array
     self.__object_data_names.setdefault(uid, set())
     self.__object_data_names[uid].add(object_data.data[&#39;name&#39;])</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.add_odometry"><code class="name flex">
+<span>def <span class="ident">add_odometry</span></span>(<span>self, frame_num, odometry)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_odometry(self, frame_num, odometry):
+    assert(isinstance(frame_num, int))
+    assert(isinstance(odometry, types.Odometry))
+
+    self.__add_frame(frame_num)  # this function internally checks if the frame already exists
+    self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num].setdefault(&#39;frame_properties&#39;, dict())
+    self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][&#39;frame_properties&#39;].update(odometry.data)</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_ontology"><code class="name flex">
@@ -2559,7 +2689,7 @@ data into JSON strings.</p></section>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_stream"><code class="name flex">
-<span>def <span class="ident">add_stream</span></span>(<span>self, stream_name, uri, description, sensor_type)</span>
+<span>def <span class="ident">add_stream</span></span>(<span>self, stream_name, uri, description, stream_type)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -2567,7 +2697,7 @@ data into JSON strings.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_stream(self, stream_name, uri, description, sensor_type):
+<pre><code class="python">def add_stream(self, stream_name, uri, description, stream_type):
     assert(isinstance(stream_name, str))
     assert(isinstance(uri, str))
     assert(isinstance(description, str))
@@ -2575,18 +2705,18 @@ data into JSON strings.</p></section>
     self.data[&#39;vcd&#39;].setdefault(&#39;metadata&#39;, dict())
     self.data[&#39;vcd&#39;][&#39;metadata&#39;].setdefault(&#39;streams&#39;, dict())
     self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;].setdefault(stream_name, dict())
-    if isinstance(sensor_type, SensorType):
+    if isinstance(stream_type, StreamType):
         self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name] = {
-            &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: sensor_type.name
+            &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: stream_type.name
         }
-    elif isinstance(sensor_type, str):
+    elif isinstance(stream_type, str):
         self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name] = {
-            &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: sensor_type
+            &#39;description&#39;: description, &#39;uri&#39;: uri, &#39;type&#39;: stream_type
         }</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_stream_properties"><code class="name flex">
-<span>def <span class="ident">add_stream_properties</span></span>(<span>self, stream_name, properties, frame_num=None)</span>
+<span>def <span class="ident">add_stream_properties</span></span>(<span>self, stream_name, properties=None, intrinsics=None, extrinsics=None, stream_sync=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -2594,12 +2724,33 @@ data into JSON strings.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_stream_properties(self, stream_name, properties, frame_num=None):
+<pre><code class="python">def add_stream_properties(self, stream_name, properties=None, intrinsics=None, extrinsics=None, stream_sync=None):
+    has_arguments = False
+    if intrinsics is not None:
+        assert(isinstance(intrinsics, types.Intrinsics))
+        has_arguments = True
+    if extrinsics is not None:
+        assert(isinstance(extrinsics, types.Extrinsics))
+        has_arguments = True
+    if properties is not None:
+        assert(isinstance(properties, dict))  # &#34;Properties of Stream should be defined as a dictionary&#34;
+        has_arguments = True
+    if stream_sync is not None:
+        assert(isinstance(stream_sync, types.StreamSync))
+        has_arguments = True
+        if stream_sync.frame_vcd is not None:
+            frame_num = stream_sync.frame_vcd
+        else:
+            frame_num = None
+    else:
+        frame_num = None
+
+    if not has_arguments:
+        return
+
     # This function can be used to add stream properties. If frame_num is defined, the information is embedded
     # inside &#39;frame_properties&#39; of the specified frame. Otherwise, the information is embedded into
     # &#39;stream_properties&#39; inside &#39;metadata&#39;.
-
-    assert isinstance(properties, dict), &#34;Properties of Stream should be defined as a dictionary&#34;
 
     # Find if this stream is declared
     if &#39;metadata&#39; in self.data[&#39;vcd&#39;]:
@@ -2608,7 +2759,14 @@ data into JSON strings.</p></section>
                 if frame_num is None:
                     # This information is static
                     self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name].setdefault(&#39;stream_properties&#39;, dict())
-                    self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                    if properties is not None:
+                        self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                    if intrinsics is not None:
+                        self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(intrinsics.data)
+                    if extrinsics is not None:
+                        self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(extrinsics.data)
+                    if stream_sync is not None:
+                        self.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(stream_sync.data)
                 else:
                     # This is information of the stream for a specific frame
                     self.__add_frame(frame_num)  # to add the frame in case it does not exist
@@ -2617,9 +2775,17 @@ data into JSON strings.</p></section>
                     frame[&#39;frame_properties&#39;].setdefault(&#39;streams&#39;, dict())
                     frame[&#39;frame_properties&#39;][&#39;streams&#39;].setdefault(stream_name, dict())
                     frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name].setdefault(&#39;stream_properties&#39;, dict())
-                    frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                    if properties is not None:
+                        frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(properties)
+                    if intrinsics is not None:
+                        frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(intrinsics.data)
+                    if extrinsics is not None:
+                        frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(extrinsics.data)
+
+                    frame[&#39;frame_properties&#39;][&#39;streams&#39;][stream_name][&#39;stream_properties&#39;].update(stream_sync.data)
             else:
-                warnings.warn(&#39;WARNING: Trying to add frame sync about non-existing stream&#39;)</code></pre>
+                warnings.warn(&#39;WARNING: Trying to add stream properties for non-existing stream. &#39;
+                              &#39;Use add_stream first.&#39;)</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.get_action"><code class="name flex">
@@ -3377,7 +3543,7 @@ e.g. all Object's or Context's</p></section>
 </details>
 </dd>
 <dt id="vcd.core.VCD.stringify_frame"><code class="name flex">
-<span>def <span class="ident">stringify_frame</span></span>(<span>self, frame_num, dynamic_only=True)</span>
+<span>def <span class="ident">stringify_frame</span></span>(<span>self, frame_num, dynamic_only=True, pretty=False)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3385,13 +3551,17 @@ e.g. all Object's or Context's</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def stringify_frame(self, frame_num, dynamic_only=True):
+<pre><code class="python">def stringify_frame(self, frame_num, dynamic_only=True, pretty=False):
     if frame_num not in self.data[&#39;vcd&#39;][&#39;frames&#39;]:
         warnings.warn(&#34;WARNING: Trying to stringify a non-existing frame.&#34;)
         return &#39;&#39;
 
     if dynamic_only:
-        return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num])
+        if pretty:
+            return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num], indent=4, sort_keys=True)
+        else:
+            return json.dumps(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num])
+
     else:
         # Need to compose dynamic and static information into a new structure
         # Copy the dynamic info first
@@ -3406,8 +3576,10 @@ e.g. all Object's or Context's</p></section>
                     )
                     # Remove frameInterval entry
                     del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
-
-        return json.dumps(frame_static_dynamic)</code></pre>
+        if pretty:
+            return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
+        else:
+            return json.dumps(frame_static_dynamic)</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.update_action"><code class="name flex">
@@ -3475,9 +3647,7 @@ e.g. all Object's or Context's</p></section>
 <pre><code class="python">def validate(self, stringified_vcd):
     temp = json.loads(stringified_vcd)
     if not hasattr(self, &#39;schema&#39;):
-        schema_file = open(&#34;../schema/vcd_schema_json-v4.0.0.json&#34;, &#34;r&#34;)
-        self.schema = json.load(schema_file)
-        schema_file.close()
+        self.schema = schema.vcd_schema
     validate(instance=temp, schema=self.schema)</code></pre>
 </details>
 </dd>
@@ -3517,11 +3687,12 @@ e.g. all Object's or Context's</p></section>
 </ul>
 </li>
 <li>
-<h4><code><a title="vcd.core.SensorType" href="#vcd.core.SensorType">SensorType</a></code></h4>
+<h4><code><a title="vcd.core.StreamType" href="#vcd.core.StreamType">StreamType</a></code></h4>
 <ul class="">
-<li><code><a title="vcd.core.SensorType.other" href="#vcd.core.SensorType.other">other</a></code></li>
-<li><code><a title="vcd.core.SensorType.pointCloud" href="#vcd.core.SensorType.pointCloud">pointCloud</a></code></li>
-<li><code><a title="vcd.core.SensorType.video" href="#vcd.core.SensorType.video">video</a></code></li>
+<li><code><a title="vcd.core.StreamType.camera" href="#vcd.core.StreamType.camera">camera</a></code></li>
+<li><code><a title="vcd.core.StreamType.lidar" href="#vcd.core.StreamType.lidar">lidar</a></code></li>
+<li><code><a title="vcd.core.StreamType.other" href="#vcd.core.StreamType.other">other</a></code></li>
+<li><code><a title="vcd.core.StreamType.radar" href="#vcd.core.StreamType.radar">radar</a></code></li>
 </ul>
 </li>
 <li>
@@ -3537,6 +3708,7 @@ e.g. all Object's or Context's</p></section>
 <li><code><a title="vcd.core.VCD.add_name" href="#vcd.core.VCD.add_name">add_name</a></code></li>
 <li><code><a title="vcd.core.VCD.add_object" href="#vcd.core.VCD.add_object">add_object</a></code></li>
 <li><code><a title="vcd.core.VCD.add_object_data" href="#vcd.core.VCD.add_object_data">add_object_data</a></code></li>
+<li><code><a title="vcd.core.VCD.add_odometry" href="#vcd.core.VCD.add_odometry">add_odometry</a></code></li>
 <li><code><a title="vcd.core.VCD.add_ontology" href="#vcd.core.VCD.add_ontology">add_ontology</a></code></li>
 <li><code><a title="vcd.core.VCD.add_rdf" href="#vcd.core.VCD.add_rdf">add_rdf</a></code></li>
 <li><code><a title="vcd.core.VCD.add_relation" href="#vcd.core.VCD.add_relation">add_relation</a></code></li>

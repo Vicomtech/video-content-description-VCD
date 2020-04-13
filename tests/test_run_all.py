@@ -1,5 +1,5 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
@@ -28,7 +28,8 @@ os.system("python test_basic.py && "
           "python test_sanity.py && "
           "python test_serializer.py &&"
           "python test_mesh.py &&"
-          "python test_image.py")
+          "python test_image.py &&"
+          "python test_stream_frame_properties.py")
 
 # Clean existing json or txt files at etc
 dir_name = "./etc/"

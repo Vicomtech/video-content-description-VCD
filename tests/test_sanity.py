@@ -1,5 +1,5 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
@@ -20,13 +20,13 @@ import vcd.sanity as sanity
 
 class TestBasic(unittest.TestCase):
     def test_sanity_frame_intervals(self):
-        vcd_file_name = "./etc/vcd400_sample_3dod.json"
+        vcd_file_name = "./etc/vcd410_sample_3dod.json"
         vcd = core.VCD(vcd_file_name, validation=True)
         valid = sanity.check_frame_intervals(vcd)
         self.assertEqual(valid, True)
 
     def test_sanity_frames_elements(self):
-        vcd_file_name = "./etc/vcd400_sample_3dod.json"
+        vcd_file_name = "./etc/vcd410_sample_3dod.json"
         vcd = core.VCD(vcd_file_name, validation=True)
         valid = sanity.check_frames_elements(vcd)
         self.assertEqual(valid, True)
