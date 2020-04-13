@@ -24,7 +24,8 @@ from vcd import draw
 
 def draw_kitti_tracking(sequence_number=0, record_video=False):
     # Get annotations
-    vcd_file_name = "../converters/kittiConverter/etc/vcd400_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
+    # Run ../converters/kittiConverter/converter.py to generate the json files
+    vcd_file_name = "../converters/kittiConverter/etc/vcd410_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
     vcd = core.VCD(vcd_file_name)
     drawerTopView = draw.TopView(vcd)
     drawerCamera = draw.Image(vcd)
