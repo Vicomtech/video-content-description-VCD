@@ -851,7 +851,7 @@
                         "lidar",
                         "radar",
                         "gps_imu",
-                        "Other"
+                        "other"
                     ],
                     "type": "string"
                 },
@@ -865,8 +865,8 @@
             "additionalProperties": true,
             "extrinsics": {
                 "properties": {
-                    "pose_lcs_wrt_wcs_4x4": {
-                        "description": "This is the pose of the Sensor Coordinate Sysmte (SCS)defined for this stream (e.g. camera) with respect tothe Local Coordinate System (LCS), e.g. the projectionin the ground of the middle of rear-axis in a vehicle, as defined in ISO 8855.It is a 4x4 homogeneous matrix, to enable transform fromLCS to SCS easily. Note that the pose_lcs_wrt_wcs_4x4 isthe transform_wcs_to_lcs_4x4:X_scs = pose_lcs_wrt_wcs_4x4 * X_lcsX_lcs = transform_wcs_wrt_lcs_4x4 * X_scs",
+                    "pose_scs_wrt_lcs_4x4": {
+                        "description": "This is the pose of the Sensor Coordinate Sysmte (SCS)defined for this stream (e.g. camera) with respect tothe Local Coordinate System (LCS), e.g. the projectionin the ground of the middle of rear-axis in a vehicle, as defined in ISO 8855.It is a 4x4 homogeneous matrix, to enable transform fromLCS to SCS easily. Note that the pose_scs_wrt_lcs_4x4 isthe transform_lcs_to_scs_4x4:X_scs = pose_scs_wrt_lcs_4x4 * X_lcsX_scs = transform_lcs_wrt_scs_4x4 * X_lcs",
                         "example": [
                             1.0,
                             0.0,
@@ -984,15 +984,26 @@
                 }
             ],
             "sync": {
-                "description": "This is the sync information for this Stream.It can be used to specify timestamps in ISO8601 format,and a frame_stream of this stream.NOTE: this information can be provided only if thesestream_properties are defined for a specific frame number.E.g. at vcd's frame 34, for stream CAM_LEFT, the sync infocontains timestamp=2020-04-09T04:57:57+00:00,and frame_stream=35 (which means that this CAM_LEFT is shifted1 frame with respect the vcd's master frame indexes.",
-                "properties": {
-                    "frame_stream": {
-                        "type": "integer"
+                "description": "This is the sync information for this Stream.If provided inside a certain frame, it can be usedto specify timestamps in ISO8601 format,and a frame_stream of this stream.E.g. at vcd's frame 34, for stream CAM_LEFT, the sync infocontains timestamp=2020-04-09T04:57:57+00:00,and frame_stream=36 (which means that this CAM_LEFT is shifted2 frame with respect the vcd's master frame indexes.If provided at stream level, it can be used to specifya frame shift, e.g. the shift of that stream wrt to themaster vcd frame count.E.g. if the shift is constant for all frames, it is more compactto define the frame_shift=2 at stream level.",
+                "oneOf": [
+                    {
+                        "properties": {
+                            "frame_stream": {
+                                "type": "integer"
+                            },
+                            "timestamp": {
+                                "type": "string"
+                            }
+                        }
                     },
-                    "timestamp": {
-                        "type": "string"
+                    {
+                        "properties": {
+                            "frame_shift": {
+                                "type": "integer"
+                            }
+                        }
                     }
-                },
+                ],
                 "type": "object"
             },
             "type": "object"

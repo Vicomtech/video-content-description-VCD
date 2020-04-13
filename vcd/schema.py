@@ -371,7 +371,7 @@ vcd_schema = {
                 "stream_properties": {"$ref": "#/definitions/stream_properties"},
                 "type": {
                     "type": "string",
-                    "enum": ["camera", "lidar", "radar", "gps_imu", "Other"]
+                    "enum": ["camera", "lidar", "radar", "gps_imu", "other"]
                 },
                 "uri": {"type": "string"},
             },
