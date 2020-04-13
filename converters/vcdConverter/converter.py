@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.0.0.
+VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -28,47 +28,48 @@ class Converter:
     def get(self):
         return self.vcd
 
-class ConverterVCD400(Converter):
-    # This class receives a VCD 4.0.0, and creates a VCD 3.3.0 file
-    # Creates a Frame-wise VCD 3.3.0 JSON file
-    def __init__(self, vcd400_file_name):
-        Converter.__init__(self, vcd400_file_name)
 
-        # Load JSON file with VCD 4.0.0 content
-        vcd400 = core.VCD(vcd400_file_name, validation=True)
+class ConverterVCD410toVCD330(Converter):
+    # This class receives a VCD 4.1.0, and creates a VCD 3.3.0 file
+    # Creates a Frame-wise VCD 3.3.0 JSON file
+    def __init__(self, vcd410_file_name):
+        Converter.__init__(self, vcd410_file_name)
+
+        # Load JSON file with VCD 4.1.0 content
+        vcd410 = core.VCD(vcd410_file_name, validation=True)
 
         # Create VCD 3.3.0 container
         self.vcd = dict()
 
         # Root and metadata
         self.vcd['VCD'] = {
-            'annotator': vcd400.get_metadata()['annotator'],
-            'name': vcd400.data['vcd']['name'],
+            'annotator': vcd410.get_metadata()['annotator'],
+            'name': vcd410.data['vcd']['name'],
             'metaData': {}
         }
-        if 'comment' in vcd400.get_metadata():
-            self.vcd['VCD']['scdName'] = vcd400.get_metadata()['comment']
-        if 'streams' in vcd400.get_metadata():
-            for stream in vcd400.get_metadata()['streams'].keys():
+        if 'comment' in vcd410.get_metadata():
+            self.vcd['VCD']['scdName'] = vcd410.get_metadata()['comment']
+        if 'streams' in vcd410.get_metadata():
+            for stream in vcd410.get_metadata()['streams'].keys():
                 self.vcd['VCD']['metaData'].setdefault('stream', [])
-                if 'stream_properties' in vcd400.get_metadata()['streams'][stream]:
+                if 'stream_properties' in vcd410.get_metadata()['streams'][stream]:
                     self.vcd['VCD']['metaData']['stream'].append(
-                        {"description": vcd400.get_metadata()['streams'][stream]['description'],
-                         "uri": vcd400.get_metadata()['streams'][stream]['uri'],
+                        {"description": vcd410.get_metadata()['streams'][stream]['description'],
+                         "uri": vcd410.get_metadata()['streams'][stream]['uri'],
                          "name": stream,
-                         "type": vcd400.get_metadata()['streams'][stream]['type'],
-                         "streamProperties": vcd400.get_metadata()['streams'][stream]['stream_properties']}
+                         "type": vcd410.get_metadata()['streams'][stream]['type'],
+                         "streamProperties": vcd410.get_metadata()['streams'][stream]['stream_properties']}
                     )
                 else:
                     self.vcd['VCD']['metaData']['stream'].append(
-                        {"description": vcd400.get_metadata()['streams'][stream]['description'],
-                         "uri": vcd400.get_metadata()['streams'][stream]['uri'],
+                        {"description": vcd410.get_metadata()['streams'][stream]['description'],
+                         "uri": vcd410.get_metadata()['streams'][stream]['uri'],
                          "name": stream,
-                         "type": vcd400.get_metadata()['streams'][stream]['type']}
+                         "type": vcd410.get_metadata()['streams'][stream]['type']}
                     )
 
         # Frame intervals
-        fis = vcd400.data['vcd']['frame_intervals']
+        fis = vcd410.data['vcd']['frame_intervals']
         frameStart = 0
         frameEnd = 0
         for fi in fis:
@@ -82,18 +83,18 @@ class ConverterVCD400(Converter):
         }
 
         # Ontologies
-        if 'ontologies' in vcd400.data['vcd']:
+        if 'ontologies' in vcd410.data['vcd']:
             self.vcd['VCD']['OntologyManager'] = {}
             self.vcd['VCD']['OntologyManager']['ontology'] = []
-            for ontology_uid in vcd400.data['vcd']['ontologies'].keys():
+            for ontology_uid in vcd410.data['vcd']['ontologies'].keys():
                 self.vcd['VCD']['OntologyManager']['ontology'].append(
-                    vcd400.data['vcd']['ontologies'][ontology_uid]
+                    vcd410.data['vcd']['ontologies'][ontology_uid]
                 )
 
         # StaticAttributes (objects and potentially contexts if no frame interval inside)
-        if 'objects' in vcd400.data['vcd']:
-            for object_key in vcd400.data['vcd']['objects'].keys():
-                object = vcd400.data['vcd']['objects'][object_key]
+        if 'objects' in vcd410.data['vcd']:
+            for object_key in vcd410.data['vcd']['objects'].keys():
+                object = vcd410.data['vcd']['objects'][object_key]
 
                 #hasFrameIntervals = ('frame_intervals' in object)
                 #if hasFrameIntervals:
@@ -116,9 +117,9 @@ class ConverterVCD400(Converter):
                     self.__copy_object_data(object, obj)
 
                     self.vcd['VCD']['staticAttributes']['objects'].append(obj)
-        if 'contexts' in vcd400.data['vcd']:
-            for context_key in vcd400.data['vcd']['contexts'].keys():
-                context4 = vcd400.data['vcd']['contexts'][context_key]
+        if 'contexts' in vcd410.data['vcd']:
+            for context_key in vcd410.data['vcd']['contexts'].keys():
+                context4 = vcd410.data['vcd']['contexts'][context_key]
                 hasFrameIntervals = ('frame_intervals' in context4)
                 if hasFrameIntervals:
                     if len(context4['frame_intervals']) == 0:
@@ -142,8 +143,8 @@ class ConverterVCD400(Converter):
         # Actions, Events, Contexts, Objects, Relations -> create entries at 'frames'
         self.vcd['VCD'].setdefault('frames', [])
 
-        for frame_num in vcd400.data['vcd']['frames'].keys():
-            frame4 = vcd400.data['vcd']['frames'][frame_num]
+        for frame_num in vcd410.data['vcd']['frames'].keys():
+            frame4 = vcd410.data['vcd']['frames'][frame_num]
 
             frame3 = dict()
             frame3.update({'frame': frame_num})
@@ -157,7 +158,7 @@ class ConverterVCD400(Converter):
                     elements4 = frame4[elements]
                     for element4_id in elements4:
                         # In VCD4, within frame, we only have the uid, data is outside
-                        element4_static = vcd400.data['vcd'][elements][element4_id]
+                        element4_static = vcd410.data['vcd'][elements][element4_id]
                         obj = {}
                         obj.update({"name": element4_static["name"]})
                         obj.update({"uid": element4_id})
@@ -181,11 +182,11 @@ class ConverterVCD400(Converter):
                         frame3[elements].append(obj)
                 self.vcd['VCD']['frames'].append(frame3)
 
-    def __add_attributes(self, src400, dst330):
-        if 'attributes' in src400:
+    def __add_attributes(self, src410, dst330):
+        if 'attributes' in src410:
             attrib3_dict = {}
             attrib3_type = ""
-            for attrib4_key in src400['attributes'].keys():
+            for attrib4_key in src410['attributes'].keys():
                 if attrib4_key == "boolean":
                     attrib3_dict.setdefault('bool', [])
                     attrib3_type = "bool"
@@ -196,7 +197,7 @@ class ConverterVCD400(Converter):
                     attrib3_dict.setdefault("num", [])
                     attrib3_type = "num"
 
-                for it4 in src400['attributes'][attrib4_key]:
+                for it4 in src410['attributes'][attrib4_key]:
                     it3 = {}
                     it3.update({"name": it4['name']})
                     if attrib4_key == "num":
@@ -206,7 +207,7 @@ class ConverterVCD400(Converter):
                         if 'val' in it4:
                             it3.update({"val": it4['val']})
                     if "stream" in it4:
-                        warnings.warn("WARNING: VCD4.0.0 allows stream info for "
+                        warnings.warn("WARNING: VCD4.1.0 allows stream info for "
                                       "bool, num, text and vec, but VCD3.3.0 does not.")
                     attrib3_dict[attrib3_type].append(it3)
             dst330.update({"attributes": attrib3_dict})
@@ -289,13 +290,13 @@ class ConverterVCD400(Converter):
                     # Area
                     object_data_current.setdefault("areaReference", list())
                     for key, val in object_data_item['area_reference'].items():
-                        ref_type400 = val['reference_type']
-                        if ref_type400 == "line_reference":
+                        ref_type410 = val['reference_type']
+                        if ref_type410 == "line_reference":
                             refType330 = "lineReference"
-                        elif ref_type400 == "point3d":
+                        elif ref_type410 == "point3d":
                             refType330 = "point3D"
                         else:
-                            refType330 = ref_type400
+                            refType330 = ref_type410
                         if 'val' in val:
                             object_data_current["areaReference"].append(
                                 {
@@ -319,11 +320,11 @@ class ConverterVCD400(Converter):
                     # Line
                     object_data_current.setdefault("lineReference", list())
                     for key, val in object_data_item['line_reference'].items():
-                        ref_type400 = val['reference_type']
-                        if ref_type400 == "point3d":
+                        ref_type410 = val['reference_type']
+                        if ref_type410 == "point3d":
                             refType330 = "point3D"
                         else:
-                            refType330 = ref_type400
+                            refType330 = ref_type410
                         if 'val' in val:
                             object_data_current["lineReference"].append(
                                 {
@@ -362,7 +363,8 @@ class ConverterVCD400(Converter):
                     odc['mesh'].append(object_data_current)
                 obj.update({'objectDataContainer': odc})
 
-class ConverterVCD330(Converter):
+
+class ConverterVCD330toVCD410(Converter):
     # This class converts a VCD3.3.0 into VCD4.0.0
     def __init__(self, vcd330_file_name):
         Converter.__init__(self, vcd330_file_name)
@@ -394,8 +396,11 @@ class ConverterVCD330(Converter):
             metadata = vcd330['VCD']['metaData']
             streams = metadata['stream']
             for stream in streams:
+                stream_type = stream['type']
+                if stream_type == 'video':
+                    stream_type = 'camera'
                 self.vcd.add_stream(
-                    stream['name'], stream['uri'], stream['description'], stream['type']
+                    stream['name'], stream['uri'], stream['description'], stream_type
                 )
         if 'ontologyManager' in vcd330['VCD']:
             ontologyManager = vcd330['VCD']['ontologyManager']
@@ -408,16 +413,27 @@ class ConverterVCD330(Converter):
                 # and then "objects", "actions", etc.
                 frame_num = frame['frame']
                 if 'timestamp' in frame:
-                    self.vcd.add_frame_properties(frame_num, {'timestamp': frame['timestamp']})
+                    self.vcd.add_frame_properties(frame_num=frame_num,
+                                                  timestamp=frame['timestamp'])
                 if 'frameProperties' in frame:
+                    frame_properties=dict()
                     for frameProperty in frame['frameProperties']:
                         val = frameProperty['val']
                         name = frameProperty['name']
-                        self.vcd.add_frame_properties(frame_num, {name: val})
+                        if frameProperty['name'] == 'timestamp':
+                            self.vcd.add_frame_properties(frame_num, timestamp=val)
+                        else:
+                            frame_properties[name] = val
+                    if frame_properties:
+                        self.vcd.add_frame_properties(frame_num, timestamp=None, properties=frame_properties)
                 if 'streamSync' in frame:
                     for streamSyncItem in frame['streamSync']:
                         self.vcd.add_stream_properties(
-                            streamSyncItem['name'], {'frame_sync': streamSyncItem['frame']}, frame_num=frame_num
+                            streamSyncItem['name'],
+                                types.StreamSync(
+                                    frame_vcd=frame_num,
+                                    frame_stream=streamSyncItem['frame']
+                                )
                         )
 
                 # Now the elements
