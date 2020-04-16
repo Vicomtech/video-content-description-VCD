@@ -37,7 +37,12 @@ class ObjectDataType(Enum):
 
 class Poly2DType(Enum):
     MODE_POLY2D_ABSOLUTE = 0
+    #MODE_POLY2D_BBOX = 1
+    #MODE_POLY2D_BBOX_DIST = 2
+    #MODE_POLY2D_F8DCC = 3
+    #MODE_POLY2D_RF8DCC = 4
     MODE_POLY2D_SRF6DCC = 5
+    MODE_POLY2D_RS6FCC = 6
 
 
 class ObjectData:
@@ -106,9 +111,13 @@ class poly2d(ObjectDataGeometry):
         assert(isinstance(closed, bool))
         if isinstance(val, tuple) or isinstance(val, list):
             if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-                srfsdcc = poly.computeSRFSDCC(val)
-                encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-                self.data['val'] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
+                srf6, xinit, yinit = poly.computeSRF6DCC(val)
+                encoded_poly, rest = poly.chainCodeBase64Encoder(srf6, 3)
+                self.data['val'] = [str(xinit), str(yinit), str(rest), encoded_poly]
+            elif mode == Poly2DType.MODE_POLY2D_RS6FCC:
+                rs6, low, high, xinit, yinit = poly.computeRS6FCC(val)
+                encoded_poly, rest = poly.chainCodeBase64Encoder(rs6, 3)
+                self.data['val'] = [str(xinit), str(yinit), str(low), str(high), str(rest), encoded_poly]
             else:
                 self.data['val'] = list(val)
         self.data['mode'] = mode.name

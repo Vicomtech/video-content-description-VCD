@@ -1,0 +1,4247 @@
+{
+    "vcd": {
+        "frame_intervals": [],
+        "frames": {},
+        "objects": {
+            "0": {
+                "frame_intervals": [],
+                "name": "object 0",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "971",
+                                "1738",
+                                "0",
+                                "OWwBRRRRy2wB1OwRS2xwOnw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2279",
+                                "1599",
+                                "1",
+                                "J2COyOwR2R2COwR2R2COyOwR2COyOwR2R2COwR2R2COyOwQKBQKBQKxWKAKxQBWKxQRCICIRCICIRCIRARCIRCICIRCICIRCIRARCIRARCJBQBQKBXRwRwRwCOE2yICICICIhQKKK+2BYKwKwKwKCKBRQKBQKKBQKBQKKBQKBRQKBQKKBQCORyOR2wR+R4CPyO2RCIRRCIRCIRCIRRCIRhRRRRRRRRRRRhCIRARCICICICIEBQBQBQBXBOwKBRQKKKBRQKKBRRQKKBRRQKKBRQKKKBRQKJCICICICICICICICORwRwRyOCORwRwREIRCIRRCIRCIRX2yICICICIC6AKwBWxWAKAKKKKKKIRRRRRB22R22R22R2wCO2yO2yO2yO2yO2yO2AR22R22R22BRRRRRRRRRCKKKKKKKKKMO2R2yO2CO2RQKBRQKKBQKO2wR22CO2wCPAKwKxWIKKBRQKKBQKKBRQKKxWBWBWBQEOwCOwCO2R2ARCKIRCKIRCKISICICIRRRRRRRRRRRRWK2BWwBWwKxIRCIRARCIRCIRCIRARCIRCIRCIRARCIREKAKBQBQBQKAKBQBQKAKBQBQBQKAKCKIRRCIRRCKIRRCIRRCKMIRRCIRICOyOyOyOAR2R2R2RAQBWBWAKwBWBWAKwBWBQCBQKBQKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKBQKBQKIRCIRRCIRCIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRCKKIRRCKIRRCI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1425",
+                                "1550",
+                                "1",
+                                "JCKKKKRRCKIRCKLKKBRuAQKB/////4E0+2AR/+wCP/2yP2wBRCKIRRCKIKBRRQKI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1378",
+                                "1549",
+                                "1",
+                                "EKKKIBWKpwSIRRRRQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1041",
+                                "1484",
+                                "0",
+                                "22AK+2wK+2wK+2wK+wK4K4K4BXBXAK4K4K1J2mBXwBXwBXwBXwBXwBX2K+AK+AK+AK+AK+AK2w"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--person"
+            },
+            "1": {
+                "frame_intervals": [],
+                "name": "object 5",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "971",
+                                "1763",
+                                "1",
+                                "OXgE2BO2yyIUKKI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1529",
+                                "1689",
+                                "1",
+                                "J2COyOwR2COwR2R2COwWwRRQKKBQKKBRQKKBQKKBRBKAKBQMKKKM22nLQBQKAKAKBQBQKAKyOCOCOCP/22AhRCKK2CKBQMKBQKBQKKKIOCOARwRwCOCOARwRwCOCOARwR+AK22BW2wBW2wPCBQKBQMAKRRRRX//RyORyIRRRRRRRRJ2mwm2xKKKKBRRRRQKKKK2COwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1421",
+                                "1624",
+                                "0",
+                                "IFOwQB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "852",
+                                "1508",
+                                "0",
+                                "/K2xWwBW2K2xW2K2AK2xW2K2xWwBW2K2xW2K2AK2xX/4nn2xX2wK+2BX2wK+2BX2xX2wK+2BX2wK22"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1373",
+                                "1486",
+                                "1",
+                                "CRARARAKKKKKKKKP/////+ya/4E0///2wCP//6P+2wBRRCKOAKMgRRRSIRCIRZRRQKKKKRRRRRQ"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--person"
+            },
+            "2": {
+                "frame_intervals": [],
+                "name": "object 10",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "857",
+                                "1742",
+                                "0",
+                                "BRQKBW2m2AIRp2wRCICIR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1291",
+                                "1718",
+                                "0",
+                                "JCIS+Am2Cy8KKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1291",
+                                "1652",
+                                "0",
+                                "/2RCIRVICP+CKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1431",
+                                "1615",
+                                "1",
+                                "JRRCCAmwA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--person"
+            },
+            "3": {
+                "frame_intervals": [],
+                "name": "object 14",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "709",
+                                "1746",
+                                "0",
+                                "ORQKAKBRwKAQKxWKxX2wE2BJWBWBWBWBQCIRCICIRmwgBO04KKKKAKAKAKAK/+EKKKJ22"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "910",
+                                "1738",
+                                "0",
+                                "JyORwR0KKKIRARCIRARUIRBRQKKBRQKKP0IWwC2wZ202wCyKBQKBB2J2WRRRRmwWJRhRRRRRRp2JwpKOwLy2wEBBRRRRRRRgKAKBQKwKwKwKw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1295",
+                                "1666",
+                                "0",
+                                "+21AKwBWAKyKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1295",
+                                "1660",
+                                "0",
+                                "0CQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1418",
+                                "1611",
+                                "0",
+                                "OpKKKNJRRR"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--person"
+            },
+            "4": {
+                "frame_intervals": [],
+                "name": "object 19",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1057",
+                                "1742",
+                                "0",
+                                "J2COwR2COwRARARyICyOCIRCIRwO202EALRRRRRRRQBWKxWK+RRRRWhRRCMKKKKxO2IKKKKy2Cy2AJ2AR2AR2yPBBRRRmwRQKBmwJRRTOy0KKIRWX+2CKKKKKKKKKKKKKKKKKKKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1115",
+                                "1734",
+                                "0",
+                                "OX4C2FIKxWKxQBQKAKBSKKKMKKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1255",
+                                "1652",
+                                "1",
+                                "QFIA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1435",
+                                "1590",
+                                "1",
+                                "IRB2ApKKKNIBQKKKNII"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "5": {
+                "frame_intervals": [],
+                "name": "object 23",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "816",
+                                "1763",
+                                "1",
+                                "JQKBRQKRCIRCISDICRCNBCKIRRCKITKIRRCIRCIRRCJP2FOzKBQKgRCIRQKKBRCIEKKKMKKKIO2wJAQKEKKBRwm2BO2J2WhRRRWX4CKKBRQKKBRSIRCIRA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1299",
+                                "1656",
+                                "1",
+                                "2gRmA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1399",
+                                "1623",
+                                "1",
+                                "KAgEw"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "6": {
+                "frame_intervals": [],
+                "name": "object 26",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1267",
+                                "1652",
+                                "1",
+                                "//2gE//wA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1619",
+                                "1",
+                                "wpAQ"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "7": {
+                "frame_intervals": [],
+                "name": "object 28",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1366",
+                                "1658",
+                                "1",
+                                "QB4CPk22AR4BRKoIRA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1377",
+                                "1595",
+                                "1",
+                                "OpKKKMKKIRoBQBQKA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "8": {
+                "frame_intervals": [],
+                "name": "object 30",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "869",
+                                "1705",
+                                "1",
+                                "/+R2wEMRW2wBXK4K2A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1443",
+                                "1541",
+                                "0",
+                                "JARARyIE02ARRRR"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "9": {
+                "frame_intervals": [],
+                "name": "object 32",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1361",
+                                "1541",
+                                "0",
+                                "wWW2AmgKBQKB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1432",
+                                "991",
+                                "1",
+                                "JRCKKIRRRCKKIRRRCKKKIRRRCKKIRRRCKKIRRRCKBQKBQKAKBQKBQKwR2COwRwRCKIRCIRRCKKBQKBQKKBQKBZARCICIRARCICKKKKKKKKKKKK2BWwRCKIRRCKIRCKIRRCKBRQKBQKKBQKKBQKBRQKBRQKBQKKBQBQKAKAKBQBoDKpKBRQKBRQKBQKKBQKKBQKKBQKKBQKBRQKBRQKKKKKKKKBRRRRRRRR2AK2AKAKBQKAKBRRARARARCICICICICP+BX/+wK///////////////////2x2Kwp/2wp5///////////+2R//2yP/+2R//2wR//2yP+AKKBRQKKBRRQKKBRRRRCKIRRCKIRRwR2R2KxWKxQKBQKBRQKBRRCKKKIRRRRCKKIRRRRCKKKIRRCKIRRCKIRRChA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "10": {
+                "frame_intervals": [],
+                "name": "object 34",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1421",
+                                "1486",
+                                "1",
+                                "JyOgKQhCIWg"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "11": {
+                "frame_intervals": [],
+                "name": "object 35",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1362",
+                                "1478",
+                                "0",
+                                "wSIQKBpBQQRR"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "12": {
+                "frame_intervals": [],
+                "name": "object 36",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1376",
+                                "1655",
+                                "1",
+                                "0AiI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "13": {
+                "frame_intervals": [],
+                "name": "object 37",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1361",
+                                "1655",
+                                "0",
+                                "wpIFJg"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "14": {
+                "frame_intervals": [],
+                "name": "object 38",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1456",
+                                "974",
+                                "1",
+                                "JRRRRCKKKKKBiIRCKIRCNJCKIRCIRRCIRCKIRC2CKQRw"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "15": {
+                "frame_intervals": [],
+                "name": "object 39",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1078",
+                                "988",
+                                "1",
+                                "22gKKBRQKKBQKKBRQKKBRQMBQKBQNPWKwKxWI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "16": {
+                "frame_intervals": [],
+                "name": "object 40",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1424",
+                                "1781",
+                                "1",
+                                "IBW2AK2wK2KAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBQBQBQKAKAKAKAKAKBQBQBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBVP/////AQBWBWBWBWBWAKwKwKwKwKwKwKwKwKwKwKwBWBWBWBWBWBWBWBWBWBWBWAKwKwKwKwKwKxWKAKxWKAKxQBWKxQBWKAKxWKAKxQBWKxQBWKAKxWKAKxQBWKxQBWKAKxWKAKxQBWKxQBWKAKxWKAKxWKxQBWKxQBWKxWKAKxWKAKxWKxQBWKxQBWKxQBWKxWKAKxWKAKxWKxQBWKxWAK2xW2K2xWwBW2K2xWwBW2K2xW2K/wK/CORyORCBQI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--barrier--curb"
+            },
+            "17": {
+                "frame_intervals": [],
+                "name": "object 41",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1697",
+                                "1730",
+                                "0",
+                                "wnK22AK5W2wCQKB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2715",
+                                "1722",
+                                "1",
+                                "QBWBWAKwBWBWAKwBQXAK+2BX2wK+2BX2wBX2wK+2BX2wK+2AK+2BX2wK+2BX2wBX2wK+2BX2wK+2AK+2BX2wNP/+A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--barrier--guard-rail"
+            },
+            "18": {
+                "frame_intervals": [],
+                "name": "object 43",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1694",
+                                "1748",
+                                "0",
+                                "J2R2R2COwR2COwR2AUKIRyORyP//KKKKIKAaBQKBQPC22BW2wBW2wK+ARwRwCOCOARwRwCOCOARwRwCOCRRRQKBQKBRKBQKOwKKIRRP/22ARwRwRwRxoRyORyP4BX+BW2K2xW2K2AK2xW2K2AK2xW2K2xWAKxWKAKxWKxQBWKxQBWKxWKAKxWKAKxWKAKxWKxQBWKxQBWKxWKAKxWKAKxWKxQBWKxQBWKAKxWKAKxQBWKxQBWKAKxWKAKxQBWKxQBWKAKxWKAKxQBWKxQBWKAKxWKAKxQBWKxQBWKxWBWBWBWBWBWAKwKwKwKwKwKwKwKwKwKwKwBWBWBWBWBWBWBWBWBWBWBWAKwKwKwKAp/////+BX//////////////////////////+BX//////////////////////////+K///////////////////////////wNP//////////////////wS2AK2AK2AK2AK2AK2AK2AK2AK2BWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwK2AK2AK2AK2AK2AK2AK2AK2AK2K2K2BWxWxWxWxWxWwK2K2K2K2K2K2BWxWxWxWxWxWpIEIRCKIRKKIRRCIRRCKIRRCIRRCKIKAKBQBQBQKAKBQBQKAKBQBQBQKAKJCIRCICIRCIRCIRCICIRCIRCIRCICIRCImK2BWwBWwKxRRRRRRRRRRRRCICICIIRRCIRRCIRRCOwCO2R2AR2ATxWBWBWBWKKBRQKKBQKKBRQKKWKxWBXAR22AR22CO2wRQKBRQKKBQKO2R2wR2yO2TRRRRRRRRRRCKKKKKKKKK22CO2yO2yO2AR22R22R22R22R22R2wCO2yO2yO2yRRRRRCKKKKKKAKwBWxWAKAPBARARARAR+2KIRCIRCKIRCIRIRwRwRyOCORwRwRyICICICICICICICIhQKKBRRQKKBRQKKKBRQKKKBRQKKBRRQKKBWwnBQBQBQBQJARARARARCICIRCaKKKKKKKKKKKJRCIRRCIRCIRCIRRCIR2yPyPAR+R2wRyORyIBQKKBQKBRQKBp22RRRR4IRCIRC2AWP2AmxP0+BRRRRKIRRR52AIRARARAR+AgnKKKKJCICIRCO2AJRCICIRwR2COwR2CO2yOwR2COwR0Ca2AK2AK2AK2AK2AIR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1268",
+                                "1745",
+                                "1",
+                                "JRCKIRRCKIRRCOAhRZRn2gBwYFIJwRyOCORwRyOCORwRyOCOTRQKKBRpKxQL2AOAgKKChRRRRRRRRR/2wOBRCKKeB2pKKM2BKBQKOwJRRRS4R2yOwCOwE2AOB2BwKKKKW2mKKKKJRCKKeBRRRR+KxWKxQFJmOwDRRRRwO02SBQKBRwO2AJ21O2B2AIU22OBRRRTwO0202wJwRQKKYBQIE22CRRRRKKKKYCIRQKKBRCIRCCQRARARARBRRRRweCOIpARRRROwJRRRRRRRRiORyOCORyaIRFPJ2gBOwJRCIERyORwRyORyOCORyORwRyORyOCORyORwRyORyOCORyOCOARwRwCOCOARwRwRwCOCOARwRwCOCOCOARwRwCOCOARwRwRwCOCOARwRwCOCOCOARwRwCOCOARwRwRwCOCOARwRwCOCOCOARwRwCOCOARwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwS////////+ECIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCIRCIS/4A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1378",
+                                "1702",
+                                "0",
+                                "xP2wEAJRQKKwICICICICaRRRRQKKKKWAOB2wn/pIRCIRCIRCKIRRRCKIRRRCKKIRRRCKKIRRCKKIRRRCKwCOwRARARARC+w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1399",
+                                "1701",
+                                "1",
+                                "4pW2wA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1420",
+                                "1700",
+                                "1",
+                                "yICICICICICICORyORgKSKBRUKJRCKIRCIRCKIRKIRRpAI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--flat--road"
+            },
+            "19": {
+                "frame_intervals": [],
+                "name": "object 48",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "443",
+                                "1820",
+                                "1",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "446",
+                                "1819",
+                                "1",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "752",
+                                "1818",
+                                "1",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "449",
+                                "1818",
+                                "0",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "515",
+                                "1817",
+                                "0",
+                                "JRRRwRwCIFwKxQBWKAKxWKAKwRQNKKKKKKBRRRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "453",
+                                "1817",
+                                "1",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "422",
+                                "1817",
+                                "0",
+                                "SORQCIRAVJRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "478",
+                                "1805",
+                                "0",
+                                "IKBQKBCIRCIoCaxQBWKAKAgCORy"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "791",
+                                "1788",
+                                "0",
+                                "Ko"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "627",
+                                "1781",
+                                "0",
+                                "2RxRRRRKIRRRCKKIRRRREmKxWKwKxWKwRRRRRRRpRARARARBCOCOC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "626",
+                                "1775",
+                                "0",
+                                "w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "625",
+                                "1770",
+                                "1",
+                                "A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                11,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "624",
+                                "1764",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "382",
+                                "1764",
+                                "1",
+                                "+20KKBRRRQKKOCOFICOyOARwCOAR2RpawKwKwI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1101",
+                                "1762",
+                                "1",
+                                "VI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                16,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "792",
+                                "1751",
+                                "1",
+                                "WaKKKKKKNIBO2AUCIRCIRBQXA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                17,
+                                15,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "832",
+                                "1748",
+                                "1",
+                                "J2AR2Am2wFIKP022A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                18,
+                                16,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "775",
+                                "1748",
+                                "1",
+                                "Eg"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                19,
+                                17,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "853",
+                                "1746",
+                                "1",
+                                "wFAKA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                20,
+                                18,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "341",
+                                "1739",
+                                "1",
+                                "/+2wCICICICQC22AX4CwBWAO2A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                21,
+                                19,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "854",
+                                "1728",
+                                "1",
+                                "CRCKJRRRRRCIF+E2wJQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                22,
+                                20,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "835",
+                                "1719",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                23,
+                                21,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "805",
+                                "1716",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                24,
+                                22,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1210",
+                                "1712",
+                                "1",
+                                "+2wF2xWwK2AQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                25,
+                                23,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1756",
+                                "1704",
+                                "1",
+                                "A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                26,
+                                24,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1071",
+                                "1702",
+                                "1",
+                                "22IRwRyICKIRRCmCPn+wA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                27,
+                                25,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "486",
+                                "1700",
+                                "0",
+                                "RwCOCOCOARwRwRwRwCOCOCIm2wmAR22R22CO2yMAICORy"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                28,
+                                26,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "982",
+                                "1698",
+                                "1",
+                                "JARCISKIRCKIBQBQBQBQOAR2RwCOATQBQBQBQBWKAKEwBO2AS5W2wpRCIRARCKKKJyOCORyawKwKwKwKBQKAKBKKKKKKKKQCARRRRWwBweB+E2BRRQSIRwRwICORARARmRwCIBRRRRRRRUBRQKKBQKKBQKKBQKKBQKI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                29,
+                                27,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1149",
+                                "1694",
+                                "0",
+                                "JyICIC2pARwCOCOCO2AIRCIRCLIRCIRRCIRCIRCKIRCIQKAKAKAKAUJiwB4KBQKBQCBQKBQaKKKKBRRR2wp2AK+2Am2K2xIBQEKBQKKBQBQBQB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                30,
+                                28,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "577",
+                                "1694",
+                                "0",
+                                "JRRCKKKKKKKKKKKMCICICICICICORARARARARAREKKKCBRQKBWRwRRCKIRRCKIKBQKBQYKAKAKBAR2R2v/0AKBQBQKAKAKB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                31,
+                                29,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "693",
+                                "1686",
+                                "1",
+                                "JwRyORARARARAgCOCOCOCIBRRRRRRRQKBQKAKBQKKKKKKKKKKKKXwCxWKxWO1PBWKxWKBxWRQKAKBRweB22hRRRP+gRCKIRREKKKKKKKKARARARARARARARAREIRCKIS2DARyORyOwRwBKKKKKKKKBQKBQBQI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                32,
+                                30,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "421",
+                                "1686",
+                                "1",
+                                "IKBQKRRRQKKKBRRWRAgK2BWwK2AK2BOCO2R2wR2yOm2wE/2wCOCOCORwRyOE2xQKBQKBQKBQI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                33,
+                                31,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1773",
+                                "1669",
+                                "0",
+                                "JCAWJyICORARyORApOCOCOCMCORARAmwJRRRR5KKKpKBRQKKBQKhCKKKKB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                34,
+                                32,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "222",
+                                "1645",
+                                "1",
+                                "KKKKKKKKKKKKKKKKJyOCOR0KBQKBS2BKBQBQKJRCKKIRRRCKKKIRRRCKaKKKKKKKIKKBQKKBQKKKKKIRRRCKKIRRpRCKIRRCKK+AXwP+BWBWBWBQEwKwKwKwKwKwKwKwK//wBWAK2KwBWxWAK2KwBWxWAK2KwBWAgRwRwRwR////20KBRQKKBRQKwKwKwBWBWBWBWAI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                35,
+                                33,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "860",
+                                "1553",
+                                "1",
+                                "yQBQBQBQBQKAKAKAKAKAKBQBQBQBQBQBQBWKAKAKAPxWyICORARARBRRRTKBQNBRRRRRRpKxWBWKARCIRCIRCIRFKKKJ2wBP2x2AOARwCOARwF//+AJ2n/2BWKxWKw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                34,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "800",
+                                "1541",
+                                "0",
+                                "gBQBQKAKAKAKAKAKBQBQBQBQEEAKxwWKxWKx"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--structure--building"
+            },
+            "20": {
+                "frame_intervals": [],
+                "name": "object 84",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "709",
+                                "1746",
+                                "0",
+                                "ORQKAKBRwKAQKxWKxX2wE2BJWBWBWBWBQCIRCICIRmwgBO04KKKKAKAKAKAK/+EKKKJ22"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "857",
+                                "1742",
+                                "0",
+                                "BRQKBW2m2AIRp2wRCICIR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "971",
+                                "1738",
+                                "1",
+                                "OWwBRRRRy2wB1OwRTOEAmwJ22WRChRRWwJ+A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1115",
+                                "1734",
+                                "0",
+                                "OX4C2FIKxWKxQBQKAKBSKKKMKKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1234",
+                                "1722",
+                                "1",
+                                "OX2yKKKNBQKAKBXwA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--person"
+            },
+            "21": {
+                "frame_intervals": [],
+                "name": "object 89",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "785",
+                                "1789",
+                                "1",
+                                "JyOmwiKIRRCCKA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "787",
+                                "1746",
+                                "1",
+                                "JCIRAREBQBQBQBQBRRRRRRRSQBWyOCORyW2EALRRRRRRRmI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--rider--bicyclist"
+            },
+            "22": {
+                "frame_intervals": [],
+                "name": "object 91",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "785",
+                                "1789",
+                                "1",
+                                "JyOmwiKIRRCCKA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "787",
+                                "1746",
+                                "1",
+                                "JCIRAREBQBQBQBQBRRRRRRRSQBWyOCORyW2EALRRRRRRRmI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--rider--bicyclist"
+            },
+            "23": {
+                "frame_intervals": [],
+                "name": "object 93",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "785",
+                                "1789",
+                                "1",
+                                "JyOmwiKIRRCCKA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "787",
+                                "1746",
+                                "1",
+                                "JCIRAREBQBQBQBQBRRRRRRRSQBWyOCORyW2EALRRRRRRRmI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "human--rider--bicyclist"
+            },
+            "24": {
+                "frame_intervals": [],
+                "name": "object 95",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1419",
+                                "1699",
+                                "1",
+                                "gA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1788",
+                                "1674",
+                                "0",
+                                "So"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1231",
+                                "1674",
+                                "1",
+                                "wRwEhQKBQI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1786",
+                                "1673",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1767",
+                                "1671",
+                                "1",
+                                "JARCIRCIRCICIRCIggCORyICORAR0xA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1399",
+                                "1666",
+                                "0",
+                                "/wk2C"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1640",
+                                "1",
+                                "2A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1421",
+                                "1622",
+                                "0",
+                                "BFA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1608",
+                                "0",
+                                "2wiQBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1570",
+                                "1",
+                                "/SE+2AQI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                9,
+                                11,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "0",
+                                "1",
+                                "//////////////////////////////4CIRyOCORiKIRCKIRCKIRRCIRRCIRRCZyOyOyOyOOwQCOCOCOCIiIRCKIRCIRCIRRCIRCaKBRQKLIRRCKIRRCIRRCKIRRCKIgCOCOCOCIEAKAKAKAKxQBQBQBIKxWKxW2mBWBWBWBWKwKwKwKwIKKKBRRQKKKKBRRQKKKYRwRyIpwBWAKwBWxWAKwBWAKwBWAK2KwBWALBQKAKBQKAKBQBQKBQBQKARyORyIgBWAK2KwBQBARwCOyOARAJ2yO2CO2R2wR2yO2R2wR21JQBQBQWxWAK2K2KwBWxWxWAK2KxWKwKxKIRARCIRCICIRCIRARCIRCICIRCIRAREhARyICICORARyICICORARAOwCO2R2AR2ATwR2AR2AR2AR2ARwIRyORyOCORyORB2BWwB2R2R2R2RRRCKKKKKIRRRRRRCN2wCO2wCO2wR22CYRCIRCJARwRwCOARwRyIRCIRCIRARCIRCIRCSKIRCIRRCIRRCIRCKIRCKIRCIRRCICIRARCICIRARCICIRARCICIRARCICIRARCaAKAKAKAKAKAKxQBQBQBQBWARCICICIRARCICawKwKwKwKwBWBWBX+whRRRRRRRP+2wBWxWxWwK2JCICORyICORyICICKKKKKKKKKKKJQBQBQKAKBQBQBUKKKKKKKKBRRRRRRXAKxWKxWOCxQCW2K+2wBOwBO2xX2wKASxWKxWK/+wJ2n//wCKBQKAKBQOE+wBX22BW2wJ2BO2BXwBXwBW20+2ASIB5QKKBRQCKBRRQKKP+Am2BaAKAKAKAJ+FJRRQKKKKPwJ8+wBOR2R2R2RwCICICICICORwRyOKxWKxVJRRRxOQR1O2JAn/////////////4BX/+wK/wRARARARARCICICICKKBQBQKBQBWwBWwRRRRRRRRQKKKKKKKKBRQKBRQKBQKKBQKKBQKKBQKKBQKBRQKBRQKAQKBQaBRQKKBRQKKBQKKBRQKKBO2AJ5WKxWBWO2wRQBQKAKAKBQBQKKBQKBRQKBRQKBQKKBQKKBQKBRQKIRRCKIRCKIRRCKIR2AK2BRRRRRRRRRRRRARCICIRARCIFAKBQKKBQKBQKKIRRCIRCKIRwR2COwRwBQKBQKBQBQKBQKBRCKKIRRRCKKIRRRCKKIRRRRCKKIRRRCKKIRRRCKQRJQKKKKKIRRRRR4ORAJR2AIRCKIRCIRRCIRCKITKIRChCKIRRCKIRRCKIRRRRCKKKIRRRCKKKIRRRRCKKBQKKBQKBQKxWKxWAR2RwRRCKIRRCKIRRRRQKKBRRQKKBRQKK/wCP/+2R//2wR//2yP/+2R///////2yIRRCIRCN/xZRRRgEAJxOFJCCORyORAYRCIRCJRRRRCKKKKIRRRRwJ2wE202JRCIk2J5IEAnR4CZCILMK4CO2wEOSKKKaKKBp///2QDIn+CBWKDJRCNP+2wRRRRRRRRQRARARRQKBCIOJwKKIBBiKKKKKIKKKKBRRoIRCIRBRRRhQJyOTKeBCIThRWCKIRRX+2wCOyKKBRoKIRCKIRRBRRRRCWJARyICICZxKKKKOARRQKKKBSKIRRCKIRX2wmRCIRCOL2wCwCaAiIRCIoKKKLwOwLRRRoIRRTOwIKAOwEKKwFOzOwJ2nwBW2BWERRCKaKKKKBRRQCIRCIRCIRCITQKBQBQJyOyWCOwpORCRCIRCPAaKKK2E22AJ+KxWKxQJ2EKIRCKIRCKIPhRCKIRRCKIIRCIRARCIRCITQBQBQBQBKIRCIkICICIaKBRQKKBRX+ARRRnmxKKKKaIRCIRCIRCIRDRRRRQKKKKBQKBQJRRRm0RARARARhCIRCIRCIRIKwKwKwKwRyOCOREKKKJKBQKBWnJ2iKIRRCKIRTRRRRQKKKLCICICICICICICICO2wmKxKBQKBQKBQKBRP0RQKBRRKKBRQKKBRRRCIRCpKIRCKIRRCZRRRRRRRRhRRSzRCKKIRRRCKJ/pKxWKAaKBRRQKKKBRAKxWKxQeK2K2BWxQCRRRTBQBQBQBWKAKAKAKB+BYRARARARAREAQRCIRCIRCIRCaBQKAKCRARARARARAKKKIRRRRTQKBQKpKIRRCKIRRO2AhQBQKBQBTBQBQBQBQKKBRRQKKKBTWBWBWBWBBQBQBQBUwK2ewmwCO2DQBQBWKAKyIRRCNJQKBQKJQKBQKBQKAKBQKBQKBRP+2wBQKBQKAKBQKBQKBQBQKBQIBWKwKSKKKRRRUKKKL2COwBwRwCOCOCaBQKBQhRRUKBRQKKBRQJRRRRRRRRO2x2wR2wCO2CO2CaIRCIRCKIRCIX/wJCORyORwRyORyIQRyORAQKBQKKBQKBQKBQKBRQKBQKBCICICICIPn22J+wCRARARDRRRUKKKKKKKKBRRRRRRiBQKBRaxWKxWKKBRQKKKBRQKKBRKKKKKKKKKKKKJP0AhCKIRRCKIRewgKSIRRCM2BKKKIRRRRTPmBWBWKwKwIKAKAKAKDIRCIRFIRyORyIIRARARAR4BICIRARARCICIRASKIRCKKRCIRCKyICCIRCIRCIRCIRCIRCIT+2wDRCKIRCKIRCKIRCKIBQKBQKBQKBQKB/4pKwKwKwKAeARwCARwRwRwR22ARQBQKBQBQKAKJQKKBQKBQKKBUKKBQRRRCKKKKKKIRRRRRRRCKKK2C5OCOARwRwTRRRRRRRRRRRRRRRR2RwX2yKKMAKwKwKwBWBQB2yO2D+2wCAKAKAK2Ap2KKKKJKIRRCKIRRRCKIRR+2yKBQKAKBQOAR2RwCOASKIRCKIOyOwR2R2RyORyOTRRQKKKKBRRRQKNKICICICICKKKaKKKIRRRRRCKKKIORyORyaBQKAKC22RARARARB2COwR2COwR2CaBQKAKBQKBQBQKBQBQBQBQBWKAKAKCRRRRRRRRRCIRCKRRRRRRRTP22m2AJARARARAm2AJ/+KIRCIRCKIRCIWyOyOARwCZ2AhRRRRRRRQBQBQBQBQBQBWKAKAKAKAKyBRQKBTARwRwRwRyIRCIRQRCKIRCIRRCIRCKIRE///////2wgKKBQKBRQKBRQKBQKKBQKKBQKBRQJBQBWKxQBWKxQBQIRyORwRyORyIBQKBQKBQKBpKBQKBn22ORwCOARwCOwBWwBW2KwZQKKKBRQKKBRRQNBRRRQKKKIRCICIRCICIRARCIRARCIBRQKKBRQKKZCKIRCKIRREBQBQBQBQhRRRRRQKKKKKJAKwKwKwKAhRRRRRRUIRCIRARCIRCKKKKBRRQKKKBRRRRRCIRRDRRRRRRRRCKKKKKKKOwBKBQKBQBQKBQKKIRCIRRQBQBQBQRRRQKKKBRRm2wCPR22AR22ATOwBXxXAK+K2AgKBQKBQKBRQKBQKBQKBQKBQKBQKBQKKBQKBQKBQKBWBWBWBWBWBWBWBWBWAKwKwKwKwKwKwKwKwLwR2yO2CO2RwB///+2hCIRCIRCIRCM2CPCPR2AOR2COwCOwRxIRCICIRCIRCICIRCIRCIRARCIRCIRARCIRCIRARCIRCIRCICIREKAKAKBQBQBQKAKBQBQBQKAKAKBQBQBQRARCICIRARCICIRARARCICIRARCICIRARCIChRCKKKIRRTyOyOwR2RyKIRRRCKKIRRRCKKIRRWxWxWAK2K2K2K2K2KwBWxWxWxQKAKBQKBQBQKBQBQKBQKAKBQKBQBQKBQBQKBQKAKBIRARARARARARARARKIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCORwCOARwCOARwCOARwRwCOARwCOARwCIA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                -1,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1366",
+                                "1659",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                11,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1373",
+                                "1658",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1375",
+                                "1655",
+                                "1",
+                                "pIJRJAI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1360",
+                                "1655",
+                                "0",
+                                "paBMLOT"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                16,
+                                14,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1411",
+                                "1617",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                17,
+                                15,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1412",
+                                "1616",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                18,
+                                16,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1377",
+                                "1594",
+                                "1",
+                                "SBQKAKBZRCKKaKKKI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                19,
+                                17,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1435",
+                                "1589",
+                                "1",
+                                "QBQZRRRQKAZRRRTOwCQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                20,
+                                18,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1383",
+                                "1553",
+                                "0",
+                                "pJZ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                21,
+                                19,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1381",
+                                "1552",
+                                "0",
+                                "pJZ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                22,
+                                20,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1379",
+                                "1551",
+                                "0",
+                                "pJZ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                21,
+                                -1,
+                                10
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1360",
+                                "1541",
+                                "0",
+                                "pOKBQKBQJAQZK2wBw"
+                            ]
+                        }
+                    ]
+                },
+                "type": "nature--sky"
+            },
+            "25": {
+                "frame_intervals": [],
+                "name": "object 118",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2755",
+                                "1769",
+                                "1",
+                                "QKAICOyOyOyOAR2R2RwExWxWxWxWxWxWwK2K2K2K2K2K2BWxWxWxWxWxWwK2K2K2AK2AK2AK2AK2AK2AK2AK2AK2BWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwBWwK2AK2AK2AK2AK2AK2AK2AK2ANP//+wS+2BX2wK+2AK+2BX2wK+2BX2wBX2wK+2BX2wK+2AK+2BX2wK+2BX2wBX2wK+2BX2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1711",
+                                "1735",
+                                "1",
+                                "2KxO0hC2AK2AK2AK2AK2AMIhQBQBQBQm2wBXK22AI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1172",
+                                "1730",
+                                "0",
+                                "IKBQKBAKBQKBXCwCRRRKBQBQKAKxQSKBRQKMORwRyOCORwRyOCORwRyOEAR2y2wRRRQKKKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1324",
+                                "1640",
+                                "1",
+                                "IRyORyIBCIRARERRRRxWAKwBWALBRCIRCKIRCIRRF/+ApIRCaKKKJ2ApKKKKBRRRRpKKKYR2OARCIRCOAgRCM2J2xO2AmCKKKIRRRRRCKKKMIRCIQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1033",
+                                "1554",
+                                "0",
+                                "IKBQBQKBQOARwCOARwC2C+2m2AhRRDIRCIRCIRCIRAKxWBWKLRRRRRRRZQKBpKKKKRARARyICOwK4CAKAKAKxQBQBQBQBQBQBQKAKAKAKAKAKBQBQBQBQBp4BX2wK+2K+2BX2wK+2BXENP2wBP4J+0BQBWKAKAKAKAMOARwCOyOAQKAKAKAKCKIRCKIIRCICOKKBQKKBQKKBQKKBQKKBRQJKKKKKKKKARwCOmExXBXBXAK4K4BXBXBX2BX22BW"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1160",
+                                "1533",
+                                "1",
+                                "2wBP+ARRQKKKBRAKKBRQK6CIP2wE2K+AK+AK+xXwBXwBXwBXwBXwBWFJ2CIhCKIRRARyOCIW2AJBP+wE5BRRRRRRRRSKBRQn2wODRRSxQBQBQBQIRCIRRCIRCIRCKIRCIoIRCIRC2wCOCOCOARAL2BARARyOAKAKAKAKBRQKBRQKKBp2wBBQKBQNO2DO2E5X+2K+BOJ//4E+2ALQKBQKJRRRRCKIRRCImSK5OAJ822K2BWwBW20+AiKP2xweB+AKBQBpwCIRRCKIRRCKIRRE+2gBP/2yyO0KKKZKxWKxWRyOCORARARARARwCOyOyOyOn2AJ8+CKKKKBRRTPwgBQBQBQA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                5,
+                                7,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "918",
+                                "1",
+                                "///////////////////////////////////pOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOARwRwCOCOARwRwRwCOCOARwRwCOCOCOARwRwCOCOARwRwRwCOCOARwRwCOCOCOARwRwCOCOARwRwRwCOCOARwRwCOCOCOARwRwCOCOARwRyORwRyORyOCORyORwRyORyOCORyORwRyORyOCORyQRCIBWBWBWAWBQOwC2WKxWKx+xKKKKKKKKKKKKBQKAKBQKBRRRRRRRQCOCOCOCIBICICICICORyOCIBaBQBQKBQKKKKKKKKWCOwRyORyIE2BIRRCIRIRARARARARARARARAKKKKKKKKJCKIRRCIm2wE2wK4RmB2C2CxWOLQBQhRRRRRRRQBQBQBQBQKhQJKBQKBRKKBRRRRQKKKKBRQBRQKBQaKIRRRRCKE4BW2K2AK2xW2K2xWwBW2K2xW2K2AK2xW2K2xWEAKAKAKAKBQBQBQBQBQBQKAKAKKKKKKKKBRRRRRRRRJQBQBQKAKBQBQBSKKKKKKKKKKKICICORyICORyICImxWwK2K2K/22AhRRRRRRRP+wKwKwKwBWBWBWBWBhARCICIRARARCOAKAKAKAKAKxQBQBQBQBQBQBhCICIRARCICIRARCICIRARCICIRARCICIRARCKIRCIRRCIRRCIRCKIRCKIRCIRRIIRCIRCIRARCIRCIRCORwRwCOARwRAhCIRCIh22CO2wR22AR2wLKIRRRRRRCKKKKKIRRR2R2R2R2WwBWyCORyORwRyORyIWR2AR2AR2AR2ARwh2AR2AR2yOwCCICORARARyICORARARyICJJCICIRCIRARCIRCICIRCIRARCIRCICIRmKwKxWK2KwBWxWxWAK2K2KwBWxAKAKAKZ2yO2CO2R2yO2CO2R2wR20ARwCOyOARAQBWAK2KwBQDCORyORxQKAKBQKAKBQBQKBQBQKpwBWAK2KwBWAKwBWAKwBWxWAKwBWALCORwREKKKBRRQKKKKBRRQKKKWBWBWBWBWKwKwKwKwJ2xWKxWKEAKAKAKxQBQBQBQBICOCOCOCIBIRRCKIRRCKIRCKIRRCKIoKBRQKMIRCIRRCIRCIRCKIRCJIRwRwRwRAOwWR2R2R2R1JCKIRCKIRCKIRRCIRRCIRRJRyOCOQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                -1,
+                                -1,
+                                6
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "340",
+                                "1739",
+                                "1",
+                                "pO2J2wWAKwB/APIBBARARAQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                6
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "421",
+                                "1685",
+                                "1",
+                                "gBQKBQKBQKBQK+AKxWKxARyORyIC+wCIRARCICIRRRRRRRRRRRRRCKKPwKBQBQBQKAKBQBP/2wRwRwRyOCORwRwRCRARARARDKKKKKKKOBWKxWBWKxWKxhwCOAR2RwCKBRRQKKKBRRQKOBQBWKxQBWKAKxWKAKxWKAKxQBWMICIRARCICICIRAKORyORwCOCKKBRRRQKKJ+2AJxWBWBWBiKIRQRARARARARyOCOCOCOKKKBRRQKKKIKBQI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                8,
+                                -1,
+                                6
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "222",
+                                "1644",
+                                "0",
+                                "n2AKwBWBWBWBWAKwKwKBRQKKBRQKJ////2yOCOCOCIJwBWAK2KwBWxWAK2KwBWxWAK2KwBX/+AKwKwKwKwKwKwKwKwJAKwKwKwK/wXwPwBRRCKIRRCIZRRCKKIRRRCKKKKKBQKKBQKKRRRRRRRRhRCKKIRRRRCKKIRRRCMKBQBQKWwJQKBQKJyORwR0KKKKKKKKKKKKKKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2894",
+                                "0",
+                                "0",
+                                "ICOARwCOARwCOARwRwCOARwCOARwCOARyIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCKRARARARARARARAREBQBQKBQKAKBQKAKBQKBQBQKBQKAKBQKAKBQKBQBQK2K2K2KwBWxWxWxWxWxWAK2K2KKIRRRCKKIRRRCKKIRRyOyOwR2R0KKIRRRRCKYICIRARCICIRARCICIRARARCICIRARCICIRARBQBQBQKAKAKBQBQBQKAKBQBQBQKAKAKJCIRARCIRCIRCICIRCIRCICIRCIRCICIRCIRCIRARCIRCIRARCImR2COwCOwRy2CPR4R2AaIRCIRCIRCIRP///2ywR2yO2CO2RwpwKwKwKwKwKwKwKwKwBWBWBWBWBWBWBWBWBQKBQKBQKBQKKBQKBQKBQKBQKBQKBQKBRQKBQKBQKBOwBXxXAK+K2ApO2wCO2wCPR22AJRRQKKKBRRRBQBQBQBRRCIRCKKBQKBQBQKBQKWwRRRRRRRRCKKKKKKKMRRCIRRRRRQKKKBRRQKKKKIRCIRARCIRCJKKKKKKKJAKwKwKwKAhRRRRQKKKKKKJBQBQBQBQJCKIRRCIRRFJRQKKBRQKKCIRARCIRARCICIRCICIRCKKKBRRRRZQKKKBRQKKBRRQNOBW2K2AK2COARwCOARy+2xKBQKBTKBQKBQKBQKCORyORwRyORCBQBWKxQBWKxQBQgKKBQKBRQKBRQKBQKKBQKKBQKBRQJ///////2wJCIRRCIRCKIRCIRRCIKIRCIRyOCOCOCIEKBQKKBxQBQBQBQBWKAKAKAKAKAKAKKKKKKKKJ2ApOARwCOyOxCIRCKIRCIRCK/+m2AJARARARAm2AJ+21JRRRRRRRKIRCIRRRRRRRRRBBQBQBWKAKAKAKAKBQKAKBQKBQBQKBh2COwR2COwR2CRARARAR22BBQBQKBhyORyOSKKKIRRRRRCKKKMKKKICICICICJaKBRRRQKKKKBRRhyORyOR2R2R2COyRRCIRRBwCOAR2RwCBQKAKBQKP22RRCKIRRRCKIRRCMRRRRWzOwBQBQBQB+2wE2yO2QBWBWAKwKwKAJRRR+2OCOyKKKKKKKKKKKKKKKMOCOCOARwnOwBRRRCKKKKKKIRRRRRRRCKKIKBRRJQKKBQKBQKKBSKAKBQBQKBQBR22ARwRwRwRAOARwEAKwKwKwKZ/4QKBQKBQKBQKBQRRCIRRCIRRCIRRCM+2whCIRCIRCIRCIRCIRCIICOBRCIRCJRRCIRRBARCICIRARARCIE4CICICICISORyORAZCIRCIpBQBQBQBSwKwKxWBWBPpKKKKIRRRmwJRCKIRIKD2FJCKIRRCKIRIBP0RRRRRRRRRRRRhQKKBRQKKKBRQKKxWKxWNJQKBQIaKKKKKKBRRRRRRRRJRRRiICICIP2An22J6RARARARCBQKBQKKBQKBQKBQKBRQKBQICORyIBCORyORwRyORyIn/wIRCIRRCIRCIRh2wR2wR2wCO2C2wCRRRRRRRRgKKBRQKKBRJRRRIKBQKBhwRwRwCOC2COwpKKKJKKKIKKKJBWBWKCBQKBQBQKBQKBQKAKBQKBX+2wEKBQKBQKBQBQKBQKBQKRQKBQKZRCKIRxQBWKAKAM2yO2ewmxWDBQBQBQBSwKwKwKwMKBRRQKKKBRQKAKAKAKhQBQKBQBT2wCRRCKIRRCKZKBQKBhRRRRCKKKCICICICICIIKAKBQMIRCIRCIRCIRBzCICICICICIp+CBQBQBQBWKAKAKAKhRRROK2K2BWxQEBWKxWKCKBRRQKKKBRgBWKxTP8KIRRRCKKIRmJRRRKKKKKKKKNJCKIRRCIRTJCIRCKKKBRQKKBRSKKBQKJP0KBQKBQKBQKBSxWe2wRARARARARARARARFJRRQKKKKMKIRRCKIRRJ2nJxQKBQKhRRRIRyOCORwKwKwKwKEIRCIRCIRCJRARARARJ2JRRRgKBQKBRRRQKKKKMRCIRCIRCIRCMKKKM2J5KKKP+AKKBRQKKBRiICICJJCIRCMAKAKAKAMIRCIRCICIRCISKIRRCKIRRPSKIRCKIRCKJ2EBWKxWK+m2wBOwKKKM4RCIRCIIR02AR2COyOwR/+2AOwCOwBRRRQpxWAK2KwBWAKwBWxWAKAJ//2xQBQKAKBQBQBQKAJxWwK2BWwK2BWwBWwKwmwE////////+2BOwJ////////+2E/0KKICIRCICnAJRhIEyICORBKOCOCOCIBIRCIRARCIRCIRCICIRCIBQKKKBRRpBRQKKKKKIRRRCKKIRRRBRRCKKKIRRQKBQKAKBQP22R+2yP2wCP22TRRRRRRRRQBQBQBQBCIRCIRAKKBRQKKBRQKKKKBRRQKKKKBRURCIRARCIRARCIBWKxQBWKAKxWKBQKBQKB2COyOwR2R2COwR2R2COyOwR2COyOwR2R2COwR2R2COyOwR//////22KIRRCKIRRCKKIRRCKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCIRCIRRCIRCKBQKBQKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKBQKBX/////////////////+2E/////////////////////////////////////////////////////////2w"
+                            ]
+                        }
+                    ]
+                },
+                "type": "nature--vegetation"
+            },
+            "26": {
+                "frame_intervals": [],
+                "name": "object 129",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "644",
+                                "2444",
+                                "1",
+                                "JQp///////////////////////////////////////////////////////////////////////////////////////2wF///////////////////////////wBX//////////////////////////+K///////////////////////////wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "721",
+                                "1818",
+                                "1",
+                                "xQBQBQBRRRgRCMORyOCORyKQBQBQBW0+I"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "689",
+                                "1817",
+                                "1",
+                                "RWFOBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "854",
+                                "1730",
+                                "1",
+                                "2K2EEKJ2iKKMKIQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "816",
+                                "1709",
+                                "1",
+                                "IKBQKBQKKBRRRQKKKKKBRhQKBQKgKAKARCITwW2wJ4pKC22AJ2AR2ARAn2wCRRCKKKIRQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "457",
+                                "1694",
+                                "1",
+                                "wCORwRyOCOCP+2AJ22AJyO2R2wR2yOE2BWwBWwK2BQiOCOCORARARARARBRCKAR2RwCOARwCOyOhyIW2wKKKMIRCICIRCIRCIQKBQKDKORyICWK2RwCOCKKKIKKKKKBRRRRRQRQKKKBRRQKOAR2RwCOATWRCKKKIRRRCKKIRhRRRWR2R2RwCOAR2R2R2RAQKAKAKgKBQKBSKIRRCKIRRwRwKBQKKBBRRRIRARARARARARyICICICICICMCICIRARCPwiO2yO2wR22RwBO2wJCOCOCOARwRwRwRwCOCOCOAWWKxWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1349",
+                                "1693",
+                                "1",
+                                "2BOwRCIRCOAWAREKKKNJARARARAWBRQKMAJ+2AgBPoKBRRhRRROWxIA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1401",
+                                "1621",
+                                "1",
+                                "NI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1401",
+                                "1614",
+                                "0",
+                                "xp"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1601",
+                                "0",
+                                "2QFOwg"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1391",
+                                "1600",
+                                "1",
+                                "QpA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1418",
+                                "1599",
+                                "1",
+                                "JCIRCOpP/2yP/2AR+2AJxP///2AgE2wR+2R+2R+wBC/BOJ+wFKICICICOwR2KIRRRCKKIRRCKKIRRRCKKIRRRCKIRRRCKIRCIRCIRCW2wXZ/2wLwBWAW2wpIRCIRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRE///////2n///////////////wQKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKAKAKBQBQBQBQBQBQKAKAKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBWxW2BW2AKARQKAKAKBQBp5O2xKKKKaBQNKORyORARARARARARARATIBQBQBaKIRSIRRCIRCIRRCMKSBRQKKBRQKBRQKKOwB2COwRpOyOgKAKBQMIRCIRCIRCIRAKKKBRRRRhRCKJOBW2BXwCa2KKIRCKgRCIRJAIFAZwB2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--bike-rack"
+            },
+            "27": {
+                "frame_intervals": [],
+                "name": "object 141",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1210",
+                                "1700",
+                                "0",
+                                "2wENIBPmAnK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1210",
+                                "1674",
+                                "1",
+                                "+AgRCKIRRCKKM2Rw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1191",
+                                "1674",
+                                "1",
+                                "W2DKBQKBS2wBaBRQgKAm2K202wBX2A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--billboard"
+            },
+            "28": {
+                "frame_intervals": [],
+                "name": "object 144",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1291",
+                                "1718",
+                                "0",
+                                "JCIS+Am2Cy8KKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1529",
+                                "1689",
+                                "1",
+                                "J2COyOwR2COwR2R2COwWwRRQKKBQKKBRQKKBQKKBRBKAKBQMKKKM22nLQBQKAKAKBQBQKAKyOCOCOCP/22AhRCKK2CKBQMKBQKBQKKKIOCOARwRwCOCOARwRwCOCOARwR+AK22BW2wBW2wPCBQKBQMAKRRRRX//RyORyIRRRRRRRRJ2mwm2xKKKKBRRRRQKKKK2COwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2279",
+                                "1599",
+                                "1",
+                                "J2COyOwR2R2COwR2R2COyOwR2COyOwR2R2COwR2R2COyOwQKBQKBQKxWKAKxQBWKxQRCICIRCICIRCIYKKBRRRQKKKBRRRQKKBRQKKBRQRCIRCIQBQBQBQBRRRRRRRRh+2yP2wCP22R+2yBQKAKBQKBRRCKKKIRRSKKIRRRCKKIRRRRRQKKBRQKBRQKKBRYKKM6KKKM2CKKKM4BJARCIRARRQKBQKAKAKAKAKwCOwR2COwR22R2COwR2COCIRARCM2wCIRCICIhRRRXJBPwCICICICIWwXRRRCMKKKK+BP02J+wCx2AIRCIRC4RRRR22LQKBRQKBQKKBQCORyOR2wR+R4CPyO2RCIRRCIRCIRCIRRCIRhRRRRRRRRRRRhCIRARCICICICIEBQBQBQBXBOwKBRQKKKBRQKKBRRQKKBRRQKKBRQKKKBRQKJCICICICICICICICORwRwRyOCORwRwREIRCIRRCIRCIRX2yICICICIC6AKwBWxWAKAKKKKKKIRRRRRB22R22R22R2wCO2yO2yO2yO2yO2yO2AR22R22R22BRRRRRRRRRCKKKKKKKKKMO2R2yO2CO2RQKBRQKKBQKO2wR22CO2wCPAKwKxWIKKBRQKKBQKKBRQKKxWBWBWBQEOwCOwCO2R2ARCKIRCKIRCKISICICIRRRRRRRRRRRRWK2BWwBWwKxIRCIRARCIRCIRCIRARCIRCIRCIRARCIREKAKBQBQBQKAKBQBQKAKBQBQBQKAKCKIRRCIRRCKIRRCIRRCKMIRRCIRICOyOyOyOAR2R2R2RAQBWBWAKwBWBWAKwBWBQCBQKBQKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKBQKBQKIRCIRRCIRCIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRCKKIRRCKIRRCI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1205",
+                                "1595",
+                                "0",
+                                "+AK/2xX+2K/2xXwWmX////+2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1041",
+                                "1484",
+                                "1",
+                                "22AK+2wK+2wK+2wK+wK4K4K4BXBXAK4K4KxOyICICORAWRwRCIRCOB22mwJAJwpKOwLy2wEBBRRRRRRRgKAKBQKwKwKwKwMORyOCOhRRRCICIRCICIaIRC2wBP2xX2wK+2BX2wK+2BX2xX2wK+2BX2wK22mwE+2wBW2K2AK2xW2K2xWwBW2K2xW2K2AK2xW2K2xWwBW2K//BPyKBQKKBSIRCIRCQZASIRoIRRCKIRRCZRCKIRCIRCKIRJ+wp2ZQKBUCIRCKBRQKIRAhRRRhRRRB22BICBQhRQKOE2wJ2xOy0KKKKy22JIWwC2wZ202wCyKBQKBB2J2WRRRRmwWJTIBWKxWK+RRRRWhRRCMKKKKxO2IKKKKy2Cy2AJ2AR2AR2yPBBRRRmwRQKBmwJRRTOy0KKIRWX+2CKKKKKKKKKKKKKKKKKKKKX4COwR2CZwK+AK+AK+AK+AK+AK+xXwBXwBXwBXwBXwBW2A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "29": {
+                "frame_intervals": [],
+                "name": "object 149",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1376",
+                                "1655",
+                                "1",
+                                "0AiI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1361",
+                                "1655",
+                                "0",
+                                "wpIFJg"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1422",
+                                "1632",
+                                "1",
+                                "Owp2A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1619",
+                                "0",
+                                "2AgE0LC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                3,
+                                5,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1418",
+                                "1611",
+                                "0",
+                                "OpKKKJx1OwQBS2FJRRBJRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1422",
+                                "1618",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1377",
+                                "1595",
+                                "1",
+                                "OpKKKMKKIRoBQBQKA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1435",
+                                "1590",
+                                "1",
+                                "IRB2ApKKKNIBQKKKNII"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1443",
+                                "1541",
+                                "0",
+                                "JARARyIE02ARRRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1361",
+                                "1541",
+                                "0",
+                                "wWW2AmgKBQKB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1421",
+                                "1486",
+                                "1",
+                                "JyOgKQhCIWg"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1362",
+                                "1478",
+                                "0",
+                                "wSIQKBpBQQRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                11,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1078",
+                                "988",
+                                "1",
+                                "22gKKBRQKKBQKKBRQKKBRQMBQKBQNPWKwKxWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1456",
+                                "974",
+                                "1",
+                                "JRRRRCKKKKKBiIRCKIRCNJCKIRCIRRCIRCKIRC2CKQRw"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "30": {
+                "frame_intervals": [],
+                "name": "object 163",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "869",
+                                "1705",
+                                "1",
+                                "/+R2wEMRW2wBXK4K2A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1366",
+                                "1658",
+                                "1",
+                                "QB4CPk22AR4BRKoIRA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1291",
+                                "1652",
+                                "1",
+                                "/2RCIRVOAKwBWAKyKKKJIRARmE0AJAJRRQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1255",
+                                "1652",
+                                "1",
+                                "QFIA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1373",
+                                "1486",
+                                "0",
+                                "CRARARAKKKKKKKKP+2wLRCKKKKIphRRRAKxQP////TX/Amn//+2AR//4LBQP/////Amn2wCP/2AR/+2R+2AKIRRCKIRRBQKKKBRuRCKKKKRRCKIRCKLKKBRR2R/22AKKIRRwBRkCKKKRCIRCLKKKBRRRSKKKKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1722",
+                                "1463",
+                                "0",
+                                "////////+2Amwn////////2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1432",
+                                "991",
+                                "1",
+                                "JRCKKIRRRCKKIRRRCKKKIRRRCKKIRRRCKKIRRRCKBQKBQKAKBQKBQKwR2COwRwRCKIRCIRRCKKBQKBQKKBQKBZARCICIRARCICKKKKKKKKKKKK2BWwRCKIRRCKIRCKIRRCKBRQKBQKKBQKKBQKBRQKBRQKBQKKBQBQKAKAKBQBoDKpKBRQKBRQKBQKKBQKKBQKKBQKKBQKBRQKBRQKKKKKKKKBRRRRRRRR2AK2AKAKBQKAKBRRARARARCICICICICP+BX/+wK//////////////AJAn/+AgBP//22B2Kwp/2wp5///////////+2R//2yP/+2R//2wR//2yP+AKKBRQKKBRRQKKBRRRRCKIRRCKIRRwR2R2KxWKxQKBQKBRQKBRRCKKKIRRRRCKKIRRRRCKKKIRRCKIRRCKIRRChA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "31": {
+                "frame_intervals": [],
+                "name": "object 170",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1291",
+                                "1718",
+                                "0",
+                                "JCIS+Am2Cy8KKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1529",
+                                "1689",
+                                "1",
+                                "J2COyOwR2COwR2R2COwWwRRQKKBQKKBRQKKBQKKBRBKAKBQMKKKM22nLQBQKAKAKBQBQKAKyOCOCOCP/22AhRCKK2CKBQMKBQKBQKKKIOCOARwRwCOCOARwRwCOCOARwR+AK22BW2wBW2wPCBQKBQMAKRRRRX//RyORyIRRRRRRRRJ2mwm2xKKKKBRRRRQKKKK2COwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2279",
+                                "1599",
+                                "1",
+                                "J2COyOwR2R2COwR2R2COyOwR2COyOwR2R2COwR2R2COyOwQKBQKBQKxWKAKxQBWKxQRCICIRCICIRCIYKKBRRRQKKKBRRRQKKBRQKKBRQRCIRCIQBQBQBQBRRRRRRRRh+2yP2wCP22R+2yBQKAKBQKBRRCKKKIRRSKKIRRRCKKIRRRRRQKKBRQKBRQKKBRYKKM6KKKM2CKKKM4BJARCIRARRQKBQKAKAKAKAKwCOwR2COwR22R2COwR2COCIRARCM2wCIRCICIhRRRXJBPwCICICICIWwXRRRCMKKKK+BP02J+wCx2AIRCIRC4RRRR22LQKBRQKBQKKBQCORyOR2wR+R4CPyO2RCIRRCIRCIRCIRRCIRhRRRRRRRRRRRhCIRARCICICICIEBQBQBQBXBOwKBRQKKKBRQKKBRRQKKBRRQKKBRQKKKBRQKJCICICICICICICICORwRwRyOCORwRwREIRCIRRCIRCIRX2yICICICIC6AKwBWxWAKAKKKKKKIRRRRRB22R22R22R2wCO2yO2yO2yO2yO2yO2AR22R22R22BRRRRRRRRRCKKKKKKKKKMO2R2yO2CO2RQKBRQKKBQKO2wR22CO2wCPAKwKxWIKKBRQKKBQKKBRQKKxWBWBWBQEOwCOwCO2R2ARCKIRCKIRCKISICICIRRRRRRRRRRRRWK2BWwBWwKxIRCIRARCIRCIRCIRARCIRCIRCIRARCIREKAKBQBQBQKAKBQBQKAKBQBQBQKAKCKIRRCIRRCKIRRCIRRCKMIRRCIRICOyOyOyOAR2R2R2RAQBWBWAKwBWBWAKwBWBQCBQKBQKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKBQKBQKIRCIRRCIRCIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRCKKIRRCKIRRCI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1205",
+                                "1595",
+                                "0",
+                                "+AK/2xX+2K/2xXwWmX////+2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1041",
+                                "1484",
+                                "1",
+                                "22AK+2wK+2wK+2wK+wK4K4K4BXBXAK4K4KxOyICICORAWRwRCIRCOB22mwJAJwpKOwLy2wEBBRRRRRRRgKAKBQKwKwKwKwMORyOCOhRRRCICIRCICIaIRC2wBP2xX2wK+2BX2wK+2BX2xX2wK+2BX2wK22mwE+2wBW2K2AK2xW2K2xWwBW2K2xW2K2AK2xW2K2xWwBW2K//BPyKBQKKBSIRCIRCQZASIRoIRRCKIRRCZRCKIRCIRCKIRJ+wp2ZQKBUCIRCKBRQKIRAhRRRhRRRB22BICBQhRQKOE2wJ2xOy0KKKKy22JIWwC2wZ202wCyKBQKBB2J2WRRRRmwWJTIBWKxWK+RRRRWhRRCMKKKKxO2IKKKKy2Cy2AJ2AR2AR2yPBBRRRmwRQKBmwJRRTOy0KKIRWX+2CKKKKKKKKKKKKKKKKKKKKX4COwR2CZwK+AK+AK+AK+AK+AK+xXwBXwBXwBXwBXwBW2A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "32": {
+                "frame_intervals": [],
+                "name": "object 175",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "857",
+                                "1701",
+                                "1",
+                                "+2wE2wn2xOwJ2BXm2An22A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--traffic-sign--back"
+            },
+            "33": {
+                "frame_intervals": [],
+                "name": "object 176",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1697",
+                                "1730",
+                                "0",
+                                "wnK22AK5W2wCQKB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2715",
+                                "1722",
+                                "1",
+                                "QBWBWAKwBWBWAKwBQXAK+2BX2wK+2BX2wBX2wK+2BX2wK+2AK+2BX2wK+2BX2wBX2wK+2BX2wK+2AK+2BX2wNP/+A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--barrier--guard-rail"
+            },
+            "34": {
+                "frame_intervals": [],
+                "name": "object 178",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1291",
+                                "1718",
+                                "0",
+                                "JCIS+Am2Cy8KKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1529",
+                                "1689",
+                                "1",
+                                "J2COyOwR2COwR2R2COwWwRRQKKBQKKBRQKKBQKKBRBKAKBQMKKKM22nLQBQKAKAKBQBQKAKyOCOCOCP/22AhRCKK2CKBQMKBQKBQKKKIOCOARwRwCOCOARwRwCOCOARwR+AK22BW2wBW2wPCBQKBQMAKRRRRX//RyORyIRRRRRRRRJ2mwm2xKKKKBRRRRQKKKK2COwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2279",
+                                "1599",
+                                "1",
+                                "J2COyOwR2R2COwR2R2COyOwR2COyOwR2R2COwR2R2COyOwQKBQKBQKxWKAKxQBWKxQRCICIRCICIRCIYKKBRRRQKKKBRRRQKKBRQKKBRQRCIRCIQBQBQBQBRRRRRRRRh+2yP2wCP22R+2yBQKAKBQKBRRCKKKIRRSKKIRRRCKKIRRRRRQKKBRQKBRQKKBRYKKM6KKKM2CKKKM4BJARCIRARRQKBQKAKAKAKAKwCOwR2COwR22R2COwR2COCIRARCM2wCIRCICIhRRRXJBPwCICICICIWwXRRRCMKKKK+BP02J+wCx2AIRCIRC4RRRR22LQKBRQKBQKKBQCORyOR2wR+R4CPyO2RCIRRCIRCIRCIRRCIRhRRRRRRRRRRRhCIRARCICICICIEBQBQBQBXBOwKBRQKKKBRQKKBRRQKKBRRQKKBRQKKKBRQKJCICICICICICICICORwRwRyOCORwRwREIRCIRRCIRCIRX2yICICICIC6AKwBWxWAKAKKKKKKIRRRRRB22R22R22R2wCO2yO2yO2yO2yO2yO2AR22R22R22BRRRRRRRRRCKKKKKKKKKMO2R2yO2CO2RQKBRQKKBQKO2wR22CO2wCPAKwKxWIKKBRQKKBQKKBRQKKxWBWBWBQEOwCOwCO2R2ARCKIRCKIRCKISICICIRRRRRRRRRRRRWK2BWwBWwKxIRCIRARCIRCIRCIRARCIRCIRCIRARCIREKAKBQBQBQKAKBQBQKAKBQBQBQKAKCKIRRCIRRCKIRRCIRRCKMIRRCIRICOyOyOyOAR2R2R2RAQBWBWAKwBWBWAKwBWBQCBQKBQKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKBQKBQKIRCIRRCIRCIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRCKKIRRCKIRRCI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1205",
+                                "1595",
+                                "0",
+                                "+AK/2xX+2K/2xXwWmX////+2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1041",
+                                "1484",
+                                "1",
+                                "22AK+2wK+2wK+2wK+wK4K4K4BXBXAK4K4KxOyICICORAWRwRCIRCOB22mwJAJwpKOwLy2wEBBRRRRRRRgKAKBQKwKwKwKwMORyOCOhRRRCICIRCICIaIRC2wBP2xX2wK+2BX2wK+2BX2xX2wK+2BX2wK22mwE+2wBW2K2AK2xW2K2xWwBW2K2xW2K2AK2xW2K2xWwBW2K//BPyKBQKKBSIRCIRCQZASIRoIRRCKIRRCZRCKIRCIRCKIRJ+wp2ZQKBUCIRCKBRQKIRAhRRRhRRRB22BICBQhRQKOE2wJ2xOy0KKKKy22JIWwC2wZ202wCyKBQKBB2J2WRRRRmwWJTIBWKxWK+RRRRWhRRCMKKKKxO2IKKKKy2Cy2AJ2AR2AR2yPBBRRRmwRQKBmwJRRTOy0KKIRWX+2CKKKKKKKKKKKKKKKKKKKKX4COwR2CZwK+AK+AK+AK+AK+AK+xXwBXwBXwBXwBXwBW2A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "35": {
+                "frame_intervals": [],
+                "name": "object 183",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1291",
+                                "1718",
+                                "0",
+                                "JCIS+Am2Cy8KKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1529",
+                                "1689",
+                                "1",
+                                "J2COyOwR2COwR2R2COwWwRRQKKBQKKBRQKKBQKKBRBKAKBQMKKKM22nLQBQKAKAKBQBQKAKyOCOCOCP/22AhRCKK2CKBQMKBQKBQKKKIOCOARwRwCOCOARwRwCOCOARwR+AK22BW2wBW2wPCBQKBQMAKRRRRX//RyORyIRRRRRRRRJ2mwm2xKKKKBRRRRQKKKK2COwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2279",
+                                "1599",
+                                "1",
+                                "J2COyOwR2R2COwR2R2COyOwR2COyOwR2R2COwR2R2COyOwQKBQKBQKxWKAKxQBWKxQRCICIRCICIRCIYKKBRRRQKKKBRRRQKKBRQKKBRQRCIRCIQBQBQBQBRRRRRRRRh+2yP2wCP22R+2yBQKAKBQKBRRCKKKIRRSKKIRRRCKKIRRRRRQKKBRQKBRQKKBRYKKM6KKKM2CKKKM4BJARCIRARRQKBQKAKAKAKAKwCOwR2COwR22R2COwR2COCIRARCM2wCIRCICIhRRRXJBPwCICICICIWwXRRRCMKKKK+BP02J+wCx2AIRCIRC4RRRR22LQKBRQKBQKKBQCORyOR2wR+R4CPyO2RCIRRCIRCIRCIRRCIRhRRRRRRRRRRRhCIRARCICICICIEBQBQBQBXBOwKBRQKKKBRQKKBRRQKKBRRQKKBRQKKKBRQKJCICICICICICICICORwRwRyOCORwRwREIRCIRRCIRCIRX2yICICICIC6AKwBWxWAKAKKKKKKIRRRRRB22R22R22R2wCO2yO2yO2yO2yO2yO2AR22R22R22BRRRRRRRRRCKKKKKKKKKMO2R2yO2CO2RQKBRQKKBQKO2wR22CO2wCPAKwKxWIKKBRQKKBQKKBRQKKxWBWBWBQEOwCOwCO2R2ARCKIRCKIRCKISICICIRRRRRRRRRRRRWK2BWwBWwKxIRCIRARCIRCIRCIRARCIRCIRCIRARCIREKAKBQBQBQKAKBQBQKAKBQBQBQKAKCKIRRCIRRCKIRRCIRRCKMIRRCIRICOyOyOyOAR2R2R2RAQBWBWAKwBWBWAKwBWBQCBQKBQKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKBQKBQKIRCIRRCIRCIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKIRRCKKIRRCKIRRCI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1205",
+                                "1595",
+                                "0",
+                                "+AK/2xX+2K/2xXwWmX////+2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1041",
+                                "1484",
+                                "1",
+                                "22AK+2wK+2wK+2wK+wK4K4K4BXBXAK4K4KxOyICICORAWRwRCIRCOB22mwJAJwpKOwLy2wEBBRRRRRRRgKAKBQKwKwKwKwMORyOCOhRRRCICIRCICIaIRC2wBP2xX2wK+2BX2wK+2BX2xX2wK+2BX2wK22mwE+2wBW2K2AK2xW2K2xWwBW2K2xW2K2AK2xW2K2xWwBW2K//BPyKBQKKBSIRCIRCQZASIRoIRRCKIRRCZRCKIRCIRCKIRJ+wp2ZQKBUCIRCKBRQKIRAhRRRhRRRB22BICBQhRQKOE2wJ2xOy0KKKKy22JIWwC2wZ202wCyKBQKBB2J2WRRRRmwWJTIBWKxWK+RRRRWhRRCMKKKKxO2IKKKKy2Cy2AJ2AR2AR2yPBBRRRmwRQKBmwJRRTOy0KKIRWX+2CKKKKKKKKKKKKKKKKKKKKX4COwR2CZwK+AK+AK+AK+AK+AK+xXwBXwBXwBXwBXwBW2A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "36": {
+                "frame_intervals": [],
+                "name": "object 188",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "754",
+                                "1783",
+                                "1",
+                                "wWKx2B2C22BQBQBQBQRRRRRRRRmwhRRRzIQCOEyKKKKCICICICIIKBQKBp2Z+wiIRRCIRCIRRCNJCKIRRCKIRRCKIRRJ2BORyOCOp0ORyOCOxQBQBQA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--vehicle--motorcycle"
+            },
+            "37": {
+                "frame_intervals": [],
+                "name": "object 189",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1619",
+                                "1656",
+                                "1",
+                                "xWAK2KwBWAKwBWxWAKxhRRRQKKKM22J2BO0RRRRRUOwCOwR2COwR2COyOyOyO0xWAm2xOJ22EwK2BWwBWwK2BWwK2BWgBQKAKAKBQBQKAI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--vehicle--truck"
+            },
+            "38": {
+                "frame_intervals": [],
+                "name": "object 190",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "644",
+                                "2444",
+                                "1",
+                                "JQp///////////////////////////////////////////////////////////////////////////////////////2wF///////////////////////////wBX//////////////////////////+K///////////////////////////wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "721",
+                                "1818",
+                                "1",
+                                "xQBQBQBRRRgRCMORyOCORyKQBQBQBW0+I"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "689",
+                                "1817",
+                                "1",
+                                "RWFOBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "854",
+                                "1730",
+                                "1",
+                                "2K2EEKJ2iKKMKIQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "816",
+                                "1709",
+                                "1",
+                                "IKBQKBQKKBRRRQKKKKKBRhQKBQKgKAKARCITwW2wJ4pKC22AJ2AR2ARAn2wCRRCKKKIRQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "457",
+                                "1694",
+                                "1",
+                                "wCORwRyOCOCP+2AJ22AJyO2R2wR2yOE2BWwBWwK2BQiOCOCORARARARARBRCKAR2RwCOARwCOyOhyIW2wKKKMIRCICIRCIRCIQKBQKDKORyICWK2RwCOCKKKIKKKKKBRRRRRQRQKKKBRRQKOAR2RwCOATWRCKKKIRRRCKKIRhRRRWR2R2RwCOAR2R2R2RAQKAKAKgKBQKBSKIRRCKIRRwRwKBQKKBBRRRIRARARARARARyICICICICICMCICIRARCPwiO2yO2wR22RwBO2wJCOCOCOARwRwRwRwCOCOCOAWWKxWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1349",
+                                "1693",
+                                "1",
+                                "2BOwRCIRCOAWAREKKKNJARARARAWBRQKMAJ+2AgBPoKBRRhRRROWxIA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1401",
+                                "1621",
+                                "1",
+                                "NI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1401",
+                                "1614",
+                                "0",
+                                "xp"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1601",
+                                "0",
+                                "2QFOwg"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1391",
+                                "1600",
+                                "1",
+                                "QpA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1418",
+                                "1599",
+                                "1",
+                                "JCIRCOpP/2yP/2AR+2AJxP///2AgE2wR+2R+2R+wBC/BOJ+wFKICICICOwR2KIRRRCKKIRRCKKIRRRCKKIRRRCKIRRRCKIRCIRCIRCW2wXZ/2wLwBWAW2wpIRCIRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRE///////2n///////////////wQKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKAKAKBQBQBQBQBQBQKAKAKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBWxW2BW2AKARQKAKAKBQBp5O2xKKKKaBQNKORyORARARARARARARATIBQBQBaKIRSIRRCIRCIRRCMKSBRQKKBRQKBRQKKOwB2COwRpOyOgKAKBQMIRCIRCIRCIRAKKKBRRRRhRCKJOBW2BXwCa2KKIRCKgRCIRJAIFAZwB2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--bike-rack"
+            },
+            "39": {
+                "frame_intervals": [],
+                "name": "object 202",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "644",
+                                "2444",
+                                "1",
+                                "JQp///////////////////////////////////////////////////////////////////////////////////////2wF///////////////////////////wBX//////////////////////////+K///////////////////////////wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "721",
+                                "1818",
+                                "1",
+                                "xQBQBQBRRRgRCMORyOCORyKQBQBQBW0+I"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "689",
+                                "1817",
+                                "1",
+                                "RWFOBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "854",
+                                "1730",
+                                "1",
+                                "2K2EEKJ2iKKMKIQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "816",
+                                "1709",
+                                "1",
+                                "IKBQKBQKKBRRRQKKKKKBRhQKBQKgKAKARCITwW2wJ4pKC22AJ2AR2ARAn2wCRRCKKKIRQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "457",
+                                "1694",
+                                "1",
+                                "wCORwRyOCOCP+2AJ22AJyO2R2wR2yOE2BWwBWwK2BQiOCOCORARARARARBRCKAR2RwCOARwCOyOhyIW2wKKKMIRCICIRCIRCIQKBQKDKORyICWK2RwCOCKKKIKKKKKBRRRRRQRQKKKBRRQKOAR2RwCOATWRCKKKIRRRCKKIRhRRRWR2R2RwCOAR2R2R2RAQKAKAKgKBQKBSKIRRCKIRRwRwKBQKKBBRRRIRARARARARARyICICICICICMCICIRARCPwiO2yO2wR22RwBO2wJCOCOCOARwRwRwRwCOCOCOAWWKxWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1349",
+                                "1693",
+                                "1",
+                                "2BOwRCIRCOAWAREKKKNJARARARAWBRQKMAJ+2AgBPoKBRRhRRROWxIA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1401",
+                                "1621",
+                                "1",
+                                "NI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1401",
+                                "1614",
+                                "0",
+                                "xp"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1398",
+                                "1601",
+                                "0",
+                                "2QFOwg"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1391",
+                                "1600",
+                                "1",
+                                "QpA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1418",
+                                "1599",
+                                "1",
+                                "JCIRCOpP/2yP/2AR+2AJxP///2AgE2wR+2R+2R+wBC/BOJ+wFKICICICOwR2KIRRRCKKIRRCKKIRRRCKKIRRRCKIRRRCKIRCIRCIRCW2wXZ/2wLwBWAW2wpIRCIRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRE///////2n///////////////wQKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKAKBQKBQKBQBQKBQKBQKAKBQKBQKBQBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKBQKBQKBQKAKBQKBQKBQBQKBQKBQKBQBQKBQKBQKAKAKAKBQBQBQBQBQBQKAKAKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBWxW2BW2AKARQKAKAKBQBp5O2xKKKKaBQNKORyORARARARARARARATIBQBQBaKIRSIRRCIRCIRRCMKSBRQKKBRQKBRQKKOwB2COwRpOyOgKAKBQMIRCIRCIRCIRAKKKBRRRRhRCKJOBW2BXwCa2KKIRCKgRCIRJAIFAZwB2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--bike-rack"
+            }
+        },
+        "version": "4.0.0"
+    }
+}

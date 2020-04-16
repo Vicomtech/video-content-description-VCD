@@ -119,3 +119,10 @@ def fuse_frame_intervals(frame_intervals):
         frame_intervals_fused = fuse_frame_interval_dict(frame_intervals[i], frame_intervals_fused)
         i += 1
     return frame_intervals_fused
+
+def get_key(my_dict, val):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
+
+    return "key doesn't exist"
