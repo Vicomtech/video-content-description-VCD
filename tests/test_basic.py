@@ -318,6 +318,20 @@ class TestBasic(unittest.TestCase):
             self.assertEqual(vcd_this.get_object(uid)['name'], 'CARLOTA')
             self.assertEqual(vcd_this.get_object(uid)['type'], 'Car')
 
+    def test_objects_without_data(self):
+        vcd = core.VCD()
+
+        pedestrian_uid = vcd.add_object(name='', semantic_type='#Pedestrian', frame_value=(0, 30))
+        car_uid = vcd.add_object(name='', semantic_type='#Car', frame_value=(20, 30))
+
+        if not os.path.isfile('./etc/test_objects_without_data.json'):
+            vcd.save('./etc/test_objects_without_data.json', True)
+        vcd_read = core.VCD('./etc/test_objects_without_data.json', validation=True)
+        vcd_read_stringified = vcd_read.stringify()
+        vcd_stringified = vcd.stringify()
+        # print(vcd_stringified)
+        self.assertEqual(vcd_read_stringified, vcd_stringified)
+
     def test_nested_object_data_attributes(self):
         vcd = core.VCD()
 

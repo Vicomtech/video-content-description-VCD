@@ -103,28 +103,52 @@ vcd_schema = {
                 "objects": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {"$ref": "#/definitions/object_data"}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "object_data": {"$ref": "#/definitions/object_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
                 "events": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "event_data": {"$ref": "#/definitions/event_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
                 "actions": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "action_data": {"$ref": "#/definitions/action_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
                 "contexts": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "context_data": {"$ref": "#/definitions/context_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
@@ -294,6 +318,72 @@ vcd_schema = {
                 "uid": {"type": "integer"},
             }
         },
+        "action_data": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/num"}
+                },
+                "vec": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/vec"}
+                },
+                "text": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/text"}
+                },
+                "boolean": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/boolean"}
+                }
+            },
+            "additionalProperties": False
+        },
+        "event_data": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/num"}
+                },
+                "vec": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/vec"}
+                },
+                "text": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/text"}
+                },
+                "boolean": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/boolean"}
+                }
+            },
+            "additionalProperties": False
+        },
+        "context_data": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/num"}
+                },
+                "vec": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/vec"}
+                },
+                "text": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/text"}
+                },
+                "boolean": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/boolean"}
+                }
+            },
+            "additionalProperties": False
+        },
         "object_data": {
             "type": "object",
             "properties": {
@@ -361,7 +451,8 @@ vcd_schema = {
                     "type": "array",
                     "items": {"$ref": "#/definitions/area_reference"}
                 }
-            }
+            },
+            "additionalProperties": False
         },
         "stream": {
             "type": "object",

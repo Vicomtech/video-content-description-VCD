@@ -90,10 +90,10 @@ class VCD:
 
                 self.schema = schema.vcd_schema
                 if 'version' in temp_data['vcd']:
-                    if temp_data['vcd']['version'] == "4.0.0":
+                    if temp_data['vcd']['version'] == "4.1.0":
                         validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
                     elif temp_data['vcd']['version'] == "3.3.0":
-                        warnings.warn("ERROR: This file is not a VCD 4.0.0 file.")
+                        warnings.warn("ERROR: This file is not a VCD 4.1.0 file.")
                     else:
                         warnings.warn("ERROR: Can't read input file: unsupported VCD format")
                 else:
@@ -117,7 +117,7 @@ class VCD:
             # Main VCD data
             self.data = {'vcd': {}}
             self.data['vcd']['frames'] = {}
-            self.data['vcd']['version'] = "4.0.0"
+            self.data['vcd']['version'] = "4.1.0"
             self.data['vcd']['frame_intervals'] = []
 
             # Schema information
@@ -291,10 +291,11 @@ class VCD:
                 for fi in fis:
                     for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
                         for objectInFrame in self.data['vcd']['frames'][frame_num]['objects'].values():
-                            for valList in objectInFrame['object_data'].values():
-                                for val in valList:
-                                    if 'name' in val:
-                                        self.__object_data_names[uid].add(val['name'])
+                            if 'object_data' in objectInFrame:
+                                for valList in objectInFrame['object_data'].values():
+                                    for val in valList:
+                                        if 'name' in val:
+                                            self.__object_data_names[uid].add(val['name'])
             if 'object_data' in object_:
                 # There is also static content
                 for valArray in object_['object_data'].values():
@@ -561,6 +562,132 @@ class VCD:
         self.data['vcd'].setdefault(element_type.name + 's', {})
         self.data['vcd'][element_type.name + 's'][uid] = element_data  # This call creates or updates the element data
 
+    def __update_context_data(self, uid, context_data, frame_intervals):
+        # 1/2 Check Stream codename existence
+        stream_valid = False
+        if 'in_stream' in context_data.data:
+            if 'metadata' in self.data['vcd']:
+                if 'streams' in self.data['vcd']['metadata']:
+                    for stream_ in self.data['vcd']['metadata']['streams']:
+                        if context_data.data['in_stream'] == stream_['name']:
+                            stream_valid = True
+            if not stream_valid:
+                warnings.warn('WARNING: trying to add context_data for non-declared Stream. Use vcd.add_stream.')
+
+        # 2/2 Fill-in context data...
+        # 2.1/2 As "static" content at ['vcd']['contexts']...
+        if not frame_intervals:
+            if uid in self.data['vcd']['contexts']:
+                context_ = self.data['vcd']['contexts'][uid]
+                # This is static content that goes into static part of context
+                context_.setdefault('context_data', dict())  # Creates 'context_data' if it does not exist
+                context_['context_data'].setdefault(context_data.type.name, []).append(context_data.data)
+            else:
+                warnings.warn("WARNING: Trying to add context_data to non-existing context, uid: " + str(uid))
+        # 2.2/2 OR as "dynamic" content at ['vcd']['frames']...
+        else:
+            # Create frames (if already existing __add_frames manages the situation
+            # Loop and fill
+            for fi in frame_intervals:
+                for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
+                    self.data['vcd']['frames'][frame_num].setdefault('contexts', {})
+
+                    if uid in self.data['vcd']['frames'][frame_num]['contexts']:
+                        context_ = self.data['vcd']['frames'][frame_num]['contexts'][uid]
+                        context_.setdefault('context_data', dict())  # Creates 'context_data' if it does not exist
+                        context_['context_data'].setdefault(context_data.type.name, []).append(context_data.data)
+
+                    else:  # need to create this entry, only with the pointer (uid) and the data
+                        self.data['vcd']['frames'][frame_num]['contexts'][uid] = (
+                            {'context_data': {
+                                context_data.type.name: [context_data.data]
+                            }}
+                        )
+    
+    def __update_event_data(self, uid, event_data, frame_intervals):
+        # 1/2 Check Stream codename existence
+        stream_valid = False
+        if 'in_stream' in event_data.data:
+            if 'metadata' in self.data['vcd']:
+                if 'streams' in self.data['vcd']['metadata']:
+                    for stream_ in self.data['vcd']['metadata']['streams']:
+                        if event_data.data['in_stream'] == stream_['name']:
+                            stream_valid = True
+            if not stream_valid:
+                warnings.warn('WARNING: trying to add event_data for non-declared Stream. Use vcd.add_stream.')
+
+        # 2/2 Fill-in event data...
+        # 2.1/2 As "static" content at ['vcd']['events']...
+        if not frame_intervals:
+            if uid in self.data['vcd']['events']:
+                event_ = self.data['vcd']['events'][uid]
+                # This is static content that goes into static part of event
+                event_.setdefault('event_data', dict())  # Creates 'event_data' if it does not exist
+                event_['event_data'].setdefault(event_data.type.name, []).append(event_data.data)
+            else:
+                warnings.warn("WARNING: Trying to add event_data to non-existing event, uid: " + str(uid))
+        # 2.2/2 OR as "dynamic" content at ['vcd']['frames']...
+        else:
+            # Create frames (if already existing __add_frames manages the situation
+            # Loop and fill
+            for fi in frame_intervals:
+                for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
+                    self.data['vcd']['frames'][frame_num].setdefault('events', {})
+
+                    if uid in self.data['vcd']['frames'][frame_num]['events']:
+                        event_ = self.data['vcd']['frames'][frame_num]['events'][uid]
+                        event_.setdefault('event_data', dict())  # Creates 'event_data' if it does not exist
+                        event_['event_data'].setdefault(event_data.type.name, []).append(event_data.data)
+
+                    else:  # need to create this entry, only with the pointer (uid) and the data
+                        self.data['vcd']['frames'][frame_num]['events'][uid] = (
+                            {'event_data': {
+                                event_data.type.name: [event_data.data]
+                            }}
+                        )
+
+    def __update_action_data(self, uid, action_data, frame_intervals):
+        # 1/2 Check Stream codename existence
+        stream_valid = False
+        if 'in_stream' in action_data.data:
+            if 'metadata' in self.data['vcd']:
+                if 'streams' in self.data['vcd']['metadata']:
+                    for stream_ in self.data['vcd']['metadata']['streams']:
+                        if action_data.data['in_stream'] == stream_['name']:
+                            stream_valid = True
+            if not stream_valid:
+                warnings.warn('WARNING: trying to add action_data for non-declared Stream. Use vcd.add_stream.')
+
+        # 2/2 Fill-in action data...
+        # 2.1/2 As "static" content at ['vcd']['actions']...
+        if not frame_intervals:
+            if uid in self.data['vcd']['actions']:
+                action_ = self.data['vcd']['actions'][uid]
+                # This is static content that goes into static part of Action
+                action_.setdefault('action_data', dict())  # Creates 'action_data' if it does not exist
+                action_['action_data'].setdefault(action_data.type.name, []).append(action_data.data)
+            else:
+                warnings.warn("WARNING: Trying to add action_data to non-existing Action, uid: " + str(uid))
+        # 2.2/2 OR as "dynamic" content at ['vcd']['frames']...
+        else:
+            # Create frames (if already existing __add_frames manages the situation
+            # Loop and fill
+            for fi in frame_intervals:
+                for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
+                    self.data['vcd']['frames'][frame_num].setdefault('actions', {})
+
+                    if uid in self.data['vcd']['frames'][frame_num]['actions']:
+                        action_ = self.data['vcd']['frames'][frame_num]['actions'][uid]
+                        action_.setdefault('action_data', dict())  # Creates 'action_data' if it does not exist
+                        action_['action_data'].setdefault(action_data.type.name, []).append(action_data.data)
+
+                    else:  # need to create this entry, only with the pointer (uid) and the data
+                        self.data['vcd']['frames'][frame_num]['actions'][uid] = (
+                            {'action_data': {
+                                action_data.type.name: [action_data.data]
+                            }}
+                        )
+
     def __update_object_data(self, uid, object_data, frame_intervals):
         # 1/2 Check Stream codename existence
         stream_valid = False
@@ -716,7 +843,8 @@ class VCD:
                         if extrinsics is not None:
                             self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].update(extrinsics.data)
                         if stream_sync is not None:
-                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].update(stream_sync.data)
+                            if stream_sync.data:
+                                self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].update(stream_sync.data)
                     else:
                         # This is information of the stream for a specific frame
                         self.__add_frame(frame_num)  # to add the frame in case it does not exist
@@ -732,7 +860,8 @@ class VCD:
                         if extrinsics is not None:
                             frame['frame_properties']['streams'][stream_name]['stream_properties'].update(extrinsics.data)
 
-                        frame['frame_properties']['streams'][stream_name]['stream_properties'].update(stream_sync.data)
+                        if stream_sync.data:
+                            frame['frame_properties']['streams'][stream_name]['stream_properties'].update(stream_sync.data)
                 else:
                     warnings.warn('WARNING: Trying to add stream properties for non-existing stream. '
                                   'Use add_stream first.')
@@ -839,6 +968,43 @@ class VCD:
                     self.data['vcd']['relations'][relation_uid]['rdf_objects'].append(
                         {'uid': element_uid, 'type': element_type.name}
                     )
+
+    def add_action_data(self, uid, action_data, frame_value=None):
+        assert (isinstance(uid, int))
+        assert (isinstance(action_data, types.ObjectData))
+        assert (not isinstance(action_data, types.ObjectDataGeometry))
+
+        # 1/3 Update element at vcd (internally, this fuses the frame intervals, etc.
+        self.__update_element(ElementType.action, uid, frame_value)
+
+        # 2/3 Update object data
+        frame_intervals = utils.as_frame_intervals_array_dict(frame_value)
+        self.__update_action_data(uid, action_data, frame_intervals)
+        
+    def add_event_data(self, uid, event_data, frame_value=None):
+        assert (isinstance(uid, int))
+        assert (isinstance(event_data, types.ObjectData))
+        assert (not isinstance(event_data, types.ObjectDataGeometry))
+
+        # 1/3 Update element at vcd (internally, this fuses the frame intervals, etc.
+        self.__update_element(ElementType.event, uid, frame_value)
+
+        # 2/3 Update object data
+        frame_intervals = utils.as_frame_intervals_array_dict(frame_value)
+        self.__update_event_data(uid, event_data, frame_intervals)
+        
+    def add_context_data(self, uid, context_data, frame_value=None):
+        assert (isinstance(uid, int))
+        assert (isinstance(context_data, types.ObjectData))
+        assert (not isinstance(context_data, types.ObjectDataGeometry))
+
+        # 1/3 Update element at vcd (internally, this fuses the frame intervals, etc.
+        self.__update_element(ElementType.context, uid, frame_value)
+
+        # 2/3 Update object data
+        frame_intervals = utils.as_frame_intervals_array_dict(frame_value)
+        self.__update_context_data(uid, context_data, frame_intervals)
+
 
     def add_object_data(self, uid, object_data, frame_value=None):
         assert (isinstance(uid, int))

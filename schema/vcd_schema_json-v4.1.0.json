@@ -30,6 +30,36 @@
             ],
             "type": "object"
         },
+        "action_data": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
         "area_reference": {
             "properties": {
                 "additionalProperties": false,
@@ -188,6 +218,36 @@
             ],
             "type": "object"
         },
+        "context_data": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
         "cuboid": {
             "additionalProperties": false,
             "properties": {
@@ -243,27 +303,81 @@
             ],
             "type": "object"
         },
+        "event_data": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
         "frame": {
             "additionalProperties": false,
             "properties": {
                 "actions": {
                     "additionalProperties": false,
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "action_data": {
+                                    "$ref": "#/definitions/action_data"
+                                }
+                            },
+                            "type": "object"
+                        }
                     },
                     "type": "object"
                 },
                 "contexts": {
                     "additionalProperties": false,
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "context_data": {
+                                    "$ref": "#/definitions/context_data"
+                                }
+                            },
+                            "type": "object"
+                        }
                     },
                     "type": "object"
                 },
                 "events": {
                     "additionalProperties": false,
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "event_data": {
+                                    "$ref": "#/definitions/event_data"
+                                }
+                            },
+                            "type": "object"
+                        }
                     },
                     "type": "object"
                 },
@@ -306,7 +420,13 @@
                     "additionalProperties": false,
                     "patternProperties": {
                         "^[0-9]+$": {
-                            "$ref": "#/definitions/object_data"
+                            "additionalProperties": false,
+                            "properties": {
+                                "object_data": {
+                                    "$ref": "#/definitions/object_data"
+                                }
+                            },
+                            "type": "object"
                         }
                     },
                     "type": "object"
@@ -548,6 +668,7 @@
             "type": "object"
         },
         "object_data": {
+            "additionalProperties": false,
             "properties": {
                 "area_reference": {
                     "items": {

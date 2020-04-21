@@ -1,0 +1,54 @@
+"""
+VCD (Video Content Description) library v4.1.0
+
+Project website: http://vcd.vicomtech.org
+
+Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+(Spain) all rights reserved.
+
+VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is distributed under MIT License. See LICENSE.
+
+"""
+
+import unittest
+import os
+import sys
+sys.path.insert(0, "..")
+import vcd.core as core
+import vcd.types as types
+
+
+class TestBasic(unittest.TestCase):
+
+    def test_action_properties(self):
+        # 1.- Create a VCD instance
+        vcd = core.VCD()
+
+        # 2.- Create the Object
+        uid_action1 = vcd.add_action(name="", semantic_type="#Running", frame_value=(0, 10))
+        vcd.add_action_data(uid=uid_action1, action_data=types.num(name="confidence", val=0.98), frame_value=0)
+        vcd.add_action_data(uid=uid_action1, action_data=types.vec(name="confidence_vec", val=[0.98, 0.97]), frame_value=0)
+        vcd.add_action_data(uid=uid_action1, action_data=types.text(name="annotation", val="Manual"), frame_value=0)
+        vcd.add_action_data(uid=uid_action1, action_data=types.boolean(name="validated", val=True), frame_value=1)
+
+        # Same can be done with events and event_data, and contexts and context_data
+
+        if not os.path.isfile('./etc/test_actions_with_action_data.json'):
+            vcd.save('./etc/test_actions_with_action_data.json', True)
+        vcd_read = core.VCD('./etc/test_actions_with_action_data.json', validation=True)
+        vcd_read_stringified = vcd_read.stringify()
+        vcd_stringified = vcd.stringify()
+        # print(vcd_stringified)
+        self.assertEqual(vcd_read_stringified, vcd_stringified)
+
+
+
+if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
+    print("Running " + os.path.basename(__file__))
+    unittest.main()
+
+
+
+
+

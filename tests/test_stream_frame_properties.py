@@ -35,6 +35,17 @@ class TestBasic(unittest.TestCase):
                        uri='./somePath/someVideo2.mp4',
                        description='Description 2',
                        stream_type=core.StreamType.camera)
+
+        # Generic stream properties can be added...
+        # ... for the Stream
+        vcd.add_stream_properties(stream_name="Camera1",
+                                  properties={"someProperty": "someValue"})
+        # ... for the Stream at specific frame number
+        vcd.add_stream_properties(stream_name="Camera1",
+                                  stream_sync=types.StreamSync(frame_vcd=2),
+                                  properties={"somePropertyForThisFrame": "someValue"})
+
+        # Sensor-domain-specific information such as INTRINSICS, EXTRINSICS and ODOMETRY can be added as well
         # See schema.py for more details on Coordinate Systems
         vcd.add_stream_properties(stream_name="Camera1",
                                   intrinsics=types.IntrinsicsPinhole(
