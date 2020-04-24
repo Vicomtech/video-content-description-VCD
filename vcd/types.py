@@ -17,13 +17,13 @@ import vcd.poly2d as poly
 
 
 class Intrinsics():
-    def __init__(self, width_px, height_px):
+    def __init__(self):
         self.data = dict()
 
 
 class IntrinsicsPinhole(Intrinsics):
     def __init__(self, width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items):
-        Intrinsics.__init__(self, width_px, height_px)
+        Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
         self.data['intrinsics_pinhole'] = dict()
@@ -50,7 +50,7 @@ class IntrinsicsPinhole(Intrinsics):
 class IntrinsicsFisheye():
     def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
                  radius_x, radius_y, **additional_items):
-        Intrinsics.__init__(self, width_px, height_px)
+        Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
         self.data['intrinsics_fisheye'] = dict()
@@ -161,7 +161,9 @@ class ObjectData:
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault('attributes', {})  # Creates 'attributes' if it does not exist
         if object_data.type.name not in self.data['attributes']:
-            self.data['attributes'].setdefault(object_data.type.name, []).append(object_data.data)
+            self.data['attributes'].setdefault(object_data.type.name, [])
+
+        self.data['attributes'][object_data.type.name].append(object_data.data)
 
 
 class ObjectDataGeometry(ObjectData):

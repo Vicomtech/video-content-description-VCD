@@ -5,6 +5,9 @@
         "action": {
             "additionalProperties": false,
             "properties": {
+                "action_data": {
+                    "$ref": "#/definitions/action_data"
+                },
                 "frame_intervals": {
                     "item": {
                         "$ref": "#/definitions/frame_interval"
@@ -193,6 +196,9 @@
         "context": {
             "additionalProperties": false,
             "properties": {
+                "context_data": {
+                    "$ref": "#/definitions/context_data"
+                },
                 "frame_intervals": {
                     "item": {
                         "$ref": "#/definitions/frame_interval"
@@ -278,6 +284,9 @@
         "event": {
             "additionalProperties": false,
             "properties": {
+                "event_data": {
+                    "$ref": "#/definitions/event_data"
+                },
                 "frame_intervals": {
                     "item": {
                         "$ref": "#/definitions/frame_interval"

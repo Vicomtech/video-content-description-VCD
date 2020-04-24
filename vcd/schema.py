@@ -253,7 +253,8 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},
-                "stream": {"type": "string"}
+                "stream": {"type": "string"},
+                "action_data": {"$ref": "#/definitions/action_data"},
             },
             "required": ["name", "type"],
             "additionalProperties": False
@@ -268,7 +269,8 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},
-                "stream": {"type": "string"}
+                "stream": {"type": "string"},
+                "event_data": {"$ref": "#/definitions/event_data"},
             },
             "required": ["name", "type"],
             "additionalProperties": False
@@ -283,7 +285,8 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},
-                "stream": {"type": "string"}
+                "stream": {"type": "string"},
+                "context_data": {"$ref": "#/definitions/context_data"},
             },
             "required": ["name", "type"],
             "additionalProperties": False

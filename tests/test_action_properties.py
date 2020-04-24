@@ -33,6 +33,16 @@ class TestBasic(unittest.TestCase):
         vcd.add_action_data(uid=uid_action1, action_data=types.boolean(name="validated", val=True), frame_value=1)
 
         # Same can be done with events and event_data, and contexts and context_data
+        # And can be done as dynamic or static info
+        uid_object1 = vcd.add_object(name="Marcos", semantic_type="#Person")
+        vcd.add_object_data(uid=uid_object1, object_data=types.text(name="Position", val="#Researcher"))
+
+        uid_context1 = vcd.add_context(name="", semantic_type="#Sunny")
+        vcd.add_context_data(uid=uid_context1, context_data=types.text(name="category", val="#Weather"))
+
+        uid_context2 = vcd.add_context(name="", semantic_type="#Highway", frame_value=(0, 5))
+        vcd.add_context_data(uid=uid_context2, context_data=types.num(name="risk", val=0.7), frame_value=4)
+
 
         if not os.path.isfile('./etc/test_actions_with_action_data.json'):
             vcd.save('./etc/test_actions_with_action_data.json', True)

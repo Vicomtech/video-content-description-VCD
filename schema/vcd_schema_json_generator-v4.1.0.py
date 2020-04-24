@@ -25,8 +25,3 @@ import vcd.schema as schema
 with open("vcd_schema_json-v4.1.0.json", "w") as write_file:
     print(json.dumps(schema.vcd_schema, indent=4, sort_keys=True))
     json.dump(schema.vcd_schema, write_file, indent=4, sort_keys=True)
-
-    if sys.platform == "win32":
-        os.system("copy vcd_schema_json-v4.1.0.json ..\..\Schemas")
-    elif sys.platform == "linux":
-        os.system("cp vcd_schema_json-v4.1.0.json ../../Schemas")
