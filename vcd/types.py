@@ -47,7 +47,7 @@ class IntrinsicsPinhole(Intrinsics):
 
 
 
-class IntrinsicsFisheye():
+class IntrinsicsFisheye(Intrinsics):
     def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
                  radius_x, radius_y, **additional_items):
         Intrinsics.__init__(self)
@@ -213,13 +213,12 @@ class poly2d(ObjectDataGeometry):
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
-        if isinstance(val, tuple) or isinstance(val, list):
-            if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-                srfsdcc = poly.computeSRFSDCC(val)
-                encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-                self.data['val'] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
-            else:
-                self.data['val'] = list(val)
+        if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
+            srfsdcc = poly.computeSRFSDCC(val)
+            encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
+            self.data['val'] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
+        else:
+            self.data['val'] = list(val)
         self.data['mode'] = mode.name
         self.data['closed'] = closed
         self.type = ObjectDataType.poly2d
