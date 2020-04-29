@@ -12,6 +12,7 @@ VCD is distributed under MIT License. See LICENSE.
 """
 
 
+import os
 import sys
 sys.path.insert(0, "..")
 import screeninfo
@@ -25,7 +26,7 @@ from vcd import draw
 def draw_kitti_tracking(sequence_number=0, record_video=False):
     # Get annotations
     # Run ../converters/kittiConverter/converter.py to generate the json files
-    vcd_file_name = "../converters/kittiConverter/etc/vcd410_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
+    vcd_file_name = "../converters/kittiConverter/etc/vcd_410_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
     vcd = core.VCD(vcd_file_name)
     drawerTopView = draw.TopView(vcd)
     drawerCamera = draw.Image(vcd)
@@ -68,6 +69,7 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
         # Capture frame
         ret, img = video_cap.read()
         if ret is not True:
+            cv.waitKey(0)
             break
 
         # Camera
@@ -181,7 +183,9 @@ def convertnuScenesFromQuaternionToCuboid(vcd):
 
 
 if __name__ == "__main__":
+    print("Running " + os.path.basename(__file__))
+
     #draw_nuscenes(scene_token="0ac05652a4c44374998be876ba5cd6fd")
-    draw_kitti_tracking(sequence_number=20, record_video=False)
+    draw_kitti_tracking(sequence_number=0, record_video=False)
 
 
