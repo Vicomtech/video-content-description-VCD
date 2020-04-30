@@ -124,6 +124,7 @@ def fuse_frame_intervals(frame_intervals):
         i += 1
     return frame_intervals_fused
 
+
 ####################################################
 # ROTATION AND ODOMETRY UTILS. See SCL library
 ####################################################
@@ -321,3 +322,12 @@ def float_2dec(val):
     This function is useful to print float into JSON with only 2 decimals
     '''
     return float((int(100*val))/100)
+
+
+def get_key(my_dict, val):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
+
+    return "key doesn't exist"
+

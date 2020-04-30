@@ -10,247 +10,201 @@ VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
-
 import numpy as np
 import math
+import time
 
-def computeSRFSDCC(coords):
+
+def computeRS6FCC(coords):
     _distances = []
-    # Simplifiers
-    high_simplifier = 15
-    low_simplifier = 3
     high_symbol = 7
     low_symbol = 6
 
-    # This method converts to integer position all (X,Y) coordinates. Then, uses the Bbox
-    # to compute the relative positions computes a 1D array concatenating rows, and determines distances between points
-
     if len(coords) == 0:
-        return []
+        return [], 0, 0, 0, 0
 
-    xinit = coords[0]
-    yinit = coords[1]
+    _xinit = int(coords[0])
+    _yinit = int(coords[1])
+    xinit = _xinit
+    yinit = _yinit
 
-    _distances.append(xinit)
-    _distances.append(yinit)
-
-    '''
-     static Direction Kernel
-     5(TopLeft)      6(Top)         7(TopRight)
-     4(Left)         X              0(Right) 
-     3(BottomLeft)   2(Bottom)      1(BottomRight)
-
-    For a previous direction of going 2(Bottom), the kernel updates the "0" value to place of the movement and the rest of the values are set clockwise.
-     New Kernel
-     3 4 5 
-     2 X 6 
-     1 0 7
-    '''
     static_direction_kernel = np.array([[5, 6, 7], [4, 9, 0], [3, 2, 1]])
-    '''
-    All SRF6DCC relative kernels
-    Static direction 0  Static direction 1  Static direction 2  Static direction 3 
-         54 4  2              5  52 4             53 5  54              3  51 5 
-         5  X  0              51 x  2             3  x  4               1  x  52 
-         53 3  1              3  1  0             1  0  2               0  2  4
-    Static direction 4  Static direction 5  Static direction 6  Static direction 7 
-         1  3  53              0  1  3            2  0  1               4  2  0 
-         0  X  5               2  x  51           4  x  3               52 x  1
-         2  4  54              4  52 5            54 5  53              5  51 3
-    '''
 
-    kernel_direction_data = np.array([[[54, 4, 2], [5, 9, 0], [53, 3, 1]],  # direction 0 updated kernel
-                                      [[5, 52, 4], [51, 9, 2], [3, 1, 0]],  # direction 1 updated kernel
-                                      [[53, 5, 54], [3, 9, 4], [1, 0, 2]],  # direction 2 updated kernel
-                                      [[3, 51, 5], [1, 9, 52], [0, 2, 4]],  # direction 3 updated kernel
-                                      [[1, 3, 53], [0, 9, 5], [2, 4, 54]],  # direction 4 updated kernel
-                                      [[0, 1, 3], [2, 9, 51], [4, 52, 5]],  # direction 5 updated kernel
-                                      [[2, 0, 1], [4, 9, 3], [54, 5, 53]],  # direction 6 updated kernel
-                                      [[4, 2, 0], [52, 9, 1], [5, 51, 3]]]) # direction 7 updated kernel
+    kernel_direction_data = np.array([[[5, 4, 2], [5, 9, 0], [5, 3, 1]],  # direction 0 updated kernel
+                                      [[5, 5, 4], [5, 9, 2], [3, 1, 0]],  # direction 1 updated kernel
+                                      [[5, 5, 5], [3, 9, 4], [1, 0, 2]],  # direction 2 updated kernel
+                                      [[3, 5, 5], [1, 9, 5], [0, 2, 4]],  # direction 3 updated kernel
+                                      [[1, 3, 5], [0, 9, 5], [2, 4, 5]],  # direction 4 updated kernel
+                                      [[0, 1, 3], [2, 9, 5], [4, 5, 5]],  # direction 5 updated kernel
+                                      [[2, 0, 1], [4, 9, 3], [5, 5, 5]],  # direction 6 updated kernel
+                                      [[4, 2, 0], [5, 9, 1], [5, 5, 3]]]) # direction 7 updated kernel
     # the polygon contouring starts always going down.
     previous_direction = 2
 
-    '''
-    IMPORTANT NOTES: the kernel is always updated but not when backward movement is done.
-    So when the kernel movement is 5, the backward step is saved in the chain code but the kernel is not updated.
-    Similar happens when moving 51, 52, 53 or 54:
-          In those cases there are two movements done. First it goes backwards, the step is saved but the kernel does not change
-          and then the other movement [1,2,3 or 4] takes places, so the step is saved in the chaincode and the kernel must be updated through that direction.
-    '''
-    for i in range(0, len(coords), 2):
+    for i in range(2, len(coords), 2):
         x = round(coords[i])
         y = round(coords[i + 1])
         xi = x - xinit
         yi = y - yinit
         temp = []
         fin = max(abs(xi), abs(yi))
-        xii = 0
-        yii = 0
 
-        if xi != 0:
-            xii = int(xi / abs(xi))
-        else:
-            xii = 0
-        if yi != 0:
-            yii = int(yi / abs(yi))
-        else:
-            yii = 0
+        xii = int(xi / abs(xi)) if xi != 0 else 0
+        yii = int(yi / abs(yi)) if yi != 0 else 0
 
         for j in range(0, fin):
             move = kernel_direction_data[previous_direction][yii + 1][xii + 1]
             if move < 5:
                 temp.append(move)
                 previous_direction = static_direction_kernel[yii + 1][xii + 1]
-            elif move == 51:
-                # Equivalent to movement Back then Right
-                temp.append(5)
-                temp.append(1)
-                xx, yy = checkPixelInMat(kernel_direction_data[previous_direction], 1)
-                previous_direction = static_direction_kernel[yy][xx]
-
-            elif move == 52:
-                # Equivalent to movement Back then Left
-                temp.append(5)
-                temp.append(2)
-                xx, yy = checkValueInKernel(kernel_direction_data[previous_direction], 2)
-                previous_direction = static_direction_kernel[yy][xx]
-
-            elif move == 53:
-                # Equivalent to movement Back then Right
-                temp.append(5)
-                temp.append(3)
-                xx, yy = checkValueInKernel(kernel_direction_data[previous_direction], 3)
-                previous_direction = static_direction_kernel[yy][xx]
-
-            elif move == 54:
-                # Equivalent to movement Back then Left
-                temp.append(5)
-                temp.append(4)
-                xx, yy = checkValueInKernel(kernel_direction_data[previous_direction], 4)
-                previous_direction = static_direction_kernel[yy][xx]
-
             elif move == 5:
                 temp.append(move)
+                previous_direction = (previous_direction+4) % 8
+                move = kernel_direction_data[previous_direction][yii+1][xii+1]
+                temp.append(move)
+                previous_direction = static_direction_kernel[yii+1][xii+1]
 
-        # usually there is a change of direction and then an accumulation of forward movements.  for example: 2 0 0 0 0 0 0 0
-        # so we keep the fisrt movement and simplify the forward movements using romanic-like counting
         for k in range(0, len(temp)):
-            if temp[k] == 0:
-                break
-            else:
-                _distances.append(temp[k])
+            _distances.append(temp[k])
 
-        num_of0 = temp.count(0)
-        _distances = simplifyFrontSequenceMovements(num_of0, low_simplifier, high_simplifier, low_symbol,
-                                                    high_symbol, _distances)
         xinit = x
         yinit = y
 
-    return simplifyAllFrontSequenceMovements(_distances, low_simplifier, high_simplifier, low_symbol, high_symbol)
+    if len(_distances) != 0:
+        _distances, RS6FCC_Low_simplifier, RS6FCC_High_simplifier = simplifyCalculatedFrontSequenceMovements(_distances, low_symbol, high_symbol)
+    else:
+        RS6FCC_High_simplifier = 0
+        RS6FCC_Low_simplifier = 0
+
+    return _distances, RS6FCC_Low_simplifier, RS6FCC_High_simplifier, _xinit, _yinit
 
 
-def extractSRF6DCC2Points(_chaincode, _xinit, _yinit):
-    # Simplifiers
-    high_simplifier = 15
-    low_simplifier = 3
-    high_symbol = 7
-    low_symbol = 6
+def extractRS6FCC2Points(_chaincode, _xinit, _yinit, _low, _high):
+    RS6FCC_High_simplifier = _high
+    RS6FCC_Low_simplifier = _low
+    RS6FCC_High_symbol = 7
+    RS6FCC_Low_symbol = 6
     _coords = []
-    _coords.append(_xinit)
-    _coords.append(_yinit)
-    xinit = _xinit
-    yinit = _yinit
+    _coords.append(int(_xinit))
+    _coords.append(int(_yinit))
+    xinit = int(_xinit)
+    yinit = int(_yinit)
+    if len(_chaincode) == 0:
+        return _coords
 
-    '''
-    static Direction Kernel
-    5(TopLeft)      6(Top)         7(TopRight)
-    4(Left)         X              0(Right) 
-    3(BottomLeft)   2(Bottom)      1(BottomRight)
-
-    For a previous direction of going 2(Bottom), the kernel updates the "0" value to place of the movement and the rest of the values are set clockwise.
-    New Kernel
-    3 4 5 
-    2 X 6 
-    1 0 7
-    '''
     static_direction_kernel = np.array([[5, 6, 7], [4, 9, 0], [3, 2, 1]])
 
-    '''
-    All SRF6DCC relative kernels
-    Static direction 0  Static direction 1  Static direction 2  Static direction 3 
-         54 4  2              5  52 4             53 5  54              3  51 5 
-         5  X  0              51 x  2             3  x  4               1  x  52 
-         53 3  1              3  1  0             1  0  2               0  2  4
-    Static direction 4  Static direction 5  Static direction 6  Static direction 7 
-         1  3  53              0  1  3            2  0  1               4  2  0 
-         0  X  5               2  x  51           4  x  3               52 x  1
-         2  4  54              4  52 5            54 5  53              5  51 3
-    '''
-    kernel_direction_data = np.array([[[54, 4, 2], [5, 9, 0], [53, 3, 1]],
-                                      [[5, 52, 4], [51, 9, 2], [3, 1, 0]],
-                                      [[53, 5, 54], [3, 9, 4], [1, 0, 2]],
-                                      [[3, 51, 5], [1, 9, 52], [0, 2, 4]],
-                                      [[1, 3, 53], [0, 9, 5], [2, 4, 54]],
-                                      [[0, 1, 3], [2, 9, 51], [4, 52, 5]],
-                                      [[2, 0, 1], [4, 9, 3], [54, 5, 53]],
-                                      [[4, 2, 0], [52, 9, 1], [5, 51, 3]]])
+    kernel_direction_data = np.array([[[5, 4, 2], [5, 9, 0], [5, 3, 1]],  # direction 0 updated kernel
+                                      [[5, 5, 4], [5, 9, 2], [3, 1, 0]],  # direction 1 updated kernel
+                                      [[5, 5, 5], [3, 9, 4], [1, 0, 2]],  # direction 2 updated kernel
+                                      [[3, 5, 5], [1, 9, 5], [0, 2, 4]],  # direction 3 updated kernel
+                                      [[1, 3, 5], [0, 9, 5], [2, 4, 5]],  # direction 4 updated kernel
+                                      [[0, 1, 3], [2, 9, 5], [4, 5, 5]],  # direction 5 updated kernel
+                                      [[2, 0, 1], [4, 9, 3], [5, 5, 5]],  # direction 6 updated kernel
+                                      [[4, 2, 0], [5, 9, 1], [5, 5, 3]]]) # direction 7 updated kernel
     # the polygon contouring starts always going down.
     previous_direction = 2
 
-    '''
-    IMPORTANT NOTES: the kernel is always updated but not when backward movement is done.
-    So when the kernel movement is 5, the backward step is saved in the chain code but the kernel is not updated.
-    Similar happens when moving 51, 52, 53 or 54:
-          In those cases there are two movements done. First it goes backwards,
-          the step is saved but the kernel does not change and then the other movement [1,2,3 or 4] takes places,
-          so the step is saved in the chaincode and the kernel must be updated through that direction.
-    '''
     counter = 0
     for i in range(0, len(_chaincode)):
-        if _chaincode[i] == low_symbol:
-            counter += low_simplifier
-            if i == len(_chaincode) - 1 and counter > 0:
-                x, y = checkPixelInMat(kernel_direction_data[previous_direction], 0)
-                xinit += x * counter if x != 0 else 0
-                yinit += y * counter if y != 0 else 0
-                _coords.append(xinit)
-                _coords.append(yinit)
-            continue
-
-        elif _chaincode[i] == high_symbol:
-            counter += high_simplifier
-            if i == len(_chaincode) - 1 and counter > 0:
-                x, y = checkPixelInMat(kernel_direction_data[previous_direction], 0)
-                xinit += x * counter if x != 0 else 0
-                yinit += y * counter if y != 0 else 0
-                _coords.append(xinit)
-                _coords.append(yinit)
-            continue
-
-        elif _chaincode[i] < 6:
+        if 6 > _chaincode[i] > 0:
             if counter > 0:
                 x, y = checkPixelInMat(kernel_direction_data[previous_direction], 0)
                 xinit += x * counter if x != 0 else 0
                 yinit += y * counter if y != 0 else 0
                 _coords.append(xinit)
                 _coords.append(yinit)
-            xi, yi = checkPixelInMat(kernel_direction_data[previous_direction], _chaincode[i])
-            xinit += xi
-            yinit += yi
+                counter = 0
+
+            if _chaincode[i] == 5:
+                previous_direction = (previous_direction+4) % 8
+            else:
+                xi, yi = checkPixelInMat(kernel_direction_data[previous_direction], _chaincode[i])
+                xinit += xi
+                yinit += yi
+                _coords.append(xinit)
+                _coords.append(yinit)
+                previous_direction = static_direction_kernel[yi+1][xi+1]
+
+        elif _chaincode[i] == 0:
+            counter += 1
+        elif _chaincode[i] == RS6FCC_Low_symbol:
+            counter += RS6FCC_Low_simplifier
+        elif _chaincode[i] == RS6FCC_High_symbol:
+            counter += RS6FCC_High_simplifier
+
+        if i == len(_chaincode)-1 and counter >0:
+            x, y = checkPixelInMat(kernel_direction_data[previous_direction], 0)
+            xinit += x * counter if x != 0 else 0
+            yinit += y * counter if y != 0 else 0
             _coords.append(xinit)
             _coords.append(yinit)
-            counter = 0
-            if _chaincode[i] == 5:
-                continue
-            elif _chaincode[i] < 5:
-                fin = max(abs(xi), abs(yi))
-                xii = -400
-                yii = -400
-                xii = int(xi / abs(xi)) if xi != 0 else 0
-                yii = int(yi / abs(yi)) if yi != 0 else 0
-                previous_direction = static_direction_kernel[yii + 1][xii + 1]
+
     return _coords
 
+def computeSRF6DCC(_coords):
+    _distances = []
+    SRF6DCC_High_simplifier = 15
+    SRF6DCC_Low_simplifier = 3
+    SRF6DCC_High_symbol = 7
+    SRF6DCC_Low_symbol = 6
+    if len(_coords) == 0:
+        return [], 0, 0
+    _xinit = int(_coords[0])
+    _yinit = int(_coords[1])
+    xinit = _xinit
+    yinit = _yinit
+
+    static_direction_kernel = np.array([[5, 6, 7], [4, 9, 0], [3, 2, 1]])
+
+    kernel_direction_data = np.array([[[5, 4, 2], [5, 9, 0], [5, 3, 1]],  # direction 0 updated kernel
+                                      [[5, 5, 4], [5, 9, 2], [3, 1, 0]],  # direction 1 updated kernel
+                                      [[5, 5, 5], [3, 9, 4], [1, 0, 2]],  # direction 2 updated kernel
+                                      [[3, 5, 5], [1, 9, 5], [0, 2, 4]],  # direction 3 updated kernel
+                                      [[1, 3, 5], [0, 9, 5], [2, 4, 5]],  # direction 4 updated kernel
+                                      [[0, 1, 3], [2, 9, 5], [4, 5, 5]],  # direction 5 updated kernel
+                                      [[2, 0, 1], [4, 9, 3], [5, 5, 5]],  # direction 6 updated kernel
+                                      [[4, 2, 0], [5, 9, 1], [5, 5, 3]]]) # direction 7 updated kernel
+    # the polygon contouring starts always going down.
+    # the polygon contouring starts always going down.
+    previous_direction = 2
+    for i in range(2, len(_coords), 2):
+        x = round(_coords[i])
+        y = round(_coords[i + 1])
+        xi = x - xinit
+        yi = y - yinit
+        temp = []
+        fin = max(abs(xi), abs(yi))
+
+        xii = int(xi / abs(xi)) if xi != 0 else 0
+        yii = int(yi / abs(yi)) if yi != 0 else 0
+
+        for j in range(0, fin):
+            move = kernel_direction_data[previous_direction][yii+1][xii+1]
+            if move < 5:
+                temp.append(move)
+                previous_direction = static_direction_kernel[yii+1][xii+1]
+            elif move == 5:
+                temp.append(move)
+                previous_direction = (previous_direction + 4) % 8
+                move = kernel_direction_data[previous_direction][yii+1][xii+1]
+                temp.append(move)
+                previous_direction = static_direction_kernel[yii+1][xii+1]
+
+        for k in range(0, len(temp)):
+            _distances.append(temp[k])
+
+        xinit = x
+        yinit = y
+
+        if len(_distances) != 0:
+            _distances = simplifyAllFrontSequenceMovements(_distances, SRF6DCC_Low_simplifier, SRF6DCC_High_simplifier, SRF6DCC_Low_symbol, SRF6DCC_High_symbol)
+    return _distances, _xinit, _yinit
+
+def extractSRF6DCC2Points(_chaincode, _xinit, _yinit ):
+    SRF6DCC_High_simplifier = 15
+    SRF6DCC_Low_simplifier = 3
+    return extractRS6FCC2Points(_chaincode, _xinit, _yinit, SRF6DCC_Low_simplifier, SRF6DCC_High_simplifier)
 
 def checkPixelInMat(_kernel_direction_data, target):
     for row in range(0, 3):
@@ -269,9 +223,15 @@ def checkValueInKernel(_kernel_direction_data, target):
 
 
 def simplifyFrontSequenceMovements(_num, _low, _high, _low_symbol, _high_symbol, _next_steps):
-    res1 = math.floor(_num / _high)
-    res2 = math.floor(_num % _high / _low)
-    res3 = math.floor(_num % _high % _low)
+    if _high != -1:
+        res1 = int(math.floor(_num / _high))
+        res2 = int(_num % _high / _low)
+        res3 = int(_num % _high % _low)
+    else:
+        res1 = 0
+        res2 = int(_num / _low)
+        res3 = int(_num % _low)
+
     for i in range(0, res1):
         _next_steps.append(_high_symbol)  # _high_symbol: {SRF6DCC: 7} for high Roman numerals-like counting simplifications
     for i in range(0, res2):
@@ -283,11 +243,12 @@ def simplifyFrontSequenceMovements(_num, _low, _high, _low_symbol, _high_symbol,
 
 def simplifyAllFrontSequenceMovements(_chaincode, _low, _high, _low_symbol, _high_symbol):
     counter = 0
-    for i in range(0, len(_chaincode)):
+    i = 0
+    while i < len(_chaincode):
         if _chaincode[i] == 0:
             counter += 1
-        else:
-            if counter > 2:
+        elif _chaincode[i] != 0:
+            if counter >= _low:
                 # i - counter //position of last 0 - counter
                 next_steps = []
                 next_steps = simplifyFrontSequenceMovements(counter, _low, _high, _low_symbol, _high_symbol, next_steps)
@@ -296,6 +257,16 @@ def simplifyAllFrontSequenceMovements(_chaincode, _low, _high, _low_symbol, _hig
                 _chaincode[i:i] = next_steps
                 i += len(next_steps)
             counter = 0
+        if i == len(_chaincode)-1:
+            if counter >= _low:
+                next_steps = []
+                next_steps = simplifyFrontSequenceMovements(counter, _low, _high, _low_symbol, _high_symbol, next_steps)
+                del _chaincode[len(_chaincode)-counter:len(_chaincode)]
+                i -= counter
+                _chaincode[len(_chaincode):len(_chaincode)] = next_steps
+                i += len(next_steps)
+            counter = 0
+        i += 1
     return _chaincode
 
 
@@ -350,8 +321,91 @@ def chainCodeBase64Decoder(_chaincodebits, _chaincode_bits, _bitsvectorrest):
 
     return _chaincodevector
 
+def calculateMultiplier(val, x):
+    return math.floor(val/x) + (val % x)
 
-def getVecFromEncodedPoly(x, y, rest, encoded_poly):
+def calculateMultiplier2(val, x, y):
+    return calculateMultiplier(math.floor(val/y) + (val % y), x)
+
+def extractMultiplierMap(map):
+    min_repetition = 0
+    min_suma = math.inf
+    for key_i in map:
+        suma = 0
+        for key_j in map:
+            suma += map[key_j] * calculateMultiplier(key_j, key_i)
+        if suma < min_suma:
+            min_repetition = key_i
+            min_suma = suma
+    return min_repetition
+
+def extractMultiplierMap2(map):
+    min_suma = math.inf
+    map_items = list(map.items())
+    for val_i in map_items[:-1]:
+        for val_j in map_items[1:]:
+            suma = 0
+            for val_k in map_items:
+                suma += val_k[1] * calculateMultiplier2(val_k[0], val_i[0], val_j[0])
+            if suma < min_suma:
+                min_repetition_1 = val_i[0]
+                min_repetition_2 = val_j[0]
+                min_suma = suma
+    return min_repetition_1, min_repetition_2
+
+def simplifyCalculatedFrontSequenceMovements(_chaincode, _low_symbol, _high_symbol):
+    repetitionCounterMap = {}
+    i = 0
+    while i < len(_chaincode)-1:
+        if _chaincode[i] == 0:
+            counter = 1
+            j = i+1
+            while j < len(_chaincode):
+                if _chaincode[j] == 0:
+                    counter += 1
+                    if j == len(_chaincode)-1:
+                        i = j-1
+                else:
+                    i = j-1
+                    break
+                j = j+1
+            if counter > 1:
+                if repetitionCounterMap.get(counter) == None:
+                    repetitionCounterMap[counter] = 1
+                else:
+                    repetitionCounterMap[counter] += 1
+        i += 1
+
+    if len(repetitionCounterMap) <= 0:
+        _low = -1
+        _high = -1
+
+    elif len(repetitionCounterMap) == 1:
+        for key in repetitionCounterMap:
+            _low = key
+        _high = -1
+        _chaincode = simplifyAllFrontSequenceMovements(_chaincode, _low, _high, 6, 7)
+    elif len(repetitionCounterMap) == 2:
+        count = 0
+        for key in repetitionCounterMap:
+            if count == 0:
+                _low = key
+            else:
+                _high = key
+            count += 1
+        _chaincode = simplifyAllFrontSequenceMovements(_chaincode, _low, _high, 6, 7)
+    else:
+        _low, _high = extractMultiplierMap2(repetitionCounterMap)
+        _chaincode = simplifyAllFrontSequenceMovements(_chaincode, _low, _high, 6, 7)
+
+    return _chaincode, _low, _high
+
+def getVecFromEncodedSRF6(x, y, rest, encoded_poly):
     decoded = chainCodeBase64Decoder(encoded_poly, 3, rest)
     vec = extractSRF6DCC2Points(decoded, x, y)
+    return vec
+
+def getVecFromEncodedRS6(x, y, low, high, rest, encoded_poly):
+    decoded = chainCodeBase64Decoder(encoded_poly, 3, rest)
+    vec = extractRS6FCC2Points(decoded, x, y, low, high)
     return vec
