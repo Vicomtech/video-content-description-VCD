@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>vcd.types API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.0.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.1.0 …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,25 +20,25 @@
 <h1 class="title">Module <code>vcd.types</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.0.0</p>
+<p>VCD (Video Content Description) library v4.1.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.0.0.
+<p>VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.0.0.
+VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -46,6 +46,113 @@ VCD is distributed under MIT License. See LICENSE.
 from builtins import bool
 from enum import Enum
 import vcd.poly2d as poly
+
+
+class Intrinsics():
+    def __init__(self):
+        self.data = dict()
+
+
+class IntrinsicsPinhole(Intrinsics):
+    def __init__(self, width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data[&#39;intrinsics_pinhole&#39;] = dict()
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;width_px&#39;] = width_px
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;height_px&#39;] = height_px
+        assert (isinstance(camera_matrix_3x4, list))
+
+        assert(len(camera_matrix_3x4) == 12)
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;camera_matrix_3x4&#39;] = camera_matrix_3x4
+
+        if distortion_coeffs_1xN is None:
+            distortion_coeffs_1xN = []
+        else:
+            assert (isinstance(distortion_coeffs_1xN, list))
+            num_coeffs = len(distortion_coeffs_1xN)
+            assert(5 &lt;= num_coeffs &lt;= 14)
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;distortion_coeffs_1xN&#39;] = distortion_coeffs_1xN
+
+        if additional_items is not None:
+            self.data[&#39;intrinsics_pinhole&#39;].update(additional_items)
+
+
+
+class IntrinsicsFisheye(Intrinsics):
+    def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
+                 radius_x, radius_y, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data[&#39;intrinsics_fisheye&#39;] = dict()
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;width_px&#39;] = width_px
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;height_px&#39;] = height_px
+        assert (isinstance(lens_coeffs_1x4, list))
+        assert (isinstance(center_x, float))
+        assert (isinstance(center_y, float))
+        assert (isinstance(radius_x, float))
+        assert (isinstance(radius_y, float))
+        assert (isinstance(fov_deg, float))
+
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;center_x&#39;] = center_x
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;center_y&#39;] = center_y
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;radius_x&#39;] = radius_x
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;radius_y&#39;] = radius_y
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;fov_deg&#39;] = fov_deg
+
+        assert (len(lens_coeffs_1x4) == 4)
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;lens_coeffs_1x4&#39;] = lens_coeffs_1x4
+
+        if additional_items is not None:
+            self.data[&#39;intrinsics_fisheye&#39;].update(additional_items)
+
+
+class Extrinsics():
+    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
+        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
+        assert (len(pose_scs_wrt_lcs_4x4) == 16)
+        self.data = dict()
+        self.data[&#39;extrinsics&#39;] = dict()
+        self.data[&#39;extrinsics&#39;][&#39;pose_scs_wrt_lcs_4x4&#39;] = pose_scs_wrt_lcs_4x4
+
+        if additional_items is not None:
+            self.data[&#39;extrinsics&#39;].update(additional_items)
+
+
+class StreamSync():
+    def __init__(self, frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items):
+        self.data = dict()
+        self.data[&#39;sync&#39;] = dict()
+        self.frame_vcd = frame_vcd  # This is the master frame at vcd (if it is None, frame_shift specifies constant shift
+
+        if frame_shift is not None:
+            assert(isinstance(frame_shift, int))
+            assert(frame_stream is None and timestamp_ISO8601 is None and frame_vcd is None)
+            self.data[&#39;sync&#39;][&#39;frame_shift&#39;] = frame_shift
+        else:
+            assert (isinstance(frame_vcd, int))
+            if frame_stream is not None:
+                assert(isinstance(frame_stream, int))
+                self.data[&#39;sync&#39;][&#39;frame_stream&#39;] = frame_stream
+            if timestamp_ISO8601 is not None:
+                assert(isinstance(timestamp_ISO8601, str))
+                self.data[&#39;sync&#39;][&#39;timestamp&#39;] = timestamp_ISO8601
+        if additional_items is not None:
+            self.data[&#39;sync&#39;].update(additional_items)
+
+
+class Odometry():
+    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
+        self.data = dict()
+        self.data[&#39;odometry&#39;] = dict()
+        assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
+        assert (len(pose_lcs_wrt_wcs_4x4) == 16)
+
+        self.data[&#39;odometry&#39;][&#39;pose_lcs_wrt_wcs_4x4&#39;] = pose_lcs_wrt_wcs_4x4
+
+        if additional_properties is not None:
+            self.data[&#39;odometry&#39;].update(additional_properties)
 
 
 class ObjectDataType(Enum):
@@ -86,7 +193,9 @@ class ObjectData:
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
         if object_data.type.name not in self.data[&#39;attributes&#39;]:
-            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, []).append(object_data.data)
+            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
+
+        self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)
 
 
 class ObjectDataGeometry(ObjectData):
@@ -136,13 +245,12 @@ class poly2d(ObjectDataGeometry):
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
-        if isinstance(val, tuple) or isinstance(val, list):
-            if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-                srfsdcc = poly.computeSRFSDCC(val)
-                encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-                self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
-            else:
-                self.data[&#39;val&#39;] = list(val)
+        if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
+            srfsdcc = poly.computeSRFSDCC(val)
+            encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
+            self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
+        else:
+            self.data[&#39;val&#39;] = list(val)
         self.data[&#39;mode&#39;] = mode.name
         self.data[&#39;closed&#39;] = closed
         self.type = ObjectDataType.poly2d
@@ -406,6 +514,28 @@ class mesh(ObjectDataGeometry):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="vcd.types.Extrinsics"><code class="flex name class">
+<span>class <span class="ident">Extrinsics</span></span>
+<span>(</span><span>pose_scs_wrt_lcs_4x4, **additional_items)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Extrinsics():
+    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
+        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
+        assert (len(pose_scs_wrt_lcs_4x4) == 16)
+        self.data = dict()
+        self.data[&#39;extrinsics&#39;] = dict()
+        self.data[&#39;extrinsics&#39;][&#39;pose_scs_wrt_lcs_4x4&#39;] = pose_scs_wrt_lcs_4x4
+
+        if additional_items is not None:
+            self.data[&#39;extrinsics&#39;].update(additional_items)</code></pre>
+</details>
+</dd>
 <dt id="vcd.types.GeometricReference"><code class="flex name class">
 <span>class <span class="ident">GeometricReference</span></span>
 <span>(</span><span>name, val, reference_type, stream=None)</span>
@@ -437,6 +567,107 @@ class mesh(ObjectDataGeometry):
 <li><a title="vcd.types.volumeReference" href="#vcd.types.volumeReference">volumeReference</a></li>
 </ul>
 </dd>
+<dt id="vcd.types.Intrinsics"><code class="flex name class">
+<span>class <span class="ident">Intrinsics</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Intrinsics():
+    def __init__(self):
+        self.data = dict()</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="vcd.types.IntrinsicsFisheye" href="#vcd.types.IntrinsicsFisheye">IntrinsicsFisheye</a></li>
+<li><a title="vcd.types.IntrinsicsPinhole" href="#vcd.types.IntrinsicsPinhole">IntrinsicsPinhole</a></li>
+</ul>
+</dd>
+<dt id="vcd.types.IntrinsicsFisheye"><code class="flex name class">
+<span>class <span class="ident">IntrinsicsFisheye</span></span>
+<span>(</span><span>width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y, radius_x, radius_y, **additional_items)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IntrinsicsFisheye(Intrinsics):
+    def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
+                 radius_x, radius_y, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data[&#39;intrinsics_fisheye&#39;] = dict()
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;width_px&#39;] = width_px
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;height_px&#39;] = height_px
+        assert (isinstance(lens_coeffs_1x4, list))
+        assert (isinstance(center_x, float))
+        assert (isinstance(center_y, float))
+        assert (isinstance(radius_x, float))
+        assert (isinstance(radius_y, float))
+        assert (isinstance(fov_deg, float))
+
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;center_x&#39;] = center_x
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;center_y&#39;] = center_y
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;radius_x&#39;] = radius_x
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;radius_y&#39;] = radius_y
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;fov_deg&#39;] = fov_deg
+
+        assert (len(lens_coeffs_1x4) == 4)
+        self.data[&#39;intrinsics_fisheye&#39;][&#39;lens_coeffs_1x4&#39;] = lens_coeffs_1x4
+
+        if additional_items is not None:
+            self.data[&#39;intrinsics_fisheye&#39;].update(additional_items)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="vcd.types.Intrinsics" href="#vcd.types.Intrinsics">Intrinsics</a></li>
+</ul>
+</dd>
+<dt id="vcd.types.IntrinsicsPinhole"><code class="flex name class">
+<span>class <span class="ident">IntrinsicsPinhole</span></span>
+<span>(</span><span>width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class IntrinsicsPinhole(Intrinsics):
+    def __init__(self, width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data[&#39;intrinsics_pinhole&#39;] = dict()
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;width_px&#39;] = width_px
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;height_px&#39;] = height_px
+        assert (isinstance(camera_matrix_3x4, list))
+
+        assert(len(camera_matrix_3x4) == 12)
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;camera_matrix_3x4&#39;] = camera_matrix_3x4
+
+        if distortion_coeffs_1xN is None:
+            distortion_coeffs_1xN = []
+        else:
+            assert (isinstance(distortion_coeffs_1xN, list))
+            num_coeffs = len(distortion_coeffs_1xN)
+            assert(5 &lt;= num_coeffs &lt;= 14)
+        self.data[&#39;intrinsics_pinhole&#39;][&#39;distortion_coeffs_1xN&#39;] = distortion_coeffs_1xN
+
+        if additional_items is not None:
+            self.data[&#39;intrinsics_pinhole&#39;].update(additional_items)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="vcd.types.Intrinsics" href="#vcd.types.Intrinsics">Intrinsics</a></li>
+</ul>
+</dd>
 <dt id="vcd.types.ObjectData"><code class="flex name class">
 <span>class <span class="ident">ObjectData</span></span>
 <span>(</span><span>name, stream=None)</span>
@@ -461,7 +692,9 @@ class mesh(ObjectDataGeometry):
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
         if object_data.type.name not in self.data[&#39;attributes&#39;]:
-            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, []).append(object_data.data)</code></pre>
+            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
+
+        self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -490,7 +723,9 @@ class mesh(ObjectDataGeometry):
     assert(not isinstance(object_data, ObjectDataGeometry))
     self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
     if object_data.type.name not in self.data[&#39;attributes&#39;]:
-        self.data[&#39;attributes&#39;].setdefault(object_data.type.name, []).append(object_data.data)</code></pre>
+        self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
+
+    self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)</code></pre>
 </details>
 </dd>
 </dl>
@@ -625,6 +860,29 @@ class mesh(ObjectDataGeometry):
 </dd>
 </dl>
 </dd>
+<dt id="vcd.types.Odometry"><code class="flex name class">
+<span>class <span class="ident">Odometry</span></span>
+<span>(</span><span>pose_lcs_wrt_wcs_4x4, **additional_properties)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Odometry():
+    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
+        self.data = dict()
+        self.data[&#39;odometry&#39;] = dict()
+        assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
+        assert (len(pose_lcs_wrt_wcs_4x4) == 16)
+
+        self.data[&#39;odometry&#39;][&#39;pose_lcs_wrt_wcs_4x4&#39;] = pose_lcs_wrt_wcs_4x4
+
+        if additional_properties is not None:
+            self.data[&#39;odometry&#39;].update(additional_properties)</code></pre>
+</details>
+</dd>
 <dt id="vcd.types.Poly2DType"><code class="flex name class">
 <span>class <span class="ident">Poly2DType</span></span>
 <span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
@@ -654,6 +912,38 @@ class mesh(ObjectDataGeometry):
 <section class="desc"><p>An enumeration.</p></section>
 </dd>
 </dl>
+</dd>
+<dt id="vcd.types.StreamSync"><code class="flex name class">
+<span>class <span class="ident">StreamSync</span></span>
+<span>(</span><span>frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class StreamSync():
+    def __init__(self, frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items):
+        self.data = dict()
+        self.data[&#39;sync&#39;] = dict()
+        self.frame_vcd = frame_vcd  # This is the master frame at vcd (if it is None, frame_shift specifies constant shift
+
+        if frame_shift is not None:
+            assert(isinstance(frame_shift, int))
+            assert(frame_stream is None and timestamp_ISO8601 is None and frame_vcd is None)
+            self.data[&#39;sync&#39;][&#39;frame_shift&#39;] = frame_shift
+        else:
+            assert (isinstance(frame_vcd, int))
+            if frame_stream is not None:
+                assert(isinstance(frame_stream, int))
+                self.data[&#39;sync&#39;][&#39;frame_stream&#39;] = frame_stream
+            if timestamp_ISO8601 is not None:
+                assert(isinstance(timestamp_ISO8601, str))
+                self.data[&#39;sync&#39;][&#39;timestamp&#39;] = timestamp_ISO8601
+        if additional_items is not None:
+            self.data[&#39;sync&#39;].update(additional_items)</code></pre>
+</details>
 </dd>
 <dt id="vcd.types.areaReference"><code class="flex name class">
 <span>class <span class="ident">areaReference</span></span>
@@ -1218,13 +1508,12 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
-        if isinstance(val, tuple) or isinstance(val, list):
-            if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-                srfsdcc = poly.computeSRFSDCC(val)
-                encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-                self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
-            else:
-                self.data[&#39;val&#39;] = list(val)
+        if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
+            srfsdcc = poly.computeSRFSDCC(val)
+            encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
+            self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
+        else:
+            self.data[&#39;val&#39;] = list(val)
         self.data[&#39;mode&#39;] = mode.name
         self.data[&#39;closed&#39;] = closed
         self.type = ObjectDataType.poly2d
@@ -1352,7 +1641,19 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="vcd.types.Extrinsics" href="#vcd.types.Extrinsics">Extrinsics</a></code></h4>
+</li>
+<li>
 <h4><code><a title="vcd.types.GeometricReference" href="#vcd.types.GeometricReference">GeometricReference</a></code></h4>
+</li>
+<li>
+<h4><code><a title="vcd.types.Intrinsics" href="#vcd.types.Intrinsics">Intrinsics</a></code></h4>
+</li>
+<li>
+<h4><code><a title="vcd.types.IntrinsicsFisheye" href="#vcd.types.IntrinsicsFisheye">IntrinsicsFisheye</a></code></h4>
+</li>
+<li>
+<h4><code><a title="vcd.types.IntrinsicsPinhole" href="#vcd.types.IntrinsicsPinhole">IntrinsicsPinhole</a></code></h4>
 </li>
 <li>
 <h4><code><a title="vcd.types.ObjectData" href="#vcd.types.ObjectData">ObjectData</a></code></h4>
@@ -1385,11 +1686,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </ul>
 </li>
 <li>
+<h4><code><a title="vcd.types.Odometry" href="#vcd.types.Odometry">Odometry</a></code></h4>
+</li>
+<li>
 <h4><code><a title="vcd.types.Poly2DType" href="#vcd.types.Poly2DType">Poly2DType</a></code></h4>
 <ul class="">
 <li><code><a title="vcd.types.Poly2DType.MODE_POLY2D_ABSOLUTE" href="#vcd.types.Poly2DType.MODE_POLY2D_ABSOLUTE">MODE_POLY2D_ABSOLUTE</a></code></li>
 <li><code><a title="vcd.types.Poly2DType.MODE_POLY2D_SRF6DCC" href="#vcd.types.Poly2DType.MODE_POLY2D_SRF6DCC">MODE_POLY2D_SRF6DCC</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="vcd.types.StreamSync" href="#vcd.types.StreamSync">StreamSync</a></code></h4>
 </li>
 <li>
 <h4><code><a title="vcd.types.areaReference" href="#vcd.types.areaReference">areaReference</a></code></h4>

@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.0.0.
+VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -23,6 +23,7 @@ vcd_schema = {
     "definitions": {
         "vcd": {
             "type": "object",
+            "description": "This is the root VCD element.",
             "properties": {
                 "version": {"type": "string"},
                 "name": {"type": "string"},
@@ -102,28 +103,52 @@ vcd_schema = {
                 "objects": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {"$ref": "#/definitions/object_data"}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "object_data": {"$ref": "#/definitions/object_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
                 "events": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "event_data": {"$ref": "#/definitions/event_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
                 "actions": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "action_data": {"$ref": "#/definitions/action_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
                 "contexts": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^[0-9]+$": {
+                            "type": "object",
+                            "properties": {
+                                "context_data": {"$ref": "#/definitions/context_data"},
+                            },
+                            "additionalProperties": False
+                        }
                     },
                     "additionalProperties": False
                 },
@@ -135,8 +160,18 @@ vcd_schema = {
                     "additionalProperties": False
                 },
                 "frame_properties": {
+                    "description": "These frame_properties include frame-related information,"
+                                   "including: stream information, odometry, and timestamping."
+                                   "-Timestamps: the field \'timestamp\' can be used to declare a"
+                                   "master timestamp for all information within thi frame."
+                                   "-Streams: can host information related to specific streams, such"
+                                   "as specific timestamps or instantaneous intrinsics."
+                                   "-Odometry: it contains ego-motion of the entire scene (i.e."
+                                   "the pose of the LCS (Local Coordinate System) wrt to WCS (World"
+                                   "Coordinate System).",
                     "type": "object",
                     "properties": {
+                        "timestamp": {"type": "string"},
                         "streams": {
                             "type": "object",
                             "patternProperties": {
@@ -144,15 +179,20 @@ vcd_schema = {
                             },
                             "additionalProperties": False
                         },
-                        "properties": {
+                        "odometry": {
                             "type": "object",
-                            "patternProperties": {
-                                "^": {}
-                            },
-                            "additionalProperties": False
+                            "properties": {
+                                "comment": {"type": "string"},
+                                "pose_lcs_wrt_wcs_4x4": {
+                                    "type": "array",
+                                    "minItems": 16,
+                                    "maxItems": 16,
+                                    "items": {"type": "number"}
+                                },
+                            }
                         }
                     },
-                    "additionalProperties": False
+                    "additionalProperties": True
                 }
             },
             "additionalProperties": False
@@ -213,7 +253,8 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},
-                "stream": {"type": "string"}
+                "stream": {"type": "string"},
+                "action_data": {"$ref": "#/definitions/action_data"},
             },
             "required": ["name", "type"],
             "additionalProperties": False
@@ -228,7 +269,8 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},
-                "stream": {"type": "string"}
+                "stream": {"type": "string"},
+                "event_data": {"$ref": "#/definitions/event_data"},
             },
             "required": ["name", "type"],
             "additionalProperties": False
@@ -243,7 +285,8 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},
-                "stream": {"type": "string"}
+                "stream": {"type": "string"},
+                "context_data": {"$ref": "#/definitions/context_data"},
             },
             "required": ["name", "type"],
             "additionalProperties": False
@@ -277,6 +320,72 @@ vcd_schema = {
                 "type": {"type": "string"},
                 "uid": {"type": "integer"},
             }
+        },
+        "action_data": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/num"}
+                },
+                "vec": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/vec"}
+                },
+                "text": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/text"}
+                },
+                "boolean": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/boolean"}
+                }
+            },
+            "additionalProperties": False
+        },
+        "event_data": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/num"}
+                },
+                "vec": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/vec"}
+                },
+                "text": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/text"}
+                },
+                "boolean": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/boolean"}
+                }
+            },
+            "additionalProperties": False
+        },
+        "context_data": {
+            "type": "object",
+            "properties": {
+                "num": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/num"}
+                },
+                "vec": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/vec"}
+                },
+                "text": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/text"}
+                },
+                "boolean": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/boolean"}
+                }
+            },
+            "additionalProperties": False
         },
         "object_data": {
             "type": "object",
@@ -345,24 +454,136 @@ vcd_schema = {
                     "type": "array",
                     "items": {"$ref": "#/definitions/area_reference"}
                 }
-            }
+            },
+            "additionalProperties": False
         },
         "stream": {
             "type": "object",
+            "description": "A stream describes the source of a data sequence, usually a sensor.",
             "properties": {
                 "description": {"type": "string"},
                 "stream_properties": {"$ref": "#/definitions/stream_properties"},
-                "type": {"type": "string"},
+                "type": {
+                    "type": "string",
+                    "enum": ["camera", "lidar", "radar", "gps_imu", "other"]
+                },
                 "uri": {"type": "string"},
             },
             'additionalProperties': False
         },
         "stream_properties": {
             "type": "object",
-            "patternProperties": {
-                "^": {}
+            "oneOf": [{
+                "intrinsics_pinhole": {
+                    "type": "object",
+                    "properties": {
+                        "width_px": {"type": "integer"},
+                        "height_px": {"type": "integer"},
+                        "camera_matrix": {
+                            "type": "array",
+                            "comment": "This is a 3x4 camera matrix which projects "
+                                       "3D homogeneous points (4x1) from Sensor Coordinate "
+                                       "System (SCS) into the Image Coordinate Sysmte (ICS),"
+                                       "plane points (3x1). "
+                                       "This is the usual K matrix for camera projection, but"
+                                       "extended from 3x3 to 3x4, to enable its usage to project"
+                                       "4x1 homogeneous 3D points defined in the SCS into the ICS."
+                                       "The SCS follows as well the usual convention x-to-right, y-down, z-forward:"
+                                       "x_ics = camera_matrix * X_scs",
+                            "minItems": 12,
+                            "maxItems": 12,
+                            "items": {"type": "number"},
+                            "example": [720.0, 0.0, 320.0, 0.0,
+                                        0.0, 720.0, 240.0, 0.0,
+                                        0.0, 0.0, 1.0, 0.0]
+                        },
+                        "distortion_coeffs": {
+                            "type": "array",
+                            "comment": "This is the array 1xN radial and tangential distortion "
+                                       "coefficients. See https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html",
+                            "minItems": 5,
+                            "maxItems": 14,
+                            "items": {"type": "number"},
+                            "example": [-4.0569640920796241e-01,
+                                        1.9116055332155032e-01,
+                                        0.0000000000000000000,
+                                        0.0000000000000000000,
+                                        -4.7033609773998064e-02]
+                        }
+                    }
+                },
+                "intrinsics_fisheye": {
+                    "type": "object",
+                    "properties": {
+                        "width_px": {"type": "integer"},
+                        "height_px": {"type": "integer"},
+                        "fov_deg": {"type": "number"},
+                        "center_x_px": {"type": "number"},
+                        "center_y_px": {"type": "number"},
+                        "radius_x_px": {"type": "number"},
+                        "radius_y_px": {"type": "number"},
+                        "lens_coeffs": {
+                            "type": "array",
+                            "minItems": 4,
+                            "maxItems": 4,
+                            "items": {"type": "number"}
+                        }
+                    }
+                }
+            }],
+            "extrinsics": {
+                "type": "object",
+                "properties": {
+                    "pose_scs_wrt_lcs_4x4": {
+                        "description": "This is the pose of the Sensor Coordinate Sysmte (SCS)"
+                                       "defined for this stream (e.g. camera) with respect to"
+                                       "the Local Coordinate System (LCS), e.g. the projection"
+                                       "in the ground of the middle of rear-axis in a vehicle, "
+                                       "as defined in ISO 8855."
+                                       "It is a 4x4 homogeneous matrix, to enable transform from"
+                                       "LCS to SCS easily. Note that the pose_scs_wrt_lcs_4x4 is"
+                                       "the transform_lcs_to_scs_4x4:"
+                                       "X_scs = pose_scs_wrt_lcs_4x4 * X_lcs"
+                                       "X_scs = transform_lcs_wrt_scs_4x4 * X_lcs",
+                        "type": "array",
+                        "minItems": 16,
+                        "maxItems": 16,
+                        "items": {"type": "number"},
+                        "example": [1.0, 0.0, 0.0, 10.0,
+                                    0.0, 1.0, 0.0, 5.0,
+                                    0.0, 0.0, 1.0, 1.0,
+                                    0.0, 0.0, 0.0, 1.0]
+                    }
+                }
             },
-            "additionalProperties": False
+            "sync": {
+                "description": "This is the sync information for this Stream."
+                               "If provided inside a certain frame, it can be used"
+                               "to specify timestamps in ISO8601 format,"
+                               "and a frame_stream of this stream."
+                               "E.g. at vcd's frame 34, for stream CAM_LEFT, the sync info"
+                               "contains timestamp=2020-04-09T04:57:57+00:00,"
+                               "and frame_stream=36 (which means that this CAM_LEFT is shifted"
+                               "2 frame with respect the vcd's master frame indexes."
+                               "If provided at stream level, it can be used to specify"
+                               "a frame shift, e.g. the shift of that stream wrt to the"
+                               "master vcd frame count."                              
+                               "E.g. if the shift is constant for all frames, it is more compact"
+                               "to define the frame_shift=2 at stream level.",
+                "type": "object",
+                "oneOf": [{
+                    "properties": {
+                        "timestamp": {"type": "string"},
+                        "frame_stream": {"type": "integer"},
+                    },
+                }, {
+                    "properties": {
+                        "frame_shift": {"type": "integer"}
+                    }
+                }
+                ]
+            },
+            "additionalProperties": True
         },
         "bbox": {
             "type": "object",
@@ -634,9 +855,10 @@ vcd_schema = {
                     "minItems": 2,
                     "maxItems": 2,
                 },
-                "attributes": {"$ref": "#/definitions/attributes"},
-                "additionalProperties": False
-            }
+                "reference_type": {"type": "string"},
+                "attributes": {"$ref": "#/definitions/attributes"}
+            },
+            "additionalProperties": False
         },
         "area_reference": {
             "type": "object",
@@ -647,9 +869,10 @@ vcd_schema = {
                     "type": "array",
                     "items": {"type": "number"},
                 },
-                "attributes": {"$ref": "#/definitions/attributes"},
-                "additionalProperties": False
-            }
+                "reference_type": {"type": "string"},
+                "attributes": {"$ref": "#/definitions/attributes"}
+            },
+            "additionalProperties": False
         },
 
     },

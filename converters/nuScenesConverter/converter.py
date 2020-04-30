@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.0.0.
+VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -78,11 +78,11 @@ for my_scene in nusc.scene:
     # Add sensors to VCD
     for sensor in nusc.sensor:
         if sensor['modality'] == 'camera':
-            vcd.add_stream(sensor['channel'], '', sensor['token'], core.SensorType.video)
+            vcd.add_stream(sensor['channel'], '', sensor['token'], core.StreamType.camera)
         elif sensor['modality'] == 'lidar':
-            vcd.add_stream(sensor['channel'], '', sensor['token'], core.SensorType.pointCloud)
+            vcd.add_stream(sensor['channel'], '', sensor['token'], core.StreamType.lidar)
         else:
-            vcd.add_stream(sensor['channel'], '', sensor['token'], core.SensorType.other)
+            vcd.add_stream(sensor['channel'], '', sensor['token'], core.StreamType.other)
 
     # Dictionary to map between frame nº and sample_token
     token_sample = my_scene['first_sample_token']

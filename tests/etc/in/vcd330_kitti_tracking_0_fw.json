@@ -12892,7 +12892,7 @@
     {
      "description":"KITTI tracking dataset",
      "name":"Video",
-     "type":"video",
+     "type":"camera",
      "uri":"KITTI/tracking/data_tracking_label_2/training/label_020"
     }
    ]

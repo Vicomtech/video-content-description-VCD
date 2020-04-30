@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.0.0.
+VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -139,7 +139,7 @@ class TestBasic(unittest.TestCase):
                         hierarchy = poly2d['hierarchy']
 
                         if mode == types.Poly2DType.MODE_POLY2D_SRF6DCC.name:
-                            vec = poly.getVecFromEncodedPoly(int(val[0]), int(val[1]), int(val[2]), val[3])
+                            vec = poly.getVecFromEncodedSRF6(int(val[0]), int(val[1]), int(val[2]), val[3])
                             #print(vec)
                         else:
                             vec = val
