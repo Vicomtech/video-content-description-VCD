@@ -49,13 +49,13 @@ import vcd.poly2d as poly
 
 
 class Intrinsics():
-    def __init__(self, width_px, height_px):
+    def __init__(self):
         self.data = dict()
 
 
 class IntrinsicsPinhole(Intrinsics):
     def __init__(self, width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items):
-        Intrinsics.__init__(self, width_px, height_px)
+        Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
         self.data[&#39;intrinsics_pinhole&#39;] = dict()
@@ -79,10 +79,10 @@ class IntrinsicsPinhole(Intrinsics):
 
 
 
-class IntrinsicsFisheye():
+class IntrinsicsFisheye(Intrinsics):
     def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
                  radius_x, radius_y, **additional_items):
-        Intrinsics.__init__(self, width_px, height_px)
+        Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
         self.data[&#39;intrinsics_fisheye&#39;] = dict()
@@ -193,7 +193,9 @@ class ObjectData:
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
         if object_data.type.name not in self.data[&#39;attributes&#39;]:
-            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, []).append(object_data.data)
+            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
+
+        self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)
 
 
 class ObjectDataGeometry(ObjectData):
@@ -243,13 +245,12 @@ class poly2d(ObjectDataGeometry):
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
-        if isinstance(val, tuple) or isinstance(val, list):
-            if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-                srfsdcc = poly.computeSRFSDCC(val)
-                encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-                self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
-            else:
-                self.data[&#39;val&#39;] = list(val)
+        if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
+            srfsdcc = poly.computeSRFSDCC(val)
+            encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
+            self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
+        else:
+            self.data[&#39;val&#39;] = list(val)
         self.data[&#39;mode&#39;] = mode.name
         self.data[&#39;closed&#39;] = closed
         self.type = ObjectDataType.poly2d
@@ -568,7 +569,6 @@ class mesh(ObjectDataGeometry):
 </dd>
 <dt id="vcd.types.Intrinsics"><code class="flex name class">
 <span>class <span class="ident">Intrinsics</span></span>
-<span>(</span><span>width_px, height_px)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -577,11 +577,12 @@ class mesh(ObjectDataGeometry):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Intrinsics():
-    def __init__(self, width_px, height_px):
+    def __init__(self):
         self.data = dict()</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
+<li><a title="vcd.types.IntrinsicsFisheye" href="#vcd.types.IntrinsicsFisheye">IntrinsicsFisheye</a></li>
 <li><a title="vcd.types.IntrinsicsPinhole" href="#vcd.types.IntrinsicsPinhole">IntrinsicsPinhole</a></li>
 </ul>
 </dd>
@@ -595,10 +596,10 @@ class mesh(ObjectDataGeometry):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class IntrinsicsFisheye():
+<pre><code class="python">class IntrinsicsFisheye(Intrinsics):
     def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
                  radius_x, radius_y, **additional_items):
-        Intrinsics.__init__(self, width_px, height_px)
+        Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
         self.data[&#39;intrinsics_fisheye&#39;] = dict()
@@ -623,6 +624,10 @@ class mesh(ObjectDataGeometry):
         if additional_items is not None:
             self.data[&#39;intrinsics_fisheye&#39;].update(additional_items)</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="vcd.types.Intrinsics" href="#vcd.types.Intrinsics">Intrinsics</a></li>
+</ul>
 </dd>
 <dt id="vcd.types.IntrinsicsPinhole"><code class="flex name class">
 <span>class <span class="ident">IntrinsicsPinhole</span></span>
@@ -636,7 +641,7 @@ class mesh(ObjectDataGeometry):
 </summary>
 <pre><code class="python">class IntrinsicsPinhole(Intrinsics):
     def __init__(self, width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items):
-        Intrinsics.__init__(self, width_px, height_px)
+        Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
         self.data[&#39;intrinsics_pinhole&#39;] = dict()
@@ -687,7 +692,9 @@ class mesh(ObjectDataGeometry):
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
         if object_data.type.name not in self.data[&#39;attributes&#39;]:
-            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, []).append(object_data.data)</code></pre>
+            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
+
+        self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -716,7 +723,9 @@ class mesh(ObjectDataGeometry):
     assert(not isinstance(object_data, ObjectDataGeometry))
     self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
     if object_data.type.name not in self.data[&#39;attributes&#39;]:
-        self.data[&#39;attributes&#39;].setdefault(object_data.type.name, []).append(object_data.data)</code></pre>
+        self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
+
+    self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)</code></pre>
 </details>
 </dd>
 </dl>
@@ -1499,13 +1508,12 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
-        if isinstance(val, tuple) or isinstance(val, list):
-            if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-                srfsdcc = poly.computeSRFSDCC(val)
-                encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-                self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
-            else:
-                self.data[&#39;val&#39;] = list(val)
+        if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
+            srfsdcc = poly.computeSRFSDCC(val)
+            encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
+            self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
+        else:
+            self.data[&#39;val&#39;] = list(val)
         self.data[&#39;mode&#39;] = mode.name
         self.data[&#39;closed&#39;] = closed
         self.type = ObjectDataType.poly2d

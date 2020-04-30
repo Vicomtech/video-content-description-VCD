@@ -32,6 +32,12 @@ class Converter:
 class ConverterVCD410toVCD330(Converter):
     # This class receives a VCD 4.1.0, and creates a VCD 3.3.0 file
     # Creates a Frame-wise VCD 3.3.0 JSON file
+
+    # NOTE: Some features of VCD 4.1.0 are NOT supported by VCD 3.3.0
+    # Therefore, some conent from a VCD 4.1.0 may not be convertible to VCD 3.3.0
+    # e.g. VCD 4.1.0 supports action_data, event_data, context_data,
+    #      also specific intrinsics and extrinsics information
+
     def __init__(self, vcd410_file_name):
         Converter.__init__(self, vcd410_file_name)
 

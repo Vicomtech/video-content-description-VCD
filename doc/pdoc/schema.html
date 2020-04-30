@@ -135,28 +135,52 @@ vcd_schema = {
                 &#34;objects&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^[0-9]+$&#34;: {&#34;$ref&#34;: &#34;#/definitions/object_data&#34;}
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;object_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/object_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
                     },
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;events&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^[0-9]+$&#34;: {}
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;event_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/event_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
                     },
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;actions&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^[0-9]+$&#34;: {}
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;action_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/action_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
                     },
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;contexts&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^[0-9]+$&#34;: {}
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;context_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/context_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
                     },
                     &#34;additionalProperties&#34;: False
                 },
@@ -173,7 +197,7 @@ vcd_schema = {
                                    &#34;-Timestamps: the field \&#39;timestamp\&#39; can be used to declare a&#34;
                                    &#34;master timestamp for all information within thi frame.&#34;
                                    &#34;-Streams: can host information related to specific streams, such&#34;
-                                   &#34;as specific timestamps or instanteneous intrinsics.&#34;
+                                   &#34;as specific timestamps or instantaneous intrinsics.&#34;
                                    &#34;-Odometry: it contains ego-motion of the entire scene (i.e.&#34;
                                    &#34;the pose of the LCS (Local Coordinate System) wrt to WCS (World&#34;
                                    &#34;Coordinate System).&#34;,
@@ -261,7 +285,8 @@ vcd_schema = {
                 &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
-                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;}
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;action_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/action_data&#34;},
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;],
             &#34;additionalProperties&#34;: False
@@ -276,7 +301,8 @@ vcd_schema = {
                 &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
-                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;}
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;event_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/event_data&#34;},
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;],
             &#34;additionalProperties&#34;: False
@@ -291,7 +317,8 @@ vcd_schema = {
                 &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
-                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;}
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;context_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/context_data&#34;},
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;],
             &#34;additionalProperties&#34;: False
@@ -325,6 +352,72 @@ vcd_schema = {
                 &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
             }
+        },
+        &#34;action_data&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                }
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;event_data&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                }
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;context_data&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                }
+            },
+            &#34;additionalProperties&#34;: False
         },
         &#34;object_data&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -393,7 +486,8 @@ vcd_schema = {
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/area_reference&#34;}
                 }
-            }
+            },
+            &#34;additionalProperties&#34;: False
         },
         &#34;stream&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -403,7 +497,7 @@ vcd_schema = {
                 &#34;stream_properties&#34;: {&#34;$ref&#34;: &#34;#/definitions/stream_properties&#34;},
                 &#34;type&#34;: {
                     &#34;type&#34;: &#34;string&#34;,
-                    &#34;enum&#34;: [&#34;camera&#34;, &#34;lidar&#34;, &#34;radar&#34;, &#34;gps_imu&#34;, &#34;Other&#34;]
+                    &#34;enum&#34;: [&#34;camera&#34;, &#34;lidar&#34;, &#34;radar&#34;, &#34;gps_imu&#34;, &#34;other&#34;]
                 },
                 &#34;uri&#34;: {&#34;type&#34;: &#34;string&#34;},
             },

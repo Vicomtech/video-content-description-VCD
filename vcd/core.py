@@ -764,7 +764,6 @@ class VCD:
         self.data['vcd']['ontologies'][length] = ontology_name
         return length
 
-
     def add_stream(self, stream_name, uri, description, stream_type):
         assert(isinstance(stream_name, str))
         assert(isinstance(uri, str))
@@ -837,14 +836,18 @@ class VCD:
                         # This information is static
                         self.data['vcd']['metadata']['streams'][stream_name].setdefault('stream_properties', dict())
                         if properties is not None:
-                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].update(properties)
+                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                                update(properties)
                         if intrinsics is not None:
-                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].update(intrinsics.data)
+                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                                update(intrinsics.data)
                         if extrinsics is not None:
-                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].update(extrinsics.data)
+                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                                update(extrinsics.data)
                         if stream_sync is not None:
                             if stream_sync.data:
-                                self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].update(stream_sync.data)
+                                self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                                    update(stream_sync.data)
                     else:
                         # This is information of the stream for a specific frame
                         self.__add_frame(frame_num)  # to add the frame in case it does not exist
@@ -854,14 +857,18 @@ class VCD:
                         frame['frame_properties']['streams'].setdefault(stream_name, dict())
                         frame['frame_properties']['streams'][stream_name].setdefault('stream_properties', dict())
                         if properties is not None:
-                            frame['frame_properties']['streams'][stream_name]['stream_properties'].update(properties)
+                            frame['frame_properties']['streams'][stream_name]['stream_properties'].\
+                                update(properties)
                         if intrinsics is not None:
-                            frame['frame_properties']['streams'][stream_name]['stream_properties'].update(intrinsics.data)
+                            frame['frame_properties']['streams'][stream_name]['stream_properties'].\
+                                update(intrinsics.data)
                         if extrinsics is not None:
-                            frame['frame_properties']['streams'][stream_name]['stream_properties'].update(extrinsics.data)
+                            frame['frame_properties']['streams'][stream_name]['stream_properties'].\
+                                update(extrinsics.data)
 
                         if stream_sync.data:
-                            frame['frame_properties']['streams'][stream_name]['stream_properties'].update(stream_sync.data)
+                            frame['frame_properties']['streams'][stream_name]['stream_properties'].\
+                                update(stream_sync.data)
                 else:
                     warnings.warn('WARNING: Trying to add stream properties for non-existing stream. '
                                   'Use add_stream first.')
@@ -1004,7 +1011,6 @@ class VCD:
         # 2/3 Update object data
         frame_intervals = utils.as_frame_intervals_array_dict(frame_value)
         self.__update_context_data(uid, context_data, frame_intervals)
-
 
     def add_object_data(self, uid, object_data, frame_value=None):
         assert (isinstance(uid, int))

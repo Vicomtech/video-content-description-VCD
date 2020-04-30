@@ -64,12 +64,15 @@
             "type": "object"
         },
         "area_reference": {
+            "additionalProperties": false,
             "properties": {
-                "additionalProperties": false,
                 "attributes": {
                     "$ref": "#/definitions/attributes"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "reference_type": {
                     "type": "string"
                 },
                 "stream": {
@@ -392,7 +395,7 @@
                 },
                 "frame_properties": {
                     "additionalProperties": true,
-                    "description": "These frame_properties include frame-related information,including: stream information, odometry, and timestamping.-Timestamps: the field 'timestamp' can be used to declare amaster timestamp for all information within thi frame.-Streams: can host information related to specific streams, suchas specific timestamps or instanteneous intrinsics.-Odometry: it contains ego-motion of the entire scene (i.e.the pose of the LCS (Local Coordinate System) wrt to WCS (WorldCoordinate System).",
+                    "description": "These frame_properties include frame-related information,including: stream information, odometry, and timestamping.-Timestamps: the field 'timestamp' can be used to declare amaster timestamp for all information within thi frame.-Streams: can host information related to specific streams, suchas specific timestamps or instantaneous intrinsics.-Odometry: it contains ego-motion of the entire scene (i.e.the pose of the LCS (Local Coordinate System) wrt to WCS (WorldCoordinate System).",
                     "properties": {
                         "odometry": {
                             "properties": {
@@ -493,12 +496,15 @@
             "type": "object"
         },
         "line_reference": {
+            "additionalProperties": false,
             "properties": {
-                "additionalProperties": false,
                 "attributes": {
                     "$ref": "#/definitions/attributes"
                 },
                 "name": {
+                    "type": "string"
+                },
+                "reference_type": {
                     "type": "string"
                 },
                 "stream": {
@@ -1035,7 +1041,7 @@
                             "center_y_px": {
                                 "type": "number"
                             },
-                            "fov_def": {
+                            "fov_deg": {
                                 "type": "number"
                             },
                             "height_px": {

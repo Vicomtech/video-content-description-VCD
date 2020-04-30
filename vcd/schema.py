@@ -165,7 +165,7 @@ vcd_schema = {
                                    "-Timestamps: the field \'timestamp\' can be used to declare a"
                                    "master timestamp for all information within thi frame."
                                    "-Streams: can host information related to specific streams, such"
-                                   "as specific timestamps or instanteneous intrinsics."
+                                   "as specific timestamps or instantaneous intrinsics."
                                    "-Odometry: it contains ego-motion of the entire scene (i.e."
                                    "the pose of the LCS (Local Coordinate System) wrt to WCS (World"
                                    "Coordinate System).",
@@ -517,7 +517,7 @@ vcd_schema = {
                     "properties": {
                         "width_px": {"type": "integer"},
                         "height_px": {"type": "integer"},
-                        "fov_def": {"type": "number"},
+                        "fov_deg": {"type": "number"},
                         "center_x_px": {"type": "number"},
                         "center_y_px": {"type": "number"},
                         "radius_x_px": {"type": "number"},
@@ -855,9 +855,10 @@ vcd_schema = {
                     "minItems": 2,
                     "maxItems": 2,
                 },
-                "attributes": {"$ref": "#/definitions/attributes"},
-                "additionalProperties": False
-            }
+                "reference_type": {"type": "string"},
+                "attributes": {"$ref": "#/definitions/attributes"}
+            },
+            "additionalProperties": False
         },
         "area_reference": {
             "type": "object",
@@ -868,9 +869,10 @@ vcd_schema = {
                     "type": "array",
                     "items": {"type": "number"},
                 },
-                "attributes": {"$ref": "#/definitions/attributes"},
-                "additionalProperties": False
-            }
+                "reference_type": {"type": "string"},
+                "attributes": {"$ref": "#/definitions/attributes"}
+            },
+            "additionalProperties": False
         },
 
     },
