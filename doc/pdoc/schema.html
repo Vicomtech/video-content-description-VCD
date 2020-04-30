@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.4" />
+<title>vcd.schema API documentation</title>
+<meta name="description" content="VCD (Video Content Description) library v4.1.0 …" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>vcd.schema</code></h1>
+</header>
+<section id="section-intro">
+<p>VCD (Video Content Description) library v4.1.0</p>
+<p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
+<p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
+(Spain) all rights reserved.</p>
+<p>VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is distributed under MIT License. See LICENSE.</p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+VCD (Video Content Description) library v4.1.0
+
+Project website: http://vcd.vicomtech.org
+
+Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+(Spain) all rights reserved.
+
+VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is distributed under MIT License. See LICENSE.
+
+&#34;&#34;&#34;
+
+######################################
+# Fully manually writing the schema
+######################################
+vcd_schema = {
+    &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema#&#34;,
+    &#34;type&#34;: &#34;object&#34;,
+    &#34;properties&#34;: {
+        &#34;vcd&#34;: {&#34;$ref&#34;: &#34;#/definitions/vcd&#34;}
+    },
+    &#34;definitions&#34;: {
+        &#34;vcd&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;description&#34;: &#34;This is the root VCD element.&#34;,
+            &#34;properties&#34;: {
+                &#34;version&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;frame_intervals&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                },
+                &#34;ontologies&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {&#34;type&#34;: &#34;string&#34;},
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;frames&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;$ref&#34;: &#34;#/definitions/frame&#34;
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;objects&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;$ref&#34;: &#34;#/definitions/object&#34;
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;actions&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;$ref&#34;: &#34;#/definitions/action&#34;
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;events&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;$ref&#34;: &#34;#/definitions/event&#34;
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;contexts&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;$ref&#34;: &#34;#/definitions/context&#34;
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;relations&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;$ref&#34;: &#34;#/definitions/relation&#34;
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;metadata&#34;: {&#34;$ref&#34;: &#34;#/definitions/metadata&#34;},
+            },
+            &#34;additionalProperties&#34;: False,
+            &#34;required&#34;: [&#34;version&#34;]
+        },
+        &#34;frame&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;objects&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;object_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/object_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;events&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;event_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/event_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;actions&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;action_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/action_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;contexts&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;context_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/context_data&#34;},
+                            },
+                            &#34;additionalProperties&#34;: False
+                        }
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;relations&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {}
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;frame_properties&#34;: {
+                    &#34;description&#34;: &#34;These frame_properties include frame-related information,&#34;
+                                   &#34;including: stream information, odometry, and timestamping.&#34;
+                                   &#34;-Timestamps: the field \&#39;timestamp\&#39; can be used to declare a&#34;
+                                   &#34;master timestamp for all information within thi frame.&#34;
+                                   &#34;-Streams: can host information related to specific streams, such&#34;
+                                   &#34;as specific timestamps or instantaneous intrinsics.&#34;
+                                   &#34;-Odometry: it contains ego-motion of the entire scene (i.e.&#34;
+                                   &#34;the pose of the LCS (Local Coordinate System) wrt to WCS (World&#34;
+                                   &#34;Coordinate System).&#34;,
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;timestamp&#34;: {&#34;type&#34;: &#34;string&#34;},
+                        &#34;streams&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;patternProperties&#34;: {
+                                &#34;^&#34;: {&#34;$ref&#34;: &#34;#/definitions/stream&#34;}
+                            },
+                            &#34;additionalProperties&#34;: False
+                        },
+                        &#34;odometry&#34;: {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;comment&#34;: {&#34;type&#34;: &#34;string&#34;},
+                                &#34;pose_lcs_wrt_wcs_4x4&#34;: {
+                                    &#34;type&#34;: &#34;array&#34;,
+                                    &#34;minItems&#34;: 16,
+                                    &#34;maxItems&#34;: 16,
+                                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                                },
+                            }
+                        }
+                    },
+                    &#34;additionalProperties&#34;: True
+                }
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;frame_interval&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;frame_start&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;frame_end&#34;: {&#34;type&#34;: &#34;integer&#34;}
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;metadata&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;streams&#34;: {
+                    &#34;patternProperties&#34;:{
+                        &#34;^&#34;: {&#34;$ref&#34;: &#34;#/definitions/stream&#34;},
+                    },
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;properties&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^&#34;: {}
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;annotator&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;comment&#34;: {&#34;type&#34;: &#34;string&#34;}
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;object&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;frame_intervals&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                },
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;object_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/object_data&#34;},
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;action&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;frame_intervals&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                },
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;action_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/action_data&#34;},
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;event&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;frame_intervals&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                },
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;event_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/event_data&#34;},
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;context&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;frame_intervals&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                },
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;context_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/context_data&#34;},
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;relation&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;frame_intervals&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                },
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;rdf_objects&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/rdf_agent&#34;}
+                },
+                &#34;rdf_subjects&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/rdf_agent&#34;}
+                },
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;, &#34;rdf_objects&#34;, &#34;rdf_subjects&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;rdf_agent&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;uid&#34;: {&#34;type&#34;: &#34;integer&#34;},
+            }
+        },
+        &#34;action_data&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                }
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;event_data&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                }
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;context_data&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                }
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;object_data&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;bbox&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/bbox&#34;}
+                },
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                },
+                &#34;poly2d&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/poly2d&#34;}
+                },
+                &#34;poly3d&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/poly3d&#34;}
+                },
+                &#34;cuboid&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/cuboid&#34;}
+                },
+                &#34;image&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/image&#34;}
+                },
+                &#34;mat&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/mat&#34;}
+                },
+                &#34;binary&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/binary&#34;}
+                },
+                &#34;point2d&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/point2d&#34;}
+                },
+                &#34;point3d&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/point3d&#34;}
+                },
+                &#34;mesh&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/mesh&#34;}
+                },
+                &#34;line_reference&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/line_reference&#34;}
+                },
+                &#34;area_reference&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/area_reference&#34;}
+                }
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;stream&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;description&#34;: &#34;A stream describes the source of a data sequence, usually a sensor.&#34;,
+            &#34;properties&#34;: {
+                &#34;description&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream_properties&#34;: {&#34;$ref&#34;: &#34;#/definitions/stream_properties&#34;},
+                &#34;type&#34;: {
+                    &#34;type&#34;: &#34;string&#34;,
+                    &#34;enum&#34;: [&#34;camera&#34;, &#34;lidar&#34;, &#34;radar&#34;, &#34;gps_imu&#34;, &#34;other&#34;]
+                },
+                &#34;uri&#34;: {&#34;type&#34;: &#34;string&#34;},
+            },
+            &#39;additionalProperties&#39;: False
+        },
+        &#34;stream_properties&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;oneOf&#34;: [{
+                &#34;intrinsics_pinhole&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;width_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                        &#34;height_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                        &#34;camera_matrix&#34;: {
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;comment&#34;: &#34;This is a 3x4 camera matrix which projects &#34;
+                                       &#34;3D homogeneous points (4x1) from Sensor Coordinate &#34;
+                                       &#34;System (SCS) into the Image Coordinate Sysmte (ICS),&#34;
+                                       &#34;plane points (3x1). &#34;
+                                       &#34;This is the usual K matrix for camera projection, but&#34;
+                                       &#34;extended from 3x3 to 3x4, to enable its usage to project&#34;
+                                       &#34;4x1 homogeneous 3D points defined in the SCS into the ICS.&#34;
+                                       &#34;The SCS follows as well the usual convention x-to-right, y-down, z-forward:&#34;
+                                       &#34;x_ics = camera_matrix * X_scs&#34;,
+                            &#34;minItems&#34;: 12,
+                            &#34;maxItems&#34;: 12,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                            &#34;example&#34;: [720.0, 0.0, 320.0, 0.0,
+                                        0.0, 720.0, 240.0, 0.0,
+                                        0.0, 0.0, 1.0, 0.0]
+                        },
+                        &#34;distortion_coeffs&#34;: {
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;comment&#34;: &#34;This is the array 1xN radial and tangential distortion &#34;
+                                       &#34;coefficients. See https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html&#34;,
+                            &#34;minItems&#34;: 5,
+                            &#34;maxItems&#34;: 14,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                            &#34;example&#34;: [-4.0569640920796241e-01,
+                                        1.9116055332155032e-01,
+                                        0.0000000000000000000,
+                                        0.0000000000000000000,
+                                        -4.7033609773998064e-02]
+                        }
+                    }
+                },
+                &#34;intrinsics_fisheye&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;width_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                        &#34;height_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                        &#34;fov_def&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;center_x_px&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;center_y_px&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;radius_x_px&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;radius_y_px&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;lens_coeffs&#34;: {
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;minItems&#34;: 4,
+                            &#34;maxItems&#34;: 4,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                        }
+                    }
+                }
+            }],
+            &#34;extrinsics&#34;: {
+                &#34;type&#34;: &#34;object&#34;,
+                &#34;properties&#34;: {
+                    &#34;pose_scs_wrt_lcs_4x4&#34;: {
+                        &#34;description&#34;: &#34;This is the pose of the Sensor Coordinate Sysmte (SCS)&#34;
+                                       &#34;defined for this stream (e.g. camera) with respect to&#34;
+                                       &#34;the Local Coordinate System (LCS), e.g. the projection&#34;
+                                       &#34;in the ground of the middle of rear-axis in a vehicle, &#34;
+                                       &#34;as defined in ISO 8855.&#34;
+                                       &#34;It is a 4x4 homogeneous matrix, to enable transform from&#34;
+                                       &#34;LCS to SCS easily. Note that the pose_scs_wrt_lcs_4x4 is&#34;
+                                       &#34;the transform_lcs_to_scs_4x4:&#34;
+                                       &#34;X_scs = pose_scs_wrt_lcs_4x4 * X_lcs&#34;
+                                       &#34;X_scs = transform_lcs_wrt_scs_4x4 * X_lcs&#34;,
+                        &#34;type&#34;: &#34;array&#34;,
+                        &#34;minItems&#34;: 16,
+                        &#34;maxItems&#34;: 16,
+                        &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;example&#34;: [1.0, 0.0, 0.0, 10.0,
+                                    0.0, 1.0, 0.0, 5.0,
+                                    0.0, 0.0, 1.0, 1.0,
+                                    0.0, 0.0, 0.0, 1.0]
+                    }
+                }
+            },
+            &#34;sync&#34;: {
+                &#34;description&#34;: &#34;This is the sync information for this Stream.&#34;
+                               &#34;If provided inside a certain frame, it can be used&#34;
+                               &#34;to specify timestamps in ISO8601 format,&#34;
+                               &#34;and a frame_stream of this stream.&#34;
+                               &#34;E.g. at vcd&#39;s frame 34, for stream CAM_LEFT, the sync info&#34;
+                               &#34;contains timestamp=2020-04-09T04:57:57+00:00,&#34;
+                               &#34;and frame_stream=36 (which means that this CAM_LEFT is shifted&#34;
+                               &#34;2 frame with respect the vcd&#39;s master frame indexes.&#34;
+                               &#34;If provided at stream level, it can be used to specify&#34;
+                               &#34;a frame shift, e.g. the shift of that stream wrt to the&#34;
+                               &#34;master vcd frame count.&#34;                              
+                               &#34;E.g. if the shift is constant for all frames, it is more compact&#34;
+                               &#34;to define the frame_shift=2 at stream level.&#34;,
+                &#34;type&#34;: &#34;object&#34;,
+                &#34;oneOf&#34;: [{
+                    &#34;properties&#34;: {
+                        &#34;timestamp&#34;: {&#34;type&#34;: &#34;string&#34;},
+                        &#34;frame_stream&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                    },
+                }, {
+                    &#34;properties&#34;: {
+                        &#34;frame_shift&#34;: {&#34;type&#34;: &#34;integer&#34;}
+                    }
+                }
+                ]
+            },
+            &#34;additionalProperties&#34;: True
+        },
+        &#34;bbox&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;minItems&#34;: 4,
+                    &#34;maxItems&#34;: 4,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;num&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;number&#34;},
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;text&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;boolean&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;boolean&#34;},
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;cuboid&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;minItems&#34;: 9,
+                    &#34;maxItems&#34;: 9,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;image&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;mime_type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;encoding&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;mime_type&#34;, &#34;encoding&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;mat&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;type&#34;: &#34;number&#34;}
+                },
+                &#34;channels&#34;: {&#34;type&#34;: &#34;number&#34;},
+                &#34;width&#34;: {&#34;type&#34;: &#34;number&#34;},
+                &#34;height&#34;: {&#34;type&#34;: &#34;number&#34;},
+                &#34;data_type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;channels&#34;, &#34;width&#34;, &#34;height&#34;, &#34;data_type&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;binary&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;encoding&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;data_type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;encoding&#34;, &#34;data_type&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;vec&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;type&#34;: &#34;number&#34;}
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;point2d&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;minItems&#34;: 2,
+                    &#34;maxItems&#34;: 2,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;point3d&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;minItems&#34;: 3,
+                    &#34;maxItems&#34;: 3,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;poly2d&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;mode&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;closed&#34;: {&#34;type&#34;: &#34;boolean&#34;},
+                &#34;val&#34;: {
+                    &#34;anyOf&#34;: [
+                        {
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;string&#34;}
+                        },
+                        {
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                        }
+                    ]
+                },
+                &#34;hierarchy&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                    &#34;minItems&#34;: 4,
+                    &#34;maxItems&#34;: 4,
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;mode&#34;, &#34;closed&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;poly3d&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;closed&#34;: {&#34;type&#34;: &#34;boolean&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
+            },
+            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;closed&#34;],
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;attributes&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;additionalProperties&#34;: False,
+            &#34;properties&#34;: {
+                &#34;num&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {
+                        &#34;$ref&#34;: &#34;#/definitions/num&#34;
+                    }
+                },
+                &#34;vec&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {
+                        &#34;$ref&#34;: &#34;#/definitions/vec&#34;
+                    }
+                },
+                &#34;boolean&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {
+                        &#34;$ref&#34;: &#34;#/definitions/boolean&#34;
+                    }
+                },
+                &#34;text&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {
+                        &#34;$ref&#34;: &#34;#/definitions/text&#34;
+                    }
+                }
+            }
+        },
+        &#34;mesh&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;point3d&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {&#34;$ref&#34;: &#34;#/definitions/point3d&#34;}
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;line_reference&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {&#34;$ref&#34;: &#34;#/definitions/line_reference&#34;}
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;area_reference&#34;: {
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;patternProperties&#34;: {
+                        &#34;^[0-9]+$&#34;: {&#34;$ref&#34;: &#34;#/definitions/area_reference&#34;}
+                    },
+                    &#34;additionalProperties&#34;: False
+                },
+                &#34;additionalProperties&#34;: False
+            }
+        },
+        &#34;line_reference&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                    &#34;minItems&#34;: 2,
+                    &#34;maxItems&#34;: 2,
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;},
+                &#34;additionalProperties&#34;: False
+            }
+        },
+        &#34;area_reference&#34;: {
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;stream&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;val&#34;: {
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                },
+                &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;},
+                &#34;additionalProperties&#34;: False
+            }
+        },
+
+    },
+    &#34;required&#34;: [&#34;vcd&#34;],
+    &#34;additionalProperties&#34;: False
+}</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="vcd" href="index.html">vcd</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

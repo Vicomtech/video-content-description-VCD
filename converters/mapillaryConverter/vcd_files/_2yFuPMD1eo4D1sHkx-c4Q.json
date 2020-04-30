@@ -1,0 +1,4291 @@
+{
+    "vcd": {
+        "frame_intervals": [],
+        "frames": {},
+        "objects": {
+            "0": {
+                "frame_intervals": [],
+                "name": "object 0",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2277",
+                                "1873",
+                                "1",
+                                "4E2wnmAI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2265",
+                                "1871",
+                                "0",
+                                "IRCKARwCIgBp+A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1854",
+                                "1866",
+                                "1",
+                                "+K4Ewn+w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1466",
+                                "1817",
+                                "0",
+                                "CIRRCIRCKIRCIRRCP/202R2EAKwBWxWAK/wgKAKBQJRRCIRRCIRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1424",
+                                "1813",
+                                "1",
+                                "E2xW2wBW2122BW2AK2wA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1791",
+                                "1777",
+                                "0",
+                                "+2wn02wCO202BWw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "393",
+                                "1715",
+                                "1",
+                                "KAKAKAKAKAKCpKBRQKBRQKBRQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "380",
+                                "1715",
+                                "1",
+                                "AKxWKxQkAKAKAKAKAI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1636",
+                                "1707",
+                                "1",
+                                "/22AnwE/22A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--billboard"
+            },
+            "1": {
+                "frame_intervals": [],
+                "name": "object 9",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2276",
+                                "1891",
+                                "1",
+                                "4gBQBQBQBp+A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1836",
+                                "1846",
+                                "1",
+                                "2wBXwBW2EwBp+wK+w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1410",
+                                "1814",
+                                "1",
+                                "ARRCKKIRRCKIRoKJyOTQBBQIRAROOR0RARARARyPwK8wK2AJ2whRRRhARAQKBhQKBRQKBX/2yIRRCIRCKIRCIRRCM22BW2wBW2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1697",
+                                "1783",
+                                "1",
+                                "+2E2Am2AK2wmwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1821",
+                                "1719",
+                                "0",
+                                "OBWwK2BWwK04R+nBW2wExWwK2AK2B"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--billboard"
+            },
+            "2": {
+                "frame_intervals": [],
+                "name": "object 14",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1682",
+                                "1829",
+                                "1",
+                                "ARyOCIE2AKE4A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1617",
+                                "1808",
+                                "0",
+                                "wBQBP22BhwCRRRCKIRCIROCRB2yBSREKBRRQLQBQBQBQBQBWBWwBWwBWwBX0BQKwCIhRQKJ22R22CPwBBgBXK2AJARyImBWAMOyC+BX/2JQKCKRQCIC2JRRRRRRRRRRRgKAKBWwK2K2BO2"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1403",
+                                "1771",
+                                "1",
+                                "5W2CKM2wBp22AK22E2KwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1842",
+                                "1769",
+                                "0",
+                                "IBWAWxW2BW2K2wK2wK2xW2BW2BW2K2wK2wKwpOExWwK2AK2BWwK2BWwBWwK2BWwBWwK2BWwK2AK2B"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--traffic-sign--front"
+            },
+            "3": {
+                "frame_intervals": [],
+                "name": "object 18",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1796",
+                                "1806",
+                                "0",
+                                "AK2AK2AK2xWwBW2K2AK2AK2xWwBWEBWmAK2wK2wBW2BW2AK2wK2wBW2BWw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1666",
+                                "1772",
+                                "0",
+                                "2An4mw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1281",
+                                "1747",
+                                "0",
+                                "2K22K2wBW2xWAmwBJRRRRRRRRRRRRRRRRRQKBQKBQKBQKBQKBQK2K2wK2wK22R22COAgKKBWBhRRQCKAKAIJICKAKWwMIRCCAKBO2AR22BQKKBQMPyPxOyIRARgBQMOyKBRgIOyKKMKxX+BXwRyICICICJORyASICIQKQBhyOhRZRCKIRRCKKIRRCKIRRRRRRSwKxhR/K+2wBh22AR2wBa22K2wBW2xWA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "4": {
+                "frame_intervals": [],
+                "name": "object 21",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1739",
+                                "1793",
+                                "1",
+                                "+AnwE+A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1710",
+                                "1743",
+                                "0",
+                                "/K/+2wBW2AgMX22BX22BX22BW2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1252",
+                                "1743",
+                                "1",
+                                "xWAKwKwBWAKwBWBWAKAmKxWKxpwK2xW2K2AK2xWEAKxQBQA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--traffic-sign--front"
+            },
+            "5": {
+                "frame_intervals": [],
+                "name": "object 24",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1698",
+                                "1827",
+                                "0",
+                                "+AmnKC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1698",
+                                "1809",
+                                "0",
+                                "S0"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1658",
+                                "1600",
+                                "1",
+                                "EwBWKAKxQBWKAKIRCJRRCPAK/AK/AK22AJ/2wmn22BO2m2J/22Ewn/K/5X/K+wRRRQBQRQKKwKxWBWI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "6": {
+                "frame_intervals": [],
+                "name": "object 27",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1745",
+                                "1814",
+                                "1",
+                                "//+AmE//+A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1690",
+                                "1811",
+                                "1",
+                                "2AK2pOAmxWw"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "7": {
+                "frame_intervals": [],
+                "name": "object 29",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1271",
+                                "1746",
+                                "0",
+                                "KARxW2K2xWKKhOBWwBWwBW2K2AK2xWwBWAoBQKBQKBQK2AK2xWwBW2K2AKxOgmJwK2xW2KxOghR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "552",
+                                "1690",
+                                "1",
+                                "xWBWBWBQE+An2w"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "8": {
+                "frame_intervals": [],
+                "name": "object 31",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1698",
+                                "1810",
+                                "1",
+                                "2AK2mBQmwK2mw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "544",
+                                "1698",
+                                "1",
+                                "BQBQKAKBQBQKAKBQBQKAKBQBQKAKBQKAKBQBQKAKBQBQKAKBQBQKAKBQBUwKwBWBWBpAK2KwBWxWAKwBWxWAK2KwBWxWAKwBWxpBIBWBWBQ"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--traffic-light"
+            },
+            "9": {
+                "frame_intervals": [],
+                "name": "object 33",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "483",
+                                "1747",
+                                "0",
+                                "AKxQBWKxWKxQBWKxWKAKxQgKAKBQNOK2K2K2K2BWxWxWxW"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "10": {
+                "frame_intervals": [],
+                "name": "object 34",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "425",
+                                "1760",
+                                "0",
+                                "BQBQBQBQKAKAKAKBQBQBQBU2wEBWBWBWKwKxWBWBQ"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "11": {
+                "frame_intervals": [],
+                "name": "object 35",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "450",
+                                "1752",
+                                "0",
+                                "AKAKxQBQBWKAKxQBQBWKAKE2EBQBWKAKAKxQBWKAKAKxQBQ"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "12": {
+                "frame_intervals": [],
+                "name": "object 36",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "388",
+                                "1694",
+                                "1",
+                                "BQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBUKKKNJQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQ"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "13": {
+                "frame_intervals": [],
+                "name": "object 37",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1253",
+                                "1904",
+                                "1",
+                                "JwCOARwCORwRyOCORwRyOCORwRyOCORwRyOCORwRyOCORwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwRwR2R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyO0/+21JwCOARwCOARwCOARwCOARwCOARwCOAR2RwCOARwCOARwCOARwCOARwCOARwCOARwCOCOARwCOARwRwCOARwCOCOARwCOARwRwCOARwCOCOARwCOCOARwCOARwRwCOARwCOCOARwCOARwRwCOARwCOCOARwCOCOARwCOARwRwCOARwCOCOARwCOARwRwCOARwCOCOARyORyORyICORyORyORyORyORyICORyORyORyORyORARyORyORyORyORyORARyORyORyORyORyORARyORyORyORyORyORARyORyORyORyORyICORyORyORyORyORyICORyORyORyORARyORyORARyORyORARyORyICORyORyICORyORyICORyORyICORyORyICORyORyICORyORARyORyORARyORyORAR0AR2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--barrier--curb"
+            },
+            "14": {
+                "frame_intervals": [],
+                "name": "object 38",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2605",
+                                "1859",
+                                "1",
+                                "JwRwCOARwRwCOARwCOCOARwCOCOARwCOCOARwCOARwRwCOARwRwCOARwRwCOARwCOCOARwCOCOATXAK+K4BXxICOAgR22Am2AR+BXwn///22CP2R+wR+yP2CP2AR+2R+wCP22AgCP+2CPw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "3255",
+                                "1757",
+                                "1",
+                                "J2COwR2COwR2COwR2COwR2COwR2COwR2COwR2COwR2COyOwR2COwR2COwR2COwR2COwR2COwR2COwR2COwR2COwR2CIRARCIRCICIRCIRARCIRARCIRCICIRCICIRCIRARCIRCICIRCICIRCIRARCIRARCIRCICIRCIRARCIRARCIRCICIRCICIRCIRARCIRCICIR2COwCOwR2EwCO2CO2CO2CO2ARwE////22R+AR+CPwCPwCPwR+AR+AR+AR+CPwCPwCPwR+AR2wCO2yO2AR22R2wCO2AR22R2wCO2yO2AR22R2wE////+w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "86",
+                                "1675",
+                                "1",
+                                "AKwKwKwKwKwKwKwKwBWExQBX+2wKBRQKKBQKKBWAKwBWxWAKxWKAKxX+xWwK2BWwBXKKBRQKKKBRQKKxW20xWKwKyKIRCIRCIRCIRCMAKAKAKAKAKAKxQBQBQBQBQBWBWKwKxWBWBWKwKxWBWBWKwKxWBWBWKwKwKxWBWKwKwKxWBWKwKwKxWBWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "45",
+                                "1671",
+                                "1",
+                                "ICOwCOwR22CO2CCWBWBWBX4gKxQBQBQBWKAKAKAKxQBQBQBQ"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--barrier--fence"
+            },
+            "15": {
+                "frame_intervals": [],
+                "name": "object 42",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1495",
+                                "1902",
+                                "1",
+                                "BOwR2EBQKKBQKJQKBARATRRRRO2E2AKwnAKxRKKKOyQJRQKOyaBQBKICIR2nyPyaBQKKBW2wR2wEBQBAIRCa2BBQBRAiQBQBRxRRTWBQKKBOAR20yICORyORyICORyORyICORyORARyORyORARyORyORARyORyORARyORyORARyORyORARyORyICORyORyICORyORyICORyORyORyORARyORyORyORyORyORARyORyORyORyORyICORyORyORyORyORyICORyORyORyORyORyICORyORyORyORyORyICORyORyORyORyORARyORyORyORyORyORARyORyORyOARwRwCOARwCOCOARwCOARwRwCOARwCOCOARwCOARwRwCOARwRwCOARwCOCOARwCOARwRwCOARwCOCOARwCOARwRwCOARwRwCOARwCOCOARwCOARwRwCOARwCOCOARwCOARwRwCOARwCOARwCOARwCOARwCOARwCOARwCOyOARwCOARwCOARwCOARwCOARwCOARwCX/////////8/////////////////////////////////////////////////////////////////////////////////+2pRCIRARCIRARCIRARCIRARCIRARCIRARCIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRCIRCIRCIRCIRCIRCICIRCIRCIRCIRCIRARCIRCIRCIRCIRCIRARCIRCIRCIRCIRCICIRCIRCIRCIRCIRCICICICICICICORARARARARARDU2m2BXwIB2TWAKwJCORAmwBXKAJS+AR22CO20KBRRIRwBQKBPxWwgR+2oKL2BW2wBW2wK22AK22AK22AK22AK22BW2wBWwa+LxWAK2KwBWAK2KwBWxWAK2KwBWAK2KwBWxWAK2KwBWAK2KwBQpAK2wI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--flat--road"
+            },
+            "16": {
+                "frame_intervals": [],
+                "name": "object 43",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2289",
+                                "1911",
+                                "0",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2277",
+                                "1908",
+                                "0",
+                                "CWwFxQB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2260",
+                                "1908",
+                                "0",
+                                "mBp"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2266",
+                                "1869",
+                                "1",
+                                "NI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2215",
+                                "1855",
+                                "1",
+                                "gKAKBQBQBUExWKwI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2135",
+                                "1855",
+                                "1",
+                                "JRRRRRRRRRRTRQKKKBRRRQKNOBW2wK22AK22BQE2K22R22R//2An22EKKKKKKKKKKKKKKKKKKKKKKKKKI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1814",
+                                "1855",
+                                "0",
+                                "BQBQBQBQBQBQBQEEAKAKAKAKAKAKAK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1824",
+                                "1853",
+                                "0",
+                                "BRWKwBWxWAKmmAK2x"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2302",
+                                "1851",
+                                "0",
+                                "JRCKIRRCK2CwExWAJ8E2wBO2wCM2RwCORRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1862",
+                                "1851",
+                                "1",
+                                "JRCK2CBWKwKxWwSIRRFO2K4BOJ/EwS2R+R4A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1872",
+                                "1847",
+                                "0",
+                                "JRm2CP2yO2pOARwCOCIE/2AgKKBRQKBR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1975",
+                                "1843",
+                                "1",
+                                "JARCIhQBQBQBWAK2K2K2m2BWwK2BWwK2ER2yKIRCKIRCKOwEIRRCKIRRA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                11,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "487",
+                                "1785",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "362",
+                                "1761",
+                                "0",
+                                "JCIRARCIRCIuKwBW2AKgCOR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "332",
+                                "1755",
+                                "0",
+                                "xWKAmwpKKKKK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                16,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "595",
+                                "1708",
+                                "0",
+                                "JCIRERRRT22KBRQKBTKIRCIRCIRCISyWxWAKwBWxWAK2KoKKKOBRCKIRTQKKBRQJCORyORnASKBRQKKBRp+J4JRRRRRRRQRARARpKKKKBRR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                15,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "441",
+                                "1671",
+                                "1",
+                                "JRRCKKKM22AKwKwKwKAJ+wgRwRwRwRiIRCIT22IKxWBWKoKAKJ2CRCKIRRRCKIewB0AJBQBWKAK22E2K2KAhQBWKxWKxQBWKBOwJxWxWxWxWAoBQKAKBQBQKAKBQKAKJyORyOTAKAKCgBQKAKBQBQKAKBQBQKAKBUKARRRCKKKKPJCICICIEhCIRRB2BKICIRCICIBWKAKxWKmwhCIRCK5wCOzQBQBQBQBBRRRTwBWAW2AQA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "construction--structure--building"
+            },
+            "17": {
+                "frame_intervals": [],
+                "name": "object 60",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1910",
+                                "2065",
+                                "0",
+                                "SICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRCICIRCICIRCICIRCICIRCICIRCICIRCIX/+oIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1907",
+                                "2063",
+                                "1",
+                                "Q"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1904",
+                                "2061",
+                                "1",
+                                "Q"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1514",
+                                "1904",
+                                "1",
+                                "IBWAK2KwBWAK2KwBWxWAK2KwBWAK2KwBWxWAK2KwBWAK2KwBQFPxmwK22AK22BW2wBW2wBW2wBW2wBW2wK22AK2pKI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                3,
+                                5,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1806",
+                                "1885",
+                                "1",
+                                "AJ2AhW2BWAJxQJwK2AKAnwRRRRRRRTIBVKAJwJgRCIRCIRCIRoKK22KIRCKIROwgKBQBQKBRRRRRRQKKKKKKKBRRQKKKBRRQKKBRQKBQKKBQKBRQKBRRQKKKKBRRWKxWBWKKIRRRRCKKKIRRRRCKKKKIRRRRCKKKIRRRRCKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKK///////An/////////2CRRRRRRCKKKKKKBQKBQKBQKAKBQKBQKB2wR22Z2xW2K2xWwBW2K2xW2K20///////m2AR22R2wCO2yO2AR22R2wCO2AR22R2wCO2yO2AR+AR+CPwCPwCPwR+AR+AR+AR+CPwCPwCPwR+AR////22mR2wR2wR2wCO2CO2CO2COAO2AR2wE+BXwZ/+2AIRARARARyICICICK+wBYCOCNP+2BRRRRRRRRQKKKKKKK/2wBQBQBQKAKAKAKBQBQBQBQKAKAKAKxQBWKAKAKxQBWKAKxQBQBQBQBQBQBQBWKAKAKAKAKAKwBWBWAKwKwBWAKwKwBWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWAKwKwBWAKwBWBWAKwBZCICIRCP4KxWBWKxWBWKwKxWKwKxWKwKxWBWKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKAKxWKxQBWKxWAKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKwBWAK2KwBWAKwBWAKwBWxWAKwBWKxWKxWKxWKxWKxWK022AR/2wR/2n22AR+wCP2yP2AR+wR+yP2CP2R///+2wJ+EBW2NOBaKKBRKWwCICICO2mBWAJ/22AJ22n/+wCO2yO2yO0J/22AJ2n22JCICICM2BWwK2BWwK2wExP/5MARwRwCOASJAJpOExOBOyCKIRpwLQKBQBUK2BWJwTOBW2BWmhOwJA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                -1,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "3175",
+                                "2104",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2784",
+                                "2047",
+                                "0",
+                                "pO2K2wK2wBW2BWAKwKwBWAKwKwBWAKwKwBWAKwKwBWAKwKwBWBWAKwBWBWAKwBWBWAKwBWBWAKwBWBWAK2BWwK2BWwBWwK2BWwK2BWwK2AK2BWwLyOBARCICICIRARCICa2K2K2KwBWxWxWxWxWxWAK2K2K2KwBWAKwBWxWAKwBWAKwBWAK2KwBWAKwKwKwKxWBWBWBWBWBWBWBWKwKwKwKwKIRCIRRCIRCKIRC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2782",
+                                "2046",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1951",
+                                "1911",
+                                "0",
+                                "pawBWxWAK2KwBWxWAK2KwBWxWAK2KwBWxWAK2KwBZQKBQKDWBWBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwLICICIC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1074",
+                                "1862",
+                                "0",
+                                "BCIRDQBQBQBWwCOyOARwCP4R2R2R2v+2KxWKxWKxWBWKxWKxWKxQBQKAKAKBQBQKAK2K2K2K2K2AoKBRQKKBRQKKBRQKKBRQKKBRQKKBRQLPK4BXxXAKwKwKwKwKxWBWBWBWBWKxWKwKxWKxWMKKKpBWKAKAKAKxQBQBWKAKAKxQBQBQBWKAK2BWwBWwK2BWBWAKwKwK2AK2xWwBWwB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "776",
+                                "1848",
+                                "1",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "766",
+                                "1847",
+                                "0",
+                                "m"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                11,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "606",
+                                "1843",
+                                "0",
+                                "BWBWBWBWmBW2wK22BX/+wBQKAKBQBQBQKAKBQBQKAKAKBQBQKAK2BWxWwK2BWxWwK2BWwK2K2BWwK2K2BWwK2K2BW2AK22K2wBW2xW2AK2wBW2xW2AKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBX+2RyOCORwRyOCORwR1BQBQKAKBQBQKBQBQKAKBX/2BWKAKxWKxQBWKxWKAKxWBWBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwLP/1BRRRRRRRWBWBWAK2RRCKIRRCKORwRyOTKKKKKKKKKKKKYFP2QBQRKORyORyYRCIRW2wK4BW2wCKIRRCaAKAKAKAK2BWwK2AK/+K2K2K2B"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1821",
+                                "1",
+                                "//////4E22K22BW2xW2xhyICORyICORyORARyORAR//+yOCOCORwRwRwRwRwRyOCOCOFAKBQKBQBQKBQKBQKBQKBQKAKBQKBQKBYBWBWAKwKBwBWAKwBWAK//+wBQKBQBQKBQKBQKBQBQKBQKBQKBQBQKBQMRCIRCNIKBQKKBQKBQKBRQKBQKBQKBRQKBQKBQKBRQKBQKBQKKBQKBZARARARARARARyICICICICP///////22ARRRRRRQKKKKKP/+AgKAKAKAKAKgBQBQBQKAKAKAKAKAKBQBQBQBXxXwK2mxawBWxWAKSIRCKIOwBJRRQKKTRU+BX2AK+wK+wB2wDO2AK22BW2wK22BW2wK22BW2wK2hRRCKKKKKKKNO2AK/wK/xX+BX2wK+2BX2wBX2wK+2BX2wK+2BX2wK+2AK+2BX2wK+2BX2wK+2BX2wBX2wK+2A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "361",
+                                "1773",
+                                "0",
+                                "RCIRCpAKwh"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1761",
+                                "1",
+                                "/22AnK5XK5W2wBXK5XK/22BX+2wK/22BX+2wK/BX4BX4K/BX4K/AK/BX21BQKKBQKKBRRRRWK0KALWBWBWAKwJKn2ALBQBQBQBVJRCKKIRUAK2K2KxaBQKAKBIKxQBWKxUAK2K2RCQBQBWKAKBOwJBQBWKAKERyOQWBWBQJ2wBJQBQBQFJyamKAJ4JBQBQBQSBQKBQBiAKAKAKAKAKAKLRRRRJQBQBpRRTWBWBWAK2ARyORyO2xQKBQKBRQKKBX/KKKK//AKxWKxXwBWBWBWBWBWwK2BWwgKALWAKwBWxWAJBp2BQKKBQKKBQKKBQKI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "marking--general"
+            },
+            "18": {
+                "frame_intervals": [],
+                "name": "object 76",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1495",
+                                "1901",
+                                "1",
+                                "gKwFwI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1547",
+                                "1900",
+                                "1",
+                                "IpQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1707",
+                                "1677",
+                                "0",
+                                "22K/5W2wmmwJwJ2EwCRRRRRRRRRRRRRRRSBWBWBWBWBQBRRRQK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2822",
+                                "1364",
+                                "0",
+                                "JCIRCIRCIRCwBW2K2xW2K2RARARARARARARARARARARARARARARARRRRCKKKKIRRRRgRyORyORCAKBQBQKAKBQBQKwCICICICORARARARARARARARyICICICICKKKKKKKKKKKKKKBRRRRRRRRRRRRRSICIRARCIRARBCIRCIRCICIRCIRCIRCIRCIRARCIRCIRCa2AK2BWwBWwBWwK2AK2AK2BWwBWwK2AK2AK2BWwBWwBWwK2AKIRCIRRCIRRCIRCKIRCIRRCIRRCIRCKIRCIRRCIRRCIRCARCIRARCIRCIRCIRCICIRCIRCX///+20ARARARARyICICICICICICICICORARARARARARARARARARyICICICICICICICICORARARARARwRwRwRyOCOCOCOCOCORwRwRARyICORARARyICICORARyICICORATWxWxWAK2K2K2K2K2KwBWxWxWx/+w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "114",
+                                "827",
+                                "1",
+                                "JQKAKBQKAKBSKBQKAKBQKBQKBQKAKBQKBQKBQKBQKBQKJRRQKKKKKKKBRRRRRQKKKKKKBRRRRRRQKKKX///+21KORwRyORwRyORwRyORyOCORyOCORwCOwR2AR2CORRQKBRQKBRQKBRQKBRQKBRQKBRWxW2AK22K2wBWAQKAKAKAKAI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "418",
+                                "0",
+                                "0",
+                                "gKKBQKKBQKKBRQKBRQKBRQKBRQKBRQKBRQKBRQKKBQKKBQKKBQKKBRCIRRCIRCKIRCKIRCIRRCIRJQKBQKKBQKBQKBQKBQKKBQKBX+2AmAKwBWxWAKKKKBRRRRRQKKKIKAKAKAKAKBQBQBQBQBQBQKAKAKAKAKZRRRRRRRRRRRCKKKKKKKKKKKMRRRRRRCKKKKIRRRRRR+2wBIRRCKIRRCIRRCKIRRCKISICICICIRARARARCICICICIBQKBQKBQKBQKBQKBQKCKIRCKIRCKIRCKIRCKIRCKNOKxWKxWKxWKxQBQBQBQBQBQKAKAKAKAKAKAKAKAKAKBQBQBQBQBQBQBQBQBQBQBWKAKAKAKAKAKAKAKAKAKxQBQBQBQBKKKIRRRCKKIRRRCKKIRRRCKKKKKBQKKBQKKBQKKBRQKBRQKBRQKBRQKBRRRCIRRCIRCIRRCIRCIRRCIRIRARARARARARARARAICIRARCICIRAREBQBQBQBQBQBQBQBQBQBQBQBQBRQKBRQKBRQKBQKKBQKKBQKKBQKBRQKBRQKBRQKLwCO2CO2R2wR2wR2wR2yO2COCRRRRRRRCKKKKKKKKRRRRCKKKKIRRRRWR2COwR2COwCOwR2COwRxRARCIRARCICIRARCIRARCICIRCICIZCICORARARyICORARyICORARARyICORARyICORARARyIFKKBRRQKKKKBRRQKKKKKKKIRRRRRCKKKKKAKBQBQKAKAKBQBX+wRRRRRRRRRRRRRRRRRBQBQBQBQBQBQBQBQLQBQBQBQBQBQKAKAKAKAKAKAKAKAKAKBQBQBQBQBQCAR2R2R2RwCORyORyIX22WR2COwRwKKIRRCKIRCKIRRCKIRRCKIRCKIRRCKIRRCKIRRCIRRCKIRRBRQKBRQKBRQKBRQKBRQKBRQKBRU2xW2K2wK2xRCIRCIRCIQRRRRRQKKKKKKOCORwRwRyOCORwTRQKKKBRRQKKKBRKKIRCKIRCKIRCKIRCKIRCMCxWKxQWAK2wBW2xW2AK2KKBRQKKBQKKBRQKKLCIRCIRCIRCIX22AIKBRQKBQKBRQKIRARyORARyORARyICORyICORyICORyORARAuxWAKwBWBWAKwBWAKwBWAKwBWAKwKwBWAKwBWBQBQBQBQBQBQBQBWKAKAKAKAKAKAKAKBRCIRCIRCICIRCIRCIRAKAKAKAKAKBQBQBQBQBQBQBQBQBQBQBQKAKAKAKAKDIRARARyICICORARARyICICORARARyICICORARARARyICICORARARyICICORARARyICICIRRQKKBRQKKBRQKBRQKKBRQKKBRR2BW2wBW2wBW2wBW2wBW2xW2wK22K2wK2BWwK2BWwCO2R2wR2ypKBQKBQKKBQKBQKKBQKBQKKBQKBQKKBQKBQKKBR+2R///KBQKBQKAKBQKBQOwR2COwR2COwT/2SKBRRQKKKKBRRQKKKBRRRQKKKBRRRQKKKBRRQKKKKBRRQKKf6P/2wBX2wB/2OAK2KBQKBVJRRRRRRRQKKKKKKKIRCICICIRARARCIP+2BRRRCKKIRRRRCKKIRRRX2E+2yORyOCORyORyZARwCOyOARARRRQKKKBRRQKKKCICICICICICORARARARARARBRRRRRRRCKKKKKKIRRRRRRRRQBQBQKAKAKBQBQKAKAKBQBQBQKAKAKKIRCIRRCIRCIRCIRCKIRCIRCIRCIRRCIRCOBWwKAgEIRCIRRCKKIOATX22EAKwJBO2mwK2KyKBQKBQKAKBQKBS+EAJ2BIEAJQKBQKBQKBQKB02wE2xO2n22E+wJ+AJ/22BPwBO2wE/2wm2wBX4BWARQKKKKBRRRR/2hWKAKxQBWKwEwBawBWAKwBWAJRCIRCJa2K2K2K2JAm2AKxWBWKE22AJCKIRCKIRREKKBRRQKKBRRQKKwCOwCOwCOwCO2BW2AK22K2wBW2COwCOwCOwCO2K2xW2BW2KwOK2K2BWxQCxWxWxWxWCKIRRCKIRRRCKIRRAKxWKxWKxWKwKxWKxWKxQP+2AKBRQKKBRQNBQKKBRRQKKBRRQKKKBRQKKKBRQKKKBRQKKKBRRQKKBRRQKKBRKIRCIRCIRCIRLWxWAK2KwBWxWxWAKwFJRRRRRRRRRRRRRRRRRRRRRRRRRRRRRARARARCICICICIRARARARLQKBRQKBQKBRQKBQKBRQKBQKBRQKBQKBRQKSKKKKKKKKKKKyOARwCOARwRwCOARwCOARwCOARwCOCOARwCOARAJ/+0KAKAKAK/+2LWBWAKwKwKwBWBWBWBWAKwKwKwBWSBQKBQBQKBQKBRQKKBRQKKBRQKBRQKKBRQKKBRQKAKAKAKBQBQBQBQKAKAKAKCICIRARCICIRARCICICIRARCICIRARCICIRAR2R2wCO2yO2AR2KBRQKBQKKBQKBRQKBQKBRQKBQKKBQKAKAKAKAKAKAKAKB2AK4BXBXAK2AICICICICICICICORARARARARARARARAgRARARARARARARARARARARARyICICICICICICICICICICICIKKKKIRRRRRCKKKIRRRRCKKKKIRRRRCIRARCIRARCIRARCIRARCIRARCIBQBQKAKAKAKBQBQBQBQKAKBQKKBRQKKBQKKBRQKeCOwCO2R2ARAUKKKKKKKKKKKBRRRRRRRRRRRRICICICICIRARARARARARARARCICICICYRARARARARARyICICICICICIWKAKxQBWKxQBWQBWAKwBWAKwBWAKwBWAKwCOAR2RwCOaKBRQKKBRQKKKBRQKKBRRQKKBRQKKBRQKAKBQKAKBQKAKBQKAKBQKAKBQKAKBQKBQBQKBQBQKBQBQKBQBQKBQBQKBQBQKKIRRRRCKKKKIRRwCO2R2yO2R2BWKxWKxQRRQKKKKBRRRQKKKKBRRRQKKIRRRCKKIRQCIRCIRCIRCICIRCIRCIRCIRCRCKIRCIRCKIR+K+O2AR22R2wCO2ATBRRQKKKBRRQKKKBRRRQKKKBRRQKKKBRRRRARCIRARCICIRARCIRARARARARARARARARARxWKxWKwKxWKxX2wCKKKKKKIRRRRRRRCKKKKKKX+2hRCKIRRCIRRCKIRRCIRARCIRARCIRARCIRARCIRARCIKBRQKKBRQKBRQKKBTICOARwCOCOARwCOARwCOCOARwCOARwCOCOARwCOARwCOCOARwF///////////////2A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "nature--sky"
+            },
+            "19": {
+                "frame_intervals": [],
+                "name": "object 82",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1910",
+                                "2065",
+                                "0",
+                                "SICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCICIRCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRARCIRCICIRCICIRCICIRCICIRCICIRCICIRCIX/+oIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1907",
+                                "2063",
+                                "1",
+                                "Q"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1904",
+                                "2061",
+                                "1",
+                                "Q"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1514",
+                                "1904",
+                                "1",
+                                "IBWAK2KwBWAK2KwBWxWAK2KwBWAK2KwBWxWAK2KwBWAK2KwBQFPxmwK22AK22BW2wBW2wBW2wBW2wBW2wK22AK2pKI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                3,
+                                5,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1806",
+                                "1885",
+                                "1",
+                                "AJ2AhW2BWAJxQJwK2AKAnwRRRRRRRTIBVKAJwJgRCIRCIRCIRoKK22KIRCKIROwgKBQBQKBRRRRRRQKKKKKKKBRRQKKKBRRQKKBRQKBQKKBQKBRQKBRRQKKKKBRRWKxWBWKKIRRRRCKKKIRRRRCKKKKIRRRRCKKKIRRRRCKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKK///////An/////////2CRRRRRRCKKKKKKBQKBQKBQKAKBQKBQKB2wR22Z2xW2K2xWwBW2K2xW2K20///////m2AR22R2wCO2yO2AR22R2wCO2AR22R2wCO2yO2AR+AR+CPwCPwCPwR+AR+AR+AR+CPwCPwCPwR+AR////22mR2wR2wR2wCO2CO2CO2COAO2AR2wE+BXwZ/+2AIRARARARyICICICK+wBYCOCNP+2BRRRRRRRRQKKKKKKK/2wBQBQBQKAKAKAKBQBQBQBQKAKAKAKxQBWKAKAKxQBWKAKxQBQBQBQBQBQBQBWKAKAKAKAKAKwBWBWAKwKwBWAKwKwBWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWAKwKwBWAKwBWBWAKwBZCICIRCP4KxWBWKxWBWKwKxWKwKxWKwKxWBWKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKAKxWKxQBWKxWAKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKwBWAK2KwBWAKwBWAKwBWxWAKwBWKxWKxWKxWKxWKxWK022AR/2wR/2n22AR+wCP2yP2AR+wR+yP2CP2R///+2wJ+EBW2NOBaKKBRKWwCICICO2mBWAJ/22AJ22n/+wCO2yO2yO0J/22AJ2n22JCICICM2BWwK2BWwK2wExP/5MARwRwCOASJAJpOExOBOyCKIRpwLQKBQBUK2BWJwTOBW2BWmhOwJA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                -1,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "3175",
+                                "2104",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2784",
+                                "2047",
+                                "0",
+                                "pO2K2wK2wBW2BWAKwKwBWAKwKwBWAKwKwBWAKwKwBWAKwKwBWBWAKwBWBWAKwBWBWAKwBWBWAKwBWBWAK2BWwK2BWwBWwK2BWwK2BWwK2AK2BWwLyOBARCICICIRARCICa2K2K2KwBWxWxWxWxWxWAK2K2K2KwBWAKwBWxWAKwBWAKwBWAK2KwBWAKwKwKwKxWBWBWBWBWBWBWBWKwKwKwKwKIRCIRRCIRCKIRC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2782",
+                                "2046",
+                                "0",
+                                "pb"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                4
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1951",
+                                "1911",
+                                "0",
+                                "pawBWxWAK2KwBWxWAK2KwBWxWAK2KwBWxWAK2KwBZQKBQKDWBWBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwLICICIC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1074",
+                                "1862",
+                                "0",
+                                "BCIRDQBQBQBWwCOyOARwCP4R2R2R2v+2KxWKxWKxWBWKxWKxWKxQBQKAKAKBQBQKAK2K2K2K2K2AoKBRQKKBRQKKBRQKKBRQKKBRQKKBRQLPK4BXxXAKwKwKwKwKxWBWBWBWBWKxWKwKxWKxWMKKKpBWKAKAKAKxQBQBWKAKAKxQBQBQBWKAK2BWwBWwK2BWBWAKwKwK2AK2xWwBWwB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "776",
+                                "1848",
+                                "1",
+                                "g"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "766",
+                                "1847",
+                                "0",
+                                "m"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                11,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "606",
+                                "1843",
+                                "0",
+                                "BWBWBWBWmBW2wK22BX/+wBQKAKBQBQBQKAKBQBQKAKAKBQBQKAK2BWxWwK2BWxWwK2BWwK2K2BWwK2K2BWwK2K2BW2AK22K2wBW2xW2AK2wBW2xW2AKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBX+2RyOCORwRyOCORwR1BQBQKAKBQBQKBQBQKAKBX/2BWKAKxWKxQBWKxWKAKxWBWBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwLP/1BRRRRRRRWBWBWAK2RRCKIRRCKORwRyOTKKKKKKKKKKKKYFP2QBQRKORyORyYRCIRW2wK4BW2wCKIRRCaAKAKAKAK2BWwK2AK/+K2K2K2B"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1821",
+                                "1",
+                                "//////4E22K22BW2xW2xhyICORyICORyORARyORAR//+yOCOCORwRwRwRwRwRyOCOCOFAKBQKBQBQKBQKBQKBQKBQKAKBQKBQKBYBWBWAKwKBwBWAKwBWAK//+wBQKBQBQKBQKBQKBQBQKBQKBQKBQBQKBQMRCIRCNIKBQKKBQKBQKBRQKBQKBQKBRQKBQKBQKBRQKBQKBQKKBQKBZARARARARARARyICICICICP///////22ARRRRRRQKKKKKP/+AgKAKAKAKAKgBQBQBQKAKAKAKAKAKBQBQBQBXxXwK2mxawBWxWAKSIRCKIOwBJRRQKKTRU+BX2AK+wK+wB2wDO2AK22BW2wK22BW2wK22BW2wK2hRRCKKKKKKKNO2AK/wK/xX+BX2wK+2BX2wBX2wK+2BX2wK+2BX2wK+2AK+2BX2wK+2BX2wK+2BX2wBX2wK+2A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "361",
+                                "1773",
+                                "0",
+                                "RCIRCpAKwh"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1761",
+                                "1",
+                                "/22AnK5XK5W2wBXK5XK/22BX+2wK/22BX+2wK/BX4BX4K/BX4K/AK/BX21BQKKBQKKBRRRRWK0KALWBWBWAKwJKn2ALBQBQBQBVJRCKKIRUAK2K2KxaBQKAKBIKxQBWKxUAK2K2RCQBQBWKAKBOwJBQBWKAKERyOQWBWBQJ2wBJQBQBQFJyamKAJ4JBQBQBQSBQKBQBiAKAKAKAKAKAKLRRRRJQBQBpRRTWBWBWAK2ARyORyO2xQKBQKBRQKKBX/KKKK//AKxWKxXwBWBWBWBWBWwK2BWwgKALWAKwBWxWAJBp2BQKKBQKKBQKKBQKI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "marking--general"
+            },
+            "20": {
+                "frame_intervals": [],
+                "name": "object 98",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1273",
+                                "1787",
+                                "0",
+                                "wK2AK2xWwBW2KwFAKKKKKKKKKKKKKKKKKKmwBOAK2"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1670",
+                                "1781",
+                                "0",
+                                "+AIKBQKBQBQKBQKBuKBQBQJRRRRRRRRRRRmwRTWEARwRyIJ22Ak2TOxWwJ2ijRRO2AKARxAaCdI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "454",
+                                "1772",
+                                "0",
+                                "wKAKAg"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1705",
+                                "1752",
+                                "1",
+                                "/EBO2BW2AJEgJ2K2BMBXmm2AK/+2wBXwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1694",
+                                "1752",
+                                "0",
+                                "IKBQKBQKBQKBgE+20+"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1276",
+                                "1751",
+                                "0",
+                                "wK2xW2KwmgK2wBW2xQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1270",
+                                "1751",
+                                "1",
+                                "BW2K2AK2FwK2xW2I"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "519",
+                                "1743",
+                                "0",
+                                "JyORyOhQBQKBQBQKAKBQBQKBQBUKIRRRCKLBQBQBQBVP2AhQKAKBQBQKAKBQBQKAKBQBQKAKBQQBQB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "446",
+                                "1739",
+                                "0",
+                                "KKIRRRCKIRQBWBWBWKwKApORyKWKAKxQBQBWKAKBOm"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "397",
+                                "1717",
+                                "0",
+                                "BQKBRQKBRQKLiAKAKAKAKAKAKAKAKAKAKCQBQKBQMQIRARARDRRRRIBWBWBpMORgKAKAKAKBQBSJWKwKxQW2AhCIRCJKOCOCOC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1690",
+                                "1608",
+                                "0",
+                                "/2CKKKKBRRRQN+2AK4CIRRhCIR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                10,
+                                12,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2542",
+                                "81",
+                                "1",
+                                "ICOAR2RwCOxWAKwBWAKwBWAKwBWAKAOKAKxWKAKxQBWIRARARARARARyICICICICICIhARARARCICICICICICICICIRARARARAhRRRRRRRRRRRQKKKKKKKKKKKJICOwCO2R2ARwhQKKBRQKBRQKKBRQKBQBQKAKAKAKBQBQBQBQKAKCIRARCIRARCIRARCIRARCIRARCIRRRRCKKKKIRRRRCKKKIRRRRRCKKKKCICICICICICICICICICICICORARARARARARARARARARARARBICICICICICICICICORARARARARARARAWwBXAK4K4BWwQKAKAKAKAKAKAKAKBQKKBQKBRQKBQKBRQKBQKKBQKBRQK2R2wCO2yO2AR2RARCICIRARCICIRARCICICIRARCICIRARCICIKAKAKAKBQBQBQBQKAKAKAKBRQKKBRQKKBRQKBRQKKBRQKKBRQKBQKBQBQKBQIOKwBWBWBWAKwKwKwKwBWBWBWAKwNP/2xQBQBQBRP/2gCOARwCOARwRwCOARwCOARwCOARwCOCOARwCOARxRRRRRRRRRRRBKBRQKBQKBRQKBQKBRQKBQKBRQKBQKBRQKBpRARARARCICICICIRARARARRRRRRRRRRRRRRRRRRRRRRRRRRRRRTOAKwBWxWxWAK2KwBWxpRCIRCIRCIRCMKBRQKKKBRQKKKBRRQKKBRRQKKBRRQKKBRRQKKKBRQKKKBRQKLKBRQKKBRQK/2wQKxWKxWKxWBWKxWKxWKxQCKIRRCKKIRRCKIRRwK2K2K2KxxWxWwK2KAWBW2K2wK2xW2R2AR2AR2AR2wK2wBW2xW2AK2wR2AR2AR2ARwBRQKKKBRQKKKBRRIRRCKIRCKIm2wEBRQKIBQBRRR+wK/ARRQKKKKAKwKwKwKwKBKKKKKKKKKKKKKKKIOAmBX22BX22BX22Bp22AK22ANP+AmBPwJ+AJ+BOwE/2wQCICICIIKxWBWKBIRCMKApKKKKKKKPwmAK2AK2AK2xWwBW2K2AK2AKExP22LWwK2BO2yO2AJ2E2BW2BW2AK2wK2wBW2BW2mwEBQBQBQBQBQBQBQBRIJKAKAKAKAKAKAKAKE2EAKwBWxWAKxRRZF2wBW2K2wK2wK2xW2BWAp2z+R4DwK2BWwK2BWDwK2BWwBWwKz2wCxWwK2AK2BWwK2BWwBWwK2BWwBWwK2BWwK2hQBQKBp22BWKwKxQOwBRCKXyOwBOJ22R22iKOKKBQKKBRQJ/2wn/8xWxWxWxWAKAKAKAKJCIRARAIRRCKIRRCJ2ARRCIRRCIRR2yICICICIm2AnJ22An+AWZ2R2COyOyaKBRQKKBRQJSKBRRRQKKKBRhRRRRRRRRRRRBRRRRRRRRRRRRRRRRRRRRRRRRRU4BIRRCKIRRCKa2KwKxWJCQBO2wK22K2wBW02yICICICIEARwCOyOARAKIRCIZ/2wEKBRRp2R5X2AOwBRCKIRRCKIJRRRyOAR2RwCIE+K4BXxXAMOARwRwCOARwRwCOARwCOCOARwCOCOARwCOCOARwCOARwRwCOARwRwCOARwRwCOARwCOCOARwCOCOBPyP+2CP+2CP+2CPwBCOCOCOCIFP2AKICICICORARARARC/+2Ap+BXwe2AR2wCwCO2CO2CO2CO2AR2wR2wR2wR2wCO2CO2CO2COAJ2COwR2AR2CIRARCIRCICIRCIRARCIRARCIRCICIRCICIRCIRARCIRCICIRCICIRCIRARCIRARCIRCICIRCIRARCIRARCIRCICIRCICIRCIRARCIRCICIR2COwR2COwR2COwR2COwR2COwR2COwR2COwR2COwR2COwR2R2COwR2COwR2COwR2COwR2COwR2COwR2COwR2COwR2COwn////////ApIRCIRCICIRCIRCIRCIRARCIRAIRCIRRCIRRCIRCKIRCIRRCIRRCIRCKIRCIRRCIRRCIRCK2AK2BWwBWwBWwK2AK2AK2BWwBWwK2AK2AK2BWwBWwBWwK2AMIRCIRCIRARCIRCIRCIRCIRCICIRCIRCISICIRCICIRARBRRRRRRRRRRRRRQKKKKKKKKKKKKKKICICICICORARARARARARARARyICICICOAKBQBQKAKBQBQKAIRyORyORAaKKKIRRRRRCKKKICICICICICICICICICICICICICICICOwK2xW2K2xWAIRCIRCIRCIRB/+wWxWxWxWAK2K2K2K2K2KwBWxWxhARyICICORARyICICORARARyICORARwRwRyOCOCOCOCOCORwRwRwRARARARARyICICICICICICICICORARARARARARARARARARyICICICICICICICICORARARARAn/////////////////////////////+RwCOARwRwCOARwCOARwRwCOARwCOARwRwCOARwCOARwRwCOARApKBRQKKBQKKBRQKKBSIRARCIRARCIRARCIRARCIRARCIRRCKIRRCIRRCKIRRP+2IKKKKKKIRRRRRRRCKKKKKKP2wBWKxWKwKxWKxWRARARARARARARARARARCIRARCICIRARCIRARRRRQKKKBRRQKKKBRRRQKKKBRRQKKKBRRUO2AR2wCO2yO2AXxXARCKIRCIRCKIRBCIRCIRCIRCIRARCIRCIRCIRAKIRRRCKKIRRQKKKKBRRRQKKKKBRRRQKKIBWKxWKxWyO2R2yO2RwCKIRRRRRCKKKIRRQKAKBQKAKBQKAKBQKAKBQKAKBQKAKBQKBQBQKBQBQKBQBQKBQBQKBQBQKBQBQKKBRQKKBRQKKKBRQKKBRRQKKBRQKKBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                11
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1835",
+                                "1846",
+                                "0",
+                                "pOAJ+xX2BawBO2BXwB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                11,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "0",
+                                "0",
+                                "///////////////////////////////9JRRQKKKKKKKBRRRRRQKKKKKKBRRRRRRQKKMKBQKBQKBQKBQKBQKAKBQKBQKBQKAKBQKIKBQBQKBQBQKYKAKAKAKAKBwBW2AK22K2wBWxRQKBRQKBRQKBRQKBRQKBRQKBRRyOwR2AR2COARyOCORyOCORyORwRyORwRyORwRyIX////////////////////+wFO2R22COwR2ARx+JKAKAKAKxQBQBQBWKAKAKAKxQBQBQBQBWKAKAKAKxQBQBQBQmAK2KwBWANIBWAKwBWAK2KwBWAKwBWAKwKwKwKwKwKwKwKBOKxWBWKwKwKxWBWKwKwKxWBWKwKwKxWBWBWKwKxWBWBWKwKxWBWBWKwKxWBQBQBQBQBQBWKAKAKAKAKAKAJRCIRCIRCIRCIRRRRRRRRRRRRpIRCIRCICIRCJKORyIuKAKAKAKAKAKAKAKAKARBWKxWK+2ALWBWBWAKwLRRCIRRCIRUAK+wgBWBWBWBW2wBKKKKIRRROO2AOxWEKKKKQBQBQBQBmARwC5RCIRCJ2BJWKxQBWKARARCIRARmwSKIRCJJARARARE6KKKKIRRRAKhQKAKJwEAKAJ4J+2J22pIRCIRCIRCIRpKBQKKBW2AhRRRJCIRCIBRRQKKKKLRARARAKKKKKKKM4nxaKBRQKKBRB4BKORyOREBRQKKBhRCKIRWRRRRWK2KwBWAK2KwBWExWKKKKKBRQKBRQKKBBRQKBRTRRRRRRRRRRCKKKKKKKKNMBRRRewDpKwBWxWANPwKwKwKwKJwBWwK2K2K/+K2AK2BWwKAKAKAKAMIRRCKIRCKPxWAKwKwKIRCIREORyORywKAP2LAhRRRRRRRRRRRpORyOCORRCKIRRCKOxWAKwKwKKKKKKKKK+AR2R2R2R/COARwCOyOwBQBQBQBiIRCIRPK2AK2BWwK//+BWxWAKwBWwBWwBWwBWhQK2AK2AK2xWwBW2K2AK2AKwk2BWBaxWKxWJAKwBWBWAKwBWAKwKwBQBaAKAKxWRwKKR5OAK22K2wBW2xp2wCO2wCa+2wBX6KaxWBp2AK22ALWAK2J22BW2wBa2wiKKIRm2KAha2wBW2AK22K2wBKKIRCKIRCKMBQKAKBP+BWAK2KwBpxWKxX4Cy2K2AKwKAKAKAKAKANIKKKBRIRIKB2yRBgBWwKwRCIRCKIRCIRCIRCIRRCIRCIRCIRCKIRCIRRQBQBQKAKAKBQBQBQKAKBQBQBQKAKAKKKKKKKKIRRRRRRRCKKKKKKKRARARARARARyICICICICICIBRRQKKKBRRQKKKICOAR2RwCIFJyORyORwRyOR+2xP2BRRRCKKIRRRRCKKIRRRX+2CRCICICIRARARCIRRRRRRRQKKKKKKKKLBQKBQK2KwX+y+2AK/+2CP8KKBRRQKKKKBRRQKKKBRRRQKKKBRRRQKKKBRRQKKKKBRRQKJ/2h2COwR2COwR2CBQKBQKAKBQKBQK//+2wCP2yKBRQKBQKBRQKBQKBRQKBQKBRQKBQKBRQKBQKBRYO2R2wR2yOwBWwK2BWwK2wK22K22BW2xW2wBW2wBW2wBW2wBWwRRQKKBRQKKBRQKBRQKKBRQKKBRRCICICORARARyICICORARARyICICORARARARyICICORARARyICICORARARyICICORARARFIKAKAKAKAKBQBQBQBQBQBQBQBQBQBQBQKAKAKAKAKCIRCIRCIRARCIRCIRCKBQBQBQBQBQBQBQBWKAKAKAKAKAKAKAKwKwBWAKwBWBWAKwBWAKwBWAKwBWAKwKwBWAKwBZARARyORyICORyICORyICORARyORARyORARCKBRQKBQKBRQKX22AIRCIRCIRCIRFJRQKKBRQKBRQKKBRWxW2AK22K2wBWAIBWKxWIJRCIRRCIRRCIRRCIRRCIRRhQKKKBRRQKKKBRhwRyOCORwRwRyOCKKKKKKBRRRRRBCIRCIRCIRW2K2wK2xW2JKKBQKKBQKKBQKKBQKKBQKKBQKKCKIRRCKIRCKIRRCKIRRCKIRRCIRRCKIRRCKIRRCIRRCKIRRWR2COwRwP22IRyORyORwCOyOyOyOIBQBQBQBQBQKAKAKAKAKAKAKAKAKAKBQBQBQBQBQBpBQBQBQBQBQBQBQBQRRRRRRRRRRRRRRRRR/2BQBQKAKAKBQBQKAKKKKKIRRRRRCKKKKKKKBRRQKKKKBRRQKIZARyICICORARyICORARyICICORARyICORARyICICORARFKICIRCICIRARCIRARCICIRARCIRARWR2COwR2COwCOwR2COwRxRRRRCKKKKIRRRRBRRRRRRRRCKKKKKKJwR2wR2yO2CO2CO2CO2R2wRwFJQKKBQKKBQKKBQKBRQKBRQKBRQKBQKKBQKKBQKKAKAKAKAKAKAKAKAKAKAKAKAKBIRARCICIRARCICCICICICICICICICISIRCKIRCIRCKIRCIRCKIRCKKKBQKKBQKKBQKKBQKKBRQKBRQKBRQKBRRRRRCKKIRRRCKKIRRRCKKIRRRgBQBQBQBWKAKAKAKAKAKAKAKAKAKxQBQBQBQBQBQBQBQBQBQBQKAKAKAKAKAKAKAKAKAKBQBQBQBQBQBWKxWKxWKxWKxaKIRCKIRCKIRCKIRCKIRCKIBQKBQKBQKBQKBQKBQKCICICICIRARARARCICICICIIRRCKIRRCKIRCKIRRCKIn22ARRRRRRCKKKKIRRRRRRJRRRRRRRRRRRRCKKKKKKKKKKNJQBQBQBQBQKAKAKAKAKAKBQBQBQBQBSKKKBRRRRRQKKKKwBWxWAKwBP+2AKBQKBRQKBQKBQKBQKBRQKBQKhCIRRCIRCKIRCKIRCIRRCIRQKKBQKKBQKKBQKKBRQKBRQKBRQKBRQKBRQKBRQKBRQKKBQKKBQKKB"
+                            ]
+                        }
+                    ]
+                },
+                "type": "nature--vegetation"
+            },
+            "21": {
+                "frame_intervals": [],
+                "name": "object 112",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "3176",
+                                "2104",
+                                "1",
+                                "W2yO2CBQKBQKBQBQKBQKBQKBRRRRRRCKKKKKNP+2E2xW2K2xW2K2AK2xW2K2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2785",
+                                "2047",
+                                "0",
+                                "SIRCKIRCIRRCIRCKwKwKwKwKxWBWBWBWBWBWBWBWKwKwKwKwBWAK2KwBWAKwBWAKwBWxWAKwBWAK2K2K2KwBWxWxWxWxWxWAK2K2K2MICIRARCICICIRAWR1OwK2BWwBWwK2BWwK2BWwK2AK2BWwK2BWAKwKwBWAKwKwBWAKwKwBWAKwKwBWAKwKwBWBWAKwBWBWAKwBWBWAKwBWBWAKwBWBWAK2wK2wBW2B"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2783",
+                                "2046",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2145",
+                                "1944",
+                                "0",
+                                "JCIRARF2KwBWBWAKwBWAKwKwBWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWAKwKwBWAKwKwBWBWAKAKAKAKAKAKxQBQBQBQBQBQBQBWKAKxQBWKAKAKxQBWKAKAKAKBQBQBQBQKAKAKAKBQBQBX+2AKKKKKKKBRRRRRRRRX+2AQCOCIWExWKxWKxWKxWKxWKxWKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKwKxWBWKxWBWKxWBWKwKxWKwKx"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1952",
+                                "1911",
+                                "1",
+                                "JARARARAuAKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBgKBQKBuxWxWAK2KwBWxWAK2KwBWxWAK2KwBWxWAK2KwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1721",
+                                "1901",
+                                "1",
+                                "JQKBQa2wBW2xpMRARARARARARyICICICICICICIRCIRCIRCIRCIRCICIRCIRCIRCIRCIRARCIRCIRCIRCIRCIRARCIRCIRCIRCIRCICIRCIRCIRCIRCIRCIRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRX/////////////////AoKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKIRRRRCKKKIRRRRCKKKKIRRRRCKKKIRRRRCKKxWBWKxRRQKKKKBRRQKBRQKBQKKBQKBRQKKBRRQKKKBRRQKKKKKKKBRRRRRRQKBQBQKBOwhCKIRCK22KI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "895",
+                                "1875",
+                                "1",
+                                "mBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwKxQBWKxWKAKxWKxQBWK/+wKBQBQKAKBQKAKBQBQKAK2RyOCORwRyOCORwRyOCORwCOARwCKW2pKKKaxWKxWKwKxWKxWBWBWBWBWKwKwKwKwK4BXxXAK9AKKBRQKKBRQKKBRQKKBRQKKBRQKKBRZ2AK2K2K2K2KAKBQBQKAKAKBQBWKxWKxWKxWBWKxWKxWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "602",
+                                "1868",
+                                "1",
+                                "2E2K+BXxQBQBQBQKAKAKAKAKAKBQBQBQBJQBQBQBQBQJ//wCKKKKKBRRRRRR///////+2wCICICICICORARARARARARAoBQKBRQKBQKBQKKBQKBQKBQKKBQKBQKBQKKBQKBQKBRQKBQLRCIRCIaBQKBQBQKBQKBQKBQBQKBQKBQKBQBQKBX//2AKwBWAKwBWAQKwKwBWBQpBQKBQKBQBQKBQKBQKBQKBQKAKBQKBQLOCOCOCORwRwRwRwRwRyOCOCP//2RARyORARyORyICORyICOTW2xW2xW2wK22n/+02R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOF/wKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBW2AK22K2wBW2AK22K2wBW2xW2AK2BWxWwK2BWxWwK2BWxWwK2BWwK2K2BWwK2K2BQBQKAKBQBQBQKAKBQBQKAKAKBQBQK//2AK22BW2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1076",
+                                "1859",
+                                "1",
+                                "BpwK2AK2AK2xWwBWBWBWAKwK2BWwK2AK2BQBWKAKAKAKxQBQBWKAKAKxQBQBQBWKAm2BWxpxWwBWwBWwBWAKwBWxX//wK2BWwK2AI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                8,
+                                10,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "460",
+                                "1859",
+                                "1",
+                                "W2C+wBX2BX2AK+AJKBRRQKKKmwCRRCIRRmwBKmAK22BW2wK22BW2wK22BW2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                -1,
+                                -1,
+                                9
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "566",
+                                "1872",
+                                "0",
+                                "pZL"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                9
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "567",
+                                "1870",
+                                "0",
+                                "pZL"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2210",
+                                "1854",
+                                "1",
+                                "JRCKIRRCKIn/4n+2wEwBW2xW2AK22K22EAKBQBQBQKAKBQA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "824",
+                                "1853",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "751",
+                                "1847",
+                                "0",
+                                "JRF22K4BW21BWBWxWwB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                16,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2067",
+                                "1846",
+                                "0",
+                                "J2R2R2CO1OP+AmJ5Om0/22AhO0mxIBW2wK22AK22BW0BRQKKBRQK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                17,
+                                15,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1806",
+                                "0",
+                                "22AS+2BX2wK+2AK+2BX2wK+2BX2wK+2BX2wBX2wK+2BX2wK+2BX2wK+2AK+2BX2wK/wK/xX+BW2ASMKKBQKKX22K/BX4BX4K/BX4K/AK/BX+2wK/22BX+2wK/22BXK5XK22AK5XK5"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                18,
+                                16,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "487",
+                                "1786",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                19,
+                                17,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "455",
+                                "1783",
+                                "0",
+                                "mxWxQFxWx"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                20,
+                                18,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "77",
+                                "1733",
+                                "0",
+                                "KwBWAK2KwBWAKAmwK2BWwKwKwKwKwK+AKxWKxX/4BRRRX/KBRQKKBQKBQK22RyORyOwBWAKwKwMKKMBQBWRCIRCZAKpRW2AKwBWK2BIBWKwRRoBWBWKxO2xWKKBRQKKKBRQKK5WwBWwK2BX+xWKAKxWKwBWxWAKwBQKKBQKKBRQK/22BQB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                19,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1723",
+                                "1",
+                                "/2EBRQKBRQKBRQKBRQK2EBQBQBWKAKAKAKxQBQBQBp/BWBWBWA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--bike-rack"
+            },
+            "22": {
+                "frame_intervals": [],
+                "name": "object 133",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2277",
+                                "1873",
+                                "0",
+                                "4BXgBQBQBQBp+EAJ8wB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2265",
+                                "1871",
+                                "0",
+                                "IRCKARwCOyOARAgn+A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--billboard"
+            },
+            "23": {
+                "frame_intervals": [],
+                "name": "object 135",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "401",
+                                "1772",
+                                "0",
+                                "KICICIQKAKAKAKE4gBWBWBWBQEKKK"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--fire-hydrant"
+            },
+            "24": {
+                "frame_intervals": [],
+                "name": "object 136",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1751",
+                                "1856",
+                                "1",
+                                "/wpIRCIgKxWBWKCRARAQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1617",
+                                "1808",
+                                "1",
+                                "wBQBP22BhwCRRRCKIRCIROCRB2yBSREKBRRQLQBQBQBQBQBWBWwBWwBWwBX0BQKwCIhRQKJ22R22CPwBBgBXK2AJARyImBWAMOyC+BW2BOwK22K2wBgKBQKBRCIRCIRCIRE/2wS22AK5W2wBW2wBhR2BKKKKKKKKKKKMBQBQK2BWxWwJ2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1323",
+                                "1794",
+                                "1",
+                                "J22AR8KKKKKKKKKKKKKKKKKKKKKBQKBQKBQKBQKBQKBWxW2BW2BW2yO2wRwEBRQKwMKKKARQBQBBJARQBS2BhCIQQBQJ2wCO2wKBRQKBh+R+J2RCICMAKBh2RQKMBB2RRRhWK4BOBWwBO2EKKKMICICBQMKBQKKBQJ2COwgBWAK2KwBX+EBQBQKBKKIRCKIRCKM2wBW2xW2AK2wBpJAK2xKIRRRRRRSwKxhR/K+2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "25": {
+                "frame_intervals": [],
+                "name": "object 139",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1625",
+                                "1592",
+                                "0",
+                                "CIRCIRmAKwBWAKwBp2wE2K2K2K2"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--street-light"
+            },
+            "26": {
+                "frame_intervals": [],
+                "name": "object 140",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1854",
+                                "1866",
+                                "1",
+                                "+K4Ewn+w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1836",
+                                "1846",
+                                "1",
+                                "2wBXwBW2EwBp+wK+w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1698",
+                                "1827",
+                                "0",
+                                "+AmnKC"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1862",
+                                "1821",
+                                "1",
+                                "2yPyPAR+R2AgE2wCP2yP2yO2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1745",
+                                "1814",
+                                "1",
+                                "//+AmE//+A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1698",
+                                "1809",
+                                "0",
+                                "S0"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1796",
+                                "1806",
+                                "0",
+                                "AK2AK2AK2xWwBW2K2AK2AK2xWwBWEBWmAK2wK2wBW2BW2AK2wK2wBW2BWw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1842",
+                                "1769",
+                                "0",
+                                "IBWAWxW2BW2K2wK2wK2xW2BW2BW2K2wK2wKwpOExWwK2AK2BWwK2BWwBWwK2BWwBWwK2BWwK2AK2B"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "425",
+                                "1760",
+                                "0",
+                                "BQBQBQBQKAKAKAKBQBQBQBU2wEBWBWBWKwKxWBWBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                10,
+                                8,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "450",
+                                "1752",
+                                "0",
+                                "AKAKxQBQBWKAKxQBQBWKAKE2EBQBWKAKAKxQBWKAKAKxQBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "483",
+                                "1747",
+                                "0",
+                                "AKxQBWKxWKxQBWKxWKAKxQgKAKBQNOK2K2K2K2BWxWxWxW"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                10,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1271",
+                                "1746",
+                                "0",
+                                "KARxW2K2xWKKhOBWwBWwBW2K2AK2xWwBWAoBQKBQKBQK2AK2xWwBW2K2AKxOgmJwK2xW2KxOghR"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                11,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1710",
+                                "1743",
+                                "0",
+                                "/K/+2wBW2AgMX22BX22BX22BW2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "544",
+                                "1698",
+                                "1",
+                                "BQBQKAKBQBQKAKBQBQKAKBQBQKAKBQKAKBQBQKAKBQBQKAKBQBQKAKBQBUwKwBWBWBpAK2KwBWxWAKwBWxWAK2KwBWxWAKwBWxpBIBWBWBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "388",
+                                "1694",
+                                "1",
+                                "BQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBUKKKNJQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQBQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1658",
+                                "1600",
+                                "1",
+                                "EwBWKAKxQBWKAKIRCJRRCPAK/AK/AK22AJ/2wmn22BO2m2J/22Ewn/K/5X/K+wRRRQBQRQKKwKxWBWI"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--support--pole"
+            },
+            "27": {
+                "frame_intervals": [],
+                "name": "object 156",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1751",
+                                "1856",
+                                "1",
+                                "/wpIRCIgKxWBWKCRARAQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1617",
+                                "1808",
+                                "1",
+                                "wBQBP22BhwCRRRCKIRCIROCRB2yBSREKBRRQLQBQBQBQBQBWBWwBWwBWwBX0BQKwCIhRQKJ22R22CPwBBgBXK2AJARyImBWAMOyC+BW2BOwK22K2wBgKBQKBRCIRCIRCIRE/2wS22AK5W2wBW2wBhR2BKKKKKKKKKKKMBQBQK2BWxWwJ2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1323",
+                                "1794",
+                                "1",
+                                "J22AR8KKKKKKKKKKKKKKKKKKKKKBQKBQKBQKBQKBQKBWxW2BW2BW2yO2wRwEBRQKwMKKKARQBQBBJARQBS2BhCIQQBQJ2wCO2wKBRQKBh+R+J2RCICMAKBh2RQKMBB2RRRhWK4BOBWwBO2EKKKMICICBQMKBQKKBQJ2COwgBWAK2KwBX+EBQBQKBKKIRCKIRCKM2wBW2xW2AK2wBpJAK2xKIRRRRRRSwKxhR/K+2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "28": {
+                "frame_intervals": [],
+                "name": "object 159",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1698",
+                                "1810",
+                                "0",
+                                "J2mwK2pO2AKE2BW02"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1693",
+                                "1783",
+                                "1",
+                                "IWRAK2wEKMa2Am2AK2wmwBhA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1403",
+                                "1771",
+                                "1",
+                                "5W2CKM2wBp22AK22E2KwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1281",
+                                "1747",
+                                "1",
+                                "2K22K2wBW2xWAm2hRRICW2xW2AK22KwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1252",
+                                "1743",
+                                "1",
+                                "xWAKwKwBWAKwBWBWAKAmKxWKxpwK2xW2K2AK2xWEAKxQBQA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1636",
+                                "1707",
+                                "1",
+                                "/22AnwE/22A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "552",
+                                "1690",
+                                "1",
+                                "xWBWBWBQE+An2w"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--traffic-light"
+            },
+            "29": {
+                "frame_intervals": [],
+                "name": "object 166",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "380",
+                                "1690",
+                                "1",
+                                "+2xWKxWKEgBQBQBQBQBQBQBQBQBQBROwBJQBQBQBQBQBQBQBQBQBQBQVJQKKBQKKBQKKgBJRCIRRCIRRpwKwBWBWA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--traffic-sign--back"
+            },
+            "30": {
+                "frame_intervals": [],
+                "name": "object 167",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2022",
+                                "1891",
+                                "0",
+                                "4nwn"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1682",
+                                "1829",
+                                "1",
+                                "ARyOCIE2AKE4A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1739",
+                                "1793",
+                                "1",
+                                "+AnwE+A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1791",
+                                "1777",
+                                "0",
+                                "+2wn02wCO202BWw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1666",
+                                "1772",
+                                "0",
+                                "2An4mw"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1821",
+                                "1719",
+                                "0",
+                                "OBWwK2BWwK04R+nBW2wExWwK2AK2B"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--traffic-sign--front"
+            },
+            "31": {
+                "frame_intervals": [],
+                "name": "object 173",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1751",
+                                "1856",
+                                "1",
+                                "/wpIRCIgKxWBWKCRARAQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1617",
+                                "1808",
+                                "1",
+                                "wBQBP22BhwCRRRCKIRCIROCRB2yBSREKBRRQLQBQBQBQBQBWBWwBWwBWwBX0BQKwCIhRQKJ22R22CPwBBgBXK2AJARyImBWAMOyC+BW2BOwK22K2wBgKBQKBRCIRCIRCIRE/2wS22AK5W2wBW2wBhR2BKKKKKKKKKKKMBQBQK2BWxWwJ2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1323",
+                                "1794",
+                                "1",
+                                "J22AR8KKKKKKKKKKKKKKKKKKKKKBQKBQKBQKBQKBQKBWxW2BW2BW2yO2wRwEBRQKwMKKKARQBQBBJARQBS2BhCIQQBQJ2wCO2wKBRQKBh+R+J2RCICMAKBh2RQKMBB2RRRhWK4BOBWwBO2EKKKMICICBQMKBQKKBQJ2COwgBWAK2KwBX+EBQBQKBKKIRCKIRCKM2wBW2xW2AK2wBpJAK2xKIRRRRRRSwKxhR/K+2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "32": {
+                "frame_intervals": [],
+                "name": "object 176",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1751",
+                                "1856",
+                                "1",
+                                "/wpIRCIgKxWBWKCRARAQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1617",
+                                "1808",
+                                "1",
+                                "wBQBP22BhwCRRRCKIRCIROCRB2yBSREKBRRQLQBQBQBQBQBWBWwBWwBWwBX0BQKwCIhRQKJ22R22CPwBBgBXK2AJARyImBWAMOyC+BW2BOwK22K2wBgKBQKBRCIRCIRCIRE/2wS22AK5W2wBW2wBhR2BKKKKKKKKKKKMBQBQK2BWxWwJ2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1323",
+                                "1794",
+                                "1",
+                                "J22AR8KKKKKKKKKKKKKKKKKKKKKBQKBQKBQKBQKBQKBWxW2BW2BW2yO2wRwEBRQKwMKKKARQBQBBJARQBS2BhCIQQBQJ2wCO2wKBRQKBh+R+J2RCICMAKBh2RQKMBB2RRRhWK4BOBWwBO2EKKKMICICBQMKBQKKBQJ2COwgBWAK2KwBX+EBQBQKBKKIRCKIRCKM2wBW2xW2AK2wBpJAK2xKIRRRRRRSwKxhR/K+2wA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--phone-booth"
+            },
+            "33": {
+                "frame_intervals": [],
+                "name": "object 179",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "3176",
+                                "2104",
+                                "1",
+                                "W2yO2CBQKBQKBQBQKBQKBQKBRRRRRRCKKKKKNP+2E2xW2K2xW2K2AK2xW2K2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2785",
+                                "2047",
+                                "0",
+                                "SIRCKIRCIRRCIRCKwKwKwKwKxWBWBWBWBWBWBWBWKwKwKwKwBWAK2KwBWAKwBWAKwBWxWAKwBWAK2K2K2KwBWxWxWxWxWxWAK2K2K2MICIRARCICICIRAWR1OwK2BWwBWwK2BWwK2BWwK2AK2BWwK2BWAKwKwBWAKwKwBWAKwKwBWAKwKwBWAKwKwBWBWAKwBWBWAKwBWBWAKwBWBWAKwBWBWAK2wK2wBW2B"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2783",
+                                "2046",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2145",
+                                "1944",
+                                "0",
+                                "JCIRARF2KwBWBWAKwBWAKwKwBWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWAKwKwBWAKwKwBWBWAKAKAKAKAKAKxQBQBQBQBQBQBQBWKAKxQBWKAKAKxQBWKAKAKAKBQBQBQBQKAKAKAKBQBQBX+2AKKKKKKKBRRRRRRRRX+2AQCOCIWExWKxWKxWKxWKxWKxWKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKwKxWBWKxWBWKxWBWKwKxWKwKx"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1952",
+                                "1911",
+                                "1",
+                                "JARARARAuAKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBgKBQKBuxWxWAK2KwBWxWAK2KwBWxWAK2KwBWxWAK2KwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1721",
+                                "1901",
+                                "1",
+                                "JQKBQa2wBW2xpMRARARARARARyICICICICICICIRCIRCIRCIRCIRCICIRCIRCIRCIRCIRARCIRCIRCIRCIRCIRARCIRCIRCIRCIRCICIRCIRCIRCIRCIRCIRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRX/////////////////AoKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKIRRRRCKKKIRRRRCKKKKIRRRRCKKKIRRRRCKKxWBWKxRRQKKKKBRRQKBRQKBQKKBQKBRQKKBRRQKKKBRRQKKKKKKKBRRRRRRQKBQBQKBOwhCKIRCK22KI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "895",
+                                "1875",
+                                "1",
+                                "mBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwKxQBWKxWKAKxWKxQBWK/+wKBQBQKAKBQKAKBQBQKAK2RyOCORwRyOCORwRyOCORwCOARwCKW2pKKKaxWKxWKwKxWKxWBWBWBWBWKwKwKwKwK4BXxXAK9AKKBRQKKBRQKKBRQKKBRQKKBRQKKBRZ2AK2K2K2K2KAKBQBQKAKAKBQBWKxWKxWKxWBWKxWKxWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "602",
+                                "1868",
+                                "1",
+                                "2E2K+BXxQBQBQBQKAKAKAKAKAKBQBQBQBJQBQBQBQBQJ//wCKKKKKBRRRRRR///////+2wCICICICICORARARARARARAoBQKBRQKBQKBQKKBQKBQKBQKKBQKBQKBQKKBQKBQKBRQKBQLRCIRCIaBQKBQBQKBQKBQKBQBQKBQKBQKBQBQKBX//2AKwBWAKwBWAQKwKwBWBQpBQKBQKBQBQKBQKBQKBQKBQKAKBQKBQLOCOCOCORwRwRwRwRwRyOCOCP//2RARyORARyORyICORyICOTW2xW2xW2wK22n/+02R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOF/wKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBW2AK22K2wBW2AK22K2wBW2xW2AK2BWxWwK2BWxWwK2BWxWwK2BWwK2K2BWwK2K2BQBQKAKBQBQBQKAKBQBQKAKAKBQBQK//2AK22BW2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1076",
+                                "1859",
+                                "1",
+                                "BpwK2AK2AK2xWwBWBWBWAKwK2BWwK2AK2BQBWKAKAKAKxQBQBWKAKAKxQBQBQBWKAm2BWxpxWwBWwBWwBWAKwBWxX//wK2BWwK2AI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                8,
+                                10,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "460",
+                                "1859",
+                                "1",
+                                "W2C+wBX2BX2AK+AJKBRRQKKKmwCRRCIRRmwBKmAK22BW2wK22BW2wK22BW2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                -1,
+                                -1,
+                                9
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "566",
+                                "1872",
+                                "0",
+                                "pZL"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                9
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "567",
+                                "1870",
+                                "0",
+                                "pZL"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2210",
+                                "1854",
+                                "1",
+                                "JRCKIRRCKIn/4n+2wEwBW2xW2AK22K22EAKBQBQBQKAKBQA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "824",
+                                "1853",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "751",
+                                "1847",
+                                "0",
+                                "JRF22K4BW21BWBWxWwB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                16,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2067",
+                                "1846",
+                                "0",
+                                "J2R2R2CO1OP+AmJ5Om0/22AhO0mxIBW2wK22AK22BW0BRQKKBRQK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                17,
+                                15,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1806",
+                                "0",
+                                "22AS+2BX2wK+2AK+2BX2wK+2BX2wK+2BX2wBX2wK+2BX2wK+2BX2wK+2AK+2BX2wK/wK/xX+BW2ASMKKBQKKX22K/BX4BX4K/BX4K/AK/BX+2wK/22BX+2wK/22BXK5XK22AK5XK5"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                18,
+                                16,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "487",
+                                "1786",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                19,
+                                17,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "455",
+                                "1783",
+                                "0",
+                                "mxWxQFxWx"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                20,
+                                18,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "77",
+                                "1733",
+                                "0",
+                                "KwBWAK2KwBWAKAmwK2BWwKwKwKwKwK+AKxWKxX/4BRRRX/KBRQKKBQKBQK22RyORyOwBWAKwKwMKKMBQBWRCIRCZAKpRW2AKwBWK2BIBWKwRRoBWBWKxO2xWKKBRQKKKBRQKK5WwBWwK2BX+xWKAKxWKwBWxWAKwBQKKBQKKBRQK/22BQB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                19,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1723",
+                                "1",
+                                "/2EBRQKBRQKBRQKBRQK2EBQBQBWKAKAKAKxQBQBQBp/BWBWBWA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--bike-rack"
+            },
+            "34": {
+                "frame_intervals": [],
+                "name": "object 200",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "3176",
+                                "2104",
+                                "1",
+                                "W2yO2CBQKBQKBQBQKBQKBQKBRRRRRRCKKKKKNP+2E2xW2K2xW2K2AK2xW2K2w"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                0,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2785",
+                                "2047",
+                                "0",
+                                "SIRCKIRCIRRCIRCKwKwKwKwKxWBWBWBWBWBWBWBWKwKwKwKwBWAK2KwBWAKwBWAKwBWxWAKwBWAK2K2K2KwBWxWxWxWxWxWAK2K2K2MICIRARCICICIRAWR1OwK2BWwBWwK2BWwK2BWwK2AK2BWwK2BWAKwKwBWAKwKwBWAKwKwBWAKwKwBWAKwKwBWBWAKwBWBWAKwBWBWAKwBWBWAKwBWBWAK2wK2wBW2B"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                3,
+                                1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2783",
+                                "2046",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                4,
+                                2,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2145",
+                                "1944",
+                                "0",
+                                "JCIRARF2KwBWBWAKwBWAKwKwBWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWKAKxWAKwKwBWAKwKwBWBWAKAKAKAKAKAKxQBQBQBQBQBQBQBWKAKxQBWKAKAKxQBWKAKAKAKBQBQBQBQKAKAKAKBQBQBX+2AKKKKKKKBRRRRRRRRX+2AQCOCIWExWKxWKxWKxWKxWKxWKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKwBWAK2KwBWAKwBWAKwBWxWAKwBWAKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKAKxWKxQBWKxWKwKxWBWKxWBWKxWBWKwKxWKwKx"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                5,
+                                3,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1952",
+                                "1911",
+                                "1",
+                                "JARARARAuAKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBgKBQKBuxWxWAK2KwBWxWAK2KwBWxWAK2KwBWxWAK2KwA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                6,
+                                4,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1721",
+                                "1901",
+                                "1",
+                                "JQKBQa2wBW2xpMRARARARARARyICICICICICICIRCIRCIRCIRCIRCICIRCIRCIRCIRCIRARCIRCIRCIRCIRCIRARCIRCIRCIRCIRCICIRCIRCIRCIRCIRCIRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCIRRCIRRCIRRCIRRCIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCIRRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRCKIRRCIRRCIRRCIRRCIRRCIRRCIRX/////////////////AoKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKBRQKKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKBRRQKKKBRRQKKKBRQKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRRQKKKKBRQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBQKBQBQKBQKAKBQKBQKAKBQKBQKAKBQKBQBQKBQKBQBQKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKBRQKKBRQKKBRQKKBRQKKBRQKKBRRQKKBRQKKBRQKKBRQKKBRQKKBRQKKKIRRRRCKKKIRRRRCKKKKIRRRRCKKKIRRRRCKKxWBWKxRRQKKKKBRRQKBRQKBQKKBQKBRQKKBRRQKKKBRRQKKKKKKKBRRRRRRQKBQBQKBOwhCKIRCK22KI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                7,
+                                5,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "895",
+                                "1875",
+                                "1",
+                                "mBWAKwKwKwKwBWBWBWBWAKwKwKwKwBWBWBWBWAKwKwKxQBWKxWKAKxWKxQBWK/+wKBQBQKAKBQKAKBQBQKAK2RyOCORwRyOCORwRyOCORwCOARwCKW2pKKKaxWKxWKwKxWKxWBWBWBWBWKwKwKwKwK4BXxXAK9AKKBRQKKBRQKKBRQKKBRQKKBRQKKBRZ2AK2K2K2K2KAKBQBQKAKAKBQBWKxWKxWKxWBWKxWKxWI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                8,
+                                6,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "602",
+                                "1868",
+                                "1",
+                                "2E2K+BXxQBQBQBQKAKAKAKAKAKBQBQBQBJQBQBQBQBQJ//wCKKKKKBRRRRRR///////+2wCICICICICORARARARARARAoBQKBRQKBQKBQKKBQKBQKBQKKBQKBQKBQKKBQKBQKBRQKBQLRCIRCIaBQKBQBQKBQKBQKBQBQKBQKBQKBQBQKBX//2AKwBWAKwBWAQKwKwBWBQpBQKBQKBQBQKBQKBQKBQKBQKAKBQKBQLOCOCOCORwRwRwRwRwRyOCOCP//2RARyORARyORyICORyICOTW2xW2xW2wK22n/+02R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOyOyOyOyOAR2R2R2R2R2R2R2R2R2RwCOyOyOyOyOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOCOF/wKAKAKBQBQBQBQBQBQKAKAKAKAKAKBQBQBW2AK22K2wBW2AK22K2wBW2xW2AK2BWxWwK2BWxWwK2BWxWwK2BWwK2K2BWwK2K2BQBQKAKBQBQBQKAKBQBQKAKAKBQBQK//2AK22BW2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                9,
+                                7,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "1076",
+                                "1859",
+                                "1",
+                                "BpwK2AK2AK2xWwBWBWBWAKwK2BWwK2AK2BQBWKAKAKAKxQBQBWKAKAKxQBQBQBWKAm2BWxpxWwBWwBWwBWAKwBWxX//wK2BWwK2AI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                12,
+                                8,
+                                10,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "460",
+                                "1859",
+                                "1",
+                                "W2C+wBX2BX2AK+AJKBRRQKKKmwCRRCIRRmwBKmAK22BW2wK22BW2wK22BW2wI"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                11,
+                                -1,
+                                -1,
+                                9
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "566",
+                                "1872",
+                                "0",
+                                "pZL"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                9
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "567",
+                                "1870",
+                                "0",
+                                "pZL"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                13,
+                                9,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2210",
+                                "1854",
+                                "1",
+                                "JRCKIRRCKIn/4n+2wEwBW2xW2AK22K22EAKBQBQBQKAKBQA"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                14,
+                                12,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "824",
+                                "1853",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                15,
+                                13,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "751",
+                                "1847",
+                                "0",
+                                "JRF22K4BW21BWBWxWwB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                16,
+                                14,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "2067",
+                                "1846",
+                                "0",
+                                "J2R2R2CO1OP+AmJ5Om0/22AhO0mxIBW2wK22AK22BW0BRQKKBRQK"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                17,
+                                15,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1806",
+                                "0",
+                                "22AS+2BX2wK+2AK+2BX2wK+2BX2wK+2BX2wBX2wK+2BX2wK+2BX2wK+2AK+2BX2wK/wK/xX+BW2ASMKKBQKKX22K/BX4BX4K/BX4K/AK/BX+2wK/22BX+2wK/22BXK5XK22AK5XK5"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                18,
+                                16,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "487",
+                                "1786",
+                                "0",
+                                ""
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                19,
+                                17,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "455",
+                                "1783",
+                                "0",
+                                "mxWxQFxWx"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                20,
+                                18,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "77",
+                                "1733",
+                                "0",
+                                "KwBWAK2KwBWAKAmwK2BWwKwKwKwKwK+AKxWKxX/4BRRRX/KBRQKKBQKBQK22RyORyOwBWAKwKwMKKMBQBWRCIRCZAKpRW2AKwBWK2BIBWKwRRoBWBWKxO2xWKKBRQKKKBRQKK5WwBWwK2BX+xWKAKxWKwBWxWAKwBQKKBQKKBRQK/22BQB"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                19,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "1723",
+                                "1",
+                                "/2EBRQKBRQKBRQKBRQK2EBQBQBWKAKAKAKxQBQBQBp/BWBWBWA"
+                            ]
+                        }
+                    ]
+                },
+                "type": "object--bike-rack"
+            }
+        },
+        "version": "4.0.0"
+    }
+}

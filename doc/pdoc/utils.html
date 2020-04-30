@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>vcd.utils API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.0.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.1.0 …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,33 +20,37 @@
 <h1 class="title">Module <code>vcd.utils</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.0.0</p>
+<p>VCD (Video Content Description) library v4.1.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.0.0.
+<p>VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.0.0
+VCD (Video Content Description) library v4.1.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.0.0.
+VCD is a Python library to create and manage VCD content version 4.1.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
 
 
 import warnings
+import numpy as np
+from enum import Enum
 
-
+####################################################
+# Frame intervals
+####################################################
 def intersects(fi_a, fi_b):
     max_start_val = max(fi_a[&#39;frame_start&#39;], fi_b[&#39;frame_start&#39;])
     min_end_val = min(fi_a[&#39;frame_end&#39;], fi_b[&#39;frame_end&#39;])
@@ -150,7 +154,205 @@ def fuse_frame_intervals(frame_intervals):
     while i &lt; num_fis:
         frame_intervals_fused = fuse_frame_interval_dict(frame_intervals[i], frame_intervals_fused)
         i += 1
-    return frame_intervals_fused</code></pre>
+    return frame_intervals_fused
+
+####################################################
+# ROTATION AND ODOMETRY UTILS. See SCL library
+####################################################
+def create_pose(R, C):
+    # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
+    temp = np.hstack((R, C))
+    P = np.vstack((temp, np.array([0, 0, 0, 1])))  # P is 4x4
+    return P
+
+
+def inv(m):
+    if m.ndim == 2:  # just an inversion of a square matrix
+        return np.linalg.inv(m)
+    else:
+        assert(m.ndim == 3)  # so batch for N matrices
+        m_inv = np.zeros(m.shape, dtype=m.dtype)
+        n = m.shape[2]
+        for i in range(0, n):
+            m_inv[:, :, i] = np.linalg.inv(m[:, :, i])
+        return m_inv
+
+
+def lat_to_scale(lat):
+    # Computes mercator scale from latitude
+    scale = np.cos(lat*np.pi / 180.0)
+    return scale
+
+
+def latlon_to_mercator(lat, lon, scale):
+    # Converts lat/lon coordinates to mercator coordinates using mercator scale
+    er = 6378137  # this seems to be the Earth Radius in meters
+    mx = scale * lon * np.pi * er / 180.0
+    my = scale * er * np.log(np.tan((90+lat) * np.pi / 360))
+    return mx, my
+
+
+class EulerSeq(Enum):
+    # https://en.wikipedia.org/wiki/Euler_angles
+    ZXZ = 1
+    XYX = 2
+    YZY = 3
+    ZYZ = 4
+    XZX = 5
+    YXY = 6
+
+    XYZ = 7
+    YZX = 8
+    ZXY = 9
+    XZY = 10
+    ZYX = 11  # yaw, pitch, roll (in that order)
+    YXZ = 12
+
+
+def isR(R):
+    assert (R.shape == (3, 3))
+    Rt = np.transpose(R)
+    I_ = np.dot(Rt, R)
+    I = np.identity(3, dtype=R.dtype)
+    n = np.linalg.norm(I - I_)
+    return n &lt; 1e-4
+
+
+def Rx(angle_rad):
+    return np.array([[1, 0, 0],
+                    [0, np.cos(angle_rad), -np.sin(angle_rad)],
+                    [0, np.sin(angle_rad), np.cos(angle_rad)]
+                    ])
+
+
+def Ry(angle_rad):
+    return np.array([[np.cos(angle_rad), 0, np.sin(angle_rad)],
+                    [0, 1, 0],
+                    [-np.sin(angle_rad), 0, np.cos(angle_rad)]
+                    ])
+
+
+def Rz(angle_rad):
+    return np.array([[np.cos(angle_rad), -np.sin(angle_rad), 0],
+                    [np.sin(angle_rad), np.cos(angle_rad), 0],
+                    [0, 0, 1]
+                    ])
+
+
+def euler2R(a, seq=EulerSeq.ZYX):
+    # Proper or improper Euler angles to R
+    # Assuming right-hand rotation and radians
+    assert(isinstance(a, list))
+    assert(len(a) == 3)
+    assert(isinstance(seq, EulerSeq))
+
+    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a sequence, e.g. &#34;ZYX&#34;
+    # 0, 1 and 2 are identified with XYZ according to the code
+    if seq.name[0] == &#34;X&#34;:
+        R_0 = Rx(a[0])
+    elif seq.name[0] == &#34;Y&#34;:
+        R_0 = Ry(a[0])
+    else:
+        R_0 = Rz(a[0])
+
+    if seq.name[1] == &#34;X&#34;:
+        R_1 = Rx(a[1])
+    elif seq.name[1] == &#34;Y&#34;:
+        R_1 = Ry(a[1])
+    else:
+        R_1 = Rz(a[1])
+
+    if seq.name[2] == &#34;X&#34;:
+        R_2 = Rx(a[2])
+    elif seq.name[2] == &#34;Y&#34;:
+        R_2 = Ry(a[2])
+    else:
+        R_2 = Rz(a[2])
+
+    # Using here reverse composition, as this Rotation matrix is built to describe
+    # a pose matrix, which encodes the rotation and position of a coordinate system
+    # with respect to another.
+    # To transform points from origin to destination coordinate systems, the R^T is used
+    # which then swaps the order of the sequence to the expected order.
+    # NOTE: this formula cannot be applied if the rotation matrix is used to rotate points (active-alibi
+    # rotation), instead of rotating coordinate systems (passive-alias rotation)
+    R = np.dot(R_0, np.dot(R_1, R_2))
+
+    assert (isR(R))
+
+    return R
+
+
+def convert_oxts_to_pose(oxts):
+    # With a cup of coffee, read:
+    # https://support.oxts.com/hc/en-us/articles/115002859149-OxTS-Reference-Frames-and-ISO8855-Reference-Frames#R2
+
+    # This code is a Python version from code in KITTI
+    # dev kit (file convertOxtsToPose.m)
+
+    # Converts oxts entries into metric pose,
+    # starting at (0,0,0) meters, OXTS coordinates are defined as
+    # x = forward, y = right, z = down (see OXTS RT3000 user manual)
+    # afterwards, the pose contains the transformation which takes a
+    # 3D point in the i&#39;th frame and projecs it into the oxts coordinates
+    # of the first frame
+
+    assert(isinstance(oxts, list))
+
+    # Compute scale from first lat value
+    lat = oxts[0][0]
+    scale = lat_to_scale(lat)
+
+    # Init pose
+    poses = []
+    Tr_0_inv = None
+    transform_wcs_to_geo_4x4 = None
+
+    # For all oxts packets do:
+    for oxts_packet in oxts:
+        # Translation vector
+        lon_utm, lat_utm = latlon_to_mercator(oxts_packet[0], oxts_packet[1], scale)
+        alt = oxts_packet[2]
+
+        # Rotation matrix (OXTS RT3000 user manual, page 71/92)
+        rx = oxts_packet[3]  # roll
+        ry = oxts_packet[4]  # pitch
+        rz = oxts_packet[5]  # heading
+
+        rotation_lcs_wrt_geo_3x3 = euler2R([rz, ry, rx])
+        location_lcs_wrt_geo_3x1 = np.array([[lon_utm, lat_utm, alt]]).T
+        pose_lcs_wrt_geo_4x4 = create_pose(rotation_lcs_wrt_geo_3x3, location_lcs_wrt_geo_3x1)
+        transform_geo_to_lcs_4x4 = inv(pose_lcs_wrt_geo_4x4)
+
+        # debug test: check location of lcs expressed in lcs coordinates. Should be zero
+        #location_lcs_wrt_geo_4x1 = np.vstack((location_lcs_wrt_geo_3x1, np.array([[1.0]])))
+        #location_lcs_wrt_lcs = np.dot(transform_geo_to_lcs_4x4, location_lcs_wrt_geo_4x1)
+
+        if transform_wcs_to_geo_4x4 is None:
+            # First entry, let&#39;s create wcs as (0,0,0) at the position of lcs
+            transform_wcs_to_geo_4x4 = inv(transform_geo_to_lcs_4x4)
+
+        # So this is Identity for the first instant
+        transform_wcs_to_lcs_4x4 = np.dot(transform_geo_to_lcs_4x4, transform_wcs_to_geo_4x4)
+        pose_lcs_wrt_wcs_4x4 = inv(transform_wcs_to_lcs_4x4)
+        poses.append(pose_lcs_wrt_wcs_4x4)
+
+
+    # Convert to 4x4xN
+    n = len(poses)
+    poses_4x4xN = np.zeros((4, 4, n), dtype=np.float)
+
+    for count, pose in enumerate(poses):
+        poses_4x4xN[:, :, count] = pose
+
+    return poses_4x4xN
+
+
+def float_2dec(val):
+    &#39;&#39;&#39;
+    This function is useful to print float into JSON with only 2 decimals
+    &#39;&#39;&#39;
+    return float((int(100*val))/100)</code></pre>
 </details>
 </section>
 <section>
@@ -160,6 +362,54 @@ def fuse_frame_intervals(frame_intervals):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="vcd.utils.Rx"><code class="name flex">
+<span>def <span class="ident">Rx</span></span>(<span>angle_rad)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def Rx(angle_rad):
+    return np.array([[1, 0, 0],
+                    [0, np.cos(angle_rad), -np.sin(angle_rad)],
+                    [0, np.sin(angle_rad), np.cos(angle_rad)]
+                    ])</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.Ry"><code class="name flex">
+<span>def <span class="ident">Ry</span></span>(<span>angle_rad)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def Ry(angle_rad):
+    return np.array([[np.cos(angle_rad), 0, np.sin(angle_rad)],
+                    [0, 1, 0],
+                    [-np.sin(angle_rad), 0, np.cos(angle_rad)]
+                    ])</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.Rz"><code class="name flex">
+<span>def <span class="ident">Rz</span></span>(<span>angle_rad)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def Rz(angle_rad):
+    return np.array([[np.cos(angle_rad), -np.sin(angle_rad), 0],
+                    [np.sin(angle_rad), np.cos(angle_rad), 0],
+                    [0, 0, 1]
+                    ])</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.as_frame_interval_dict"><code class="name flex">
 <span>def <span class="ident">as_frame_interval_dict</span></span>(<span>frame_value)</span>
 </code></dt>
@@ -215,6 +465,165 @@ def fuse_frame_intervals(frame_intervals):
         return True
     else:
         return False</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.convert_oxts_to_pose"><code class="name flex">
+<span>def <span class="ident">convert_oxts_to_pose</span></span>(<span>oxts)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def convert_oxts_to_pose(oxts):
+    # With a cup of coffee, read:
+    # https://support.oxts.com/hc/en-us/articles/115002859149-OxTS-Reference-Frames-and-ISO8855-Reference-Frames#R2
+
+    # This code is a Python version from code in KITTI
+    # dev kit (file convertOxtsToPose.m)
+
+    # Converts oxts entries into metric pose,
+    # starting at (0,0,0) meters, OXTS coordinates are defined as
+    # x = forward, y = right, z = down (see OXTS RT3000 user manual)
+    # afterwards, the pose contains the transformation which takes a
+    # 3D point in the i&#39;th frame and projecs it into the oxts coordinates
+    # of the first frame
+
+    assert(isinstance(oxts, list))
+
+    # Compute scale from first lat value
+    lat = oxts[0][0]
+    scale = lat_to_scale(lat)
+
+    # Init pose
+    poses = []
+    Tr_0_inv = None
+    transform_wcs_to_geo_4x4 = None
+
+    # For all oxts packets do:
+    for oxts_packet in oxts:
+        # Translation vector
+        lon_utm, lat_utm = latlon_to_mercator(oxts_packet[0], oxts_packet[1], scale)
+        alt = oxts_packet[2]
+
+        # Rotation matrix (OXTS RT3000 user manual, page 71/92)
+        rx = oxts_packet[3]  # roll
+        ry = oxts_packet[4]  # pitch
+        rz = oxts_packet[5]  # heading
+
+        rotation_lcs_wrt_geo_3x3 = euler2R([rz, ry, rx])
+        location_lcs_wrt_geo_3x1 = np.array([[lon_utm, lat_utm, alt]]).T
+        pose_lcs_wrt_geo_4x4 = create_pose(rotation_lcs_wrt_geo_3x3, location_lcs_wrt_geo_3x1)
+        transform_geo_to_lcs_4x4 = inv(pose_lcs_wrt_geo_4x4)
+
+        # debug test: check location of lcs expressed in lcs coordinates. Should be zero
+        #location_lcs_wrt_geo_4x1 = np.vstack((location_lcs_wrt_geo_3x1, np.array([[1.0]])))
+        #location_lcs_wrt_lcs = np.dot(transform_geo_to_lcs_4x4, location_lcs_wrt_geo_4x1)
+
+        if transform_wcs_to_geo_4x4 is None:
+            # First entry, let&#39;s create wcs as (0,0,0) at the position of lcs
+            transform_wcs_to_geo_4x4 = inv(transform_geo_to_lcs_4x4)
+
+        # So this is Identity for the first instant
+        transform_wcs_to_lcs_4x4 = np.dot(transform_geo_to_lcs_4x4, transform_wcs_to_geo_4x4)
+        pose_lcs_wrt_wcs_4x4 = inv(transform_wcs_to_lcs_4x4)
+        poses.append(pose_lcs_wrt_wcs_4x4)
+
+
+    # Convert to 4x4xN
+    n = len(poses)
+    poses_4x4xN = np.zeros((4, 4, n), dtype=np.float)
+
+    for count, pose in enumerate(poses):
+        poses_4x4xN[:, :, count] = pose
+
+    return poses_4x4xN</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.create_pose"><code class="name flex">
+<span>def <span class="ident">create_pose</span></span>(<span>R, C)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_pose(R, C):
+    # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
+    temp = np.hstack((R, C))
+    P = np.vstack((temp, np.array([0, 0, 0, 1])))  # P is 4x4
+    return P</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.euler2R"><code class="name flex">
+<span>def <span class="ident">euler2R</span></span>(<span>a, seq=EulerSeq.ZYX)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def euler2R(a, seq=EulerSeq.ZYX):
+    # Proper or improper Euler angles to R
+    # Assuming right-hand rotation and radians
+    assert(isinstance(a, list))
+    assert(len(a) == 3)
+    assert(isinstance(seq, EulerSeq))
+
+    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a sequence, e.g. &#34;ZYX&#34;
+    # 0, 1 and 2 are identified with XYZ according to the code
+    if seq.name[0] == &#34;X&#34;:
+        R_0 = Rx(a[0])
+    elif seq.name[0] == &#34;Y&#34;:
+        R_0 = Ry(a[0])
+    else:
+        R_0 = Rz(a[0])
+
+    if seq.name[1] == &#34;X&#34;:
+        R_1 = Rx(a[1])
+    elif seq.name[1] == &#34;Y&#34;:
+        R_1 = Ry(a[1])
+    else:
+        R_1 = Rz(a[1])
+
+    if seq.name[2] == &#34;X&#34;:
+        R_2 = Rx(a[2])
+    elif seq.name[2] == &#34;Y&#34;:
+        R_2 = Ry(a[2])
+    else:
+        R_2 = Rz(a[2])
+
+    # Using here reverse composition, as this Rotation matrix is built to describe
+    # a pose matrix, which encodes the rotation and position of a coordinate system
+    # with respect to another.
+    # To transform points from origin to destination coordinate systems, the R^T is used
+    # which then swaps the order of the sequence to the expected order.
+    # NOTE: this formula cannot be applied if the rotation matrix is used to rotate points (active-alibi
+    # rotation), instead of rotating coordinate systems (passive-alias rotation)
+    R = np.dot(R_0, np.dot(R_1, R_2))
+
+    assert (isR(R))
+
+    return R</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.float_2dec"><code class="name flex">
+<span>def <span class="ident">float_2dec</span></span>(<span>val)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>This function is useful to print float into JSON with only 2 decimals</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def float_2dec(val):
+    &#39;&#39;&#39;
+    This function is useful to print float into JSON with only 2 decimals
+    &#39;&#39;&#39;
+    return float((int(100*val))/100)</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.fuse_frame_interval_dict"><code class="name flex">
@@ -325,6 +734,45 @@ def fuse_frame_intervals(frame_intervals):
     return max_start_val &lt;= min_end_val</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.inv"><code class="name flex">
+<span>def <span class="ident">inv</span></span>(<span>m)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def inv(m):
+    if m.ndim == 2:  # just an inversion of a square matrix
+        return np.linalg.inv(m)
+    else:
+        assert(m.ndim == 3)  # so batch for N matrices
+        m_inv = np.zeros(m.shape, dtype=m.dtype)
+        n = m.shape[2]
+        for i in range(0, n):
+            m_inv[:, :, i] = np.linalg.inv(m[:, :, i])
+        return m_inv</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.isR"><code class="name flex">
+<span>def <span class="ident">isR</span></span>(<span>R)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def isR(R):
+    assert (R.shape == (3, 3))
+    Rt = np.transpose(R)
+    I_ = np.dot(Rt, R)
+    I = np.identity(3, dtype=R.dtype)
+    n = np.linalg.norm(I - I_)
+    return n &lt; 1e-4</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.is_inside"><code class="name flex">
 <span>def <span class="ident">is_inside</span></span>(<span>frame_num, frame_interval)</span>
 </code></dt>
@@ -338,9 +786,126 @@ def fuse_frame_intervals(frame_intervals):
     return frame_interval[&#39;frame_start&#39;] &lt;= frame_num &lt;= frame_interval[&#39;frame_end&#39;]</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.lat_to_scale"><code class="name flex">
+<span>def <span class="ident">lat_to_scale</span></span>(<span>lat)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def lat_to_scale(lat):
+    # Computes mercator scale from latitude
+    scale = np.cos(lat*np.pi / 180.0)
+    return scale</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.latlon_to_mercator"><code class="name flex">
+<span>def <span class="ident">latlon_to_mercator</span></span>(<span>lat, lon, scale)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def latlon_to_mercator(lat, lon, scale):
+    # Converts lat/lon coordinates to mercator coordinates using mercator scale
+    er = 6378137  # this seems to be the Earth Radius in meters
+    mx = scale * lon * np.pi * er / 180.0
+    my = scale * er * np.log(np.tan((90+lat) * np.pi / 360))
+    return mx, my</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="vcd.utils.EulerSeq"><code class="flex name class">
+<span>class <span class="ident">EulerSeq</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class EulerSeq(Enum):
+    # https://en.wikipedia.org/wiki/Euler_angles
+    ZXZ = 1
+    XYX = 2
+    YZY = 3
+    ZYZ = 4
+    XZX = 5
+    YXY = 6
+
+    XYZ = 7
+    YZX = 8
+    ZXY = 9
+    XZY = 10
+    ZYX = 11  # yaw, pitch, roll (in that order)
+    YXZ = 12</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="vcd.utils.EulerSeq.XYX"><code class="name">var <span class="ident">XYX</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.XYZ"><code class="name">var <span class="ident">XYZ</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.XZX"><code class="name">var <span class="ident">XZX</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.XZY"><code class="name">var <span class="ident">XZY</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.YXY"><code class="name">var <span class="ident">YXY</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.YXZ"><code class="name">var <span class="ident">YXZ</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.YZX"><code class="name">var <span class="ident">YZX</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.YZY"><code class="name">var <span class="ident">YZY</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.ZXY"><code class="name">var <span class="ident">ZXY</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.ZXZ"><code class="name">var <span class="ident">ZXZ</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.ZYX"><code class="name">var <span class="ident">ZYX</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.utils.EulerSeq.ZYZ"><code class="name">var <span class="ident">ZYZ</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -356,14 +921,46 @@ def fuse_frame_intervals(frame_intervals):
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="vcd.utils.Rx" href="#vcd.utils.Rx">Rx</a></code></li>
+<li><code><a title="vcd.utils.Ry" href="#vcd.utils.Ry">Ry</a></code></li>
+<li><code><a title="vcd.utils.Rz" href="#vcd.utils.Rz">Rz</a></code></li>
 <li><code><a title="vcd.utils.as_frame_interval_dict" href="#vcd.utils.as_frame_interval_dict">as_frame_interval_dict</a></code></li>
 <li><code><a title="vcd.utils.as_frame_intervals_array_dict" href="#vcd.utils.as_frame_intervals_array_dict">as_frame_intervals_array_dict</a></code></li>
 <li><code><a title="vcd.utils.consecutive" href="#vcd.utils.consecutive">consecutive</a></code></li>
+<li><code><a title="vcd.utils.convert_oxts_to_pose" href="#vcd.utils.convert_oxts_to_pose">convert_oxts_to_pose</a></code></li>
+<li><code><a title="vcd.utils.create_pose" href="#vcd.utils.create_pose">create_pose</a></code></li>
+<li><code><a title="vcd.utils.euler2R" href="#vcd.utils.euler2R">euler2R</a></code></li>
+<li><code><a title="vcd.utils.float_2dec" href="#vcd.utils.float_2dec">float_2dec</a></code></li>
 <li><code><a title="vcd.utils.fuse_frame_interval_dict" href="#vcd.utils.fuse_frame_interval_dict">fuse_frame_interval_dict</a></code></li>
 <li><code><a title="vcd.utils.fuse_frame_intervals" href="#vcd.utils.fuse_frame_intervals">fuse_frame_intervals</a></code></li>
 <li><code><a title="vcd.utils.get_outer_frame_interval" href="#vcd.utils.get_outer_frame_interval">get_outer_frame_interval</a></code></li>
 <li><code><a title="vcd.utils.intersects" href="#vcd.utils.intersects">intersects</a></code></li>
+<li><code><a title="vcd.utils.inv" href="#vcd.utils.inv">inv</a></code></li>
+<li><code><a title="vcd.utils.isR" href="#vcd.utils.isR">isR</a></code></li>
 <li><code><a title="vcd.utils.is_inside" href="#vcd.utils.is_inside">is_inside</a></code></li>
+<li><code><a title="vcd.utils.lat_to_scale" href="#vcd.utils.lat_to_scale">lat_to_scale</a></code></li>
+<li><code><a title="vcd.utils.latlon_to_mercator" href="#vcd.utils.latlon_to_mercator">latlon_to_mercator</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="vcd.utils.EulerSeq" href="#vcd.utils.EulerSeq">EulerSeq</a></code></h4>
+<ul class="two-column">
+<li><code><a title="vcd.utils.EulerSeq.XYX" href="#vcd.utils.EulerSeq.XYX">XYX</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.XYZ" href="#vcd.utils.EulerSeq.XYZ">XYZ</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.XZX" href="#vcd.utils.EulerSeq.XZX">XZX</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.XZY" href="#vcd.utils.EulerSeq.XZY">XZY</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.YXY" href="#vcd.utils.EulerSeq.YXY">YXY</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.YXZ" href="#vcd.utils.EulerSeq.YXZ">YXZ</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.YZX" href="#vcd.utils.EulerSeq.YZX">YZX</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.YZY" href="#vcd.utils.EulerSeq.YZY">YZY</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.ZXY" href="#vcd.utils.EulerSeq.ZXY">ZXY</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.ZXZ" href="#vcd.utils.EulerSeq.ZXZ">ZXZ</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.ZYX" href="#vcd.utils.EulerSeq.ZYX">ZYX</a></code></li>
+<li><code><a title="vcd.utils.EulerSeq.ZYZ" href="#vcd.utils.EulerSeq.ZYZ">ZYZ</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

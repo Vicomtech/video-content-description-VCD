@@ -5,7 +5,7 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The syntax(see ./schema/vcd_schema_json-v4.0.0.json), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see ./schema/vcd_schema_json-v4.1.0.json), as a JSON Schema file, contains the full description of the VCD structure.
 
 
 ## Details
@@ -14,7 +14,7 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 
 ## Install
 
-Using pip:
+Using pip (Python >3.8)):
 
 ```
 pip install vcd
@@ -33,10 +33,10 @@ import vcd.core as core
 import vcd.types as types
 
 # Create a VCD instance
-myVCD = core.vcd()
+myVCD = core.VCD()
 
 # Add Objects, Actions, etc.
-uid = myVCD.add_object(name='someName', type='#Pedestrian')
+uid = myVCD.add_object(name='someName', semantic_type='#Pedestrian')
 
 ...
 
@@ -51,7 +51,7 @@ import vcd.core as core
 import vcd.types as types
 
 # Load a VCD file
-myVCD = core.vcd('./tests/etc/vcd400_semantics_fw.json')
+myVCD = core.vcd('./tests/etc/vcd410_semantics_fw.json')
 
 # Access data directly
 metadata = myVCD.data['vcd']['metadata']
@@ -76,7 +76,15 @@ myVCD.validate(stringified_vcd)
 
 VCD is defined as a syntax, and as such, different versions imply differences in the syntax or data structure. In addition, each version has a dedicated library version compatible with it.
 
-Last version is VCD 4.0.0.
+Last version is VCD 4.1.0.
+
+Main changes at VCD 4.1.0 from VCD 4.0.0 are:
+* Enhanced JSON schema self-documentation
+* Explicit definition of timestamping and sync information
+* Explicit definition of intrinsics parameters for cameras
+* Explicit definition of extrinsics parameters for stream (as 4x4 pose matrices)
+* Explicit definition of odometry entries
+* Reviewed samples and converters
 
 Main changes at VCD 4.0.0 from VCD 3.3.0 are:
 * Python API
@@ -112,6 +120,10 @@ VCD has evolved as follows:
     * Native Python JSON serialization
     * Google's Protocol Buffer serialization
     * Object data 'num' for single numbers, 'vec' for arrays of numbers
+* VCD 4.1 (2020)
+    * Explicit definition of intrinsics, extrinsics and odometry
+    * Enhanced timestamping and sync information
+
 
 ## Related projects
 

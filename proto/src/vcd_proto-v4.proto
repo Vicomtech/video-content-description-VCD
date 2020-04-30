@@ -12,12 +12,20 @@ message VCD {
         int32 ontology_uid = 3;
         string stream = 4;
         string type = 5;
+        action_data action_data = 6;
+    }
+    message action_data {
+        repeated boolean boolean = 1;
+        repeated num num = 2;
+        repeated text text = 3;
+        repeated vec vec = 4;
     }
     message area_reference {
         attributes attributes = 1;
         string name = 2;
         string stream = 3;
         repeated float val = 4;
+        string reference_type = 5;
     }
     message attributes {
         repeated boolean boolean = 1;
@@ -51,6 +59,13 @@ message VCD {
         int32 ontology_uid = 3;
         string stream = 4;
         string type = 5;
+        context_data context_data = 6;
+    }
+    message context_data {
+        repeated boolean boolean = 1;
+        repeated num num = 2;
+        repeated text text = 3;
+        repeated vec vec = 4;
     }
     message cuboid {
         attributes attributes = 1;
@@ -64,19 +79,36 @@ message VCD {
         int32 ontology_uid = 3;
         string stream = 4;
         string type = 5;
+        event_data event_data = 6;
+    }
+    message event_data {
+        repeated boolean boolean = 1;
+        repeated num num = 2;
+        repeated text text = 3;
+        repeated vec vec = 4;
     }
     message frame_properties {
-        map<string, stream> streams = 3;
-        google.protobuf.Struct properties = 2;
+        map<string, stream> streams = 1;
+        odometry odometry = 2;
+        google.protobuf.Struct properties = 3;
     }
     message frame {
-        map<int32, google.protobuf.Empty> actions = 1;
-        map<int32, google.protobuf.Empty> contexts = 2;
-        map<int32, google.protobuf.Empty> events = 3;
-        google.protobuf.Struct frame_properties = 4;
+        google.protobuf.Struct frame_properties = 1;
+        message Actions {
+            action_data action_data = 1;
+        }
+        message Events {
+            event_data event_data = 1;
+        }
+        message Contexts {
+            context_data context_data = 1;
+        }
         message Objects {
             object_data object_data = 1;
         }
+        map<int32, Actions> actions = 2;
+        map<int32, Contexts> contexts = 3;
+        map<int32, Events> events = 4;
         map<int32, Objects> objects = 5;
         map<int32, google.protobuf.Empty> relations = 6;
     }
@@ -97,6 +129,7 @@ message VCD {
         string name = 2;
         string stream = 3;
         repeated float number = 4;
+        string reference_type = 5;
     }
     message mat {
         attributes attributes = 1;
@@ -153,6 +186,10 @@ message VCD {
         repeated line_reference line_reference = 15;
         repeated mesh mesh = 16;
     }
+    message odometry {
+        repeated float pose_lcs_wrt_wcs_4x4 = 1;
+        string comment = 2;
+    }
     message point2d {
         attributes attributes = 1;
         string name = 3;
@@ -165,7 +202,6 @@ message VCD {
         string stream = 4;
         repeated float val = 5;
     }
-
     message poly2d {
         attributes attributes = 1;
         bool closed = 2;
@@ -195,11 +231,54 @@ message VCD {
         string stream = 6;
         string type = 7;
     }
+    message stream_properties {
+        extrinsics extrinsics = 1;
+        oneof intrinsics {
+            intrinsics_pinhole intrinsics_pinhole = 2;
+            intrinsics_fisheye intrinsics_fisheye = 3;
+        }
+        sync sync = 4;
+    }
+    message intrinsics_pinhole {
+        int32 width_px = 1;
+        int32 height_px = 2;
+        repeated float camera_matrix = 3;
+        repeated float distortion = 4;
+    }
+    message intrinsics_fisheye {
+        int32 width_px = 1;
+        int32 height_px = 2;
+        float fov_deg = 3;
+        float center_x_px = 4;
+        float center_y_px = 5;
+        float radius_x_px = 6;
+        float radius_y_px = 7;
+        repeated float lens_coeff = 8;
+    }
+    message extrinsics {
+        repeated float pose_scs_wrt_lcs_4x4 = 1;
+    }
     message stream {
         string description = 1;
-        google.protobuf.Struct stream_properties = 3;
-        string type = 4;
+        stream_properties stream_properties = 3;
+        enum type {
+            camera = 0;
+            lidar = 1;
+            radar = 2;
+            gps_imu = 3;
+            other = 4;
+        }
         string uri = 5;
+    }
+    message sync {
+        oneof props {
+            int32 frame_shift = 1;
+            timestamp_and_frame timestamp_and_frame = 2;
+        }
+    }
+    message timestamp_and_frame {
+        string timestamp = 1;
+        int32 frame = 2;
     }
     message text {
         attributes attributes = 1;
