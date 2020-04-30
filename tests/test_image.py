@@ -139,7 +139,7 @@ class TestBasic(unittest.TestCase):
                         hierarchy = poly2d['hierarchy']
 
                         if mode == types.Poly2DType.MODE_POLY2D_SRF6DCC.name:
-                            vec = poly.getVecFromEncodedPoly(int(val[0]), int(val[1]), int(val[2]), val[3])
+                            vec = poly.getVecFromEncodedSRF6(int(val[0]), int(val[1]), int(val[2]), val[3])
                             #print(vec)
                         else:
                             vec = val
