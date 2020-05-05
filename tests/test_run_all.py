@@ -30,7 +30,8 @@ os.system("python test_basic.py && "
           "python test_mesh.py &&"
           "python test_image.py &&"
           "python test_stream_frame_properties.py &&"
-          "python test_action_properties.py")
+          "python test_action_properties.py &&"
+          "python test_semantics")
 
 # Clean existing json or txt files at etc
 dir_name = "./etc/"
