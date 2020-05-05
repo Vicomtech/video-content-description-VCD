@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="vcd",
-    version="4.0.0",
+    version="4.1.0",
     author="Marcos Nieto",
     author_email="mnieto@vicomtech.org",
     description="Video Content Description (VCD) library",
@@ -27,5 +27,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
 		"Topic :: Scientific/Engineering :: Artificial Intelligence"
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.6',
 )

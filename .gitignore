@@ -1,2 +1,3 @@
 # Recursively ignore 
 __pycache__/
+.idea
