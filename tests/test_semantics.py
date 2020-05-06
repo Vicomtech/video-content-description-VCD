@@ -85,6 +85,56 @@ class TestBasic(unittest.TestCase):
         if not os.path.isfile('./etc/test_actions_c.json'):
             vcd_c.save('./etc/test_actions_c.json')
 
+    # Add semantics to the KITTI tracking #0
+    def test_scene_KITTI_Tracking_0(self):
+        sequence_number = 0
+        vcd_file_name = "../converters/kittiConverter/etc/vcd_410_kitti_tracking_" + str(sequence_number).zfill(
+            4) + ".json"
+        vcd = core.VCD(vcd_file_name)
+
+        # Natural language scene description:
+        # In a city, being sunny, the ego-vehicle drives straight following a cyclist, and a van.
+        # The van and cyclist turn right and the ego-vehicle as well. The road is single lane, and there are
+        # parked cars at both sides of it. There are some pedestrians walking at the footwalk.
+
+        # The objects already labeled are the pedestrians, cars, vans, etc. Inspecting the VCD we can see the uids
+        # of the main actors
+        uid_cyclist = 2
+        uid_van = 1
+
+        # We need to add the Ego-vehicle
+        uid_ego = vcd.add_object(name="Ego-vehicle", semantic_type="Car")
+
+        # Now the actions
+        # Driving straight
+        vcd.add_object_data(uid=uid_van, object_data=types.text(name="action", val="Driving straight"),
+                            frame_value=[(0, 30), (32, 153)])
+        vcd.add_object_data(uid=uid_cyclist, object_data=types.text(name="action", val="Driving straight"),
+                            frame_value=[(0, 57), (59, 153)])
+        vcd.add_object_data(uid=uid_ego, object_data=types.text(name="action", val="Driving straight"),
+                            frame_value=[(0, 75), (77, 153)])
+        # Turning right
+        vcd.add_object_data(uid=uid_van, object_data=types.text(name="action", val="Turning right"), frame_value=31)
+        vcd.add_object_data(uid=uid_cyclist, object_data=types.text(name="action", val="Turning right"), frame_value=58)
+        vcd.add_object_data(uid=uid_ego, object_data=types.text(name="action", val="Turning right"), frame_value=76)
+
+        # Parked cars and vans, and walking pedestrians
+        for uid_object, object_ in vcd.data['vcd']['objects'].items():
+            if object_['type'] == 'Car':
+                vcd.add_object_data(uid=uid_object, object_data=types.text(name="action", val="Parked"))
+            elif object_['type'] == 'Pedestrian':
+                vcd.add_object_data(uid=uid_object, object_data=types.text(name="action", val="Walking"))
+            elif object_['type'] == "Van" and uid_object is not uid_van:
+                vcd.add_object_data(uid=uid_object, object_data=types.text(name="action", val="Parked"))
+
+        # Context
+        vcd.add_context(name="", semantic_type="City")
+        vcd.add_context(name="", semantic_type="Sunny")
+
+        # Store
+        if not os.path.isfile('./etc/test_kitti_tracking_0_actions.json'):
+            vcd.save('./etc/test_kitti_tracking_0_actions.json', False)
+
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))
     unittest.main()
