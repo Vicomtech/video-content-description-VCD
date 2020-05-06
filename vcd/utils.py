@@ -60,16 +60,25 @@ def as_frame_interval_dict(frame_value):
 
 def as_frame_intervals_array_dict(frame_value):
     # Allow for multiple type of frame_interval arguments (int, tuple, list(tuple))
+    frame_intervals_array_of_dict = []
     if isinstance(frame_value, int):  # The user has given as argument a "frame number"
-        frame_intervals = [{'frame_start': frame_value, 'frame_end': frame_value}]
+        frame_intervals_array_of_dict = [{'frame_start': frame_value, 'frame_end': frame_value}]
     elif isinstance(frame_value, tuple):  # The user has given as argument a single "frame interval"
-        frame_intervals = [{'frame_start': frame_value[0], 'frame_end': frame_value[1]}]
+        frame_intervals_array_of_dict = [{'frame_start': frame_value[0], 'frame_end': frame_value[1]}]
     elif frame_value is None:  # The user has provided nothing: this is a static element
-        frame_intervals = []
+        frame_intervals_array_of_dict = []
     else:
-        assert isinstance(frame_value, list)  # User provides a list of "frame intervals"
-        frame_intervals = frame_value
-    return frame_intervals
+        assert isinstance(frame_value, list)  # User provides a list of "frame intervals" tuples
+        for frame_interval in frame_value:
+            if 'frame_start' in frame_interval:
+                # User provided already a dict
+                frame_intervals_array_of_dict = frame_value
+                break
+            else:
+                # User provided tuples of numbers
+                frame_intervals_array_of_dict.append({'frame_start': frame_interval[0], 'frame_end': frame_interval[1]})
+
+    return frame_intervals_array_of_dict
 
 
 def fuse_frame_interval_dict(frame_interval, frame_intervals):

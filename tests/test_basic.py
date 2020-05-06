@@ -27,32 +27,32 @@ class TestBasic(unittest.TestCase):
         vcd = core.VCD()
 
         # 2.- Create the Object
-        uid_marcos = vcd.add_object('marcos')
+        uid_marcos = vcd.add_object(name='marcos')
         self.assertEqual(uid_marcos, 0, "Should be 0")
 
         # 3.- Add some data to the object
-        vcd.add_object_data(uid_marcos, types.bbox('head', (10, 10, 30, 30)))
-        vcd.add_object_data(uid_marcos, types.bbox('body', (0, 0, 60, 120)))
-        vcd.add_object_data(uid_marcos, types.vec('speed', (0.0, 0.2)))
-        vcd.add_object_data(uid_marcos, types.num('accel', 0.1))
+        vcd.add_object_data(uid=uid_marcos, object_data=types.bbox(name='head', val=(10, 10, 30, 30)))
+        vcd.add_object_data(uid=uid_marcos, object_data=types.bbox(name='body', val=(0, 0, 60, 120)))
+        vcd.add_object_data(uid=uid_marcos, object_data=types.vec(name='speed', val=(0.0, 0.2)))
+        vcd.add_object_data(uid=uid_marcos, object_data=types.num(name='accel', val=0.1))
 
-        uid_peter = vcd.add_object('peter')
+        uid_peter = vcd.add_object(name='peter')
 
-        vcd.add_object_data(uid_peter, types.num('age', 38.0))
-        vcd.add_object_data(uid_peter, types.vec('eyeL', (0, 0, 10, 10)))
-        vcd.add_object_data(uid_peter, types.vec('eyeR', (0, 0, 10, 10)))
+        vcd.add_object_data(uid=uid_peter, object_data=types.num(name='age', val=38.0))
+        vcd.add_object_data(uid=uid_peter, object_data=types.vec(name='eyeL', val=(0, 0, 10, 10)))
+        vcd.add_object_data(uid=uid_peter, object_data=types.vec(name='eyeR', val=(0, 0, 10, 10)))
 
         # 4.- Write into string
         vcd_string_pretty = vcd.stringify()
         vcd_string_nopretty = vcd.stringify(False)
 
         # 5.- We can ask VCD
-        marcos_ref = vcd.get_element(core.ElementType.object, uid_marcos)
+        marcos_ref = vcd.get_element(element_type=core.ElementType.object, uid=uid_marcos)
         # print('Found Object: uid = ', uid_marcos, ', name = ', marcosRef['name'])
         self.assertEqual(uid_marcos, 0, "Should be 0")
         self.assertEqual(marcos_ref['name'], 'marcos', "Should be marcos")
 
-        peter_ref = vcd.get_element(core.ElementType.object, uid_peter)
+        peter_ref = vcd.get_element(element_type=core.ElementType.object, uid=uid_peter)
         # print('Found Object: uid = ', uid_peter, ', name = ', peterRef['name'])
         self.assertEqual(uid_peter, 1, "Should be 1")
         self.assertEqual(peter_ref['name'], 'peter', "Should be peter")
@@ -82,30 +82,30 @@ class TestBasic(unittest.TestCase):
         vcd = core.VCD()
 
         # 2.- Create some content
-        uid_marcos = vcd.add_object('marcos', '#Adult')
-        uid_peter = vcd.add_object('peter', '#Adult')
-        uid_katixa = vcd.add_object('katixa', '#Child')
+        uid_marcos = vcd.add_object(name='marcos', semantic_type='#Adult')
+        uid_peter = vcd.add_object(name='peter', semantic_type='#Adult')
+        uid_katixa = vcd.add_object(name='katixa', semantic_type='#Child')
 
-        vcd.add_object_data(uid_marcos, types.num('age', 37.0), (0, 10))
-        vcd.add_object_data(uid_marcos, types.num('height', 1.75), (0, 10))
-        vcd.add_object_data(uid_marcos, types.vec('marks', (5.0, 5.0, 5.0)), (0, 10))
-        vcd.add_object_data(uid_peter, types.num('age', 40.0), (0, 11))
-        vcd.add_object_data(uid_peter, types.vec('marks', (10.0, 10.0, 10.0)), (0, 11))
-        vcd.add_object_data(uid_katixa, types.num('age', 9), (5, 10))
-        vcd.add_object_data(uid_katixa, types.num('age', 9.01), 11)
-        vcd.add_object_data(uid_katixa, types.num('age', 9.02), 12)
+        vcd.add_object_data(uid=uid_marcos, object_data=types.num('age', 37.0), frame_value=(0, 10))
+        vcd.add_object_data(uid=uid_marcos, object_data=types.num('height', 1.75), frame_value=(0, 10))
+        vcd.add_object_data(uid=uid_marcos, object_data=types.vec('marks', (5.0, 5.0, 5.0)), frame_value=(0, 10))
+        vcd.add_object_data(uid=uid_peter, object_data=types.num('age', 40.0), frame_value=(0, 11))
+        vcd.add_object_data(uid=uid_peter, object_data=types.vec('marks', (10.0, 10.0, 10.0)), frame_value=(0, 11))
+        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9), frame_value=(5, 10))
+        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.01), frame_value=11)
+        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.02), frame_value=12)
 
         # 3.- Search Objects according to some search criteria
         # 3.1.- According to "Object::type" (also for other Elements such as Action, Event, Context)
-        uids_child = vcd.get_elements_of_type(core.ElementType.object, "#Child")
+        uids_child = vcd.get_elements_of_type(element_type=core.ElementType.object, semantic_type="#Child")
         for uid in uids_child:
             # print("Hi there! I'm ", vcd.getObject(uid)['name'], " and I am a child")
             self.assertEqual(vcd.get_object(uid)['name'], 'katixa', "Should be katixa")
 
         # 3.2.- According to ObjectData
-        uids_age = vcd.get_objects_with_object_data_name('age')
+        uids_age = vcd.get_objects_with_object_data_name(data_name='age')
         for uid in uids_age:
-            object_ = vcd.get_object(uid)
+            object_ = vcd.get_object(uid=uid)
             # print("Hi there! I'm ", object['name'], " and I have ObjectData with name age")
             if uid == 0:
                 self.assertEqual(object_['name'], 'marcos', "Should be marcos")
@@ -114,9 +114,9 @@ class TestBasic(unittest.TestCase):
             elif uid == 2:
                 self.assertEqual(object_['name'], 'katixa', "Should be katixa")
 
-            frames_with_age = vcd.get_frames_with_object_data_name(uid, 'age')
+            frames_with_age = vcd.get_frames_with_object_data_name(uid=uid, data_name='age')
             for frame_num in frames_with_age:
-                my_age = vcd.get_object_data(uid, 'age', frame_num)
+                my_age = vcd.get_object_data(uid=uid, data_name='age', frame_num=frame_num)
                 # print("I am ", myAge['val'], " years old at frame ", frameNum)
 
                 if uid == 0:
@@ -143,27 +143,27 @@ class TestBasic(unittest.TestCase):
         vcd = core.VCD()
 
         # 2.- Create some objects
-        car1_uid = vcd.add_object('BMW', '#Car')
-        car2_uid = vcd.add_object('Seat', '#Car')
-        person1_uid = vcd.add_object('John', '#Pedestrian')
-        trafficSign1UID = vcd.add_object('', '#StopSign')
+        car1_uid = vcd.add_object(name='BMW', semantic_type='#Car')
+        car2_uid = vcd.add_object(name='Seat', semantic_type='#Car')
+        person1_uid = vcd.add_object(name='John', semantic_type='#Pedestrian')
+        trafficSign1UID = vcd.add_object(name='', semantic_type='#StopSign')
 
         # 3.- Add some content
         # Same FrameInterval (0, 5)
-        vcd.add_object_data(person1_uid, types.bbox('face', (0, 0, 100, 100)), (0, 5))
-        vcd.add_object_data(person1_uid, types.bbox('mouth', (0, 0, 10, 10)), (0, 5))
-        vcd.add_object_data(person1_uid, types.bbox('hand', (0, 0, 30, 30)), (0, 5))
-        vcd.add_object_data(person1_uid, types.bbox('eyeL', (0, 0, 10, 10)), (0, 5))
-        vcd.add_object_data(person1_uid, types.bbox('eyeR', (0, 0, 10, 10)), (0, 5))
+        vcd.add_object_data(uid=person1_uid, object_data=types.bbox('face', (0, 0, 100, 100)), frame_value=(0, 5))
+        vcd.add_object_data(uid=person1_uid, object_data=types.bbox('mouth', (0, 0, 10, 10)), frame_value=(0, 5))
+        vcd.add_object_data(uid=person1_uid, object_data=types.bbox('hand', (0, 0, 30, 30)), frame_value=(0, 5))
+        vcd.add_object_data(uid=person1_uid, object_data=types.bbox('eyeL', (0, 0, 10, 10)), frame_value=(0, 5))
+        vcd.add_object_data(uid=person1_uid, object_data=types.bbox('eyeR', (0, 0, 10, 10)), frame_value=(0, 5))
 
         # A different FrameInterval (0, 10)
-        vcd.add_object_data(person1_uid, types.num('age', 35.0), (0, 10))
+        vcd.add_object_data(uid=person1_uid, object_data=types.num('age', 35.0), frame_value=(0, 10))
 
         # Data for the other objects
-        vcd.add_object_data(car1_uid, types.bbox('position', (100, 100, 200, 400)), (0, 10))
-        vcd.add_object_data(car1_uid, types.text('color', 'red'), (6, 10))
-        vcd.add_object_data(car2_uid, types.bbox('position', (300, 1000, 200, 400)), (0, 10))
-        vcd.add_object_data(trafficSign1UID, types.boolean('visible', True), (0, 4))
+        vcd.add_object_data(uid=car1_uid, object_data=types.bbox('position', (100, 100, 200, 400)), frame_value=(0, 10))
+        vcd.add_object_data(uid=car1_uid, object_data=types.text('color', 'red'), frame_value=(6, 10))
+        vcd.add_object_data(uid=car2_uid, object_data=types.bbox('position', (300, 1000, 200, 400)), frame_value=(0, 10))
+        vcd.add_object_data(uid=trafficSign1UID, object_data=types.boolean('visible', True), frame_value=(0, 4))
 
         # print("Frame 5, dynamic only message: ", vcd.stringify_frame(5, dynamic_only=True))
         # print("Frame 5, full message: ", vcd.stringify_frame(5, dynamic_only=False))
@@ -172,23 +172,23 @@ class TestBasic(unittest.TestCase):
             vcd.save('./etc/test_remove_simple.json')
 
         test_remove_simple_read = open('./etc/test_remove_simple.json', 'r')
-        self.assertEqual(vcd.stringify(False), test_remove_simple_read.read(), "Should be equal")
+        self.assertEqual(vcd.stringify(pretty=False), test_remove_simple_read.read(), "Should be equal")
         test_remove_simple_read.close()
         self.assertEqual(vcd.get_num_objects(), 4, "Should be 4")
 
         # 4.- Delete some content
-        vcd.rm_object(car2_uid)
+        vcd.rm_object(uid=car2_uid)
         self.assertEqual(vcd.get_num_objects(), 3, "Should be 3")
-        vcd.rm_object_by_type('#StopSign')
+        vcd.rm_object_by_type(semantic_type='#StopSign')
         self.assertEqual(vcd.get_num_objects(), 2, "Should be 2")
-        vcd.rm_object_by_frame(person1_uid, (0, 5))  # After this call, this person has data only between 5 and 10
+        vcd.rm_object_by_frame(uid=person1_uid, frame_interval_tuple=(0, 5))  # After this call, this person has data only between 5 and 10
         self.assertEqual(vcd.get_object(person1_uid)['frame_intervals'][0]['frame_start'], 6)
         self.assertEqual(vcd.get_object(person1_uid)['frame_intervals'][0]['frame_end'], 10)
 
         # 5.- Remove all content sequentially
-        vcd.rm_object(person1_uid)
+        vcd.rm_object(uid=person1_uid)
         self.assertEqual(vcd.get_num_objects(), 1, "Should be 1")
-        vcd.rm_object(car1_uid)
+        vcd.rm_object(uid=car1_uid)
         self.assertEqual(vcd.get_num_objects(), 0, "Should be 0")
 
     # Load

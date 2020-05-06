@@ -1076,10 +1076,10 @@ class VCD:
         assert('frames' in self.data['vcd'])
         return self.data['vcd']['frames'].get(frame_num)
 
-    def get_elements_of_type(self, element_type, type_):
+    def get_elements_of_type(self, element_type, semantic_type):
         uids = []
         for uid, element in self.data['vcd'][element_type.name + 's'].items():
-            if element['type'] == type_:
+            if element['type'] == semantic_type:
                 uids.append(uid)
         return uids
 
