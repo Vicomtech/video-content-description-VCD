@@ -1044,6 +1044,37 @@ class VCD:
                         frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
                         self.__add_frames(frame_value, ElementType.relation, relation_uid)
 
+    def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None, ont_uid=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=object_uid, element_type=ElementType.object)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=action_uid, element_type=ElementType.action)
+
+    def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
+                                   ont_uid=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=action_uid_1, element_type=ElementType.action)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=action_uid_2, element_type=ElementType.action)
+
+    def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
+                                   ont_uid=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=object_uid_1, element_type=ElementType.object)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=object_uid_2, element_type=ElementType.object)
+
+    def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
+                                   ont_uid=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=action_uid, element_type=ElementType.action)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=object_uid, element_type=ElementType.object)
+
     def add_action_data(self, uid, action_data, frame_value=None):
         assert (isinstance(uid, int))
         assert (isinstance(action_data, types.ObjectData))

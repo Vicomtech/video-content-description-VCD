@@ -137,45 +137,29 @@ class TestBasic(unittest.TestCase):
 
         # Driving straight (6)
         uid_action_6 = vcd.add_action(name="", semantic_type="driving-straight", frame_value=[(0, 30), (41, 153)])
-        uid_rel_6 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-        vcd.add_rdf(relation_uid=uid_rel_6, rdf_type=core.RDF.subject, element_uid=uid_ego, element_type=core.ElementType.object)
-        vcd.add_rdf(relation_uid=uid_rel_6, rdf_type=core.RDF.object, element_uid=uid_action_6, element_type=core.ElementType.action)
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_ego, action_uid=uid_action_6)
 
         # Ego-vehicle following Cyclist (7-8)
         uid_action_7 = vcd.add_action(name="", semantic_type="following")  # , frame_value=[(0, 153)])
-        uid_rel_7 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-        vcd.add_rdf(relation_uid=uid_rel_7, rdf_type=core.RDF.subject, element_uid=uid_ego, element_type=core.ElementType.object)
-        vcd.add_rdf(relation_uid=uid_rel_7, rdf_type=core.RDF.object, element_uid=uid_action_7, element_type=core.ElementType.action)
-        uid_rel_8 = vcd.add_relation(name="", semantic_type="isObjectOfAction")
-        vcd.add_rdf(relation_uid=uid_rel_8, rdf_type=core.RDF.subject, element_uid=uid_cyclist, element_type=core.ElementType.object)
-        vcd.add_rdf(relation_uid=uid_rel_8, rdf_type=core.RDF.object, element_uid=uid_action_7, element_type=core.ElementType.action)
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_ego, action_uid=uid_action_7)
+        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_cyclist, action_uid=uid_action_7)
 
         # Cyclist following Van (9-10)
         uid_action_9 = vcd.add_action(name="", semantic_type="following")  # , frame_value=[(0, 153)])
-        uid_rel_9 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-        vcd.add_rdf(uid_rel_9, rdf_type=core.RDF.subject, element_uid=uid_cyclist, element_type=core.ElementType.object)
-        vcd.add_rdf(uid_rel_9, rdf_type=core.RDF.object, element_uid=uid_action_9, element_type=core.ElementType.action)
-        uid_rel_10 = vcd.add_relation(name="", semantic_type="isObjectOfAction")
-        vcd.add_rdf(relation_uid=uid_rel_10, rdf_type=core.RDF.subject, element_uid=uid_van, element_type=core.ElementType.object)
-        vcd.add_rdf(relation_uid=uid_rel_10, rdf_type=core.RDF.object, element_uid=uid_action_9, element_type=core.ElementType.action)
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_cyclist, action_uid=uid_action_9)
+        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_van, action_uid=uid_action_9)
 
         # Van Turn-right (11)
         uid_action_11 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(31, 40))
-        uid_rel_11 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-        vcd.add_rdf(relation_uid=uid_rel_11, rdf_type=core.RDF.subject, element_uid=uid_van, element_type=core.ElementType.object)
-        vcd.add_rdf(relation_uid=uid_rel_11, rdf_type=core.RDF.object, element_uid=uid_action_11, element_type=core.ElementType.action)
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_van, action_uid=uid_action_11)
 
         # Cyclist Turn-right (12)
         uid_action_12 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(58, 65))
-        uid_rel_12 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-        vcd.add_rdf(relation_uid=uid_rel_12, rdf_type=core.RDF.subject, element_uid=uid_cyclist, element_type=core.ElementType.object)
-        vcd.add_rdf(relation_uid=uid_rel_12, rdf_type=core.RDF.object, element_uid=uid_action_12,element_type=core.ElementType.action)
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_cyclist, action_uid=uid_action_12)
 
         # Ego-vehicle Turn-right (13)
         uid_action_13 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(76, 84))
-        uid_rel_13 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-        vcd.add_rdf(relation_uid=uid_rel_13, rdf_type=core.RDF.subject, element_uid=uid_ego, element_type=core.ElementType.object)
-        vcd.add_rdf(relation_uid=uid_rel_13, rdf_type=core.RDF.object, element_uid=uid_action_13,element_type=core.ElementType.action)
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_ego, action_uid=uid_action_13)
 
         # Road object (14), footwalk (15) and road attribute (16)
         uid_road = vcd.add_object(name="", semantic_type="road")
@@ -189,25 +173,16 @@ class TestBasic(unittest.TestCase):
             frame_value = utils.as_frame_intervals_array_tuples(frame_intervals)
             if object_['type'] == 'Car':
                 uid_act_aux = vcd.add_action(name="", semantic_type="parked", frame_value=frame_value)
-                uid_rel_aux = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.subject, element_uid=uid_obj_aux, element_type=core.ElementType.object)
-                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
+                vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_obj_aux, action_uid=uid_act_aux)
 
             elif object_['type'] == 'Pedestrian':
                 uid_act_aux = vcd.add_action(name="", semantic_type="walking", frame_value=frame_value)
-                uid_rel_aux = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.subject, element_uid=uid_obj_aux, element_type=core.ElementType.object)
-                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
-
-                uid_rel_aux2 = vcd.add_relation(name="", semantic_type="isObjectOfAction")
-                vcd.add_rdf(relation_uid=uid_rel_aux2, rdf_type=core.RDF.subject, element_uid=uid_footwalk, element_type=core.ElementType.object)
-                vcd.add_rdf(relation_uid=uid_rel_aux2, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
+                vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_obj_aux, action_uid=uid_act_aux)
+                vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_footwalk, action_uid=uid_act_aux)
 
             elif object_['type'] == "Van" and uid_obj_aux is not uid_van:
                 uid_act_aux = vcd.add_action(name="", semantic_type="parked", frame_value=frame_value)
-                uid_rel_aux = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
-                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.subject, element_uid=uid_obj_aux, element_type=core.ElementType.object)
-                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
+                vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_obj_aux, action_uid=uid_act_aux)
 
         # Store frame 0 - static and dynamic
         if not os.path.isfile('./etc/test_kitti_tracking_0_frame_0_static-dynamic.json'):
