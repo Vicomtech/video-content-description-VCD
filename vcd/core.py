@@ -873,6 +873,12 @@ class VCD:
                     warnings.warn('WARNING: Trying to add stream properties for non-existing stream. '
                                   'Use add_stream first.')
 
+    def save_frame(self, frame_num, file_name, dynamic_only=True, pretty=False):
+        string = self.stringify_frame(frame_num, dynamic_only, pretty)
+        file = open(file_name, 'w')
+        file.write(string)
+        file.close()
+
     def save(self, file_name, pretty=False):
         string = self.stringify(pretty)
         file = open(file_name, 'w')
@@ -912,6 +918,7 @@ class VCD:
 
             # Now the static info for objects, actions, events, contexts and relations
             for element_type in ElementType:
+                # First, elements explicitly defined for this frame
                 if element_type.name + 's' in self.data['vcd']['frames'][frame_num]:
                     for uid, content in self.data['vcd']['frames'][frame_num][element_type.name + 's'].items():
                         frame_static_dynamic[element_type.name + 's'][uid].update(
@@ -919,6 +926,57 @@ class VCD:
                         )
                         # Remove frameInterval entry
                         del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
+
+                # But also other elements (no relations!) without frame intervals specified, which are assumed to exist during
+                # the entire sequence
+                if element_type.name + 's' in self.data['vcd'] and element_type.name != "relation":
+                    for uid, element in self.data['vcd'][element_type.name + 's'].items():
+                        frame_intervals_dict = element['frame_intervals']
+                        if not frame_intervals_dict:
+                            # So the list of frame intervals is empty -> this element lives the entire scene
+                            # Let's add it to frame_static_dynamic
+                            frame_static_dynamic.setdefault(element_type.name + 's', dict()) # in case there are no
+                                                                        # such type of elements already in this frame
+                            frame_static_dynamic[element_type.name + 's'][uid] = dict()
+                            frame_static_dynamic[element_type.name + 's'][uid] = copy.deepcopy(element)
+
+                            # Remove frameInterval entry
+                            del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
+
+                # Now also the Relations!
+                if 'relations' in self.data['vcd']:
+                    for uid, relation in self.data['vcd']['relations'].items():
+                        # Need to find if this relation has rdf uids related to objects active at this frame
+                        found = False
+                        for rdf_subject in relation['rdf_subjects']:
+                            subject_uid = rdf_subject['uid']
+                            subject_type = rdf_subject['type']
+
+                            if subject_type + 's' in frame_static_dynamic:
+                                if subject_uid in frame_static_dynamic[subject_type + 's'].keys():
+                                    # Found
+                                    found = True
+                                    break
+                        if not found:
+                            for rdf_object in relation['rdf_objects']:
+                                object_uid = rdf_object['uid']
+                                object_type = rdf_object['type']
+
+                                if object_type + 's' in frame_static_dynamic:
+                                    if object_uid in frame_static_dynamic[object_type + 's'].keys():
+                                        # Found
+                                        found = True
+                                        break
+                        if found:
+                            # Found, add this relation
+                            frame_static_dynamic.setdefault('relations', dict())
+                            frame_static_dynamic['relations'][uid] = dict()
+                            frame_static_dynamic['relations'][uid] = copy.deepcopy(relation)
+
+                            # Remove frameInterval entry
+                            if 'frame_intervals' in frame_static_dynamic['relations'][uid]:
+                                del frame_static_dynamic['relations'][uid]['frame_intervals']
+
             if pretty:
                 return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
             else:

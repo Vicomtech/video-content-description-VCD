@@ -17,6 +17,7 @@ import sys
 sys.path.insert(0, "..")
 import vcd.core as core
 import vcd.types as types
+import vcd.utils as utils
 
 
 class TestBasic(unittest.TestCase):
@@ -93,43 +94,124 @@ class TestBasic(unittest.TestCase):
         vcd = core.VCD(vcd_file_name)
 
         # Natural language scene description:
-        # In a city, being sunny, the ego-vehicle drives straight following a cyclist, and a van.
-        # The van and cyclist turn right and the ego-vehicle as well. The road is single lane, and there are
-        # parked cars at both sides of it. There are some pedestrians walking at the footwalk.
+        # In a city, being sunny, the ego-vehicle drives straight following a cyclist, and a van. The van, cyclist
+        # and ego-vehicle turn right. The road is single lane, and there are parked cars at both sides of it. There
+        # are some pedestrians walking along the footwalk.
+
+        '''
+        1) City is a Context
+        2) Sunny is a Context
+        3) Ego-vehicle is an Object
+        4) Cyclist is an Object
+        5) Van is an Object
+        6) Ego-vehicle isSubjectOfAction drives-straight
+        7) Ego-vehicle performsAction following1
+        8) Cyclist isObjectOfAction following1
+        9) Cyclist performsAction following2
+        10) Van isObjectOfAction following2
+        11) Van isObjectOfAction turn-right
+        12) Cyclist isObjectOfAction turn-right
+        13) Ego-vehicle isObjectOfAction turn-right 
+        14) Road is an Object
+        15) Footwalk is an Object
+        16) Road hasAttribute single-lane
+        17) Cars are Objects (multiple Car is Object)
+        18) Cars performAction Parked
+        19) Pedestrians are Objects
+        20) Pedestrians isSubjectOfAction Walking
+        21) Footwalk isObjectOfAction Walking
+        '''
+        # Let's add VCD entries following the order
+        # Contexts (1-2)
+        vcd.add_context(name="", semantic_type="City")
+        vcd.add_context(name="", semantic_type="Sunny")
+
+        # Ego-vehicle (3)
+        uid_ego = vcd.add_object(name="Ego-vehicle", semantic_type="Car")
 
         # The objects already labeled are the pedestrians, cars, vans, etc. Inspecting the VCD we can see the uids
         # of the main actors
+        # Cyclist, van (4-5), (17) and (19)
         uid_cyclist = 2
         uid_van = 1
 
-        # We need to add the Ego-vehicle
-        uid_ego = vcd.add_object(name="Ego-vehicle", semantic_type="Car")
+        # Driving straight (6)
+        uid_action_6 = vcd.add_action(name="", semantic_type="driving-straight", frame_value=[(0, 30), (41, 153)])
+        uid_rel_6 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+        vcd.add_rdf(relation_uid=uid_rel_6, rdf_type=core.RDF.subject, element_uid=uid_ego, element_type=core.ElementType.object)
+        vcd.add_rdf(relation_uid=uid_rel_6, rdf_type=core.RDF.object, element_uid=uid_action_6, element_type=core.ElementType.action)
 
-        # Now the actions
-        # Driving straight
-        vcd.add_object_data(uid=uid_van, object_data=types.text(name="action", val="Driving straight"),
-                            frame_value=[(0, 30), (32, 153)])
-        vcd.add_object_data(uid=uid_cyclist, object_data=types.text(name="action", val="Driving straight"),
-                            frame_value=[(0, 57), (59, 153)])
-        vcd.add_object_data(uid=uid_ego, object_data=types.text(name="action", val="Driving straight"),
-                            frame_value=[(0, 75), (77, 153)])
-        # Turning right
-        vcd.add_object_data(uid=uid_van, object_data=types.text(name="action", val="Turning right"), frame_value=31)
-        vcd.add_object_data(uid=uid_cyclist, object_data=types.text(name="action", val="Turning right"), frame_value=58)
-        vcd.add_object_data(uid=uid_ego, object_data=types.text(name="action", val="Turning right"), frame_value=76)
+        # Ego-vehicle following Cyclist (7-8)
+        uid_action_7 = vcd.add_action(name="", semantic_type="following")  # , frame_value=[(0, 153)])
+        uid_rel_7 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+        vcd.add_rdf(relation_uid=uid_rel_7, rdf_type=core.RDF.subject, element_uid=uid_ego, element_type=core.ElementType.object)
+        vcd.add_rdf(relation_uid=uid_rel_7, rdf_type=core.RDF.object, element_uid=uid_action_7, element_type=core.ElementType.action)
+        uid_rel_8 = vcd.add_relation(name="", semantic_type="isObjectOfAction")
+        vcd.add_rdf(relation_uid=uid_rel_8, rdf_type=core.RDF.subject, element_uid=uid_cyclist, element_type=core.ElementType.object)
+        vcd.add_rdf(relation_uid=uid_rel_8, rdf_type=core.RDF.object, element_uid=uid_action_7, element_type=core.ElementType.action)
 
-        # Parked cars and vans, and walking pedestrians
-        for uid_object, object_ in vcd.data['vcd']['objects'].items():
+        # Cyclist following Van (9-10)
+        uid_action_9 = vcd.add_action(name="", semantic_type="following")  # , frame_value=[(0, 153)])
+        uid_rel_9 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+        vcd.add_rdf(uid_rel_9, rdf_type=core.RDF.subject, element_uid=uid_cyclist, element_type=core.ElementType.object)
+        vcd.add_rdf(uid_rel_9, rdf_type=core.RDF.object, element_uid=uid_action_9, element_type=core.ElementType.action)
+        uid_rel_10 = vcd.add_relation(name="", semantic_type="isObjectOfAction")
+        vcd.add_rdf(relation_uid=uid_rel_10, rdf_type=core.RDF.subject, element_uid=uid_van, element_type=core.ElementType.object)
+        vcd.add_rdf(relation_uid=uid_rel_10, rdf_type=core.RDF.object, element_uid=uid_action_9, element_type=core.ElementType.action)
+
+        # Van Turn-right (11)
+        uid_action_11 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(31, 40))
+        uid_rel_11 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+        vcd.add_rdf(relation_uid=uid_rel_11, rdf_type=core.RDF.subject, element_uid=uid_van, element_type=core.ElementType.object)
+        vcd.add_rdf(relation_uid=uid_rel_11, rdf_type=core.RDF.object, element_uid=uid_action_11, element_type=core.ElementType.action)
+
+        # Cyclist Turn-right (12)
+        uid_action_12 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(58, 65))
+        uid_rel_12 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+        vcd.add_rdf(relation_uid=uid_rel_12, rdf_type=core.RDF.subject, element_uid=uid_cyclist, element_type=core.ElementType.object)
+        vcd.add_rdf(relation_uid=uid_rel_12, rdf_type=core.RDF.object, element_uid=uid_action_12,element_type=core.ElementType.action)
+
+        # Ego-vehicle Turn-right (13)
+        uid_action_13 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(76, 84))
+        uid_rel_13 = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+        vcd.add_rdf(relation_uid=uid_rel_13, rdf_type=core.RDF.subject, element_uid=uid_ego, element_type=core.ElementType.object)
+        vcd.add_rdf(relation_uid=uid_rel_13, rdf_type=core.RDF.object, element_uid=uid_action_13,element_type=core.ElementType.action)
+
+        # Road object (14), footwalk (15) and road attribute (16)
+        uid_road = vcd.add_object(name="", semantic_type="road")
+        uid_footwalk = vcd.add_object(name="", semantic_type="footwalk")
+        vcd.add_object_data(uid=uid_road, object_data=types.text(name="road-type", val="single-lane"))
+
+        # Cars (and a van) are parked (18), pedestrians are walking (20)
+        # NOTE: read frame_interval from object, so the action is bounded to such limits
+        for uid_obj_aux, object_ in vcd.data['vcd']['objects'].items():
+            frame_intervals = object_['frame_intervals']
+            frame_value = utils.as_frame_intervals_array_tuples(frame_intervals)
             if object_['type'] == 'Car':
-                vcd.add_object_data(uid=uid_object, object_data=types.text(name="action", val="Parked"))
-            elif object_['type'] == 'Pedestrian':
-                vcd.add_object_data(uid=uid_object, object_data=types.text(name="action", val="Walking"))
-            elif object_['type'] == "Van" and uid_object is not uid_van:
-                vcd.add_object_data(uid=uid_object, object_data=types.text(name="action", val="Parked"))
+                uid_act_aux = vcd.add_action(name="", semantic_type="parked", frame_value=frame_value)
+                uid_rel_aux = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.subject, element_uid=uid_obj_aux, element_type=core.ElementType.object)
+                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
 
-        # Context
-        vcd.add_context(name="", semantic_type="City")
-        vcd.add_context(name="", semantic_type="Sunny")
+            elif object_['type'] == 'Pedestrian':
+                uid_act_aux = vcd.add_action(name="", semantic_type="walking", frame_value=frame_value)
+                uid_rel_aux = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.subject, element_uid=uid_obj_aux, element_type=core.ElementType.object)
+                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
+
+                uid_rel_aux2 = vcd.add_relation(name="", semantic_type="isObjectOfAction")
+                vcd.add_rdf(relation_uid=uid_rel_aux2, rdf_type=core.RDF.subject, element_uid=uid_footwalk, element_type=core.ElementType.object)
+                vcd.add_rdf(relation_uid=uid_rel_aux2, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
+
+            elif object_['type'] == "Van" and uid_obj_aux is not uid_van:
+                uid_act_aux = vcd.add_action(name="", semantic_type="parked", frame_value=frame_value)
+                uid_rel_aux = vcd.add_relation(name="", semantic_type="isSubjectOfAction")
+                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.subject, element_uid=uid_obj_aux, element_type=core.ElementType.object)
+                vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
+
+        # Store frame 0
+        if not os.path.isfile('./etc/test_kitti_tracking_0_frame_0.json'):
+            vcd.save_frame(frame_num=0, file_name='./etc/test_kitti_tracking_0_frame_0.json', dynamic_only=False)
 
         # Store
         if not os.path.isfile('./etc/test_kitti_tracking_0_actions.json'):

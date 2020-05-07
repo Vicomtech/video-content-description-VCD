@@ -81,6 +81,15 @@ def as_frame_intervals_array_dict(frame_value):
     return frame_intervals_array_of_dict
 
 
+def as_frame_intervals_array_tuples(frame_intervals_array_of_dict):
+    assert isinstance(frame_intervals_array_of_dict, list)
+    fi_tuples = []
+    for fi_dict in frame_intervals_array_of_dict:
+        assert 'frame_start' in fi_dict
+        assert 'frame_end' in fi_dict
+        fi_tuples.append((fi_dict['frame_start'], fi_dict['frame_end']))
+    return fi_tuples
+
 def fuse_frame_interval_dict(frame_interval, frame_intervals):
     # This function inserts frame_interval into frame_intervals fusing intervals
     assert(isinstance(frame_interval, dict))
