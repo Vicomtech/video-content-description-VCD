@@ -209,9 +209,14 @@ class TestBasic(unittest.TestCase):
                 vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.subject, element_uid=uid_obj_aux, element_type=core.ElementType.object)
                 vcd.add_rdf(relation_uid=uid_rel_aux, rdf_type=core.RDF.object, element_uid=uid_act_aux, element_type=core.ElementType.action)
 
-        # Store frame 0
-        if not os.path.isfile('./etc/test_kitti_tracking_0_frame_0.json'):
-            vcd.save_frame(frame_num=0, file_name='./etc/test_kitti_tracking_0_frame_0.json', dynamic_only=False)
+        # Store frame 0 - static and dynamic
+        if not os.path.isfile('./etc/test_kitti_tracking_0_frame_0_static-dynamic.json'):
+            vcd.save_frame(frame_num=0, file_name='./etc/test_kitti_tracking_0_frame_0_static-dynamic.json', dynamic_only=False)
+
+        # Same but dynamic only
+        if not os.path.isfile('./etc/test_kitti_tracking_0_frame_0_dynamic.json'):
+            vcd.save_frame(frame_num=0, file_name='./etc/test_kitti_tracking_0_frame_0_dynamic.json',
+                           dynamic_only=True)
 
         # Store
         if not os.path.isfile('./etc/test_kitti_tracking_0_actions.json'):
