@@ -495,6 +495,14 @@ class VCD:
         else:
             # Nothing about frame intervals to be updated
             fis_dicts_updated = fis_dicts_existing
+            if self.get_frame_intervals():
+                # So, frames have already been defined, but this element is defined as frame-less
+                # It is then assumed to exist in all frames: let's add a pointer into all frames
+                # Not valid for Relations, as they don't have frame intervals per se, and they are defined in time
+                # by the rdf_subjects and rdf_objects
+                if element_type is not ElementType.relation:
+                    frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                    self.__add_frames(frame_value, element_type, uid_to_assign)
 
         # 4/5 Create/update Element
         self.__create_update_element(
@@ -529,7 +537,10 @@ class VCD:
             self, element_type, name, semantic_type, frame_intervals_dicts, uid, ont_uid=None, stream=None
     ):
         # This function creates OR updates an element at the root of VCD using the given information
-        element_data = {'name': name, 'type': semantic_type, 'frame_intervals': frame_intervals_dicts}
+        if element_type is not ElementType.relation:
+            element_data = {'name': name, 'type': semantic_type, 'frame_intervals': frame_intervals_dicts}
+        else:
+            element_data = {'name': name, 'type': semantic_type}
 
         # Check existing data and append to element_data
         if (ont_uid is not None) and self.get_ontology(ont_uid) is not None:
@@ -925,9 +936,10 @@ class VCD:
                             self.data['vcd'][element_type.name + 's'][uid]
                         )
                         # Remove frameInterval entry
-                        del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
+                        if 'frame_intervals' in frame_static_dynamic[element_type.name + 's'][uid]:
+                            del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
 
-                # But also other elements (no relations!) without frame intervals specified, which are assumed to exist during
+                # But also other elements without frame intervals specified, which are assumed to exist during
                 # the entire sequence
                 if element_type.name + 's' in self.data['vcd'] and element_type.name != "relation":
                     for uid, element in self.data['vcd'][element_type.name + 's'].items():
@@ -941,32 +953,14 @@ class VCD:
                             frame_static_dynamic[element_type.name + 's'][uid] = copy.deepcopy(element)
 
                             # Remove frameInterval entry
-                            del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
+                            if 'frame_intervals' in frame_static_dynamic[element_type.name + 's'][uid]:
+                                del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
 
                 # Now also the Relations!
-                if 'relations' in self.data['vcd']:
+                '''if 'relations' in self.data['vcd']:
                     for uid, relation in self.data['vcd']['relations'].items():
                         # Need to find if this relation has rdf uids related to objects active at this frame
-                        found = False
-                        for rdf_subject in relation['rdf_subjects']:
-                            subject_uid = rdf_subject['uid']
-                            subject_type = rdf_subject['type']
-
-                            if subject_type + 's' in frame_static_dynamic:
-                                if subject_uid in frame_static_dynamic[subject_type + 's'].keys():
-                                    # Found
-                                    found = True
-                                    break
-                        if not found:
-                            for rdf_object in relation['rdf_objects']:
-                                object_uid = rdf_object['uid']
-                                object_type = rdf_object['type']
-
-                                if object_type + 's' in frame_static_dynamic:
-                                    if object_uid in frame_static_dynamic[object_type + 's'].keys():
-                                        # Found
-                                        found = True
-                                        break
+                        found = self.is_relation_at_frame(relation, frame_static_dynamic)
                         if found:
                             # Found, add this relation
                             frame_static_dynamic.setdefault('relations', dict())
@@ -976,6 +970,7 @@ class VCD:
                             # Remove frameInterval entry
                             if 'frame_intervals' in frame_static_dynamic['relations'][uid]:
                                 del frame_static_dynamic['relations'][uid]['frame_intervals']
+                                '''
 
             if pretty:
                 return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
@@ -1007,9 +1002,9 @@ class VCD:
     def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
         return self.__add_element(ElementType.context, name, semantic_type, frame_value, uid, ont_uid, stream)
 
-    def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None):
+    def add_relation(self, name, semantic_type='', uid=None, ont_uid=None):
         return self.__add_element(
-            ElementType.relation, name, semantic_type, frame_value, uid=uid, ont_uid=ont_uid
+            ElementType.relation, name, semantic_type, frame_value=None, uid=uid, ont_uid=ont_uid
         )
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
@@ -1033,6 +1028,21 @@ class VCD:
                     self.data['vcd']['relations'][relation_uid]['rdf_objects'].append(
                         {'uid': element_uid, 'type': element_type.name}
                     )
+
+                # Update the Relation appearance at frames according to the added RDF elements
+                # Let's build up the frame intervals for this relation according to the RDF elements
+                element = self.data['vcd'][element_type.name + 's'][element_uid]
+                fis_dict_element = element['frame_intervals']
+                if fis_dict_element:
+                    frame_value = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                    self.__add_frames(frame_value, ElementType.relation, relation_uid)
+                else:
+                    # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                    if self.get_frame_intervals():
+                        # And the VCD has frame intervals defined: so the RDF element exists in all the scene
+                        # And so does the Relation
+                        frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                        self.__add_frames(frame_value, ElementType.relation, relation_uid)
 
     def add_action_data(self, uid, action_data, frame_value=None):
         assert (isinstance(uid, int))
@@ -1231,6 +1241,30 @@ class VCD:
     def get_frame_intervals_of_element(self, element_type, uid):
         assert (element_type.name + 's' in self.data['vcd'])
         return self.data['vcd'][element_type.name + 's'][uid].get('frame_intervals')
+
+    def is_relation_at_frame(self, relation, frame):
+        # Need to find if this relation has rdf uids related to objects active at this frame
+        found = False
+        for rdf_subject in relation['rdf_subjects']:
+            subject_uid = rdf_subject['uid']
+            subject_type = rdf_subject['type']
+
+            if subject_type + 's' in frame:
+                if subject_uid in frame[subject_type + 's'].keys():
+                    # Found
+                    found = True
+                    break
+        if not found:
+            for rdf_object in relation['rdf_objects']:
+                object_uid = rdf_object['uid']
+                object_type = rdf_object['type']
+
+                if object_type + 's' in frame:
+                    if object_uid in frame[object_type + 's'].keys():
+                        # Found
+                        found = True
+                        break
+        return found
 
     ##################################################
     # Remove

@@ -622,7 +622,7 @@ class ConverterVCD330toVCD410(Converter):
                 rdf_subjects = relation.get('rdf_subjects', None)
 
                 if not self.vcd.has(core.ElementType.relation, uid):
-                    self.vcd.add_relation(name, predicate, frame_num, uid=uid, ont_uid=ontologyUID)
+                    self.vcd.add_relation(name, predicate, uid=uid, ont_uid=ontologyUID)
                     for rdf_object in rdf_objects:
                         element_type = None
                         rdf_object_type_str = rdf_object['type']
