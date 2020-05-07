@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.1.0
+VCD (Video Content Description) library v4.2.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -294,10 +294,6 @@ vcd_schema = {
         "relation": {
             "type": "object",
             "properties": {
-                "frame_intervals": {
-                    "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
-                },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},

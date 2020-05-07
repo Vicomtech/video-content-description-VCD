@@ -5,7 +5,7 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The syntax(see ./schema/vcd_schema_json-v4.1.0.json), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see ./schema/vcd_schema_json-v4.2.0.json), as a JSON Schema file, contains the full description of the VCD structure.
 
 
 ## Details
@@ -14,7 +14,7 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 
 ## Install
 
-Using pip (Python >3.8)):
+Using pip (Python >3.6)):
 
 ```
 pip install vcd
@@ -51,7 +51,7 @@ import vcd.core as core
 import vcd.types as types
 
 # Load a VCD file
-myVCD = core.vcd('./tests/etc/vcd410_semantics_fw.json')
+myVCD = core.vcd('./tests/etc/vcd420_semantics_fw.json')
 
 # Access data directly
 metadata = myVCD.data['vcd']['metadata']
@@ -76,7 +76,13 @@ myVCD.validate(stringified_vcd)
 
 VCD is defined as a syntax, and as such, different versions imply differences in the syntax or data structure. In addition, each version has a dedicated library version compatible with it.
 
-Last version is VCD 4.1.0.
+Last version is VCD 4.2.0.
+
+Main changes at VCD 4.2.0 from VCD 4.1.0 are:
+* Frame intervals suppressed from Relations
+* Improved Frame-message creation
+* Enhanced API for adding Relations and RDFs
+* Added examples for semantic labeling
 
 Main changes at VCD 4.1.0 from VCD 4.0.0 are:
 * Enhanced JSON schema self-documentation
@@ -120,9 +126,10 @@ VCD has evolved as follows:
     * Native Python JSON serialization
     * Google's Protocol Buffer serialization
     * Object data 'num' for single numbers, 'vec' for arrays of numbers
-* VCD 4.1 (2020)
+* VCD 4.1-2 (2020)
     * Explicit definition of intrinsics, extrinsics and odometry
     * Enhanced timestamping and sync information
+    * Enhanced semantics management (RDF triplets)
 
 
 ## Related projects
