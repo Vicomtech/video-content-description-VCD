@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.1.0
+VCD (Video Content Description) library v4.2.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -69,10 +69,10 @@ def convert_town_center_to_VCD4():
                 if headValid:
                     vcd.add_object_data(personNumber, head, frameNumber)
 
-    vcd_json_file_name = "./etc/vcd410_towncenter.json"
+    vcd_json_file_name = "./etc/vcd420_towncenter.json"
     vcd.save(vcd_json_file_name, False)
 
-    vcd_proto_file_name = "./etc/vcd410_proto_towncenter.txt"
+    vcd_proto_file_name = "./etc/vcd420_proto_towncenter.txt"
     serializer.json2proto_bin(vcd_json_file_name, vcd_proto_file_name)
 
 

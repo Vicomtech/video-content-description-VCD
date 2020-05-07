@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.1.0
+VCD (Video Content Description) library v4.2.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -26,7 +26,7 @@ from vcd import draw
 def draw_kitti_tracking(sequence_number=0, record_video=False):
     # Get annotations
     # Run ../converters/kittiConverter/converter.py to generate the json files
-    vcd_file_name = "../converters/kittiConverter/etc/vcd_410_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
+    vcd_file_name = "../converters/kittiConverter/etc/vcd_420_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
     vcd = core.VCD(vcd_file_name)
     drawerTopView = draw.TopView(vcd)
     drawerCamera = draw.Image(vcd)
