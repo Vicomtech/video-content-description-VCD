@@ -89,7 +89,7 @@ class TestBasic(unittest.TestCase):
     # Add semantics to the KITTI tracking #0
     def test_scene_KITTI_Tracking_0(self):
         sequence_number = 0
-        vcd_file_name = "../converters/kittiConverter/etc/vcd_420_kitti_tracking_" + str(sequence_number).zfill(
+        vcd_file_name = "./etc/in/vcd_420_kitti_tracking_" + str(sequence_number).zfill(
             4) + ".json"
         vcd = core.VCD(vcd_file_name)
 
