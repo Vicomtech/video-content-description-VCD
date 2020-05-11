@@ -39,9 +39,11 @@ class TestBasic(unittest.TestCase):
 
         uid_context1 = vcd.add_context(name="", semantic_type="#Sunny")
         vcd.add_context_data(uid=uid_context1, context_data=types.text(name="category", val="#Weather"))
+        vcd.add_context_data(uid=uid_context1, context_data=types.text(name="annotation", val="Manual"))
 
         uid_context2 = vcd.add_context(name="", semantic_type="#Highway", frame_value=(0, 5))
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="risk", val=0.7), frame_value=4)
+        vcd.add_context_data(uid=uid_context2, context_data=types.num(name="weight", val=0.5), frame_value=4)
 
 
         if not os.path.isfile('./etc/test_actions_with_action_data.json'):
