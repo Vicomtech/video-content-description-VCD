@@ -555,12 +555,19 @@ class VCD:
             else:
                 warnings.warn('WARNING: trying to add ObjectData for non-declared Stream. Use vcd.addStream.')
 
-        # Check data if object
-        if element_type is ElementType.object:
-            if 'objects' in self.data['vcd']:
-                if uid in self.data['vcd']['objects']:
-                    if 'object_data' in self.data['vcd']['objects'][uid]:
-                        element_data['object_data'] = self.data['vcd']['objects'][uid]['object_data']
+        # Check data if object, action, event or context
+        if element_type is not ElementType.relation:
+            if element_type.name + 's' in self.data['vcd']:
+                if uid in self.data['vcd'][element_type.name + 's']:
+                    if element_type.name + '_data' in self.data['vcd'][element_type.name + 's'][uid]:
+                        element_data[element_type.name + '_data'] = self.data['vcd'][element_type.name + 's'][uid][element_type.name + '_data']
+
+        #if element_type is ElementType.object:
+        #    if 'objects' in self.data['vcd']:
+        #        if uid in self.data['vcd']['objects']:
+        #            if 'object_data' in self.data['vcd']['objects'][uid]:
+        #                element_data['object_data'] = self.data['vcd']['objects'][uid]['object_data']
+
         # Check if relation
         elif element_type is ElementType.relation:
             if 'relations' in self.data['vcd']:
