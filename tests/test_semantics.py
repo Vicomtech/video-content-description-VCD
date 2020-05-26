@@ -86,6 +86,70 @@ class TestBasic(unittest.TestCase):
         if not os.path.isfile('./etc/test_actions_c.json'):
             vcd_c.save('./etc/test_actions_c.json')
 
+    def test_relations(self):
+        # This tests shows how relations can be created with and without frame interval information
+        vcd = core.VCD()
+
+        # Case 1: RDF elements don't have frame interval, but relation does
+        uid1 = vcd.add_object(name="", semantic_type="Car")
+        uid2 = vcd.add_object(name="", semantic_type="Pedestrian")
+
+        vcd.add_relation_object_object(name="", semantic_type="isNear",
+                                       object_uid_1=uid1, object_uid_2=uid2,
+                                       frame_value=(0, 10))
+
+        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 10)
+        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_end'], 10)
+        for frame in vcd.data['vcd']['frames'].values():
+            self.assertEqual(len(frame['relations']), 1)
+
+        if not os.path.isfile('./etc/test_relations_1.json'):
+            vcd.save('./etc/test_relations_1.json')
+
+        # Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
+        vcd = core.VCD()
+
+        uid1 = vcd.add_object(name="", semantic_type="Car", frame_value=(0, 10))
+        uid2 = vcd.add_object(name="", semantic_type="Pedestrian", frame_value=(5, 15))
+
+        vcd.add_relation_object_object(name="", semantic_type="isNear",
+                                       object_uid_1=uid1, object_uid_2=uid2,
+                                       frame_value=(7, 9))
+
+        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 15)
+        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_start'], 7)
+        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_end'], 9)
+        for frame_key, frame_val in vcd.data['vcd']['frames'].items():
+            if 7 <= frame_key <= 9:
+                self.assertEqual(len(frame['relations']), 1)
+
+        if not os.path.isfile('./etc/test_relations_2.json'):
+            vcd.save('./etc/test_relations_2.json')
+
+        # Case 3: RDF elements have frame interval and relation doesn't
+        vcd = core.VCD()
+
+        uid1 = vcd.add_object(name="", semantic_type="Car", frame_value=(0, 10))
+        uid2 = vcd.add_object(name="", semantic_type="Pedestrian", frame_value=(5, 15))
+        uid3 = vcd.add_object(name="", semantic_type="Other", frame_value=(15, 20))
+
+        vcd.add_relation_object_object(name="", semantic_type="isNear",
+                                       object_uid_1=uid1, object_uid_2=uid2)
+
+        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 20)
+        for frame_key, frame_val in vcd.data['vcd']['frames'].items():
+            if 0 <= frame_key <= 15:
+                self.assertEqual(len(frame['relations']), 1)
+
+        if not os.path.isfile('./etc/test_relations_3.json'):
+            vcd.save('./etc/test_relations_3.json')
+
+        pass
+
     # Add semantics to the KITTI tracking #0
     def test_scene_KITTI_Tracking_0(self):
         sequence_number = 0
@@ -105,9 +169,9 @@ class TestBasic(unittest.TestCase):
         4) Cyclist is an Object
         5) Van is an Object
         6) Ego-vehicle isSubjectOfAction drives-straight
-        7) Ego-vehicle performsAction following1
+        7) Ego-vehicle isSubjectOfAction following1
         8) Cyclist isObjectOfAction following1
-        9) Cyclist performsAction following2
+        9) Cyclist isSubjectOfAction following2
         10) Van isObjectOfAction following2
         11) Van isObjectOfAction turn-right
         12) Cyclist isObjectOfAction turn-right

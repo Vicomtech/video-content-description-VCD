@@ -294,6 +294,10 @@ vcd_schema = {
         "relation": {
             "type": "object",
             "properties": {
+                "frame_intervals": {
+                    "type": "array",
+                    "item": {"$ref": "#/definitions/frame_interval"}
+                },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "integer"},
