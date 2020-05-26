@@ -498,11 +498,8 @@ class VCD:
             if self.get_frame_intervals():
                 # So, frames have already been defined, but this element is defined as frame-less
                 # It is then assumed to exist in all frames: let's add a pointer into all frames
-                # Not valid for Relations, as they don't have frame intervals per se, and they are defined in time
-                # by the rdf_subjects and rdf_objects
-                if element_type is not ElementType.relation:
-                    frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
-                    self.__add_frames(frame_value, element_type, uid_to_assign)
+                frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                self.__add_frames(frame_value, element_type, uid_to_assign)
 
         # 4/5 Create/update Element
         self.__create_update_element(
@@ -537,10 +534,7 @@ class VCD:
             self, element_type, name, semantic_type, frame_intervals_dicts, uid, ont_uid=None, stream=None
     ):
         # This function creates OR updates an element at the root of VCD using the given information
-        if element_type is not ElementType.relation:
-            element_data = {'name': name, 'type': semantic_type, 'frame_intervals': frame_intervals_dicts}
-        else:
-            element_data = {'name': name, 'type': semantic_type}
+        element_data = {'name': name, 'type': semantic_type, 'frame_intervals': frame_intervals_dicts}
 
         # Check existing data and append to element_data
         if (ont_uid is not None) and self.get_ontology(ont_uid) is not None:
@@ -561,12 +555,6 @@ class VCD:
                 if uid in self.data['vcd'][element_type.name + 's']:
                     if element_type.name + '_data' in self.data['vcd'][element_type.name + 's'][uid]:
                         element_data[element_type.name + '_data'] = self.data['vcd'][element_type.name + 's'][uid][element_type.name + '_data']
-
-        #if element_type is ElementType.object:
-        #    if 'objects' in self.data['vcd']:
-        #        if uid in self.data['vcd']['objects']:
-        #            if 'object_data' in self.data['vcd']['objects'][uid]:
-        #                element_data['object_data'] = self.data['vcd']['objects'][uid]['object_data']
 
         # Check if relation
         elif element_type is ElementType.relation:
@@ -1009,9 +997,9 @@ class VCD:
     def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
         return self.__add_element(ElementType.context, name, semantic_type, frame_value, uid, ont_uid, stream)
 
-    def add_relation(self, name, semantic_type='', uid=None, ont_uid=None):
+    def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None):
         return self.__add_element(
-            ElementType.relation, name, semantic_type, frame_value=None, uid=uid, ont_uid=ont_uid
+            ElementType.relation, name, semantic_type, frame_value=frame_value, uid=uid, ont_uid=ont_uid
         )
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
@@ -1021,62 +1009,93 @@ class VCD:
             warnings.warn("WARNING: trying to add RDF to non-existing Relation.")
             return
         else:
+            relation = self.data['vcd']['relations'][relation_uid]
             if element_uid not in self.data['vcd'][element_type.name + 's']:
                 warnings.warn("WARNING: trying to add RDF using non-existing Element.")
                 return
             else:
                 if rdf_type == RDF.subject:
-                    self.data['vcd']['relations'][relation_uid].setdefault('rdf_subjects', [])
-                    self.data['vcd']['relations'][relation_uid]['rdf_subjects'].append(
+                    relation.setdefault('rdf_subjects', [])
+                    relation['rdf_subjects'].append(
                         {'uid': element_uid, 'type': element_type.name}
                     )
                 else:
-                    self.data['vcd']['relations'][relation_uid].setdefault('rdf_objects', [])
-                    self.data['vcd']['relations'][relation_uid]['rdf_objects'].append(
+                    relation.setdefault('rdf_objects', [])
+                    relation['rdf_objects'].append(
                         {'uid': element_uid, 'type': element_type.name}
                     )
 
-                # Update the Relation appearance at frames according to the added RDF elements
-                # Let's build up the frame intervals for this relation according to the RDF elements
-                element = self.data['vcd'][element_type.name + 's'][element_uid]
-                fis_dict_element = element['frame_intervals']
-                if fis_dict_element:
-                    frame_value = utils.as_frame_intervals_array_tuples(fis_dict_element)
-                    self.__add_frames(frame_value, ElementType.relation, relation_uid)
-                else:
-                    # So this RDF element (e.g. an object or action) does not have frame intervals defined
-                    if self.get_frame_intervals():
-                        # And the VCD has frame intervals defined: so the RDF element exists in all the scene
-                        # And so does the Relation
-                        frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
-                        self.__add_frames(frame_value, ElementType.relation, relation_uid)
+                # If the relation already has a frame_value, it must be a sub-set of the union of the frame_values
+                # of the provided rdf elements
+                fis_dict_relation = relation.get('frame_intervals')
+                if fis_dict_relation:
+                    frame_value_relation = utils.as_frame_intervals_array_tuples(fis_dict_relation)
+                    if frame_value_relation:
+                        # This relation already has a frame_value explicitly defined
+                        element = self.data['vcd'][element_type.name + 's'][element_uid]
+                        fis_dict_element = element['frame_intervals']
+                        if fis_dict_element:
+                            frame_value_element = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                            if utils.frame_interval_is_inside(frame_value_relation, frame_value_element):
+                                # Good. The frame intervals of this relation are inside the frame intervals of the RDFs
+                                # Nothing to do
+                                pass
+                            else:
+                                # Something's wrong: the provided frame interval for this relation is not inside the
+                                # frame interval of the given RDF element
+                                warnings.warn("WARNING: The provided RDF element frame interval is not a super-set of"
+                                              " the frame interval of the Relation. Frames are not added.")
+                        else:
+                            # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            # Then, there is nothing to do
+                            pass
+                    else:
+                        # Update the Relation appearance at frames according to the added RDF elements
+                        # Let's build up the frame intervals for this relation according to the RDF elements
+                        element = self.data['vcd'][element_type.name + 's'][element_uid]
+                        fis_dict_element = element['frame_intervals']
+                        if fis_dict_element:
+                            frame_value = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                            self.__add_frames(frame_value, ElementType.relation, relation_uid)
+                        else:
+                            # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            if self.get_frame_intervals():
+                                # And the VCD has frame intervals defined: so the RDF element exists in all the scene
+                                # And so does the Relation
+                                frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                                self.__add_frames(frame_value, ElementType.relation, relation_uid)
 
-    def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None, ont_uid=None):
-        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+    def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
                      element_uid=action_uid, element_type=ElementType.action)
 
     def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
-                                   ont_uid=None):
-        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid_1, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
                      element_uid=action_uid_2, element_type=ElementType.action)
 
     def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
-                                   ont_uid=None):
-        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid_1, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
                      element_uid=object_uid_2, element_type=ElementType.object)
 
     def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
-                                   ont_uid=None):
-        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid)
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,

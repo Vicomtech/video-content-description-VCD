@@ -223,12 +223,13 @@ message VCD {
         int32 uid = 2;
     }
     message relation {
-        string name = 1;
-        int32 ontology_uid = 2;
-        repeated rdf_agent rdf_objects = 3;
-        repeated rdf_agent rdf_subjects = 4;
-        string stream = 5;
-        string type = 6;
+        repeated frame_interval frame_intervals = 1;
+        string name = 2;
+        int32 ontology_uid = 3;
+        repeated rdf_agent rdf_objects = 4;
+        repeated rdf_agent rdf_subjects = 5;
+        string stream = 6;
+        string type = 7;
     }
     message stream_properties {
         extrinsics extrinsics = 1;

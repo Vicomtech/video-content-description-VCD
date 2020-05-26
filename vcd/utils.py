@@ -90,6 +90,25 @@ def as_frame_intervals_array_tuples(frame_intervals_array_of_dict):
         fi_tuples.append((fi_dict['frame_start'], fi_dict['frame_end']))
     return fi_tuples
 
+
+def frame_interval_is_inside(frame_intervals_a, frame_intervals_b):
+    assert(isinstance(frame_intervals_a, list))
+    assert (isinstance(frame_intervals_b, list))
+
+    all_inside = True
+    for fi_a in frame_intervals_a:
+        inside = False
+        for fi_b in frame_intervals_b:
+            if fi_a[0] >= fi_b[0] and fi_a[1] <= fi_b[1]:
+                inside = True
+                break
+        if not inside:
+            all_inside = False
+            break
+
+    return all_inside
+
+
 def fuse_frame_interval_dict(frame_interval, frame_intervals):
     # This function inserts frame_interval into frame_intervals fusing intervals
     assert(isinstance(frame_interval, dict))

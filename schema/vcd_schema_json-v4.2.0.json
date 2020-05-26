@@ -932,6 +932,12 @@
         "relation": {
             "additionalProperties": false,
             "properties": {
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
                 "name": {
                     "type": "string"
                 },
