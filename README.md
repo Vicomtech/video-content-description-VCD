@@ -21,6 +21,13 @@ pip install vcd
 ```
 
 VCD can be also used cloning this repository. And adding the files to a location the Python environment recognizes.
+You can also use the provided setup.py file to install if from the source:
+
+```
+pip uninstall vcd
+python setup.py build
+python setup.py install
+```
 
 ## Usage
 
@@ -71,6 +78,7 @@ This can be useful some times, but it is not recommended, as the dictionary may 
 myVCD.validate(stringified_vcd)
 ``` 
 
+This validation function is optionally called when saving to JSON files.
 
 ## Versions
 
@@ -79,10 +87,10 @@ VCD is defined as a syntax, and as such, different versions imply differences in
 Last version is VCD 4.2.0.
 
 Main changes at VCD 4.2.0 from VCD 4.1.0 are:
-* Frame intervals suppressed from Relations
 * Improved Frame-message creation
 * Enhanced API for adding Relations and RDFs
 * Added examples for semantic labeling
+* General bug fixing and better frame interval management
 
 Main changes at VCD 4.1.0 from VCD 4.0.0 are:
 * Enhanced JSON schema self-documentation

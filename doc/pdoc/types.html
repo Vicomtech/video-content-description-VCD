@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>vcd.types API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.1.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.2.0 …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,25 +20,25 @@
 <h1 class="title">Module <code>vcd.types</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.1.0</p>
+<p>VCD (Video Content Description) library v4.2.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.1.0.
+<p>VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.1.0
+VCD (Video Content Description) library v4.2.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -176,7 +176,12 @@ class ObjectDataType(Enum):
 
 class Poly2DType(Enum):
     MODE_POLY2D_ABSOLUTE = 0
+    #MODE_POLY2D_BBOX = 1
+    #MODE_POLY2D_BBOX_DIST = 2
+    #MODE_POLY2D_F8DCC = 3
+    #MODE_POLY2D_RF8DCC = 4
     MODE_POLY2D_SRF6DCC = 5
+    MODE_POLY2D_RS6FCC = 6
 
 
 class ObjectData:
@@ -245,12 +250,17 @@ class poly2d(ObjectDataGeometry):
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
-        if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-            srfsdcc = poly.computeSRFSDCC(val)
-            encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-            self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
-        else:
-            self.data[&#39;val&#39;] = list(val)
+        if isinstance(val, tuple) or isinstance(val, list):
+            if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
+                srf6, xinit, yinit = poly.computeSRF6DCC(val)
+                encoded_poly, rest = poly.chainCodeBase64Encoder(srf6, 3)
+                self.data[&#39;val&#39;] = [str(xinit), str(yinit), str(rest), encoded_poly]
+            elif mode == Poly2DType.MODE_POLY2D_RS6FCC:
+                rs6, low, high, xinit, yinit = poly.computeRS6FCC(val)
+                encoded_poly, rest = poly.chainCodeBase64Encoder(rs6, 3)
+                self.data[&#39;val&#39;] = [str(xinit), str(yinit), str(low), str(high), str(rest), encoded_poly]
+            else:
+                self.data[&#39;val&#39;] = list(val)
         self.data[&#39;mode&#39;] = mode.name
         self.data[&#39;closed&#39;] = closed
         self.type = ObjectDataType.poly2d
@@ -369,13 +379,16 @@ class point2d(ObjectDataGeometry):
 
 
 class point3d(ObjectDataGeometry):
-    def __init__(self, name, val, stream=None):
+    def __init__(self, name, val, id=None, stream=None):
         ObjectDataGeometry.__init__(self, name, stream)
         assert (isinstance(val, (tuple, list)) and len(val) == 3)
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
         elif isinstance(val, list):
             self.data[&#39;val&#39;] = tuple(val)
+        if id is not None:
+            assert (isinstance(id, int))
+            self.data[&#39;id&#39;] = id
         self.type = ObjectDataType.point3d
 
 
@@ -895,7 +908,12 @@ class mesh(ObjectDataGeometry):
 </summary>
 <pre><code class="python">class Poly2DType(Enum):
     MODE_POLY2D_ABSOLUTE = 0
-    MODE_POLY2D_SRF6DCC = 5</code></pre>
+    #MODE_POLY2D_BBOX = 1
+    #MODE_POLY2D_BBOX_DIST = 2
+    #MODE_POLY2D_F8DCC = 3
+    #MODE_POLY2D_RF8DCC = 4
+    MODE_POLY2D_SRF6DCC = 5
+    MODE_POLY2D_RS6FCC = 6</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -904,6 +922,10 @@ class mesh(ObjectDataGeometry):
 <h3>Class variables</h3>
 <dl>
 <dt id="vcd.types.Poly2DType.MODE_POLY2D_ABSOLUTE"><code class="name">var <span class="ident">MODE_POLY2D_ABSOLUTE</span></code></dt>
+<dd>
+<section class="desc"><p>An enumeration.</p></section>
+</dd>
+<dt id="vcd.types.Poly2DType.MODE_POLY2D_RS6FCC"><code class="name">var <span class="ident">MODE_POLY2D_RS6FCC</span></code></dt>
 <dd>
 <section class="desc"><p>An enumeration.</p></section>
 </dd>
@@ -1468,7 +1490,7 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.point3d"><code class="flex name class">
 <span>class <span class="ident">point3d</span></span>
-<span>(</span><span>name, val, stream=None)</span>
+<span>(</span><span>name, val, id=None, stream=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -1477,13 +1499,16 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class point3d(ObjectDataGeometry):
-    def __init__(self, name, val, stream=None):
+    def __init__(self, name, val, id=None, stream=None):
         ObjectDataGeometry.__init__(self, name, stream)
         assert (isinstance(val, (tuple, list)) and len(val) == 3)
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
         elif isinstance(val, list):
             self.data[&#39;val&#39;] = tuple(val)
+        if id is not None:
+            assert (isinstance(id, int))
+            self.data[&#39;id&#39;] = id
         self.type = ObjectDataType.point3d</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1508,12 +1533,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
-        if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
-            srfsdcc = poly.computeSRFSDCC(val)
-            encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-            self.data[&#39;val&#39;] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]
-        else:
-            self.data[&#39;val&#39;] = list(val)
+        if isinstance(val, tuple) or isinstance(val, list):
+            if mode == Poly2DType.MODE_POLY2D_SRF6DCC:
+                srf6, xinit, yinit = poly.computeSRF6DCC(val)
+                encoded_poly, rest = poly.chainCodeBase64Encoder(srf6, 3)
+                self.data[&#39;val&#39;] = [str(xinit), str(yinit), str(rest), encoded_poly]
+            elif mode == Poly2DType.MODE_POLY2D_RS6FCC:
+                rs6, low, high, xinit, yinit = poly.computeRS6FCC(val)
+                encoded_poly, rest = poly.chainCodeBase64Encoder(rs6, 3)
+                self.data[&#39;val&#39;] = [str(xinit), str(yinit), str(low), str(high), str(rest), encoded_poly]
+            else:
+                self.data[&#39;val&#39;] = list(val)
         self.data[&#39;mode&#39;] = mode.name
         self.data[&#39;closed&#39;] = closed
         self.type = ObjectDataType.poly2d
@@ -1692,6 +1722,7 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <h4><code><a title="vcd.types.Poly2DType" href="#vcd.types.Poly2DType">Poly2DType</a></code></h4>
 <ul class="">
 <li><code><a title="vcd.types.Poly2DType.MODE_POLY2D_ABSOLUTE" href="#vcd.types.Poly2DType.MODE_POLY2D_ABSOLUTE">MODE_POLY2D_ABSOLUTE</a></code></li>
+<li><code><a title="vcd.types.Poly2DType.MODE_POLY2D_RS6FCC" href="#vcd.types.Poly2DType.MODE_POLY2D_RS6FCC">MODE_POLY2D_RS6FCC</a></code></li>
 <li><code><a title="vcd.types.Poly2DType.MODE_POLY2D_SRF6DCC" href="#vcd.types.Poly2DType.MODE_POLY2D_SRF6DCC">MODE_POLY2D_SRF6DCC</a></code></li>
 </ul>
 </li>
