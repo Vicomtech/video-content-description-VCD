@@ -790,6 +790,9 @@
                 "attributes": {
                     "$ref": "#/definitions/attributes"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "name": {
                     "type": "string"
                 },
@@ -816,6 +819,9 @@
             "properties": {
                 "attributes": {
                     "$ref": "#/definitions/attributes"
+                },
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"

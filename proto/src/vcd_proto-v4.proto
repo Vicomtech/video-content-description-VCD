@@ -195,12 +195,14 @@ message VCD {
         string name = 3;
         string stream = 4;
         repeated float val = 5;
+        int32 id = 6;
     }
     message point3d {
         attributes attributes = 1;
         string name = 3;
         string stream = 4;
         repeated float val = 5;
+        int32 id = 6;
     }
     message poly2d {
         attributes attributes = 1;
