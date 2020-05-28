@@ -405,6 +405,8 @@ class ConverterVCD330toVCD420(Converter):
                 stream_type = stream['type']
                 if stream_type == 'video':
                     stream_type = 'camera'
+                elif stream_type == 'pointcloud' or stream_type == 'lidar':
+                    stream_type = 'lidar'
                 self.vcd.add_stream(
                     stream['name'], stream['uri'], stream['description'], stream_type
                 )
@@ -436,7 +438,7 @@ class ConverterVCD330toVCD420(Converter):
                     for streamSyncItem in frame['streamSync']:
                         self.vcd.add_stream_properties(
                             streamSyncItem['name'],
-                                types.StreamSync(
+                            stream_sync=types.StreamSync(
                                     frame_vcd=frame_num,
                                     frame_stream=streamSyncItem['frame']
                                 )
