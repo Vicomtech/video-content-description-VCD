@@ -713,6 +713,7 @@ vcd_schema = {
             "properties": {
                 "name": {"type": "string"},
                 "stream": {"type": "string"},
+                "id": {"type": "integer"},
                 "val": {
                     "type": "array",
                     "minItems": 2,
@@ -729,6 +730,7 @@ vcd_schema = {
             "properties": {
                 "name": {"type": "string"},
                 "stream": {"type": "string"},
+                "id": {"type": "integer"},
                 "val": {
                     "type": "array",
                     "minItems": 3,
