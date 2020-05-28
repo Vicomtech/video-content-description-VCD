@@ -347,13 +347,16 @@ class point2d(ObjectDataGeometry):
 
 
 class point3d(ObjectDataGeometry):
-    def __init__(self, name, val, stream=None):
+    def __init__(self, name, val, id=None, stream=None):
         ObjectDataGeometry.__init__(self, name, stream)
         assert (isinstance(val, (tuple, list)) and len(val) == 3)
         if isinstance(val, tuple):
             self.data['val'] = val
         elif isinstance(val, list):
             self.data['val'] = tuple(val)
+        if id is not None:
+            assert (isinstance(id, int))
+            self.data['id'] = id
         self.type = ObjectDataType.point3d
 
 

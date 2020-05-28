@@ -41,7 +41,8 @@ class StreamType(Enum):
     camera = 1
     lidar = 2
     radar = 3
-    other = 4
+    gps_imu = 4
+    other = 5
 
 
 class RDF(Enum):
