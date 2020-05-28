@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>vcd.utils API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.1.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.2.0 …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,25 +20,25 @@
 <h1 class="title">Module <code>vcd.utils</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.1.0</p>
+<p>VCD (Video Content Description) library v4.2.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.1.0.
+<p>VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.1.0
+VCD (Video Content Description) library v4.2.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -92,16 +92,53 @@ def as_frame_interval_dict(frame_value):
 
 def as_frame_intervals_array_dict(frame_value):
     # Allow for multiple type of frame_interval arguments (int, tuple, list(tuple))
+    frame_intervals_array_of_dict = []
     if isinstance(frame_value, int):  # The user has given as argument a &#34;frame number&#34;
-        frame_intervals = [{&#39;frame_start&#39;: frame_value, &#39;frame_end&#39;: frame_value}]
+        frame_intervals_array_of_dict = [{&#39;frame_start&#39;: frame_value, &#39;frame_end&#39;: frame_value}]
     elif isinstance(frame_value, tuple):  # The user has given as argument a single &#34;frame interval&#34;
-        frame_intervals = [{&#39;frame_start&#39;: frame_value[0], &#39;frame_end&#39;: frame_value[1]}]
+        frame_intervals_array_of_dict = [{&#39;frame_start&#39;: frame_value[0], &#39;frame_end&#39;: frame_value[1]}]
     elif frame_value is None:  # The user has provided nothing: this is a static element
-        frame_intervals = []
+        frame_intervals_array_of_dict = []
     else:
-        assert isinstance(frame_value, list)  # User provides a list of &#34;frame intervals&#34;
-        frame_intervals = frame_value
-    return frame_intervals
+        assert isinstance(frame_value, list)  # User provides a list of &#34;frame intervals&#34; tuples
+        for frame_interval in frame_value:
+            if &#39;frame_start&#39; in frame_interval:
+                # User provided already a dict
+                frame_intervals_array_of_dict = frame_value
+                break
+            else:
+                # User provided tuples of numbers
+                frame_intervals_array_of_dict.append({&#39;frame_start&#39;: frame_interval[0], &#39;frame_end&#39;: frame_interval[1]})
+
+    return frame_intervals_array_of_dict
+
+
+def as_frame_intervals_array_tuples(frame_intervals_array_of_dict):
+    assert isinstance(frame_intervals_array_of_dict, list)
+    fi_tuples = []
+    for fi_dict in frame_intervals_array_of_dict:
+        assert &#39;frame_start&#39; in fi_dict
+        assert &#39;frame_end&#39; in fi_dict
+        fi_tuples.append((fi_dict[&#39;frame_start&#39;], fi_dict[&#39;frame_end&#39;]))
+    return fi_tuples
+
+
+def frame_interval_is_inside(frame_intervals_a, frame_intervals_b):
+    assert(isinstance(frame_intervals_a, list))
+    assert (isinstance(frame_intervals_b, list))
+
+    all_inside = True
+    for fi_a in frame_intervals_a:
+        inside = False
+        for fi_b in frame_intervals_b:
+            if fi_a[0] &gt;= fi_b[0] and fi_a[1] &lt;= fi_b[1]:
+                inside = True
+                break
+        if not inside:
+            all_inside = False
+            break
+
+    return all_inside
 
 
 def fuse_frame_interval_dict(frame_interval, frame_intervals):
@@ -155,6 +192,7 @@ def fuse_frame_intervals(frame_intervals):
         frame_intervals_fused = fuse_frame_interval_dict(frame_intervals[i], frame_intervals_fused)
         i += 1
     return frame_intervals_fused
+
 
 ####################################################
 # ROTATION AND ODOMETRY UTILS. See SCL library
@@ -352,7 +390,15 @@ def float_2dec(val):
     &#39;&#39;&#39;
     This function is useful to print float into JSON with only 2 decimals
     &#39;&#39;&#39;
-    return float((int(100*val))/100)</code></pre>
+    return float((int(100*val))/100)
+
+
+def get_key(my_dict, val):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
+
+    return &#34;key doesn&#39;t exist&#34;</code></pre>
 </details>
 </section>
 <section>
@@ -439,16 +485,44 @@ def float_2dec(val):
 </summary>
 <pre><code class="python">def as_frame_intervals_array_dict(frame_value):
     # Allow for multiple type of frame_interval arguments (int, tuple, list(tuple))
+    frame_intervals_array_of_dict = []
     if isinstance(frame_value, int):  # The user has given as argument a &#34;frame number&#34;
-        frame_intervals = [{&#39;frame_start&#39;: frame_value, &#39;frame_end&#39;: frame_value}]
+        frame_intervals_array_of_dict = [{&#39;frame_start&#39;: frame_value, &#39;frame_end&#39;: frame_value}]
     elif isinstance(frame_value, tuple):  # The user has given as argument a single &#34;frame interval&#34;
-        frame_intervals = [{&#39;frame_start&#39;: frame_value[0], &#39;frame_end&#39;: frame_value[1]}]
+        frame_intervals_array_of_dict = [{&#39;frame_start&#39;: frame_value[0], &#39;frame_end&#39;: frame_value[1]}]
     elif frame_value is None:  # The user has provided nothing: this is a static element
-        frame_intervals = []
+        frame_intervals_array_of_dict = []
     else:
-        assert isinstance(frame_value, list)  # User provides a list of &#34;frame intervals&#34;
-        frame_intervals = frame_value
-    return frame_intervals</code></pre>
+        assert isinstance(frame_value, list)  # User provides a list of &#34;frame intervals&#34; tuples
+        for frame_interval in frame_value:
+            if &#39;frame_start&#39; in frame_interval:
+                # User provided already a dict
+                frame_intervals_array_of_dict = frame_value
+                break
+            else:
+                # User provided tuples of numbers
+                frame_intervals_array_of_dict.append({&#39;frame_start&#39;: frame_interval[0], &#39;frame_end&#39;: frame_interval[1]})
+
+    return frame_intervals_array_of_dict</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.as_frame_intervals_array_tuples"><code class="name flex">
+<span>def <span class="ident">as_frame_intervals_array_tuples</span></span>(<span>frame_intervals_array_of_dict)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def as_frame_intervals_array_tuples(frame_intervals_array_of_dict):
+    assert isinstance(frame_intervals_array_of_dict, list)
+    fi_tuples = []
+    for fi_dict in frame_intervals_array_of_dict:
+        assert &#39;frame_start&#39; in fi_dict
+        assert &#39;frame_end&#39; in fi_dict
+        fi_tuples.append((fi_dict[&#39;frame_start&#39;], fi_dict[&#39;frame_end&#39;]))
+    return fi_tuples</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.consecutive"><code class="name flex">
@@ -626,6 +700,33 @@ def float_2dec(val):
     return float((int(100*val))/100)</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.frame_interval_is_inside"><code class="name flex">
+<span>def <span class="ident">frame_interval_is_inside</span></span>(<span>frame_intervals_a, frame_intervals_b)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def frame_interval_is_inside(frame_intervals_a, frame_intervals_b):
+    assert(isinstance(frame_intervals_a, list))
+    assert (isinstance(frame_intervals_b, list))
+
+    all_inside = True
+    for fi_a in frame_intervals_a:
+        inside = False
+        for fi_b in frame_intervals_b:
+            if fi_a[0] &gt;= fi_b[0] and fi_a[1] &lt;= fi_b[1]:
+                inside = True
+                break
+        if not inside:
+            all_inside = False
+            break
+
+    return all_inside</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.fuse_frame_interval_dict"><code class="name flex">
 <span>def <span class="ident">fuse_frame_interval_dict</span></span>(<span>frame_interval, frame_intervals)</span>
 </code></dt>
@@ -695,6 +796,23 @@ def float_2dec(val):
         frame_intervals_fused = fuse_frame_interval_dict(frame_intervals[i], frame_intervals_fused)
         i += 1
     return frame_intervals_fused</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.get_key"><code class="name flex">
+<span>def <span class="ident">get_key</span></span>(<span>my_dict, val)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_key(my_dict, val):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
+
+    return &#34;key doesn&#39;t exist&#34;</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.get_outer_frame_interval"><code class="name flex">
@@ -926,13 +1044,16 @@ def float_2dec(val):
 <li><code><a title="vcd.utils.Rz" href="#vcd.utils.Rz">Rz</a></code></li>
 <li><code><a title="vcd.utils.as_frame_interval_dict" href="#vcd.utils.as_frame_interval_dict">as_frame_interval_dict</a></code></li>
 <li><code><a title="vcd.utils.as_frame_intervals_array_dict" href="#vcd.utils.as_frame_intervals_array_dict">as_frame_intervals_array_dict</a></code></li>
+<li><code><a title="vcd.utils.as_frame_intervals_array_tuples" href="#vcd.utils.as_frame_intervals_array_tuples">as_frame_intervals_array_tuples</a></code></li>
 <li><code><a title="vcd.utils.consecutive" href="#vcd.utils.consecutive">consecutive</a></code></li>
 <li><code><a title="vcd.utils.convert_oxts_to_pose" href="#vcd.utils.convert_oxts_to_pose">convert_oxts_to_pose</a></code></li>
 <li><code><a title="vcd.utils.create_pose" href="#vcd.utils.create_pose">create_pose</a></code></li>
 <li><code><a title="vcd.utils.euler2R" href="#vcd.utils.euler2R">euler2R</a></code></li>
 <li><code><a title="vcd.utils.float_2dec" href="#vcd.utils.float_2dec">float_2dec</a></code></li>
+<li><code><a title="vcd.utils.frame_interval_is_inside" href="#vcd.utils.frame_interval_is_inside">frame_interval_is_inside</a></code></li>
 <li><code><a title="vcd.utils.fuse_frame_interval_dict" href="#vcd.utils.fuse_frame_interval_dict">fuse_frame_interval_dict</a></code></li>
 <li><code><a title="vcd.utils.fuse_frame_intervals" href="#vcd.utils.fuse_frame_intervals">fuse_frame_intervals</a></code></li>
+<li><code><a title="vcd.utils.get_key" href="#vcd.utils.get_key">get_key</a></code></li>
 <li><code><a title="vcd.utils.get_outer_frame_interval" href="#vcd.utils.get_outer_frame_interval">get_outer_frame_interval</a></code></li>
 <li><code><a title="vcd.utils.intersects" href="#vcd.utils.intersects">intersects</a></code></li>
 <li><code><a title="vcd.utils.inv" href="#vcd.utils.inv">inv</a></code></li>

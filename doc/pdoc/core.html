@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.4" />
 <title>vcd.core API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.1.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.2.0 …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,25 +20,25 @@
 <h1 class="title">Module <code>vcd.core</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.1.0</p>
+<p>VCD (Video Content Description) library v4.2.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.1.0.
+<p>VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.1.0
+VCD (Video Content Description) library v4.2.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.1.0.
+VCD is a Python library to create and manage VCD content version 4.2.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -73,7 +73,8 @@ class StreamType(Enum):
     camera = 1
     lidar = 2
     radar = 3
-    other = 4
+    gps_imu = 4
+    other = 5
 
 
 class RDF(Enum):
@@ -122,10 +123,10 @@ class VCD:
 
                 self.schema = schema.vcd_schema
                 if &#39;version&#39; in temp_data[&#39;vcd&#39;]:
-                    if temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.1.0&#34;:
+                    if temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.2.0&#34;:
                         validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
                     elif temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;3.3.0&#34;:
-                        warnings.warn(&#34;ERROR: This file is not a VCD 4.1.0 file.&#34;)
+                        warnings.warn(&#34;ERROR: This file is not a VCD 4.2.0 file.&#34;)
                     else:
                         warnings.warn(&#34;ERROR: Can&#39;t read input file: unsupported VCD format&#34;)
                 else:
@@ -149,7 +150,7 @@ class VCD:
             # Main VCD data
             self.data = {&#39;vcd&#39;: {}}
             self.data[&#39;vcd&#39;][&#39;frames&#39;] = {}
-            self.data[&#39;vcd&#39;][&#39;version&#39;] = &#34;4.1.0&#34;
+            self.data[&#39;vcd&#39;][&#39;version&#39;] = &#34;4.2.0&#34;
             self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;] = []
 
             # Schema information
@@ -527,6 +528,11 @@ class VCD:
         else:
             # Nothing about frame intervals to be updated
             fis_dicts_updated = fis_dicts_existing
+            if self.get_frame_intervals():
+                # So, frames have already been defined, but this element is defined as frame-less
+                # It is then assumed to exist in all frames: let&#39;s add a pointer into all frames
+                frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                self.__add_frames(frame_value, element_type, uid_to_assign)
 
         # 4/5 Create/update Element
         self.__create_update_element(
@@ -576,12 +582,13 @@ class VCD:
             else:
                 warnings.warn(&#39;WARNING: trying to add ObjectData for non-declared Stream. Use vcd.addStream.&#39;)
 
-        # Check data if object
-        if element_type is ElementType.object:
-            if &#39;objects&#39; in self.data[&#39;vcd&#39;]:
-                if uid in self.data[&#39;vcd&#39;][&#39;objects&#39;]:
-                    if &#39;object_data&#39; in self.data[&#39;vcd&#39;][&#39;objects&#39;][uid]:
-                        element_data[&#39;object_data&#39;] = self.data[&#39;vcd&#39;][&#39;objects&#39;][uid][&#39;object_data&#39;]
+        # Check data if object, action, event or context
+        if element_type is not ElementType.relation:
+            if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;]:
+                if uid in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]:
+                    if element_type.name + &#39;_data&#39; in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid]:
+                        element_data[element_type.name + &#39;_data&#39;] = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid][element_type.name + &#39;_data&#39;]
+
         # Check if relation
         elif element_type is ElementType.relation:
             if &#39;relations&#39; in self.data[&#39;vcd&#39;]:
@@ -905,8 +912,14 @@ class VCD:
                     warnings.warn(&#39;WARNING: Trying to add stream properties for non-existing stream. &#39;
                                   &#39;Use add_stream first.&#39;)
 
-    def save(self, file_name, pretty=False):
-        string = self.stringify(pretty)
+    def save_frame(self, frame_num, file_name, dynamic_only=True, pretty=False):
+        string = self.stringify_frame(frame_num, dynamic_only, pretty)
+        file = open(file_name, &#39;w&#39;)
+        file.write(string)
+        file.close()
+
+    def save(self, file_name, pretty=False, validate=False):
+        string = self.stringify(pretty, validate)
         file = open(file_name, &#39;w&#39;)
         file.write(string)
         file.close()
@@ -917,12 +930,12 @@ class VCD:
             self.schema = schema.vcd_schema
         validate(instance=temp, schema=self.schema)
 
-    def stringify(self, pretty=True, validation=True):
+    def stringify(self, pretty=True, validate=True):
         if pretty:
             stringified_vcd = json.dumps(self.data, indent=4, sort_keys=True)
         else:
             stringified_vcd = json.dumps(self.data)
-        if validation:
+        if validate:
             self.validate(stringified_vcd)
         return stringified_vcd
 
@@ -944,13 +957,49 @@ class VCD:
 
             # Now the static info for objects, actions, events, contexts and relations
             for element_type in ElementType:
+                # First, elements explicitly defined for this frame
                 if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]:
                     for uid, content in self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;].items():
                         frame_static_dynamic[element_type.name + &#39;s&#39;][uid].update(
                             self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid]
                         )
                         # Remove frameInterval entry
-                        del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+                        if &#39;frame_intervals&#39; in frame_static_dynamic[element_type.name + &#39;s&#39;][uid]:
+                            del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+
+                # But also other elements without frame intervals specified, which are assumed to exist during
+                # the entire sequence
+                if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;] and element_type.name != &#34;relation&#34;:
+                    for uid, element in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
+                        frame_intervals_dict = element[&#39;frame_intervals&#39;]
+                        if not frame_intervals_dict:
+                            # So the list of frame intervals is empty -&gt; this element lives the entire scene
+                            # Let&#39;s add it to frame_static_dynamic
+                            frame_static_dynamic.setdefault(element_type.name + &#39;s&#39;, dict()) # in case there are no
+                                                                        # such type of elements already in this frame
+                            frame_static_dynamic[element_type.name + &#39;s&#39;][uid] = dict()
+                            frame_static_dynamic[element_type.name + &#39;s&#39;][uid] = copy.deepcopy(element)
+
+                            # Remove frameInterval entry
+                            if &#39;frame_intervals&#39; in frame_static_dynamic[element_type.name + &#39;s&#39;][uid]:
+                                del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+
+                # Now also the Relations!
+                &#39;&#39;&#39;if &#39;relations&#39; in self.data[&#39;vcd&#39;]:
+                    for uid, relation in self.data[&#39;vcd&#39;][&#39;relations&#39;].items():
+                        # Need to find if this relation has rdf uids related to objects active at this frame
+                        found = self.is_relation_at_frame(relation, frame_static_dynamic)
+                        if found:
+                            # Found, add this relation
+                            frame_static_dynamic.setdefault(&#39;relations&#39;, dict())
+                            frame_static_dynamic[&#39;relations&#39;][uid] = dict()
+                            frame_static_dynamic[&#39;relations&#39;][uid] = copy.deepcopy(relation)
+
+                            # Remove frameInterval entry
+                            if &#39;frame_intervals&#39; in frame_static_dynamic[&#39;relations&#39;][uid]:
+                                del frame_static_dynamic[&#39;relations&#39;][uid][&#39;frame_intervals&#39;]
+                                &#39;&#39;&#39;
+
             if pretty:
                 return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
             else:
@@ -983,7 +1032,7 @@ class VCD:
 
     def add_relation(self, name, semantic_type=&#39;&#39;, frame_value=None, uid=None, ont_uid=None):
         return self.__add_element(
-            ElementType.relation, name, semantic_type, frame_value, uid=uid, ont_uid=ont_uid
+            ElementType.relation, name, semantic_type, frame_value=frame_value, uid=uid, ont_uid=ont_uid
         )
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
@@ -993,20 +1042,97 @@ class VCD:
             warnings.warn(&#34;WARNING: trying to add RDF to non-existing Relation.&#34;)
             return
         else:
+            relation = self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid]
             if element_uid not in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]:
                 warnings.warn(&#34;WARNING: trying to add RDF using non-existing Element.&#34;)
                 return
             else:
                 if rdf_type == RDF.subject:
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid].setdefault(&#39;rdf_subjects&#39;, [])
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid][&#39;rdf_subjects&#39;].append(
+                    relation.setdefault(&#39;rdf_subjects&#39;, [])
+                    relation[&#39;rdf_subjects&#39;].append(
                         {&#39;uid&#39;: element_uid, &#39;type&#39;: element_type.name}
                     )
                 else:
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid].setdefault(&#39;rdf_objects&#39;, [])
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid][&#39;rdf_objects&#39;].append(
+                    relation.setdefault(&#39;rdf_objects&#39;, [])
+                    relation[&#39;rdf_objects&#39;].append(
                         {&#39;uid&#39;: element_uid, &#39;type&#39;: element_type.name}
                     )
+
+                # If the relation already has a frame_value, it must be a sub-set of the union of the frame_values
+                # of the provided rdf elements
+                fis_dict_relation = relation.get(&#39;frame_intervals&#39;)
+                if fis_dict_relation:
+                    frame_value_relation = utils.as_frame_intervals_array_tuples(fis_dict_relation)
+                    if frame_value_relation:
+                        # This relation already has a frame_value explicitly defined
+                        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][element_uid]
+                        fis_dict_element = element[&#39;frame_intervals&#39;]
+                        if fis_dict_element:
+                            frame_value_element = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                            if utils.frame_interval_is_inside(frame_value_relation, frame_value_element):
+                                # Good. The frame intervals of this relation are inside the frame intervals of the RDFs
+                                # Nothing to do
+                                pass
+                            else:
+                                # Something&#39;s wrong: the provided frame interval for this relation is not inside the
+                                # frame interval of the given RDF element
+                                warnings.warn(&#34;WARNING: The provided RDF element frame interval is not a super-set of&#34;
+                                              &#34; the frame interval of the Relation. Frames are not added.&#34;)
+                        else:
+                            # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            # Then, there is nothing to do
+                            pass
+                    else:
+                        # Update the Relation appearance at frames according to the added RDF elements
+                        # Let&#39;s build up the frame intervals for this relation according to the RDF elements
+                        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][element_uid]
+                        fis_dict_element = element[&#39;frame_intervals&#39;]
+                        if fis_dict_element:
+                            frame_value = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                            self.__add_frames(frame_value, ElementType.relation, relation_uid)
+                        else:
+                            # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            if self.get_frame_intervals():
+                                # And the VCD has frame intervals defined: so the RDF element exists in all the scene
+                                # And so does the Relation
+                                frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                                self.__add_frames(frame_value, ElementType.relation, relation_uid)
+
+    def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=object_uid, element_type=ElementType.object)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=action_uid, element_type=ElementType.action)
+
+    def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=action_uid_1, element_type=ElementType.action)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=action_uid_2, element_type=ElementType.action)
+
+    def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=object_uid_1, element_type=ElementType.object)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=object_uid_2, element_type=ElementType.object)
+
+    def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=action_uid, element_type=ElementType.action)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=object_uid, element_type=ElementType.object)
 
     def add_action_data(self, uid, action_data, frame_value=None):
         assert (isinstance(uid, int))
@@ -1108,10 +1234,10 @@ class VCD:
         assert(&#39;frames&#39; in self.data[&#39;vcd&#39;])
         return self.data[&#39;vcd&#39;][&#39;frames&#39;].get(frame_num)
 
-    def get_elements_of_type(self, element_type, type_):
+    def get_elements_of_type(self, element_type, semantic_type):
         uids = []
         for uid, element in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
-            if element[&#39;type&#39;] == type_:
+            if element[&#39;type&#39;] == semantic_type:
                 uids.append(uid)
         return uids
 
@@ -1205,6 +1331,30 @@ class VCD:
     def get_frame_intervals_of_element(self, element_type, uid):
         assert (element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;])
         return self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid].get(&#39;frame_intervals&#39;)
+
+    def is_relation_at_frame(self, relation, frame):
+        # Need to find if this relation has rdf uids related to objects active at this frame
+        found = False
+        for rdf_subject in relation[&#39;rdf_subjects&#39;]:
+            subject_uid = rdf_subject[&#39;uid&#39;]
+            subject_type = rdf_subject[&#39;type&#39;]
+
+            if subject_type + &#39;s&#39; in frame:
+                if subject_uid in frame[subject_type + &#39;s&#39;].keys():
+                    # Found
+                    found = True
+                    break
+        if not found:
+            for rdf_object in relation[&#39;rdf_objects&#39;]:
+                object_uid = rdf_object[&#39;uid&#39;]
+                object_type = rdf_object[&#39;type&#39;]
+
+                if object_type + &#39;s&#39; in frame:
+                    if object_uid in frame[object_type + &#39;s&#39;].keys():
+                        # Found
+                        found = True
+                        break
+        return found
 
     ##################################################
     # Remove
@@ -1470,7 +1620,8 @@ class VCD:
     camera = 1
     lidar = 2
     radar = 3
-    other = 4</code></pre>
+    gps_imu = 4
+    other = 5</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1479,6 +1630,10 @@ class VCD:
 <h3>Class variables</h3>
 <dl>
 <dt id="vcd.core.StreamType.camera"><code class="name">var <span class="ident">camera</span></code></dt>
+<dd>
+<section class="desc"><p>Type of stream (sensor).</p></section>
+</dd>
+<dt id="vcd.core.StreamType.gps_imu"><code class="name">var <span class="ident">gps_imu</span></code></dt>
 <dd>
 <section class="desc"><p>Type of stream (sensor).</p></section>
 </dd>
@@ -1547,10 +1702,10 @@ data into JSON strings.</p></section>
 
                 self.schema = schema.vcd_schema
                 if &#39;version&#39; in temp_data[&#39;vcd&#39;]:
-                    if temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.1.0&#34;:
+                    if temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.2.0&#34;:
                         validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
                     elif temp_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;3.3.0&#34;:
-                        warnings.warn(&#34;ERROR: This file is not a VCD 4.1.0 file.&#34;)
+                        warnings.warn(&#34;ERROR: This file is not a VCD 4.2.0 file.&#34;)
                     else:
                         warnings.warn(&#34;ERROR: Can&#39;t read input file: unsupported VCD format&#34;)
                 else:
@@ -1574,7 +1729,7 @@ data into JSON strings.</p></section>
             # Main VCD data
             self.data = {&#39;vcd&#39;: {}}
             self.data[&#39;vcd&#39;][&#39;frames&#39;] = {}
-            self.data[&#39;vcd&#39;][&#39;version&#39;] = &#34;4.1.0&#34;
+            self.data[&#39;vcd&#39;][&#39;version&#39;] = &#34;4.2.0&#34;
             self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;] = []
 
             # Schema information
@@ -1952,6 +2107,11 @@ data into JSON strings.</p></section>
         else:
             # Nothing about frame intervals to be updated
             fis_dicts_updated = fis_dicts_existing
+            if self.get_frame_intervals():
+                # So, frames have already been defined, but this element is defined as frame-less
+                # It is then assumed to exist in all frames: let&#39;s add a pointer into all frames
+                frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                self.__add_frames(frame_value, element_type, uid_to_assign)
 
         # 4/5 Create/update Element
         self.__create_update_element(
@@ -2001,12 +2161,13 @@ data into JSON strings.</p></section>
             else:
                 warnings.warn(&#39;WARNING: trying to add ObjectData for non-declared Stream. Use vcd.addStream.&#39;)
 
-        # Check data if object
-        if element_type is ElementType.object:
-            if &#39;objects&#39; in self.data[&#39;vcd&#39;]:
-                if uid in self.data[&#39;vcd&#39;][&#39;objects&#39;]:
-                    if &#39;object_data&#39; in self.data[&#39;vcd&#39;][&#39;objects&#39;][uid]:
-                        element_data[&#39;object_data&#39;] = self.data[&#39;vcd&#39;][&#39;objects&#39;][uid][&#39;object_data&#39;]
+        # Check data if object, action, event or context
+        if element_type is not ElementType.relation:
+            if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;]:
+                if uid in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]:
+                    if element_type.name + &#39;_data&#39; in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid]:
+                        element_data[element_type.name + &#39;_data&#39;] = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid][element_type.name + &#39;_data&#39;]
+
         # Check if relation
         elif element_type is ElementType.relation:
             if &#39;relations&#39; in self.data[&#39;vcd&#39;]:
@@ -2330,8 +2491,14 @@ data into JSON strings.</p></section>
                     warnings.warn(&#39;WARNING: Trying to add stream properties for non-existing stream. &#39;
                                   &#39;Use add_stream first.&#39;)
 
-    def save(self, file_name, pretty=False):
-        string = self.stringify(pretty)
+    def save_frame(self, frame_num, file_name, dynamic_only=True, pretty=False):
+        string = self.stringify_frame(frame_num, dynamic_only, pretty)
+        file = open(file_name, &#39;w&#39;)
+        file.write(string)
+        file.close()
+
+    def save(self, file_name, pretty=False, validate=False):
+        string = self.stringify(pretty, validate)
         file = open(file_name, &#39;w&#39;)
         file.write(string)
         file.close()
@@ -2342,12 +2509,12 @@ data into JSON strings.</p></section>
             self.schema = schema.vcd_schema
         validate(instance=temp, schema=self.schema)
 
-    def stringify(self, pretty=True, validation=True):
+    def stringify(self, pretty=True, validate=True):
         if pretty:
             stringified_vcd = json.dumps(self.data, indent=4, sort_keys=True)
         else:
             stringified_vcd = json.dumps(self.data)
-        if validation:
+        if validate:
             self.validate(stringified_vcd)
         return stringified_vcd
 
@@ -2369,13 +2536,49 @@ data into JSON strings.</p></section>
 
             # Now the static info for objects, actions, events, contexts and relations
             for element_type in ElementType:
+                # First, elements explicitly defined for this frame
                 if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]:
                     for uid, content in self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;].items():
                         frame_static_dynamic[element_type.name + &#39;s&#39;][uid].update(
                             self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid]
                         )
                         # Remove frameInterval entry
-                        del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+                        if &#39;frame_intervals&#39; in frame_static_dynamic[element_type.name + &#39;s&#39;][uid]:
+                            del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+
+                # But also other elements without frame intervals specified, which are assumed to exist during
+                # the entire sequence
+                if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;] and element_type.name != &#34;relation&#34;:
+                    for uid, element in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
+                        frame_intervals_dict = element[&#39;frame_intervals&#39;]
+                        if not frame_intervals_dict:
+                            # So the list of frame intervals is empty -&gt; this element lives the entire scene
+                            # Let&#39;s add it to frame_static_dynamic
+                            frame_static_dynamic.setdefault(element_type.name + &#39;s&#39;, dict()) # in case there are no
+                                                                        # such type of elements already in this frame
+                            frame_static_dynamic[element_type.name + &#39;s&#39;][uid] = dict()
+                            frame_static_dynamic[element_type.name + &#39;s&#39;][uid] = copy.deepcopy(element)
+
+                            # Remove frameInterval entry
+                            if &#39;frame_intervals&#39; in frame_static_dynamic[element_type.name + &#39;s&#39;][uid]:
+                                del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+
+                # Now also the Relations!
+                &#39;&#39;&#39;if &#39;relations&#39; in self.data[&#39;vcd&#39;]:
+                    for uid, relation in self.data[&#39;vcd&#39;][&#39;relations&#39;].items():
+                        # Need to find if this relation has rdf uids related to objects active at this frame
+                        found = self.is_relation_at_frame(relation, frame_static_dynamic)
+                        if found:
+                            # Found, add this relation
+                            frame_static_dynamic.setdefault(&#39;relations&#39;, dict())
+                            frame_static_dynamic[&#39;relations&#39;][uid] = dict()
+                            frame_static_dynamic[&#39;relations&#39;][uid] = copy.deepcopy(relation)
+
+                            # Remove frameInterval entry
+                            if &#39;frame_intervals&#39; in frame_static_dynamic[&#39;relations&#39;][uid]:
+                                del frame_static_dynamic[&#39;relations&#39;][uid][&#39;frame_intervals&#39;]
+                                &#39;&#39;&#39;
+
             if pretty:
                 return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
             else:
@@ -2408,7 +2611,7 @@ data into JSON strings.</p></section>
 
     def add_relation(self, name, semantic_type=&#39;&#39;, frame_value=None, uid=None, ont_uid=None):
         return self.__add_element(
-            ElementType.relation, name, semantic_type, frame_value, uid=uid, ont_uid=ont_uid
+            ElementType.relation, name, semantic_type, frame_value=frame_value, uid=uid, ont_uid=ont_uid
         )
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
@@ -2418,20 +2621,97 @@ data into JSON strings.</p></section>
             warnings.warn(&#34;WARNING: trying to add RDF to non-existing Relation.&#34;)
             return
         else:
+            relation = self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid]
             if element_uid not in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]:
                 warnings.warn(&#34;WARNING: trying to add RDF using non-existing Element.&#34;)
                 return
             else:
                 if rdf_type == RDF.subject:
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid].setdefault(&#39;rdf_subjects&#39;, [])
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid][&#39;rdf_subjects&#39;].append(
+                    relation.setdefault(&#39;rdf_subjects&#39;, [])
+                    relation[&#39;rdf_subjects&#39;].append(
                         {&#39;uid&#39;: element_uid, &#39;type&#39;: element_type.name}
                     )
                 else:
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid].setdefault(&#39;rdf_objects&#39;, [])
-                    self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid][&#39;rdf_objects&#39;].append(
+                    relation.setdefault(&#39;rdf_objects&#39;, [])
+                    relation[&#39;rdf_objects&#39;].append(
                         {&#39;uid&#39;: element_uid, &#39;type&#39;: element_type.name}
                     )
+
+                # If the relation already has a frame_value, it must be a sub-set of the union of the frame_values
+                # of the provided rdf elements
+                fis_dict_relation = relation.get(&#39;frame_intervals&#39;)
+                if fis_dict_relation:
+                    frame_value_relation = utils.as_frame_intervals_array_tuples(fis_dict_relation)
+                    if frame_value_relation:
+                        # This relation already has a frame_value explicitly defined
+                        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][element_uid]
+                        fis_dict_element = element[&#39;frame_intervals&#39;]
+                        if fis_dict_element:
+                            frame_value_element = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                            if utils.frame_interval_is_inside(frame_value_relation, frame_value_element):
+                                # Good. The frame intervals of this relation are inside the frame intervals of the RDFs
+                                # Nothing to do
+                                pass
+                            else:
+                                # Something&#39;s wrong: the provided frame interval for this relation is not inside the
+                                # frame interval of the given RDF element
+                                warnings.warn(&#34;WARNING: The provided RDF element frame interval is not a super-set of&#34;
+                                              &#34; the frame interval of the Relation. Frames are not added.&#34;)
+                        else:
+                            # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            # Then, there is nothing to do
+                            pass
+                    else:
+                        # Update the Relation appearance at frames according to the added RDF elements
+                        # Let&#39;s build up the frame intervals for this relation according to the RDF elements
+                        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][element_uid]
+                        fis_dict_element = element[&#39;frame_intervals&#39;]
+                        if fis_dict_element:
+                            frame_value = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                            self.__add_frames(frame_value, ElementType.relation, relation_uid)
+                        else:
+                            # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            if self.get_frame_intervals():
+                                # And the VCD has frame intervals defined: so the RDF element exists in all the scene
+                                # And so does the Relation
+                                frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                                self.__add_frames(frame_value, ElementType.relation, relation_uid)
+
+    def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=object_uid, element_type=ElementType.object)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=action_uid, element_type=ElementType.action)
+
+    def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=action_uid_1, element_type=ElementType.action)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=action_uid_2, element_type=ElementType.action)
+
+    def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=object_uid_1, element_type=ElementType.object)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=object_uid_2, element_type=ElementType.object)
+
+    def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
+                                   ont_uid=None, frame_value=None):
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                     element_uid=action_uid, element_type=ElementType.action)
+        self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                     element_uid=object_uid, element_type=ElementType.object)
 
     def add_action_data(self, uid, action_data, frame_value=None):
         assert (isinstance(uid, int))
@@ -2533,10 +2813,10 @@ data into JSON strings.</p></section>
         assert(&#39;frames&#39; in self.data[&#39;vcd&#39;])
         return self.data[&#39;vcd&#39;][&#39;frames&#39;].get(frame_num)
 
-    def get_elements_of_type(self, element_type, type_):
+    def get_elements_of_type(self, element_type, semantic_type):
         uids = []
         for uid, element in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
-            if element[&#39;type&#39;] == type_:
+            if element[&#39;type&#39;] == semantic_type:
                 uids.append(uid)
         return uids
 
@@ -2630,6 +2910,30 @@ data into JSON strings.</p></section>
     def get_frame_intervals_of_element(self, element_type, uid):
         assert (element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;])
         return self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid].get(&#39;frame_intervals&#39;)
+
+    def is_relation_at_frame(self, relation, frame):
+        # Need to find if this relation has rdf uids related to objects active at this frame
+        found = False
+        for rdf_subject in relation[&#39;rdf_subjects&#39;]:
+            subject_uid = rdf_subject[&#39;uid&#39;]
+            subject_type = rdf_subject[&#39;type&#39;]
+
+            if subject_type + &#39;s&#39; in frame:
+                if subject_uid in frame[subject_type + &#39;s&#39;].keys():
+                    # Found
+                    found = True
+                    break
+        if not found:
+            for rdf_object in relation[&#39;rdf_objects&#39;]:
+                object_uid = rdf_object[&#39;uid&#39;]
+                object_type = rdf_object[&#39;type&#39;]
+
+                if object_type + &#39;s&#39; in frame:
+                    if object_uid in frame[object_type + &#39;s&#39;].keys():
+                        # Found
+                        found = True
+                        break
+        return found
 
     ##################################################
     # Remove
@@ -3067,20 +3371,61 @@ data into JSON strings.</p></section>
         warnings.warn(&#34;WARNING: trying to add RDF to non-existing Relation.&#34;)
         return
     else:
+        relation = self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid]
         if element_uid not in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]:
             warnings.warn(&#34;WARNING: trying to add RDF using non-existing Element.&#34;)
             return
         else:
             if rdf_type == RDF.subject:
-                self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid].setdefault(&#39;rdf_subjects&#39;, [])
-                self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid][&#39;rdf_subjects&#39;].append(
+                relation.setdefault(&#39;rdf_subjects&#39;, [])
+                relation[&#39;rdf_subjects&#39;].append(
                     {&#39;uid&#39;: element_uid, &#39;type&#39;: element_type.name}
                 )
             else:
-                self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid].setdefault(&#39;rdf_objects&#39;, [])
-                self.data[&#39;vcd&#39;][&#39;relations&#39;][relation_uid][&#39;rdf_objects&#39;].append(
+                relation.setdefault(&#39;rdf_objects&#39;, [])
+                relation[&#39;rdf_objects&#39;].append(
                     {&#39;uid&#39;: element_uid, &#39;type&#39;: element_type.name}
-                )</code></pre>
+                )
+
+            # If the relation already has a frame_value, it must be a sub-set of the union of the frame_values
+            # of the provided rdf elements
+            fis_dict_relation = relation.get(&#39;frame_intervals&#39;)
+            if fis_dict_relation:
+                frame_value_relation = utils.as_frame_intervals_array_tuples(fis_dict_relation)
+                if frame_value_relation:
+                    # This relation already has a frame_value explicitly defined
+                    element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][element_uid]
+                    fis_dict_element = element[&#39;frame_intervals&#39;]
+                    if fis_dict_element:
+                        frame_value_element = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                        if utils.frame_interval_is_inside(frame_value_relation, frame_value_element):
+                            # Good. The frame intervals of this relation are inside the frame intervals of the RDFs
+                            # Nothing to do
+                            pass
+                        else:
+                            # Something&#39;s wrong: the provided frame interval for this relation is not inside the
+                            # frame interval of the given RDF element
+                            warnings.warn(&#34;WARNING: The provided RDF element frame interval is not a super-set of&#34;
+                                          &#34; the frame interval of the Relation. Frames are not added.&#34;)
+                    else:
+                        # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                        # Then, there is nothing to do
+                        pass
+                else:
+                    # Update the Relation appearance at frames according to the added RDF elements
+                    # Let&#39;s build up the frame intervals for this relation according to the RDF elements
+                    element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][element_uid]
+                    fis_dict_element = element[&#39;frame_intervals&#39;]
+                    if fis_dict_element:
+                        frame_value = utils.as_frame_intervals_array_tuples(fis_dict_element)
+                        self.__add_frames(frame_value, ElementType.relation, relation_uid)
+                    else:
+                        # So this RDF element (e.g. an object or action) does not have frame intervals defined
+                        if self.get_frame_intervals():
+                            # And the VCD has frame intervals defined: so the RDF element exists in all the scene
+                            # And so does the Relation
+                            frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
+                            self.__add_frames(frame_value, ElementType.relation, relation_uid)</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_relation"><code class="name flex">
@@ -3094,8 +3439,84 @@ data into JSON strings.</p></section>
 </summary>
 <pre><code class="python">def add_relation(self, name, semantic_type=&#39;&#39;, frame_value=None, uid=None, ont_uid=None):
     return self.__add_element(
-        ElementType.relation, name, semantic_type, frame_value, uid=uid, ont_uid=ont_uid
+        ElementType.relation, name, semantic_type, frame_value=frame_value, uid=uid, ont_uid=ont_uid
     )</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.add_relation_action_action"><code class="name flex">
+<span>def <span class="ident">add_relation_action_action</span></span>(<span>self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None, ont_uid=None, frame_value=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
+                               ont_uid=None, frame_value=None):
+    relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                     frame_value=frame_value)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                 element_uid=action_uid_1, element_type=ElementType.action)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                 element_uid=action_uid_2, element_type=ElementType.action)</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.add_relation_action_object"><code class="name flex">
+<span>def <span class="ident">add_relation_action_object</span></span>(<span>self, name, semantic_type, action_uid, object_uid, relation_uid=None, ont_uid=None, frame_value=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
+                               ont_uid=None, frame_value=None):
+    relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                     frame_value=frame_value)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                 element_uid=action_uid, element_type=ElementType.action)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                 element_uid=object_uid, element_type=ElementType.object)</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.add_relation_object_action"><code class="name flex">
+<span>def <span class="ident">add_relation_object_action</span></span>(<span>self, name, semantic_type, object_uid, action_uid, relation_uid=None, ont_uid=None, frame_value=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
+                               ont_uid=None, frame_value=None):
+    relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                     frame_value=frame_value)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                 element_uid=object_uid, element_type=ElementType.object)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                 element_uid=action_uid, element_type=ElementType.action)</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.add_relation_object_object"><code class="name flex">
+<span>def <span class="ident">add_relation_object_object</span></span>(<span>self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None, ont_uid=None, frame_value=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
+                               ont_uid=None, frame_value=None):
+    relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                     frame_value=frame_value)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
+                 element_uid=object_uid_1, element_type=ElementType.object)
+    self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
+                 element_uid=object_uid_2, element_type=ElementType.object)</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_stream"><code class="name flex">
@@ -3275,7 +3696,7 @@ e.g. all Object's or Context's</p></section>
 </details>
 </dd>
 <dt id="vcd.core.VCD.get_elements_of_type"><code class="name flex">
-<span>def <span class="ident">get_elements_of_type</span></span>(<span>self, element_type, type_)</span>
+<span>def <span class="ident">get_elements_of_type</span></span>(<span>self, element_type, semantic_type)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3283,10 +3704,10 @@ e.g. all Object's or Context's</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_elements_of_type(self, element_type, type_):
+<pre><code class="python">def get_elements_of_type(self, element_type, semantic_type):
     uids = []
     for uid, element in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
-        if element[&#39;type&#39;] == type_:
+        if element[&#39;type&#39;] == semantic_type:
             uids.append(uid)
     return uids</code></pre>
 </details>
@@ -3592,6 +4013,40 @@ e.g. all Object's or Context's</p></section>
                         if val[&#39;name&#39;] == data_name:
                             return True
     return False</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.is_relation_at_frame"><code class="name flex">
+<span>def <span class="ident">is_relation_at_frame</span></span>(<span>self, relation, frame)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_relation_at_frame(self, relation, frame):
+    # Need to find if this relation has rdf uids related to objects active at this frame
+    found = False
+    for rdf_subject in relation[&#39;rdf_subjects&#39;]:
+        subject_uid = rdf_subject[&#39;uid&#39;]
+        subject_type = rdf_subject[&#39;type&#39;]
+
+        if subject_type + &#39;s&#39; in frame:
+            if subject_uid in frame[subject_type + &#39;s&#39;].keys():
+                # Found
+                found = True
+                break
+    if not found:
+        for rdf_object in relation[&#39;rdf_objects&#39;]:
+            object_uid = rdf_object[&#39;uid&#39;]
+            object_type = rdf_object[&#39;type&#39;]
+
+            if object_type + &#39;s&#39; in frame:
+                if object_uid in frame[object_type + &#39;s&#39;].keys():
+                    # Found
+                    found = True
+                    break
+    return found</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.rm_action"><code class="name flex">
@@ -3928,7 +4383,7 @@ e.g. all Object's or Context's</p></section>
 </details>
 </dd>
 <dt id="vcd.core.VCD.save"><code class="name flex">
-<span>def <span class="ident">save</span></span>(<span>self, file_name, pretty=False)</span>
+<span>def <span class="ident">save</span></span>(<span>self, file_name, pretty=False, validate=False)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3936,15 +4391,31 @@ e.g. all Object's or Context's</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def save(self, file_name, pretty=False):
-    string = self.stringify(pretty)
+<pre><code class="python">def save(self, file_name, pretty=False, validate=False):
+    string = self.stringify(pretty, validate)
+    file = open(file_name, &#39;w&#39;)
+    file.write(string)
+    file.close()</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.save_frame"><code class="name flex">
+<span>def <span class="ident">save_frame</span></span>(<span>self, frame_num, file_name, dynamic_only=True, pretty=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save_frame(self, frame_num, file_name, dynamic_only=True, pretty=False):
+    string = self.stringify_frame(frame_num, dynamic_only, pretty)
     file = open(file_name, &#39;w&#39;)
     file.write(string)
     file.close()</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.stringify"><code class="name flex">
-<span>def <span class="ident">stringify</span></span>(<span>self, pretty=True, validation=True)</span>
+<span>def <span class="ident">stringify</span></span>(<span>self, pretty=True, validate=True)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -3952,12 +4423,12 @@ e.g. all Object's or Context's</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def stringify(self, pretty=True, validation=True):
+<pre><code class="python">def stringify(self, pretty=True, validate=True):
     if pretty:
         stringified_vcd = json.dumps(self.data, indent=4, sort_keys=True)
     else:
         stringified_vcd = json.dumps(self.data)
-    if validation:
+    if validate:
         self.validate(stringified_vcd)
     return stringified_vcd</code></pre>
 </details>
@@ -3989,13 +4460,49 @@ e.g. all Object's or Context's</p></section>
 
         # Now the static info for objects, actions, events, contexts and relations
         for element_type in ElementType:
+            # First, elements explicitly defined for this frame
             if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]:
                 for uid, content in self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;].items():
                     frame_static_dynamic[element_type.name + &#39;s&#39;][uid].update(
                         self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid]
                     )
                     # Remove frameInterval entry
-                    del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+                    if &#39;frame_intervals&#39; in frame_static_dynamic[element_type.name + &#39;s&#39;][uid]:
+                        del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+
+            # But also other elements without frame intervals specified, which are assumed to exist during
+            # the entire sequence
+            if element_type.name + &#39;s&#39; in self.data[&#39;vcd&#39;] and element_type.name != &#34;relation&#34;:
+                for uid, element in self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
+                    frame_intervals_dict = element[&#39;frame_intervals&#39;]
+                    if not frame_intervals_dict:
+                        # So the list of frame intervals is empty -&gt; this element lives the entire scene
+                        # Let&#39;s add it to frame_static_dynamic
+                        frame_static_dynamic.setdefault(element_type.name + &#39;s&#39;, dict()) # in case there are no
+                                                                    # such type of elements already in this frame
+                        frame_static_dynamic[element_type.name + &#39;s&#39;][uid] = dict()
+                        frame_static_dynamic[element_type.name + &#39;s&#39;][uid] = copy.deepcopy(element)
+
+                        # Remove frameInterval entry
+                        if &#39;frame_intervals&#39; in frame_static_dynamic[element_type.name + &#39;s&#39;][uid]:
+                            del frame_static_dynamic[element_type.name + &#39;s&#39;][uid][&#39;frame_intervals&#39;]
+
+            # Now also the Relations!
+            &#39;&#39;&#39;if &#39;relations&#39; in self.data[&#39;vcd&#39;]:
+                for uid, relation in self.data[&#39;vcd&#39;][&#39;relations&#39;].items():
+                    # Need to find if this relation has rdf uids related to objects active at this frame
+                    found = self.is_relation_at_frame(relation, frame_static_dynamic)
+                    if found:
+                        # Found, add this relation
+                        frame_static_dynamic.setdefault(&#39;relations&#39;, dict())
+                        frame_static_dynamic[&#39;relations&#39;][uid] = dict()
+                        frame_static_dynamic[&#39;relations&#39;][uid] = copy.deepcopy(relation)
+
+                        # Remove frameInterval entry
+                        if &#39;frame_intervals&#39; in frame_static_dynamic[&#39;relations&#39;][uid]:
+                            del frame_static_dynamic[&#39;relations&#39;][uid][&#39;frame_intervals&#39;]
+                            &#39;&#39;&#39;
+
         if pretty:
             return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
         else:
@@ -4110,6 +4617,7 @@ e.g. all Object's or Context's</p></section>
 <h4><code><a title="vcd.core.StreamType" href="#vcd.core.StreamType">StreamType</a></code></h4>
 <ul class="">
 <li><code><a title="vcd.core.StreamType.camera" href="#vcd.core.StreamType.camera">camera</a></code></li>
+<li><code><a title="vcd.core.StreamType.gps_imu" href="#vcd.core.StreamType.gps_imu">gps_imu</a></code></li>
 <li><code><a title="vcd.core.StreamType.lidar" href="#vcd.core.StreamType.lidar">lidar</a></code></li>
 <li><code><a title="vcd.core.StreamType.other" href="#vcd.core.StreamType.other">other</a></code></li>
 <li><code><a title="vcd.core.StreamType.radar" href="#vcd.core.StreamType.radar">radar</a></code></li>
@@ -4135,6 +4643,10 @@ e.g. all Object's or Context's</p></section>
 <li><code><a title="vcd.core.VCD.add_ontology" href="#vcd.core.VCD.add_ontology">add_ontology</a></code></li>
 <li><code><a title="vcd.core.VCD.add_rdf" href="#vcd.core.VCD.add_rdf">add_rdf</a></code></li>
 <li><code><a title="vcd.core.VCD.add_relation" href="#vcd.core.VCD.add_relation">add_relation</a></code></li>
+<li><code><a title="vcd.core.VCD.add_relation_action_action" href="#vcd.core.VCD.add_relation_action_action">add_relation_action_action</a></code></li>
+<li><code><a title="vcd.core.VCD.add_relation_action_object" href="#vcd.core.VCD.add_relation_action_object">add_relation_action_object</a></code></li>
+<li><code><a title="vcd.core.VCD.add_relation_object_action" href="#vcd.core.VCD.add_relation_object_action">add_relation_object_action</a></code></li>
+<li><code><a title="vcd.core.VCD.add_relation_object_object" href="#vcd.core.VCD.add_relation_object_object">add_relation_object_object</a></code></li>
 <li><code><a title="vcd.core.VCD.add_stream" href="#vcd.core.VCD.add_stream">add_stream</a></code></li>
 <li><code><a title="vcd.core.VCD.add_stream_properties" href="#vcd.core.VCD.add_stream_properties">add_stream_properties</a></code></li>
 <li><code><a title="vcd.core.VCD.get_action" href="#vcd.core.VCD.get_action">get_action</a></code></li>
@@ -4161,6 +4673,7 @@ e.g. all Object's or Context's</p></section>
 <li><code><a title="vcd.core.VCD.get_relation" href="#vcd.core.VCD.get_relation">get_relation</a></code></li>
 <li><code><a title="vcd.core.VCD.has" href="#vcd.core.VCD.has">has</a></code></li>
 <li><code><a title="vcd.core.VCD.has_frame_object_data_name" href="#vcd.core.VCD.has_frame_object_data_name">has_frame_object_data_name</a></code></li>
+<li><code><a title="vcd.core.VCD.is_relation_at_frame" href="#vcd.core.VCD.is_relation_at_frame">is_relation_at_frame</a></code></li>
 <li><code><a title="vcd.core.VCD.rm_action" href="#vcd.core.VCD.rm_action">rm_action</a></code></li>
 <li><code><a title="vcd.core.VCD.rm_action_by_frame" href="#vcd.core.VCD.rm_action_by_frame">rm_action_by_frame</a></code></li>
 <li><code><a title="vcd.core.VCD.rm_action_by_type" href="#vcd.core.VCD.rm_action_by_type">rm_action_by_type</a></code></li>
@@ -4180,6 +4693,7 @@ e.g. all Object's or Context's</p></section>
 <li><code><a title="vcd.core.VCD.rm_relation_by_frame" href="#vcd.core.VCD.rm_relation_by_frame">rm_relation_by_frame</a></code></li>
 <li><code><a title="vcd.core.VCD.rm_relation_by_type" href="#vcd.core.VCD.rm_relation_by_type">rm_relation_by_type</a></code></li>
 <li><code><a title="vcd.core.VCD.save" href="#vcd.core.VCD.save">save</a></code></li>
+<li><code><a title="vcd.core.VCD.save_frame" href="#vcd.core.VCD.save_frame">save_frame</a></code></li>
 <li><code><a title="vcd.core.VCD.stringify" href="#vcd.core.VCD.stringify">stringify</a></code></li>
 <li><code><a title="vcd.core.VCD.stringify_frame" href="#vcd.core.VCD.stringify_frame">stringify_frame</a></code></li>
 <li><code><a title="vcd.core.VCD.update_action" href="#vcd.core.VCD.update_action">update_action</a></code></li>
