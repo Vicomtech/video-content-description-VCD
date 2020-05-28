@@ -886,8 +886,8 @@ class VCD:
         file.write(string)
         file.close()
 
-    def save(self, file_name, pretty=False):
-        string = self.stringify(pretty)
+    def save(self, file_name, pretty=False, validate=False):
+        string = self.stringify(pretty, validate)
         file = open(file_name, 'w')
         file.write(string)
         file.close()
@@ -898,12 +898,12 @@ class VCD:
             self.schema = schema.vcd_schema
         validate(instance=temp, schema=self.schema)
 
-    def stringify(self, pretty=True, validation=True):
+    def stringify(self, pretty=True, validate=True):
         if pretty:
             stringified_vcd = json.dumps(self.data, indent=4, sort_keys=True)
         else:
             stringified_vcd = json.dumps(self.data)
-        if validation:
+        if validate:
             self.validate(stringified_vcd)
         return stringified_vcd
 
