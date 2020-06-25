@@ -1155,6 +1155,21 @@ class VCD:
     ##################################################
     # Get / Read
     ##################################################
+    def has_objects(self):
+        return 'objects' in self.data['vcd']
+
+    def has_actions(self):
+        return 'actions' in self.data['vcd']
+
+    def has_contexts(self):
+        return 'contexts' in self.data['vcd']
+
+    def has_events(self):
+        return 'events' in self.data['vcd']
+
+    def has_relations(self):
+        return 'relations' in self.data['vcd']
+
     def has(self, element_type, uid):
         if not element_type.name + 's' in self.data['vcd']:
             return False
@@ -1204,6 +1219,8 @@ class VCD:
 
     def get_elements_of_type(self, element_type, semantic_type):
         uids = []
+        if not element_type.name + 's' in self.data['vcd']:
+            return uids
         for uid, element in self.data['vcd'][element_type.name + 's'].items():
             if element['type'] == semantic_type:
                 uids.append(uid)
