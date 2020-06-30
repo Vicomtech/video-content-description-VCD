@@ -1,28 +1,18 @@
+//import * as poly2d from './poly2d'; // TODO!!
 
 function isFloat(n){
     return Number(n) === n && n % 1 !== 0;
 }
 
-function mergeObjects(obj1, obj2){
-	let key;
-	
-	for (key in obj2) {
-	  if(obj2.hasOwnProperty(key)){
-		obj1[key] = obj2[key];
-	  }
-	}
-}
-
-
 export class Intrinsics{
-	data:any;
-    constructor(){
+	data:Object ;
+    constructor() {
         this.data = {};
 	}
 }
 
 export class IntrinsicsPinhole extends Intrinsics{
-    constructor( widthPx, heightPx, cameraMatrix3x4, distortionCoeffs1xN=null, additionalItems){
+    constructor( widthPx: number, heightPx: number, cameraMatrix3x4: Array<number>, distortionCoeffs1xN=null, additionalItems){
         super();
 		if (!Number.isInteger(widthPx)){
 			console.warn("WARNING: widthPx is not integer");
@@ -64,16 +54,16 @@ export class IntrinsicsPinhole extends Intrinsics{
         this.data['intrinsics_pinhole']['distortion_coeffs_1xN'] = distortionCoeffs1xN;
 
         if (additionalItems != null){
-            mergeObjects(this.data['intrinsics_pinhole'],additionalItems);
+			Object.assign(this.data['intrinsics_pinhole'], additionalItems);
 		}
 	}
 }
 
-export class IntrinsicsFisheye{
-	data:any;
-    constructor( widthPx, heightPx, lensCoeffsLx4, fovDeg, centerX, centerY,
-                 radiusX, radiusY, additionalItems){
-        if (!Number.isInteger(widthPx)){
+export class IntrinsicsFisheye extends Intrinsics {	
+    constructor( widthPx: number, heightPx: number, lensCoeffsLx4: Array<number>, fovDeg: number, centerX: number, centerY: number,
+                 radiusX: number, radiusY: number, additionalItems){
+		super();
+		if (!Number.isInteger(widthPx)){
 			console.warn("WARNING: widthPx is not integer");
 			return;
 		}
@@ -84,32 +74,6 @@ export class IntrinsicsFisheye{
         this.data['intrinsics_fisheye'] = {}
         this.data['intrinsics_fisheye']['width_px'] = widthPx
         this.data['intrinsics_fisheye']['height_px'] = heightPx
-		if(!Array.isArray(lensCoeffsLx4)){
-			console.warn("WARNING: lensCoeffsLx4 not array");
-			return;
-		}
-            
-		if (!isFloat(centerX)){
-			console.warn("WARNING: centerX is not float");
-			return;
-		}
-		if (!isFloat(centerY)){
-			console.warn("WARNING: centerY is not float");
-			return;
-		}
-		if (!isFloat(radiusX)){
-			console.warn("WARNING: radiusX is not float");
-			return;
-		}
-		if (!isFloat(radiusY)){
-			console.warn("WARNING: radiusY is not float");
-			return;
-		}
-		if (!isFloat(fovDeg)){
-			console.warn("WARNING: fovDeg is not float");
-			return;
-		}
-
         this.data['intrinsics_fisheye']['center_x'] = centerX;
         this.data['intrinsics_fisheye']['center_y'] = centerY;
         this.data['intrinsics_fisheye']['radius_x'] = radiusX;
@@ -123,19 +87,15 @@ export class IntrinsicsFisheye{
 		}
         this.data['intrinsics_fisheye']['lens_coeffs_1x4'] = lensCoeffsLx4;
 
-        if(additionalItems != null){
-            this.data['intrinsics_fisheye'].update(additionalItems);
+        if(additionalItems != null){			
+			Object.assign(this.data['intrinsics_fisheye'], additionalItems);
 		}
 	}
 }
 
 export class Extrinsics{
-	data:any;
-    constructor( poseScsWrtLcs4x4, additionalItems){
-		if(!Array.isArray(poseScsWrtLcs4x4)){
-			console.warn("WARNING: poseScsWrtLcs4x4 not array");
-			return;
-		}
+	data: Object;
+    constructor( poseScsWrtLcs4x4: Array<number>, additionalItems){	
 		var num_coeffs = poseScsWrtLcs4x4.length;
 		if(num_coeffs != 16){
 			console.warn("WARNING: poseScsWrtLcs4x4 length not 16");
@@ -145,15 +105,15 @@ export class Extrinsics{
         this.data['extrinsics'] = {};
         this.data['extrinsics']['pose_scs_wrt_lcs_4x4'] = poseScsWrtLcs4x4;
 
-        if(additionalItems != null){
-            this.data['extrinsics'].update(additionalItems);
+        if(additionalItems != null){			
+			Object.assign(this.data['extrinsics'], additionalItems);
 		}
 	}
 }
 
 export class StreamSync{
-	data:any;
-	frameVcd:number;
+	data: Object;
+	frameVcd: number;
     constructor( frameVcd=null, frameStream=null, timestampISO8601=null, frameShift=null, additionalItems){
         this.data = {};
         this.data['sync'] = {};
@@ -190,21 +150,17 @@ export class StreamSync{
                 this.data['sync']['timestamp'] = timestampISO8601;
 			}
 		}
-        if(additionalItems != null){
-            this.data['sync'].update(additionalItems)
+        if(additionalItems != null){			
+			Object.assign(this.data['sync'], additionalItems);
 		}
 	}
 }
 
 export class Odometry{
-	data:any;
-    constructor( poseLcsWrtWcs4x4, additionalProperties){
+	data: Object;
+    constructor( poseLcsWrtWcs4x4: Array<number>, additionalProperties){
         this.data = {};
-        this.data['odometry'] = {};
-		if(!Array.isArray(poseLcsWrtWcs4x4)){
-			console.warn("WARNING: poseLcsWrtWcs4x4 not array");
-			return;
-		}
+        this.data['odometry'] = {};		
 		var num_coeffs = poseLcsWrtWcs4x4.length;
 		if(num_coeffs != 16){
 			console.warn("WARNING: poseLcsWrtWcs4x4 length not 16");
@@ -213,20 +169,41 @@ export class Odometry{
 
         this.data['odometry']['pose_lcs_wrt_wcs_4x4'] = poseLcsWrtWcs4x4;
 
-        if(additionalProperties != null){
-            this.data['odometry'].update(additionalProperties);
+        if(additionalProperties != null){			
+			Object.assign(this.data['odometry'], additionalProperties);
 		}
 	}
 }
 
+export enum ObjectDataType {
+	bbox = 1,
+	num = 2,
+	text = 3,
+	boolean = 4,
+	poly2d = 5,
+	poly3d = 6,
+	cuboid = 7,
+	image = 8,
+	mat = 9,
+	binary = 10,
+	point2d = 11,
+	point3d = 12,
+	vec = 13,
+	line_reference = 14,
+	area_reference = 15,
+	mesh = 16
+}
+
+export enum Poly2DType {
+	MODE_POLY2D_ABSOLUTE = 0,
+	MODE_POLY2D_SRF6DCC = 5,
+	MODE_POLY2D_RS6FCC = 6
+}
+
 export class ObjectData{
-	data:any;
-	type:string;
-    constructor( name, stream=null){
-        if(typeof name != "string" && !(name instanceof String)){
-			console.warn("WARNING: name not string",name);
-			return;
-		}
+	data: Object;
+	type: any;
+    constructor( name: string, stream=null) {        
         this.data = {};
         this.data['name'] = name;
         if(stream != null){
@@ -238,7 +215,7 @@ export class ObjectData{
 		}
 	}
 
-    addAttribute( objectData){
+    addAttribute( objectData ){
 		if(!(objectData instanceof ObjectData)){
 			console.warn("WARNING: objectData not ObjectData",objectData);
 			return;
@@ -258,92 +235,88 @@ export class ObjectData{
 	}
 }
 
-export class ObjectDataGeometry extends ObjectData{
-    constructor( name, stream=null){
+export class ObjectDataGeometry extends ObjectData {
+    constructor( name: string, stream=null) {
         super( name, stream);  // Calling parent export class 
 	}
 }
 
-export class Bbox extends ObjectDataGeometry{
-    constructor( name, val, stream=null){
-        super( name, stream);
-		if(!Array.isArray(val)){
-			console.warn("WARNING: val not array");
-			return;
-		}
+export class Bbox extends ObjectDataGeometry {
+    constructor( name: string, val: Array<number>, stream=null ) {
+        super( name, stream );		
 		if(val.length != 4){
 			console.warn("WARNING: val length not 4");
 			return;
 		}
         this.data['val'] = val;
-        this.type = "bbox";
+        this.type = ObjectDataType.bbox;
 	}
 }
 
 export class Num extends ObjectData{
-    constructor( name, val, stream=null){
+    constructor( name: string, val, stream=null) {
         super( name, stream);
 		if (!isFloat(val) && !Number.isInteger(val)){
 			console.warn("WARNING: val is not float or integer");
 			return;
 		}
         this.data['val'] = val;
-        this.type = "num";
+        this.type = ObjectDataType.num;
 	}
 }
 
 export class Text extends ObjectData{
-    constructor( name, val, stream=null){
+    constructor( name: string, val, stream=null){
         super( name, stream);
 		if(typeof val != "string" && !(val instanceof String)){
 			console.warn("WARNING: val not string",val);
 			return;
 		}
         this.data['val'] = val;
-        this.type = "text";
+        this.type = ObjectDataType.text;
 	}
 }
 
 export class Boolean extends ObjectData{
-    constructor( name, val, stream=null){
+    constructor( name: string, val, stream=null){
         super( name, stream);
 		if (typeof val != "boolean"){
 			console.warn("WARNING: val is not boolean");
 		}
         this.data['val'] = val;
-        this.type = "boolean";
+        this.type = ObjectDataType.boolean;
 	}
 }
 
 export class Poly2d extends ObjectDataGeometry{
-    constructor( name, val, mode, closed, hierarchy=null, stream=null){
+    constructor( name: string, val: Array<number>, mode, closed, hierarchy=null, stream=null){
         super( name, stream);
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
 			return;
 		}
-        if(typeof mode != "string" && !(mode instanceof String)){
-			console.warn("WARNING: mode not string",mode);
-			return;
-		}
-        if (typeof closed != "boolean"){
+        //if(typeof mode != "string" && !(mode instanceof String)){
+		//	console.warn("WARNING: mode not string",mode);
+		//	return;
+		//}
+        if (typeof closed != "boolean") {
 			console.warn("WARNING: closed is not boolean");
 		}
-		if(mode == "MODE_POLY2D_SRF6DCC"){
+		if(mode == Poly2DType.MODE_POLY2D_SRF6DCC) {
 			//not implemented yet
 			/*srfsdcc = poly.computeSRFSDCC(val)
 			encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-			this.data['val'] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]*/
+			this.data['val'] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]*/			
 		}
-		else if(mode == "MODE_POLY2D_ABSOLUTE"){
+		else if(mode == Poly2DType.MODE_POLY2D_ABSOLUTE) {
 			this.data['val'] = val;
 		}
-		else{
+		else {
 			console.warn("WARNING: mode has not accepted value");
 		}
         this.data['mode'] = mode;
         this.data['closed'] = closed;
-        this.type = "poly2d";
+        this.type = ObjectDataType.poly2d;
         if(hierarchy != null){
 			if(!Array.isArray(hierarchy)){
 				console.warn("WARNING: hierarchy not array");
@@ -361,8 +334,8 @@ export class Poly2d extends ObjectDataGeometry{
 }
 
 export class Poly3d extends ObjectDataGeometry{
-    constructor( name, val, closed, stream=null){
-        super( name, stream);
+    constructor( name: string, val, closed, stream=null){
+        super( name, stream );
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
 			return;
@@ -373,12 +346,12 @@ export class Poly3d extends ObjectDataGeometry{
 		
         this.data['val'] = val;
         this.data['closed'] = closed
-        this.type = "poly3d";
+        this.type = ObjectDataType.poly3d;
 	}
 }
 
-export class Cuboid extends ObjectDataGeometry{
-    constructor( name, val, stream=null){
+export class Cuboid extends ObjectDataGeometry {
+    constructor( name: string, val, stream=null ) {
         super( name, stream);
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
@@ -388,7 +361,7 @@ export class Cuboid extends ObjectDataGeometry{
 			console.warn("WARNING: val length not 16");
 		}
         this.data['val'] = val;
-        this.type = "cuboid";
+        this.type = ObjectDataType.cuboid;
 	}
 }
 
@@ -407,50 +380,18 @@ export class Image extends ObjectData{
     compr_params=[int(cv2.IMWRITE_PNG_COMPRESSION), 9]
     result, payload = cv2.imencode('.png', img, compr_params)
     */
-    constructor( name, val, mimeType, encoding, stream=null){
-        super( name, stream);
-		if(typeof val != "string" && !(val instanceof String)){
-			console.warn("WARNING: val not string",val);
-			return;
-		}
-		if(typeof mimeType != "string" && !(mimeType instanceof String)){
-			console.warn("WARNING: mimeType not string",mimeType);
-			return;
-		}
-		if(typeof encoding != "string" && !(encoding instanceof String)){
-			console.warn("WARNING: encoding not string",encoding);
-			return;
-		}
+    constructor( name: string, val: string, mimeType: string, encoding: string, stream=null) {
+        super( name, stream);		
         this.data['val'] = val;
         this.data['mime_type'] = mimeType;
         this.data['encoding'] = encoding;
-        this.type = "image";
+        this.type = ObjectDataType.image;
 	}
 }
 
 export class Mat extends ObjectData{
-    constructor( name, val, channels, width, height, dataType, stream=null){
-        super( name, stream);
-        if(!Array.isArray(val)){
-			console.warn("WARNING: val not array");
-			return;
-		}
-		if (!Number.isInteger(width)){
-			console.warn("WARNING: width is not integer");
-			return;
-		}
-		if (!Number.isInteger(height)){
-			console.warn("WARNING: height is not integer");
-			return;
-		}
-		if (!Number.isInteger(channels)){
-			console.warn("WARNING: channels is not integer");
-			return;
-		}
-		if(typeof dataType != "string" && !(dataType instanceof String)){
-			console.warn("WARNING: dataType not string",dataType);
-			return;
-		}
+    constructor( name: string, val: Array<number>, channels: number, width: number, height: number, dataType: string, stream=null){
+        super( name, stream);        
 		if(val.length != width * height * channels){
 			console.warn("WARNING: val.length != width * height * channels");
 			return;
@@ -460,51 +401,31 @@ export class Mat extends ObjectData{
         this.data['width'] = width;
         this.data['height'] = height;
         this.data['data_type'] = dataType;
-        this.type = "mat";
+        this.type = ObjectDataType.mat;
 	}
 }
 
 export class Binary extends ObjectData{
-    constructor( name, val, dataType, encoding, stream=null){
-        super( name, stream);
-		if(typeof val != "string" && !(val instanceof String)){
-			console.warn("WARNING: val not string",val);
-			return;
-		}
-		if(typeof dataType != "string" && !(dataType instanceof String)){
-			console.warn("WARNING: dataType not string",dataType);
-			return;
-		}
-		if(typeof encoding != "string" && !(encoding instanceof String)){
-			console.warn("WARNING: encoding not string",encoding);
-			return;
-		}
+    constructor( name: string, val: string, dataType: string, encoding: string, stream=null){
+        super( name, stream);		
         this.data['val'] = val;
         this.data['data_type'] = dataType;
         this.data['encoding'] = encoding;
-        this.type = "binary";
+        this.type = ObjectDataType.binary;
 	}
 }
 
 export class Vec extends ObjectData{
-    constructor( name, val, stream=null){
-        super( name, stream);
-        if(!Array.isArray(val)){
-			console.warn("WARNING: val not array");
-			return;
-		}
+    constructor( name: string, val: Array<number>, stream=null) {
+        super( name, stream);        
         this.data['val'] = val;
-        this.type = "vec";
+        this.type = ObjectDataType.vec;
 	}
 }
 
 export class Point2d extends ObjectDataGeometry{
-    constructor( name, val, id=null, stream=null){
-        super( name, stream);
-		if(!Array.isArray(val)){
-			console.warn("WARNING: val not array");
-			return;
-		}
+    constructor( name: string, val: Array<number>, id=null, stream=null){
+        super( name, stream);		
         if(val.length != 2){
 			console.warn("WARNING: val length not 2");
 		}
@@ -518,34 +439,34 @@ export class Point2d extends ObjectDataGeometry{
 			}
             this.data['id'] = id;
 		}
-        this.type = "point2d";
+        this.type = ObjectDataType.point2d;
 	}
 }
 
 export class Point3d extends ObjectDataGeometry{
-    constructor( name, val, stream=null){
-        super( name, stream);
-		if(!Array.isArray(val)){
-			console.warn("WARNING: val not array");
-			return;
-		}
+    constructor( name: string, val: Array<number>, id=null,  stream=null) {
+        super( name, stream);		
 		if(val.length != 3){
 			console.warn("WARNING: val length not 3");
 			return;
 		}
-        this.data['val'] = val;
-        this.type = "point3d";
+		this.data['val'] = val;
+		if(id != null){
+			
+            if (!Number.isInteger(id)){
+				console.warn("WARNING: id is not integer");
+				return;
+			}
+            this.data['id'] = id;
+		}
+        this.type = ObjectDataType.point3d;
 	}
 }
 
 export class GeometricReference extends ObjectDataGeometry{
-    constructor( name, val, referenceType, stream=null){
-        super( name, stream);
-		if(referenceType != "LineReference" && referenceType != "AreaReference" && referenceType != "VolumeReference"){
-			console.warn("WARNING: referenceType not valid");
-			return;
-		}
-        this.data['reference_type'] = referenceType;
+    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
+        super( name, stream);		
+        this.data['reference_type'] = ObjectDataType[ObjectDataType[referenceType]];  // this trick returns the value of the enum as a string
         if(val != null){
             if(!Array.isArray(val)){
 				console.warn("WARNING: val not array");
@@ -557,29 +478,29 @@ export class GeometricReference extends ObjectDataGeometry{
 }
 
 export class LineReference extends GeometricReference{
-    constructor( name, val, referenceType, stream=null){
+    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
         super( name, val, referenceType, stream);
 	}
 }
 
 export class AreaReference extends GeometricReference{
-    constructor( name, val, referenceType, stream=null){
+    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
         super( name, val, referenceType, stream);
 	}
 }
 
 export class VolumeReference extends GeometricReference{
-    constructor( name, val, referenceType, stream=null){
+    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
         super( name, val, referenceType, stream);
 	}
 }
 
 export class Mesh extends ObjectDataGeometry{
-	pid:number;
-    eid:number;
-    aid:number;
-    vid:number;
-    constructor( name, stream=null){
+	pid: number;
+    eid: number;
+    aid: number;
+    vid: number;
+    constructor( name: string, stream=null) {
         super( name, stream);
         this.pid = 0;
         this.eid = 0;
@@ -588,17 +509,12 @@ export class Mesh extends ObjectDataGeometry{
         this.data['point3d'] = {};
         this.data['line_reference'] = {};
         this.data['area_reference'] = {};
-        this.type = "mesh";
+        this.type = ObjectDataType.mesh;
 	}
 
     // Vertex
-    addVertex( p3d, id=null){
+    addVertex( p3d: Point3d, id=null){
 		var idx;
-		if(!(p3d instanceof Point3d)){
-			console.warn("WARNING: p3d not point3d");
-			return;
-		}
-
         // if(an id is provided use it
         if(id != null){
             // if(it already exists, this is an update call
@@ -622,12 +538,8 @@ export class Mesh extends ObjectDataGeometry{
 	}
 	
     // Edge
-    addEdge( lref, id=null){
-		var idx;
-		if(!(lref instanceof LineReference)){
-			console.warn("WARNING: lref not lineReference");
-			return;
-		}
+    addEdge( lref: LineReference, id=null){
+		var idx;		
 
         if(id != null){
             if(this.data['line_reference'][id]){
@@ -649,12 +561,8 @@ export class Mesh extends ObjectDataGeometry{
 	}
 
     // Area
-    addArea( aref, id=null){
-		var idx;
-		if(!(aref instanceof AreaReference)){
-			console.warn("WARNING: aref not areaReference");
-			return;
-		}
+    addArea( aref: AreaReference, id=null){
+		var idx;		
 
         if(id != null){
             if(this.data['area_reference'][id]){

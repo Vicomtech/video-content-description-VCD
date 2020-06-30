@@ -11,6 +11,9 @@
 * ```
 */
 
+import * as utils from "./vcd.utils";
+import * as types from "./vcd.types";
+
 export enum ElementType {
     object = 0,
     action = 1,
@@ -33,12 +36,12 @@ export enum RDF {
 }
     
 export class VCD4 {
-	private data: any = {}
-	private schema: any = {}
+	private data: Object = {}
+    private schema: Object = {}   
 	
-	private lastUID: any = {}
-	private objectDataNames: any = {}
-	private actionDataNames: any = {}
+	private lastUID: Object = {}
+	private objectDataNames: Object = {}
+	private actionDataNames: Object = {}
 	
 	private schema_file: "vcd_schema_json-v4.2.0.json";
 	private version: "4.2.0";
@@ -321,7 +324,8 @@ export class VCD4 {
             var found = false;
             for (var i = 0; i < this.data['vcd']['frame_intervals'].length; i++) {
                 var fi = this.data['vcd']['frame_intervals'][i];
-                if (this.isInside(frameNum, fi)) {
+                //if (this.isInside(frameNum, fi)) {
+                if( utils.isInside(frameNum, fi)) {
                     found = true;
                 }
             }

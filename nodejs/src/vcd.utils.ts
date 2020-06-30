@@ -110,6 +110,7 @@ export function frameIntervalIsInside(frameIntervalsA: Array<Number>, frameInter
             break;
         }
     }
+    return allInside;
 }
 
 export function fuseFrameIntervalDict(frameInterval: Object, frameIntervals: Array<Object>): Array<Object> {
