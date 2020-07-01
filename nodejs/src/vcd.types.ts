@@ -5,7 +5,7 @@ function isFloat(n){
 }
 
 export class Intrinsics{
-	data:Object ;
+	data: object ;
     constructor() {
         this.data = {};
 	}
@@ -94,7 +94,7 @@ export class IntrinsicsFisheye extends Intrinsics {
 }
 
 export class Extrinsics{
-	data: Object;
+	data: object;
     constructor( poseScsWrtLcs4x4: Array<number>, additionalItems){	
 		var num_coeffs = poseScsWrtLcs4x4.length;
 		if(num_coeffs != 16){
@@ -112,7 +112,7 @@ export class Extrinsics{
 }
 
 export class StreamSync{
-	data: Object;
+	data: object;
 	frameVcd: number;
     constructor( frameVcd=null, frameStream=null, timestampISO8601=null, frameShift=null, additionalItems){
         this.data = {};
@@ -157,7 +157,7 @@ export class StreamSync{
 }
 
 export class Odometry{
-	data: Object;
+	data: object;
     constructor( poseLcsWrtWcs4x4: Array<number>, additionalProperties){
         this.data = {};
         this.data['odometry'] = {};		
@@ -201,7 +201,7 @@ export enum Poly2DType {
 }
 
 export class ObjectData{
-	data: Object;
+	data: object;
 	type: any;
     constructor( name: string, stream=null) {        
         this.data = {};

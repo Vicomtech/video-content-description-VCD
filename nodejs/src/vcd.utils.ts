@@ -1,25 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utils
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/*export mergeObjects(obj1, obj2): any {
-    let key;
-
-    for (key in obj2) {
-        if (obj2.hasOwnProperty(key)) {
-            obj1[key] = obj2[key];
-        }
-    }
-}*/
-
-
-
-export function intersects(fiA: Object, fiB: Object): boolean {
+export function intersects(fiA: object, fiB: object): boolean {
     var maxStartVal = Math.max(fiA['frame_start'], fiB['frame_start']);
     var minEndVal = Math.min(fiA['frame_end'], fiB['frame_end']);
     return maxStartVal <= minEndVal;
 }
 
-export function consecutive(fiA: Object, fiB: Object): boolean {
+export function consecutive(fiA: object, fiB: object): boolean {
     if (fiA['frame_end'] + 1 == fiB['frame_start'] || fiB['frame_end'] + 1 == fiA['frame_start']) {
         return true;
     }
@@ -28,11 +16,11 @@ export function consecutive(fiA: Object, fiB: Object): boolean {
     }
 }
 
-export function isInside(frameNum: number, frameInterval: Object): boolean {
+export function isInside(frameNum: number, frameInterval: object): boolean {
     return frameInterval['frame_start'] <= frameNum && frameNum <= frameInterval['frame_end'];
 }
 
-export function getOuterFrameInterval(frameIntervals: Array<Object>): any {
+export function getOuterFrameInterval(frameIntervals: Array<object>): any {
     var outer = null;
     for (var i = 0; i < frameIntervals.length; i++) {
         var fi = frameIntervals[i];
@@ -51,7 +39,7 @@ export function getOuterFrameInterval(frameIntervals: Array<Object>): any {
     return outer;
 }
 
-export function asFrameIntervalDict(frameValue: any): Object {
+export function asFrameIntervalDict(frameValue: number | Array<number>): object {
     if (Number.isInteger(frameValue)) {
         return { 'frame_start': frameValue, 'frame_end': frameValue };
     }
@@ -63,7 +51,7 @@ export function asFrameIntervalDict(frameValue: any): Object {
     }
 }
 
-export function asFrameIntervalsArrayDict(frameValue: any) {
+export function asFrameIntervalsArrayDict(frameValue: number | Array<number>): Array<object> {
     // Allow for multiple type of frame_interval arguments (int, tuple, list(tuple))
     var frameIntervals;
     if (Number.isInteger(frameValue)) {  // The user has given as argument a "frame number"
@@ -87,7 +75,7 @@ export function asFrameIntervalsArrayDict(frameValue: any) {
     return frameIntervals;
 }
 
-export function asFrameIntervalsArrayTuples(frameIntervals: Array<Object>): Array<Array<Number> > {
+export function asFrameIntervalsArrayTuples(frameIntervals: Array<object>): Array<Array<number> > {
     let fiTuples: number[][] = [[]];
     for (let fiDict in frameIntervals) {
         fiTuples.push([fiDict['frame_start'], fiDict['frame_end']]);
@@ -95,7 +83,7 @@ export function asFrameIntervalsArrayTuples(frameIntervals: Array<Object>): Arra
     return fiTuples;
 }
 
-export function frameIntervalIsInside(frameIntervalsA: Array<Number>, frameIntervalsB: Array<Number>): boolean {
+export function frameIntervalIsInside(frameIntervalsA: Array<number>, frameIntervalsB: Array<number>): boolean {
     let allInside: boolean = true;
     for (let fiA in frameIntervalsA) {
         let inside: boolean = false;
@@ -113,7 +101,7 @@ export function frameIntervalIsInside(frameIntervalsA: Array<Number>, frameInter
     return allInside;
 }
 
-export function fuseFrameIntervalDict(frameInterval: Object, frameIntervals: Array<Object>): Array<Object> {
+export function fuseFrameIntervalDict(frameInterval: object, frameIntervals: Array<object>): Array<object> {
     // This function inserts frameInterval into frameIntervals fusing intervals    
     if (frameIntervals.length == 0) {
         return [frameInterval];
@@ -151,11 +139,11 @@ export function fuseFrameIntervalDict(frameInterval: Object, frameIntervals: Arr
     return frameIntervalsToReturn;
 }
 
-export function fuseFrameIntervals(frameIntervals: Array<Object>) {
+export function fuseFrameIntervals(frameIntervals: Array<object>) {
     // This functions receives a list of frame_intervals and returns another one with
     // non-overlapping intervals
-    // e.g. input: [(0, 5), (3, 6), (8, 10)]
-    //      output:[(0, 6), (8, 10)]    
+    // e.g. input: [{'frame_start': 0, 'frame_end': 5}, {'frame_start': 3, 'frame_end': 6}, {'frame_start': 8, 'frame_end': 10}]
+    //      output:[{'frame_start': 0, 'frame_end': 6}, {'frame_start': 8, 'frame_end': 10}]    
 
     var numFis = frameIntervals.length;
 

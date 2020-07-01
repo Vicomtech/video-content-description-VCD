@@ -8,8 +8,9 @@
 		"declaration" : true,
 		"esModuleInterop" : true,
 		"skipLibCheck" : true,
-		"forceConsistentCasingInFileNames" : true
+		"forceConsistentCasingInFileNames" : true,
+		"sourceMap": true
 	},
 	"include": ["src"],
-	"exclude": ["node_modules"] 
+	"exclude": ["node_modules", "**/__tests__/*"] 
 }
