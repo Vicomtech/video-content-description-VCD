@@ -96,10 +96,14 @@ export class VCD {
                 }
                 else {
                     this.data = vcd_json
+
+                    if(this.data['vcd']['version'] != "4.2.0") {
+                        console.warn("The loaded VCD does not have key \'version\' set to 4.2.0!")
+                    }
+
                     this.computeLastUid();
                     this.computeObjectDataNames();
-                    this.computeActionDataNames();
-                    // TODO: Context, Event data names?
+                    
                 }
             }            
 		}
@@ -234,7 +238,6 @@ export class VCD {
     }
 
     private addFrame(frameNum: number) {
-        // this.data['vcd']['frames'].setdefault(frameNum, {}) // 3.8 secs - 10.000 times
         if (!this.data['vcd']['frames'][frameNum]) {
             this.data['vcd']['frames'][frameNum] = {};
         }
@@ -299,16 +302,6 @@ export class VCD {
         }
     }
 
-    private computeActionDataNames() {
-        this.actionDataNames = {};
-        if (this.data['vcd']['actions']) {
-            for (const uid of Object.keys(this.data['vcd']['actions'])) {
-                this.actionDataNames[uid] = this.actionDataNames[uid] || [];
-                this.computeActionDataNamesUid(uid);
-            }
-        }
-    }
-
     private computeObjectDataNamesUid(uid) {
         // This function recomputes the this.objectDataNames entry for uid
         if (!this.objectDataNames[uid]) {
@@ -341,45 +334,6 @@ export class VCD {
                     for (const val of object['object_data'][valArray]) {
                         if (val['name']) {
                             this.objectDataNames[uid].push(val['name']);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private computeActionDataNamesUid(uid) {
-        // This function recomputes the this.actionDataNames entry for uid
-        if (!this.actionDataNames[uid]) {
-            return;
-        }
-        delete this.actionDataNames[uid];  // Clear list
-        if (this.data['vcd']['actions'][uid]) {
-            var action = this.data['vcd']['actions'][uid];
-            this.actionDataNames[uid] = this.actionDataNames[uid] || [];
-            if (action['frame_intervals']) {
-                // There is dynamic content
-                var fis = action['frame_intervals'];
-                for (var i = 0; i < fis.length; i++) {
-                    for (var j = fis[i]['frame_start']; j < fis[i]['frame_end'] + 1; j++) {
-                        for (const actionInFrame in this.data['vcd']['frames'][j]['actions']) {
-                            for (const valList in this.data['vcd']['frames'][j]['actions'][actionInFrame]['action_data']) {
-                                for (const val of this.data['vcd']['frames'][j]['actions'][actionInFrame]['action_data'][valList]) {
-                                    if (val['name']) {
-                                        this.actionDataNames[uid].push(val['name']);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (action['action_data']) {
-                // There is also static content
-                for (const valArray in action['action_data']) {
-                    for (const val of action['action_data'][valArray]) {
-                        if (val['name']) {
-                            this.actionDataNames[uid].push(val['name']);
                         }
                     }
                 }
@@ -465,33 +419,41 @@ export class VCD {
     }
 
     private addFrames(frameValue: any, elementType: ElementType, uidToAssign) {        
+        // frameValue can be number | Array<number> | Array<Array<number> >
         // This functions add frame structures to root vcd
+        // Steps:
+        // 1/3 Create the frame if it doesn't already exist
+        // 2/3 Fill with entries for this element
+        // 3/3 Create an empty entry (we only need the pointer at 'frames')
+        // If the entry already exists, it is overwritten to {}
+
         let elementTypeName = ElementType[elementType];
-        if (Number.isInteger(frameValue)) {
-            this.addFrame(frameValue);
+        if (Number.isInteger(frameValue)) {            
+            this.addFrame(frameNum);
             this.data['vcd']['frames'][frameValue][elementTypeName + 's'] = this.data['vcd']['frames'][frameValue][elementTypeName + 's'] || {};
             this.data['vcd']['frames'][frameValue][elementTypeName + 's'][uidToAssign] = this.data['vcd']['frames'][frameValue][elementTypeName + 's'][uidToAssign] || {};
         }
         else if (Array.isArray(frameValue)) {
-            for (var frameNum = frameValue[0]; frameNum < frameValue[1] + 1; frameNum++) {
-                this.addFrame(frameNum);                
-                this.data['vcd']['frames'][frameNum][elementTypeName + 's'] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'] || {};
-                this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] || {};
-            }
-        }
-        else if (frameValue.constructor == Object) {
-            for (const key in frameValue) {
-                var frameInterval = frameValue[key];
-                for (var frameNum = frameInterval[0]; frameNum < frameInterval[1] + 1; frameNum++) {
-                    // 1/3 Create the frame if it doesn't already exist
-                    this.addFrame(frameNum);
-                    // 2/3 Fill with entries for this element
-                    this.data['vcd']['frames'][frameNum][elementTypeName + 's'] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'] || {};
-                    // 3/3 Create an empty entry (we only need the pointer at 'frames')
-                    // If the entry already exists, it is overwritten to {}
-                    this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] || {};
+            if(frameValue.every(function(x) { return Array.isArray(x); }))
+            {
+                // Then, frameValue is Array<Array<number> >, e.g. [[0, 10], [26, 29]]
+                for(let frameInterval of frameValue) {
+                    for (var frameNum = frameInterval[0]; frameNum < frameInterval[1] + 1; frameNum++) {
+                        this.addFrame(frameNum);                
+                        this.data['vcd']['frames'][frameNum][elementTypeName + 's'] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'] || {};
+                        this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] || {};
+                    }    
                 }
             }
+            else if (frameValue.every(function(x) { return Number.isInteger(x); }))
+            {
+                // Then, frameValue is a single frame interval, e.g. [0, 10]
+                for (var frameNum = frameValue[0]; frameNum < frameValue[1] + 1; frameNum++) {
+                    this.addFrame(frameNum);                
+                    this.data['vcd']['frames'][frameNum][elementTypeName + 's'] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'] || {};
+                    this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] = this.data['vcd']['frames'][frameNum][elementTypeName + 's'][uidToAssign] || {};
+                }
+            }   
         }
         else {
             console.warn("WARNING: calling addFrames with " + typeof frameValue);
@@ -600,12 +562,9 @@ export class VCD {
 
     private addElement(elementType: ElementType, name: string, semanticType = '', frameValue = null, uid = null, ontUid = null, stream = null) {
         let elementTypeName = ElementType[elementType];        
-        if (frameValue != null) {
-            if (!Number.isInteger(frameValue) && !Array.isArray(frameValue) && frameValue.constructor != Object) {
-                console.warn("WARNING: frameValue has no valid format (int, array or object)");
-            }
-        }
-
+        
+        // frameValue must be either: number | Array<number> | Array<Array<number>>
+       
         // 1/5 Get uid to assign
         // This function checks if the uid exists (keeps it), or if not, and if it is null
         var uidToAssign = this.getUidToAssign(elementType, uid);
@@ -663,7 +622,8 @@ export class VCD {
     }
 
     private createUpdateElement(elementType: ElementType, name: string, semanticType: string, frameIntervalsDicts, uid, ontUid = null, stream = null) {
-        // This function creates OR updates an element at the root of VCD using the given information
+        // This function creates OR updates an element at the root of VCD using the given information        
+        let elementTypeName = ElementType[elementType];
         var elementData = { 'name': name, 'type': semanticType, 'frame_intervals': frameIntervalsDicts };
 
         // Check existing data and push to elementData
@@ -673,9 +633,9 @@ export class VCD {
 
         // Check Stream codename existence
         if (stream != null) {
-            if (this.data['vcd']['metadata']) {
-                if (this.data['vcd']['metadata']['streams']) {
-                    if (this.data['vcd']['metadata']['streams'][stream]) {
+            if ('metadata' in this.data['vcd']) {
+                if ('streams' in this.data['vcd']['metadata']) {
+                    if (stream in this.data['vcd']['metadata']['streams']) {
                         elementData['stream'] = stream;
                     }
                 }
@@ -685,56 +645,44 @@ export class VCD {
             }
         }
 
-        // Check data if object
-        if (elementType == ElementType.object) {
-            if (this.data['vcd']['objects']) {
-                if (this.data['vcd']['objects'][uid]) {
-                    if (this.data['vcd']['objects'][uid]['object_data']) {
-                        elementData['object_data'] = this.data['vcd']['objects'][uid]['object_data'];
-                    }
-                }
-            }
-        }
-
-        // Check data if action
-        if (elementType == ElementType.action) {
-            if (this.data['vcd']['actions']) {
-                if (this.data['vcd']['actions'][uid]) {
-                    if (this.data['vcd']['actions'][uid]['action_data']) {
-                        elementData['action_data'] = this.data['vcd']['actions'][uid]['action_data'];
+        // Check data if object, action, event or context
+        if (elementType != ElementType.relation) {
+            if (elementTypeName + 's' in this.data['vcd']) {
+                if (uid in this.data['vcd'][elementTypeName + 's']) {
+                    if (elementTypeName + '_data' in this.data['vcd'][elementTypeName + 's'][uid]) {
+                        elementData[elementTypeName + '_data'] = this.data['vcd'][elementTypeName + 's'][uid][elementTypeName + '_data'];
                     }
                 }
             }
         }
 
         // Check if relation
-        else if (elementType == ElementType.relation) {
-            if (this.data['vcd']['relations']) {
-                if (this.data['vcd']['relations'][uid]) {
-                    if (this.data['vcd']['relations'][uid]['rdfSubjects']) {
-                        elementData['rdfSubjects'] = this.data['vcd']['relations'][uid]['rdfSubjects'];
+        else {
+            if ('relations' in this.data['vcd']) {
+                if (uid in this.data['vcd']['relations']) {
+                    if ('rdf_subjects' in this.data['vcd']['relations'][uid]) {
+                        elementData['rdf_subjects'] = this.data['vcd']['relations'][uid]['rdf_subjects'];
                     }
-                    if (this.data['vcd']['relations'][uid]['rdfObjects']) {
-                        elementData['rdfObjects'] = this.data['vcd']['relations'][uid]['rdfObjects'];
+                    if ('rdf_objects' in this.data['vcd']['relations'][uid]) {
+                        elementData['rdf_objects'] = this.data['vcd']['relations'][uid]['rdf_objects'];
                     }
                 }
             }
         }
-
-        let elementTypeName = ElementType[elementType];
+       
         this.data['vcd'][elementTypeName + 's'] = this.data['vcd'][elementTypeName + 's'] || {};
         this.data['vcd'][elementTypeName + 's'][uid] = elementData;  // This call creates or updates the element data
     }
 
-    private updateObjectData(uid: number, objectData, frameIntervals) {
+    private updateObjectData(uid: number, objectData: types.ObjectData, frameIntervals: Array<object>) {
         // 1/2 Check Stream codename existence
         var streamValid = false;
-        if (objectData.data['inStream']) {
-            if (this.data['vcd']['metadata']) {
-                if (this.data['vcd']['metadata']['streams']) {
+        if ('in_stream' in objectData.data) {
+            if ('metadata' in this.data['vcd']) {
+                if ('streams' in this.data['vcd']['metadata']) {
                     for (const prop in this.data['vcd']['metadata']['streams']) {
                         var stream = this.data['vcd']['metadata']['streams'][prop];
-                        if (objectData.data['inStream'] == stream['name']) {
+                        if (objectData.data['in_stream'] == stream['name']) {
                             streamValid = true;
                         }
                     }
@@ -748,7 +696,7 @@ export class VCD {
         // 2/2 Fill-in object data...
         // 2.1/2 As "static" content at ['vcd']['objects']...
         if (frameIntervals.length == 0) {
-            if (this.data['vcd']['objects'][uid]) {
+            if (uid in this.data['vcd']['objects']) {
                 var object = this.data['vcd']['objects'][uid];
                 // This is static content that goes into static part of Object
                 object['object_data'] = object['object_data'] || {}; // Creates 'object_data' if it does not exist
@@ -767,7 +715,7 @@ export class VCD {
                 var fi = frameIntervals[i];
                 for (var frameNum = fi['frame_start']; frameNum < fi['frame_end'] + 1; frameNum++) {
                     this.data['vcd']['frames'][frameNum]['objects'] = this.data['vcd']['frames'][frameNum]['objects'] || {};
-                    if (this.data['vcd']['frames'][frameNum]['objects'][uid]) {
+                    if (uid in this.data['vcd']['frames'][frameNum]['objects']) {
                         object = this.data['vcd']['frames'][frameNum]['objects'][uid];
                         object['object_data'] = object['object_data'] || {};  // Creates 'object_data' if it does not exist
                         object['object_data'][objectData.typeName()] = object['object_data'][objectData.typeName()] || [];
@@ -783,37 +731,37 @@ export class VCD {
         }
     }
 
-    private updateActionData(uid: number, actionData, frameIntervals) {
+    private updateActionData(uid: number, actionData: types.ObjectData, frameIntervals: Array<object>) {
         // 1/2 Check Stream codename existence
         var streamValid = false;
-        if (actionData.data['inStream']) {
-            if (this.data['vcd']['metadata']) {
-                if (this.data['vcd']['metadata']['streams']) {
+        if ('in_stream' in actionData.data) {
+            if ('metadata' in this.data['vcd']) {
+                if ('streams' in this.data['vcd']['metadata']) {
                     for (const prop in this.data['vcd']['metadata']['streams']) {
                         var stream = this.data['vcd']['metadata']['streams'][prop];
-                        if (actionData.data['inStream'] == stream['name']) {
+                        if (actionData.data['in_stream'] == stream['name']) {
                             streamValid = true;
                         }
                     }
                 }
             }
             if (!streamValid) {
-                console.warn('WARNING: trying to add actionData for non-declared Stream. Use vcd.addStream.');
+                console.warn('WARNING: trying to add ObjectData for non-declared Stream. Use vcd.addStream.');
             }
         }
 
         // 2/2 Fill-in action data...
         // 2.1/2 As "static" content at ['vcd']['actions']...
-        if (!frameIntervals) {
-            if (this.data['vcd']['actions'][uid]) {
+        if (frameIntervals.length == 0) {
+            if (uid in this.data['vcd']['actions']) {
                 var action = this.data['vcd']['actions'][uid];
-                // This is static content that goes into static part of action
+                // This is static content that goes into static part of Object
                 action['action_data'] = action['action_data'] || {}; // Creates 'action_data' if it does not exist
                 action['action_data'][actionData.typeName()] = action['action_data'][actionData.typeName()] || [];
                 action['action_data'][actionData.typeName()].push(actionData.data);
             }
             else {
-                console.warn("WARNING: Trying to add actionData to non-existing action, uid: " + uid);
+                console.warn("WARNING: Trying to add ObjectData to non-existing Object, uid: " + uid);
             }
         }
         // 2.2/2 OR as "dynamic" content at ['vcd']['frames']...
@@ -824,9 +772,9 @@ export class VCD {
                 var fi = frameIntervals[i];
                 for (var frameNum = fi['frame_start']; frameNum < fi['frame_end'] + 1; frameNum++) {
                     this.data['vcd']['frames'][frameNum]['actions'] = this.data['vcd']['frames'][frameNum]['actions'] || {};
-                    if (this.data['vcd']['frames'][frameNum]['actions'][uid]) {
+                    if (uid in this.data['vcd']['frames'][frameNum]['actions']) {
                         action = this.data['vcd']['frames'][frameNum]['actions'][uid];
-                        action['action_data'] = action['action_data'] || {};  // Creates 'action_data' if it does not exist
+                        action['action_data'] = action['action_data'] || {};  // Creates 'object_data' if it does not exist
                         action['action_data'][actionData.typeName()] = action['action_data'][actionData.typeName()] || [];
                         action['action_data'][actionData.typeName()].push(actionData.data);
                     }
@@ -840,12 +788,118 @@ export class VCD {
         }
     }
     
-    private updateContextData(uid: number, contextData, frameIntervals) {
-        //TODO
+    private updateContextData(uid: number, contextData: types.ObjectData, frameIntervals: Array<object>) {
+        // 1/2 Check Stream codename existence
+        var streamValid = false;
+        if ('in_stream' in contextData.data) {
+            if ('metadata' in this.data['vcd']) {
+                if ('streams' in this.data['vcd']['metadata']) {
+                    for (const prop in this.data['vcd']['metadata']['streams']) {
+                        var stream = this.data['vcd']['metadata']['streams'][prop];
+                        if (contextData.data['in_stream'] == stream['name']) {
+                            streamValid = true;
+                        }
+                    }
+                }
+            }
+            if (!streamValid) {
+                console.warn('WARNING: trying to add ObjectData for non-declared Stream. Use vcd.addStream.');
+            }
+        }
+
+        // 2/2 Fill-in context data...
+        // 2.1/2 As "static" content at ['vcd']['contexts']...
+        if (frameIntervals.length == 0) {
+            if (uid in this.data['vcd']['contexts']) {
+                var context = this.data['vcd']['contexts'][uid];
+                // This is static content that goes into static part of Object
+                context['context_data'] = context['context_data'] || {}; // Creates 'context_data' if it does not exist
+                context['context_data'][contextData.typeName()] = context['context_data'][contextData.typeName()] || [];
+                context['context_data'][contextData.typeName()].push(contextData.data);
+            }
+            else {
+                console.warn("WARNING: Trying to add ObjectData to non-existing Object, uid: " + uid);
+            }
+        }
+        // 2.2/2 OR as "dynamic" content at ['vcd']['frames']...
+        else {
+            // Create frames (if already existing addFrames manages the situation
+            // Loop and fill
+            for (var i = 0; i < frameIntervals.length; i++) {
+                var fi = frameIntervals[i];
+                for (var frameNum = fi['frame_start']; frameNum < fi['frame_end'] + 1; frameNum++) {
+                    this.data['vcd']['frames'][frameNum]['contexts'] = this.data['vcd']['frames'][frameNum]['contexts'] || {};
+                    if (uid in this.data['vcd']['frames'][frameNum]['contexts']) {
+                        context = this.data['vcd']['frames'][frameNum]['contexts'][uid];
+                        context['context_data'] = context['context_data'] || {};  // Creates 'object_data' if it does not exist
+                        context['context_data'][contextData.typeName()] = context['context_data'][contextData.typeName()] || [];
+                        context['context_data'][contextData.typeName()].push(contextData.data);
+                    }
+                    else {  // need to create this entry, only with the pointer (uid) and the data
+                        this.data['vcd']['frames'][frameNum]['contexts'][uid] = {};
+                        this.data['vcd']['frames'][frameNum]['contexts'][uid]['context_data'] = {};
+                        this.data['vcd']['frames'][frameNum]['contexts'][uid]['context_data'][contextData.typeName()] = [contextData.data];
+                    }
+                }
+            }
+        }
     }
 
-    private updateEventData(uid: number, eventData, frameIntervals) {
-        //TODO
+    private updateEventData(uid: number, eventData: types.ObjectData, frameIntervals: Array<object>) {
+        // 1/2 Check Stream codename existence
+        var streamValid = false;
+        if ('in_stream' in eventData.data) {
+            if ('metadata' in this.data['vcd']) {
+                if ('streams' in this.data['vcd']['metadata']) {
+                    for (const prop in this.data['vcd']['metadata']['streams']) {
+                        var stream = this.data['vcd']['metadata']['streams'][prop];
+                        if (eventData.data['in_stream'] == stream['name']) {
+                            streamValid = true;
+                        }
+                    }
+                }
+            }
+            if (!streamValid) {
+                console.warn('WARNING: trying to add ObjectData for non-declared Stream. Use vcd.addStream.');
+            }
+        }
+
+        // 2/2 Fill-in event data...
+        // 2.1/2 As "static" content at ['vcd']['events']...
+        if (frameIntervals.length == 0) {
+            if (uid in this.data['vcd']['events']) {
+                var event = this.data['vcd']['events'][uid];
+                // This is static content that goes into static part of Object
+                event['event_data'] = event['event_data'] || {}; // Creates 'event_data' if it does not exist
+                event['event_data'][eventData.typeName()] = event['event_data'][eventData.typeName()] || [];
+                event['event_data'][eventData.typeName()].push(eventData.data);
+            }
+            else {
+                console.warn("WARNING: Trying to add ObjectData to non-existing Object, uid: " + uid);
+            }
+        }
+        // 2.2/2 OR as "dynamic" content at ['vcd']['frames']...
+        else {
+            // Create frames (if already existing addFrames manages the situation
+            // Loop and fill
+            for (var i = 0; i < frameIntervals.length; i++) {
+                var fi = frameIntervals[i];
+                for (var frameNum = fi['frame_start']; frameNum < fi['frame_end'] + 1; frameNum++) {
+                    this.data['vcd']['frames'][frameNum]['events'] = this.data['vcd']['frames'][frameNum]['events'] || {};
+                    if (uid in this.data['vcd']['frames'][frameNum]['events']) {
+                        event = this.data['vcd']['frames'][frameNum]['events'][uid];
+                        event['event_data'] = event['event_data'] || {};  // Creates 'object_data' if it does not exist
+                        event['event_data'][eventData.typeName()] = event['event_data'][eventData.typeName()] || [];
+                        event['event_data'][eventData.typeName()].push(eventData.data);
+                    }
+                    else {  // need to create this entry, only with the pointer (uid) and the data
+                        this.data['vcd']['frames'][frameNum]['events'][uid] = {};
+                        this.data['vcd']['frames'][frameNum]['events'][uid]['event_data'] = {};
+                        this.data['vcd']['frames'][frameNum]['events'][uid]['event_data'][eventData.typeName()] = [eventData.data];
+                    }
+                }
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -856,31 +910,18 @@ export class VCD {
         Object.assign(prop, properties);        
     }
 
-    public addName(name) {
-
-        if (typeof name != 'string' && !(name instanceof String)) {
-            console.warn("name not string");
-            return;
-        }
+    public addName(name: string) {        
         this.data['vcd']['name'] = name;
     }
 
-    public addAnnotator(annotator) {
-        if (typeof annotator != 'string' && !(annotator instanceof String)) {
-            console.warn("annotator not string");
-            return;
-        }
+    public addAnnotator(annotator: string) {        
         if (!this.data['vcd']['metadata']) {
             this.data['vcd']['metadata'] = {};
         }
         this.data['vcd']['metadata']['annotator'] = annotator;
     }
 
-    public addComment(comment) {
-        if (typeof comment != 'string' && !(comment instanceof String)) {
-            console.warn("comment not string");
-            return;
-        }
+    public addComment(comment: string) {        
         if (!this.data['vcd']['metadata']) {
             this.data['vcd']['metadata'] = {};
         }
@@ -907,34 +948,73 @@ export class VCD {
         
         this.data['vcd']['metadata']['streams'][streamName] = {
             'description': description, 'uri': uri, 'type': sensorType
-        }
-        
+        }        
     }
 
-    public addFrameProperties(frameNum: number, properties: object) {        
+    public addFrameProperties(frameNum: number, timestamp = null, additionalProperties = null) {        
         this.addFrame(frameNum);  // this function internally checks if( the frame already exists
         this.data['vcd']['frames'][frameNum]['frame_properties'] = this.data['vcd']['frames'][frameNum]['frame_properties'] || {};
-        this.data['vcd']['frames'][frameNum]['frame_properties']['properties'] = this.data['vcd']['frames'][frameNum]['frame_properties']['properties'] || {};
-        Object.assign(this.data['vcd']['frames'][frameNum]['frame_properties']['properties'], properties);        
+
+        if (timestamp != null) {
+            if(timestamp instanceof String) {
+                this.data['vcd']['frames'][frameNum]['frame_properties']['timestamp'] = timestamp
+            }
+        }
+
+        if (additionalProperties != null) {
+            if(additionalProperties instanceof Object) {
+                Object.assign(this.data['vcd']['frames'][frameNum]['frame_properties'], additionalProperties)
+            }
+        }     
     }
 
     public addOdometry(frameNum: number, odometry: types.Odometry) {
-        // TODO
+        this.addFrame(frameNum) // this function internally checks if the frame already exists
+        this.data['vcd']['frames'][frameNum]['frame_properties'] = this.data['vcd']['frames'][frameNum]['frame_properties'] || {};
+        Object.assign(this.data['vcd']['frames'][frameNum]['frame_properties'], odometry.data)  // internally odometry.data has 'odometry' entry
     }
 
-    public addStreamProperties(streamName: string, properties: object, frameNum = null) {
+    public addStreamProperties(streamName: string, properties: object, intrinsics =null, extrinsics = null, streamSync = null) {
+        let has_arguments = false
+        let frameNum: number
+        if(intrinsics != null && intrinsics instanceof types.Intrinsics) { has_arguments = true }
+        if(extrinsics != null && extrinsics instanceof types.Extrinsics) { has_arguments = true }
+        if(properties != null && properties instanceof Object) { has_arguments = true }
+        if(streamSync != null && streamSync instanceof types.StreamSync) {
+            has_arguments = true
+            if( streamSync.frameVcd != null) { frameNum = streamSync.frameVcd }
+            else { frameNum = null }
+        }
+        else { frameNum = null }
+
+        if (!has_arguments) {
+            return
+        }
+                
         // This function can be used to add stream properties. if( frame_num is defined, the information is embedded
         // inside 'frame_properties' of the specified frame. Otherwise, the information is embedded into
         // 'stream_properties' inside 'metadata'.
 
         // Find if( this stream is declared
-        if (this.data['vcd']['metadata']) {
-            if (this.data['vcd']['metadata']['streams']) {
-                if (this.data['vcd']['metadata']['streams'][streamName]) {
+        if ('metadata' in this.data['vcd']) {
+            if ('streams' in this.data['vcd']['metadata']) {
+                if (streamName in this.data['vcd']['metadata']['streams']) {
                     if (frameNum == null) {
                         // This information is static
                         this.data['vcd']['metadata']['streams'][streamName]['stream_properties'] = this.data['vcd']['metadata']['streams'][streamName]['stream_properties'] || {};
-                        Object.assign(this.data['vcd']['metadata']['streams'][streamName]['stream_properties'], properties);
+                        
+                        if (properties != null) {
+                            Object.assign(this.data['vcd']['metadata']['streams'][streamName]['stream_properties'], properties)
+                        }
+                        if (intrinsics != null) {
+                            Object.assign(this.data['vcd']['metadata']['streams'][streamName]['stream_properties'], intrinsics.data)
+                        }
+                        if (extrinsics != null) {
+                            Object.assign(this.data['vcd']['metadata']['streams'][streamName]['stream_properties'], extrinsics.data)
+                        }
+                        if (streamSync != null) {
+                            Object.assign(this.data['vcd']['metadata']['streams'][streamName]['stream_properties'], streamSync.data)
+                        }
                     }
                     else {
                         // This is information of the stream for( a specific frame
@@ -944,7 +1024,19 @@ export class VCD {
                         frame['frame_properties']['streams'] = frame['frame_properties']['streams'] || {};
                         frame['frame_properties']['streams'][streamName] = frame['frame_properties']['streams'][streamName] || {};
                         frame['frame_properties']['streams'][streamName]['stream_properties'] = frame['frame_properties']['streams'][streamName]['stream_properties'] || {};
-                        Object.assign(frame['frame_properties']['streams'][streamName]['stream_properties'], properties);
+                        
+                        if (properties != null) {
+                            Object.assign(frame['frame_properties']['streams'][streamName]['stream_properties'], properties)
+                        }
+                        if (intrinsics != null) {
+                            Object.assign(frame['frame_properties']['streams'][streamName]['stream_properties'], intrinsics.data)
+                        }
+                        if (extrinsics != null) {
+                            Object.assign(frame['frame_properties']['streams'][streamName]['stream_properties'], extrinsics.data)
+                        }
+                        if (streamSync != null) {
+                            Object.assign(frame['frame_properties']['streams'][streamName]['stream_properties'], streamSync.data)
+                        }
                     }
                 }
                 else {
@@ -979,7 +1071,66 @@ export class VCD {
     }
 
     public stringifyFrame(frameNum: number, dynamicOnly = true, pretty = false) {
-        // TODO
+        if(!(frameNum in this.data['vcd']['frames'])) {
+            console.warn("WARNING: Trying to stringify a non-existing frame")
+            return ''
+        }
+
+        if(dynamicOnly) {
+            if(pretty) { 
+                return JSON.stringify(this.data['vcd']['frames'][frameNum], null, '    ')
+            }
+            else {
+                return JSON.stringify(this.data['vcd']['frames'][frameNum])
+            }
+        }
+        else {
+            // Need to compose dynamic and static information into a new structure
+            // Copy the dynamic info first
+            let frame_static_dynamic: object
+            Object.assign(frame_static_dynamic, this.data['vcd']['frames'][frameNum])
+
+            // Now the static info for objects, actions, events, contexts and relations
+            for(let elementType in ElementType) {
+                let elementTypeName = ElementType[elementType]
+                // First, elements explicitly defined for this frame
+                if(elementTypeName + 's' in this.data['vcd']['frames'][frameNum]) {
+                    for (var [uid, content] of Object.entries(this.data['vcd']['frames'][frameNum][elementTypeName + 's'])) {
+                        Object.assign(frame_static_dynamic[elementTypeName + 's'][uid], this.data['vcd'][elementTypeName + 's'][uid])
+                        // Remove frameInterval entry
+                        if('frame_intervals' in frame_static_dynamic[elementTypeName + 's'][uid]) {
+                            delete frame_static_dynamic[elementTypeName + 's'][uid]['frame_intervals']
+                        }
+                    }
+                }
+
+                // But also other elements without frame intervals specified, which are assumed to exist during the entire sequence
+                if(elementTypeName + 's' in this.data['vcd'] && elementTypeName != 'relation') {
+                    for( var [uid, element] of Object.entries(this.data['vcd'][elementTypeName + 's'])) {
+                        let frame_intervals_dict = element['frame_intervals']
+                        if(Object.keys(frame_intervals_dict).length == 0) {
+                            // So the list of frame intervals is empty -> this element lives the entire scene
+                            // Let's add it to frame_static_dynamic
+                            frame_static_dynamic[elementTypeName + 's'] = frame_static_dynamic[elementTypeName + 's'] || {}  // in case there are no such type of elements already in this frame
+                            frame_static_dynamic[elementTypeName + 's'][uid] = {}
+                            Object.assign(frame_static_dynamic[elementTypeName + 's'][uid], element)
+
+                            // Remove frameInterval entry
+                            if('frame_intervals' in frame_static_dynamic[elementTypeName + 's'][uid]) {
+                                delete frame_static_dynamic[elementTypeName + 's'][uid]['frame_intervals']
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(pretty) { 
+                return JSON.stringify(frame_static_dynamic, null, '    ')
+            }
+            else {
+                return JSON.stringify(frame_static_dynamic)
+            }
+        }
     }
 
     public updateObject(uid: number, frameValue) {
@@ -1085,32 +1236,29 @@ export class VCD {
         // 2/3 Update action data
         var frameIntervals = utils.asFrameIntervalsArrayDict(frameValue);
         this.updateActionData(uid, actionData, frameIntervals);
-
-        // 3/3 Update auxiliary array
-        this.actionDataNames[uid] = this.actionDataNames[uid] || [];
-        this.actionDataNames[uid].push(actionData.data['name']);
     }
 
     public addContextData(uid: number, contextData, frameValue = null) {
-        // TODO
+         // 1/3 Update element at vcd (internally, this fuses the frame intervals, etc.
+         this.updateElement(ElementType.context, uid, frameValue);
+
+         // 2/3 Update action data
+         var frameIntervals = utils.asFrameIntervalsArrayDict(frameValue);
+         this.updateContextData(uid, contextData, frameIntervals);
     }
 
     public addEventData(uid: number, eventData, frameValue = null) {
-        // TODO
+         // 1/3 Update element at vcd (internally, this fuses the frame intervals, etc.
+         this.updateElement(ElementType.event, uid, frameValue);
+
+         // 2/3 Update action data
+         var frameIntervals = utils.asFrameIntervalsArrayDict(frameValue);
+         this.updateEventData(uid, eventData, frameIntervals);
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Get / Read
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    /*public setData(schema: any, data: any) {
-        // TODO: Is this function necessary?
-        this.lastUID = {};
-        this.schema = schema;
-        this.data = data;
-        this.init();
-    }*/
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////////    
     public getData(): object {
         return this.data;
     }

@@ -1,4 +1,4 @@
-import { VCD, ElementType } from '../vcd.core'
+import { VCD, ElementType, RDF } from '../vcd.core'
 import * as types from '../vcd.types'
 
 test('test_create_search_simple', () => {
@@ -91,6 +91,24 @@ test('test_create_search_mid', () => {
             }               
         }
     }
+
+    // Load and save data
+    let vcd_string_nopretty = vcd.stringify(false)
+    let vcd_data = vcd.getData()
+    let vcd_copy = new VCD(vcd_data, true)
+    let vcd_copy_string_nopretty = vcd_copy.stringify(false)
+    expect(vcd_string_nopretty).toBe(vcd_copy_string_nopretty)
+
+});
+
+test('test_parse_string', () => {
+    let vcd_string = '{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"1":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"2":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"3":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"4":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"5":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"6":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"7":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"8":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"9":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"10":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"11":{"objects":{"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"12":{"objects":{"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}}},"version":"4.2.0","frame_intervals":[{"frame_start":0,"frame_end":12}],"objects":{"0":{"name":"marcos","type":"#Adult","frame_intervals":[{"frame_start":0,"frame_end":10}],"object_data":{"num":[{"name":"age","val":38},{"name":"height","val":1.75}]}},"1":{"name":"peter","type":"#Adult","frame_intervals":[{"frame_start":0,"frame_end":11}],"object_data":{"num":[{"name":"age","val":40}]}},"2":{"name":"katixa","type":"#Child","frame_intervals":[{"frame_start":5,"frame_end":12}],"object_data":{"num":[{"name":"age","val":10}]}}}}}';
+
+    let vcd_object = JSON.parse(vcd_string)
+    let vcd_copy = new VCD(vcd_object, true)
+
+    let vcd_copy_string = vcd_copy.stringify(false)
+    expect(vcd_string).toBe(vcd_copy_string)
 });
 
 test('test_remove_simple', () => {
@@ -169,6 +187,42 @@ test('test_ontology_list', () => {
     expect(vcd.getOntology(ont_uid_2)).toBe('http://www.anotherURL.org/ontology')
 
     expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"2":{"objects":{"1":{"object_data":{"bbox":[{"name":"head","val":[10,10,30,30]}]}}}},"3":{"objects":{"1":{"object_data":{"bbox":[{"name":"head","val":[10,10,30,30]}]}}}},"4":{"objects":{"1":{"object_data":{"bbox":[{"name":"head","val":[10,10,30,30]}]}}}}},"version":"4.2.0","frame_intervals":[{"frame_start":2,"frame_end":4}],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive","1":"http://www.anotherURL.org/ontology"},"objects":{"0":{"name":"CARLOTA","type":"#Car","frame_intervals":[],"ontology_uid":0,"object_data":{"text":[{"name":"brand","val":"Toyota"},{"name":"model","val":"Prius"}]}},"1":{"name":"Marcos","type":"#Person","frame_intervals":[{"frame_start":2,"frame_end":4}],"ontology_uid":1}}}}')
+});
+
+test('test_semantics', () => {
+    let vcd = new VCD()
+
+    // Let's create some contexts, actions, and events
+    let officeUID = vcd.addContext('Room1', '#Office')
+
+    let talking_uid, start_talking_uid, noisy_uid, relation1_uid, relation2_uid;
+    for(let frameNum=0; frameNum<30; frameNum++) {
+        if (frameNum == 3) {
+            start_talking_uid = vcd.addEvent('', '#StartTalking', frameNum)
+            talking_uid = vcd.addAction('', '#Talking', frameNum)
+            noisy_uid = vcd.addContext('', '#Noisy', frameNum)
+
+            let relation1_uid = vcd.addRelation('', '#Starts')
+            vcd.addRdf(relation1_uid, RDF.subject, start_talking_uid, ElementType.event)
+            vcd.addRdf(relation1_uid, RDF.object, talking_uid, ElementType.action)
+
+            let relation2_uid = vcd.addRelation('', '#Causes')
+            vcd.addRdf(relation2_uid, RDF.subject, talking_uid, ElementType.action)
+            vcd.addRdf(relation2_uid, RDF.object, noisy_uid, ElementType.context)
+
+            expect(vcd.getNumRelations()).toBe(2)
+            expect(vcd.getRelation(relation2_uid)['rdf_subjects'].length).toBe(1)
+            expect(vcd.getRelation(relation2_uid)['rdf_subjects'][0]['uid']).toBe(talking_uid)
+        }
+
+        else if( frameNum >= 3 && frameNum <= 11) {
+            vcd.updateAction(talking_uid, frameNum)
+            vcd.updateContext(noisy_uid, frameNum)
+            vcd.updateRelation(relation2_uid, frameNum)
+        }
+    }
+
+    console.log(vcd.stringify(false))
 });
 
 /*test('some_test', () => {
