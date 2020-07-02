@@ -1179,6 +1179,7 @@ export class VCD {
             return;
         }
         else {
+            let relation = this.data['vcd']['relations'][relationUid]
             if (!this.data['vcd'][elementTypeName + 's'][elementUid]) {
                 console.warn("WARNING: trying to add RDF using non-existing Element.")
                 return;
@@ -1195,6 +1196,51 @@ export class VCD {
                     this.data['vcd']['relations'][relationUid]['rdf_objects'].push(
                         { 'uid': elementUid, 'type': elementTypeName }
                     );
+                }
+
+                // If the relation already has a frame_value, it must be a sub-set of the union of the frame_values
+                // of the provided_elements
+                if( relation.hasOwnProperty('frame_intervals')) {
+                    let frame_value_relation = utils.asFrameIntervalsArrayTuples(relation['frame_intervals'])
+                    if (frame_value_relation.length > 0) {
+                        // This relation already has a frame_value explicitly defined
+                        let element = this.data['vcd'][elementTypeName + 's'][elementUid]
+                        if('frame_intervals' in element) {
+                            let fis_dict_element = element['frame_intervals']
+                            let frame_value_element = utils.asFrameIntervalsArrayTuples(fis_dict_element)
+                            if(utils.frameIntervalIsInside(frame_value_relation, frame_value_element)) {
+                                // Good. The frame intervals of this relation are inside the frame intervals of the RDFs.
+                                // Nothing to do                                
+                            }
+                            else {
+                                // Something's wrong: the provided frame interval for this relation is not inside the
+                                // frame interval of the given RDF element
+                                console.warn("WARNING: The provided RDF element frame interval is not a super-set of the frame interval of the Relation. Frames are not added")
+                            }
+                        }    
+                        else {
+                            // So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            // Then, there is nothing to do
+                        }                    
+                    }
+                    else {
+                        // Update the relation appearance at frames according to the added RDF elements
+                        // Let's build up the frame intervals for this relation according to the RDF elements
+                        let element = this.data['vcd'][elementTypeName + 's'][elementUid]
+                        if('frame_intervals' in element) {
+                            let frame_value = utils.asFrameIntervalsArrayTuples(element['frame_intervals'])
+                            this.addFrames(frame_value, ElementType.relation, relationUid)
+                        }
+                        else {
+                            // So this RDF element (e.g. an object or action) does not have frame intervals defined
+                            if(this.getFrameIntervals().length != 0) {
+                                // And the VCD has frame intervals defined: so the RDF element exists in all the scene
+                                // And so does the Relation
+                                let frame_value = utils.asFrameIntervalsArrayTuples(this.getFrameIntervals())
+                                this.addFrames(frame_value, ElementType.relation, relationUid)
+                            }
+                        }
+                    }
                 }
             }
         }

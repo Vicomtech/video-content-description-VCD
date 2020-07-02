@@ -83,7 +83,7 @@ export function asFrameIntervalsArrayTuples(frameIntervals: Array<object>): Arra
     return fiTuples;
 }
 
-export function frameIntervalIsInside(frameIntervalsA: Array<number>, frameIntervalsB: Array<number>): boolean {
+export function frameIntervalIsInside(frameIntervalsA: Array<Array<number>>, frameIntervalsB: Array<Array<number>>): boolean {
     let allInside: boolean = true;
     for (let fiA in frameIntervalsA) {
         let inside: boolean = false;
