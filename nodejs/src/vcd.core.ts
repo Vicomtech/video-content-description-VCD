@@ -95,6 +95,7 @@ export class VCD {
                     this.reset();                 
                 }
                 else {
+                    this.data = vcd_json
                     this.computeLastUid();
                     this.computeObjectDataNames();
                     this.computeActionDataNames();
@@ -243,7 +244,7 @@ export class VCD {
         this.lastUID = {};
         // Read all objects and fill lastUID
         this.lastUID['object'] = -1;
-        if (this.data['vcd']['objects']) {
+        if ('objects' in this.data['vcd']) {
             for (const uid of Object.keys(this.data['vcd']['objects'])) {
                 if (parseInt(uid) > this.lastUID['object']) {
                     this.lastUID['object'] = parseInt(uid);
@@ -252,7 +253,7 @@ export class VCD {
         }
 
         this.lastUID['action'] = -1;
-        if (this.data['vcd']['actions']) {
+        if ('actions' in this.data['vcd']) {
             for (const uid of Object.keys(this.data['vcd']['actions'])) {
                 if (parseInt(uid) > this.lastUID['action']) {
                     this.lastUID['action'] = parseInt(uid);
@@ -261,7 +262,7 @@ export class VCD {
         }
 
         this.lastUID['event'] = -1;
-        if (this.data['vcd']['events']) {
+        if ('events' in this.data['vcd']) {
             for (const uid of Object.keys(this.data['vcd']['events'])) {
                 if (parseInt(uid) > this.lastUID['event']) {
                     this.lastUID['event'] = parseInt(uid);
@@ -270,7 +271,7 @@ export class VCD {
         }
 
         this.lastUID['context'] = -1;
-        if (this.data['vcd']['contexts']) {
+        if ('contexts' in this.data['vcd']) {
             for (const uid of Object.keys(this.data['vcd']['contexts'])) {
                 if (parseInt(uid) > this.lastUID['context']) {
                     this.lastUID['context'] = parseInt(uid);
@@ -279,7 +280,7 @@ export class VCD {
         }
 
         this.lastUID['relation'] = -1;
-        if (this.data['vcd']['relations']) {
+        if ('relations' in this.data['vcd']) {
             for (const uid of Object.keys(this.data['vcd']['relations'])) {
                 if (parseInt(uid) > this.lastUID['relation']) {
                     this.lastUID['relation'] = parseInt(uid);
@@ -650,10 +651,10 @@ export class VCD {
         var semanticType = this.data['vcd'][elementTypeName + 's'][uid]['type'];
         var ontUid = null;
         var stream = null;
-        if (this.data['vcd'][elementTypeName + 's'][uid]['ontologyUid']) {
-            ontUid = this.data['vcd'][elementTypeName + 's'][uid]['ontologyUid'];
+        if ('ontology_uid' in this.data['vcd'][elementTypeName + 's'][uid]) {
+            ontUid = this.data['vcd'][elementTypeName + 's'][uid]['ontology_uid'];
         }
-        if (this.data['vcd'][elementTypeName + 's'][uid]['stream']) {
+        if ('stream' in this.data['vcd'][elementTypeName + 's'][uid]) {
             stream = this.data['vcd'][elementTypeName + 's'][uid]['stream'];
         }
 
@@ -667,7 +668,7 @@ export class VCD {
 
         // Check existing data and push to elementData
         if (ontUid != null && this.getOntology(ontUid) != null) {
-            elementData['ontologyUid'] = ontUid;
+            elementData['ontology_uid'] = ontUid;
         }
 
         // Check Stream codename existence
@@ -746,13 +747,13 @@ export class VCD {
 
         // 2/2 Fill-in object data...
         // 2.1/2 As "static" content at ['vcd']['objects']...
-        if (!frameIntervals) {
+        if (frameIntervals.length == 0) {
             if (this.data['vcd']['objects'][uid]) {
                 var object = this.data['vcd']['objects'][uid];
                 // This is static content that goes into static part of Object
                 object['object_data'] = object['object_data'] || {}; // Creates 'object_data' if it does not exist
-                object['object_data'][objectData.type.name] = object['object_data'][objectData.type.name] || [];
-                object['object_data'][objectData.type.name].push(objectData.data);
+                object['object_data'][objectData.typeName()] = object['object_data'][objectData.typeName()] || [];
+                object['object_data'][objectData.typeName()].push(objectData.data);
             }
             else {
                 console.warn("WARNING: Trying to add ObjectData to non-existing Object, uid: " + uid);
@@ -769,13 +770,13 @@ export class VCD {
                     if (this.data['vcd']['frames'][frameNum]['objects'][uid]) {
                         object = this.data['vcd']['frames'][frameNum]['objects'][uid];
                         object['object_data'] = object['object_data'] || {};  // Creates 'object_data' if it does not exist
-                        object['object_data'][objectData.type.name] = object['object_data'][objectData.type.name] || [];
-                        object['object_data'][objectData.type.name].push(objectData.data);
+                        object['object_data'][objectData.typeName()] = object['object_data'][objectData.typeName()] || [];
+                        object['object_data'][objectData.typeName()].push(objectData.data);
                     }
                     else {  // need to create this entry, only with the pointer (uid) and the data
                         this.data['vcd']['frames'][frameNum]['objects'][uid] = {};
                         this.data['vcd']['frames'][frameNum]['objects'][uid]['object_data'] = {};
-                        this.data['vcd']['frames'][frameNum]['objects'][uid]['object_data'][objectData.type.name] = [objectData.data];
+                        this.data['vcd']['frames'][frameNum]['objects'][uid]['object_data'][objectData.typeName()] = [objectData.data];
                     }
                 }
             }
@@ -808,8 +809,8 @@ export class VCD {
                 var action = this.data['vcd']['actions'][uid];
                 // This is static content that goes into static part of action
                 action['action_data'] = action['action_data'] || {}; // Creates 'action_data' if it does not exist
-                action['action_data'][actionData.type.name] = action['action_data'][actionData.type.name] || [];
-                action['action_data'][actionData.type.name].push(actionData.data);
+                action['action_data'][actionData.typeName()] = action['action_data'][actionData.typeName()] || [];
+                action['action_data'][actionData.typeName()].push(actionData.data);
             }
             else {
                 console.warn("WARNING: Trying to add actionData to non-existing action, uid: " + uid);
@@ -826,13 +827,13 @@ export class VCD {
                     if (this.data['vcd']['frames'][frameNum]['actions'][uid]) {
                         action = this.data['vcd']['frames'][frameNum]['actions'][uid];
                         action['action_data'] = action['action_data'] || {};  // Creates 'action_data' if it does not exist
-                        action['action_data'][actionData.type.name] = action['action_data'][actionData.type.name] || [];
-                        action['action_data'][actionData.type.name].push(actionData.data);
+                        action['action_data'][actionData.typeName()] = action['action_data'][actionData.typeName()] || [];
+                        action['action_data'][actionData.typeName()].push(actionData.data);
                     }
                     else {  // need to create this entry, only with the pointer (uid) and the data
                         this.data['vcd']['frames'][frameNum]['actions'][uid] = {};
                         this.data['vcd']['frames'][frameNum]['actions'][uid]['action_data'] = {};
-                        this.data['vcd']['frames'][frameNum]['actions'][uid]['action_data'][actionData.type.name] = [actionData.data];
+                        this.data['vcd']['frames'][frameNum]['actions'][uid]['action_data'][actionData.typeName()] = [actionData.data];
                     }
                 }
             }
@@ -886,7 +887,7 @@ export class VCD {
         this.data['vcd']['metadata']['comment'] = comment;
     }
 
-    public addOntology(ontologyName) {
+    public addOntology(ontologyName: string) {
         this.data['vcd']['ontologies'] = this.data['vcd']['ontologies'] || {};
         for (const ont_uid in this.data['vcd']['ontologies']) {
             if (this.data['vcd']['ontologies'][ont_uid] == ontologyName) {
@@ -894,7 +895,7 @@ export class VCD {
                 return null;
             }
         }
-        var length = this.data['vcd']['ontologies'].length;
+        var length = Object.keys(this.data['vcd']['ontologies']).length;
         this.data['vcd']['ontologies'][length] = ontologyName;
         return length;
     }
@@ -1048,19 +1049,19 @@ export class VCD {
         }
     }
 
-    public add_relation_object_action(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationObjectAction(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
         // TODO
     }
 
-    public add_relation_action_action(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationActionAction(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
         // TODO
     }
 
-    public add_relation_object_object(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationObjectObject(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
         // TODO
     }
 
-    public add_relation_action_object(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationActionObject(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
         // TODO
     }
 
@@ -1069,7 +1070,7 @@ export class VCD {
         this.updateElement(ElementType.object, uid, frameValue);
 
         // 2/3 Update object data
-        var frameIntervals = utils.asFrameIntervalsArrayDict(frameValue);
+        var frameIntervals = utils.asFrameIntervalsArrayDict(frameValue);  // returns [] if frameValue is null
         this.updateObjectData(uid, objectData, frameIntervals);
 
         // 3/3 Update auxiliary array
@@ -1232,7 +1233,7 @@ export class VCD {
         }
     }
 
-    public getElementsOfType(elementType: ElementType, type: string) {
+    public getElementsOfType(elementType: ElementType, type: string): number[] {
         let elementTypeName = ElementType[elementType]
  
         var uids = [];
@@ -1250,18 +1251,6 @@ export class VCD {
         for (const uid in this.data['vcd']['objects']) {
             if (this.objectDataNames[uid]) {
                 if (this.objectDataNames[uid][dataName]) {
-                    uids.push(uid);
-                }
-            }
-        }
-        return uids;
-    }
-
-    public getObjectsWithActionDataName(dataName: string) {
-        var uids = [];
-        for (const uid in this.data['vcd']['actions']) {
-            if (this.actionDataNames[uid]) {
-                if (this.actionDataNames[uid][dataName]) {
                     uids.push(uid);
                 }
             }
@@ -1321,27 +1310,6 @@ export class VCD {
                     var fi_tuple = [fi['frame_start'], fi['frame_end']];
                     for (var frameNum = fi_tuple[0]; frameNum < fi_tuple[1] + 1; frameNum++) {
                         if (this.hasFrameObjectDataName(frameNum, dataName, uid)) {
-                            frames.push(frameNum);
-                        }
-                    }
-                }
-            }
-        }
-        return frames;
-    }
-
-    public getFramesWithActionDataName(uid: number, dataName: string) {
-        var frames = [];
-        if (this.data['vcd']['actions'][uid] && this.actionDataNames[uid]) {
-            var object = this.data['vcd']['actions'][uid];
-            if (this.actionDataNames[uid][dataName]) {
-                // Now look into Frames
-                var fis = object['frame_intervals'];
-                for (var i = 0; i < fis.length; i++) {
-                    var fi = fis[i];
-                    var fi_tuple = [fi['frame_start'], fi['frame_end']];
-                    for (var frameNum = fi_tuple[0]; frameNum < fi_tuple[1] + 1; frameNum++) {
-                        if (this.hasFrameActionDataName(frameNum, dataName, uid)) {
                             frames.push(frameNum);
                         }
                     }
@@ -1497,7 +1465,7 @@ export class VCD {
         // Get Element from summary
         var element = null;
         for (uid in elements) {
-            element = element[uid];
+            element = elements[uid];
             if (element['type'] == semanticType) {
                 index = uid;
                 break;

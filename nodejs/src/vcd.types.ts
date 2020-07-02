@@ -214,6 +214,9 @@ export class ObjectData{
             this.data['stream'] = stream;
 		}
 	}
+	typeName() {
+		return ObjectDataType[this.type]
+	}
 
     addAttribute( objectData ){
 		if(!(objectData instanceof ObjectData)){
