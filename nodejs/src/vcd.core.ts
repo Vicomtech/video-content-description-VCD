@@ -1247,19 +1247,27 @@ export class VCD {
     }
 
     public addRelationObjectAction(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
-        // TODO
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+        this.addRdf(relationUid, RDF.subject, objectUid, ElementType.object)
+        this.addRdf(relationUid, RDF.object, actionUid, ElementType.action)
     }
 
-    public addRelationActionAction(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
-        // TODO
+    public addRelationActionAction(name: string, semanticType: string, actionUid1: number, actionUid2: number, relationUid = null, ontUid = null, frameValue=null) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+        this.addRdf(relationUid, RDF.subject, actionUid1, ElementType.action)
+        this.addRdf(relationUid, RDF.object, actionUid2, ElementType.action)
     }
 
-    public addRelationObjectObject(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
-        // TODO
+    public addRelationObjectObject(name: string, semanticType: string, objectUid1: number, objectUid2: number, relationUid = null, ontUid = null, frameValue=null) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+        this.addRdf(relationUid, RDF.subject, objectUid1, ElementType.object)
+        this.addRdf(relationUid, RDF.object, objectUid2, ElementType.object)
     }
 
-    public addRelationActionObject(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
-        // TODO
+    public addRelationActionObject(name: string, semanticType: string, actionUid: number, objectUid: number, relationUid = null, ontUid = null, frameValue=null) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+        this.addRdf(relationUid, RDF.subject, actionUid, ElementType.action)
+        this.addRdf(relationUid, RDF.object, objectUid, ElementType.object)
     }
 
     public addObjectData(uid: number, objectData, frameValue = null) {        
@@ -1758,7 +1766,6 @@ export class VCD {
 
         // Update indexes and other member variables
         this.computeObjectDataNamesUid(uid);
-        this.computeActionDataNamesUid(uid);
 
         var outerInterval = utils.getOuterFrameInterval(element['frame_intervals'])
         if (frameIntervalDict['frame_start'] <= outerInterval['frame_start'] && frameIntervalDict['frame_end'] >= outerInterval['frame_end']) {
