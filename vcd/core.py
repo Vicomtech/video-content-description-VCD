@@ -945,7 +945,7 @@ class VCD:
 
                 # But also other elements without frame intervals specified, which are assumed to exist during
                 # the entire sequence
-                if element_type.name + 's' in self.data['vcd'] and element_type.name != "relation":
+                if element_type.name + 's' in self.data['vcd']:
                     for uid, element in self.data['vcd'][element_type.name + 's'].items():
                         frame_intervals_dict = element['frame_intervals']
                         if not frame_intervals_dict:
