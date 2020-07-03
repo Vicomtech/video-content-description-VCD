@@ -91,10 +91,10 @@ class VCD:
 
                 self.schema = schema.vcd_schema
                 if 'version' in temp_data['vcd']:
-                    if temp_data['vcd']['version'] == "4.2.1":
+                    if temp_data['vcd']['version'] == "4.2.1" or temp_data['vcd']['version'] == "4.2.0":
                         validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
                     elif temp_data['vcd']['version'] == "3.3.0":
-                        warnings.warn("ERROR: This file is not a VCD 4.2.1 file.")
+                        warnings.warn("ERROR: This file is not a VCD 4.2.1 or 4.2.0 file.")
                     else:
                         warnings.warn("ERROR: Can't read input file: unsupported VCD format")
                 else:
