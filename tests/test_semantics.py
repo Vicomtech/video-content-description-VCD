@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.2.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.2.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -77,14 +77,14 @@ class TestBasic(unittest.TestCase):
         vcd_c.add_action_data(uid=uid_action1, action_data=types.num(name="subject", val=uid_pedestrian1))
         vcd_c.add_action_data(uid=uid_action2, action_data=types.num(name="subject", val=uid_car1))
 
-        if not os.path.isfile('./etc/test_actions_a.json'):
-            vcd_a.save('./etc/test_actions_a.json')
+        if not os.path.isfile('./etc/in/test_actions_a.json'):
+            vcd_a.save('./etc/in/test_actions_a.json')
 
-        if not os.path.isfile('./etc/test_actions_b.json'):
-            vcd_b.save('./etc/test_actions_b.json')
+        if not os.path.isfile('./etc/in/test_actions_b.json'):
+            vcd_b.save('./etc/in/test_actions_b.json')
 
-        if not os.path.isfile('./etc/test_actions_c.json'):
-            vcd_c.save('./etc/test_actions_c.json')
+        if not os.path.isfile('./etc/in/test_actions_c.json'):
+            vcd_c.save('./etc/in/test_actions_c.json')
 
     def test_relations(self):
         # This tests shows how relations can be created with and without frame interval information
@@ -105,8 +105,8 @@ class TestBasic(unittest.TestCase):
         for frame in vcd.data['vcd']['frames'].values():
             self.assertEqual(len(frame['relations']), 1)
 
-        if not os.path.isfile('./etc/test_relations_1.json'):
-            vcd.save('./etc/test_relations_1.json')
+        if not os.path.isfile('./etc/in/test_relations_1.json'):
+            vcd.save('./etc/in/test_relations_1.json')
 
         # Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
         vcd = core.VCD()
@@ -126,8 +126,8 @@ class TestBasic(unittest.TestCase):
             if 7 <= frame_key <= 9:
                 self.assertEqual(len(frame['relations']), 1)
 
-        if not os.path.isfile('./etc/test_relations_2.json'):
-            vcd.save('./etc/test_relations_2.json')
+        if not os.path.isfile('./etc/in/test_relations_2.json'):
+            vcd.save('./etc/in/test_relations_2.json')
 
         # Case 3: RDF elements have frame interval and relation doesn't
         vcd = core.VCD()
@@ -145,15 +145,15 @@ class TestBasic(unittest.TestCase):
             if 0 <= frame_key <= 15:
                 self.assertEqual(len(frame['relations']), 1)
 
-        if not os.path.isfile('./etc/test_relations_3.json'):
-            vcd.save('./etc/test_relations_3.json')
+        if not os.path.isfile('./etc/in/test_relations_3.json'):
+            vcd.save('./etc/in/test_relations_3.json')
 
         pass
 
     # Add semantics to the KITTI tracking #0
     def test_scene_KITTI_Tracking_0(self):
         sequence_number = 0
-        vcd_file_name = "./etc/in/vcd_420_kitti_tracking_" + str(sequence_number).zfill(
+        vcd_file_name = "./etc/in/vcd_421_kitti_tracking_" + str(sequence_number).zfill(
             4) + ".json"
         vcd = core.VCD(vcd_file_name)
 

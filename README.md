@@ -5,7 +5,7 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The syntax(see ./schema/vcd_schema_json-v4.2.0.json), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see ./schema/vcd_schema_json-v4.2.1.json), as a JSON Schema file, contains the full description of the VCD structure.
 
 
 ## Details
@@ -58,7 +58,7 @@ import vcd.core as core
 import vcd.types as types
 
 # Load a VCD file
-myVCD = core.vcd('./tests/etc/vcd420_semantics_fw.json')
+myVCD = core.vcd('./tests/etc/vcd421_semantics_fw.json')
 
 # Access data directly
 metadata = myVCD.data['vcd']['metadata']
@@ -84,9 +84,9 @@ This validation function is optionally called when saving to JSON files.
 
 VCD is defined as a syntax, and as such, different versions imply differences in the syntax or data structure. In addition, each version has a dedicated library version compatible with it.
 
-Last version is VCD 4.2.0.
+Last version is VCD 4.2.1.
 
-Main changes at VCD 4.2.0 from VCD 4.1.0 are:
+Main changes at VCD 4.2.1 from VCD 4.1.0 are:
 * Improved Frame-message creation
 * Enhanced API for adding Relations and RDFs
 * Added examples for semantic labeling

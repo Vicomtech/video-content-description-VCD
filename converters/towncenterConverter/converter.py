@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.2.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.2.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -22,12 +22,12 @@ import vcd.serializer as serializer
 
 
 def convert_town_center_to_VCD4():
-    if not os.path.isfile('./etc/TownCentreXVID_groundTruth.top'):
+    if not os.path.isfile('./etc/in/townCentreXVID_groundTruth.top'):
         import urllib.request
         url = 'https://www.robots.ox.ac.uk/ActiveVision/Research/Projects/2009bbenfold_headpose/Datasets/TownCentre-groundtruth.top'
-        urllib.request.urlretrieve(url, './etc/TownCentreXVID_groundTruth.top')
+        urllib.request.urlretrieve(url, './etc/in/townCentreXVID_groundTruth.top')
 
-    orig_file_name = "./etc/TownCentreXVID_groundTruth.top"
+    orig_file_name = "./etc/in/townCentreXVID_groundTruth.top"
     vcd = core.VCD()
     with open(orig_file_name, newline='') as csvfile:
         my_reader = csv.reader(csvfile, delimiter=',')

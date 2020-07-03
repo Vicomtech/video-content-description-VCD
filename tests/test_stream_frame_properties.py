@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.2.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.2.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -141,10 +141,10 @@ class TestBasic(unittest.TestCase):
             status="interpolated",  # we can add any thing (it is permitted by VCD schema)
         ))
 
-        if not os.path.isfile('./etc/test_stream_frame_properties.json'):
-            vcd.save('./etc/test_stream_frame_properties.json', True)
+        if not os.path.isfile('./etc/in/test_stream_frame_properties.json'):
+            vcd.save('./etc/in/test_stream_frame_properties.json', True)
 
-        vcd_read = core.VCD('./etc/test_stream_frame_properties.json', validation=True)
+        vcd_read = core.VCD('./etc/in/test_stream_frame_properties.json', validation=True)
         self.assertEqual(vcd_read.stringify(), vcd.stringify())
 
 

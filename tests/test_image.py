@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.2.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.2.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -77,8 +77,8 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(diff_val, 0)
 
-        if not os.path.isfile('./etc/test_image.json'):
-            vcd.save('./etc/test_image.json', True)
+        if not os.path.isfile('./etc/in/test_image.json'):
+            vcd.save('./etc/in/test_image.json', True)
 
         # cv.imshow('decoded_image', img_dec)
         # cv.waitKey(0)
@@ -119,8 +119,8 @@ class TestBasic(unittest.TestCase):
                                                  hierarchy=hierarchy_list)
                                     )
 
-        if not os.path.isfile('./etc/test_contours.json'):
-            vcd.save('./etc/test_contours.json', True)
+        if not os.path.isfile('./etc/in/test_contours.json'):
+            vcd.save('./etc/in/test_contours.json', True)
 
         # 3.- Reconstruct the image from the VCD poly2d and hierarchies (using OpenCV)
         contours_dict = {}  # A dictionary of contours. Each key is one class type, each value, a contours array

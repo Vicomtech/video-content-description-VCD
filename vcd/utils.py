@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.2.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.2.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -145,10 +145,15 @@ def fuse_frame_interval_dict(frame_interval, frame_intervals):
 def fuse_frame_intervals(frame_intervals):
     # This functions receives a list of frame_intervals and returns another one with
     # non-overlapping intervals
-    # e.g. input: [(0, 5), (3, 6), (8, 10)]
-    #      output:[(0, 6), (8, 10)]
+    # e.g.input: [{'frame_start': 0, 'frame_end': 5}, {'frame_start': 3, 'frame_end': 6},
+    #               {'frame_start': 8, 'frame_end': 10}]
+    # output: [{'frame_start': 0, 'frame_end': 6}, {'frame_start': 8, 'frame_end': 10}]
+
     assert(isinstance(frame_intervals, list))
     num_fis = len(frame_intervals)
+
+    if num_fis == 0:
+        return []
 
     if num_fis == 1:
         return frame_intervals
