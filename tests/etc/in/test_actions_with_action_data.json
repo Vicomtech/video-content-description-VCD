@@ -1,0 +1,242 @@
+{
+    "vcd": {
+        "actions": {
+            "0": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 10,
+                        "frame_start": 0
+                    }
+                ],
+                "name": "",
+                "type": "#Running"
+            }
+        },
+        "contexts": {
+            "0": {
+                "context_data": {
+                    "text": [
+                        {
+                            "name": "category",
+                            "val": "#Weather"
+                        },
+                        {
+                            "name": "annotation",
+                            "val": "Manual"
+                        }
+                    ]
+                },
+                "frame_intervals": [],
+                "name": "",
+                "type": "#Sunny"
+            },
+            "1": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 5,
+                        "frame_start": 0
+                    }
+                ],
+                "name": "",
+                "type": "#Highway"
+            }
+        },
+        "frame_intervals": [
+            {
+                "frame_end": 10,
+                "frame_start": 0
+            }
+        ],
+        "frames": {
+            "0": {
+                "actions": {
+                    "0": {
+                        "action_data": {
+                            "num": [
+                                {
+                                    "name": "confidence",
+                                    "val": 0.98
+                                }
+                            ],
+                            "text": [
+                                {
+                                    "name": "annotation",
+                                    "val": "Manual"
+                                }
+                            ],
+                            "vec": [
+                                {
+                                    "name": "confidence_vec",
+                                    "val": [
+                                        0.98,
+                                        0.97
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                "contexts": {
+                    "0": {},
+                    "1": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "1": {
+                "actions": {
+                    "0": {
+                        "action_data": {
+                            "boolean": [
+                                {
+                                    "name": "validated",
+                                    "val": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                "contexts": {
+                    "0": {},
+                    "1": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "2": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {},
+                    "1": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "3": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {},
+                    "1": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "4": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {},
+                    "1": {
+                        "context_data": {
+                            "num": [
+                                {
+                                    "name": "risk",
+                                    "val": 0.7
+                                },
+                                {
+                                    "name": "weight",
+                                    "val": 0.5
+                                }
+                            ]
+                        }
+                    }
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "5": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {},
+                    "1": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "6": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "7": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "8": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "9": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            },
+            "10": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "0": {}
+                },
+                "objects": {
+                    "0": {}
+                }
+            }
+        },
+        "objects": {
+            "0": {
+                "frame_intervals": [],
+                "name": "Marcos",
+                "object_data": {
+                    "text": [
+                        {
+                            "name": "Position",
+                            "val": "#Researcher"
+                        }
+                    ]
+                },
+                "type": "#Person"
+            }
+        },
+        "version": "4.2.1"
+    }
+}

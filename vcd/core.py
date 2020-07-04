@@ -134,11 +134,6 @@ class VCD:
 
             self.__object_data_names = {}  # Stores names of ObjectData, e.g. "age", or "width" per Object
 
-        # Relation's frame_intervals
-        self.__relations_explicit_frame_intervals = dict()  # Will store, for each relation_uid, a boolean, whether
-        # the user declared the frame_interval for the relation explicitly when calling add_relation, or if it was
-        # left as None, so frame_intervals need to be updated from rdf subjects and objects when added
-
     ##################################################
     # Private API: inner functions
     ##################################################
@@ -932,6 +927,7 @@ class VCD:
             frame_static_dynamic = copy.deepcopy(self.data['vcd']['frames'][frame_num])  # Needs to be a copy!
 
             # Now the static info for objects, actions, events, contexts and relations
+            # Relations can be frame-less or frame-specific
             for element_type in ElementType:
                 # First, elements explicitly defined for this frame
                 if element_type.name + 's' in self.data['vcd']['frames'][frame_num]:
@@ -960,22 +956,6 @@ class VCD:
                             if 'frame_intervals' in frame_static_dynamic[element_type.name + 's'][uid]:
                                 del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
 
-                # Now also the Relations!
-                '''if 'relations' in self.data['vcd']:
-                    for uid, relation in self.data['vcd']['relations'].items():
-                        # Need to find if this relation has rdf uids related to objects active at this frame
-                        found = self.is_relation_at_frame(relation, frame_static_dynamic)
-                        if found:
-                            # Found, add this relation
-                            frame_static_dynamic.setdefault('relations', dict())
-                            frame_static_dynamic['relations'][uid] = dict()
-                            frame_static_dynamic['relations'][uid] = copy.deepcopy(relation)
-
-                            # Remove frameInterval entry
-                            if 'frame_intervals' in frame_static_dynamic['relations'][uid]:
-                                del frame_static_dynamic['relations'][uid]['frame_intervals']
-                                '''
-
             if pretty:
                 return json.dumps(frame_static_dynamic, indent=4, sort_keys=True)
             else:
@@ -992,7 +972,12 @@ class VCD:
         return self.__update_element(ElementType.context, uid, frame_value)
 
     def update_relation(self, uid, frame_value):
-        return self.__update_element(ElementType.relation, uid, frame_value)
+        if self.get_relation(uid) is not None:
+            if not self.relation_has_frame_intervals(uid):
+                warnings.warn("WARNING: Trying to update the frame information of a Relation defined as frame-less. "
+                              "Ignoring command.")
+            else:
+                return self.__update_element(ElementType.relation, uid, frame_value)
 
     def add_object(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
         return self.__add_element(ElementType.object, name, semantic_type, frame_value, uid, ont_uid, stream)
@@ -1010,9 +995,7 @@ class VCD:
         relation_uid = self.__add_element(
             ElementType.relation, name, semantic_type, frame_value=frame_value, uid=uid, ont_uid=ont_uid
         )
-        self.__relations_explicit_frame_intervals[relation_uid] = frame_value is not None
         return relation_uid
-
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
         assert(isinstance(element_type, ElementType))
@@ -1036,61 +1019,6 @@ class VCD:
                     relation['rdf_objects'].append(
                         {'uid': element_uid, 'type': element_type.name}
                     )
-
-                # If the relation has frame intervals specified by user,
-                # then rdfs frame intervals are checked for consistency but nothing else
-                if self.__relations_explicit_frame_intervals[relation_uid]:
-                    assert('frame_intervals' in relation)
-                    frame_value_relation = utils.as_frame_intervals_array_tuples(relation['frame_intervals'])
-
-                    if len(frame_value_relation) > 0:
-                        # This relation already has a frame_value explicitly defined (so add_frames was already called)
-                        element = self.data['vcd'][element_type.name + 's'][element_uid]
-                        fis_dict_element = element.get('frame_intervals')
-                        if fis_dict_element:
-                            frame_value_element = utils.as_frame_intervals_array_tuples(fis_dict_element)
-                            if utils.frame_interval_is_inside(frame_value_relation, frame_value_element):
-                                # Good. The frame intervals of this relation are inside the frame intervals of the RDFs
-                                # Nothing to do
-                                pass
-                            else:
-                                # Something's wrong: the provided frame interval for this relation is not inside the
-                                # frame interval of the given RDF element
-                                warnings.warn("WARNING: The provided RDF element frame interval is not a super-set of"
-                                              " the frame interval of the Relation. Frames are not added.")
-                else:
-                    # Update the Relation appearance at frames according to the added RDF elements
-                    # Let's build up the frame intervals for this relation according to the RDF elements, fusing with
-                    # content already at relation, which may have come from previous rdfs
-                    fis_dict_relation = []
-                    if 'frame_intervals' in relation:
-                        fis_dict_relation = relation['frame_intervals']
-
-                    element = self.data['vcd'][element_type.name + 's'][element_uid]
-                    fis_dict_element = element['frame_intervals']
-                    fis_dict_fused = utils.fuse_frame_intervals(fis_dict_relation + fis_dict_element)
-
-                    if fis_dict_fused:
-                        frame_value = utils.as_frame_intervals_array_tuples(fis_dict_fused)
-                        self.__add_frames(frame_value, ElementType.relation, relation_uid)
-
-                        # Let's also update relation's frame_intervals
-                        relation['frame_intervals'] = copy.deepcopy(fis_dict_element)
-                    else:
-                        # So this RDF element (e.g. an object or action) does not have frame intervals defined
-                        if self.get_frame_intervals():
-                            # But the VCD has frame intervals..
-                            if len(relation['frame_intervals']) > 0:
-                                # ... and this relation has gained frame_intervals from
-                                # previously added RDFs. Then, do nothing.
-                                pass
-                            else:
-                                # ... and the relation has no frame_intervals from previous RDFs, so let's use VCD's
-                                frame_value = utils.as_frame_intervals_array_tuples(self.get_frame_intervals())
-                                self.__add_frames(frame_value, ElementType.relation, relation_uid)
-
-                                # Let's also update relation's frame_intervals
-                                relation['frame_intervals'] = copy.deepcopy(fis_dict_element)
 
     def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
                                    ont_uid=None, frame_value=None):
@@ -1363,29 +1291,18 @@ class VCD:
         assert (element_type.name + 's' in self.data['vcd'])
         return self.data['vcd'][element_type.name + 's'][uid].get('frame_intervals')
 
-    def is_relation_at_frame(self, relation, frame):
-        # Need to find if this relation has rdf uids related to objects active at this frame
-        found = False
-        for rdf_subject in relation['rdf_subjects']:
-            subject_uid = rdf_subject['uid']
-            subject_type = rdf_subject['type']
-
-            if subject_type + 's' in frame:
-                if subject_uid in frame[subject_type + 's'].keys():
-                    # Found
-                    found = True
-                    break
-        if not found:
-            for rdf_object in relation['rdf_objects']:
-                object_uid = rdf_object['uid']
-                object_type = rdf_object['type']
-
-                if object_type + 's' in frame:
-                    if object_uid in frame[object_type + 's'].keys():
-                        # Found
-                        found = True
-                        break
-        return found
+    def relation_has_frame_intervals(self, relation_uid):
+        relation = self.get_relation(relation_uid)
+        if relation is None:
+            warnings.warn("WARNING: Non-existing relation " + str(relation_uid))
+        else:
+            if 'frame_intervals' not in relation:
+                return False
+            else:
+                if len(relation['frame_intervals']) == 0:
+                    return False
+                else:
+                    return True
 
     ##################################################
     # Remove

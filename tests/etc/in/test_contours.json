@@ -1,0 +1,121 @@
+{
+    "vcd": {
+        "frame_intervals": [],
+        "frames": {},
+        "objects": {
+            "0": {
+                "frame_intervals": [],
+                "name": "",
+                "object_data": {
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "50",
+                                "50",
+                                "1",
+                                "////+2wE////+2wn////22A"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                2,
+                                -1,
+                                -1,
+                                0
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "109",
+                                "60",
+                                "1",
+                                "pa2BWKBRRRRRCO2BQKKKKKIRyOwTWwKxQKKKKKIR2wKBRRRRRCOR2Ca2BWKBRRRRRCO2BQKKKKKIRyOwTWwKxQKKKKKIR2wKBRRRRRCOQ"
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                0
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "59",
+                                "60",
+                                "0",
+                                "pOwBOwBOwB"
+                            ]
+                        }
+                    ]
+                },
+                "type": "class1"
+            },
+            "1": {
+                "frame_intervals": [],
+                "name": "",
+                "object_data": {
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "110",
+                                "60",
+                                "1",
+                                "J2CORCKKKKKBW2RCKKKKKBWK2Bh2CORCKKKKKBW2RCKKKKKBWK2Bh2CORCKKKKKBW2RCKKKKKBWK2Bh2CORCKKKKKBW2RCKKKKKBWK2A"
+                            ]
+                        }
+                    ]
+                },
+                "type": "class2"
+            },
+            "2": {
+                "frame_intervals": [],
+                "name": "",
+                "object_data": {
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ],
+                            "mode": "MODE_POLY2D_SRF6DCC",
+                            "name": "contour",
+                            "val": [
+                                "479",
+                                "32",
+                                "0",
+                                "OwBW2AK2wK2wBW2AK2wK2wBW2BW2AK2wBW2BW2AK2wBW2BW2AK2wK2wBW2AK2wK2wBW2AK2wK2wBW2BW2AK2wBW2BW2AK2wBW2BW2AK2wK2wBW2AK2wK2wQMISBhCBW2BW2AK2wBW2BW2AK2wK2wBW2AK2wK2wBW2AK2wK2wBW2BW2AK2wBW2BW2AK2wBW2BW2AK2wK2wBW2AK2wK2wBW2AK2wK2wBW2BW2AK2wBW2BW2AK2w"
+                            ]
+                        }
+                    ]
+                },
+                "type": "class3"
+            }
+        },
+        "version": "4.2.1"
+    }
+}

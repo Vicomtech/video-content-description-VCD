@@ -391,7 +391,6 @@ class ConverterVCD330toVCD421(Converter):
         # NOTE: 'scdName' field is lost as VCD 4.0.0 does not support SCD
         # NOTE: 'frameInterval' from 'VCD' is not copied, but computed from frames
         # NOTE: 'guid' in 'Object's is ignored in VCD 4.0.0
-        # NOTE: 'mesh' is not supported in VCD 4.0.0
         # TODO: Apparently 'streamProperties" can exist in VCD3.3.0, although it is not in the schema
         # TODO
         if 'annotator' in vcd330['VCD']:
@@ -624,7 +623,7 @@ class ConverterVCD330toVCD421(Converter):
                 rdf_subjects = relation.get('rdf_subjects', None)
 
                 if not self.vcd.has(core.ElementType.relation, uid):
-                    self.vcd.add_relation(name, predicate, uid=uid, ont_uid=ontologyUID)
+                    self.vcd.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
                     for rdf_object in rdf_objects:
                         element_type = None
                         rdf_object_type_str = rdf_object['type']

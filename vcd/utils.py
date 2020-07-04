@@ -24,6 +24,14 @@ def intersects(fi_a, fi_b):
     min_end_val = min(fi_a['frame_end'], fi_b['frame_end'])
     return max_start_val <= min_end_val
 
+def intersection(fi_a, fi_b):
+    max_start_val = max(fi_a['frame_start'], fi_b['frame_start'])
+    min_end_val = min(fi_a['frame_end'], fi_b['frame_end'])
+    if max_start_val <= min_end_val:
+        return min_end_val, max_start_val
+    else:
+        return None
+
 
 def consecutive(fi_a, fi_b):
     if fi_a['frame_end'] + 1 == fi_b['frame_start'] or fi_b['frame_end'] + 1 == fi_a['frame_start']:
@@ -166,6 +174,33 @@ def fuse_frame_intervals(frame_intervals):
         i += 1
     return frame_intervals_fused
 
+
+def intersection_frame_intervals(frame_intervals_a, frame_intervals_b):
+    # This function finds the intersection frame intervals between two sets of frame intervals
+    # Input arguments are expected as lists of tuples
+    assert (isinstance(frame_intervals_a, list))
+    assert (isinstance(frame_intervals_b, list))
+
+    if len(frame_intervals_a) == 0 and len(frame_intervals_b) == 0:
+        # Both empty
+        return []
+    elif len(frame_intervals_a) == 0:
+        # a empty, check if b is actually list of tuples and return b
+        assert(all(isinstance(fi, tuple) for fi in frame_intervals_b))
+        return frame_intervals_b
+    elif len(frame_intervals_b) == 0:
+        # b empty, check if a is actually list of tuples and return a
+        assert (all(isinstance(fi, tuple) for fi in frame_intervals_a))
+        return frame_intervals_a
+    else:
+        # Ok, both not emtpy, let's compute all intersections between all pairs, and then fuse the result
+        frame_intervals_intersection = []
+        for fi_a in frame_intervals_a:
+            for fi_b in frame_intervals_b:
+                inter_a_b = intersection(fi_a, fi_b)
+                if inter_a_b is not None:
+                    frame_intervals_intersection.append(inter_a_b)
+        return fuse_frame_intervals(frame_intervals_intersection)
 
 ####################################################
 # ROTATION AND ODOMETRY UTILS. See SCL library

@@ -1,0 +1,174 @@
+{
+    "vcd": {
+        "actions": {
+            "0": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 11,
+                        "frame_start": 3
+                    }
+                ],
+                "name": "Talking",
+                "ontology_uid": 0,
+                "type": "#Talking"
+            }
+        },
+        "contexts": {
+            "0": {
+                "frame_intervals": [],
+                "name": "Office",
+                "ontology_uid": 0,
+                "type": "#Office"
+            },
+            "1": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 11,
+                        "frame_start": 3
+                    }
+                ],
+                "name": "Noisy",
+                "type": ""
+            }
+        },
+        "events": {
+            "0": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 3,
+                        "frame_start": 3
+                    }
+                ],
+                "name": "StartTalking",
+                "ontology_uid": 0,
+                "type": "#StartTalking"
+            }
+        },
+        "frame_intervals": [
+            {
+                "frame_end": 11,
+                "frame_start": 3
+            }
+        ],
+        "frames": {
+            "3": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                },
+                "events": {
+                    "0": {}
+                }
+            },
+            "4": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            },
+            "5": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            },
+            "6": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            },
+            "7": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            },
+            "8": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            },
+            "9": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            },
+            "10": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            },
+            "11": {
+                "actions": {
+                    "0": {}
+                },
+                "contexts": {
+                    "1": {}
+                }
+            }
+        },
+        "ontologies": {
+            "0": "http://www.vicomtech.org/viulib/ontology",
+            "1": "http://www.alternativeURL.org/ontology"
+        },
+        "relations": {
+            "0": {
+                "frame_intervals": [],
+                "name": "",
+                "ontology_uid": 0,
+                "rdf_objects": [
+                    {
+                        "type": "action",
+                        "uid": 0
+                    }
+                ],
+                "rdf_subjects": [
+                    {
+                        "type": "event",
+                        "uid": 0
+                    }
+                ],
+                "type": "#Starts"
+            },
+            "1": {
+                "frame_intervals": [],
+                "name": "",
+                "ontology_uid": 0,
+                "rdf_objects": [
+                    {
+                        "type": "context",
+                        "uid": 1
+                    }
+                ],
+                "rdf_subjects": [
+                    {
+                        "type": "action",
+                        "uid": 0
+                    }
+                ],
+                "type": "#Causes"
+            }
+        },
+        "version": "4.2.1"
+    }
+}

@@ -80,17 +80,27 @@ class TestBasic(unittest.TestCase):
         if not os.path.isfile('./etc/in/test_actions_a.json'):
             vcd_a.save('./etc/in/test_actions_a.json')
 
+        vcd_read = core.VCD('./etc/in/test_actions_a.json')
+        self.assertEqual(vcd_read.stringify(False, False), vcd_a.stringify(False, False))
+
         if not os.path.isfile('./etc/in/test_actions_b.json'):
             vcd_b.save('./etc/in/test_actions_b.json')
 
+        vcd_read = core.VCD('./etc/in/test_actions_b.json')
+        self.assertEqual(vcd_read.stringify(False, False), vcd_b.stringify(False, False))
+
         if not os.path.isfile('./etc/in/test_actions_c.json'):
             vcd_c.save('./etc/in/test_actions_c.json')
+
+        vcd_read = core.VCD('./etc/in/test_actions_c.json')
+        self.assertEqual(vcd_read.stringify(False, False), vcd_c.stringify(False, False))
 
     def test_relations(self):
         # This tests shows how relations can be created with and without frame interval information
         vcd = core.VCD()
 
         # Case 1: RDF elements don't have frame interval, but relation does
+        # So objects don't appear in frames, but relation does. Reading the relation leads to the static objects
         uid1 = vcd.add_object(name="", semantic_type="Car")
         uid2 = vcd.add_object(name="", semantic_type="Pedestrian")
 
@@ -107,6 +117,9 @@ class TestBasic(unittest.TestCase):
 
         if not os.path.isfile('./etc/in/test_relations_1.json'):
             vcd.save('./etc/in/test_relations_1.json')
+
+        vcd_read = core.VCD('./etc/in/test_relations_1.json')
+        self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         # Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
         vcd = core.VCD()
@@ -129,15 +142,21 @@ class TestBasic(unittest.TestCase):
         if not os.path.isfile('./etc/in/test_relations_2.json'):
             vcd.save('./etc/in/test_relations_2.json')
 
-        # Case 3: RDF elements have frame interval and relation doesn't
+        vcd_read = core.VCD('./etc/in/test_relations_2.json')
+        self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
+
+        # Case 3: RDF elements have frame interval and relation doesn't (so it is left frame-less)
         vcd = core.VCD()
 
         uid1 = vcd.add_object(name="", semantic_type="Car", frame_value=(0, 10))
         uid2 = vcd.add_object(name="", semantic_type="Pedestrian", frame_value=(5, 15))
         uid3 = vcd.add_object(name="", semantic_type="Other", frame_value=(15, 20))
 
-        vcd.add_relation_object_object(name="", semantic_type="isNear",
+        uid4 = vcd.add_relation_object_object(name="", semantic_type="isNear",
                                        object_uid_1=uid1, object_uid_2=uid2)
+
+        # The relation does not have frame information
+        self.assertEqual(len(vcd.get_relation(uid4)['frame_intervals']), 0)
 
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 20)
@@ -147,6 +166,9 @@ class TestBasic(unittest.TestCase):
 
         if not os.path.isfile('./etc/in/test_relations_3.json'):
             vcd.save('./etc/in/test_relations_3.json')
+
+        vcd_read = core.VCD('./etc/in/test_relations_3.json')
+        self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         pass
 
@@ -260,6 +282,9 @@ class TestBasic(unittest.TestCase):
         # Store
         if not os.path.isfile('./etc/test_kitti_tracking_0_actions.json'):
             vcd.save('./etc/test_kitti_tracking_0_actions.json', False)
+
+        vcd_read = core.VCD('./etc/test_kitti_tracking_0_actions.json')
+        self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

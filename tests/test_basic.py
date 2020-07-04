@@ -274,39 +274,12 @@ class TestBasic(unittest.TestCase):
                 )
 
                 #print(vcd.stringify(pretty=False, validate=False))
-                self.assertEqual(vcd.stringify(False, False), '{"vcd": {"frames": {"3": {"events": {"0": {}}, '
-                                                              '"actions": {"0": {}}, "contexts": {"1": {}}, '
-                                                              '"relations": {"0": {}, "1": {}}}}, "version": '
-                                                              '"4.2.1", "frame_intervals": [{"frame_start": 3, '
-                                                              '"frame_end": 3}], "ontologies": {"0": '
-                                                              '"http://www.vicomtech.org/viulib/ontology", '
-                                                              '"1": "http://www.alternativeURL.org/ontology"}, '
-                                                              '"contexts": {"0": {"name": "Office", "type": '
-                                                              '"#Office", "frame_intervals": [], "ontology_uid": 0}, '
-                                                              '"1": {"name": "Noisy", "type": "", "frame_intervals": '
-                                                              '[{"frame_start": 3, "frame_end": 3}]}}, "events": '
-                                                              '{"0": {"name": "StartTalking", "type": "#StartTalking", '
-                                                              '"frame_intervals": [{"frame_start": 3, '
-                                                              '"frame_end": 3}], "ontology_uid": 0}}, '
-                                                              '"actions": {"0": {"name": "Talking", "type": '
-                                                              '"#Talking", "frame_intervals": [{"frame_start": '
-                                                              '3, "frame_end": 3}], "ontology_uid": 0}}, '
-                                                              '"relations": {"0": {"name": "", "type": "#Starts", '
-                                                              '"frame_intervals": [{"frame_start": 3, "frame_end": 3}]'
-                                                              ', "ontology_uid": 0, "rdf_subjects": [{"uid": 0, "type"'
-                                                              ': "event"}], "rdf_objects": [{"uid": 0, "type": '
-                                                              '"action"}]}, "1": {"name": "", "type": "#Causes", '
-                                                              '"frame_intervals": [{"frame_start": 3, "frame_end": '
-                                                              '3}], "ontology_uid": 0, "rdf_subjects": [{"uid": 0, '
-                                                              '"type": "action"}], "rdf_objects": [{"uid": 1, '
-                                                              '"type": "context"}]}}}}')
                 # print("Frame 3, dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
                 # print("Frame 3, full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
 
             elif 3 <= frameNum <= 11:
                 vcd.update_action(talkingUID, frameNum)
                 vcd.update_context(noisyUID, frameNum)
-                vcd.update_relation(relation2UID, frameNum)
 
                 # print("Frame ", frameNum, ", dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
                 # print("Frame ", frameNum, ", full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))

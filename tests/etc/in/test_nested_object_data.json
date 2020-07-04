@@ -1,0 +1,52 @@
+{
+    "vcd": {
+        "frame_intervals": [
+            {
+                "frame_end": 0,
+                "frame_start": 0
+            }
+        ],
+        "frames": {
+            "0": {
+                "objects": {
+                    "0": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "attributes": {
+                                        "boolean": [
+                                            {
+                                                "name": "visible",
+                                                "val": true
+                                            }
+                                        ]
+                                    },
+                                    "name": "head",
+                                    "val": [
+                                        0,
+                                        0,
+                                        10,
+                                        10
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "objects": {
+            "0": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 0,
+                        "frame_start": 0
+                    }
+                ],
+                "name": "someName1",
+                "type": "#Some"
+            }
+        },
+        "version": "4.2.1"
+    }
+}
