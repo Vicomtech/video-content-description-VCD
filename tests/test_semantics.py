@@ -137,7 +137,7 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_end'], 9)
         for frame_key, frame_val in vcd.data['vcd']['frames'].items():
             if 7 <= frame_key <= 9:
-                self.assertEqual(len(frame['relations']), 1)
+                self.assertEqual(len(frame_val['relations']), 1)
 
         if not os.path.isfile('./etc/in/test_relations_2.json'):
             vcd.save('./etc/in/test_relations_2.json')
@@ -162,7 +162,7 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 20)
         for frame_key, frame_val in vcd.data['vcd']['frames'].items():
             if 0 <= frame_key <= 15:
-                self.assertEqual(len(frame['relations']), 1)
+                self.assertEqual(frame_val.get('relations'), None)
 
         if not os.path.isfile('./etc/in/test_relations_3.json'):
             vcd.save('./etc/in/test_relations_3.json')

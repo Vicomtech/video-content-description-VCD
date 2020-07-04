@@ -940,8 +940,8 @@ class VCD:
                             del frame_static_dynamic[element_type.name + 's'][uid]['frame_intervals']
 
                 # But also other elements without frame intervals specified, which are assumed to exist during
-                # the entire sequence
-                if element_type.name + 's' in self.data['vcd']:
+                # the entire sequence, except frame-less Relations which are assumed to not be associated to any frame
+                if element_type.name + 's' in self.data['vcd'] and element_type.name != 'relation':
                     for uid, element in self.data['vcd'][element_type.name + 's'].items():
                         frame_intervals_dict = element['frame_intervals']
                         if not frame_intervals_dict:
