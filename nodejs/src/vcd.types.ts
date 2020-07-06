@@ -309,18 +309,10 @@ export class Poly2d extends ObjectDataGeometry{
 			console.warn("WARNING: val not array");
 			return;
 		}
-        //if(typeof mode != "string" && !(mode instanceof String)){
-		//	console.warn("WARNING: mode not string",mode);
-		//	return;
-		//}
         if (typeof closed != "boolean") {
 			console.warn("WARNING: closed is not boolean");
 		}
-		if(mode == Poly2DType.MODE_POLY2D_SRF6DCC) {
-			//not implemented yet
-			/*srfsdcc = poly.computeSRFSDCC(val)
-			encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
-			this.data['val'] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]*/			
+		if(mode == Poly2DType.MODE_POLY2D_SRF6DCC) {			
 			let vals = poly2d.computeSRF6DCC(val)
 			let srf6 = vals['code']
 			let xinit = vals['xinit']

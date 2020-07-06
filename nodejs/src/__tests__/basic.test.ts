@@ -284,29 +284,3 @@ test('test_nested_data_attributes', () => {
 
     expect(vcd.stringify(false, false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"bbox":[{"name":"head","val":[0,0,10,10],"attributes":{"boolean":[{"name":"visible","val":true}]}}]}}}}},"version":"4.2.1","frame_intervals":[{"frame_start":0,"frame_end":0}],"objects":{"0":{"name":"someName1","type":"#Some","frame_intervals":[{"frame_start":0,"frame_end":0}]}}}}')
 });
-
-
-
-
-
-/*test('some_test', () => {
-    let vcd = new VCD();
-
-    // Create an Action
-    let uid_action = vcd.addAction("", "Walking", [0, 10]);
-        
-    expect(vcd.getNumActions()).toBe(1)
-    expect(vcd.getFrameIntervals().length).toBe(1)
-    expect(vcd.getFrameIntervals()[0]['frame_start']).toBe(0)
-    expect(vcd.getFrameIntervals()[0]['frame_end']).toBe(10)
-    
-    // Extend the time interval
-    vcd.updateAction(uid_action, 11);
-    expect(vcd.getNumActions()).toBe(1)
-    expect(vcd.getFrameIntervals()[0]['frame_start']).toBe(0)
-    expect(vcd.getFrameIntervals()[0]['frame_end']).toBe(11)
-    expect(vcd.getAction(uid_action)['frame_intervals'][0]['frame_start']).toBe(0)
-    expect(vcd.getAction(uid_action)['frame_intervals'][0]['frame_end']).toBe(11)
-
-    console.log(vcd.stringify())
-});*/

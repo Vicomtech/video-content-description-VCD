@@ -47,3 +47,97 @@ test('test_actions', () => {
     expect(vcd_b.stringify(false, false)).toBe('{"vcd":{"frames":{},"version":"4.2.1","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","frame_intervals":[],"ontology_uid":0},"1":{"name":"","type":"Car","frame_intervals":[],"ontology_uid":0}},"actions":{"0":{"name":"","type":"Walking","frame_intervals":[],"ontology_uid":0},"1":{"name":"","type":"Parked","frame_intervals":[],"ontology_uid":0}},"relations":{"0":{"name":"","type":"performsAction","frame_intervals":[],"ontology_uid":0,"rdf_subjects":[{"uid":0,"type":"object"}],"rdf_objects":[{"uid":0,"type":"action"}]},"1":{"name":"","type":"performsAction","frame_intervals":[],"ontology_uid":0,"rdf_subjects":[{"uid":1,"type":"object"}],"rdf_objects":[{"uid":1,"type":"action"}]}}}}')
     expect(vcd_c.stringify(false, false)).toBe('{"vcd":{"frames":{},"version":"4.2.1","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","frame_intervals":[],"ontology_uid":0},"1":{"name":"","type":"Car","frame_intervals":[],"ontology_uid":0}},"actions":{"0":{"name":"","type":"Walking","frame_intervals":[],"ontology_uid":0,"action_data":{"num":[{"name":"subject","val":0}]}},"1":{"name":"","type":"Parked","frame_intervals":[],"ontology_uid":0,"action_data":{"num":[{"name":"subject","val":1}]}}}}}')
 });
+
+test('test_relations', () => {
+    // This tests shows how relations can be created with and without frame interval information
+    let vcd = new VCD()
+
+    // Case 1: RDF elements don't have frame interval, but relation does
+    // So objects don't appear in frames, but relation does. Reading the relation leads to the static objects
+    let uid1 = vcd.addObject("", "Car")
+    let uid2 = vcd.addObject("", "Pedestrian")
+
+    vcd.addRelationObjectObject("", "isNear",
+                                    uid1, uid2, null, null, 
+                                    [0, 10])
+
+    expect(vcd.getData()['vcd']['frame_intervals'][0]['frame_start']).toBe(0)
+    expect(vcd.getData()['vcd']['frame_intervals'][0]['frame_end']).toBe(10)
+    expect(vcd.getData()['vcd']['relations'][0]['frame_intervals'][0]['frame_start']).toBe(0)
+    expect(vcd.getData()['vcd']['relations'][0]['frame_intervals'][0]['frame_end']).toBe(10)
+    for (let frame_key in vcd.getData()['vcd']['frames']) {        
+        let relations = vcd.getData()['vcd']['frames'][frame_key]['relations']        
+        expect(Object.keys(relations).length).toBe(1)
+    }
+
+    //console.log(vcd.stringify(false))
+    expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"relations":{"0":{}}},"1":{"relations":{"0":{}}},"2":{"relations":{"0":{}}},"3":{"relations":{"0":{}}},"4":{"relations":{"0":{}}},"5":{"relations":{"0":{}}},"6":{"relations":{"0":{}}},"7":{"relations":{"0":{}}},"8":{"relations":{"0":{}}},"9":{"relations":{"0":{}}},"10":{"relations":{"0":{}}}},"version":"4.2.1","frame_intervals":[{"frame_start":0,"frame_end":10}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[]},"1":{"name":"","type":"Pedestrian","frame_intervals":[]}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":0,"frame_end":10}],"rdf_subjects":[{"uid":0,"type":"object"}],"rdf_objects":[{"uid":1,"type":"object"}]}}}}')
+
+    //if not os.path.isfile('./etc/in/test_relations_1.json'):
+    //    vcd.save('./etc/in/test_relations_1.json')
+
+    //vcd_read = core.VCD('./etc/in/test_relations_1.json')
+    //self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
+
+    // Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
+    vcd = new VCD()
+
+    uid1 = vcd.addObject("", "Car", [0, 10])
+    uid2 = vcd.addObject("", "Pedestrian", [5, 15])
+
+    vcd.addRelationObjectObject("", "isNear",
+                                    uid1, uid2, null, null,
+                                    [7, 9])
+
+    expect(vcd.getData()['vcd']['frame_intervals'][0]['frame_start']).toBe(0)
+    expect(vcd.getData()['vcd']['frame_intervals'][0]['frame_end']).toBe(15)
+    expect(vcd.getData()['vcd']['relations'][0]['frame_intervals'][0]['frame_start']).toBe(7)
+    expect(vcd.getData()['vcd']['relations'][0]['frame_intervals'][0]['frame_end']).toBe(9)
+    for (let frame_key in vcd.getData()['vcd']['frames']) {
+        if (7 <= +frame_key && +frame_key <= 9) {  // + operator to convert from string to number
+            let frame_val = vcd.getData()['vcd']['frames'][frame_key]
+            let relations = frame_val['relations']
+            expect(Object.keys(relations).length).toBe(1)
+        }
+    }
+
+    //console.log(vcd.stringify(false))
+    expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"8":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"9":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{}}}},"version":"4.2.1","frame_intervals":[{"frame_start":0,"frame_end":15}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":7,"frame_end":9}],"rdf_subjects":[{"uid":0,"type":"object"}],"rdf_objects":[{"uid":1,"type":"object"}]}}}}')
+
+    //if not os.path.isfile('./etc/in/test_relations_2.json'):
+    //   vcd.save('./etc/in/test_relations_2.json')
+
+    //vcd_read = core.VCD('./etc/in/test_relations_2.json')
+    //self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
+
+    // Case 3: RDF elements have frame interval and relation doesn't (so it is left frame-less)
+    vcd = new VCD()
+
+    uid1 = vcd.addObject("", "Car", [0, 10])
+    uid2 = vcd.addObject("", "Pedestrian", [5, 15])
+    let uid3 = vcd.addObject("", "Other", [15, 20])
+
+    let uid4 = vcd.addRelationObjectObject("", "isNear",
+                                    uid1, uid2)
+
+    // The relation does not have frame information
+    expect(vcd.getRelation(uid4)['frame_intervals'].length).toBe(0)
+
+    expect(vcd.getData()['vcd']['frame_intervals'][0]['frame_start']).toBe(0)
+    expect(vcd.getData()['vcd']['frame_intervals'][0]['frame_end']).toBe(20)
+    for (let frame_key in vcd.getData()['vcd']['frames']) {
+        if (0 <= +frame_key && +frame_key <= 15) {
+            let frame_val = vcd.getData()['vcd']['frames'][frame_key]            
+            expect(!('relations' in frame_val)).toBe(true)
+        }
+    }
+
+    //console.log(vcd.stringify(false))
+    expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}}},"8":{"objects":{"0":{},"1":{}}},"9":{"objects":{"0":{},"1":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{},"2":{}}},"16":{"objects":{"2":{}}},"17":{"objects":{"2":{}}},"18":{"objects":{"2":{}}},"19":{"objects":{"2":{}}},"20":{"objects":{"2":{}}}},"version":"4.2.1","frame_intervals":[{"frame_start":0,"frame_end":20}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]},"2":{"name":"","type":"Other","frame_intervals":[{"frame_start":15,"frame_end":20}]}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[],"rdf_subjects":[{"uid":0,"type":"object"}],"rdf_objects":[{"uid":1,"type":"object"}]}}}}')
+
+    //if not os.path.isfile('./etc/in/test_relations_3.json'):
+    //    vcd.save('./etc/in/test_relations_3.json')
+
+    //vcd_read = core.VCD('./etc/in/test_relations_3.json')
+    //self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
+});
