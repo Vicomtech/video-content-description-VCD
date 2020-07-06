@@ -1,21 +1,21 @@
 /**
-* VCD (Video Content Description) 4.x.x
-*
-* This class is the main manager of VCD 4 content.
-* It can be created void, and add content (e.g. Objects) using the API
-* It can also be created by providing a JSON file.
-* ```
-* import { VCD } from 'vcd'
-* let vcd_a = new VCD() // created void
-* let vcd_b = new VCD(vcd_string) // vcd_string is a read JSON string from a file
-* ```
+VCD (Video Content Description) library v4.2.1
+
+Project website: http://vcd.vicomtech.org
+
+Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+(Spain) all rights reserved.
+
+VCD is a library to create and manage VCD content version 4.2.1.
+VCD is distributed under MIT License. See LICENSE.
+
 */
 
 import * as utils from "./vcd.utils";
 import * as types from "./vcd.types";
 import * as schema from "./vcd.schema";
 
-import { Validator } from 'jsonschema';
+import Ajv from 'ajv';
 
 export enum ElementType {
     object = 0,
@@ -37,14 +37,28 @@ export enum RDF {
     subject = 1,
     object = 2
 }
-    
+  
+
+/**
+* VCD
+*
+* This class is the main manager of VCD 4 content.
+* It can be created void, and add content (e.g. Objects) using the API
+* It can also be created by providing a JSON file.
+* ```
+* import { VCD } from 'vcd'
+* let vcd_a = new VCD() // created void
+* let vcd_b = new VCD(vcd_string) // vcd_string is a read JSON string from a file
+* ```
+*/
 export class VCD {
-	private data: Object = {}
-    private schema: Object = schema.vcd_schema;
+    private data = {}  
+    private schema = schema.vcd_schema     
+    private ajv = new Ajv()
+    private ajv_validate = this.ajv.compile(this.schema)
 	
-	private lastUID: Object = {}
-	private objectDataNames: Object = {}
-	private actionDataNames: Object = {}
+	private lastUID = {}
+    private objectDataNames = {}
 	
 	constructor(vcd_json = null, validation = false) {
 		this.init(vcd_json, validation);		
@@ -59,11 +73,8 @@ export class VCD {
         // Main VCD data
         this.data = { 'vcd': {} };
         this.data['vcd']['frames'] = {};
-        this.data['vcd']['version'] = "4.2.0";
+        this.data['vcd']['version'] = "4.2.1";
         this.data['vcd']['frame_intervals'] = [];
-
-        // Schema information
-        this.schema = schema.vcd_schema;
 
         // Additional auxiliary structures
         this.lastUID = {};
@@ -74,7 +85,6 @@ export class VCD {
         this.lastUID['relation'] = -1;
 
         this.objectDataNames = {};  // Stores names of ObjectData, e.g. "age", or "width" per Object
-        this.actionDataNames = {};  // Stores names of ActionData, e.g. "age", or "width" per Action
     }
 
 	private init(vcd_json = null, validation = false) {
@@ -84,21 +94,20 @@ export class VCD {
 		else {
             // Load from file, and validate with schema
             if (validation) {
-                let validationResult = this.validate(vcd_json)
-
-                if (!validationResult.valid) {
-                    console.log("ERROR: loading VCD content not compliant with schema 4.2.0.");
+                let validation_errors = this.validate(vcd_json)
+                if (validation_errors.length != 0) {
+                    console.log("ERROR: loading VCD content not compliant with schema 4.2.1.");
                     console.warn("Creating an empty VCD instead.");
-                    for(var i = 0; i <validationResult.errors.length; i++){
-                        console.log(validationResult.errors[i].message);
+                    for(var i = 0; i <validation_errors.length; i++){
+                        console.log(validation_errors[i].message);
                     }   
                     this.reset();                 
                 }
                 else {
                     this.data = vcd_json
 
-                    if(this.data['vcd']['version'] != "4.2.0") {
-                        console.warn("The loaded VCD does not have key \'version\' set to 4.2.0!")
+                    if(this.data['vcd']['version'] != "4.2.1" && this.data['vcd']['version'] != "4.2.0") {
+                        console.warn("The loaded VCD does not have key \'version\' set to 4.2.1!")
                     }
 
                     this.computeLastUid();
@@ -294,7 +303,7 @@ export class VCD {
 
     private computeObjectDataNames() {
         this.objectDataNames = {};
-        if (this.data['vcd']['objects']) {
+        if ('objects' in this.data['vcd']) {
             for (const uid of Object.keys(this.data['vcd']['objects'])) {
                 this.objectDataNames[uid] = this.objectDataNames[uid] || [];
                 this.computeObjectDataNamesUid(uid);
@@ -387,7 +396,7 @@ export class VCD {
     }
 
     private cleanUpVcd() {
-        if (this.data['vcd']['objects']) {
+        if ('objects' in this.data['vcd']) {
             if (Object.keys(this.data['vcd']['objects']).length === 0) {  // So there is 'objects', but empty
                 delete this.data['vcd']['objects'];
             }
@@ -429,7 +438,7 @@ export class VCD {
 
         let elementTypeName = ElementType[elementType];
         if (Number.isInteger(frameValue)) {            
-            this.addFrame(frameNum);
+            this.addFrame(frameValue);
             this.data['vcd']['frames'][frameValue][elementTypeName + 's'] = this.data['vcd']['frames'][frameValue][elementTypeName + 's'] || {};
             this.data['vcd']['frames'][frameValue][elementTypeName + 's'][uidToAssign] = this.data['vcd']['frames'][frameValue][elementTypeName + 's'][uidToAssign] || {};
         }
@@ -589,6 +598,15 @@ export class VCD {
         else {
             // Nothing about frame intervals to be updated
             fisDictsUpdated = fisDictsExisting;
+            if(this.getFrameIntervals().length > 0) {
+                // So, frames have already been defined, bu this element is defined as frame-less
+                // It is then assumed to exist in all frames: let's add a pointer into all frames, unless it's a Relation
+                // in which case, frame_intervals are defined by adding rdfs
+                if (elementType != ElementType.relation) {
+                    let frame_value = utils.asFrameIntervalsArrayTuples(this.getFrameIntervals())
+                    this.addFrames(frame_value, elementType, uidToAssign)
+                }
+            }
         }
 
         // 4/5 Create/update Element
@@ -1047,10 +1065,11 @@ export class VCD {
     }
 
     public validate(vcd: object) {
-        let v = new Validator();
-        var validationResult = v.validate(vcd, this.schema);
-
-        return validationResult
+        let valid = this.ajv_validate(vcd)
+        if (!valid)
+            return this.ajv_validate.errors
+        else
+            return []
     }
 
     public stringify(pretty = true, validate = true) {
@@ -1062,9 +1081,13 @@ export class VCD {
             stringified_vcd = JSON.stringify(this.data)
         }
         if (validate) {
-            let validationResult = this.validate(this.data)
-            for(var i = 0; i <validationResult.errors.length; i++){
-                console.log(validationResult.errors[i].message);
+            let validation_errors = this.validate(this.data)
+            if(validation_errors.length != 0) {
+                console.log("ERROR: loading VCD content not compliant with schema 4.2.1.");
+                console.warn("Creating an empty VCD instead.");
+                for(var i = 0; i <validation_errors.length; i++){
+                    console.log(validation_errors[i].message);
+                }               
             }
         }
         return stringified_vcd
@@ -1147,7 +1170,14 @@ export class VCD {
     }
 
     public updateRelation(uid: number, frameValue) {
-        return this.updateElement(ElementType.relation, uid, frameValue);
+        if (this.getRelation(uid) != null) {
+            if (!this.relationHasFrameIntervals(uid)) {
+                console.warn("WARNING: Trying to update the frame information of a Relation defined as frame-less. Ignoring.")
+            }
+            else {
+                return this.updateElement(ElementType.relation, uid, frameValue);
+            }
+        }        
     }
 
     public addObject(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, stream = null) {
@@ -1167,9 +1197,10 @@ export class VCD {
     }
 
     public addRelation(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null) {
-        return this.addElement(
+        let relation_uid = this.addElement(
             ElementType.relation, name, semanticType, frameValue, uid = uid, ontUid = ontUid
         );
+        return relation_uid
     }
 
     public addRdf(relationUid: number, rdfType: RDF, elementUid: number, elementType: ElementType) {
@@ -1196,52 +1227,7 @@ export class VCD {
                     this.data['vcd']['relations'][relationUid]['rdf_objects'].push(
                         { 'uid': elementUid, 'type': elementTypeName }
                     );
-                }
-
-                // If the relation already has a frame_value, it must be a sub-set of the union of the frame_values
-                // of the provided_elements
-                if( relation.hasOwnProperty('frame_intervals')) {
-                    let frame_value_relation = utils.asFrameIntervalsArrayTuples(relation['frame_intervals'])
-                    if (frame_value_relation.length > 0) {
-                        // This relation already has a frame_value explicitly defined
-                        let element = this.data['vcd'][elementTypeName + 's'][elementUid]
-                        if('frame_intervals' in element) {
-                            let fis_dict_element = element['frame_intervals']
-                            let frame_value_element = utils.asFrameIntervalsArrayTuples(fis_dict_element)
-                            if(utils.frameIntervalIsInside(frame_value_relation, frame_value_element)) {
-                                // Good. The frame intervals of this relation are inside the frame intervals of the RDFs.
-                                // Nothing to do                                
-                            }
-                            else {
-                                // Something's wrong: the provided frame interval for this relation is not inside the
-                                // frame interval of the given RDF element
-                                console.warn("WARNING: The provided RDF element frame interval is not a super-set of the frame interval of the Relation. Frames are not added")
-                            }
-                        }    
-                        else {
-                            // So this RDF element (e.g. an object or action) does not have frame intervals defined
-                            // Then, there is nothing to do
-                        }                    
-                    }
-                    else {
-                        // Update the relation appearance at frames according to the added RDF elements
-                        // Let's build up the frame intervals for this relation according to the RDF elements
-                        let element = this.data['vcd'][elementTypeName + 's'][elementUid]
-                        if('frame_intervals' in element) {
-                            let frame_value = utils.asFrameIntervalsArrayTuples(element['frame_intervals'])
-                            this.addFrames(frame_value, ElementType.relation, relationUid)
-                        }
-                        else {
-                            // So this RDF element (e.g. an object or action) does not have frame intervals defined
-                            if(this.getFrameIntervals().length != 0) {
-                                // And the VCD has frame intervals defined: so the RDF element exists in all the scene
-                                // And so does the Relation
-                                let frame_value = utils.asFrameIntervalsArrayTuples(this.getFrameIntervals())
-                                this.addFrames(frame_value, ElementType.relation, relationUid)
-                            }
-                        }
-                    }
-                }
+                }                             
             }
         }
     }
@@ -1250,24 +1236,35 @@ export class VCD {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, objectUid, ElementType.object)
         this.addRdf(relationUid, RDF.object, actionUid, ElementType.action)
+        return relationUid
     }
 
     public addRelationActionAction(name: string, semanticType: string, actionUid1: number, actionUid2: number, relationUid = null, ontUid = null, frameValue=null) {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, actionUid1, ElementType.action)
         this.addRdf(relationUid, RDF.object, actionUid2, ElementType.action)
+        return relationUid
     }
 
     public addRelationObjectObject(name: string, semanticType: string, objectUid1: number, objectUid2: number, relationUid = null, ontUid = null, frameValue=null) {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, objectUid1, ElementType.object)
         this.addRdf(relationUid, RDF.object, objectUid2, ElementType.object)
+        return relationUid
     }
 
     public addRelationActionObject(name: string, semanticType: string, actionUid: number, objectUid: number, relationUid = null, ontUid = null, frameValue=null) {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, actionUid, ElementType.action)
         this.addRdf(relationUid, RDF.object, objectUid, ElementType.object)
+        return relationUid
+    }
+
+    public addRelationSubjectObject(name: string, semanticType: string, subjectType: ElementType, subjectUid: number, objectType: ElementType, objectUid: number, relationUid: null, ontUid: null, frameValue = null) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+        this.addRdf(relationUid, RDF.subject, subjectUid, subjectType)
+        this.addRdf(relationUid, RDF.object, objectUid, objectType)
+        return relationUid
     }
 
     public addObjectData(uid: number, objectData, frameValue = null) {        
@@ -1522,11 +1519,13 @@ export class VCD {
     }
 
     public getObjectData(uid: number, dataName: string, frameNum = null) {
-        if (this.data['vcd']['objects'][uid]) {
-            if (this.objectDataNames[uid][dataName]) {
+        if (!('objects' in this.data['vcd'])) { return {}}
+        
+        if (uid in this.data['vcd']['objects']) {
+            if (this.objectDataNames[uid].includes(dataName)) {
                 // Frame-specific information
                 if (frameNum != null) {
-                    if (this.data['vcd']['frames'][frameNum]['objects'][uid]) {
+                    if (uid in this.data['vcd']['frames'][frameNum]['objects']) {
                         var object = this.data['vcd']['frames'][frameNum]['objects'][uid];
                         for (const prop in object['object_data']) {
                             var valArray = object['object_data'][prop];
@@ -1542,47 +1541,9 @@ export class VCD {
                 // Static information
                 else {
                     var object = this.data['vcd']['objects'][uid];
-                    if (object["object_data"]) {
+                    if ("object_data" in object) {
                         for (const prop in object['object_data']) {
                             var valArray = object['object_data'][prop];
-                            for (var i = 0; i < valArray.length; i++) {
-                                var val = valArray[i];
-                                if (val['name'] == dataName) {
-                                    return val;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return {};
-    }
-
-    public getActionData(uid: number, dataName: string, frameNum = null) {
-        if (this.data['vcd']['actions'][uid]) {
-            if (this.actionDataNames[uid][dataName]) {
-                // Frame-specific information
-                if (frameNum != null) {
-                    if (this.data['vcd']['frames'][frameNum]['actions'][uid]) {
-                        var action = this.data['vcd']['frames'][frameNum]['actions'][uid];
-                        for (const prop in action['action_data']) {
-                            var valArray = action['action_data'][prop];
-                            for (var i = 0; i < valArray.length; i++) {
-                                var val = valArray[i];
-                                if (val['name'] == dataName) {
-                                    return val;
-                                }
-                            }
-                        }
-                    }
-                }
-                // Static information
-                else {
-                    var action = this.data['vcd']['actions'][uid];
-                    if (action["action_data"]) {
-                        for (const prop in action['action_data']) {
-                            var valArray = action['action_data'][prop];
                             for (var i = 0; i < valArray.length; i++) {
                                 var val = valArray[i];
                                 if (val['name'] == dataName) {
@@ -1640,7 +1601,7 @@ export class VCD {
         }
     }
 
-    public getFrameIntervals() {
+    public getFrameIntervals(): Array<object> {
         return this.data['vcd']['frame_intervals'];
     }
 
@@ -1652,8 +1613,22 @@ export class VCD {
         return this.data['vcd'][elementTypeName + 's'][uid]['frame_intervals'];
     }
 
-    public isRelationAtFrame(relation: object, frame: number) {
-        // TODO
+    public relationHasFrameIntervals(relationUid: number) {
+        let relation = this.getRelation(relationUid)
+        if(relation == null) {
+            console.warn("WARNING: Non-existing relation.")
+        }
+        else {
+            if(!('frame_intervals' in relation)) {
+                return false
+            }
+            else {
+                if(relation['frame_intervals'].length == 0) {
+                    return false
+                }
+                else return true
+            }
+        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1683,9 +1658,6 @@ export class VCD {
         var uid = index;
         if (elementType == ElementType.object) {
             delete this.objectDataNames[uid];
-        }
-        if (elementType == ElementType.action) {
-            delete this.actionDataNames[uid];
         }
 
         // Remove from Frames{ let's read frameIntervals from summary
@@ -1811,11 +1783,6 @@ export class VCD {
         // Update indexes and other member variables
         if (elementType == ElementType.object) {
             delete this.objectDataNames[uid];
-        }
-
-        // Update indexes and other member variables
-        if (elementType == ElementType.action) {
-            delete this.actionDataNames[uid];
         }
 
         // Remove from Frames{ let's read frameIntervals from summary

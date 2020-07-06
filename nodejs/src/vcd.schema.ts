@@ -1,12 +1,12 @@
 /*
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.2.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.2.0.
+VCD is a library to create and manage VCD content version 4.2.1.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -160,7 +160,7 @@ export const vcd_schema = {
                     "additionalProperties": false
                 },
                 "frame_properties": {
-                    "description": "These frame_properties include frame-related information\
+                    "description": "These frame_properties include frame-related information,\
                                    including: stream information, odometry, and timestamping.\
                                    -Timestamps: the field \'timestamp\' can be used to declare a\
                                    master timestamp for all information within thi frame.\
@@ -481,7 +481,7 @@ export const vcd_schema = {
                         "height_px": {"type": "integer"},
                         "camera_matrix": {
                             "type": "array",
-                            "comment": "This is a 3x4 camera matrix which projects \
+                            "comment": "This is a 3x4 camera matrix which projects  \
                                        3D homogeneous points (4x1) from Sensor Coordinate \
                                        System (SCS) into the Image Coordinate Sysmte (ICS),\
                                        plane points (3x1). \

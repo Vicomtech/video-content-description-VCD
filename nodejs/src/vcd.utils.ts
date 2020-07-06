@@ -1,3 +1,16 @@
+/**
+VCD (Video Content Description) library v4.2.1
+
+Project website: http://vcd.vicomtech.org
+
+Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+(Spain) all rights reserved.
+
+VCD is a library to create and manage VCD content version 4.2.1.
+VCD is distributed under MIT License. See LICENSE.
+
+*/
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utils
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +90,7 @@ export function asFrameIntervalsArrayDict(frameValue: number | Array<number>): A
 
 export function asFrameIntervalsArrayTuples(frameIntervals: Array<object>): Array<Array<number> > {
     let fiTuples: number[][] = [[]];
-    for (let fiDict in frameIntervals) {
+    for (let fiDict of frameIntervals) {
         fiTuples.push([fiDict['frame_start'], fiDict['frame_end']]);
     }
     return fiTuples;

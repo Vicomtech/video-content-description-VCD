@@ -23,11 +23,10 @@
   "author": "Marcos Nieto",
   "license": "ISC",
   "homepage": "https://github.com/Vicomtech/video-content-description-VCD#readme",
-  "dependencies": {
-    "jsonschema": "^1.2.6"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^26.0.3",
+    "ajv": "^6.12.3",
     "jest": "^26.1.0",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.5"

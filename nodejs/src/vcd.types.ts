@@ -1,4 +1,17 @@
-//import * as poly2d from './poly2d'; // TODO!!
+/*
+VCD (Video Content Description) library v4.2.1
+
+Project website: http://vcd.vicomtech.org
+
+Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+(Spain) all rights reserved.
+
+VCD is a library to create and manage VCD content version 4.2.1.
+VCD is distributed under MIT License. See LICENSE.
+
+*/
+
+import * as poly2d from './vcd.poly2d'
 
 function isFloat(n){
     return Number(n) === n && n % 1 !== 0;
@@ -227,13 +240,14 @@ export class ObjectData{
 			console.warn("WARNING: objectData is ObjectDataGeometry",objectData);
 			return;
 		}
-        this.data['attributes'] = this.data['attributes'] || {};  // Creates 'attributes' if(it does not exist
-        if(!this.data['attributes'][objectData.type]){
-            this.data['attributes'][objectData.type] = this.data['attributes'][objectData.type] || [];
-			this.data['attributes'][objectData.type].push(objectData.data);
+		this.data['attributes'] = this.data['attributes'] || {};  // Creates 'attributes' if(it does not exist
+		let objectDataName = ObjectDataType[objectData.type]
+        if(!this.data['attributes'][objectDataName]){
+            this.data['attributes'][objectDataName] = this.data['attributes'][objectDataName] || [];
+			this.data['attributes'][objectDataName].push(objectData.data);
 		}
 		else{
-			this.data['attributes'][objectData.type].push(objectData.data);
+			this.data['attributes'][objectDataName].push(objectData.data);
 		}
 	}
 }
@@ -281,18 +295,15 @@ export class Text extends ObjectData{
 }
 
 export class Boolean extends ObjectData{
-    constructor( name: string, val, stream=null){
-        super( name, stream);
-		if (typeof val != "boolean"){
-			console.warn("WARNING: val is not boolean");
-		}
+    constructor( name: string, val: boolean, stream=null){
+        super( name, stream);		
         this.data['val'] = val;
         this.type = ObjectDataType.boolean;
 	}
 }
 
 export class Poly2d extends ObjectDataGeometry{
-    constructor( name: string, val: Array<number>, mode, closed, hierarchy=null, stream=null){
+    constructor( name: string, val: Array<number>, mode: Poly2DType, closed: boolean, hierarchy=null, stream=null){
         super( name, stream);
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
@@ -310,6 +321,14 @@ export class Poly2d extends ObjectDataGeometry{
 			/*srfsdcc = poly.computeSRFSDCC(val)
 			encoded_poly, rest = poly.chainCodeBase64Encoder(srfsdcc[2:], 3)
 			this.data['val'] = [str(srfsdcc[0]), str(srfsdcc[1]), str(rest), encoded_poly]*/			
+			let vals = poly2d.computeSRF6DCC(val)
+			let srf6 = vals['code']
+			let xinit = vals['xinit']
+			let yinit = vals['yinit']			
+			let res  = poly2d.chainCodeBase64Encoder(srf6, 3)
+			let encoded_poly = res['code']
+			let rest = res['rest']
+            this.data['val'] = [xinit.toString(), yinit.toString(), rest.toString(), encoded_poly]
 		}
 		else if(mode == Poly2DType.MODE_POLY2D_ABSOLUTE) {
 			this.data['val'] = val;
