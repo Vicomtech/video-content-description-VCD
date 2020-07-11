@@ -14,6 +14,7 @@ VCD is distributed under MIT License. See LICENSE.
 /*######################################
 # Fully manually writing the schema
 ######################################*/
+export const vcd_schema_version = "4.2.1"
 export const vcd_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
@@ -25,7 +26,8 @@ export const vcd_schema = {
             "type": "object",
             "description": "This is the root VCD element.",
             "properties": {
-                "version": {"type": "string"},
+                "schema_version": {"type": "string", "enum": [vcd_schema_version]},
+                "file_version": {"type": "string"},
                 "name": {"type": "string"},
                 "frame_intervals": {
                     "type": "array",
@@ -95,7 +97,7 @@ export const vcd_schema = {
                 "metadata": {"$ref": "#/definitions/metadata"},
             },
             "additionalProperties": false,
-            "required": ["version"]
+            "required": ["schema_version"]
         },
         "frame": {
             "type": "object",
@@ -239,6 +241,7 @@ export const vcd_schema = {
                 "ontology_uid": {"type": "integer"},
                 "stream": {"type": "string"},
                 "object_data": {"$ref": "#/definitions/object_data"},
+                "object_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
             "required": ["name", "type"],
             "additionalProperties": false
@@ -255,6 +258,7 @@ export const vcd_schema = {
                 "ontology_uid": {"type": "integer"},
                 "stream": {"type": "string"},
                 "action_data": {"$ref": "#/definitions/action_data"},
+                "action_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
             "required": ["name", "type"],
             "additionalProperties": false
@@ -271,6 +275,7 @@ export const vcd_schema = {
                 "ontology_uid": {"type": "integer"},
                 "stream": {"type": "string"},
                 "event_data": {"$ref": "#/definitions/event_data"},
+                "event_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
             "required": ["name", "type"],
             "additionalProperties": false
@@ -287,6 +292,7 @@ export const vcd_schema = {
                 "ontology_uid": {"type": "integer"},
                 "stream": {"type": "string"},
                 "context_data": {"$ref": "#/definitions/context_data"},
+                "context_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
             "required": ["name", "type"],
             "additionalProperties": false
@@ -320,6 +326,36 @@ export const vcd_schema = {
                 "type": {"type": "string"},
                 "uid": {"type": "integer"},
             }
+        },
+        "element_data_pointers": {
+            "type": "object",
+            "patternProperties": {
+                "^": {"$ref": "#/definitions/element_data_pointer"}
+            },
+            "additionalProperties": false
+        },        
+        "element_data_pointer": {
+            "type": "object",
+            "properties": {
+                "frame_intervals": {
+                    "type": "array",
+                    "item": {"$ref": "#/definitions/frame_interval"}
+                },
+                "type": {
+                    "type": "string",
+                    "enum": ["bbox", "num", "text", "boolean", "poly2d", "poly3d", "cuboid", "image", "mat", "binary", "point2d", "point3d", "vec", "line_reference", "area_reference", "mesh"]
+                },
+                "attribute_pointers": {
+                    "type": "object",
+                    "patternProperties": {
+                        "^": {
+                            "type": "string",
+                            "enum": ["num", "text", "boolean", "vec"]                                                        
+                        }
+                    }
+                }
+            },
+            "required": ["frame_intervals"]
         },
         "action_data": {
             "type": "object",

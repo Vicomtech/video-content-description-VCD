@@ -232,6 +232,7 @@ export class ObjectData{
 	}
 
     addAttribute( objectData ){
+		// Check if the name already exists, if so, substitute
 		if(!(objectData instanceof ObjectData)){
 			console.warn("WARNING: objectData not ObjectData",objectData);
 			return;
@@ -242,12 +243,23 @@ export class ObjectData{
 		}
 		this.data['attributes'] = this.data['attributes'] || {};  // Creates 'attributes' if(it does not exist
 		let objectDataName = ObjectDataType[objectData.type]
-        if(!this.data['attributes'][objectDataName]){
-            this.data['attributes'][objectDataName] = this.data['attributes'][objectDataName] || [];
-			this.data['attributes'][objectDataName].push(objectData.data);
+        if(objectDataName in this.data['attributes']){
+			this.data['attributes'][objectDataName] = this.data['attributes'][objectDataName] || [];
+			
+			// Find if this element_data name is already there...			
+			const pos = this.data['attributes'][objectDataName].findIndex(item => item.name === objectData.data['name'])
+			let found = (pos == -1)?(false):(true)
+			if(!found) {
+				// No: then, just push this new object data
+				this.data['attributes'][objectDataName].push(objectData.data);
+			}
+			else {
+				// Ok, exists, so let's substitute
+				this.data['attributes'][objectDataName][pos] = objectData.data
+			}
 		}
-		else{
-			this.data['attributes'][objectDataName].push(objectData.data);
+		else {
+			this.data['attributes'][objectDataName] = [objectData.data];
 		}
 	}
 }
@@ -328,7 +340,7 @@ export class Poly2d extends ObjectDataGeometry{
 		else {
 			console.warn("WARNING: mode has not accepted value");
 		}
-        this.data['mode'] = mode;
+        this.data['mode'] = Poly2DType[mode];
         this.data['closed'] = closed;
         this.type = ObjectDataType.poly2d;
         if(hierarchy != null){

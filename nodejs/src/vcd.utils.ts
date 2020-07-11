@@ -14,6 +14,31 @@ VCD is distributed under MIT License. See LICENSE.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Utils
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+export function intersectionBetweenFrameIntervalArrays(fisA: Array<Array<number>>, fisB: Array<Array<number>>): Array<Array<number>> {
+    let fisInt = []
+    for(let fiA of fisA) {
+        for(let fiB of fisB) {
+            let fiInt = intersectionBetweenFrameIntervals(fiA, fiB)
+            if(fiInt != null) {
+                fisInt.push(fiInt)
+            }                
+        }
+    }
+    return fisInt
+}
+
+export function intersectionBetweenFrameIntervals(fiA: Array<number>, fiB: Array<number>) {
+    var maxStartVal = Math.max(fiA[0], fiB[0]);
+    var minEndVal = Math.min(fiA[1], fiB[1]);
+
+    if (maxStartVal <= minEndVal) {
+        return [maxStartVal, minEndVal]
+    }
+    else {
+        return null
+    }
+}
+
 export function intersects(fiA: object, fiB: object): boolean {
     var maxStartVal = Math.max(fiA['frame_start'], fiB['frame_start']);
     var minEndVal = Math.min(fiA['frame_end'], fiB['frame_end']);
@@ -27,6 +52,19 @@ export function consecutive(fiA: object, fiB: object): boolean {
     else {
         return false;
     }
+}
+
+export function isInsideFrameIntervals(frameNum: number, frameIntervals: Array<Array<number>>) {
+    for(let fi of frameIntervals) {
+        if(isInsideFrameInterval(frameNum, fi)) {
+            return true
+        }
+    }
+    return false
+}
+
+export function isInsideFrameInterval(frameNum: number, frameInterval: Array<number>) {
+    return frameInterval[0] <= frameNum && frameNum <= frameInterval[1];
 }
 
 export function isInside(frameNum: number, frameInterval: object): boolean {
@@ -64,9 +102,9 @@ export function asFrameIntervalDict(frameValue: number | Array<number>): object 
     }
 }
 
-export function asFrameIntervalsArrayDict(frameValue: number | Array<number>): Array<object> {
+export function asFrameIntervalsArrayDict(frameValue: number | Array<number> | Array<Array<number>>): Array<object> {
     // Allow for multiple type of frame_interval arguments (int, tuple, list(tuple))
-    var frameIntervals;
+    var frameIntervals = [];
     if (Number.isInteger(frameValue)) {  // The user has given as argument a "frame number"
         frameIntervals = [{ 'frame_start': frameValue, 'frame_end': frameValue }];
     }
@@ -77,8 +115,11 @@ export function asFrameIntervalsArrayDict(frameValue: number | Array<number>): A
         frameIntervals = [];
     }
     else {
-        if (Array.isArray(frameValue) && Array.isArray(frameValue[0])) { // User provides a list of "frame intervals"
-            frameIntervals = frameValue;
+        if (Array.isArray(frameValue) && Array.isArray(frameValue[0])) { // User provides a list of "frame intervals"            
+            for(let frameInterval of frameValue) {            
+                // User provided Array<Array<number>>
+                frameIntervals.push({'frame_start': frameInterval[0], 'frame_end': frameInterval[1]})
+            }            
         }
         else {
             console.warn("WARNING trying to convert something not contemplated");
@@ -89,7 +130,7 @@ export function asFrameIntervalsArrayDict(frameValue: number | Array<number>): A
 }
 
 export function asFrameIntervalsArrayTuples(frameIntervals: Array<object>): Array<Array<number> > {
-    let fiTuples: number[][] = [[]];
+    let fiTuples: number[][] = [];
     for (let fiDict of frameIntervals) {
         fiTuples.push([fiDict['frame_start'], fiDict['frame_end']]);
     }
@@ -172,5 +213,40 @@ export function fuseFrameIntervals(frameIntervals: Array<object>) {
         i += 1;
     }
     return frameIntervalsFused;
+}
+
+export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNum: number) {
+    let fiDictNew = []
+    for(let fi of frameIntervals) {
+        if(frameNum < fi['frame_start']) {
+            fiDictNew.push(fi)
+            continue
+        }
+        if(frameNum == fi['frame_start']) {
+            // Start frame, just remove it
+            if(fi['frame_end'] > frameNum) {
+                fiDictNew.push({'frame_start': frameNum + 1, 'frame_end': fi['frame_end']})
+                continue
+            }
+        }
+        else if(frameNum < fi['frame_end']) {
+            // Inside! Need to split
+            for(let f = fi['frame_start'] + 1; f<=fi['frame_end']; f++) {
+                if (f==frameNum) {
+                    fiDictNew.push({'frame_start': fi['frame_start'], 'frame_end': frameNum - 1})
+                    fiDictNew.push({'frame_start': frameNum + 1, 'frame_end': fi['frame_end']})
+                }
+            }
+        }
+        else if(frameNum == fi['frame_end']) {
+            // End frame, just remove it
+            // no need to check if fi['frame_start'] > frameNum backwards as we are in the else if
+            fiDictNew.push({'frame_start': fi['frame_start'], 'frame_end': frameNum - 1})
+        }
+        else{
+            fiDictNew.push(fi)         
+        }
+    }
+    return fiDictNew
 }
 
