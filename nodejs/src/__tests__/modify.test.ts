@@ -31,42 +31,47 @@ test('test_element_data_nested_same_name', () => {
     expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"1":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"2":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"3":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"4":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"5":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}}},"schema_version":"4.2.1","frame_intervals":[{"frame_start":0,"frame_end":5}],"objects":{"0":{"name":"mike","type":"#Pedestrian","frame_intervals":[{"frame_start":0,"frame_end":5}],"object_data_pointers":{"body":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":5}],"attributes":{"visible":"boolean","occluded":"boolean"}}}}}}}')
 });
 
-/*
 test('test_action_frame_interval_modification', () => {
     let vcd = new VCD()
     
     // Basic modification of element-level information, including frame-intervals
     let uid1 = vcd.addAction('Drinking_5', "distraction/Drinking", [[5, 10], [15, 20]])
-    expect(vcd.getFrameIntervalsOfElement(ElementType.action, uid1)).toStrictEqual([{'frame_start': 5, 'frame_end': 10}, {'frame_start': 15, 'frame_end': 20}])
+    let fis = vcd.getElementFrameIntervals(ElementType.action, uid1)
+    expect(fis.getDict()).toStrictEqual([{'frame_start': 5, 'frame_end': 10}, {'frame_start': 15, 'frame_end': 20}])
 
     // Usual "just-one-frame" update for online operation: internally updates frame interval using FUSION (UNION)
     vcd.updateAction(uid1, 21)
-    expect(vcd.getFrameIntervalsOfElement(ElementType.action, uid1)).toStrictEqual([{'frame_start': 5, 'frame_end': 10}, {'frame_start': 15, 'frame_end': 21}])
-
+    fis = vcd.getElementFrameIntervals(ElementType.action, uid1)
+    expect(fis.getDict()).toStrictEqual([{'frame_start': 5, 'frame_end': 10}, {'frame_start': 15, 'frame_end': 21}])
 
     // Entire modification with potential removal and extension
     vcd.modifyAction(uid1, null, null, [[5, 11], [17, 20]])  // adding 11, and deleting 15, 16 and 21
-    expect(vcd.getFrameIntervalsOfElement(ElementType.action, uid1)).toStrictEqual([{'frame_start': 5, 'frame_end': 11}, {'frame_start': 17, 'frame_end': 20}])
-
+    fis = vcd.getElementFrameIntervals(ElementType.action, uid1)
+    expect(fis.getDict()).toStrictEqual([{'frame_start': 5, 'frame_end': 11}, {'frame_start': 17, 'frame_end': 20}])
     
     // Complex modification of element_data level information    
     vcd.addActionData(uid1, new types.Text('label', 'manual'), [[5, 5], [11, 11], [20, 20]])
-    vcd.stringify(false)
-/*    vcd.modifyActionData(uid1, new types.Text('label', 'auto'), [[11, 11]]) 
+    //vcd.stringify(false)
+    vcd.updateActionData(uid1, new types.Text('label', 'auto'), [[11, 11]])  // This is an update, we want to modify part of the ActionData, without the need to substitute it entirely. This function can also be used to increase element's range
         
     expect(vcd.getActionData(uid1, 'label', 5)['val']).toBe('manual')    
-    expect(vcd.getActionData(uid1, 'label', 10)['val']).toBe('auto')    
+    expect(vcd.getActionData(uid1, 'label', 11)['val']).toBe('auto')    
     expect(vcd.getActionData(uid1, 'label', 20)['val']).toBe('manual')
+    fis = vcd.getElementFrameIntervals(ElementType.action, uid1)
+    expect(fis.getDict()).toStrictEqual([{'frame_start': 5, 'frame_end': 11}, {'frame_start': 17, 'frame_end': 20}])  // element should not be modified so far
 
-    // Element-data can't go BEYOND elements limits -> error/warning is sent
-    vcd.addActionData(uid1, new types.Boolean('label', 'manual'), [[5, 25]])
-    expect(vcd.getFrameIntervalsOfElement(ElementType.action, uid1)).toStrictEqual([{'frame_start': 5, 'frame_end: 11'}, {'frame_start': 15, 'frame_end': 21}])
+    // If element-data is defined BEYOND the element limits -> Element is automatically extendedElement-data can't go BEYOND elements limits -> error/warning is sent
+    vcd.addActionData(uid1, new types.Text('label', 'manual'), [[5, 25]])
+    for(let i=5; i<=25; i++) {
+        expect(vcd.getActionData(uid1, 'label', i)['val']).toBe('manual')
+    }
+    expect(vcd.getElementFrameIntervals(ElementType.action, uid1).getDict()).toStrictEqual([{'frame_start': 5, 'frame_end': 25}])
 
     // Note: any further modification of Action also modifies (e.g. removes) any actionData
-    vcd.modifyAction(uid1, null, null, [[5, 11], [15, 19]])  // removing frames 20 and 21, then removes entry of 'label' action data from frame 20 which does not exist now
-    expect(vcd.getFrameIntervalsOfElement(ElementType.action, uid1)).toBe([{'frame_start': 5, 'frame_end: 11'}, {'frame_start': 15, 'frame_end': 19}])
-    expect(vcd.getActionData(uid1, 'label', 20)).toBe({})  // getActionData return {} if not found
+    vcd.modifyAction(uid1, null, null, [[5, 11], [15, 19]])  // removing frames 20 and 21, and also from 12 to 14 inclusive
+    expect(vcd.getElementFrameIntervals(ElementType.action, uid1).getDict()).toStrictEqual([{'frame_start': 5, 'frame_end': 11}, {'frame_start': 15, 'frame_end': 19}])
+    expect(vcd.getActionData(uid1, 'label', 20)).toBe(null)  // getActionData return null if not found
     
-});*/
+});
 
 // TODO: test modify Relation also
