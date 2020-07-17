@@ -91,7 +91,7 @@ export function getOuterFrameInterval(frameIntervals: Array<object>): any {
 }
 
 export function asFrameIntervalDict(frameValue: number | Array<number>): object {
-    if (Number.isInteger(frameValue)) {
+    if (typeof frameValue == "number") {
         return { 'frame_start': frameValue, 'frame_end': frameValue };
     }
     else if (Array.isArray(frameValue)) {
@@ -105,10 +105,10 @@ export function asFrameIntervalDict(frameValue: number | Array<number>): object 
 export function asFrameIntervalsArrayDict(frameValue: number | Array<number> | Array<Array<number>>): Array<object> {
     // Allow for multiple type of frame_interval arguments (int, tuple, list(tuple))
     var frameIntervals = [];
-    if (Number.isInteger(frameValue)) {  // The user has given as argument a "frame number"
+    if (typeof frameValue == "number") {  // The user has given as argument a "frame number"
         frameIntervals = [{ 'frame_start': frameValue, 'frame_end': frameValue }];
     }
-    else if (Array.isArray(frameValue) && Number.isInteger(frameValue[0])) { // The user has given as argument a single "frame interval"
+    else if (Array.isArray(frameValue) && typeof frameValue[0] == "number") { // The user has given as argument a single "frame interval"
         frameIntervals = [{ 'frame_start': frameValue[0], 'frame_end': frameValue[1] }];
     }
     else if (frameValue == null) { // The user has provided nothing: this is a static element
@@ -212,7 +212,13 @@ export function fuseFrameIntervals(frameIntervals: Array<object>) {
         frameIntervalsFused = fuseFrameIntervalDict(frameIntervals[i], frameIntervalsFused);
         i += 1;
     }
-    return frameIntervalsFused;
+    let frameIntervalsFusedSorted = sortFrameIntervals(frameIntervalsFused)
+    return frameIntervalsFusedSorted;
+}
+
+export function sortFrameIntervals(frameIntervals: Array<object>) {
+    // This function assumes frame intervals have already been fused, otherwise, there might be problems 
+    return frameIntervals.sort(function(a, b) { return a['frame_start'] - b['frame_start']})    
 }
 
 export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNum: number) {

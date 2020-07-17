@@ -1391,6 +1391,38 @@ export class VCD {
         return this.getElementData(ElementType.event, uid, dataName, frameNum)
     }
 
+    public getElementDataPointer(elementType: ElementType, uid: number, dataName: string) {
+        if( this.has(elementType, uid)){
+            let elementTypeName = ElementType[elementType]
+            let element = this.data['vcd'][elementTypeName + 's'][uid]
+            if(elementTypeName + '_data_pointers' in element) {
+                if( dataName in element[elementTypeName + '_data_pointers']) {
+                    return element[elementTypeName + '_data_pointers'][dataName]
+                }
+            }
+        }
+        else {
+            console.warn("WARNING: Asking element data from a non-existing Element.")
+        }
+        return null
+    }
+
+    public getElementDataFrameIntervals(elementType: ElementType, uid: number, dataName: string): FrameIntervals {
+        return new FrameIntervals(this.getElementDataPointer(elementType, uid, dataName)['frame_intervals'])        
+    }
+    public getObjectDataFrameIntervals(uid: number, dataName: string) {
+        return this.getElementDataFrameIntervals(ElementType.object, uid, dataName)
+    }
+    public getActionDataFrameIntervals(uid: number, dataName: string) {
+        return this.getElementDataFrameIntervals(ElementType.action, uid, dataName)
+    }
+    public getEventDataFrameIntervals(uid: number, dataName: string) {
+        return this.getElementDataFrameIntervals(ElementType.event, uid, dataName)
+    }
+    public getContextDataFrameIntervals(uid: number, dataName: string) {
+        return this.getElementDataFrameIntervals(ElementType.context, uid, dataName)
+    }
+
     public getNumElements(elementType: ElementType) {
         let elementTypeName = ElementType[elementType]
         return Object.keys(this.data['vcd'][elementTypeName + 's']).length        
