@@ -1,21 +1,22 @@
 /**
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.2.1.
+VCD is a library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 */
 
-import * as utils from "./vcd.utils";
-import * as types from "./vcd.types";
-import * as schema from "./vcd.schema";
+import * as utils from "./vcd.utils"
+import * as types from "./vcd.types"
+import * as schema from "./vcd.schema"
 
-import Ajv from 'ajv';
+import Ajv from 'ajv'
+import { v4 as uuidv4 } from 'uuid'
 
 export enum ElementType {
     object = 0,
@@ -53,8 +54,10 @@ export class FrameIntervals {
                 if(frameValue.length == 0) return
                 if(frameValue.every(function(x) { return Array.isArray(x); })) {
                     // Then, frameValue is Array<Array<number> >, e.g. [[0, 10], [26, 29]]
-                    this.fisNum = frameValue           
-                    this.fisDict = utils.asFrameIntervalsArrayDict(frameValue)       
+                    this.fisDict = utils.asFrameIntervalsArrayDict(frameValue)    
+                    this.fisDict = utils.fuseFrameIntervals(this.fisDict)
+                    this.fisNum = utils.asFrameIntervalsArrayTuples(this.fisDict)           
+                       
                 }
                 else if (frameValue.every(function(x) { return Number.isInteger(x); })) {
                     // Then, frameValue is a single frame interval, e.g. [0, 10]
@@ -64,7 +67,8 @@ export class FrameIntervals {
                 else if (frameValue.every(function(x) { return (typeof x === 'object' && x !== null && 'frame_start' in x && 'frame_end' in x) })) {
                     // User provided an Array of dict, e.g. [{'frame_start': 0, 'frame_end':10}]
                     this.fisDict = frameValue
-                    this.fisNum = utils.asFrameIntervalsArrayTuples(this.fisDict)
+                    this.fisDict = utils.fuseFrameIntervals(this.fisDict)
+                    this.fisNum = utils.asFrameIntervalsArrayTuples(this.fisDict)   
                 }
             }        
             else if(typeof frameValue === 'object' && frameValue !== null && 'frame_start' in frameValue && 'frame_end' in frameValue) {
@@ -111,7 +115,7 @@ export class FrameIntervals {
         return utils.isInsideFrameIntervals(frameNum, this.fisNum)
     }
 }
-  
+
 
 /**
 * VCD
@@ -132,11 +136,16 @@ export class VCD {
     private ajv = new Ajv()
     private ajv_validate = this.ajv.compile(this.schema)
 	
-	private lastUID = {}
+    private lastUID = {}
+    private useUUID = false
 	
 	constructor(vcd_json = null, validation = false) {
 		this.init(vcd_json, validation);		
-	}
+    }
+    
+    setUseUUID(val: boolean) {
+        this.useUUID = val
+    }
 	
 	printInfo() {
 		console.log("This is a VCD4 content\n");
@@ -191,24 +200,57 @@ export class VCD {
 	////////////////////////////////////////////////////////////////////////////////////////////////////
     // Private API: inner functions
     ////////////////////////////////////////////////////////////////////////////////////////////////////    
-    private getUidToAssign(elementType: ElementType, uid = null) {
-        var uidToAssign        
+    private getUidToAssign(elementType: ElementType, uid = null): string {
+        let uid_string: string      
         let elementTypeName = ElementType[elementType]
         if (uid == null) {
-            this.lastUID[elementTypeName] += 1;  // If null is provided, let's use the next one available            
-            uidToAssign = this.lastUID[elementTypeName];
-            return uidToAssign;
-        }
-        // uid is not null
-        // There are already this type of elements in vcd
-        if (uid > this.lastUID[elementTypeName]) {
-            this.lastUID[elementTypeName] = uid;
-            var uidToAssign = this.lastUID[elementTypeName];
+            if(this.useUUID) {
+                // Let's use UUIDs
+                uid_string = uuidv4()
+            }
+            else {
+                // Let's use integers, and return a string
+                this.lastUID[elementTypeName] += 1;  // If null is provided, let's use the next one available            
+                uid_string = this.lastUID[elementTypeName].toString();
+            }
+            
         }
         else {
-            uidToAssign = uid;
+            // uid is not null, let's see if it's a string, and then if it's a number inside or a UUID (32 chars)
+            
+            if(typeof uid == "number") {
+                // Ok, user provided a number, let's convert into string and proceed
+                let uid_number = uid    
+                if (uid_number > this.lastUID[elementTypeName]) {
+                    this.lastUID[elementTypeName] = uid_number;
+                    uid_string = this.lastUID[elementTypeName].toString();
+                }
+                else {
+                    uid_string = uid_number.toString();
+                }
+            }
+            else if(typeof uid == "string") {
+                // User provided a string, let's inspect it
+                let asNumber = Number(uid)
+                if(!isNaN(asNumber)) {
+                    // So, it is a number, let's proceed normally
+                    uid_string = uid
+                }
+                else if (/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/g.test(uid)) {
+                    // This looks like a UUID
+                    uid_string = uid
+                    this.useUUID = true // so next calls automatically create new UUIDs
+                }
+                else {
+                    console.error("ERROR: User provided UID of unsupported type, please use string, either a quoted number or a UUID.")    
+                }
+            }    
+            else {
+                console.error("ERROR: User provided UID of unsupported type, please use string, either a quoted number or a UUID.")
+            }
         }
-        return uidToAssign;
+                
+        return uid_string;
     }
 
     private setVCDFrameIntervals(frameIntervals: FrameIntervals) {
@@ -224,49 +266,6 @@ export class VCD {
             this.setVCDFrameIntervals(fisUnion)
         }        
     }  
-
-    private computeFrameIntervals() {
-        for (const prop in this.data['vcd']['frames']) {
-            var frameNum = parseInt(prop);
-            var found = false;
-            for (var i = 0; i < this.data['vcd']['frame_intervals'].length; i++) {
-                var fi = this.data['vcd']['frame_intervals'][i];
-                //if (this.isInside(frameNum, fi)) {
-                if( utils.isInside(frameNum, fi)) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                // This frame is not included in the frameIntervals, let's modify them
-                var idxToFuse = [];
-                for (var i = 0; i < this.data['vcd']['frame_intervals'].length; i++) {
-                    var fi = this.data['vcd']['frame_intervals'][i];
-                    if (utils.intersects(fi, utils.asFrameIntervalDict(frameNum)) || utils.consecutive(fi, utils.asFrameIntervalDict(frameNum))) {
-                        idxToFuse.push(i);
-                    }
-                }
-                if (idxToFuse.length == 0) {
-                    // New frameInterval, separated
-                    this.data['vcd']['frame_intervals'].push({ 'frame_start': frameNum, 'frame_end': frameNum });
-                }
-                else {
-                    var newList = [];
-                    var fusedFi = utils.asFrameIntervalDict(frameNum);
-                    for (var i = 0; i < this.data['vcd']['frame_intervals'].length; i++) {
-                        var fi = this.data['vcd']['frame_intervals'][i];
-                        if (idxToFuse.indexOf(i) > -1) {
-                            fusedFi = { 'frame_start': Math.min(fusedFi['frame_start'], fi['frame_start']), 'frame_end': Math.max(fusedFi['frame_end'], fi['frame_end']) };
-                        }
-                        else {
-                            newList.push(fi);  // also add those not affected by fusion
-                        }
-                    }
-                    newList.push(fusedFi);
-                    this.data['vcd']['frame_intervals'] = newList;
-                }
-            }
-        }
-    }
 
     private addFrame(frameNum: number) {
         if (!this.data['vcd']['frames'][frameNum]) {
@@ -323,7 +322,7 @@ export class VCD {
         }
     }
 
-    private addFrames(frameIntervals: FrameIntervals, elementType: ElementType, uid: number) {
+    private addFrames(frameIntervals: FrameIntervals, elementType: ElementType, uid: string) {
         if(frameIntervals.empty()) return
         else {
             let elementTypeName = ElementType[elementType]
@@ -343,7 +342,32 @@ export class VCD {
         }
     }
 
-    private addElement(elementType: ElementType, name: string, semanticType: string, frameIntervals = null, uid = null, ontUid = null, stream = null) {        
+    private addElement(elementType: ElementType, name: string, semanticType: string, frameIntervals = null, uid_ = null, ontUid_ = null, stream = null) {        
+        let uid = null
+        let ontUid = null
+        if (uid_ != null) {
+            if(typeof uid_ == "number") {
+                console.warn("WARNING: UIDs should be provided as strings, with quotes.")
+                uid = uid_.toString()
+            }
+            else if(typeof uid_ == "string") {
+                uid = uid_
+            }
+            else { console.error("ERROR: Unsupported UID format. Must be string."); return }
+        }
+
+        if(ontUid_ != null) {
+            if(typeof ontUid_ == "number") {
+                console.warn("WARNING: UIDs should be provided as strings, with quotes.")
+                ontUid = ontUid_.toString()
+            }
+            else if(typeof ontUid_ == "string") {
+                ontUid = ontUid_
+            }
+            else { console.error("ERROR: Unsupported UID format. Must be string."); return }
+        }
+        
+        
         // 0.- Check if element already exists
         let elementTypeName = ElementType[elementType];
         let elementExists = this.has(elementType, uid)
@@ -414,7 +438,7 @@ export class VCD {
         return uidToAssign
     }
 
-    private updateElement(elementType: ElementType, uid: number, frameIntervals: FrameIntervals) {
+    private updateElement(elementType: ElementType, uid: string, frameIntervals: FrameIntervals) {
         // This function updates an Element by providing NEW frame intervals
         // It is useful for online processing, as an alternative to using modifyElement()        
         let elementTypeName = ElementType[elementType];
@@ -443,11 +467,11 @@ export class VCD {
         return true
     }
 
-    private modifyElement(elementType: ElementType, uid: number, name= null, semanticType= null, frameInterval = null, ontUid = null, stream = null) {
+    private modifyElement(elementType: ElementType, uid: string, name= null, semanticType= null, frameInterval = null, ontUid = null, stream = null) {
         this.addElement(elementType, name, semanticType, frameInterval, uid, ontUid, stream)
     }
 
-    private createUpdateElement(elementType: ElementType, name: string, semanticType: string, frameIntervals: FrameIntervals, uid: number, ontUid: number, stream: string) {        
+    private createUpdateElement(elementType: ElementType, name: string, semanticType: string, frameIntervals: FrameIntervals, uid: string, ontUid: string, stream: string) {        
         // 1.- Copy from existing or create new entry (this copies everything, including element_data, element_data_pointers, and frame intervals)
         let elementTypeName = ElementType[elementType];  
         this.data['vcd'][elementTypeName + 's'] = this.data['vcd'][elementTypeName + 's'] || {}
@@ -479,7 +503,7 @@ export class VCD {
         }
     }
 
-    private addElementData(elementType: ElementType, uid: number, elementData: types.ObjectData, frameIntervals: FrameIntervals) {
+    private addElementData(elementType: ElementType, uid: string, elementData: types.ObjectData, frameIntervals: FrameIntervals) {
         // 0.- Check if Element
         if(!this.has(elementType, uid)) return
         
@@ -505,7 +529,7 @@ export class VCD {
         this.createUpdateElementDataPointers(elementType, uid, elementData, frameIntervals)
     }
 
-    private createUpdateElementDataPointers(elementType: ElementType, uid: number, elementData: types.ObjectData, frameIntervals: FrameIntervals) {
+    private createUpdateElementDataPointers(elementType: ElementType, uid: string, elementData: types.ObjectData, frameIntervals: FrameIntervals) {
         let elementTypeName = ElementType[elementType]        
         this.data['vcd'][elementTypeName + 's'][uid][elementTypeName + '_data_pointers'] = this.data['vcd'][elementTypeName + 's'][uid][elementTypeName + '_data_pointers'] || {}
         let edp = this.data['vcd'][elementTypeName + 's'][uid][elementTypeName + '_data_pointers']
@@ -527,7 +551,7 @@ export class VCD {
         }
     }
 
-    private createUpdateElementData(elementType: ElementType, uid: number, elementData: types.ObjectData, frameIntervals: FrameIntervals) {        
+    private createUpdateElementData(elementType: ElementType, uid: string, elementData: types.ObjectData, frameIntervals: FrameIntervals) {        
         let elementTypeName = ElementType[elementType]
         let elementsTypeName = ElementType[elementType] + 's'        
 
@@ -643,7 +667,7 @@ export class VCD {
         this.data['vcd']['metadata']['comment'] = comment;
     }
 
-    public addOntology(ontologyName: string) {
+    public addOntology(ontologyName: string): string {
         this.data['vcd']['ontologies'] = this.data['vcd']['ontologies'] || {};
         for (const ont_uid in this.data['vcd']['ontologies']) {
             if (this.data['vcd']['ontologies'][ont_uid] == ontologyName) {
@@ -652,8 +676,8 @@ export class VCD {
             }
         }
         var length = Object.keys(this.data['vcd']['ontologies']).length;
-        this.data['vcd']['ontologies'][length] = ontologyName;
-        return length;
+        this.data['vcd']['ontologies'][length.toString()] = ontologyName;
+        return length.toString();
     }
 
     public addStream(streamName: string, uri: string, description: string, sensorType: StreamType) {       
@@ -854,20 +878,20 @@ export class VCD {
     }
 
 
-    public updateObject(uid: number, frameValue) {
+    public updateObject(uid: string, frameValue) {
         // This function is only needed if( no add_object_data calls are used, but the object needs to be kept alive
         return this.updateElement(ElementType.object, uid, new FrameIntervals(frameValue));
     }
 
-    public updateAction(uid: number, frameValue) {
+    public updateAction(uid: string, frameValue) {
         return this.updateElement(ElementType.action, uid, new FrameIntervals(frameValue));
     }
 
-    public updateContext(uid: number, frameValue) {
+    public updateContext(uid: string, frameValue) {
         return this.updateElement(ElementType.context, uid, new FrameIntervals(frameValue));
     }
 
-    public updateRelation(uid: number, frameValue) {
+    public updateRelation(uid: string, frameValue) {
         if (this.getRelation(uid) != null) {
             if (!this.relationHasFrameIntervals(uid)) {
                 console.warn("WARNING: Trying to update the frame information of a Relation defined as frame-less. Ignoring.")
@@ -898,7 +922,7 @@ export class VCD {
         return this.addElement(ElementType.relation, name, semanticType, new FrameIntervals(frameValue), uid, ontUid);        
     }
 
-    public addRdf(relationUid: number, rdfType: RDF, elementUid: number, elementType: ElementType) {
+    public addRdf(relationUid: string, rdfType: RDF, elementUid: string, elementType: ElementType) {
         let elementTypeName = ElementType[elementType]
         if (!this.data['vcd']['relations'][relationUid]) {
             console.warn("WARNING: trying to add RDF to non-existing Relation.")
@@ -927,88 +951,88 @@ export class VCD {
         }
     }
 
-    public addRelationObjectAction(name: string, semanticType: string, objectUid: number, actionUid: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationObjectAction(name: string, semanticType: string, objectUid: string, actionUid: string, relationUid = null, ontUid = null, frameValue=null) {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, objectUid, ElementType.object)
         this.addRdf(relationUid, RDF.object, actionUid, ElementType.action)
         return relationUid
     }
 
-    public addRelationActionAction(name: string, semanticType: string, actionUid1: number, actionUid2: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationActionAction(name: string, semanticType: string, actionUid1: string, actionUid2: string, relationUid = null, ontUid = null, frameValue=null) {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, actionUid1, ElementType.action)
         this.addRdf(relationUid, RDF.object, actionUid2, ElementType.action)
         return relationUid
     }
 
-    public addRelationObjectObject(name: string, semanticType: string, objectUid1: number, objectUid2: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationObjectObject(name: string, semanticType: string, objectUid1: string, objectUid2: string, relationUid = null, ontUid = null, frameValue=null) {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, objectUid1, ElementType.object)
         this.addRdf(relationUid, RDF.object, objectUid2, ElementType.object)
         return relationUid
     }
 
-    public addRelationActionObject(name: string, semanticType: string, actionUid: number, objectUid: number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationActionObject(name: string, semanticType: string, actionUid: string, objectUid: string, relationUid = null, ontUid = null, frameValue=null) {
         relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
         this.addRdf(relationUid, RDF.subject, actionUid, ElementType.action)
         this.addRdf(relationUid, RDF.object, objectUid, ElementType.object)
         return relationUid
     }
 
-    public addRelationSubjectObject(name: string, semanticType: string, subjectType: ElementType, subjectUid: number, objectType: ElementType, objectUid: number, relationUid: null, ontUid: null, frameValue = null) {
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
-        this.addRdf(relationUid, RDF.subject, subjectUid, subjectType)
-        this.addRdf(relationUid, RDF.object, objectUid, objectType)
-        return relationUid
+    public addRelationSubjectObject(name: string, semanticType: string, subjectType: ElementType, subjectUid: string, objectType: ElementType, objectUid: string, relationUid: null, ontUid: null, frameValue = null) {
+        let uid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+        this.addRdf(uid, RDF.subject, subjectUid, subjectType)
+        this.addRdf(uid, RDF.object, objectUid, objectType)
+        return uid
     }    
 
-    public addObjectData(uid: number, objectData: types.ObjectData, frameValue = null) {        
+    public addObjectData(uid: string, objectData: types.ObjectData, frameValue = null) {        
         return this.addElementData(ElementType.object, uid, objectData, new FrameIntervals(frameValue))        
     }
 
-    public addActionData(uid: number, actionData: types.ObjectData, frameValue = null) {
+    public addActionData(uid: string, actionData: types.ObjectData, frameValue = null) {
         return this.addElementData(ElementType.action, uid, actionData, new FrameIntervals(frameValue))                
     }
 
-    public addContextData(uid: number, contextData: types.ObjectData, frameValue = null) {
+    public addContextData(uid: string, contextData: types.ObjectData, frameValue = null) {
         return this.addElementData(ElementType.context, uid, contextData, new FrameIntervals(frameValue))        
     }
 
-    public addEventData(uid: number, eventData: types.ObjectData, frameValue = null) {
+    public addEventData(uid: string, eventData: types.ObjectData, frameValue = null) {
         return this.addElementData(ElementType.event, uid, eventData, new FrameIntervals(frameValue))        
     }
 
-    public modifyAction(uid: number, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
+    public modifyAction(uid: string, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
         return this.modifyElement(ElementType.action, uid, name, semanticType, new FrameIntervals(frameValue), ontUid, stream)
     }
 
-    public modifyObject(uid: number, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
+    public modifyObject(uid: string, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
         return this.modifyElement(ElementType.object, uid, name, semanticType, new FrameIntervals(frameValue), ontUid, stream)
     }
-    public modifyEvent(uid: number, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
+    public modifyEvent(uid: string, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
         return this.modifyElement(ElementType.event, uid, name, semanticType, new FrameIntervals(frameValue), ontUid, stream)
     }
-    public modifyContext(uid: number, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
+    public modifyContext(uid: string, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
         return this.modifyElement(ElementType.context, uid, name, semanticType, new FrameIntervals(frameValue), ontUid, stream)
     }
-    public modifyRelation(uid: number, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
+    public modifyRelation(uid: string, name= null, semanticType= null, frameValue = null, ontUid = null, stream = null) {
         return this.modifyElement(ElementType.relation, uid, name, semanticType, new FrameIntervals(frameValue), ontUid, stream)
     }
 
-    public modifyActionData(uid: number, actionData: types.ObjectData, frameValue = null) {        
+    public modifyActionData(uid: string, actionData: types.ObjectData, frameValue = null) {        
         return this.addActionData(uid, actionData, frameValue)
     }
-    public modifyObjectData(uid: number, objectData: types.ObjectData, frameValue = null) {
+    public modifyObjectData(uid: string, objectData: types.ObjectData, frameValue = null) {
         return this.addObjectData(uid, objectData, frameValue)
     }
-    public modifyContextData(uid: number, contextData: types.ObjectData, frameValue = null) {
+    public modifyContextData(uid: string, contextData: types.ObjectData, frameValue = null) {
         return this.addContextData(uid, contextData, frameValue)
     }
-    public modifyEventData(uid: number, eventData: types.ObjectData, frameValue = null) {
+    public modifyEventData(uid: string, eventData: types.ObjectData, frameValue = null) {
         return this.addEventData(uid, eventData, frameValue)
     }
 
-    public updateElementData(elementType: ElementType, uid: number, elementData: types.ObjectData, frameValue = null) {
+    public updateElementData(elementType: ElementType, uid: string, elementData: types.ObjectData, frameValue = null) {
         let elementTypeName = ElementType[elementType]
         let element = this.getElement(elementType, uid)
         if(frameValue != null) {
@@ -1047,16 +1071,16 @@ export class VCD {
         }       
     }
 
-    public updateActionData(uid: number, actionData: types.ObjectData, frameValue = null) {        
+    public updateActionData(uid: string, actionData: types.ObjectData, frameValue = null) {        
         return this.updateElementData(ElementType.action, uid, actionData, frameValue)
     }
-    public updateObjectData(uid: number, objectData: types.ObjectData, frameValue = null) {        
+    public updateObjectData(uid: string, objectData: types.ObjectData, frameValue = null) {        
         return this.updateElementData(ElementType.object, uid, objectData, frameValue)
     }
-    public updateContextData(uid: number, contextData: types.ObjectData, frameValue = null) {        
+    public updateContextData(uid: string, contextData: types.ObjectData, frameValue = null) {        
         return this.updateElementData(ElementType.context, uid, contextData, frameValue)
     }
-    public updateEventData(uid: number, eventData: types.ObjectData, frameValue = null) {        
+    public updateEventData(uid: string, eventData: types.ObjectData, frameValue = null) {        
         return this.updateElementData(ElementType.event, uid, eventData, frameValue)
     }
 
@@ -1088,7 +1112,7 @@ export class VCD {
         return 'relations' in this.data['vcd']
     }
     
-    public has(elementType: ElementType, uid: number) {
+    public has(elementType: ElementType, uid: string) {
         let elementTypeName = ElementType[elementType]
         if (!this.data['vcd'][elementTypeName + 's']) {
             return false;
@@ -1144,7 +1168,7 @@ export class VCD {
         return aux;
     }
 
-    public getElement(elementType: ElementType, uid: number) {        
+    public getElement(elementType: ElementType, uid: string) {        
         let elementTypeName = ElementType[elementType]
 
         if (this.data['vcd'][elementTypeName + 's'] == null) {
@@ -1160,23 +1184,23 @@ export class VCD {
         }
     }
 
-    public getObject(uid: number) {
+    public getObject(uid: string) {
         return this.getElement(ElementType.object, uid);
     }
 
-    public getAction(uid: number) {
+    public getAction(uid: string) {
         return this.getElement(ElementType.action, uid);
     }
 
-    public getEvent(uid: number) {
+    public getEvent(uid: string) {
         return this.getElement(ElementType.event, uid);
     }
 
-    public getContext(uid: number) {
+    public getContext(uid: string) {
         return this.getElement(ElementType.context, uid);
     }
 
-    public getRelation(uid: number) {
+    public getRelation(uid: string) {
         return this.getElement(ElementType.relation, uid);
     }
 
@@ -1188,7 +1212,7 @@ export class VCD {
         return null
     }
 
-    public getElementsOfType(elementType: ElementType, type: string): number[] {
+    public getElementsOfType(elementType: ElementType, type: string): string[] {
         let elementTypeName = ElementType[elementType]
  
         var uids = [];
@@ -1285,7 +1309,7 @@ export class VCD {
     }
     */
 
-    public getFramesWithElementDataName(elementType: ElementType, uid: number, dataName: string) {
+    public getFramesWithElementDataName(elementType: ElementType, uid: string, dataName: string) {
         let uids = []
         let elementTypeName = ElementType[elementType]
         if(uid in this.data['vcd'][elementTypeName + 's']) {
@@ -1301,21 +1325,21 @@ export class VCD {
         return null
     }
 
-    public getFramesWithObjectDataName(uid: number, dataName: string) {
+    public getFramesWithObjectDataName(uid: string, dataName: string) {
         return this.getFramesWithElementDataName(ElementType.object, uid, dataName)
     }
-    public getFramesWithActionDataName(uid: number, dataName: string) {
+    public getFramesWithActionDataName(uid: string, dataName: string) {
         return this.getFramesWithElementDataName(ElementType.action, uid, dataName)
     }
-    public getFramesWithEventDataName(uid: number, dataName: string) {
+    public getFramesWithEventDataName(uid: string, dataName: string) {
         return this.getFramesWithElementDataName(ElementType.event, uid, dataName)
     }
-    public getFramesWithContextDataName(uid: number, dataName: string) {
+    public getFramesWithContextDataName(uid: string, dataName: string) {
         return this.getFramesWithElementDataName(ElementType.context, uid, dataName)
     }
 
     /*
-    public getFramesWithObjectDataName(uid: number, dataName: string) {
+    public getFramesWithObjectDataName(uid: string, dataName: string) {
         var frames = [];
         if (this.data['vcd']['objects'][uid] && this.objectDataNames[uid]) {
             var object = this.data['vcd']['objects'][uid];
@@ -1336,7 +1360,7 @@ export class VCD {
         return frames;
     }
 */
-    public getElementData(elementType: ElementType, uid: number, dataName: string, frameNum = null) {
+    public getElementData(elementType: ElementType, uid: string, dataName: string, frameNum = null) {
         if( this.has(elementType, uid)){
             let elementTypeName = ElementType[elementType]
             if(frameNum != null) {
@@ -1378,20 +1402,20 @@ export class VCD {
         return null
     }
 
-    public getObjectData(uid: number, dataName: string, frameNum = null) {
+    public getObjectData(uid: string, dataName: string, frameNum = null) {
         return this.getElementData(ElementType.object, uid, dataName, frameNum)
     }
-    public getActionData(uid: number, dataName: string, frameNum = null) {
+    public getActionData(uid: string, dataName: string, frameNum = null) {
         return this.getElementData(ElementType.action, uid, dataName, frameNum)
     }
-    public getContextData(uid: number, dataName: string, frameNum = null) {
+    public getContextData(uid: string, dataName: string, frameNum = null) {
         return this.getElementData(ElementType.context, uid, dataName, frameNum)
     }
-    public getEventData(uid: number, dataName: string, frameNum = null) {
+    public getEventData(uid: string, dataName: string, frameNum = null) {
         return this.getElementData(ElementType.event, uid, dataName, frameNum)
     }
 
-    public getElementDataPointer(elementType: ElementType, uid: number, dataName: string) {
+    public getElementDataPointer(elementType: ElementType, uid: string, dataName: string) {
         if( this.has(elementType, uid)){
             let elementTypeName = ElementType[elementType]
             let element = this.data['vcd'][elementTypeName + 's'][uid]
@@ -1407,19 +1431,19 @@ export class VCD {
         return null
     }
 
-    public getElementDataFrameIntervals(elementType: ElementType, uid: number, dataName: string): FrameIntervals {
+    public getElementDataFrameIntervals(elementType: ElementType, uid: string, dataName: string): FrameIntervals {
         return new FrameIntervals(this.getElementDataPointer(elementType, uid, dataName)['frame_intervals'])        
     }
-    public getObjectDataFrameIntervals(uid: number, dataName: string) {
+    public getObjectDataFrameIntervals(uid: string, dataName: string) {
         return this.getElementDataFrameIntervals(ElementType.object, uid, dataName)
     }
-    public getActionDataFrameIntervals(uid: number, dataName: string) {
+    public getActionDataFrameIntervals(uid: string, dataName: string) {
         return this.getElementDataFrameIntervals(ElementType.action, uid, dataName)
     }
-    public getEventDataFrameIntervals(uid: number, dataName: string) {
+    public getEventDataFrameIntervals(uid: string, dataName: string) {
         return this.getElementDataFrameIntervals(ElementType.event, uid, dataName)
     }
-    public getContextDataFrameIntervals(uid: number, dataName: string) {
+    public getContextDataFrameIntervals(uid: string, dataName: string) {
         return this.getElementDataFrameIntervals(ElementType.context, uid, dataName)
     }
 
@@ -1448,7 +1472,7 @@ export class VCD {
         return this.getNumElements(ElementType.relation);
     }
 
-    public getOntology(ontUid: number) {
+    public getOntology(ontUid: string) {
         if (this.data['vcd']['ontologies']) {
             if (this.data['vcd']['ontologies'][ontUid]) {
                 return this.data['vcd']['ontologies'][ontUid];
@@ -1484,7 +1508,7 @@ export class VCD {
         else return new FrameIntervals()        
     }
 
-    public getElementFrameIntervals(elementType: ElementType, uid: number) {
+    public getElementFrameIntervals(elementType: ElementType, uid: string) {
         let elementTypeName = ElementType[elementType]
         if (!(elementTypeName + 's' in this.data['vcd'])) {            
             return new FrameIntervals()
@@ -1500,7 +1524,7 @@ export class VCD {
         return this.data['vcd']['frame_intervals'];
     }
 
-    public getFrameIntervalsOfElement(elementType: ElementType, uid: number) {
+    public getFrameIntervalsOfElement(elementType: ElementType, uid: string) {
         let elementTypeName = ElementType[elementType]
         if (!this.data['vcd'][elementTypeName + 's']) {
             console.warn(elementTypeName + 's' + " not in this.data['vcd']");
@@ -1508,8 +1532,8 @@ export class VCD {
         return this.data['vcd'][elementTypeName + 's'][uid]['frame_intervals'];
     }
 */
-    public relationHasFrameIntervals(relationUid: number) {
-        let relation = this.getRelation(relationUid)
+    public relationHasFrameIntervals(uid: string) {
+        let relation = this.getRelation(uid)
         if(relation == null) {
             console.warn("WARNING: Non-existing relation.")
         }
@@ -1567,7 +1591,7 @@ export class VCD {
         this.rmElementByType(ElementType.relation, semanticType);
     }
     
-    public rmElement(elementType: ElementType, uid: number) {
+    public rmElement(elementType: ElementType, uid: string) {
         let elementTypeName = ElementType[elementType]
         var elements = this.data['vcd'][elementTypeName + 's'];
 
@@ -1597,23 +1621,23 @@ export class VCD {
         delete elements[uid];
     }
 
-    public rmObject(uid: number) {
+    public rmObject(uid: string) {
         this.rmElement(ElementType.object, uid);
     }
 
-    public rmAction(uid: number) {
+    public rmAction(uid: string) {
         this.rmElement(ElementType.action, uid);
     }
 
-    public rmEvent(uid: number) {
+    public rmEvent(uid: string) {
         this.rmElement(ElementType.event, uid);
     }
 
-    public rmContext(uid: number) {
+    public rmContext(uid: string) {
         this.rmElement(ElementType.context, uid);
     }
 
-    public rmRelation(uid: number) {
+    public rmRelation(uid: string) {
         this.rmElement(ElementType.relation, uid);
     }
     
@@ -1629,7 +1653,7 @@ export class VCD {
     @intervalId: position of the frameInterval to be modified in "frame_intervals" list of object
     @newItervalLimits: array=[start, end]
     
-    public updateOneFrameInterOfElement(elementType: ElementType, uid: number, intervalId: number, newIntervalLimits: Array<number>) {
+    public updateOneFrameInterOfElement(elementType: ElementType, uid: string, intervalId: number, newIntervalLimits: Array<number>) {
         let elementTypeName = ElementType[elementType]
         if (this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"] == null) {
             console.warn("WARNING: trying to get frame intervals of " + uid + " but is not found.");
@@ -1667,7 +1691,7 @@ export class VCD {
     -array with limits of interval
     -frame interval dict
     
-    public removeOneFrameInterOfElement(elementType: ElementType, uid: number, interval) {
+    public removeOneFrameInterOfElement(elementType: ElementType, uid: string, interval) {
         let elementTypeName = ElementType[elementType]
         //If interval is an Id
         var intervalToRemove;

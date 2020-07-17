@@ -1,12 +1,12 @@
 /*
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.2.1.
+VCD is a library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -14,7 +14,7 @@ VCD is distributed under MIT License. See LICENSE.
 /*######################################
 # Fully manually writing the schema
 ######################################*/
-export const vcd_schema_version = "4.2.1"
+export const vcd_schema_version = "4.3.0"
 export const vcd_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
@@ -36,7 +36,7 @@ export const vcd_schema = {
                 "ontologies": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {"type": "string"},
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {"type": "string"},
                     },
                     "additionalProperties": false
                 },
@@ -52,7 +52,7 @@ export const vcd_schema = {
                 "objects": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/object"
                         }
                     },
@@ -61,7 +61,7 @@ export const vcd_schema = {
                 "actions": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/action"
                         }
                     },
@@ -70,7 +70,7 @@ export const vcd_schema = {
                 "events": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/event"
                         }
                     },
@@ -79,7 +79,7 @@ export const vcd_schema = {
                 "contexts": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/context"
                         }
                     },
@@ -88,7 +88,7 @@ export const vcd_schema = {
                 "relations": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/relation"
                         }
                     },
@@ -105,7 +105,7 @@ export const vcd_schema = {
                 "objects": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "object_data": {"$ref": "#/definitions/object_data"},
@@ -118,7 +118,7 @@ export const vcd_schema = {
                 "events": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "event_data": {"$ref": "#/definitions/event_data"},
@@ -131,7 +131,7 @@ export const vcd_schema = {
                 "actions": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "action_data": {"$ref": "#/definitions/action_data"},
@@ -144,7 +144,7 @@ export const vcd_schema = {
                 "contexts": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "context_data": {"$ref": "#/definitions/context_data"},
@@ -157,7 +157,7 @@ export const vcd_schema = {
                 "relations": {
                     "type": "object",
                     "patternProperties": {
-                        "^[0-9]+$": {}
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {}
                     },
                     "additionalProperties": false
                 },
@@ -238,7 +238,7 @@ export const vcd_schema = {
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
-                "ontology_uid": {"type": "integer"},
+                "ontology_uid": {"type": "string"},
                 "stream": {"type": "string"},
                 "object_data": {"$ref": "#/definitions/object_data"},
                 "object_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -255,7 +255,7 @@ export const vcd_schema = {
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
-                "ontology_uid": {"type": "integer"},
+                "ontology_uid": {"type": "string"},
                 "stream": {"type": "string"},
                 "action_data": {"$ref": "#/definitions/action_data"},
                 "action_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -272,7 +272,7 @@ export const vcd_schema = {
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
-                "ontology_uid": {"type": "integer"},
+                "ontology_uid": {"type": "string"},
                 "stream": {"type": "string"},
                 "event_data": {"$ref": "#/definitions/event_data"},
                 "event_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -289,7 +289,7 @@ export const vcd_schema = {
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
-                "ontology_uid": {"type": "integer"},
+                "ontology_uid": {"type": "string"},
                 "stream": {"type": "string"},
                 "context_data": {"$ref": "#/definitions/context_data"},
                 "context_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -306,7 +306,7 @@ export const vcd_schema = {
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
-                "ontology_uid": {"type": "integer"},
+                "ontology_uid": {"type": "string"},
                 "stream": {"type": "string"},
                 "rdf_objects": {
                     "type": "array",
@@ -324,7 +324,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "type": {"type": "string"},
-                "uid": {"type": "integer"},
+                "uid": {"type": "string"},
             }
         },
         "element_data_pointers": {
