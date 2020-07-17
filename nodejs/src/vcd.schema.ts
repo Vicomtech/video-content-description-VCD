@@ -343,7 +343,7 @@ export const vcd_schema = {
                 },
                 "type": {
                     "type": "string",
-                    "enum": ["bbox", "num", "text", "boolean", "poly2d", "poly3d", "cuboid", "image", "mat", "binary", "point2d", "point3d", "vec", "line_reference", "area_reference", "mesh"]
+                    "enum": ["bbox", "rbbox", "num", "text", "boolean", "poly2d", "poly3d", "cuboid", "image", "mat", "binary", "point2d", "point3d", "vec", "line_reference", "area_reference", "mesh"]
                 },
                 "attribute_pointers": {
                     "type": "object",
@@ -429,6 +429,10 @@ export const vcd_schema = {
                 "bbox": {
                     "type": "array",
                     "items": {"$ref": "#/definitions/bbox"}
+                },
+                "rbbox": {
+                    "type": "array",
+                    "items": {"$ref": "#/definitions/rbbox"}
                 },
                 "num": {
                     "type": "array",
@@ -623,6 +627,8 @@ export const vcd_schema = {
         },
         "bbox": {
             "type": "object",
+            "description": "A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] is the centre of the bounding box, and\
+                            [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.",
             "properties": {
                 "name": {"type": "string"},
                 "stream": {"type": "string"},
@@ -630,6 +636,26 @@ export const vcd_schema = {
                     "type": "array",
                     "minItems": 4,
                     "maxItems": 4,
+                    "items": {"type": "number"}
+                },
+                "attributes": {"$ref": "#/definitions/attributes"}
+            },
+            "required": ["name", "val"],
+            "additionalProperties": false
+        },
+        "rbbox": {
+            "type": "object",
+            "description": "A 2D rotated bounding box is defined as a 5-dimensional vector [x, y, w, h, alpha], where [x, y] is the centre of the bounding box, and\
+                            [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.\
+                            The angle alpha, in radians, represents the rotation of the rotated bounding box, and is defined as a right-handed rotation, i.e. positive from x to y axes, \
+                            and with the origin of rotation placed at the center of the bounding box (i.e. [x, y]).",
+            "properties": {
+                "name": {"type": "string"},
+                "stream": {"type": "string"},
+                "val": {
+                    "type": "array",
+                    "minItems": 5,
+                    "maxItems": 5,
                     "items": {"type": "number"}
                 },
                 "attributes": {"$ref": "#/definitions/attributes"}

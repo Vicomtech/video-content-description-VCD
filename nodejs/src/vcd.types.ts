@@ -190,21 +190,22 @@ export class Odometry{
 
 export enum ObjectDataType {
 	bbox = 1,
-	num = 2,
-	text = 3,
-	boolean = 4,
-	poly2d = 5,
-	poly3d = 6,
-	cuboid = 7,
-	image = 8,
-	mat = 9,
-	binary = 10,
-	point2d = 11,
-	point3d = 12,
-	vec = 13,
-	line_reference = 14,
-	area_reference = 15,
-	mesh = 16
+	rbbox,
+	num,
+	text,
+	boolean,
+	poly2d,
+	poly3d,
+	cuboid,
+	image,
+	mat,
+	binary,
+	point2d,
+	point3d,
+	vec,
+	line_reference,
+	area_reference,
+	mesh
 }
 
 export enum Poly2DType {
@@ -279,6 +280,18 @@ export class Bbox extends ObjectDataGeometry {
 		}
         this.data['val'] = val;
         this.type = ObjectDataType.bbox;
+	}
+}
+
+export class Rbbox extends ObjectDataGeometry {
+    constructor( name: string, val: Array<number>, stream=null ) {
+        super( name, stream );		
+		if(val.length != 5){
+			console.warn("WARNING: val length not 5.");
+			return;
+		}
+        this.data['val'] = val;
+        this.type = ObjectDataType.rbbox;
 	}
 }
 
