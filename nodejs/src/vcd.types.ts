@@ -396,7 +396,7 @@ export class Cuboid extends ObjectDataGeometry {
 			console.warn("WARNING: val not array");
 			return;
 		}
-		if(val.length != 9){
+		if(val.length != 10){
 			console.warn("WARNING: val length not 16");
 		}
         this.data['val'] = val;

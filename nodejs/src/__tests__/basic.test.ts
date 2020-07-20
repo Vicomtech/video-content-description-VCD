@@ -68,13 +68,13 @@ test('test_create_search_mid', () => {
     for (let uid of uids_age) {
         let object_ = vcd.getObject(uid)
 
-        if (uid == 0) {
+        if (uid == "0") {
             expect(object_['name']).toBe('marcos')
         }
-        else if (uid == 1) {
+        else if (uid == "1") {
             expect(object_['name']).toBe('peter')
         }
-        else if (uid == 2) {
+        else if (uid == "2") {
             expect(object_['name']).toBe('katixa')
         }
 
@@ -82,13 +82,13 @@ test('test_create_search_mid', () => {
         for(let frameInterval of frameIntervals.get()) {
             for(let frameNum=frameInterval[0]; frameNum<=frameInterval[1]; frameNum++) {
                 let my_pos = vcd.getObjectData(uid, 'pos', frameNum)
-                if (uid == 0) {
+                if (uid == "0") {
                     expect(my_pos['val']).toStrictEqual([0.0, 1.0, 8.0])
                 }
-                else if (uid == 1) {
+                else if (uid == "1") {
                     expect(my_pos['val']).toStrictEqual([0.0, 2.0, 6.0])
                 }
-                else if (uid == 2) {
+                else if (uid == "2") {
                     expect(my_pos['val']).toStrictEqual([0.0, 5.0, 1.0])
                 }    
             }

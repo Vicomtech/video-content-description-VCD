@@ -6,7 +6,7 @@ Project website: http://vcd.vicomtech.org
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.3.0.
+VCD is a library to create and manage VCD content version 4.2.1.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -193,7 +193,14 @@ export class VCD {
 
                     this.computeLastUid();                    
                 }
-            }            
+            }         
+            else {
+                this.data = vcd_json
+                if(this.data['vcd']['schema_version'] != this.schema_version) {
+                    console.warn("The loaded VCD does not have key \'version\' set to " + this.schema_version + '. Unexpected behaviour may happen.')
+                }
+                this.computeLastUid();                    
+            }   
 		}
 	}	
 	
@@ -1255,62 +1262,7 @@ export class VCD {
         return this.getElementsWithElementDataName(ElementType.context, dataName)
     }
 
-/*
-    public getObjectsWithObjectDataName(dataName: string) {
-        var uids = [];
-        for (const uid in this.data['vcd']['objects']) {
-            if (this.objectDataNames[uid]) {
-                if (this.objectDataNames[uid][dataName]) {
-                    uids.push(uid);
-                }
-            }
-        }
-        return uids;
-    }
-
-    public hasFrameObjectDataName(frameNum: number, dataName: string, uid_ = -1) {
-        if (this.data['vcd']['frames'][frameNum]) {
-            for (const uid in this.data['vcd']['frames'][frameNum]['objects']) {
-                var obj = this.data['vcd']['frames'][frameNum]['objects'][uid];
-                if (uid_ == -1 || parseInt(uid) == uid_) {  // if( uid == -1 means we want to loop over all objects
-                    for (const prop in obj['object_data']) {
-                        var valArray = obj['object_data'][prop];
-                        for (var i = 0; i < valArray.length; i++) {
-                            var val = valArray[i];
-                            if (val['name'] == dataName) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    public hasFrameActionDataName(frameNum: number, dataName: string, uid_ = -1) {
-        if (this.data['vcd']['frames'][frameNum]) {
-            for (const uid in this.data['vcd']['frames'][frameNum]['actions']) {
-                var obj = this.data['vcd']['frames'][frameNum]['actions'][uid];
-                if (uid_ == -1 || parseInt(uid) == uid_) {  // if( uid == -1 means we want to loop over all actions
-                    for (const prop in obj['action_data']) {
-                        var valArray = obj['action_data'][prop];
-                        for (var i = 0; i < valArray.length; i++) {
-                            var val = valArray[i];
-                            if (val['name'] == dataName) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-    */
-
-    public getFramesWithElementDataName(elementType: ElementType, uid: string, dataName: string) {
-        let uids = []
+    public getFramesWithElementDataName(elementType: ElementType, uid: string, dataName: string) {        
         let elementTypeName = ElementType[elementType]
         if(uid in this.data['vcd'][elementTypeName + 's']) {
             let element = this.data['vcd'][elementTypeName + 's'][uid]
@@ -1338,28 +1290,6 @@ export class VCD {
         return this.getFramesWithElementDataName(ElementType.context, uid, dataName)
     }
 
-    /*
-    public getFramesWithObjectDataName(uid: string, dataName: string) {
-        var frames = [];
-        if (this.data['vcd']['objects'][uid] && this.objectDataNames[uid]) {
-            var object = this.data['vcd']['objects'][uid];
-            if (this.objectDataNames[uid][dataName]) {
-                // Now look into Frames
-                var fis = object['frame_intervals'];
-                for (var i = 0; i < fis.length; i++) {
-                    var fi = fis[i];
-                    var fi_tuple = [fi['frame_start'], fi['frame_end']];
-                    for (var frameNum = fi_tuple[0]; frameNum < fi_tuple[1] + 1; frameNum++) {
-                        if (this.hasFrameObjectDataName(frameNum, dataName, uid)) {
-                            frames.push(frameNum);
-                        }
-                    }
-                }
-            }
-        }
-        return frames;
-    }
-*/
     public getElementData(elementType: ElementType, uid: string, dataName: string, frameNum = null) {
         if( this.has(elementType, uid)){
             let elementTypeName = ElementType[elementType]
@@ -1519,19 +1449,7 @@ export class VCD {
             return new FrameIntervals(this.data['vcd'][elementTypeName + 's'][uid]['frame_intervals'])
         }        
     }
-/*
-    public getFrameIntervals(): Array<object> {
-        return this.data['vcd']['frame_intervals'];
-    }
-
-    public getFrameIntervalsOfElement(elementType: ElementType, uid: string) {
-        let elementTypeName = ElementType[elementType]
-        if (!this.data['vcd'][elementTypeName + 's']) {
-            console.warn(elementTypeName + 's' + " not in this.data['vcd']");
-        }
-        return this.data['vcd'][elementTypeName + 's'][uid]['frame_intervals'];
-    }
-*/
+    
     public relationHasFrameIntervals(uid: string) {
         let relation = this.getRelation(uid)
         if(relation == null) {
@@ -1640,88 +1558,4 @@ export class VCD {
     public rmRelation(uid: string) {
         this.rmElement(ElementType.relation, uid);
     }
-    
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Modified by: Paola Cañas 09/06/2020
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Hay que crear una funciond e add o mirar como se optimiza para agragarlo en update. creo que se puede añdair el intervalo y luego se calculara solo lo demas*/
-    /*
-    Function to update or add one interval in "frame_intervals" list of specified object in specific element
-    @elementType: element to be modified (ex:action,object)
-    @uid: id of the object in element list
-    @intervalId: position of the frameInterval to be modified in "frame_intervals" list of object
-    @newItervalLimits: array=[start, end]
-    
-    public updateOneFrameInterOfElement(elementType: ElementType, uid: string, intervalId: number, newIntervalLimits: Array<number>) {
-        let elementTypeName = ElementType[elementType]
-        if (this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"] == null) {
-            console.warn("WARNING: trying to get frame intervals of " + uid + " but is not found.");
-        } else if (!Array.isArray(newIntervalLimits)) {
-            console.warn("WARNING: not a valid interval to include in vcd.");
-        } else {
-            //conver new interval to dict
-            var newInterval = utils.asFrameIntervalDict(newIntervalLimits);
-            var oldIntervals = this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"];
-            if (intervalId != null) {
-                if (this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"][intervalId] == null) {
-                    console.warn("WARNING: trying to get frame interval of " + uid + " but is not found.");
-                } else {
-                    //interval exists and needs to be updated
-                    this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"][intervalId] = newInterval;
-                }
-
-            } else {
-                //add new interval to existing
-                oldIntervals.push(newInterval);
-                this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"] = oldIntervals;
-            }
-            //see if there is overlapping and unify
-            oldIntervals = this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"];
-            var newIntervals = utils.fuseFrameIntervals(oldIntervals);
-            this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"] = newIntervals;
-        }
-    }
-    /*
-    Function to remove one interval in "frame_intervals" list of specified object in specific element
-    @elementType: element to be modified (ex:action,object)
-    @uid: id of the object in element list
-    @interval: can be: 
-    -position of the frameInterval to be modified in "frame_intervals" list of object
-    -array with limits of interval
-    -frame interval dict
-    
-    public removeOneFrameInterOfElement(elementType: ElementType, uid: string, interval) {
-        let elementTypeName = ElementType[elementType]
-        //If interval is an Id
-        var intervalToRemove;
-        if (Number.isInteger(parseInt(interval))) {
-            if (this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"][interval] == null) {
-                console.warn("WARNING: trying to get frame interval of " + uid + " but is not found.");
-            } else {
-                intervalToRemove = this.data['vcd'][elementTypeName + 's'][uid]["frame_intervals"][interval];
-            }
-        }
-        //interval is an array
-        else if (Array.isArray(interval)) {
-            if (interval.length != 2) {
-                console.warn("WARNING: not a valid interval to include in vcd.");
-            } else {
-                intervalToRemove = utils.asFrameIntervalDict(interval);
-            }
-        }
-        //interval is a dict 
-        else if (interval.constructor == Object) {
-            if (Object.keys(interval).length === 0) {
-                console.warn("WARNING: not a valid interval to include in vcd.");
-            } else {
-                intervalToRemove = interval;
-            }
-        } else {
-            console.warn("WARNING: not a valid interval to include in vcd.");
-        }
-        //remove
-        this.removeElementFrameInterval(elementType, uid, intervalToRemove);
-    }
-    */
 }
