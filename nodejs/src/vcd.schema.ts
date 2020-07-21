@@ -704,7 +704,7 @@ export const vcd_schema = {
                 "val": {
                     "type": "array",
                     "minItems": 9,
-                    "maxItems": 9,
+                    "maxItems": 10,
                     "items": {"type": "number"}
                 },
                 "attributes": {"$ref": "#/definitions/attributes"}

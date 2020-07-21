@@ -185,7 +185,19 @@ export class VCD {
                     this.reset();                 
                 }
                 else {
+                    // Copy the VCD content into this.data
                     this.data = vcd_json
+
+                    // In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
+                    // but frames are still ints. However, it looks that in Typescript, JSON.parse reads as integer
+                    //if('frames' in this.data['vcd']){
+                    //    let frames = this.data['vcd']['frames']
+                    //    if(Object.keys(frames).length > 0){                                                        
+                            //let new_frames = Object.assign({}, ...Object.entries(frames).map(([k, v]) => ({[Number(k)]: v}))); // no funciona devuelve string                            
+                    //        let new_frames = Object.assign({}, ...Object.keys(frames).map(k => ({[Number(k)]: frames[k]}))); 
+                    //        this.data['vcd']['frames'] = new_frames
+                    //    }
+                    //}
 
                     if(this.data['vcd']['schema_version'] != this.schema_version) {
                         console.warn("The loaded VCD does not have key \'version\' set to " + this.schema_version + '. Unexpected behaviour may happen.')

@@ -112,6 +112,13 @@ test('test_parse_string', () => {
 
     let vcd_copy_string = vcd_copy.stringify(false)
     expect(vcd_string).toBe(vcd_copy_string)
+
+    // We can add some more content
+    let uid_context = vcd_copy.addContext('someContext', 'someType', [12, 13])
+    expect(vcd_copy.getFrameIntervals().get()[0][0]).toBe(0)
+    expect(vcd_copy.getFrameIntervals().get()[0][1]).toBe(13)
+    expect(vcd_copy.getElementFrameIntervals(ElementType.context, uid_context).getDict()[0]['frame_start']).toBe(12)
+    expect(vcd_copy.getElementFrameIntervals(ElementType.context, uid_context).getDict()[0]['frame_end']).toBe(13)
 });
 
 test('test_remove_simple', () => {

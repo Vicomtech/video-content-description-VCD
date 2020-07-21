@@ -390,14 +390,22 @@ export class Poly3d extends ObjectDataGeometry{
 }
 
 export class Cuboid extends ObjectDataGeometry {
+	private use_quaternion = false
     constructor( name: string, val, stream=null ) {
         super( name, stream);
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
 			return;
+		}				
+		if(val.length == 9) {
+			this.use_quaternion = false
 		}
-		if(val.length != 10){
-			console.warn("WARNING: val length not 16");
+		else if(val.length == 10){
+			this.use_quaternion = true
+		}
+		else {
+			console.error("CUBOID is defined as a 9 or 10-dim vector.")
+			return
 		}
         this.data['val'] = val;
         this.type = ObjectDataType.cuboid;
