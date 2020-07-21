@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -274,12 +274,12 @@ class KITTI_Tracking_reader():
                                        utils.float_2dec(dimWidth), utils.float_2dec(dimLength), utils.float_2dec(dimHeight)))
             # Note that if no "stream" parameter is given to this cuboid, LCS is assumed
 
-            if not vcd.has(core.ElementType.object, trackID):
-                vcd.add_object(name="", semantic_type=semantic_class, uid=trackID)
+            if not vcd.has(core.ElementType.object, str(trackID)):
+                vcd.add_object(name="", semantic_type=semantic_class, uid=str(trackID))
 
-            vcd.add_object_data(trackID, bounding_box, frameNum)
+            vcd.add_object_data(str(trackID), bounding_box, frameNum)
             if semantic_class != "DontCare":
-                vcd.add_object_data(trackID, cuboid, frameNum)
+                vcd.add_object_data(str(trackID), cuboid, frameNum)
             vcd.add_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
             vcd.add_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
             vcd.add_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
@@ -300,7 +300,7 @@ def convert_KITTI_tracking_to_VCD4():
     for count, key in enumerate(kitti_parser.vcds):
         # Store
         vcd_file_name = os.path.join(kitti_tracking_output_vcd_path,
-                                     "vcd_421_kitti_tracking_" + str(count).zfill(4) + ".json")
+                                     "vcd_430_kitti_tracking_" + str(count).zfill(4) + ".json")
         print('Storing VCD file...' + vcd_file_name)
         kitti_parser.vcds[key].save(file_name=vcd_file_name)
 

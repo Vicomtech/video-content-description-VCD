@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -218,11 +218,11 @@ class TestBasic(unittest.TestCase):
 
         # Let's read mesh object
         # mesh1 = vcd.get_objects_with_object_data_name("parkslot1")
-        mesh1 = vcd.get_object(0)
+        mesh1 = vcd.get_object("0")
 
         # Let's read static object_data
         # od_mesh = mesh1.data['object_data']['mesh']
-        od_mesh = vcd.get_object_data(0, "parkslot1", frame_num=None)
+        od_mesh = vcd.get_object_data("0", "parkslot1", frame_num=None)
 
         vertices = od_mesh['point3d']
         edges = od_mesh['line_reference']
@@ -249,7 +249,7 @@ class TestBasic(unittest.TestCase):
                 aX.add_attribute(types.text("PM_park_slot_content", "Empty"))
                 mesh1_frame.add_area(aX, area_key)
 
-            vcd.add_object_data(0, mesh1_frame, frame_num)
+            vcd.add_object_data("0", mesh1_frame, frame_num)
 
         # Save it
         if not os.path.isfile('./etc/in/test_mesh_frame.json'):

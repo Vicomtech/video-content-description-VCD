@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -19,18 +19,34 @@ from enum import Enum
 ####################################################
 # Frame intervals
 ####################################################
+def intersection_between_frame_interval_arrays(fisA, fisB):
+    assert (isinstance(fisA, list))
+    assert (isinstance(fisB, list))
+    fis_int = []
+    for fiA in fisA:
+        assert(isinstance(fiA, tuple))
+        for fiB in fisB:
+            assert(isinstance(fiB, tuple))
+            fi_int = intersection_between_frame_intervals(fiA, fiB)
+            if fi_int is not None:
+                fis_int.append(fi_int)
+    return fis_int
+
+
+def intersection_between_frame_intervals(fiA, fiB):
+    max_start_val = max(fiA[0], fiB[0])
+    min_end_val = min(fiA[1], fiB[1])
+
+    if max_start_val <= min_end_val:
+        return [max_start_val, min_end_val]
+    else:
+        return None
+
+
 def intersects(fi_a, fi_b):
     max_start_val = max(fi_a['frame_start'], fi_b['frame_start'])
     min_end_val = min(fi_a['frame_end'], fi_b['frame_end'])
     return max_start_val <= min_end_val
-
-def intersection(fi_a, fi_b):
-    max_start_val = max(fi_a['frame_start'], fi_b['frame_start'])
-    min_end_val = min(fi_a['frame_end'], fi_b['frame_end'])
-    if max_start_val <= min_end_val:
-        return min_end_val, max_start_val
-    else:
-        return None
 
 
 def consecutive(fi_a, fi_b):
@@ -38,6 +54,17 @@ def consecutive(fi_a, fi_b):
         return True
     else:
         return False
+
+
+def is_inside_frame_intervals(frame_num, frame_intervals):
+    for fi in frame_intervals:
+        if is_inside_frame_interval(frame_num, fi):
+            return True
+    return False
+
+
+def is_inside_frame_interval(frame_num, frame_interval):
+    return frame_interval[0] <= frame_num <= frame_interval[1]
 
 
 def is_inside(frame_num, frame_interval):
@@ -172,35 +199,46 @@ def fuse_frame_intervals(frame_intervals):
     while i < num_fis:
         frame_intervals_fused = fuse_frame_interval_dict(frame_intervals[i], frame_intervals_fused)
         i += 1
-    return frame_intervals_fused
+
+    frame_intervals_fused_sorted = sort_frame_intervals(frame_intervals_fused)
+    return frame_intervals_fused_sorted
 
 
-def intersection_frame_intervals(frame_intervals_a, frame_intervals_b):
-    # This function finds the intersection frame intervals between two sets of frame intervals
-    # Input arguments are expected as lists of tuples
-    assert (isinstance(frame_intervals_a, list))
-    assert (isinstance(frame_intervals_b, list))
+def get_frame_start(a):
+    return a['frame_start']
 
-    if len(frame_intervals_a) == 0 and len(frame_intervals_b) == 0:
-        # Both empty
-        return []
-    elif len(frame_intervals_a) == 0:
-        # a empty, check if b is actually list of tuples and return b
-        assert(all(isinstance(fi, tuple) for fi in frame_intervals_b))
-        return frame_intervals_b
-    elif len(frame_intervals_b) == 0:
-        # b empty, check if a is actually list of tuples and return a
-        assert (all(isinstance(fi, tuple) for fi in frame_intervals_a))
-        return frame_intervals_a
-    else:
-        # Ok, both not emtpy, let's compute all intersections between all pairs, and then fuse the result
-        frame_intervals_intersection = []
-        for fi_a in frame_intervals_a:
-            for fi_b in frame_intervals_b:
-                inter_a_b = intersection(fi_a, fi_b)
-                if inter_a_b is not None:
-                    frame_intervals_intersection.append(inter_a_b)
-        return fuse_frame_intervals(frame_intervals_intersection)
+
+def sort_frame_intervals(frame_intervals):
+    # This function assumes frame intervals have already been fused, otherwise, there might be problems
+    frame_intervals.sort(key=get_frame_start)
+    return frame_intervals
+
+
+def rm_frame_from_frame_intervals(frame_intervals, frame_num):
+    fi_dict_new = []
+    for fi in frame_intervals:
+        if frame_num < fi['frame_start']:
+            fi_dict_new.append(fi)
+            continue
+        if frame_num == fi['frame_start']:
+            # Start frame, just remove it
+            if fi['frame_end'] > frame_num:
+                fi_dict_new.append({'frame_start': frame_num + 1, 'frame_end': fi['frame_end']})
+                continue
+        elif frame_num < fi['frame_end']:
+            # Inside! Need to split
+            for f in range(fi['frame_start'], fi['frame_end'] + 1):
+                if f == frame_num:
+                    fi_dict_new.append({'frame_start': fi['frame_start'], 'frame_end': frame_num - 1})
+                    fi_dict_new.append({'frame_start': frame_num + 1, 'frame_end': fi['frame_end']})
+        elif frame_num == fi['frame_end']:
+            # End frame just remove it
+            # no need to check if fi['frame_start'] > frame_num backwards as we are in the else if
+            fi_dict_new.append({'frame_start': fi['frame_start'], 'frame_end': frame_num - 1})
+        else:
+            fi_dict_new.append(fi)
+    return fi_dict_new
+
 
 ####################################################
 # ROTATION AND ODOMETRY UTILS. See SCL library

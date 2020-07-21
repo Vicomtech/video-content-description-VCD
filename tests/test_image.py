@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -83,8 +83,8 @@ class TestBasic(unittest.TestCase):
         if not os.path.isfile('./etc/in/test_image.json'):
             vcd.save('./etc/in/test_image.json', True)
 
-        # cv.imshow('decoded_image', img_dec)
-        # cv.waitKey(0)
+        #cv.imshow('decoded_image', img_dec)
+        #cv.waitKey(0)
 
     def test_contours(self):
         # 1.- Create a VCD instance
@@ -115,7 +115,7 @@ class TestBasic(unittest.TestCase):
                 points = flatten_contour.tolist()
                 hierarchy_list = hierarchy[0][idx].tolist()
                 vcd.add_object_data(uid,
-                                    types.poly2d('contour',
+                                    types.poly2d('contour' + str(idx),  # WARNING: In VCD 4.3.0, names MUST be unique
                                                  points,
                                                  types.Poly2DType.MODE_POLY2D_SRF6DCC,
                                                  closed=True,
@@ -154,7 +154,6 @@ class TestBasic(unittest.TestCase):
                         contour = np.asarray(vec).reshape((num_points, 1, 2))
                         contours_dict[object_val['type']].append(contour)
                         hierarchy_dict[object_val['type']].append(hierarchy)
-
 
         img_out = np.zeros((640, 480, 3), np.uint8)
         for class_name, contours in contours_dict.items():
@@ -229,7 +228,7 @@ class TestBasic(unittest.TestCase):
                     c = c.flatten()
                     hierarchy_list = hierarchy[0][cnt_id].tolist()
                     # Write poly, hierarchy and instance
-                    polygon = types.poly2d('contour', c.tolist(), types.Poly2DType.MODE_POLY2D_SRF6DCC, closed=True,
+                    polygon = types.poly2d('contour' + str(cnt_id), c.tolist(), types.Poly2DType.MODE_POLY2D_SRF6DCC, closed=True,
                                            hierarchy=hierarchy_list)
                     vcd.add_object_data(uid, polygon)
                     cnt_id += 1
@@ -250,14 +249,14 @@ class TestBasic(unittest.TestCase):
                 for c in contours:
                     c = c.flatten()
                     hierarchy_list = hierarchy[0][cnt_id].tolist()
-                    polygon = types.poly2d('contour', c.tolist(), types.Poly2DType.MODE_POLY2D_SRF6DCC, closed=True,
+                    polygon = types.poly2d('contour' + str(cnt_id), c.tolist(), types.Poly2DType.MODE_POLY2D_SRF6DCC, closed=True,
                                            hierarchy=hierarchy_list)
                     vcd.add_object_data(uid, polygon)
                     cont += 1
                     cnt_id += 1
 
-        vcd.save('../converters/mapillaryConverter/vcd_files/' + img_name[0:len(img_name) - 4] + '.json',
-                 True)  # Change to True to use json prettifier
+        #vcd.save('../converters/mapillaryConverter/vcd_files/' + img_name[0:len(img_name) - 4] + '.json', True)
+        vcd.save('../converters/mapillaryConverter/vcd_files/' + img_name[0:len(img_name) - 4] + '.json', False, False)
 
         # 3.- Reconstruct the image from the VCD poly2d and hierarchies (using OpenCV)
         contours_dict_instance = {}  # A dictionary of contours. Each key is one class type, each value, a contours array
@@ -345,8 +344,11 @@ class TestBasic(unittest.TestCase):
         labels = data['labels']
         path = '../converters/mapillaryConverter/labels'
 
+        quick_test = True
         for img_name in os.listdir(path):
             self.mapillary_image_analysis(img_name, labels)
+            if quick_test:
+                break
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

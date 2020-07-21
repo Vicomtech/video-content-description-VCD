@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -29,53 +29,53 @@ class Converter:
         return self.vcd
 
 
-class ConverterVCD421toVCD330(Converter):
-    # This class receives a VCD 4.2.1, and creates a VCD 3.3.0 file
+class ConverterVCD430toVCD330(Converter):
+    # This class receives a VCD 4.3.0, and creates a VCD 3.3.0 file
     # Creates a Frame-wise VCD 3.3.0 JSON file
 
-    # NOTE: Some features of VCD 4.2.1 are NOT supported by VCD 3.3.0
-    # Therefore, some conent from a VCD 4.2.1 may not be convertible to VCD 3.3.0
-    # e.g. VCD 4.2.1 supports action_data, event_data, context_data,
+    # NOTE: Some features of VCD 4.3.0 are NOT supported by VCD 3.3.0
+    # Therefore, some conent from a VCD 4.3.0 may not be convertible to VCD 3.3.0
+    # e.g. VCD 4.3.0 supports action_data, event_data, context_data,
     #      also specific intrinsics and extrinsics information
 
-    def __init__(self, vcd421_file_name):
-        Converter.__init__(self, vcd421_file_name)
+    def __init__(self, vcd430_file_name):
+        Converter.__init__(self, vcd430_file_name)
 
-        # Load JSON file with VCD 4.2.1 content
-        vcd421 = core.VCD(vcd421_file_name, validation=True)
+        # Load JSON file with VCD 4.3.0 content
+        vcd430 = core.VCD(vcd430_file_name, validation=True)
 
         # Create VCD 3.3.0 container
         self.vcd = dict()
 
         # Root and metadata
         self.vcd['VCD'] = {
-            'annotator': vcd421.get_metadata()['annotator'],
-            'name': vcd421.data['vcd']['name'],
+            'annotator': vcd430.get_metadata()['annotator'],
+            'name': vcd430.data['vcd']['name'],
             'metaData': {}
         }
-        if 'comment' in vcd421.get_metadata():
-            self.vcd['VCD']['scdName'] = vcd421.get_metadata()['comment']
-        if 'streams' in vcd421.get_metadata():
-            for stream in vcd421.get_metadata()['streams'].keys():
+        if 'comment' in vcd430.get_metadata():
+            self.vcd['VCD']['scdName'] = vcd430.get_metadata()['comment']
+        if 'streams' in vcd430.get_metadata():
+            for stream in vcd430.get_metadata()['streams'].keys():
                 self.vcd['VCD']['metaData'].setdefault('stream', [])
-                if 'stream_properties' in vcd421.get_metadata()['streams'][stream]:
+                if 'stream_properties' in vcd430.get_metadata()['streams'][stream]:
                     self.vcd['VCD']['metaData']['stream'].append(
-                        {"description": vcd421.get_metadata()['streams'][stream]['description'],
-                         "uri": vcd421.get_metadata()['streams'][stream]['uri'],
+                        {"description": vcd430.get_metadata()['streams'][stream]['description'],
+                         "uri": vcd430.get_metadata()['streams'][stream]['uri'],
                          "name": stream,
-                         "type": vcd421.get_metadata()['streams'][stream]['type'],
-                         "streamProperties": vcd421.get_metadata()['streams'][stream]['stream_properties']}
+                         "type": vcd430.get_metadata()['streams'][stream]['type'],
+                         "streamProperties": vcd430.get_metadata()['streams'][stream]['stream_properties']}
                     )
                 else:
                     self.vcd['VCD']['metaData']['stream'].append(
-                        {"description": vcd421.get_metadata()['streams'][stream]['description'],
-                         "uri": vcd421.get_metadata()['streams'][stream]['uri'],
+                        {"description": vcd430.get_metadata()['streams'][stream]['description'],
+                         "uri": vcd430.get_metadata()['streams'][stream]['uri'],
                          "name": stream,
-                         "type": vcd421.get_metadata()['streams'][stream]['type']}
+                         "type": vcd430.get_metadata()['streams'][stream]['type']}
                     )
 
         # Frame intervals
-        fis = vcd421.data['vcd']['frame_intervals']
+        fis = vcd430.data['vcd']['frame_intervals']
         frameStart = 0
         frameEnd = 0
         for fi in fis:
@@ -89,18 +89,18 @@ class ConverterVCD421toVCD330(Converter):
         }
 
         # Ontologies
-        if 'ontologies' in vcd421.data['vcd']:
+        if 'ontologies' in vcd430.data['vcd']:
             self.vcd['VCD']['OntologyManager'] = {}
             self.vcd['VCD']['OntologyManager']['ontology'] = []
-            for ontology_uid in vcd421.data['vcd']['ontologies'].keys():
+            for ontology_uid in vcd430.data['vcd']['ontologies'].keys():
                 self.vcd['VCD']['OntologyManager']['ontology'].append(
-                    vcd421.data['vcd']['ontologies'][ontology_uid]
+                    vcd430.data['vcd']['ontologies'][ontology_uid]
                 )
 
         # StaticAttributes (objects and potentially contexts if no frame interval inside)
-        if 'objects' in vcd421.data['vcd']:
-            for object_key in vcd421.data['vcd']['objects'].keys():
-                object = vcd421.data['vcd']['objects'][object_key]
+        if 'objects' in vcd430.data['vcd']:
+            for object_key in vcd430.data['vcd']['objects'].keys():
+                object = vcd430.data['vcd']['objects'][object_key]
 
                 #hasFrameIntervals = ('frame_intervals' in object)
                 #if hasFrameIntervals:
@@ -123,9 +123,9 @@ class ConverterVCD421toVCD330(Converter):
                     self.__copy_object_data(object, obj)
 
                     self.vcd['VCD']['staticAttributes']['objects'].append(obj)
-        if 'contexts' in vcd421.data['vcd']:
-            for context_key in vcd421.data['vcd']['contexts'].keys():
-                context4 = vcd421.data['vcd']['contexts'][context_key]
+        if 'contexts' in vcd430.data['vcd']:
+            for context_key in vcd430.data['vcd']['contexts'].keys():
+                context4 = vcd430.data['vcd']['contexts'][context_key]
                 hasFrameIntervals = ('frame_intervals' in context4)
                 if hasFrameIntervals:
                     if len(context4['frame_intervals']) == 0:
@@ -149,8 +149,8 @@ class ConverterVCD421toVCD330(Converter):
         # Actions, Events, Contexts, Objects, Relations -> create entries at 'frames'
         self.vcd['VCD'].setdefault('frames', [])
 
-        for frame_num in vcd421.data['vcd']['frames'].keys():
-            frame4 = vcd421.data['vcd']['frames'][frame_num]
+        for frame_num in vcd430.data['vcd']['frames'].keys():
+            frame4 = vcd430.data['vcd']['frames'][frame_num]
 
             frame3 = dict()
             frame3.update({'frame': frame_num})
@@ -164,7 +164,7 @@ class ConverterVCD421toVCD330(Converter):
                     elements4 = frame4[elements]
                     for element4_id in elements4:
                         # In VCD4, within frame, we only have the uid, data is outside
-                        element4_static = vcd421.data['vcd'][elements][element4_id]
+                        element4_static = vcd430.data['vcd'][elements][element4_id]
                         obj = {}
                         obj.update({"name": element4_static["name"]})
                         obj.update({"uid": element4_id})
@@ -188,11 +188,11 @@ class ConverterVCD421toVCD330(Converter):
                         frame3[elements].append(obj)
                 self.vcd['VCD']['frames'].append(frame3)
 
-    def __add_attributes(self, src421, dst330):
-        if 'attributes' in src421:
+    def __add_attributes(self, src430, dst330):
+        if 'attributes' in src430:
             attrib3_dict = {}
             attrib3_type = ""
-            for attrib4_key in src421['attributes'].keys():
+            for attrib4_key in src430['attributes'].keys():
                 if attrib4_key == "boolean":
                     attrib3_dict.setdefault('bool', [])
                     attrib3_type = "bool"
@@ -203,7 +203,7 @@ class ConverterVCD421toVCD330(Converter):
                     attrib3_dict.setdefault("num", [])
                     attrib3_type = "num"
 
-                for it4 in src421['attributes'][attrib4_key]:
+                for it4 in src430['attributes'][attrib4_key]:
                     it3 = {}
                     it3.update({"name": it4['name']})
                     if attrib4_key == "num":
@@ -213,7 +213,7 @@ class ConverterVCD421toVCD330(Converter):
                         if 'val' in it4:
                             it3.update({"val": it4['val']})
                     if "stream" in it4:
-                        warnings.warn("WARNING: VCD4.2.1 allows stream info for "
+                        warnings.warn("WARNING: VCD4.3.0 allows stream info for "
                                       "bool, num, text and vec, but VCD3.3.0 does not.")
                     attrib3_dict[attrib3_type].append(it3)
             dst330.update({"attributes": attrib3_dict})
@@ -296,13 +296,13 @@ class ConverterVCD421toVCD330(Converter):
                     # Area
                     object_data_current.setdefault("areaReference", list())
                     for key, val in object_data_item['area_reference'].items():
-                        ref_type421 = val['reference_type']
-                        if ref_type421 == "line_reference":
+                        ref_type430 = val['reference_type']
+                        if ref_type430 == "line_reference":
                             refType330 = "lineReference"
-                        elif ref_type421 == "point3d":
+                        elif ref_type430 == "point3d":
                             refType330 = "point3D"
                         else:
-                            refType330 = ref_type421
+                            refType330 = ref_type430
                         if 'val' in val:
                             object_data_current["areaReference"].append(
                                 {
@@ -326,11 +326,11 @@ class ConverterVCD421toVCD330(Converter):
                     # Line
                     object_data_current.setdefault("lineReference", list())
                     for key, val in object_data_item['line_reference'].items():
-                        ref_type421 = val['reference_type']
-                        if ref_type421 == "point3d":
+                        ref_type430 = val['reference_type']
+                        if ref_type430 == "point3d":
                             refType330 = "point3D"
                         else:
-                            refType330 = ref_type421
+                            refType330 = ref_type430
                         if 'val' in val:
                             object_data_current["lineReference"].append(
                                 {
@@ -370,8 +370,8 @@ class ConverterVCD421toVCD330(Converter):
                 obj.update({'objectDataContainer': odc})
 
 
-class ConverterVCD330toVCD421(Converter):
-    # This class converts a VCD3.3.0 into VCD4.0.0
+class ConverterVCD330toVCD430(Converter):
+    # This class converts a VCD3.3.0 into VCD4.3.0
     def __init__(self, vcd330_file_name):
         Converter.__init__(self, vcd330_file_name)
 
@@ -388,11 +388,10 @@ class ConverterVCD330toVCD421(Converter):
             raise Exception("This is not a valid VCD 3.3.0 file.")
 
         # Metadata and other
-        # NOTE: 'scdName' field is lost as VCD 4.0.0 does not support SCD
+        # NOTE: 'scdName' field is lost as VCD 4.3.0 does not support SCD
         # NOTE: 'frameInterval' from 'VCD' is not copied, but computed from frames
-        # NOTE: 'guid' in 'Object's is ignored in VCD 4.0.0
+        # NOTE: 'guid' in 'Object's is ignored in VCD 4.3.0
         # TODO: Apparently 'streamProperties" can exist in VCD3.3.0, although it is not in the schema
-        # TODO
         if 'annotator' in vcd330['VCD']:
             self.vcd.add_annotator(vcd330['VCD']['annotator'])
         if 'name' in vcd330['VCD']:
@@ -452,12 +451,12 @@ class ConverterVCD330toVCD421(Converter):
     def __copy_elements(self, root, frame_num=None):
         if 'objects' in root:
             for object in root['objects']:
-                uid = object['uid']
+                uid = str(object['uid'])  # Let's convert to string here
                 name = object['name']
                 ontologyUID = None
                 if 'ontologyUID' in object:
-                    ontologyUID = object['ontologyUID']
-                typeSemantic = object.get('type', '')  # In VCD 4.0.0 type is required, but it VCD 3.3.0 seems to be not
+                    ontologyUID = str(object['ontologyUID'])  # Let's convert to string here
+                typeSemantic = object.get('type', '')  # In VCD 4.3.0 type is required, but it VCD 3.3.0 seems to be not
 
                 if not self.vcd.has(core.ElementType.object, uid):
                     self.vcd.add_object(name, typeSemantic, frame_num, uid, ontologyUID)
@@ -534,9 +533,9 @@ class ConverterVCD330toVCD421(Converter):
                                         name = p3d_330['name']
                                         val = p3d_330['val']
 
-                                        p3d_400 = types.point3d(name, val)
-                                        self.__add_attributes(p3d_330, p3d_400)
-                                        currentObjectData.add_vertex(p3d_400, id)
+                                        p3d_430 = types.point3d(name, val)
+                                        self.__add_attributes(p3d_330, p3d_430)
+                                        currentObjectData.add_vertex(p3d_430, id)
 
                                 if 'lineReference' in object_data:
                                     for lref_330 in object_data['lineReference']:
@@ -547,9 +546,9 @@ class ConverterVCD330toVCD421(Converter):
                                         assert(referenceType == "point3D")
                                         val = lref_330.get('val')  # defaults to None, needed for the constructor
 
-                                        lref_400 = types.lineReference(name, val, types.ObjectDataType.point3d)
-                                        self.__add_attributes(lref_330, lref_400)
-                                        currentObjectData.add_edge(lref_400, id)
+                                        lref_430 = types.lineReference(name, val, types.ObjectDataType.point3d)
+                                        self.__add_attributes(lref_330, lref_430)
+                                        currentObjectData.add_edge(lref_430, id)
 
                                 if 'areaReference' in object_data:
                                     for aref_330 in object_data['areaReference']:
@@ -561,11 +560,11 @@ class ConverterVCD330toVCD421(Converter):
                                         val = aref_330.get('val')  # defaults to None, needed for the constructor
 
                                         if referenceType == "point3D":
-                                            aref_400 = types.areaReference(name, val, types.ObjectDataType.point3d)
+                                            aref_430 = types.areaReference(name, val, types.ObjectDataType.point3d)
                                         else:
-                                            aref_400 = types.areaReference(name, val, types.ObjectDataType.line_reference)
-                                        self.__add_attributes(aref_330, aref_400)
-                                        currentObjectData.add_area(aref_400, id)
+                                            aref_430 = types.areaReference(name, val, types.ObjectDataType.line_reference)
+                                        self.__add_attributes(aref_330, aref_430)
+                                        currentObjectData.add_area(aref_430, id)
 
                             # Add any attributes
                             self.__add_attributes(object_data, currentObjectData)
@@ -574,11 +573,11 @@ class ConverterVCD330toVCD421(Converter):
                             self.vcd.add_object_data(uid, currentObjectData, frame_num)
         if 'actions' in root:
             for action in root['actions']:
-                uid = action['uid']
+                uid = str(action['uid'])
                 name = action['name']
                 ontologyUID = None
                 if 'ontologyUID' in action:
-                    ontologyUID = action['ontologyUID']
+                    ontologyUID = str(action['ontologyUID'])
                 typeSemantic = action.get('type', '')  # required in VCD 4.0, not in VCD 3.3.0
 
                 if not self.vcd.has(core.ElementType.action, uid):
@@ -587,11 +586,11 @@ class ConverterVCD330toVCD421(Converter):
                     self.vcd.update_action(uid, frame_num)
         if 'events' in root:
             for event in root['events']:
-                uid = event['uid']
+                uid = str(event['uid'])
                 name = event['name']
                 ontologyUID = None
                 if 'ontologyUID' in event:
-                    ontologyUID = event['ontologyUID']
+                    ontologyUID = str(event['ontologyUID'])
                 typeSemantic = event.get('type', '')
 
                 if not self.vcd.has(core.ElementType.event, uid):
@@ -600,11 +599,11 @@ class ConverterVCD330toVCD421(Converter):
                     self.vcd.update_event(uid, frame_num)
         if 'contexts' in root:
             for context in root['contexts']:
-                uid = context['uid']
+                uid = str(context['uid'])
                 name = context['name']
                 ontologyUID = None
                 if 'ontologyUID' in context:
-                    ontologyUID = context['ontologyUID']
+                    ontologyUID = str(context['ontologyUID'])
                 typeSemantic = context.get('type', '')
 
                 if not self.vcd.has(core.ElementType.context, uid):
@@ -613,11 +612,11 @@ class ConverterVCD330toVCD421(Converter):
                     self.vcd.update_context(uid, frame_num)
         if 'relations' in root:
             for relation in root['relations']:
-                uid = relation['uid']
+                uid = str(relation['uid'])
                 name = relation['name']
                 ontologyUID = None
                 if 'ontologyUID' in relation:
-                    ontologyUID = relation['ontologyUID']
+                    ontologyUID = str(relation['ontologyUID'])
                 predicate = relation.get('predicate', '')
                 rdf_objects = relation.get('rdf_objects', None)
                 rdf_subjects = relation.get('rdf_subjects', None)
@@ -638,7 +637,7 @@ class ConverterVCD330toVCD421(Converter):
                         else:
                             warnings.warn("ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.")
 
-                        self.vcd.add_rdf(uid, core.RDF.object, rdf_object['uid'], element_type)
+                        self.vcd.add_rdf(uid, core.RDF.object, str(rdf_object['uid']), element_type)
                     for rdf_subject in rdf_subjects:
                         element_type = None
                         rdf_object_type_str = rdf_subject['type']
@@ -653,25 +652,25 @@ class ConverterVCD330toVCD421(Converter):
                         else:
                             warnings.warn("ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.")
 
-                        self.vcd.add_rdf(uid, core.RDF.subject, rdf_subject['uid'], element_type)
+                        self.vcd.add_rdf(uid, core.RDF.subject, str(rdf_subject['uid']), element_type)
                 else:
                     self.vcd.update_relation(uid, frame_num)
 
-    def __add_attributes(self, src330, object_data400):
+    def __add_attributes(self, src330, object_data430):
         # Add any attributes
         if 'attributes' in src330:
             attributes = src330['attributes']
             for k, v in attributes.items():
                 if k == "bool":
                     for od in v:
-                        object_data400.add_attribute(types.boolean(od['name'], od['val']))
+                        object_data430.add_attribute(types.boolean(od['name'], od['val']))
                 elif k == "num":
                     for od in v:
                         if len(od['val']) == 1:
-                            object_data400.add_attribute(types.num(od['name'], od['val'][0]))
+                            object_data430.add_attribute(types.num(od['name'], od['val'][0]))
                         else:
-                            object_data400.add_attribute(types.vec(od['name'], od['val']))
+                            object_data430.add_attribute(types.vec(od['name'], od['val']))
                 elif k == "text":
                     for od in v:
-                        object_data400.add_attribute(types.text(od['name'], od['val']))
+                        object_data430.add_attribute(types.text(od['name'], od['val']))
 

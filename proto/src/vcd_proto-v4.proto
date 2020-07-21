@@ -9,16 +9,22 @@ message VCD {
     message action {
         repeated frame_interval frame_intervals = 1;
         string name = 2;
-        int32 ontology_uid = 3;
+        string ontology_uid = 3;
         string stream = 4;
         string type = 5;
         action_data action_data = 6;
+        map<string, element_data_pointer> action_data_pointers = 7;
     }
     message action_data {
         repeated boolean boolean = 1;
         repeated num num = 2;
         repeated text text = 3;
         repeated vec vec = 4;
+    }
+    message element_data_pointer {
+        string type = 1;
+        repeated frame_interval frame_intervals = 2;
+        google.protobuf.Struct attributes = 3;
     }
     message area_reference {
         attributes attributes = 1;
@@ -34,6 +40,12 @@ message VCD {
         repeated vec vec = 4;
     }
     message bbox {
+        attributes attributes = 1;
+        string name = 2;
+        string stream = 3;
+        repeated float val = 4;
+    }
+    message rbbox {
         attributes attributes = 1;
         string name = 2;
         string stream = 3;
@@ -56,10 +68,11 @@ message VCD {
     message context {
         repeated frame_interval frame_intervals = 1;
         string name = 2;
-        int32 ontology_uid = 3;
+        string ontology_uid = 3;
         string stream = 4;
         string type = 5;
         context_data context_data = 6;
+        map<string, element_data_pointer> context_data_pointers = 7;
     }
     message context_data {
         repeated boolean boolean = 1;
@@ -76,10 +89,11 @@ message VCD {
     message event {
         repeated frame_interval frame_intervals = 1;
         string name = 2;
-        int32 ontology_uid = 3;
+        string ontology_uid = 3;
         string stream = 4;
         string type = 5;
         event_data event_data = 6;
+        map<string, element_data_pointer> event_data_pointers = 7;
     }
     message event_data {
         repeated boolean boolean = 1;
@@ -106,11 +120,11 @@ message VCD {
         message Objects {
             object_data object_data = 1;
         }
-        map<int32, Actions> actions = 2;
-        map<int32, Contexts> contexts = 3;
-        map<int32, Events> events = 4;
-        map<int32, Objects> objects = 5;
-        map<int32, google.protobuf.Empty> relations = 6;
+        map<string, Actions> actions = 2;
+        map<string, Contexts> contexts = 3;
+        map<string, Events> events = 4;
+        map<string, Objects> objects = 5;
+        map<string, google.protobuf.Empty> relations = 6;
     }
     message frame_interval {
         int32 frame_start = 1;
@@ -142,10 +156,10 @@ message VCD {
         float width = 8;
     }
     message mesh {
-        map<int32, area_reference> area_reference = 1;
-        map<int32, line_reference> line_reference = 2;
+        map<string, area_reference> area_reference = 1;
+        map<string, line_reference> line_reference = 2;
         string name = 3;
-        map<int32, point3d> point3d = 4;
+        map<string, point3d> point3d = 4;
         string stream = 5;
     }
     message metadata {
@@ -164,27 +178,29 @@ message VCD {
         repeated frame_interval frame_intervals = 1;
         string name = 2;
         object_data object_data = 3;
-        int32 ontology_uid = 4;
+        string ontology_uid = 4;
         string stream = 5;
         string type = 6;
+        map<string, element_data_pointer> object_data_pointers = 7;
     }
     message object_data {
         repeated bbox bbox = 1;
-        repeated binary binary = 2;
-        repeated boolean boolean = 3;
-        repeated cuboid cuboid = 4;
-        repeated image image = 5;
-        repeated mat mat = 6;
-        repeated num num = 7;
-        repeated point2d point2d = 8;
-        repeated point3d point3d = 9;
-        repeated poly2d poly2d = 10;
-        repeated poly3d poly3d = 11;
-        repeated text text = 12;
-        repeated vec vec = 13;
-        repeated area_reference area_reference = 14;
-        repeated line_reference line_reference = 15;
-        repeated mesh mesh = 16;
+        repeated rbbox rbbox = 2;
+        repeated binary binary = 3;
+        repeated boolean boolean = 4;
+        repeated cuboid cuboid = 5;
+        repeated image image = 6;
+        repeated mat mat = 7;
+        repeated num num = 8;
+        repeated point2d point2d = 9;
+        repeated point3d point3d = 10;
+        repeated poly2d poly2d = 11;
+        repeated poly3d poly3d = 12;
+        repeated text text = 13;
+        repeated vec vec = 14;
+        repeated area_reference area_reference = 15;
+        repeated line_reference line_reference = 16;
+        repeated mesh mesh = 17;
     }
     message odometry {
         repeated float pose_lcs_wrt_wcs_4x4 = 1;
@@ -195,14 +211,14 @@ message VCD {
         string name = 3;
         string stream = 4;
         repeated float val = 5;
-        int32 id = 6;
+        string id = 6;
     }
     message point3d {
         attributes attributes = 1;
         string name = 3;
         string stream = 4;
         repeated float val = 5;
-        int32 id = 6;
+        string id = 6;
     }
     message poly2d {
         attributes attributes = 1;
@@ -222,12 +238,12 @@ message VCD {
     }
     message rdf_agent {
         string type = 1;
-        int32 uid = 2;
+        string uid = 2;
     }
     message relation {
         repeated frame_interval frame_intervals = 1;
         string name = 2;
-        int32 ontology_uid = 3;
+        string ontology_uid = 3;
         repeated rdf_agent rdf_objects = 4;
         repeated rdf_agent rdf_subjects = 5;
         string stream = 6;
@@ -289,17 +305,18 @@ message VCD {
         string val = 4;
     }
     message Vcd {
-        map<int32, action> actions = 1;
-        map<int32, context> contexts = 2;
-        map<int32, event> events = 3;
+        map<string, action> actions = 1;
+        map<string, context> contexts = 2;
+        map<string, event> events = 3;
         repeated frame_interval frame_intervals = 4;
         map<int32, frame> frames = 5;
         metadata metadata = 6;
         string name = 7;
-        map<int32, object> objects = 8;
-        map<int32, string> ontologies = 9;
-        map<int32, relation> relations = 10;
-        string version = 11;
+        map<string, object> objects = 8;
+        map<string, string> ontologies = 9;
+        map<string, relation> relations = 10;
+        string schema_version = 11;
+        string file_version = 12;
     }
     message vec {
         attributes attributes = 1;

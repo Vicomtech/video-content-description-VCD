@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -28,7 +28,7 @@ class TestBasic(unittest.TestCase):
 
         # 2.- Create the Object
         uid_marcos = vcd.add_object(name='marcos')
-        self.assertEqual(uid_marcos, 0, "Should be 0")
+        self.assertEqual(uid_marcos, "0", "Should be 0")
 
         # 3.- Add some data to the object
         vcd.add_object_data(uid=uid_marcos, object_data=types.bbox(name='head', val=(10, 10, 30, 30)))
@@ -49,12 +49,12 @@ class TestBasic(unittest.TestCase):
         # 5.- We can ask VCD
         marcos_ref = vcd.get_element(element_type=core.ElementType.object, uid=uid_marcos)
         # print('Found Object: uid = ', uid_marcos, ', name = ', marcosRef['name'])
-        self.assertEqual(uid_marcos, 0, "Should be 0")
+        self.assertEqual(uid_marcos, "0", "Should be 0")
         self.assertEqual(marcos_ref['name'], 'marcos', "Should be marcos")
 
         peter_ref = vcd.get_element(element_type=core.ElementType.object, uid=uid_peter)
         # print('Found Object: uid = ', uid_peter, ', name = ', peterRef['name'])
-        self.assertEqual(uid_peter, 1, "Should be 1")
+        self.assertEqual(uid_peter, "1", "Should be 1")
         self.assertEqual(peter_ref['name'], 'peter', "Should be peter")
 
         # print('VCD string no pretty:\n', vcd_string_nopretty)
@@ -107,26 +107,27 @@ class TestBasic(unittest.TestCase):
         for uid in uids_age:
             object_ = vcd.get_object(uid=uid)
             # print("Hi there! I'm ", object['name'], " and I have ObjectData with name age")
-            if uid == 0:
+            if uid == "0":
                 self.assertEqual(object_['name'], 'marcos', "Should be marcos")
-            elif uid == 1:
+            elif uid == "1":
                 self.assertEqual(object_['name'], 'peter', "Should be peter")
-            elif uid == 2:
+            elif uid == "2":
                 self.assertEqual(object_['name'], 'katixa', "Should be katixa")
 
             frames_with_age = vcd.get_frames_with_object_data_name(uid=uid, data_name='age')
-            for frame_num in frames_with_age:
-                my_age = vcd.get_object_data(uid=uid, data_name='age', frame_num=frame_num)
-                # print("I am ", myAge['val'], " years old at frame ", frameNum)
+            for frame_interval in frames_with_age.get():
+                for frame_num in range(frame_interval[0], frame_interval[1]+1):
+                    my_age = vcd.get_object_data(uid=uid, data_name='age', frame_num=frame_num)
+                    # print("I am ", myAge['val'], " years old at frame ", frameNum)
 
-                if uid == 0:
-                    self.assertEqual(my_age['val'], 37.0, "Should be 37 for marcos")
-                elif uid == 1:
-                    self.assertEqual(my_age['val'], 40.0, "Should be 40 for peter")
-                elif uid == 2 and frame_num < 11:
-                    self.assertEqual(my_age['val'], 9, "Should be 9 for katixa while frameNum < 11")
-                elif uid == 2:
-                    self.assertEqual(my_age['val'], 9 + 0.01*(frame_num - 10), "Should increase 0.01 per frame for katixa for frameNum >= 11")
+                    if uid == "0":
+                        self.assertEqual(my_age['val'], 37.0, "Should be 37 for marcos")
+                    elif uid == "1":
+                        self.assertEqual(my_age['val'], 40.0, "Should be 40 for peter")
+                    elif uid == "2" and frame_num < 11:
+                        self.assertEqual(my_age['val'], 9, "Should be 9 for katixa while frameNum < 11")
+                    elif uid == "2":
+                        self.assertEqual(my_age['val'], 9 + 0.01*(frame_num - 10), "Should increase 0.01 per frame for katixa for frameNum >= 11")
 
         if not os.path.isfile('./etc/in/test_create_search_mid.json'):
             vcd.save('./etc/in/test_create_search_mid.json')
@@ -181,9 +182,6 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_num_objects(), 3, "Should be 3")
         vcd.rm_object_by_type(semantic_type='#StopSign')
         self.assertEqual(vcd.get_num_objects(), 2, "Should be 2")
-        vcd.rm_object_by_frame(uid=person1_uid, frame_interval_tuple=(0, 5))  # After this call, this person has data only between 6 and 10
-        self.assertEqual(vcd.get_object(person1_uid)['frame_intervals'][0]['frame_start'], 6)
-        self.assertEqual(vcd.get_object(person1_uid)['frame_intervals'][0]['frame_end'], 10)
 
         # 5.- Remove all content sequentially
         vcd.rm_object(uid=person1_uid)

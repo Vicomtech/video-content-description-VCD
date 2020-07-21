@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -125,21 +125,22 @@ class Odometry():
 
 class ObjectDataType(Enum):
     bbox = 1
-    num = 2
-    text = 3
-    boolean = 4
-    poly2d = 5
-    poly3d = 6
-    cuboid = 7
-    image = 8
-    mat = 9
-    binary = 10
-    point2d = 11
-    point3d = 12
-    vec = 13
-    line_reference = 14
-    area_reference = 15
-    mesh = 16
+    rbbox = 2
+    num = 3
+    text = 4
+    boolean = 5
+    poly2d = 6
+    poly3d = 7
+    cuboid = 8
+    image = 9
+    mat = 10
+    binary = 11
+    point2d = 12
+    point3d = 13
+    vec = 14
+    line_reference = 15
+    area_reference = 16
+    mesh = 17
 
 
 class Poly2DType(Enum):
@@ -165,10 +166,20 @@ class ObjectData:
         assert(isinstance(object_data, ObjectData))
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault('attributes', {})  # Creates 'attributes' if it does not exist
-        if object_data.type.name not in self.data['attributes']:
-            self.data['attributes'].setdefault(object_data.type.name, [])
 
-        self.data['attributes'][object_data.type.name].append(object_data.data)
+        if object_data.type.name in self.data['attributes']:
+            # Find if element_data already there, if so, replace, otherwise, append
+            list_aux = self.data['attributes'][object_data.type.name]
+            pos_list = [idx for idx, val in enumerate(list_aux) if val['name'] == object_data.data['name']]
+            if len(pos_list) == 0:
+                # No: then, just push this new object data
+                self.data['attributes'][object_data.type.name].append(object_data.data)
+            else:
+                # Ok, exists, so let's substitute
+                pos = pos_list[0]
+                self.data['attributes'][object_data.type.name][pos] = object_data.data
+        else:
+            self.data['attributes'][object_data.type.name] = [object_data.data]
 
 
 class ObjectDataGeometry(ObjectData):
@@ -186,6 +197,18 @@ class bbox(ObjectDataGeometry):
         elif isinstance(val, list):
             self.data['val'] = tuple(val)
         self.type = ObjectDataType.bbox
+
+
+class rbbox(ObjectDataGeometry):
+    def __init__(self, name, val, stream=None):
+        ObjectDataGeometry.__init__(self, name, stream)
+        assert (isinstance(val, (tuple, list)))
+        assert (len(val) == 5)
+        if isinstance(val, tuple):
+            self.data['val'] = val
+        elif isinstance(val, list):
+            self.data['val'] = tuple(val)
+        self.type = ObjectDataType.rbbox
 
 
 class num(ObjectData):
@@ -255,7 +278,11 @@ class cuboid(ObjectDataGeometry):
     def __init__(self, name, val, stream=None):
         ObjectDataGeometry.__init__(self, name, stream)
         assert (isinstance(val, (tuple, list)))
-        assert (len(val) == 9)
+        assert (len(val) == 9 or len(val) == 10)
+        if len(val) == 9:
+            self.use_quaternion = False
+        else:
+            self.use_quaternion = True
         if isinstance(val, tuple):
             self.data['val'] = val
         elif isinstance(val, list):
@@ -388,13 +415,13 @@ class volumeReference(GeometricReference):
 class mesh(ObjectDataGeometry):
     def __init__(self, name, stream=None):
         ObjectDataGeometry.__init__(self, name, stream)
-        self.pid = 0
-        self.eid = 0
-        self.aid = 0
-        self.vid = 0
-        self.data['point3d'] = dict()
-        self.data['line_reference'] = dict()
-        self.data['area_reference'] = dict()
+        self.pid = "0"
+        self.eid = "0"
+        self.aid = "0"
+        self.vid = "0"
+        self.data['point3d'] = {}
+        self.data['line_reference'] = {}
+        self.data['area_reference'] = {}
         self.type = ObjectDataType.mesh
 
     # Vertex
@@ -409,10 +436,10 @@ class mesh(ObjectDataGeometry):
                 idx = id
             else:
                 idx = id
-                self.pid = idx + 1
+                self.pid = str(int(idx) + 1)
         else:
             idx = self.pid
-            self.pid += 1
+            self.pid = str(int(self.pid) + 1)
 
         self.data.setdefault('point3d', dict())
         self.data['point3d'][idx] = p3d.data
@@ -427,10 +454,10 @@ class mesh(ObjectDataGeometry):
                 idx = id
             else:
                 idx = id
-                self.eid = idx + 1
+                self.eid = str(int(idx) + 1)
         else:
             idx = self.eid
-            self.eid += 1
+            self.eid = str(int(self.eid) + 1)
 
         self.data.setdefault('line_reference', dict())
         self.data['line_reference'][idx] = lref.data
@@ -445,10 +472,10 @@ class mesh(ObjectDataGeometry):
                 idx = id
             else:
                 idx = id
-                self.aid = idx + 1
+                self.aid = str(int(idx) + 1)
         else:
             idx = self.aid
-            self.aid += 1
+            self.aid = str(int(self.aid) + 1)
 
         self.data.setdefault('area_reference', dict())
         self.data['area_reference'][idx] = aref.data

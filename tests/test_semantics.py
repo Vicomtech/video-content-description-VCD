@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.1
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.1.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -36,12 +36,12 @@ class TestBasic(unittest.TestCase):
 
 
         # 3.- Add some objects
-        uid_pedestrian1 = vcd_a.add_object(name="", semantic_type="Pedestrian", frame_value=None, ont_uid=0) # therefore its uri is "http://vcd.vicomtech.org/ontology/automotive/#Pedestrian"
-        uid_car1 = vcd_a.add_object(name="", semantic_type="Car", frame_value=None, ont_uid=0)
-        uid_pedestrian1 = vcd_b.add_object(name="", semantic_type="Pedestrian", frame_value=None,ont_uid=0)
-        uid_car1 = vcd_b.add_object(name="", semantic_type="Car", frame_value=None, ont_uid=0)
-        uid_pedestrian1 = vcd_c.add_object(name="", semantic_type="Pedestrian", frame_value=None,ont_uid=0)
-        uid_car1 = vcd_c.add_object(name="", semantic_type="Car", frame_value=None, ont_uid=0)
+        uid_pedestrian1 = vcd_a.add_object(name="", semantic_type="Pedestrian", frame_value=None, ont_uid="0") # therefore its uri is "http://vcd.vicomtech.org/ontology/automotive/#Pedestrian"
+        uid_car1 = vcd_a.add_object(name="", semantic_type="Car", frame_value=None, ont_uid="0")
+        uid_pedestrian1 = vcd_b.add_object(name="", semantic_type="Pedestrian", frame_value=None,ont_uid="0")
+        uid_car1 = vcd_b.add_object(name="", semantic_type="Car", frame_value=None, ont_uid="0")
+        uid_pedestrian1 = vcd_c.add_object(name="", semantic_type="Pedestrian", frame_value=None,ont_uid="0")
+        uid_car1 = vcd_c.add_object(name="", semantic_type="Car", frame_value=None, ont_uid="0")
 
 
         # 4.- Add (intransitive) Actions
@@ -55,15 +55,15 @@ class TestBasic(unittest.TestCase):
         # Option b) Add (intransitive) Actions as Actions and use Relations to link to Objects
         # Pro: Action as element with entity, can add action_data, link to other Objects or complex Relations
         # Con: long to write, occupy more bytes in JSON, more difficult to parse
-        uid_action1 = vcd_b.add_action(name="", semantic_type="Walking", frame_value=None, ont_uid=0)
-        uid_rel1 = vcd_b.add_relation(name="", semantic_type="performsAction", ont_uid=0)
+        uid_action1 = vcd_b.add_action(name="", semantic_type="Walking", frame_value=None, ont_uid="0")
+        uid_rel1 = vcd_b.add_relation(name="", semantic_type="performsAction", ont_uid="0")
         vcd_b.add_rdf(relation_uid=uid_rel1, rdf_type=core.RDF.subject,
                     element_uid=uid_pedestrian1, element_type=core.ElementType.object)
         vcd_b.add_rdf(relation_uid=uid_rel1, rdf_type=core.RDF.object,
                     element_uid=uid_action1, element_type=core.ElementType.action)
 
-        uid_action2 = vcd_b.add_action(name="", semantic_type="Parked", frame_value=None, ont_uid=0)
-        uid_rel2 = vcd_b.add_relation(name="", semantic_type="performsAction", ont_uid=0)
+        uid_action2 = vcd_b.add_action(name="", semantic_type="Parked", frame_value=None, ont_uid="0")
+        uid_rel2 = vcd_b.add_relation(name="", semantic_type="performsAction", ont_uid="0")
         vcd_b.add_rdf(relation_uid=uid_rel2, rdf_type=core.RDF.subject,
                     element_uid=uid_car1, element_type=core.ElementType.object)
         vcd_b.add_rdf(relation_uid=uid_rel2, rdf_type=core.RDF.object,
@@ -72,10 +72,10 @@ class TestBasic(unittest.TestCase):
         # Option c) Add Actions as Actions, and use action_Data to point to subject Object
         # Pro: simple as option a
         # Con: sames as a
-        uid_action1 = vcd_c.add_action(name="", semantic_type="Walking", frame_value=None, ont_uid=0)
-        uid_action2 = vcd_c.add_action(name="", semantic_type="Parked", frame_value=None, ont_uid=0)
-        vcd_c.add_action_data(uid=uid_action1, action_data=types.num(name="subject", val=uid_pedestrian1))
-        vcd_c.add_action_data(uid=uid_action2, action_data=types.num(name="subject", val=uid_car1))
+        uid_action1 = vcd_c.add_action(name="", semantic_type="Walking", frame_value=None, ont_uid="0")
+        uid_action2 = vcd_c.add_action(name="", semantic_type="Parked", frame_value=None, ont_uid="0")
+        vcd_c.add_action_data(uid=uid_action1, action_data=types.num(name="subject", val=int(uid_pedestrian1)))
+        vcd_c.add_action_data(uid=uid_action2, action_data=types.num(name="subject", val=int(uid_car1)))
 
         if not os.path.isfile('./etc/in/test_actions_a.json'):
             vcd_a.save('./etc/in/test_actions_a.json')
@@ -110,8 +110,8 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 10)
-        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_end'], 10)
+        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_end'], 10)
         for frame in vcd.data['vcd']['frames'].values():
             self.assertEqual(len(frame['relations']), 1)
 
@@ -133,8 +133,8 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 15)
-        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_start'], 7)
-        self.assertEqual(vcd.data['vcd']['relations'][0]['frame_intervals'][0]['frame_end'], 9)
+        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_start'], 7)
+        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_end'], 9)
         for frame_key, frame_val in vcd.data['vcd']['frames'].items():
             if 7 <= frame_key <= 9:
                 self.assertEqual(len(frame_val['relations']), 1)
@@ -156,7 +156,7 @@ class TestBasic(unittest.TestCase):
                                        object_uid_1=uid1, object_uid_2=uid2)
 
         # The relation does not have frame information
-        self.assertEqual(len(vcd.get_relation(uid4)['frame_intervals']), 0)
+        self.assertEqual('frame_intervals' in vcd.get_relation(uid4), False)
 
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
         self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 20)
@@ -175,7 +175,7 @@ class TestBasic(unittest.TestCase):
     # Add semantics to the KITTI tracking #0
     def test_scene_KITTI_Tracking_0(self):
         sequence_number = 0
-        vcd_file_name = "./etc/in/vcd_421_kitti_tracking_" + str(sequence_number).zfill(
+        vcd_file_name = "./etc/in/vcd_430_kitti_tracking_" + str(sequence_number).zfill(
             4) + ".json"
         vcd = core.VCD(vcd_file_name)
 
@@ -218,8 +218,8 @@ class TestBasic(unittest.TestCase):
         # The objects already labeled are the pedestrians, cars, vans, etc. Inspecting the VCD we can see the uids
         # of the main actors
         # Cyclist, van (4-5), (17) and (19)
-        uid_cyclist = 2
-        uid_van = 1
+        uid_cyclist = "2"
+        uid_van = "1"
 
         # Driving straight (6)
         uid_action_6 = vcd.add_action(name="", semantic_type="driving-straight", frame_value=[(0, 30), (41, 153)])
@@ -231,13 +231,17 @@ class TestBasic(unittest.TestCase):
         vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_cyclist, action_uid=uid_action_7)
 
         # Cyclist following Van (9-10)
-        uid_action_9 = vcd.add_action(name="", semantic_type="following")  # , frame_value=[(0, 153)])
-        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_cyclist, action_uid=uid_action_9)
-        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_van, action_uid=uid_action_9)
+        uid_action_9 = vcd.add_action(name="", semantic_type="following")
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction",
+                                       object_uid=uid_cyclist, action_uid=uid_action_9)
+        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction",
+                                       object_uid=uid_van, action_uid=uid_action_9)
 
         # Van Turn-right (11)
-        uid_action_11 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(31, 40))
-        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_van, action_uid=uid_action_11)
+        uid_action_11 = vcd.add_action(name="", semantic_type="turning-right",
+                                       frame_value=(31, 40))
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction",
+                                       object_uid=uid_van, action_uid=uid_action_11)
 
         # Cyclist Turn-right (12)
         uid_action_12 = vcd.add_action(name="", semantic_type="turning-right", frame_value=(58, 65))
@@ -255,7 +259,9 @@ class TestBasic(unittest.TestCase):
         # Cars (and a van) are parked (18), pedestrians are walking (20)
         # NOTE: read frame_interval from object, so the action is bounded to such limits
         for uid_obj_aux, object_ in vcd.data['vcd']['objects'].items():
-            frame_intervals = object_['frame_intervals']
+            frame_intervals = object_.get('frame_intervals')
+            if frame_intervals is None:  # Ignore static objects
+                continue
             frame_value = utils.as_frame_intervals_array_tuples(frame_intervals)
             if object_['type'] == 'Car':
                 uid_act_aux = vcd.add_action(name="", semantic_type="parked", frame_value=frame_value)
