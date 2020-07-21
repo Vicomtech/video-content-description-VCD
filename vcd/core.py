@@ -416,7 +416,8 @@ class VCD:
         element = self.data['vcd'][element_type.name + 's'][uid]
 
         # 2.- Copy from arguments
-        element['name'] = name
+        if name is not None:
+            element['name'] = name
         if semantic_type is not None:
             element['type'] = semantic_type
         if not frame_intervals.empty():

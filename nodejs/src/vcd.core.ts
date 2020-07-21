@@ -497,8 +497,8 @@ export class VCD {
         this.data['vcd'][elementTypeName + 's'][uid] = this.data['vcd'][elementTypeName + 's'][uid] || {}
         let element = this.data['vcd'][elementTypeName + 's'][uid]
         
-        // 2.- Copy from arguments
-        element['name'] = name
+        // 2.- Copy from arguments        
+        if(name != null) element['name'] = name
         if(semanticType != null)  element['type'] = semanticType
         if(!frameIntervals.empty())  element['frame_intervals'] = frameIntervals.getDict()
         if(ontUid != null && this.getOntology(ontUid)) element['ontology_uid'] = ontUid
