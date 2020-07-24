@@ -189,26 +189,23 @@ class VCD:
     def __init__(self, file_name=None, validation=False):
         self.use_uuid = False
         if file_name is not None:
-            if validation:
-                json_file = open(file_name)
-                temp_data = json.load(json_file)  # Open without converting strings to integers
-
-                self.schema = schema.vcd_schema
-                assert('schema_version' in temp_data['vcd'])
-                assert(temp_data['vcd']['schema_version'] == schema.vcd_schema_version)
-                validate(instance=temp_data, schema=self.schema)  # Raises errors if not validated
-                json_file.close()
-
-            # Proceed normally to open file and load the dictionary, converting strings into integers
             json_file = open(file_name)
             # In VCD 4.2.0, uids and frames were ints, so, parsing needed a lambda function to do the job
-            #self.data = json.load(
+            # self.data = json.load(
             #    json_file,
             #    object_hook=lambda d: {int(k) if k.lstrip('-').isdigit() else k: v for k, v in d.items()}
-            #)
+            # )
+            self.data = json.load(json_file)  # Open without converting strings to integers
+
+            if validation:
+                self.schema = schema.vcd_schema
+                assert('schema_version' in self.data['vcd'])
+                assert(self.data['vcd']['schema_version'] == schema.vcd_schema_version)
+                validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
+                json_file.close()
+
             # In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
             # but frames are still ints, so let's parse like that
-            self.data = json.load(json_file)  # No need to convert into int, so all keys remain string
             if 'frames' in self.data['vcd']:
                 frames = self.data['vcd']['frames']
                 if frames:  # So frames is not empty
@@ -512,7 +509,7 @@ class VCD:
             edp[element_data.data['name']]['frame_intervals'] = frame_intervals.get_dict()
         if 'attributes' in element_data.data:
             edp[element_data.data['name']]['attributes'] = {}
-            for attr_type in element_data.data['attributes']: # attr_type might be 'boolean', 'text', 'num', or 'vec'
+            for attr_type in element_data.data['attributes']:  # attr_type might be 'boolean', 'text', 'num', or 'vec'
                 for attr in element_data.data['attributes'][attr_type]:
                     edp[element_data.data['name']]['attributes'][attr['name']] = attr_type
 

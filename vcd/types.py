@@ -16,7 +16,7 @@ from enum import Enum
 import vcd.poly2d as poly
 
 
-class Intrinsics():
+class Intrinsics:
     def __init__(self):
         self.data = dict()
 
@@ -44,7 +44,6 @@ class IntrinsicsPinhole(Intrinsics):
 
         if additional_items is not None:
             self.data['intrinsics_pinhole'].update(additional_items)
-
 
 
 class IntrinsicsFisheye(Intrinsics):
@@ -88,7 +87,7 @@ class Extrinsics():
             self.data['extrinsics'].update(additional_items)
 
 
-class StreamSync():
+class StreamSync:
     def __init__(self, frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items):
         self.data = dict()
         self.data['sync'] = dict()
