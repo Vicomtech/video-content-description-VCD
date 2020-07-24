@@ -203,8 +203,8 @@ class TestBasic(unittest.TestCase):
         final = np.zeros(img_label.shape, np.uint8)
         cont = 0
 
-        # cv.namedWindow('image', cv.WINDOW_NORMAL)
-        # cv.resizeWindow('image', img_instance.shape[0], img_instance.shape[1])
+        #cv.namedWindow('image', cv.WINDOW_NORMAL)
+        #cv.resizeWindow('image', img_instance.shape[0], img_instance.shape[1])
 
         # Get contours of each instance and retrieve it's class to write in vcd as instance -> True
         for i in range(1, np.max(instance_ids_array) + 1):
@@ -323,9 +323,9 @@ class TestBasic(unittest.TestCase):
         img_instance = cv.cvtColor(img_instance, cv.COLOR_GRAY2BGR)
         difference_instance = cv.subtract(img_instance_out, x)
         difference_class = cv.subtract(img_label, img_class_out)
-        # stack = np.hstack((img_instance, img_instance_out, difference_instance))
-        # stack2 = np.hstack((img_label, img_class_out, difference_class))
-        # vstack = np.vstack((stack, stack2))
+        stack = np.hstack((img_instance, img_instance_out, difference_instance))
+        stack2 = np.hstack((img_label, img_class_out, difference_class))
+        vstack = np.vstack((stack, stack2))
 
         # 4.- Check equals
         difference_instance_sum = np.sum(difference_instance)
@@ -333,8 +333,8 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(difference_instance_sum, 0)
         self.assertEqual(difference_class_sum, 0)
 
-        # cv.imshow('image', vstack)
-        # cv.waitKey(0)
+        #cv.imshow('image', vstack)
+        #cv.waitKey(0)
 
     def test_mapillary(self):
         # Dump content from test_mapillary_SRF6.py at /mapillaryConverter

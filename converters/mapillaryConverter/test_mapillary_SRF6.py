@@ -23,6 +23,7 @@ def prueba():
     pr = cProfile.Profile()
 
     for img_name in os.listdir(path):
+        print(img_name)
         pr.enable()
         vcd = core.VCD()
         img_label = cv.imread('labels/' + img_name)
@@ -72,6 +73,11 @@ def prueba():
                     color = list(color)
                     instance_class = utils.get_key(classes_colors, color[::-1])
 
+                    #if instance_class == "object--traffic-sign--front":
+                    #    cv.imshow('seg', seg)
+                    #    cv.waitKey(0)
+
+
                     if cnt_id == 0:
                         uid = vcd.add_object("object " + str(cont), instance_class)
                         vcd.add_object_data(uid, types.boolean('isInstance', True))
@@ -97,6 +103,11 @@ def prueba():
                 instance_class = utils.get_key(classes_colors, class_val['color'])
                 uid = vcd.add_object("object " + str(cont), instance_class)
                 vcd.add_object_data(uid, types.boolean('isInstance', False))
+
+                #if instance_class == "object--traffic-sign--front":
+                 #   cv.imshow('seg', seg)
+                #    cv.waitKey(0)
+
                 for c in contours:
                     c = c.flatten()
                     hierarchy_list = hierarchy[0][cnt_id].tolist()

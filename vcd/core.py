@@ -122,6 +122,60 @@ class FrameIntervals:
     def has_frame(self, frame_num):
         return utils.is_inside_frame_intervals(frame_num, self.fis_num)
 
+
+class UID:
+    """
+    This is a helper class that simplifies management of UIDs.
+    Public functions permits the user to introduce either int or string values as UIDs
+    Internal functions create the UID objects to ensure the proper format is used where needed
+    """
+    def __init__(self, val=None):
+        if val is None:
+            # Void uid
+            self.__set("", -1, False)
+        else:
+            if isinstance(val, int):
+                self.__set(str(val), val, False)
+            elif isinstance(val, str):
+                if val == '':
+                    self.__set("", -1, False)
+                else:
+                    if val.isnumeric():
+                        self.__set(val, int(val), False)
+                    elif bool(re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+                                       val)):
+                        self.__set(val, -1, True)
+                    else:
+                        warnings.warn("ERROR: Unsupported UID string type.")
+                        self.__set("", -1, False)
+            else:
+                warnings.warn("ERROR: Unsupported UID type.")
+                self.__set("", -1, False)
+
+    def __set(self, uid_str=None, uid_int=None, is_uuid=False):
+        self.uid_str = uid_str
+        self.uid_int = uid_int
+        self.uuid = is_uuid
+
+    def is_uuid(self):
+        return self.uuid
+
+    def as_str(self):
+        return self.uid_str
+
+    def as_int(self):
+        if self.is_uuid():
+            warnings.warn("ERROR: This UID is not numeric, can't call getAsInt.")
+        else:
+            return self.uid_int
+
+    def is_none(self):
+        if self.uid_int == -1 and self.uid_str == "":
+            return True
+        else:
+            return False
+
+
 class VCD:
     """
     VCD class as main container of VCD content. Exposes functions to
@@ -194,43 +248,32 @@ class VCD:
     ##################################################
     def __get_uid_to_assign(self, element_type, uid):
         assert isinstance(element_type, ElementType)
-        uid_string = ""
-        if uid is None:
+        assert(isinstance(uid, UID))
+        if uid.is_none():
             if self.use_uuid:
                 # Let's use UUIDs
-                uid_string = uuid.uuid4()
+                uid_to_assign = UID(str(uuid.uuid4()))
             else:
                 # Let's use integers, and return a string
                 self.__lastUID[element_type] += 1
-                uid_string = str(self.__lastUID[element_type])
+                uid_to_assign = UID(self.__lastUID[element_type])
         else:
-            # uid is not None, let's see if it's a string, and then if it's a number inside
-            # or a UUID
-            if isinstance(uid, int):
-                # Ok, user provided a number, let's convert into string and proceed
-                uid_number = uid
-                if uid_number > self.__lastUID[element_type]:
-                    self.__lastUID[element_type] = uid_number
-                    uid_string = str(self.__lastUID[element_type])
+            # uid is not None
+            assert(isinstance(uid, UID))
+            if not uid.is_uuid():
+                # Ok, user provided a number, let's proceed
+                if uid.as_int() > self.__lastUID[element_type]:
+                    self.__lastUID[element_type] = uid.as_int()
+                    uid_to_assign = UID(self.__lastUID[element_type])
                 else:
-                    uid_string = str(uid_number)
-            elif isinstance(uid, str):
-                # User provided a string, let's inspect it
-                pattern_uuid = re.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
-                if uid.isnumeric():
-                    # So, it is a number, let's proceed normally
-                    uid_string = uid
-                elif pattern_uuid.match(uid):
-                    # This looks like a uuid
-                    uid_string = uid
-                    self.use_uuid = True
-                else:
-                    warnings.warn("ERROR: User provided UID of unsupported type, please use string, either a quoted"
-                                  "int or a UUID")
+                    uid_to_assign = uid
             else:
-                warnings.warn("ERROR: User provided UID of unsupported type, please use string, either a quoted"
-                              "int or a UUID")
-        return uid_string
+                # This is a UUID
+                self.use_uuid = True
+                uid_to_assign = uid
+
+        return uid_to_assign
+
 
     def __set_vcd_frame_intervals(self, frame_intervals):
         assert(isinstance(frame_intervals, FrameIntervals))
@@ -286,7 +329,7 @@ class VCD:
     def __add_frames(self, frame_intervals, element_type, uid):
         assert(isinstance(frame_intervals, FrameIntervals))
         assert(isinstance(element_type, ElementType))
-        assert(isinstance(uid, str))
+        assert(isinstance(uid, UID))
         if frame_intervals.empty():
             return
         else:
@@ -299,42 +342,29 @@ class VCD:
                     # Add element entry
                     frame = self.get_frame(f)
                     frame.setdefault(element_type.name + 's', {})
-                    frame[element_type.name + 's'].setdefault(uid, {})
+                    frame[element_type.name + 's'].setdefault(uid.as_str(), {})
 
     def __add_element(
-            self, element_type, name, semantic_type, frame_intervals=None, uid_=None, ont_uid_=None,
+            self, element_type, name, semantic_type, frame_intervals=None, uid=None, ont_uid=None,
             stream=None
     ):
-        uid = None
-        ont_uid = None
-        if uid_ is not None:
-            if isinstance(uid_, int):
-                warnings.warn("WARNING: UIDs should be provided as strings, with quotes.")
-                uid = str(uid_)
-            elif isinstance(uid_, str):
-                uid = uid_
-            else:
-                warnings.warn("ERROR: Unsupported UID format. Must be a string.")
-                return
-
-        if ont_uid_ is not None:
-            if isinstance(ont_uid_, int):
-                warnings.warn("WARNING: UIDs should be provided as strings, with quotes.")
-                ont_uid = str(ont_uid_)
-            elif isinstance(ont_uid_, str):
-                ont_uid = ont_uid_
-            else:
-                warnings.warn("ERROR: Unsupported UID format. Must be a string.")
-                return
+        if uid is not None:
+            assert(isinstance(uid, UID))
+        else:
+            uid = UID()  # so we don't have more None types
+        if ont_uid is not None:
+            assert(isinstance(ont_uid, UID))
+        else:
+            ont_uid = UID()  # so we don't have more None types
 
         # 0.- Check if element already exists
-        element_exists = self.has(element_type, uid)
+        element_exists = self.has(element_type, uid.as_str())  # note: public functions use int or str for uids
 
         # 1.- Get uid to assign
-        uid_to_assign = self.__get_uid_to_assign(element_type, uid)
+        uid_to_assign = self.__get_uid_to_assign(element_type, uid)  # note: private functions use UID type for uids
 
         # 2.- Update Root element (['vcd']['element']), overwrites content
-        fis_old = self.get_element_frame_intervals(element_type, uid)
+        fis_old = self.get_element_frame_intervals(element_type, uid.as_str())
         self.__create_update_element(element_type, name, semantic_type, frame_intervals, uid_to_assign, ont_uid, stream)
 
         # 3.- Update frames entries and VCD frame intervals
@@ -358,7 +388,7 @@ class VCD:
                         if not is_inside:
                             # Old frame not inside new ones -> let's remove this frame
                             elements_in_frame = self.data['vcd']['frames'][f][element_type.name +'s']
-                            del elements_in_frame[uid]
+                            del elements_in_frame[uid.as_str()]
                             if len(elements_in_frame) == 0:
                                 del self.data['vcd']['frames'][f][element_type.name +'s']
                                 if len(self.data['vcd']['frames'][f]) == 0:
@@ -379,31 +409,31 @@ class VCD:
 
     def __update_element(self, element_type, uid, frame_intervals):
         assert(isinstance(element_type, ElementType))
-        assert(isinstance(uid, str))
+        assert(isinstance(uid, UID))
         assert(isinstance(frame_intervals, FrameIntervals))
 
         # Check if this uid exists
-        if uid not in self.data['vcd'][element_type.name + 's']:
+        if uid.as_str() not in self.data['vcd'][element_type.name + 's']:
             warnings.warn("WARNING: trying to update a non-existing Element.")
             return False
 
         # Read existing data about this element, so we can call __add_element
-        name = self.data['vcd'][element_type.name + 's'][uid]['name']
-        semantic_type = self.data['vcd'][element_type.name + 's'][uid]['type']
+        name = self.data['vcd'][element_type.name + 's'][uid.as_str()]['name']
+        semantic_type = self.data['vcd'][element_type.name + 's'][uid.as_str()]['type']
         ont_uid = None
         stream = None
-        if 'ontology_uid' in self.data['vcd'][element_type.name + 's'][uid]:
-            ont_uid = self.data['vcd'][element_type.name + 's'][uid]['ontology_uid']
-        if 'stream' in self.data['vcd'][element_type.name + 's'][uid]:
-            stream = self.data['vcd'][element_type.name + 's'][uid]['stream']
+        if 'ontology_uid' in self.data['vcd'][element_type.name + 's'][uid.as_str()]:
+            ont_uid = UID(self.data['vcd'][element_type.name + 's'][uid.as_str()]['ontology_uid'])
+        if 'stream' in self.data['vcd'][element_type.name + 's'][uid.as_str()]:
+            stream = self.data['vcd'][element_type.name + 's'][uid.as_str()]['stream']
 
         # Call __add_element (which internally creates OR updates)
-        fis_existing = self.get_element_frame_intervals(element_type, uid)
+        fis_existing = self.get_element_frame_intervals(element_type, uid.as_str())
         fis_union = fis_existing.union(frame_intervals)
         self.__add_element(element_type, name, semantic_type, fis_union, uid, ont_uid, stream)
 
-    def __modify_element(self, element_type, uid, name = None, semantic_type = None, frame_intervals = None,
-                         ont_uid = None, stream = None):
+    def __modify_element(self, element_type, uid, name=None, semantic_type=None, frame_intervals=None,
+                         ont_uid=None, stream=None):
         self.__add_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, stream)
 
     def __create_update_element(
@@ -412,8 +442,8 @@ class VCD:
         # 1.- Copy from existing or create new entry (this copies everything, including element_data)
         # element_data_pointers and frame intervals
         self.data['vcd'].setdefault(element_type.name + 's', {})
-        self.data['vcd'][element_type.name + 's'].setdefault(uid, {})
-        element = self.data['vcd'][element_type.name + 's'][uid]
+        self.data['vcd'][element_type.name + 's'].setdefault(uid.as_str(), {})
+        element = self.data['vcd'][element_type.name + 's'][uid.as_str()]
 
         # 2.- Copy from arguments
         if name is not None:
@@ -422,8 +452,8 @@ class VCD:
             element['type'] = semantic_type
         if not frame_intervals.empty():
             element['frame_intervals'] = frame_intervals.get_dict()
-        if ont_uid is not None and self.get_ontology(ont_uid):
-            element['ontology_uid'] = ont_uid
+        if not ont_uid.is_none() and self.get_ontology(ont_uid.as_str()):
+            element['ontology_uid'] = ont_uid.as_str()
         if stream is not None and self.has_stream(stream):
             element['stream'] = stream
 
@@ -443,23 +473,24 @@ class VCD:
                         element[element_type.name + '_data_pointers'][edp_name]['frame_intervals'] = fis_int.get_dict()
 
     def __add_element_data(self, element_type, uid, element_data, frame_intervals):
+        assert(isinstance(uid, UID))
         # 0.- Check if element
-        if not self.has(element_type, uid):
+        if not self.has(element_type, uid.as_str()):
             return
 
         # 1.- If new frameinterval, update root element, frames and vcd
         # as this frame interval refers to an element_data, we need to NOT delete frames from element
         if frame_intervals is not None and not frame_intervals.empty():
-            element = self.get_element(element_type, uid)
+            element = self.get_element(element_type, uid.as_str())
             ont_uid = None
             stream = None
             if 'ontology_uid' in element:
-                ont_uid = element['ontology_uid']
+                ont_uid = UID(element['ontology_uid'])
             if 'stream' in element:
                 stream = element['stream']
 
             # Prepare union of frame intervals to update element
-            fis_element = self.get_element_frame_intervals(element_type, uid)
+            fis_element = self.get_element_frame_intervals(element_type, uid.as_str())
             fis_union = fis_element.union(frame_intervals)
             self.__add_element(element_type, element['name'], element['type'], fis_union, uid, ont_uid, stream)
 
@@ -470,8 +501,9 @@ class VCD:
         self.__create_update_element_data_pointers(element_type, uid, element_data, frame_intervals)
 
     def __create_update_element_data_pointers(self, element_type, uid, element_data, frame_intervals):
-        self.data['vcd'][element_type.name + 's'][uid].setdefault(element_type.name + '_data_pointers', {})
-        edp = self.data['vcd'][element_type.name + 's'][uid][element_type.name + '_data_pointers']
+        assert(isinstance(uid, UID))
+        self.data['vcd'][element_type.name + 's'][uid.as_str()].setdefault(element_type.name + '_data_pointers', {})
+        edp = self.data['vcd'][element_type.name + 's'][uid.as_str()][element_type.name + '_data_pointers']
         edp[element_data.data['name']] = {}
         edp[element_data.data['name']]['type'] = element_data.type.name
         if frame_intervals is None:
@@ -485,6 +517,7 @@ class VCD:
                     edp[element_data.data['name']]['attributes'][attr['name']] = attr_type
 
     def __create_update_element_data(self, element_type, uid, element_data, frame_intervals):
+        assert(isinstance(uid, UID))
         # 0.- Check if element_data
         if 'in_stream' in element_data.data:
             if not self.has_stream(element_data.data['in_stream']):
@@ -493,7 +526,7 @@ class VCD:
         # 1.- At root XOR frames, copy from existing or create new entry
         if frame_intervals.empty():
             # 1.1.- Static
-            element = self.get_element(element_type, uid)
+            element = self.get_element(element_type, uid.as_str())
             if element is not None:
                 element.setdefault(element_type.name + '_data', {})
                 element[element_type.name + '_data'].setdefault(element_data.type.name, []) # e.g. bbox
@@ -523,8 +556,8 @@ class VCD:
                         self.__add_frame(f)
                         frame = self.get_frame(f)
                     frame.setdefault(element_type.name + 's', {})
-                    frame[element_type.name + 's'].setdefault(uid, {})
-                    element = frame[element_type.name + 's'][uid]
+                    frame[element_type.name + 's'].setdefault(uid.as_str(), {})
+                    element = frame[element_type.name + 's'][uid.as_str()]
                     element.setdefault(element_type.name + '_data', {})
                     element[element_type.name + '_data'].setdefault(element_data.type.name, [])
 
@@ -788,13 +821,13 @@ class VCD:
 
     def update_object(self, uid, frame_value):
         # This function is only needed if no add_object_data calls are used, but the object needs to be kept alive
-        return self.__update_element(ElementType.object, uid, FrameIntervals(frame_value))
+        return self.__update_element(ElementType.object, UID(uid), FrameIntervals(frame_value))
 
     def update_action(self, uid, frame_value):
-        return self.__update_element(ElementType.action, uid, FrameIntervals(frame_value))
+        return self.__update_element(ElementType.action, UID(uid), FrameIntervals(frame_value))
 
     def update_context(self, uid, frame_value):
-        return self.__update_element(ElementType.context, uid, FrameIntervals(frame_value))
+        return self.__update_element(ElementType.context, UID(uid), FrameIntervals(frame_value))
 
     def update_relation(self, uid, frame_value):
         if self.get_relation(uid) is not None:
@@ -802,56 +835,59 @@ class VCD:
                 warnings.warn("WARNING: Trying to update the frame information of a Relation defined as frame-less. "
                               "Ignoring command.")
             else:
-                return self.__update_element(ElementType.relation, uid, FrameIntervals(frame_value))
+                return self.__update_element(ElementType.relation, UID(uid), FrameIntervals(frame_value))
 
     def add_object(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
         return self.__add_element(ElementType.object, name, semantic_type, FrameIntervals(frame_value),
-                                  uid, ont_uid, stream)
+                                  UID(uid), UID(ont_uid), stream).as_str()
 
     def add_action(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
         return self.__add_element(ElementType.action, name, semantic_type, FrameIntervals(frame_value),
-                                  uid, ont_uid, stream)
+                                  UID(uid), UID(ont_uid), stream).as_str()
 
     def add_event(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
         return self.__add_element(ElementType.event, name, semantic_type, FrameIntervals(frame_value),
-                                  uid, ont_uid, stream)
+                                  UID(uid), UID(ont_uid), stream).as_str()
 
     def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
         return self.__add_element(ElementType.context, name, semantic_type, FrameIntervals(frame_value),
-                                  uid, ont_uid, stream)
+                                  UID(uid), UID(ont_uid), stream).as_str()
 
     def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None):
         relation_uid = self.__add_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
-            uid_=uid, ont_uid_=ont_uid
+            uid=UID(uid), ont_uid=UID(ont_uid)
         )
-        return relation_uid
+        return relation_uid.as_str()
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
         assert(isinstance(element_type, ElementType))
         assert(isinstance(rdf_type, RDF))
-        if relation_uid not in self.data['vcd']['relations']:
+        rel_uid = UID(relation_uid)
+        el_uid = UID(element_uid)
+        if rel_uid.as_str() not in self.data['vcd']['relations']:
             warnings.warn("WARNING: trying to add RDF to non-existing Relation.")
             return
         else:
-            relation = self.data['vcd']['relations'][relation_uid]
-            if element_uid not in self.data['vcd'][element_type.name + 's']:
+            relation = self.data['vcd']['relations'][rel_uid.as_str()]
+            if el_uid.as_str() not in self.data['vcd'][element_type.name + 's']:
                 warnings.warn("WARNING: trying to add RDF using non-existing Element.")
                 return
             else:
                 if rdf_type == RDF.subject:
                     relation.setdefault('rdf_subjects', [])
                     relation['rdf_subjects'].append(
-                        {'uid': element_uid, 'type': element_type.name}
+                        {'uid': el_uid.as_str(), 'type': element_type.name}
                     )
                 else:
                     relation.setdefault('rdf_objects', [])
                     relation['rdf_objects'].append(
-                        {'uid': element_uid, 'type': element_type.name}
+                        {'uid': el_uid.as_str(), 'type': element_type.name}
                     )
 
     def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
                                    ont_uid=None, frame_value=None):
+        # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
                                          frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -863,6 +899,7 @@ class VCD:
 
     def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
                                    ont_uid=None, frame_value=None):
+        # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
                                          frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -874,6 +911,7 @@ class VCD:
 
     def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
                                    ont_uid=None, frame_value=None):
+        # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
                                          frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -885,6 +923,7 @@ class VCD:
 
     def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
                                    ont_uid=None, frame_value=None):
+        # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
                                          frame_value=frame_value)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -896,6 +935,7 @@ class VCD:
 
     def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
                                     relation_uid, ont_uid, frame_value=None):
+        # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid, frame_value=frame_value)
         assert(isinstance(subject_type, ElementType))
         assert(isinstance(object_type, ElementType))
@@ -907,40 +947,40 @@ class VCD:
         return relation_uid
 
     def add_object_data(self, uid, object_data, frame_value=None):
-        return self.__add_element_data(ElementType.object, uid, object_data, FrameIntervals(frame_value))
+        return self.__add_element_data(ElementType.object, UID(uid), object_data, FrameIntervals(frame_value))
 
     def add_action_data(self, uid, action_data, frame_value=None):
-        return self.__add_element_data(ElementType.action, uid, action_data, FrameIntervals(frame_value))
+        return self.__add_element_data(ElementType.action, UID(uid), action_data, FrameIntervals(frame_value))
         
     def add_event_data(self, uid, event_data, frame_value=None):
-        return self.__add_element_data(ElementType.evevt, uid, event_data, FrameIntervals(frame_value))
+        return self.__add_element_data(ElementType.evevt, UID(uid), event_data, FrameIntervals(frame_value))
         
     def add_context_data(self, uid, context_data, frame_value=None):
-        return self.__add_element_data(ElementType.context, uid, context_data, FrameIntervals(frame_value))
+        return self.__add_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value))
 
-    def modify_action(self, uid, name = None, semantic_type = None, frame_value = None, ont_uid = None, stream = None):
+    def modify_action(self, uid, name=None, semantic_type=None, frame_value = None, ont_uid=None, stream=None):
         return self.__modify_element(
-            ElementType.action, uid, name, semantic_type, FrameIntervals(frame_value), ont_uid, stream
+            ElementType.action, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
         )
 
-    def modify_object(self, uid, name = None, semantic_type = None, frame_value = None, ont_uid = None, stream = None):
+    def modify_object(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
         return self.__modify_element(
-            ElementType.object, uid, name, semantic_type, FrameIntervals(frame_value), ont_uid, stream
+            ElementType.object, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
         )
 
-    def modify_event(self, uid, name = None, semantic_type = None, frame_value = None, ont_uid = None, stream = None):
+    def modify_event(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
         return self.__modify_element(
-            ElementType.event, uid, name, semantic_type, FrameIntervals(frame_value), ont_uid, stream
+            ElementType.event, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
         )
 
-    def modify_context(self, uid, name = None, semantic_type = None, frame_value = None, ont_uid = None, stream = None):
+    def modify_context(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
         return self.__modify_element(
-            ElementType.context, uid, name, semantic_type, FrameIntervals(frame_value), ont_uid, stream
+            ElementType.context, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
         )
 
-    def modify_relation(self, uid, name = None, semantic_type = None, frame_value = None, ont_uid = None, stream = None):
+    def modify_relation(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
         return self.__modify_element(
-            ElementType.relation, uid, name, semantic_type, FrameIntervals(frame_value), ont_uid, stream
+            ElementType.relation, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
         )
 
     def modify_action_data(self, uid, action_data, frame_value):
@@ -955,9 +995,8 @@ class VCD:
     def modify_context_data(self, uid, context_data, frame_value):
         return self.add_context_data(uid, context_data, frame_value)
 
-    def update_element_data(self, element_type, uid, element_data, frame_value = None):
+    def update_element_data(self, element_type, uid, element_data, frame_value=None):
         assert(isinstance(element_type, ElementType))
-        assert(isinstance(uid, str))
         assert(isinstance(element_data, types.ObjectData))
         element = self.get_element(element_type, uid)
 
@@ -983,19 +1022,19 @@ class VCD:
                         if 'stream' in element:
                             stream = element['stream']
                         self.__add_element(
-                            element_type, element['name'], element['type'], fis_union, uid, ont_uid, stream
+                            element_type, element['name'], element['type'], fis_union, UID(uid), UID(ont_uid), stream
                         )
 
                         # 2.- Inject the new elementdata using the framevalue
                         # this will replace existing content at such frames, or create new entries
-                        self.__create_update_element_data(element_type, uid, element_data, fis_new)
+                        self.__create_update_element_data(element_type, UID(uid), element_data, fis_new)
 
                         # 3.- Update element_data_pointers
-                        self.__create_update_element_data_pointers(element_type, uid, element_data, fis_new)
+                        self.__create_update_element_data_pointers(element_type, UID(uid), element_data, fis_new)
         else:
             # Static: so wa can't fuse frame intervals, this is a substitution
             if element is not None:
-                self.__add_element_data(element_type, uid, element_data, FrameIntervals(frame_value))
+                self.__add_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value))
 
     def update_action_data(self, uid, action_data, frame_value=None):
         return self.update_element_data(ElementType.action, uid, action_data, frame_value)
@@ -1034,7 +1073,8 @@ class VCD:
         if not element_type.name + 's' in self.data['vcd']:
             return False
         else:
-            if uid in self.data['vcd'][element_type.name + 's']:
+            uid_str = UID(uid).as_str()
+            if uid_str in self.data['vcd'][element_type.name + 's']:
                 return True
             else:
                 return False
@@ -1052,10 +1092,11 @@ class VCD:
         if self.data['vcd'].get(element_type.name + 's') is None:
             warnings.warn("WARNING: trying to get a " + element_type.name + " but this VCD has none.")
             return None
-        if uid in self.data['vcd'][element_type.name + 's']:
-            return self.data['vcd'][element_type.name + 's'][uid]
+        uid_str = UID(uid).as_str()
+        if uid_str in self.data['vcd'][element_type.name + 's']:
+            return self.data['vcd'][element_type.name + 's'][uid_str]
         else:
-            warnings.warn("WARNING: trying to get non-existing " + element_type.name + " with uid: " + str(uid))
+            warnings.warn("WARNING: trying to get non-existing " + element_type.name + " with uid: " + uid_str)
             return None
 
     def get_object(self, uid):
@@ -1081,24 +1122,24 @@ class VCD:
             return frame
 
     def get_elements_of_type(self, element_type, semantic_type):
-        uids = []
+        uids_str = []
         if not element_type.name + 's' in self.data['vcd']:
-            return uids
-        for uid, element in self.data['vcd'][element_type.name + 's'].items():
+            return uids_str
+        for uid_str, element in self.data['vcd'][element_type.name + 's'].items():
             if element['type'] == semantic_type:
-                uids.append(uid)
-        return uids
+                uids_str.append(uid_str)
+        return uids_str
 
     def get_elements_with_element_data_name(self, element_type, data_name):
-        uids = []
-        for uid in self.data['vcd'][element_type.name + 's']:
-            element = self.data['vcd'][element_type.name + 's'][uid]
+        uids_str = []
+        for uid_str in self.data['vcd'][element_type.name + 's']:
+            element = self.data['vcd'][element_type.name + 's'][uid_str]
             if element_type.name + '_data_pointers' in element:
                 for name in element[element_type.name + '_data_pointers']:
                     if name == data_name:
-                        uids.append(uid)
+                        uids_str.append(uid_str)
                         break
-        return uids
+        return uids_str
 
     def get_objects_with_object_data_name(self, data_name):
         return self.get_elements_with_element_data_name(ElementType.object, data_name)
@@ -1112,10 +1153,10 @@ class VCD:
     def get_contexts_with_context_data_name(self, data_name):
         return self.get_elements_with_element_data_name(ElementType.context, data_name)
 
-
     def get_frames_with_element_data_name(self, element_type, uid, data_name):
-        if uid in self.data['vcd'][element_type.name + 's']:
-            element = self.data['vcd'][element_type.name + 's'][uid]
+        uid_str = UID(uid).as_str()
+        if uid_str in self.data['vcd'][element_type.name + 's']:
+            element = self.data['vcd'][element_type.name + 's'][uid_str]
             if element_type.name + '_data_pointers' in element:
                 for name in element[element_type.name + '_data_pointers']:
                     if name == data_name:
@@ -1135,6 +1176,7 @@ class VCD:
         return self.get_frames_with_element_data_name(ElementType.context, uid, data_name)
 
     def get_element_data(self, element_type, uid, data_name, frame_num = None):
+        uid_str = UID(uid).as_str()
         if self.has(element_type, uid):
             if frame_num is not None:
                 # Dynamic info
@@ -1142,7 +1184,7 @@ class VCD:
                     warnings.warn("WARNING: Calling get_element_data with a non-integer frame_num.")
                 frame = self.get_frame(frame_num)
                 if frame is not None:
-                    element = frame[element_type.name + 's'][uid]
+                    element = frame[element_type.name + 's'][uid_str]
                     for prop in element[element_type.name + '_data']:
                         val_array = element[element_type.name + '_data'][prop]
                         for val in val_array:
@@ -1150,7 +1192,7 @@ class VCD:
                                 return val
             else:
                 # Static info
-                element = self.data['vcd'][element_type.name + 's'][uid]
+                element = self.data['vcd'][element_type.name + 's'][uid_str]
                 for prop in element[element_type.name + '_data']:
                     val_array = element[element_type.name + '_data'][prop]
                     for val in val_array:
@@ -1173,8 +1215,9 @@ class VCD:
         return self.get_element_data(ElementType.context, uid, data_name, frame_num)
 
     def get_element_data_pointer(self, element_type, uid, data_name):
+        uid_str = UID(uid).as_str()
         if self.has(element_type, uid):
-            element = self.data['vcd'][element_type.name + 's'][uid]
+            element = self.data['vcd'][element_type.name + 's'][uid_str]
             if element_type.name + '_data_pointers' in element:
                 if data_name in element[element_type.name + '_data_pointers']:
                     return element[element_type.name + '_data_pointers'][data_name]
@@ -1216,9 +1259,10 @@ class VCD:
         return self.get_num_elements(ElementType.relation)
 
     def get_ontology(self, ont_uid):
+        ont_uid_str = UID(ont_uid).as_str()
         if 'ontologies' in self.data['vcd']:
-            if ont_uid in self.data['vcd']['ontologies']:
-                return self.data['vcd']['ontologies'][ont_uid]
+            if ont_uid_str in self.data['vcd']['ontologies']:
+                return self.data['vcd']['ontologies'][ont_uid_str]
         return None
 
     def get_metadata(self):
@@ -1243,17 +1287,19 @@ class VCD:
             return FrameIntervals()
 
     def get_element_frame_intervals(self, element_type, uid):
+        uid_str = UID(uid).as_str()
         if not element_type.name + 's' in self.data['vcd']:
             return FrameIntervals()
         else:
-            if not uid in self.data['vcd'][element_type.name + 's']:
+            if not uid_str in self.data['vcd'][element_type.name + 's']:
                 return FrameIntervals()
-            return FrameIntervals(self.data['vcd'][element_type.name + 's'][uid].get('frame_intervals'))
+            return FrameIntervals(self.data['vcd'][element_type.name + 's'][uid_str].get('frame_intervals'))
 
     def relation_has_frame_intervals(self, relation_uid):
+        rel_uid = UID(relation_uid)
         relation = self.get_relation(relation_uid)
         if relation is None:
-            warnings.warn("WARNING: Non-existing relation " + str(relation_uid))
+            warnings.warn("WARNING: Non-existing relation " + rel_uid.as_str())
         else:
             if 'frame_intervals' not in relation:
                 return False
@@ -1271,12 +1317,12 @@ class VCD:
         index = None
 
         # Get Element from summary
-        uids_to_remove = []
-        for uid, element in elements.items():
+        uids_to_remove_str = []
+        for uid_str, element in elements.items():
             if element['type'] == semantic_type:
-                uids_to_remove.append(uid)
-        for uid in uids_to_remove:
-            self.rm_element(element_type, uid)
+                uids_to_remove_str.append(uid_str)
+        for uid_str in uids_to_remove_str:
+            self.rm_element(element_type, uid_str)
 
     def rm_object_by_type(self, semantic_type):
         self.rm_element_by_type(ElementType.object, semantic_type)
@@ -1294,6 +1340,7 @@ class VCD:
         self.rm_element_by_type(ElementType.relation, semantic_type)
 
     def rm_element(self, element_type, uid):
+        uid_str = UID(uid).as_str()
         elements = self.data['vcd'][element_type.name + 's']
 
         # Get element from summary
@@ -1301,20 +1348,20 @@ class VCD:
             return
 
         # Remove from frames: let's read frame_intervals from summary
-        element = elements[uid]
+        element = elements[uid_str]
         for i in range(0, len(element['frame_intervals'])):
             fi = element['frame_intervals'][i]
             for frame_num in range(fi['frame_start'], fi['frame_end']+1):
                 elements_in_frame = self.data['vcd']['frames'][frame_num][element_type.name + 's']
                 if uid in elements_in_frame:
-                    del elements_in_frame[uid]
+                    del elements_in_frame[uid_str]
                 if len(elements_in_frame) == 0: # objects might have end up empty TODO: test this
                     del self.data['vcd']['frames'][frame_num][element_type.name + 's']
                     if len(self.data['vcd']['frames'][frame_num]) == 0: # this frame may have ended up being empty
                         del self.data['vcd']['frames'][frame_num]
 
         # Delete this element from summary
-        del elements[uid]
+        del elements[uid_str]
 
     def rm_object(self, uid):
         self.rm_element(ElementType.object, uid)

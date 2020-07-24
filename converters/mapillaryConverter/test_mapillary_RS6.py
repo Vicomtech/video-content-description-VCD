@@ -74,7 +74,7 @@ for img_name in os.listdir(path):
                 c = c.flatten()
                 hierarchy_list = hierarchy[0][cnt_id].tolist()
                 # Write poly, hierarchy and instance
-                polygon = types.poly2d('contour', c.tolist(), types.Poly2DType.MODE_POLY2D_RS6FCC, closed=True,
+                polygon = types.poly2d('contour' + str(cont), c.tolist(), types.Poly2DType.MODE_POLY2D_RS6FCC, closed=True,
                                        hierarchy=hierarchy_list)
                 vcd.add_object_data(uid, polygon)
                 cnt_id += 1
@@ -94,7 +94,7 @@ for img_name in os.listdir(path):
             for c in contours:
                 c = c.flatten()
                 hierarchy_list = hierarchy[0][cnt_id].tolist()
-                polygon = types.poly2d('contour', c.tolist(), types.Poly2DType.MODE_POLY2D_RS6FCC, closed=True,
+                polygon = types.poly2d('contour' + str(cont), c.tolist(), types.Poly2DType.MODE_POLY2D_RS6FCC, closed=True,
                                        hierarchy=hierarchy_list)
                 vcd.add_object_data(uid, polygon)
                 cnt_id += 1
