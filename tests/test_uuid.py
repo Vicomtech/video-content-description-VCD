@@ -59,7 +59,7 @@ class TestBasic(unittest.TestCase):
 
         # All returned UIDs are strings, and when written into JSON as well
         #print(vcd.stringify(False))
-        self.assertEqual(vcd.stringify(False), '{"vcd":{"frames":{},"schema_version":"4.3.0","frame_intervals":[],"objects":{"0":{"name":"Mike","type":"Person"},"1":{"name":"George","type":"Person"},"2":{"name":"Susan","type":"Person","object_data":{"boolean":[{"name":"checked","val":true},{"name":"double-checked","val":true}]},"object_data_pointers":{"checked":{"type":"boolean","frame_intervals":[]},"double-checked":{"type":"boolean","frame_intervals":[]}}},"3":{"name":"Mark","type":"#Pedestrian","ontology_uid":"0"},"4":{"name":"Rose","type":"#Pedestrian","ontology_uid":"0"}},"ontologies":{"0":"http://www.vicomtech.org/viulib/ontology"}}}')
+        self.assertEqual(vcd.stringify(False), '{"vcd":{"metadata":{"schema_version":"4.3.0"},"objects":{"0":{"name":"Mike","type":"Person"},"1":{"name":"George","type":"Person"},"2":{"name":"Susan","type":"Person","object_data":{"boolean":[{"name":"checked","val":true},{"name":"double-checked","val":true}]},"object_data_pointers":{"checked":{"type":"boolean","frame_intervals":[]},"double-checked":{"type":"boolean","frame_intervals":[]}}},"3":{"name":"Mark","type":"#Pedestrian","ontology_uid":"0"},"4":{"name":"Rose","type":"#Pedestrian","ontology_uid":"0"}},"ontologies":{"0":"http://www.vicomtech.org/viulib/ontology"}}}')
 
     def test_uuid_usage_explicit_1(self):
         vcd = core.VCD()

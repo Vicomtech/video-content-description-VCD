@@ -236,6 +236,8 @@ class KITTI_Tracking_reader():
         for row in object_reader:
             frameNum = int(row[0])
             trackID = int(row[1]) + 1  # VCD can't handle negative ids
+            if trackID == 0:
+                continue  # Let's ignore DontCare labels
 
             semantic_class = row[2]
             truncated = utils.float_2dec(float(row[3]))
@@ -247,7 +249,7 @@ class KITTI_Tracking_reader():
             width = utils.float_2dec(float(row[8]) - left)
             height = utils.float_2dec(float(row[9]) - top)
 
-            bounding_box = types.bbox(name="",
+            bounding_box = types.bbox(name="box2D",
                                       val=(left, top, width, height),
                                       stream='CAM_LEFT')
 
@@ -268,21 +270,28 @@ class KITTI_Tracking_reader():
             # Cameras are 1.03 meters wrt to rear axle
             cam_wrt_rear_axle_z = 1.03
             cam_height = 1.65
-            cuboid = types.cuboid(name="",
+            cuboid = types.cuboid(name="box3D",
                                   val=(utils.float_2dec(locZ + cam_wrt_rear_axle_z), utils.float_2dec(-locX),
                                        utils.float_2dec(-locY + cam_height), 0, 0, utils.float_2dec(rotY),
                                        utils.float_2dec(dimWidth), utils.float_2dec(dimLength), utils.float_2dec(dimHeight)))
             # Note that if no "stream" parameter is given to this cuboid, LCS is assumed
 
             if not vcd.has(core.ElementType.object, str(trackID)):
+                # First time
                 vcd.add_object(name="", semantic_type=semantic_class, uid=str(trackID))
 
-            vcd.add_object_data(str(trackID), bounding_box, frameNum)
-            if semantic_class != "DontCare":
+                vcd.add_object_data(str(trackID), bounding_box, frameNum)
                 vcd.add_object_data(str(trackID), cuboid, frameNum)
-            vcd.add_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
-            vcd.add_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
-            vcd.add_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
+                vcd.add_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
+                vcd.add_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
+                vcd.add_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
+            else:
+                # Already exists, call update
+                vcd.update_object_data(str(trackID), bounding_box, frameNum)
+                vcd.update_object_data(str(trackID), cuboid, frameNum)
+                vcd.update_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
+                vcd.update_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
+                vcd.update_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
 
         # Return
         return vcd
@@ -303,6 +312,10 @@ def convert_KITTI_tracking_to_VCD4():
                                      "vcd_430_kitti_tracking_" + str(count).zfill(4) + ".json")
         print('Storing VCD file...' + vcd_file_name)
         kitti_parser.vcds[key].save(file_name=vcd_file_name)
+
+        if count == 0:  # Save a copy of the first trace to tests for further VCD tests
+            vcd_file_name = os.path.join("../../tests/etc/in", "vcd_430_kitti_tracking_" + str(count).zfill(4) + ".json")
+            kitti_parser.vcds[key].save(file_name=vcd_file_name)
 
 
 if __name__ == '__main__':

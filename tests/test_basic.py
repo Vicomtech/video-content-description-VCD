@@ -92,8 +92,8 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid=uid_peter, object_data=types.num('age', 40.0), frame_value=(0, 11))
         vcd.add_object_data(uid=uid_peter, object_data=types.vec('marks', (10.0, 10.0, 10.0)), frame_value=(0, 11))
         vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9), frame_value=(5, 10))
-        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.01), frame_value=11)
-        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.02), frame_value=12)
+        vcd.update_object_data(uid=uid_katixa, object_data=types.num('age', 9.01), frame_value=11)
+        vcd.update_object_data(uid=uid_katixa, object_data=types.num('age', 9.02), frame_value=12)
 
         # 3.- Search Objects according to some search criteria
         # 3.1.- According to "Object::type" (also for other Elements such as Action, Event, Context)
@@ -202,8 +202,15 @@ class TestBasic(unittest.TestCase):
         vcd = core.VCD()
         annotator = "Algorithm001"
         comment = "Annotations produced automatically - SW v0.1"
+        file_version = "2.0"  # This is a versioning for the annotation file itself
+        name = "vcd_" + file_version + "-" + annotator # A friendly name
         vcd.add_annotator(annotator)
         vcd.add_comment(comment)
+        vcd.add_file_version(file_version)
+        vcd.add_name(name)
+
+        # Other customized metadata can be added as well
+        vcd.add_metadata_properties({"target": "Test track", "origin": "synthetic"})
 
         # TODO: vcd.add_metadata_properties (a dictionary just like frame_properties)
 
@@ -308,11 +315,11 @@ class TestBasic(unittest.TestCase):
                     vcd_current.add_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
                 else:
                     uid = vcd_current.add_object('CARLOTA', 'Car', uid=uid)  # tell VCD to use last_uid
-                    vcd_current.add_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
+                    vcd_current.update_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
             else:
                 # Continue with current VCD
                 vcd_current = vcds[-1]
-                vcd_current.add_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
+                vcd_current.update_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
 
         for vcd_this in vcds:
             self.assertEqual(vcd_this.get_num_objects(), 1)
@@ -364,17 +371,15 @@ class TestBasic(unittest.TestCase):
         uid_obj1 = vcd.add_object('someName1', '#Some')
 
         # Add a polygon with SRF6DCC encoding (list of strings)
-        poly1 = types.poly2d('poly', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
+        poly1 = types.poly2d('poly1', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
                      types.Poly2DType.MODE_POLY2D_SRF6DCC, False)
-        self.assertEqual(poly1.data['name'], "poly")
+        self.assertEqual(poly1.data['name'], "poly1")
         self.assertEqual(poly1.data['mode'], "MODE_POLY2D_SRF6DCC")
         self.assertEqual(poly1.data['closed'], False)
         vcd.add_object_data(uid_obj1, poly1)
 
-
-
         # Add a polygon with absolute coordinates (list of numbers)
-        poly2 = types.poly2d('poly', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
+        poly2 = types.poly2d('poly2', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
                      types.Poly2DType.MODE_POLY2D_ABSOLUTE, False)
         vcd.add_object_data(uid_obj1, poly2)
 

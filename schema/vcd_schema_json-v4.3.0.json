@@ -671,7 +671,7 @@
             "type": "object"
         },
         "metadata": {
-            "additionalProperties": false,
+            "additionalProperties": true,
             "properties": {
                 "annotator": {
                     "type": "string"
@@ -679,23 +679,22 @@
                 "comment": {
                     "type": "string"
                 },
-                "properties": {
-                    "additionalProperties": false,
-                    "patternProperties": {
-                        "^": {}
-                    },
-                    "type": "object"
+                "file_version": {
+                    "type": "string"
                 },
-                "streams": {
-                    "additionalProperties": false,
-                    "patternProperties": {
-                        "^": {
-                            "$ref": "#/definitions/stream"
-                        }
-                    },
-                    "type": "object"
+                "name": {
+                    "type": "string"
+                },
+                "schema_version": {
+                    "enum": [
+                        "4.3.0"
+                    ],
+                    "type": "string"
                 }
             },
+            "required": [
+                "schema_version"
+            ],
             "type": "object"
         },
         "num": {
@@ -1256,6 +1255,15 @@
             },
             "type": "object"
         },
+        "streams": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^": {
+                    "$ref": "#/definitions/stream"
+                }
+            },
+            "type": "object"
+        },
         "text": {
             "additionalProperties": false,
             "properties": {
@@ -1309,9 +1317,6 @@
                     },
                     "type": "object"
                 },
-                "file_version": {
-                    "type": "string"
-                },
                 "frame_intervals": {
                     "item": {
                         "$ref": "#/definitions/frame_interval"
@@ -1329,9 +1334,6 @@
                 },
                 "metadata": {
                     "$ref": "#/definitions/metadata"
-                },
-                "name": {
-                    "type": "string"
                 },
                 "objects": {
                     "additionalProperties": false,
@@ -1360,15 +1362,12 @@
                     },
                     "type": "object"
                 },
-                "schema_version": {
-                    "enum": [
-                        "4.3.0"
-                    ],
-                    "type": "string"
+                "streams": {
+                    "$ref": "#/definitions/streams"
                 }
             },
             "required": [
-                "schema_version"
+                "metadata"
             ],
             "type": "object"
         },

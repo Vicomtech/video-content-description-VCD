@@ -26,9 +26,6 @@ vcd_schema = {
             "type": "object",
             "description": "This is the root VCD element.",
             "properties": {
-                "schema_version": {"type": "string", "enum": [vcd_schema_version]},
-                "file_version": {"type": "string"},
-                "name": {"type": "string"},
                 "frame_intervals": {
                     "type": "array",
                     "item": {"$ref": "#/definitions/frame_interval"}
@@ -96,9 +93,10 @@ vcd_schema = {
                     "additionalProperties": False
                 },
                 "metadata": {"$ref": "#/definitions/metadata"},
+                "streams": {"$ref": "#/definitions/streams"}
             },
             "additionalProperties": False,
-            "required": ["schema_version"]
+            "required": ["metadata"]
         },
         "frame": {
             "type": "object",
@@ -211,23 +209,20 @@ vcd_schema = {
         "metadata": {
             "type": "object",
             "properties": {
-                "streams": {
-                    "patternProperties": {
-                        "^": {"$ref": "#/definitions/stream"},
-                    },
-                    "type": "object",
-                    "additionalProperties": False
-                },
-                "properties": {
-                    "type": "object",
-                    "patternProperties": {
-                        "^": {}
-                    },
-                    "additionalProperties": False
-                },
+                "schema_version": {"type": "string", "enum": [vcd_schema_version]},
+                "file_version": {"type": "string"},
+                "name": {"type": "string"},
                 "annotator": {"type": "string"},
                 "comment": {"type": "string"}
             },
+            "additionalProperties": True,
+            "required": ["schema_version"]
+        },
+        "streams": {
+            "patternProperties": {
+                "^": {"$ref": "#/definitions/stream"},
+                },
+            "type": "object",
             "additionalProperties": False
         },
         "object": {

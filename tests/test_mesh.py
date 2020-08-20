@@ -233,7 +233,7 @@ class TestBasic(unittest.TestCase):
         # and add it to the existing Object, specifying the frame
 
         for frame_num in range(0, 2):
-            mesh1_frame = types.mesh("parkslot1")
+            mesh1_frame = types.mesh("parkslot1_dyn")
             for line_key, line_val in edges.items():
                 # If we want to add a line_reference attribute: Reconstruct line_reference
                 # Read existing info
@@ -249,7 +249,12 @@ class TestBasic(unittest.TestCase):
                 aX.add_attribute(types.text("PM_park_slot_content", "Empty"))
                 mesh1_frame.add_area(aX, area_key)
 
-            vcd.add_object_data("0", mesh1_frame, frame_num)
+            # We add and then update. Note we use a different name "parkslot1_dyn", because "parkslot1" is used for
+            # a static object_data
+            if frame_num == 0:
+                vcd.add_object_data("0", mesh1_frame, frame_num)
+            else:
+                vcd.update_object_data("0", mesh1_frame, frame_num)
 
         # Save it
         if not os.path.isfile('./etc/in/test_mesh_frame.json'):

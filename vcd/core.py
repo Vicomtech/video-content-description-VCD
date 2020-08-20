@@ -197,10 +197,11 @@ class VCD:
             # )
             self.data = json.load(json_file)  # Open without converting strings to integers
 
+            # schema_version is required
+            self.schema = schema.vcd_schema
+            assert ('schema_version' in self.data['vcd']['metadata'])
+            assert (self.data['vcd']['metadata']['schema_version'] == schema.vcd_schema_version)
             if validation:
-                self.schema = schema.vcd_schema
-                assert('schema_version' in self.data['vcd'])
-                assert(self.data['vcd']['schema_version'] == schema.vcd_schema_version)
                 validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
                 json_file.close()
 
@@ -225,9 +226,8 @@ class VCD:
     def reset(self):
         # Main VCD data
         self.data = {'vcd': {}}
-        self.data['vcd']['frames'] = {}
-        self.data['vcd']['schema_version'] = schema.vcd_schema_version
-        self.data['vcd']['frame_intervals'] = []
+        self.data['vcd']['metadata'] = {}
+        self.data['vcd']['metadata']['schema_version'] = schema.vcd_schema_version
 
         # Schema information
         self.schema = schema.vcd_schema
@@ -281,12 +281,16 @@ class VCD:
         # This function creates the union of existing VCD with the input frameIntervals
         assert (isinstance(frame_intervals, FrameIntervals))
         if not frame_intervals.empty():
+            if 'frame_intervals' not in self.data['vcd']:
+                self.data['vcd']['frame_intervals'] = []
             fis_current = FrameIntervals(self.data['vcd']['frame_intervals'])
             fis_union = fis_current.union(frame_intervals)
             self.__set_vcd_frame_intervals(fis_union)
 
     def __add_frame(self, frame_num):
         # self.data['vcd']['frames'].setdefault(frame_num, {}) # 3.8 secs - 10.000 times
+        if 'frames' not in self.data['vcd']:
+            self.data['vcd']['frames'] = {}
         if frame_num not in self.data['vcd']['frames']:
             self.data['vcd']['frames'][frame_num] = {}
 
@@ -495,6 +499,8 @@ class VCD:
         self.__create_update_element_data(element_type, uid, element_data, frame_intervals)
 
         # 3.- Update element_data_pointers
+        # IMPORTANT: here we use frame_intervals, and NOT the fusion, because "add" concept is to create or modify,
+        # but not to update (fuse)
         self.__create_update_element_data_pointers(element_type, uid, element_data, frame_intervals)
 
     def __create_update_element_data_pointers(self, element_type, uid, element_data, frame_intervals):
@@ -595,16 +601,21 @@ class VCD:
     # Public API: add, update
     ##################################################
     def add_file_version(self, version):
-        self.data['vcd']['file_version'] = version
+        assert (type(version) is str)
+        if 'metadata' not in self.data['vcd']:
+            self.data['vcd']['metadata'] = {}
+        self.data['vcd']['metadata']['file_version'] = version
 
     def add_metadata_properties(self, properties):
         assert(isinstance(properties, dict))
-        prop = self.data['vcd']['metadata'].setdefault('properties', dict())
+        prop = self.data['vcd']['metadata']
         prop.update(properties)
 
     def add_name(self, name):
         assert(type(name) is str)
-        self.data['vcd']['name'] = name
+        if 'metadata' not in self.data['vcd']:
+            self.data['vcd']['metadata'] = {}
+        self.data['vcd']['metadata']['name'] = name
 
     def add_annotator(self, annotator):
         assert(type(annotator) is str)
@@ -633,15 +644,14 @@ class VCD:
         assert(isinstance(uri, str))
         assert(isinstance(description, str))
 
-        self.data['vcd'].setdefault('metadata', dict())
-        self.data['vcd']['metadata'].setdefault('streams', dict())
-        self.data['vcd']['metadata']['streams'].setdefault(stream_name, dict())
+        self.data['vcd'].setdefault('streams', dict())
+        self.data['vcd']['streams'].setdefault(stream_name, dict())
         if isinstance(stream_type, StreamType):
-            self.data['vcd']['metadata']['streams'][stream_name] = {
+            self.data['vcd']['streams'][stream_name] = {
                 'description': description, 'uri': uri, 'type': stream_type.name
             }
         elif isinstance(stream_type, str):
-            self.data['vcd']['metadata']['streams'][stream_name] = {
+            self.data['vcd']['streams'][stream_name] = {
                 'description': description, 'uri': uri, 'type': stream_type
             }
 
@@ -694,23 +704,23 @@ class VCD:
 
         # Find if this stream is declared
         if 'metadata' in self.data['vcd']:
-            if 'streams' in self.data['vcd']['metadata']:
-                if stream_name in self.data['vcd']['metadata']['streams']:
+            if 'streams' in self.data['vcd']:
+                if stream_name in self.data['vcd']['streams']:
                     if frame_num is None:
                         # This information is static
-                        self.data['vcd']['metadata']['streams'][stream_name].setdefault('stream_properties', dict())
+                        self.data['vcd']['streams'][stream_name].setdefault('stream_properties', dict())
                         if properties is not None:
-                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                            self.data['vcd']['streams'][stream_name]['stream_properties'].\
                                 update(properties)
                         if intrinsics is not None:
-                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                            self.data['vcd']['streams'][stream_name]['stream_properties'].\
                                 update(intrinsics.data)
                         if extrinsics is not None:
-                            self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                            self.data['vcd']['streams'][stream_name]['stream_properties'].\
                                 update(extrinsics.data)
                         if stream_sync is not None:
                             if stream_sync.data:
-                                self.data['vcd']['metadata']['streams'][stream_name]['stream_properties'].\
+                                self.data['vcd']['streams'][stream_name]['stream_properties'].\
                                     update(stream_sync.data)
                     else:
                         # This is information of the stream for a specific frame
@@ -944,15 +954,35 @@ class VCD:
         return relation_uid
 
     def add_object_data(self, uid, object_data, frame_value=None):
+        if self.has_element_data(ElementType.object, uid, object_data):
+            warnings.warn("WARNING: This element already has an object_data with this name. "
+                          "This will substitute the content. To add new object_data at new frame_intervals "
+                          "use update_object_data. "
+                          "To modify an existing object_data, use modify_object_data.")
         return self.__add_element_data(ElementType.object, UID(uid), object_data, FrameIntervals(frame_value))
 
     def add_action_data(self, uid, action_data, frame_value=None):
+        if self.has_element_data(ElementType.object, uid, action_data):
+            warnings.warn("WARNING: This element already has an action_data with this name. "
+                          "This will substitute the content. To add new action_data at new frame_intervals "
+                          "use update_action_data. "
+                          "To modify an existing action_data, use modify_action_data.")
         return self.__add_element_data(ElementType.action, UID(uid), action_data, FrameIntervals(frame_value))
         
     def add_event_data(self, uid, event_data, frame_value=None):
+        if self.has_element_data(ElementType.object, uid, event_data):
+            warnings.warn("WARNING: This element already has an event_data with this name. "
+                          "This will substitute the content. To add new event_data at new frame_intervals "
+                          "use update_event_data. "
+                          "To modify an existing event_data, use modify_event_data.")
         return self.__add_element_data(ElementType.evevt, UID(uid), event_data, FrameIntervals(frame_value))
         
     def add_context_data(self, uid, context_data, frame_value=None):
+        if self.has_element_data(ElementType.object, uid, context_data):
+            warnings.warn("WARNING: This element already has an context_data with this name. "
+                          "This will substitute the content. To add new context_data at new frame_intervals "
+                          "use update_context_data. "
+                          "To modify an existing context_data, use modify_context_data.")
         return self.__add_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value))
 
     def modify_action(self, uid, name=None, semantic_type=None, frame_value = None, ont_uid=None, stream=None):
@@ -1027,7 +1057,7 @@ class VCD:
                         self.__create_update_element_data(element_type, UID(uid), element_data, fis_new)
 
                         # 3.- Update element_data_pointers
-                        self.__create_update_element_data_pointers(element_type, UID(uid), element_data, fis_new)
+                        self.__create_update_element_data_pointers(element_type, UID(uid), element_data, fis_union)
         else:
             # Static: so wa can't fuse frame intervals, this is a substitution
             if element is not None:
@@ -1036,13 +1066,13 @@ class VCD:
     def update_action_data(self, uid, action_data, frame_value=None):
         return self.update_element_data(ElementType.action, uid, action_data, frame_value)
 
-    def update_object_data(self, uid, object_data, frame_value = None):
+    def update_object_data(self, uid, object_data, frame_value=None):
         return self.update_element_data(ElementType.object, uid, object_data, frame_value)
 
-    def update_event_data(self, uid, event_data, frame_value = None):
+    def update_event_data(self, uid, event_data, frame_value=None):
         return self.update_element_data(ElementType.event, uid, event_data, frame_value)
 
-    def update_context_data(self, uid, context_data, frame_value = None):
+    def update_context_data(self, uid, context_data, frame_value=None):
         return self.update_element_data(ElementType.context, uid, context_data, frame_value)
 
     ##################################################
@@ -1075,6 +1105,16 @@ class VCD:
                 return True
             else:
                 return False
+
+    def has_element_data(self, element_type, uid, element_data):
+        if not self.has(element_type, uid):
+            return False
+        else:
+            uid_str = UID(uid).as_str()
+            if element_type.name + '_data_pointers' not in self.data['vcd'][element_type.name + 's'][uid_str]:
+                return False
+            name = element_data.data['name']
+            return name in self.data['vcd'][element_type.name + 's'][uid_str][element_type.name + '_data_pointers']
 
     def get_all(self, element_type):
         """
@@ -1272,7 +1312,7 @@ class VCD:
         md = self.get_metadata()
         if 'streams' in md:
             stream_name = StreamType[stream]
-            if stream_name in self.data['vcd']['metadata']['streams']:
+            if stream_name in self.data['vcd']['streams']:
                 return True
             else:
                 return False
