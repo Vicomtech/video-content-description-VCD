@@ -165,8 +165,10 @@ message VCD {
     message metadata {
         string annotator = 1;
         string comment = 2;
-        map<string, stream> streams = 3;
-        google.protobuf.Struct properties = 4;
+        string name = 3;
+        string schema_version = 4;
+        string file_version = 5;
+        google.protobuf.Struct properties = 6;
     }
     message num {
         attributes attributes = 1;
@@ -311,12 +313,10 @@ message VCD {
         repeated frame_interval frame_intervals = 4;
         map<int32, frame> frames = 5;
         metadata metadata = 6;
-        string name = 7;
+        map<string, stream> streams = 7;
         map<string, object> objects = 8;
         map<string, string> ontologies = 9;
         map<string, relation> relations = 10;
-        string schema_version = 11;
-        string file_version = 12;
     }
     message vec {
         attributes attributes = 1;

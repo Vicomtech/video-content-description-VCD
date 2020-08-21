@@ -24,6 +24,7 @@ import uuid
 import vcd.types as types
 import vcd.utils as utils
 import vcd.schema as schema
+import vcd.converter as converter
 
 
 class ElementType(Enum):
@@ -195,23 +196,51 @@ class VCD:
             #    json_file,
             #    object_hook=lambda d: {int(k) if k.lstrip('-').isdigit() else k: v for k, v in d.items()}
             # )
-            self.data = json.load(json_file)  # Open without converting strings to integers
+            read_data = json.load(json_file)  # Open without converting strings to integers
 
-            # schema_version is required
-            self.schema = schema.vcd_schema
-            assert ('schema_version' in self.data['vcd']['metadata'])
-            assert (self.data['vcd']['metadata']['schema_version'] == schema.vcd_schema_version)
-            if validation:
-                validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
-                json_file.close()
+            # Check VERSION
+            if 'vcd' in read_data:
+                # This is 4.x
+                if 'version' in read_data['vcd']:
+                    # This is 4.1-2
+                    if read_data['vcd']['version'] == "4.2.0":
+                        # This is VCD 4.2.0
+                        self.reset()  # to init object
+                        converter.ConverterVCD420toVCD430(read_data, self)  # self is modified internally
 
-            # In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
-            # but frames are still ints, so let's parse like that
-            if 'frames' in self.data['vcd']:
-                frames = self.data['vcd']['frames']
-                if frames:  # So frames is not empty
-                    self.data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
+                    elif read_data['vcd']['version'] == "4.1.0":
+                        # This is VCD 4.1.0
+                        # TODO
+                        pass
+                elif 'metadata' in read_data['vcd']:
+                    if 'schema_version' in read_data['vcd']['metadata']:
+                        if read_data['vcd']['metadata']['schema_version'] == "4.3.0":
+                            # This is VCD 4.3.0
+                            self.data = read_data
+                            if validation:
+                                if not hasattr(self, 'schema'):
+                                    self.schema = schema.vcd_schema
+                                validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
+                                json_file.close()
 
+                            # In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
+                            # but frames are still ints, so let's parse like that
+                            if 'frames' in self.data['vcd']:
+                                frames = self.data['vcd']['frames']
+                                if frames:  # So frames is not empty
+                                    self.data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
+                        else:
+                            raise Exception("ERROR: This vcd file does not seem to be 4.3.0 nor 4.2.0")
+                    else:
+                        raise Exception("ERROR: This vcd file does not seem to be 4.3.0 nor 4.2.0")
+            elif 'VCD' in read_data:
+                # This is 3.x
+                #if read_data['VCD']['version'] == "3.3.0":
+                # Assuming this is VCD 3.3.0, let's load into VCD 4.3.0
+                self.reset()  # to init object
+                converter.ConverterVCD330toVCD430(read_data, self)  # self is modified internally
+
+            # Close file
             json_file.close()
 
             # Final set-up
@@ -239,6 +268,9 @@ class VCD:
         self.__lastUID[ElementType.event] = -1
         self.__lastUID[ElementType.context] = -1
         self.__lastUID[ElementType.relation] = -1
+
+    def convert_to_vcd330(self):
+        return converter.ConverterVCD430toVCD330(self.data)
 
     ##################################################
     # Private API: inner functions
@@ -270,7 +302,6 @@ class VCD:
                 uid_to_assign = uid
 
         return uid_to_assign
-
 
     def __set_vcd_frame_intervals(self, frame_intervals):
         assert(isinstance(frame_intervals, FrameIntervals))
@@ -596,6 +627,43 @@ class VCD:
 
                 # Now substitute
                 self.data['vcd']['frame_intervals'] = fis_dict_new  # TODO: deep copy?
+
+    def __compute_data_pointers(self):
+        # WARNING! This function might be extremely slow
+        # It does loop over all frames, and updates data pointers at objects, actions, etc
+        # It is useful to convert from VCD 4.2.0 into VCD 4.3.0 (use converter.ConverterVCD420toVCD430)
+
+        # Looping over frames and creating the necessary data_pointers
+        if 'frame_intervals' in self.data['vcd']:
+            fis = self.data['vcd']['frame_intervals']
+            for fi in fis:
+                for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
+                    frame = self.get_frame(frame_num)
+                    for element_type in ElementType:
+                        if element_type.name + 's' in frame:  # e.g. "objects", "actions"...
+                            for uid, element in frame[element_type.name + 's'].items():
+                                if element_type.name + '_data' in element:
+                                    # So this element has element_data in this frame
+                                    # and then we need to update the element_data_pointer at the root
+                                    # we can safely assume it already exists
+
+                                    # First, let's create a element_data_pointer at the root
+                                    self.data['vcd'][element_type.name + 's'][uid].\
+                                        setdefault(element_type.name + '_data_pointers', {})
+                                    edp = self.data['vcd'][element_type.name + 's'][uid][element_type.name + '_data_pointers']
+
+                                    # Let's loop over the element_data
+                                    for ed_type, ed_array in element[element_type.name + '_data'].items():
+                                        # e.g. ed_type is 'bbox', ed_array is the array of such bboxes content
+                                        for element_data in ed_array:
+                                            name = element_data['name']
+                                            edp.setdefault(name, {})  # this element_data may already exist
+                                            edp[name].setdefault('type', ed_type)  # e.g. 'bbox'
+                                            edp[name].setdefault('frame_intervals', [])  # in case it does not exist
+                                            fis_exist = FrameIntervals(edp[name]['frame_intervals'])
+                                            fis_exist.union(FrameIntervals(frame_num))  # So, let's fuse with this frame
+                                            edp[name]['frame_intervals'] = fis_exist.get_dict()  # overwrite
+                                            # No need to manage attributes
 
     ##################################################
     # Public API: add, update
@@ -968,7 +1036,7 @@ class VCD:
                           "use update_action_data. "
                           "To modify an existing action_data, use modify_action_data.")
         return self.__add_element_data(ElementType.action, UID(uid), action_data, FrameIntervals(frame_value))
-        
+
     def add_event_data(self, uid, event_data, frame_value=None):
         if self.has_element_data(ElementType.object, uid, event_data):
             warnings.warn("WARNING: This element already has an event_data with this name. "
@@ -976,7 +1044,7 @@ class VCD:
                           "use update_event_data. "
                           "To modify an existing event_data, use modify_event_data.")
         return self.__add_element_data(ElementType.evevt, UID(uid), event_data, FrameIntervals(frame_value))
-        
+
     def add_context_data(self, uid, context_data, frame_value=None):
         if self.has_element_data(ElementType.object, uid, context_data):
             warnings.warn("WARNING: This element already has an context_data with this name. "

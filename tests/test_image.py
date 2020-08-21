@@ -38,6 +38,33 @@ def draw_basic_image(classes_colors):
 
 class TestBasic(unittest.TestCase):
 
+    def test_polygon2D(self):
+        vcd = core.VCD()
+
+        uid_obj1 = vcd.add_object('someName1', '#Some')
+
+        # Add a polygon with SRF6DCC encoding (list of strings)
+        poly1 = types.poly2d('poly1', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
+                     types.Poly2DType.MODE_POLY2D_SRF6DCC, False)
+        self.assertEqual(poly1.data['name'], "poly1")
+        self.assertEqual(poly1.data['mode'], "MODE_POLY2D_SRF6DCC")
+        self.assertEqual(poly1.data['closed'], False)
+        vcd.add_object_data(uid_obj1, poly1)
+
+        # Add a polygon with absolute coordinates (list of numbers)
+        poly2 = types.poly2d('poly2', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
+                     types.Poly2DType.MODE_POLY2D_ABSOLUTE, False)
+        vcd.add_object_data(uid_obj1, poly2)
+
+        if not os.path.isfile('./etc/vcd430_test_polygon2D.json'):
+            vcd.save('./etc/vcd430_test_polygon2D.json', True)
+
+        vcd_read = core.VCD('./etc/vcd430_test_polygon2D.json', validation=True)
+        vcd_read_stringified = vcd_read.stringify()
+        vcd_stringified = vcd.stringify()
+        # print(vcd_stringified)
+        self.assertEqual(vcd_read_stringified, vcd_stringified)
+
     def test_create_image_png(self):
         # 1.- Create a VCD instance
         vcd = core.VCD()
@@ -80,8 +107,8 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(diff_val, 0)
 
-        if not os.path.isfile('./etc/in/test_image.json'):
-            vcd.save('./etc/in/test_image.json', True)
+        if not os.path.isfile('./etc/vcd430_test_image.json'):
+            vcd.save('./etc/vcd430_test_image.json', True)
 
         #cv.imshow('decoded_image', img_dec)
         #cv.waitKey(0)
@@ -122,8 +149,8 @@ class TestBasic(unittest.TestCase):
                                                  hierarchy=hierarchy_list)
                                     )
 
-        if not os.path.isfile('./etc/in/test_contours.json'):
-            vcd.save('./etc/in/test_contours.json', True)
+        if not os.path.isfile('./etc/vcd430_test_contours.json'):
+            vcd.save('./etc/vcd430_test_contours.json', True)
 
         # 3.- Reconstruct the image from the VCD poly2d and hierarchies (using OpenCV)
         contours_dict = {}  # A dictionary of contours. Each key is one class type, each value, a contours array

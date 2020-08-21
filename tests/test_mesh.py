@@ -118,75 +118,75 @@ class TestBasic(unittest.TestCase):
         # Vertex
         # P0
         p0 = types.point3d("Vertex", (25, 25, 0))
-        p0.add_attribute(types.text("T Shape", "PM_line_ending_type"))
+        p0.add_attribute(types.text("T Shape", "line_ending_type"))
         p0_id = mesh1.add_vertex(p0)
         # P1
         p1 = types.point3d("Vertex", (26, 25, 0))
-        p1.add_attribute(types.text("I Shape", "PM_line_ending_type"))
+        p1.add_attribute(types.text("I Shape", "line_ending_type"))
         mesh1.add_vertex(p1)
         # P2
         p2 = types.point3d("Vertex", (26, 26, 0))
-        p2.add_attribute(types.text("U Shape", "PM_line_ending_type"))
+        p2.add_attribute(types.text("U Shape", "line_ending_type"))
         mesh1.add_vertex(p2)
         # P3
         p3 = types.point3d("Vertex", (25, 26, 0))
-        p3.add_attribute(types.text("C Shape", "PM_line_ending_type"))
+        p3.add_attribute(types.text("C Shape", "line_ending_type"))
         mesh1.add_vertex(p3)
         # P4
         p4 = types.point3d("Vertex", (27, 25, 0))
-        p4.add_attribute(types.text("T Shape", "PM_line_ending_type"))
+        p4.add_attribute(types.text("T Shape", "line_ending_type"))
         mesh1.add_vertex(p4)
         # P5
         p5 = types.point3d("Vertex", (27, 26, 0))
-        p5.add_attribute(types.text("I Shape", "PM_line_ending_type"))
+        p5.add_attribute(types.text("I Shape", "line_ending_type"))
         mesh1.add_vertex(p5)
 
         # Edges
         # L0
         l0 = types.lineReference("Edge", [0, 1], types.ObjectDataType.point3d)
-        l0.add_attribute(types.text("Single Solid", "PM_line_marking_type"))
-        l0.add_attribute(types.text("White", "PM_lPM_line_colourine_marking_typ"))
+        l0.add_attribute(types.text("Single Solid", "line_marking_type"))
+        l0.add_attribute(types.text("White", "line_colourine_marking_typ"))
         l0_id = mesh1.add_edge(l0)
         # L1
         l1 = types.lineReference("Edge", [1, 2], types.ObjectDataType.point3d)
-        l1.add_attribute(types.text("Double Solid", "PM_line_marking_type"))
-        l1.add_attribute(types.text("Blue", "PM_lPM_line_colourine_marking_type"))
+        l1.add_attribute(types.text("Double Solid", "line_marking_type"))
+        l1.add_attribute(types.text("Blue", "line_colourine_marking_type"))
         l1_id = mesh1.add_edge(l1)
         # L2
         l2 = types.lineReference("Edge", [2, 3], types.ObjectDataType.point3d)
-        l2.add_attribute(types.text("Dashed", "PM_line_marking_type"))
-        l2.add_attribute(types.text("Yellow", "PM_lPM_line_colourine_marking_type"))
+        l2.add_attribute(types.text("Dashed", "line_marking_type"))
+        l2.add_attribute(types.text("Yellow", "line_colourine_marking_type"))
         l2_id = mesh1.add_edge(l2)
         # L3
         l3 = types.lineReference("Edge", [3, 0], types.ObjectDataType.point3d)
-        l3.add_attribute(types.text("Cross", "PM_line_marking_type"))
-        l3.add_attribute(types.text("Green", "PM_lPM_line_colourine_marking_type"))
+        l3.add_attribute(types.text("Cross", "line_marking_type"))
+        l3.add_attribute(types.text("Green", "line_colourine_marking_type"))
         mesh1.add_edge(l3)
         # L4
         l4 = types.lineReference("Edge", [1, 4], types.ObjectDataType.point3d)
-        l4.add_attribute(types.text("Single Solid", "PM_line_marking_type"))
-        l4.add_attribute(types.text("White", "PM_lPM_line_colourine_marking_type"))
+        l4.add_attribute(types.text("Single Solid", "line_marking_type"))
+        l4.add_attribute(types.text("White", "line_colourine_marking_type"))
         mesh1.add_edge(l4)
         # L5
         l5 = types.lineReference("Edge", [4, 5], types.ObjectDataType.point3d)
-        l5.add_attribute(types.text("Double Solid", "PM_line_marking_type"))
-        l5.add_attribute(types.text("Blue", "PM_lPM_line_colourine_marking_type"))
+        l5.add_attribute(types.text("Double Solid", "line_marking_type"))
+        l5.add_attribute(types.text("Blue", "line_colourine_marking_type"))
         mesh1.add_edge(l5)
         # L6
         l6 = types.lineReference("Edge", [5, 2], types.ObjectDataType.point3d)
-        l6.add_attribute(types.text("Dashed", "PM_line_marking_type"))
-        l6.add_attribute(types.text("Yellow", "PM_lPM_line_colourine_marking_type"))
+        l6.add_attribute(types.text("Dashed", "line_marking_type"))
+        l6.add_attribute(types.text("Yellow", "line_colourine_marking_type"))
         mesh1.add_edge(l6)
 
         # Areas
         # A0
         a0 = types.areaReference("Slot", [0, 1, 2, 3], types.ObjectDataType.line_reference)
-        a0.add_attribute(types.text("Fishbone", "PM_park_slot_type"))
-        a0.add_attribute(types.text("Empty", "PM_park_slot_content"))
+        a0.add_attribute(types.text("Fishbone", "park_slot_type"))
+        a0.add_attribute(types.text("Empty", "park_slot_content"))
         mesh1.add_area(a0)
         a1 = types.areaReference("Slot", [4, 5, 6, 1], types.ObjectDataType.line_reference)
-        a1.add_attribute(types.text("Fishbone", "PM_park_slot_type"))
-        a1.add_attribute(types.text("Empty", "PM_park_slot_content"))
+        a1.add_attribute(types.text("Fishbone", "park_slot_type"))
+        a1.add_attribute(types.text("Empty", "park_slot_content"))
         mesh1.add_area(a1)
 
         mesh_id = vcd.add_object("mesh1", "mesh")
@@ -197,12 +197,12 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(string_mesh, "[[[25,25,0],[26,25,0],[26,26,0],[25,26,0],[27,25,0],[27,26,0]],"
                                       "[[0,1],[1,2],[2,3],[3,0],[1,4],[4,5],[5,2]],[[0,1,2,3],[4,5,6,1]]]")
 
-        if not os.path.isfile('./etc/in/test_mesh.json'):
-            vcd.save('./etc/in/test_mesh.json', True)
+        if not os.path.isfile('./etc/vcd430_test_mesh.json'):
+            vcd.save('./etc/vcd430_test_mesh.json', True)
 
     def test_create_mesh_with_API_frames(self):
         # Load from previous test
-        vcd = core.VCD('./etc/in/test_mesh.json')
+        vcd = core.VCD('./etc/vcd430_test_mesh.json')
 
         # Let's assume we know the structure of the mesh
         #
@@ -239,14 +239,14 @@ class TestBasic(unittest.TestCase):
                 # Read existing info
                 # "None" for val, so it is not copied at frame-lev.
                 lX = types.lineReference(line_val['name'], reference_type=types.ObjectDataType.point3d, val=None)
-                lX.add_attribute(types.text("PM_line_colour", "not set"))
+                lX.add_attribute(types.text("line_colour", "not set"))
                 mesh1_frame.add_edge(lX, line_key)
 
             for area_key, area_val in areas.items():
                 # If we want to add an area_reference attribute: Reconstruct area_reference
                 # Read existing info
                 aX = types.areaReference(area_val['name'], reference_type=types.ObjectDataType.line_reference, val=None)
-                aX.add_attribute(types.text("PM_park_slot_content", "Empty"))
+                aX.add_attribute(types.text("park_slot_content", "Empty"))
                 mesh1_frame.add_area(aX, area_key)
 
             # We add and then update. Note we use a different name "parkslot1_dyn", because "parkslot1" is used for
@@ -257,8 +257,8 @@ class TestBasic(unittest.TestCase):
                 vcd.update_object_data("0", mesh1_frame, frame_num)
 
         # Save it
-        if not os.path.isfile('./etc/in/test_mesh_frame.json'):
-            vcd.save('./etc/in/test_mesh_frame.json', True)
+        if not os.path.isfile('./etc/vcd430_test_mesh_frame.json'):
+            vcd.save('./etc/vcd430_test_mesh_frame.json', True)
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

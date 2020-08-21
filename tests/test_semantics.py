@@ -22,6 +22,59 @@ import vcd.utils as utils
 
 class TestBasic(unittest.TestCase):
 
+    # Semantics
+    def test_semantics(self):
+        vcd = core.VCD()
+
+        ont_uid_0 = vcd.add_ontology("http://www.vicomtech.org/viulib/ontology")
+        ont_uid_1 = vcd.add_ontology("http://www.alternativeURL.org/ontology")
+
+        # Let's create a static Context
+        officeUID = vcd.add_context('Office', '#Office', frame_value=None, uid=None, ont_uid=ont_uid_0)
+
+        for frameNum in range(0, 30):
+            if frameNum == 3:
+                startTalkingUID = vcd.add_event('StartTalking', '#StartTalking', frameNum, uid=None, ont_uid=ont_uid_0)
+                talkingUID = vcd.add_action('Talking', '#Talking', frameNum, uid=None, ont_uid=ont_uid_0)
+                noisyUID = vcd.add_context('Noisy', '', frameNum)  # No ontology
+
+                relation1UID = vcd.add_relation_subject_object('', '#Starts',
+                                                               core.ElementType.event, startTalkingUID,
+                                                               core.ElementType.action, talkingUID,
+                                                               relation_uid=None, ont_uid=ont_uid_0, frame_value=None)
+
+                relation2UID = vcd.add_relation_subject_object('', '#Causes',
+                                                               core.ElementType.action, talkingUID,
+                                                               core.ElementType.context, noisyUID,
+                                                               relation_uid=None, ont_uid=ont_uid_0, frame_value=None)
+
+                self.assertEqual(vcd.get_num_relations(), 2, "Should be 2.")
+                self.assertEqual(len(vcd.get_relation(relation2UID)['rdf_subjects']), 1, "Should be 1")
+                self.assertEqual(
+                    vcd.get_relation(relation2UID)['rdf_subjects'][0]['uid'], talkingUID, "Should be equal"
+                )
+
+                # print(vcd.stringify(pretty=False, validate=False))
+                # print("Frame 3, dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
+                # print("Frame 3, full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
+
+            elif 3 <= frameNum <= 11:
+                vcd.update_action(talkingUID, frameNum)
+                vcd.update_context(noisyUID, frameNum)
+
+                # print("Frame ", frameNum, ", dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
+                # print("Frame ", frameNum, ", full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
+
+        if not os.path.isfile('./etc/vcd430_test_semantics.json'):
+            vcd.save('./etc/vcd430_test_semantics.json', True)
+
+        vcd_read = core.VCD('./etc/vcd430_test_semantics.json', validation=True)
+        vcd_read_stringified = vcd_read.stringify()
+        vcd_stringified = vcd.stringify()
+
+        # print(vcd_stringified)
+        self.assertEqual(vcd_read_stringified, vcd_stringified)
+
     # Create some basic content, without time information, and do some basic search
     def test_actions(self):
         # 1.- Create a VCD instance
@@ -77,22 +130,22 @@ class TestBasic(unittest.TestCase):
         vcd_c.add_action_data(uid=uid_action1, action_data=types.num(name="subject", val=int(uid_pedestrian1)))
         vcd_c.add_action_data(uid=uid_action2, action_data=types.num(name="subject", val=int(uid_car1)))
 
-        if not os.path.isfile('./etc/in/test_actions_a.json'):
-            vcd_a.save('./etc/in/test_actions_a.json')
+        if not os.path.isfile('./etc/vcd430_test_actions_a.json'):
+            vcd_a.save('./etc/vcd430_test_actions_a.json')
 
-        vcd_read = core.VCD('./etc/in/test_actions_a.json')
+        vcd_read = core.VCD('./etc/vcd430_test_actions_a.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd_a.stringify(False, False))
 
-        if not os.path.isfile('./etc/in/test_actions_b.json'):
-            vcd_b.save('./etc/in/test_actions_b.json')
+        if not os.path.isfile('./etc/vcd430_test_actions_b.json'):
+            vcd_b.save('./etc/vcd430_test_actions_b.json')
 
-        vcd_read = core.VCD('./etc/in/test_actions_b.json')
+        vcd_read = core.VCD('./etc/vcd430_test_actions_b.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd_b.stringify(False, False))
 
-        if not os.path.isfile('./etc/in/test_actions_c.json'):
-            vcd_c.save('./etc/in/test_actions_c.json')
+        if not os.path.isfile('./etc/vcd430_test_actions_c.json'):
+            vcd_c.save('./etc/vcd430_test_actions_c.json')
 
-        vcd_read = core.VCD('./etc/in/test_actions_c.json')
+        vcd_read = core.VCD('./etc/vcd430_test_actions_c.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd_c.stringify(False, False))
 
     def test_relations(self):
@@ -115,10 +168,10 @@ class TestBasic(unittest.TestCase):
         for frame in vcd.data['vcd']['frames'].values():
             self.assertEqual(len(frame['relations']), 1)
 
-        if not os.path.isfile('./etc/in/test_relations_1.json'):
-            vcd.save('./etc/in/test_relations_1.json')
+        if not os.path.isfile('./etc/vcd430_test_relations_1.json'):
+            vcd.save('./etc/vcd430_test_relations_1.json')
 
-        vcd_read = core.VCD('./etc/in/test_relations_1.json')
+        vcd_read = core.VCD('./etc/vcd430_test_relations_1.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         # Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
@@ -139,10 +192,10 @@ class TestBasic(unittest.TestCase):
             if 7 <= frame_key <= 9:
                 self.assertEqual(len(frame_val['relations']), 1)
 
-        if not os.path.isfile('./etc/in/test_relations_2.json'):
-            vcd.save('./etc/in/test_relations_2.json')
+        if not os.path.isfile('./etc/vcd430_test_relations_2.json'):
+            vcd.save('./etc/vcd430_test_relations_2.json')
 
-        vcd_read = core.VCD('./etc/in/test_relations_2.json')
+        vcd_read = core.VCD('./etc/vcd430_test_relations_2.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         # Case 3: RDF elements have frame interval and relation doesn't (so it is left frame-less)
@@ -164,10 +217,10 @@ class TestBasic(unittest.TestCase):
             if 0 <= frame_key <= 15:
                 self.assertEqual(frame_val.get('relations'), None)
 
-        if not os.path.isfile('./etc/in/test_relations_3.json'):
-            vcd.save('./etc/in/test_relations_3.json')
+        if not os.path.isfile('./etc/vcd430_test_relations_3.json'):
+            vcd.save('./etc/vcd430_test_relations_3.json')
 
-        vcd_read = core.VCD('./etc/in/test_relations_3.json')
+        vcd_read = core.VCD('./etc/vcd430_test_relations_3.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         pass
@@ -175,7 +228,7 @@ class TestBasic(unittest.TestCase):
     # Add semantics to the KITTI tracking #0
     def test_scene_KITTI_Tracking_0(self):
         sequence_number = 0
-        vcd_file_name = "./etc/in/vcd_430_kitti_tracking_" + str(sequence_number).zfill(
+        vcd_file_name = "./etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(
             4) + ".json"
         vcd = core.VCD(vcd_file_name)
 
@@ -277,20 +330,21 @@ class TestBasic(unittest.TestCase):
                 vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_obj_aux, action_uid=uid_act_aux)
 
         # Store frame 0 - static and dynamic
-        if not os.path.isfile('./etc/test_kitti_tracking_0_frame_0_static-dynamic.json'):
-            vcd.save_frame(frame_num=0, file_name='./etc/test_kitti_tracking_0_frame_0_static-dynamic.json', dynamic_only=False)
+        if not os.path.isfile('./etc/vcd430_test_kitti_tracking_0_frame_0_static-dynamic.json'):
+            vcd.save_frame(frame_num=0, file_name='./etc/vcd430_test_kitti_tracking_0_frame_0_static-dynamic.json', dynamic_only=False)
 
         # Same but dynamic only
-        if not os.path.isfile('./etc/test_kitti_tracking_0_frame_0_dynamic.json'):
-            vcd.save_frame(frame_num=0, file_name='./etc/test_kitti_tracking_0_frame_0_dynamic.json',
+        if not os.path.isfile('./etc/vcd430_test_kitti_tracking_0_frame_0_dynamic.json'):
+            vcd.save_frame(frame_num=0, file_name='./etc/vcd430_test_kitti_tracking_0_frame_0_dynamic.json',
                            dynamic_only=True)
 
         # Store
-        if not os.path.isfile('./etc/test_kitti_tracking_0_actions.json'):
-            vcd.save('./etc/test_kitti_tracking_0_actions.json', False)
+        if not os.path.isfile('./etc/vcd430_test_kitti_tracking_0_actions.json'):
+            vcd.save('./etc/vcd430_test_kitti_tracking_0_actions.json', False)
 
-        vcd_read = core.VCD('./etc/test_kitti_tracking_0_actions.json')
+        vcd_read = core.VCD('./etc/vcd430_test_kitti_tracking_0_actions.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
+
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

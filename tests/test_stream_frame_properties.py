@@ -141,10 +141,10 @@ class TestBasic(unittest.TestCase):
             status="interpolated",  # we can add any thing (it is permitted by VCD schema)
         ))
 
-        if not os.path.isfile('./etc/in/test_stream_frame_properties.json'):
-            vcd.save('./etc/in/test_stream_frame_properties.json', True)
+        if not os.path.isfile('./etc/vcd430_test_stream_frame_properties.json'):
+            vcd.save('./etc/vcd430_test_stream_frame_properties.json', True)
 
-        vcd_read = core.VCD('./etc/in/test_stream_frame_properties.json', validation=True)
+        vcd_read = core.VCD('./etc/vcd430_test_stream_frame_properties.json', validation=True)
         self.assertEqual(vcd_read.stringify(), vcd.stringify())
 
 

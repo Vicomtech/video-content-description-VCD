@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='VCD',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\x12vcd_proto-v4.proto\x12\x03VCD\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xf8@\n\x03VCD\x12\x19\n\x03vcd\x18\x01 \x01(\x0b\x32\x0c.VCD.VCD.Vcd\x1a\xc8\x02\n\x06\x61\x63tion\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12)\n\x0b\x61\x63tion_data\x18\x06 \x01(\x0b\x32\x14.VCD.VCD.action_data\x12\x45\n\x14\x61\x63tion_data_pointers\x18\x07 \x03(\x0b\x32\'.VCD.VCD.action.ActionDataPointersEntry\x1aX\n\x17\x41\x63tionDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x83\x01\n\x0b\x61\x63tion_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\x83\x01\n\x14\x65lement_data_pointer\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x30\n\x0f\x66rame_intervals\x18\x02 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12+\n\nattributes\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a|\n\x0e\x61rea_reference\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x12\x16\n\x0ereference_type\x18\x05 \x01(\t\x1a\x82\x01\n\nattributes\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1aZ\n\x04\x62\x62ox\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a[\n\x05rbbox\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\x81\x01\n\x06\x62inary\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\x10\n\x08\x65ncoding\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1a]\n\x07\x62oolean\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x08\x1a\xcf\x02\n\x07\x63ontext\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12+\n\x0c\x63ontext_data\x18\x06 \x01(\x0b\x32\x15.VCD.VCD.context_data\x12H\n\x15\x63ontext_data_pointers\x18\x07 \x03(\x0b\x32).VCD.VCD.context.ContextDataPointersEntry\x1aY\n\x18\x43ontextDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x84\x01\n\x0c\x63ontext_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\\\n\x06\x63uboid\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\xc1\x02\n\x05\x65vent\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12\'\n\nevent_data\x18\x06 \x01(\x0b\x32\x13.VCD.VCD.event_data\x12\x42\n\x13\x65vent_data_pointers\x18\x07 \x03(\x0b\x32%.VCD.VCD.event.EventDataPointersEntry\x1aW\n\x16\x45ventDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x82\x01\n\nevent_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\xde\x01\n\x10\x66rame_properties\x12\x37\n\x07streams\x18\x01 \x03(\x0b\x32&.VCD.VCD.frame_properties.StreamsEntry\x12#\n\x08odometry\x18\x02 \x01(\x0b\x32\x11.VCD.VCD.odometry\x12+\n\nproperties\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1a\xe6\x06\n\x05\x66rame\x12\x31\n\x10\x66rame_properties\x18\x01 \x01(\x0b\x32\x17.google.protobuf.Struct\x12,\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32\x1b.VCD.VCD.frame.ActionsEntry\x12.\n\x08\x63ontexts\x18\x03 \x03(\x0b\x32\x1c.VCD.VCD.frame.ContextsEntry\x12*\n\x06\x65vents\x18\x04 \x03(\x0b\x32\x1a.VCD.VCD.frame.EventsEntry\x12,\n\x07objects\x18\x05 \x03(\x0b\x32\x1b.VCD.VCD.frame.ObjectsEntry\x12\x30\n\trelations\x18\x06 \x03(\x0b\x32\x1d.VCD.VCD.frame.RelationsEntry\x1a\x34\n\x07\x41\x63tions\x12)\n\x0b\x61\x63tion_data\x18\x01 \x01(\x0b\x32\x14.VCD.VCD.action_data\x1a\x31\n\x06\x45vents\x12\'\n\nevent_data\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.event_data\x1a\x37\n\x08\x43ontexts\x12+\n\x0c\x63ontext_data\x18\x01 \x01(\x0b\x32\x15.VCD.VCD.context_data\x1a\x34\n\x07Objects\x12)\n\x0bobject_data\x18\x01 \x01(\x0b\x32\x14.VCD.VCD.object_data\x1a\x46\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.VCD.VCD.frame.Actions:\x02\x38\x01\x1aH\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.frame.Contexts:\x02\x38\x01\x1a\x44\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12$\n\x05value\x18\x02 \x01(\x0b\x32\x15.VCD.VCD.frame.Events:\x02\x38\x01\x1a\x46\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.VCD.VCD.frame.Objects:\x02\x38\x01\x1aH\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Empty:\x02\x38\x01\x1a\x38\n\x0e\x66rame_interval\x12\x13\n\x0b\x66rame_start\x18\x01 \x01(\x05\x12\x11\n\tframe_end\x18\x02 \x01(\x05\x1a\x80\x01\n\x05image\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x65ncoding\x18\x02 \x01(\t\x12\x11\n\tmime_type\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1a\x7f\n\x0eline_reference\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0e\n\x06number\x18\x04 \x03(\x02\x12\x16\n\x0ereference_type\x18\x05 \x01(\t\x1a\x9d\x01\n\x03mat\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x63hannels\x18\x02 \x01(\x02\x12\x11\n\tdata_type\x18\x03 \x01(\t\x12\x0e\n\x06height\x18\x04 \x01(\x02\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0b\n\x03val\x18\x07 \x03(\x02\x12\r\n\x05width\x18\x08 \x01(\x02\x1a\xa5\x03\n\x04mesh\x12\x38\n\x0e\x61rea_reference\x18\x01 \x03(\x0b\x32 .VCD.VCD.mesh.AreaReferenceEntry\x12\x38\n\x0eline_reference\x18\x02 \x03(\x0b\x32 .VCD.VCD.mesh.LineReferenceEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12+\n\x07point3d\x18\x04 \x03(\x0b\x32\x1a.VCD.VCD.mesh.Point3dEntry\x12\x0e\n\x06stream\x18\x05 \x01(\t\x1aM\n\x12\x41reaReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.area_reference:\x02\x38\x01\x1aM\n\x12LineReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.line_reference:\x02\x38\x01\x1a@\n\x0cPoint3dEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.point3d:\x02\x38\x01\x1a\xcd\x01\n\x08metadata\x12\x11\n\tannotator\x18\x01 \x01(\t\x12\x0f\n\x07\x63omment\x18\x02 \x01(\t\x12/\n\x07streams\x18\x03 \x03(\x0b\x32\x1e.VCD.VCD.metadata.StreamsEntry\x12+\n\nproperties\x18\x04 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1aY\n\x03num\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x02\x1a\xc8\x02\n\x06object\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12)\n\x0bobject_data\x18\x03 \x01(\x0b\x32\x14.VCD.VCD.object_data\x12\x14\n\x0contology_uid\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0c\n\x04type\x18\x06 \x01(\t\x12\x45\n\x14object_data_pointers\x18\x07 \x03(\x0b\x32\'.VCD.VCD.object.ObjectDataPointersEntry\x1aX\n\x17ObjectDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\xc2\x04\n\x0bobject_data\x12\x1b\n\x04\x62\x62ox\x18\x01 \x03(\x0b\x32\r.VCD.VCD.bbox\x12\x1d\n\x05rbbox\x18\x02 \x03(\x0b\x32\x0e.VCD.VCD.rbbox\x12\x1f\n\x06\x62inary\x18\x03 \x03(\x0b\x32\x0f.VCD.VCD.binary\x12!\n\x07\x62oolean\x18\x04 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x1f\n\x06\x63uboid\x18\x05 \x03(\x0b\x32\x0f.VCD.VCD.cuboid\x12\x1d\n\x05image\x18\x06 \x03(\x0b\x32\x0e.VCD.VCD.image\x12\x19\n\x03mat\x18\x07 \x03(\x0b\x32\x0c.VCD.VCD.mat\x12\x19\n\x03num\x18\x08 \x03(\x0b\x32\x0c.VCD.VCD.num\x12!\n\x07point2d\x18\t \x03(\x0b\x32\x10.VCD.VCD.point2d\x12!\n\x07point3d\x18\n \x03(\x0b\x32\x10.VCD.VCD.point3d\x12\x1f\n\x06poly2d\x18\x0b \x03(\x0b\x32\x0f.VCD.VCD.poly2d\x12\x1f\n\x06poly3d\x18\x0c \x03(\x0b\x32\x0f.VCD.VCD.poly3d\x12\x1b\n\x04text\x18\r \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x0e \x03(\x0b\x32\x0c.VCD.VCD.vec\x12/\n\x0e\x61rea_reference\x18\x0f \x03(\x0b\x32\x17.VCD.VCD.area_reference\x12/\n\x0eline_reference\x18\x10 \x03(\x0b\x32\x17.VCD.VCD.line_reference\x12\x1b\n\x04mesh\x18\x11 \x03(\x0b\x32\r.VCD.VCD.mesh\x1a\x39\n\x08odometry\x12\x1c\n\x14pose_lcs_wrt_wcs_4x4\x18\x01 \x03(\x02\x12\x0f\n\x07\x63omment\x18\x02 \x01(\t\x1ai\n\x07point2d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x12\n\n\x02id\x18\x06 \x01(\t\x1ai\n\x07point3d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x12\n\n\x02id\x18\x06 \x01(\t\x1a\xa5\x01\n\x06poly2d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04mode\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12#\n\x03val\x18\x06 \x03(\x0b\x32\x16.google.protobuf.Value\x12\x11\n\thierarchy\x18\x07 \x03(\x05\x1al\n\x06poly3d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x1a&\n\trdf_agent\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x1a\xd1\x01\n\x08relation\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\'\n\x0brdf_objects\x18\x04 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12(\n\x0crdf_subjects\x18\x05 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0c\n\x04type\x18\x07 \x01(\t\x1a\xdd\x01\n\x11stream_properties\x12\'\n\nextrinsics\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.extrinsics\x12\x39\n\x12intrinsics_pinhole\x18\x02 \x01(\x0b\x32\x1b.VCD.VCD.intrinsics_pinholeH\x00\x12\x39\n\x12intrinsics_fisheye\x18\x03 \x01(\x0b\x32\x1b.VCD.VCD.intrinsics_fisheyeH\x00\x12\x1b\n\x04sync\x18\x04 \x01(\x0b\x32\r.VCD.VCD.syncB\x0c\n\nintrinsics\x1a\x64\n\x12intrinsics_pinhole\x12\x10\n\x08width_px\x18\x01 \x01(\x05\x12\x11\n\theight_px\x18\x02 \x01(\x05\x12\x15\n\rcamera_matrix\x18\x03 \x03(\x02\x12\x12\n\ndistortion\x18\x04 \x03(\x02\x1a\xb2\x01\n\x12intrinsics_fisheye\x12\x10\n\x08width_px\x18\x01 \x01(\x05\x12\x11\n\theight_px\x18\x02 \x01(\x05\x12\x0f\n\x07\x66ov_deg\x18\x03 \x01(\x02\x12\x13\n\x0b\x63\x65nter_x_px\x18\x04 \x01(\x02\x12\x13\n\x0b\x63\x65nter_y_px\x18\x05 \x01(\x02\x12\x13\n\x0bradius_x_px\x18\x06 \x01(\x02\x12\x13\n\x0bradius_y_px\x18\x07 \x01(\x02\x12\x12\n\nlens_coeff\x18\x08 \x03(\x02\x1a*\n\nextrinsics\x12\x1c\n\x14pose_scs_wrt_lcs_4x4\x18\x01 \x03(\x02\x1a\xa3\x01\n\x06stream\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x35\n\x11stream_properties\x18\x03 \x01(\x0b\x32\x1a.VCD.VCD.stream_properties\x12\x0b\n\x03uri\x18\x05 \x01(\t\"@\n\x04type\x12\n\n\x06\x63\x61mera\x10\x00\x12\t\n\x05lidar\x10\x01\x12\t\n\x05radar\x10\x02\x12\x0b\n\x07gps_imu\x10\x03\x12\t\n\x05other\x10\x04\x1a\x63\n\x04sync\x12\x15\n\x0b\x66rame_shift\x18\x01 \x01(\x05H\x00\x12;\n\x13timestamp_and_frame\x18\x02 \x01(\x0b\x32\x1c.VCD.VCD.timestamp_and_frameH\x00\x42\x07\n\x05props\x1a\x37\n\x13timestamp_and_frame\x12\x11\n\ttimestamp\x18\x01 \x01(\t\x12\r\n\x05\x66rame\x18\x02 \x01(\x05\x1aZ\n\x04text\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\t\x1a\x8f\x07\n\x03Vcd\x12*\n\x07\x61\x63tions\x18\x01 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ActionsEntry\x12,\n\x08\x63ontexts\x18\x02 \x03(\x0b\x32\x1a.VCD.VCD.Vcd.ContextsEntry\x12(\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x18.VCD.VCD.Vcd.EventsEntry\x12\x30\n\x0f\x66rame_intervals\x18\x04 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12(\n\x06\x66rames\x18\x05 \x03(\x0b\x32\x18.VCD.VCD.Vcd.FramesEntry\x12#\n\x08metadata\x18\x06 \x01(\x0b\x32\x11.VCD.VCD.metadata\x12\x0c\n\x04name\x18\x07 \x01(\t\x12*\n\x07objects\x18\x08 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ObjectsEntry\x12\x30\n\nontologies\x18\t \x03(\x0b\x32\x1c.VCD.VCD.Vcd.OntologiesEntry\x12.\n\trelations\x18\n \x03(\x0b\x32\x1b.VCD.VCD.Vcd.RelationsEntry\x12\x16\n\x0eschema_version\x18\x0b \x01(\t\x12\x14\n\x0c\x66ile_version\x18\x0c \x01(\t\x1a?\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.action:\x02\x38\x01\x1a\x41\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.context:\x02\x38\x01\x1a=\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.event:\x02\x38\x01\x1a=\n\x0b\x46ramesEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.frame:\x02\x38\x01\x1a?\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.object:\x02\x38\x01\x1a\x31\n\x0fOntologiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x43\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.VCD.VCD.relation:\x02\x38\x01\x1aY\n\x03vec\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x62\x06proto3'
+  serialized_pb=b'\n\x12vcd_proto-v4.proto\x12\x03VCD\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1bgoogle/protobuf/empty.proto\"\xf3@\n\x03VCD\x12\x19\n\x03vcd\x18\x01 \x01(\x0b\x32\x0c.VCD.VCD.Vcd\x1a\xc8\x02\n\x06\x61\x63tion\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12)\n\x0b\x61\x63tion_data\x18\x06 \x01(\x0b\x32\x14.VCD.VCD.action_data\x12\x45\n\x14\x61\x63tion_data_pointers\x18\x07 \x03(\x0b\x32\'.VCD.VCD.action.ActionDataPointersEntry\x1aX\n\x17\x41\x63tionDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x83\x01\n\x0b\x61\x63tion_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\x83\x01\n\x14\x65lement_data_pointer\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x30\n\x0f\x66rame_intervals\x18\x02 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12+\n\nattributes\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a|\n\x0e\x61rea_reference\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x12\x16\n\x0ereference_type\x18\x05 \x01(\t\x1a\x82\x01\n\nattributes\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1aZ\n\x04\x62\x62ox\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a[\n\x05rbbox\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\x81\x01\n\x06\x62inary\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\x10\n\x08\x65ncoding\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1a]\n\x07\x62oolean\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x08\x1a\xcf\x02\n\x07\x63ontext\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12+\n\x0c\x63ontext_data\x18\x06 \x01(\x0b\x32\x15.VCD.VCD.context_data\x12H\n\x15\x63ontext_data_pointers\x18\x07 \x03(\x0b\x32).VCD.VCD.context.ContextDataPointersEntry\x1aY\n\x18\x43ontextDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x84\x01\n\x0c\x63ontext_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\\\n\x06\x63uboid\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\xc1\x02\n\x05\x65vent\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12\'\n\nevent_data\x18\x06 \x01(\x0b\x32\x13.VCD.VCD.event_data\x12\x42\n\x13\x65vent_data_pointers\x18\x07 \x03(\x0b\x32%.VCD.VCD.event.EventDataPointersEntry\x1aW\n\x16\x45ventDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x82\x01\n\nevent_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\xde\x01\n\x10\x66rame_properties\x12\x37\n\x07streams\x18\x01 \x03(\x0b\x32&.VCD.VCD.frame_properties.StreamsEntry\x12#\n\x08odometry\x18\x02 \x01(\x0b\x32\x11.VCD.VCD.odometry\x12+\n\nproperties\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1a\xe6\x06\n\x05\x66rame\x12\x31\n\x10\x66rame_properties\x18\x01 \x01(\x0b\x32\x17.google.protobuf.Struct\x12,\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32\x1b.VCD.VCD.frame.ActionsEntry\x12.\n\x08\x63ontexts\x18\x03 \x03(\x0b\x32\x1c.VCD.VCD.frame.ContextsEntry\x12*\n\x06\x65vents\x18\x04 \x03(\x0b\x32\x1a.VCD.VCD.frame.EventsEntry\x12,\n\x07objects\x18\x05 \x03(\x0b\x32\x1b.VCD.VCD.frame.ObjectsEntry\x12\x30\n\trelations\x18\x06 \x03(\x0b\x32\x1d.VCD.VCD.frame.RelationsEntry\x1a\x34\n\x07\x41\x63tions\x12)\n\x0b\x61\x63tion_data\x18\x01 \x01(\x0b\x32\x14.VCD.VCD.action_data\x1a\x31\n\x06\x45vents\x12\'\n\nevent_data\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.event_data\x1a\x37\n\x08\x43ontexts\x12+\n\x0c\x63ontext_data\x18\x01 \x01(\x0b\x32\x15.VCD.VCD.context_data\x1a\x34\n\x07Objects\x12)\n\x0bobject_data\x18\x01 \x01(\x0b\x32\x14.VCD.VCD.object_data\x1a\x46\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.VCD.VCD.frame.Actions:\x02\x38\x01\x1aH\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.frame.Contexts:\x02\x38\x01\x1a\x44\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12$\n\x05value\x18\x02 \x01(\x0b\x32\x15.VCD.VCD.frame.Events:\x02\x38\x01\x1a\x46\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.VCD.VCD.frame.Objects:\x02\x38\x01\x1aH\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Empty:\x02\x38\x01\x1a\x38\n\x0e\x66rame_interval\x12\x13\n\x0b\x66rame_start\x18\x01 \x01(\x05\x12\x11\n\tframe_end\x18\x02 \x01(\x05\x1a\x80\x01\n\x05image\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x65ncoding\x18\x02 \x01(\t\x12\x11\n\tmime_type\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1a\x7f\n\x0eline_reference\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0e\n\x06number\x18\x04 \x03(\x02\x12\x16\n\x0ereference_type\x18\x05 \x01(\t\x1a\x9d\x01\n\x03mat\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x63hannels\x18\x02 \x01(\x02\x12\x11\n\tdata_type\x18\x03 \x01(\t\x12\x0e\n\x06height\x18\x04 \x01(\x02\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0b\n\x03val\x18\x07 \x03(\x02\x12\r\n\x05width\x18\x08 \x01(\x02\x1a\xa5\x03\n\x04mesh\x12\x38\n\x0e\x61rea_reference\x18\x01 \x03(\x0b\x32 .VCD.VCD.mesh.AreaReferenceEntry\x12\x38\n\x0eline_reference\x18\x02 \x03(\x0b\x32 .VCD.VCD.mesh.LineReferenceEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12+\n\x07point3d\x18\x04 \x03(\x0b\x32\x1a.VCD.VCD.mesh.Point3dEntry\x12\x0e\n\x06stream\x18\x05 \x01(\t\x1aM\n\x12\x41reaReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.area_reference:\x02\x38\x01\x1aM\n\x12LineReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.line_reference:\x02\x38\x01\x1a@\n\x0cPoint3dEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.point3d:\x02\x38\x01\x1a\x97\x01\n\x08metadata\x12\x11\n\tannotator\x18\x01 \x01(\t\x12\x0f\n\x07\x63omment\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x16\n\x0eschema_version\x18\x04 \x01(\t\x12\x14\n\x0c\x66ile_version\x18\x05 \x01(\t\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x1aY\n\x03num\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x02\x1a\xc8\x02\n\x06object\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12)\n\x0bobject_data\x18\x03 \x01(\x0b\x32\x14.VCD.VCD.object_data\x12\x14\n\x0contology_uid\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0c\n\x04type\x18\x06 \x01(\t\x12\x45\n\x14object_data_pointers\x18\x07 \x03(\x0b\x32\'.VCD.VCD.object.ObjectDataPointersEntry\x1aX\n\x17ObjectDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\xc2\x04\n\x0bobject_data\x12\x1b\n\x04\x62\x62ox\x18\x01 \x03(\x0b\x32\r.VCD.VCD.bbox\x12\x1d\n\x05rbbox\x18\x02 \x03(\x0b\x32\x0e.VCD.VCD.rbbox\x12\x1f\n\x06\x62inary\x18\x03 \x03(\x0b\x32\x0f.VCD.VCD.binary\x12!\n\x07\x62oolean\x18\x04 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x1f\n\x06\x63uboid\x18\x05 \x03(\x0b\x32\x0f.VCD.VCD.cuboid\x12\x1d\n\x05image\x18\x06 \x03(\x0b\x32\x0e.VCD.VCD.image\x12\x19\n\x03mat\x18\x07 \x03(\x0b\x32\x0c.VCD.VCD.mat\x12\x19\n\x03num\x18\x08 \x03(\x0b\x32\x0c.VCD.VCD.num\x12!\n\x07point2d\x18\t \x03(\x0b\x32\x10.VCD.VCD.point2d\x12!\n\x07point3d\x18\n \x03(\x0b\x32\x10.VCD.VCD.point3d\x12\x1f\n\x06poly2d\x18\x0b \x03(\x0b\x32\x0f.VCD.VCD.poly2d\x12\x1f\n\x06poly3d\x18\x0c \x03(\x0b\x32\x0f.VCD.VCD.poly3d\x12\x1b\n\x04text\x18\r \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x0e \x03(\x0b\x32\x0c.VCD.VCD.vec\x12/\n\x0e\x61rea_reference\x18\x0f \x03(\x0b\x32\x17.VCD.VCD.area_reference\x12/\n\x0eline_reference\x18\x10 \x03(\x0b\x32\x17.VCD.VCD.line_reference\x12\x1b\n\x04mesh\x18\x11 \x03(\x0b\x32\r.VCD.VCD.mesh\x1a\x39\n\x08odometry\x12\x1c\n\x14pose_lcs_wrt_wcs_4x4\x18\x01 \x03(\x02\x12\x0f\n\x07\x63omment\x18\x02 \x01(\t\x1ai\n\x07point2d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x12\n\n\x02id\x18\x06 \x01(\t\x1ai\n\x07point3d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x12\n\n\x02id\x18\x06 \x01(\t\x1a\xa5\x01\n\x06poly2d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04mode\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12#\n\x03val\x18\x06 \x03(\x0b\x32\x16.google.protobuf.Value\x12\x11\n\thierarchy\x18\x07 \x03(\x05\x1al\n\x06poly3d\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x1a&\n\trdf_agent\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x1a\xd1\x01\n\x08relation\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\'\n\x0brdf_objects\x18\x04 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12(\n\x0crdf_subjects\x18\x05 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0c\n\x04type\x18\x07 \x01(\t\x1a\xdd\x01\n\x11stream_properties\x12\'\n\nextrinsics\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.extrinsics\x12\x39\n\x12intrinsics_pinhole\x18\x02 \x01(\x0b\x32\x1b.VCD.VCD.intrinsics_pinholeH\x00\x12\x39\n\x12intrinsics_fisheye\x18\x03 \x01(\x0b\x32\x1b.VCD.VCD.intrinsics_fisheyeH\x00\x12\x1b\n\x04sync\x18\x04 \x01(\x0b\x32\r.VCD.VCD.syncB\x0c\n\nintrinsics\x1a\x64\n\x12intrinsics_pinhole\x12\x10\n\x08width_px\x18\x01 \x01(\x05\x12\x11\n\theight_px\x18\x02 \x01(\x05\x12\x15\n\rcamera_matrix\x18\x03 \x03(\x02\x12\x12\n\ndistortion\x18\x04 \x03(\x02\x1a\xb2\x01\n\x12intrinsics_fisheye\x12\x10\n\x08width_px\x18\x01 \x01(\x05\x12\x11\n\theight_px\x18\x02 \x01(\x05\x12\x0f\n\x07\x66ov_deg\x18\x03 \x01(\x02\x12\x13\n\x0b\x63\x65nter_x_px\x18\x04 \x01(\x02\x12\x13\n\x0b\x63\x65nter_y_px\x18\x05 \x01(\x02\x12\x13\n\x0bradius_x_px\x18\x06 \x01(\x02\x12\x13\n\x0bradius_y_px\x18\x07 \x01(\x02\x12\x12\n\nlens_coeff\x18\x08 \x03(\x02\x1a*\n\nextrinsics\x12\x1c\n\x14pose_scs_wrt_lcs_4x4\x18\x01 \x03(\x02\x1a\xa3\x01\n\x06stream\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x35\n\x11stream_properties\x18\x03 \x01(\x0b\x32\x1a.VCD.VCD.stream_properties\x12\x0b\n\x03uri\x18\x05 \x01(\t\"@\n\x04type\x12\n\n\x06\x63\x61mera\x10\x00\x12\t\n\x05lidar\x10\x01\x12\t\n\x05radar\x10\x02\x12\x0b\n\x07gps_imu\x10\x03\x12\t\n\x05other\x10\x04\x1a\x63\n\x04sync\x12\x15\n\x0b\x66rame_shift\x18\x01 \x01(\x05H\x00\x12;\n\x13timestamp_and_frame\x18\x02 \x01(\x0b\x32\x1c.VCD.VCD.timestamp_and_frameH\x00\x42\x07\n\x05props\x1a\x37\n\x13timestamp_and_frame\x12\x11\n\ttimestamp\x18\x01 \x01(\t\x12\r\n\x05\x66rame\x18\x02 \x01(\x05\x1aZ\n\x04text\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\t\x1a\xc0\x07\n\x03Vcd\x12*\n\x07\x61\x63tions\x18\x01 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ActionsEntry\x12,\n\x08\x63ontexts\x18\x02 \x03(\x0b\x32\x1a.VCD.VCD.Vcd.ContextsEntry\x12(\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x18.VCD.VCD.Vcd.EventsEntry\x12\x30\n\x0f\x66rame_intervals\x18\x04 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12(\n\x06\x66rames\x18\x05 \x03(\x0b\x32\x18.VCD.VCD.Vcd.FramesEntry\x12#\n\x08metadata\x18\x06 \x01(\x0b\x32\x11.VCD.VCD.metadata\x12*\n\x07streams\x18\x07 \x03(\x0b\x32\x19.VCD.VCD.Vcd.StreamsEntry\x12*\n\x07objects\x18\x08 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ObjectsEntry\x12\x30\n\nontologies\x18\t \x03(\x0b\x32\x1c.VCD.VCD.Vcd.OntologiesEntry\x12.\n\trelations\x18\n \x03(\x0b\x32\x1b.VCD.VCD.Vcd.RelationsEntry\x1a?\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.action:\x02\x38\x01\x1a\x41\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.context:\x02\x38\x01\x1a=\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.event:\x02\x38\x01\x1a=\n\x0b\x46ramesEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.frame:\x02\x38\x01\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1a?\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.object:\x02\x38\x01\x1a\x31\n\x0fOntologiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x43\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.VCD.VCD.relation:\x02\x38\x01\x1aY\n\x03vec\x12\'\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x62\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
@@ -55,8 +55,8 @@ _VCD_STREAM_TYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=7080,
-  serialized_end=7144,
+  serialized_start=7026,
+  serialized_end=7090,
 )
 _sym_db.RegisterEnumDescriptor(_VCD_STREAM_TYPE)
 
@@ -1822,43 +1822,6 @@ _VCD_MESH = _descriptor.Descriptor(
   serialized_end=4413,
 )
 
-_VCD_METADATA_STREAMSENTRY = _descriptor.Descriptor(
-  name='StreamsEntry',
-  full_name='VCD.VCD.metadata.StreamsEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='VCD.VCD.metadata.StreamsEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='VCD.VCD.metadata.StreamsEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2575,
-  serialized_end=2638,
-)
-
 _VCD_METADATA = _descriptor.Descriptor(
   name='metadata',
   full_name='VCD.VCD.metadata',
@@ -1881,15 +1844,29 @@ _VCD_METADATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='streams', full_name='VCD.VCD.metadata.streams', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      name='name', full_name='VCD.VCD.metadata.name', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='properties', full_name='VCD.VCD.metadata.properties', index=3,
-      number=4, type=11, cpp_type=10, label=1,
+      name='schema_version', full_name='VCD.VCD.metadata.schema_version', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='file_version', full_name='VCD.VCD.metadata.file_version', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='properties', full_name='VCD.VCD.metadata.properties', index=5,
+      number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1897,7 +1874,7 @@ _VCD_METADATA = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_VCD_METADATA_STREAMSENTRY, ],
+  nested_types=[],
   enum_types=[
   ],
   serialized_options=None,
@@ -1907,7 +1884,7 @@ _VCD_METADATA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=4416,
-  serialized_end=4621,
+  serialized_end=4567,
 )
 
 _VCD_NUM = _descriptor.Descriptor(
@@ -1957,8 +1934,8 @@ _VCD_NUM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4623,
-  serialized_end=4712,
+  serialized_start=4569,
+  serialized_end=4658,
 )
 
 _VCD_OBJECT_OBJECTDATAPOINTERSENTRY = _descriptor.Descriptor(
@@ -1994,8 +1971,8 @@ _VCD_OBJECT_OBJECTDATAPOINTERSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4955,
-  serialized_end=5043,
+  serialized_start=4901,
+  serialized_end=4989,
 )
 
 _VCD_OBJECT = _descriptor.Descriptor(
@@ -2066,8 +2043,8 @@ _VCD_OBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4715,
-  serialized_end=5043,
+  serialized_start=4661,
+  serialized_end=4989,
 )
 
 _VCD_OBJECT_DATA = _descriptor.Descriptor(
@@ -2208,8 +2185,8 @@ _VCD_OBJECT_DATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5046,
-  serialized_end=5624,
+  serialized_start=4992,
+  serialized_end=5570,
 )
 
 _VCD_ODOMETRY = _descriptor.Descriptor(
@@ -2245,8 +2222,8 @@ _VCD_ODOMETRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5626,
-  serialized_end=5683,
+  serialized_start=5572,
+  serialized_end=5629,
 )
 
 _VCD_POINT2D = _descriptor.Descriptor(
@@ -2303,8 +2280,8 @@ _VCD_POINT2D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5685,
-  serialized_end=5790,
+  serialized_start=5631,
+  serialized_end=5736,
 )
 
 _VCD_POINT3D = _descriptor.Descriptor(
@@ -2361,8 +2338,8 @@ _VCD_POINT3D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5792,
-  serialized_end=5897,
+  serialized_start=5738,
+  serialized_end=5843,
 )
 
 _VCD_POLY2D = _descriptor.Descriptor(
@@ -2433,8 +2410,8 @@ _VCD_POLY2D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5900,
-  serialized_end=6065,
+  serialized_start=5846,
+  serialized_end=6011,
 )
 
 _VCD_POLY3D = _descriptor.Descriptor(
@@ -2491,8 +2468,8 @@ _VCD_POLY3D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6067,
-  serialized_end=6175,
+  serialized_start=6013,
+  serialized_end=6121,
 )
 
 _VCD_RDF_AGENT = _descriptor.Descriptor(
@@ -2528,8 +2505,8 @@ _VCD_RDF_AGENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6177,
-  serialized_end=6215,
+  serialized_start=6123,
+  serialized_end=6161,
 )
 
 _VCD_RELATION = _descriptor.Descriptor(
@@ -2600,8 +2577,8 @@ _VCD_RELATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6218,
-  serialized_end=6427,
+  serialized_start=6164,
+  serialized_end=6373,
 )
 
 _VCD_STREAM_PROPERTIES = _descriptor.Descriptor(
@@ -2654,8 +2631,8 @@ _VCD_STREAM_PROPERTIES = _descriptor.Descriptor(
       name='intrinsics', full_name='VCD.VCD.stream_properties.intrinsics',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=6430,
-  serialized_end=6651,
+  serialized_start=6376,
+  serialized_end=6597,
 )
 
 _VCD_INTRINSICS_PINHOLE = _descriptor.Descriptor(
@@ -2705,8 +2682,8 @@ _VCD_INTRINSICS_PINHOLE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6653,
-  serialized_end=6753,
+  serialized_start=6599,
+  serialized_end=6699,
 )
 
 _VCD_INTRINSICS_FISHEYE = _descriptor.Descriptor(
@@ -2784,8 +2761,8 @@ _VCD_INTRINSICS_FISHEYE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6756,
-  serialized_end=6934,
+  serialized_start=6702,
+  serialized_end=6880,
 )
 
 _VCD_EXTRINSICS = _descriptor.Descriptor(
@@ -2814,8 +2791,8 @@ _VCD_EXTRINSICS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6936,
-  serialized_end=6978,
+  serialized_start=6882,
+  serialized_end=6924,
 )
 
 _VCD_STREAM = _descriptor.Descriptor(
@@ -2859,8 +2836,8 @@ _VCD_STREAM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6981,
-  serialized_end=7144,
+  serialized_start=6927,
+  serialized_end=7090,
 )
 
 _VCD_SYNC = _descriptor.Descriptor(
@@ -2899,8 +2876,8 @@ _VCD_SYNC = _descriptor.Descriptor(
       name='props', full_name='VCD.VCD.sync.props',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=7146,
-  serialized_end=7245,
+  serialized_start=7092,
+  serialized_end=7191,
 )
 
 _VCD_TIMESTAMP_AND_FRAME = _descriptor.Descriptor(
@@ -2936,8 +2913,8 @@ _VCD_TIMESTAMP_AND_FRAME = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7247,
-  serialized_end=7302,
+  serialized_start=7193,
+  serialized_end=7248,
 )
 
 _VCD_TEXT = _descriptor.Descriptor(
@@ -2987,8 +2964,8 @@ _VCD_TEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7304,
-  serialized_end=7394,
+  serialized_start=7250,
+  serialized_end=7340,
 )
 
 _VCD_VCD_ACTIONSENTRY = _descriptor.Descriptor(
@@ -3024,8 +3001,8 @@ _VCD_VCD_ACTIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7867,
-  serialized_end=7930,
+  serialized_start=7797,
+  serialized_end=7860,
 )
 
 _VCD_VCD_CONTEXTSENTRY = _descriptor.Descriptor(
@@ -3061,8 +3038,8 @@ _VCD_VCD_CONTEXTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7932,
-  serialized_end=7997,
+  serialized_start=7862,
+  serialized_end=7927,
 )
 
 _VCD_VCD_EVENTSENTRY = _descriptor.Descriptor(
@@ -3098,8 +3075,8 @@ _VCD_VCD_EVENTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7999,
-  serialized_end=8060,
+  serialized_start=7929,
+  serialized_end=7990,
 )
 
 _VCD_VCD_FRAMESENTRY = _descriptor.Descriptor(
@@ -3135,8 +3112,45 @@ _VCD_VCD_FRAMESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8062,
-  serialized_end=8123,
+  serialized_start=7992,
+  serialized_end=8053,
+)
+
+_VCD_VCD_STREAMSENTRY = _descriptor.Descriptor(
+  name='StreamsEntry',
+  full_name='VCD.VCD.Vcd.StreamsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='VCD.VCD.Vcd.StreamsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='VCD.VCD.Vcd.StreamsEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2575,
+  serialized_end=2638,
 )
 
 _VCD_VCD_OBJECTSENTRY = _descriptor.Descriptor(
@@ -3172,8 +3186,8 @@ _VCD_VCD_OBJECTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8125,
-  serialized_end=8188,
+  serialized_start=8120,
+  serialized_end=8183,
 )
 
 _VCD_VCD_ONTOLOGIESENTRY = _descriptor.Descriptor(
@@ -3209,8 +3223,8 @@ _VCD_VCD_ONTOLOGIESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8190,
-  serialized_end=8239,
+  serialized_start=8185,
+  serialized_end=8234,
 )
 
 _VCD_VCD_RELATIONSENTRY = _descriptor.Descriptor(
@@ -3246,8 +3260,8 @@ _VCD_VCD_RELATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8241,
-  serialized_end=8308,
+  serialized_start=8236,
+  serialized_end=8303,
 )
 
 _VCD_VCD = _descriptor.Descriptor(
@@ -3300,9 +3314,9 @@ _VCD_VCD = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='name', full_name='VCD.VCD.Vcd.name', index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='streams', full_name='VCD.VCD.Vcd.streams', index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -3327,24 +3341,10 @@ _VCD_VCD = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='schema_version', full_name='VCD.VCD.Vcd.schema_version', index=10,
-      number=11, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='file_version', full_name='VCD.VCD.Vcd.file_version', index=11,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_VCD_VCD_ACTIONSENTRY, _VCD_VCD_CONTEXTSENTRY, _VCD_VCD_EVENTSENTRY, _VCD_VCD_FRAMESENTRY, _VCD_VCD_OBJECTSENTRY, _VCD_VCD_ONTOLOGIESENTRY, _VCD_VCD_RELATIONSENTRY, ],
+  nested_types=[_VCD_VCD_ACTIONSENTRY, _VCD_VCD_CONTEXTSENTRY, _VCD_VCD_EVENTSENTRY, _VCD_VCD_FRAMESENTRY, _VCD_VCD_STREAMSENTRY, _VCD_VCD_OBJECTSENTRY, _VCD_VCD_ONTOLOGIESENTRY, _VCD_VCD_RELATIONSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -3353,8 +3353,8 @@ _VCD_VCD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7397,
-  serialized_end=8308,
+  serialized_start=7343,
+  serialized_end=8303,
 )
 
 _VCD_VEC = _descriptor.Descriptor(
@@ -3404,8 +3404,8 @@ _VCD_VEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8310,
-  serialized_end=8399,
+  serialized_start=8305,
+  serialized_end=8394,
 )
 
 _VCD = _descriptor.Descriptor(
@@ -3435,7 +3435,7 @@ _VCD = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=87,
-  serialized_end=8399,
+  serialized_end=8394,
 )
 
 _VCD_ACTION_ACTIONDATAPOINTERSENTRY.fields_by_name['value'].message_type = _VCD_ELEMENT_DATA_POINTER
@@ -3539,9 +3539,6 @@ _VCD_MESH.fields_by_name['area_reference'].message_type = _VCD_MESH_AREAREFERENC
 _VCD_MESH.fields_by_name['line_reference'].message_type = _VCD_MESH_LINEREFERENCEENTRY
 _VCD_MESH.fields_by_name['point3d'].message_type = _VCD_MESH_POINT3DENTRY
 _VCD_MESH.containing_type = _VCD
-_VCD_METADATA_STREAMSENTRY.fields_by_name['value'].message_type = _VCD_STREAM
-_VCD_METADATA_STREAMSENTRY.containing_type = _VCD_METADATA
-_VCD_METADATA.fields_by_name['streams'].message_type = _VCD_METADATA_STREAMSENTRY
 _VCD_METADATA.fields_by_name['properties'].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _VCD_METADATA.containing_type = _VCD
 _VCD_NUM.fields_by_name['attributes'].message_type = _VCD_ATTRIBUTES
@@ -3621,6 +3618,8 @@ _VCD_VCD_EVENTSENTRY.fields_by_name['value'].message_type = _VCD_EVENT
 _VCD_VCD_EVENTSENTRY.containing_type = _VCD_VCD
 _VCD_VCD_FRAMESENTRY.fields_by_name['value'].message_type = _VCD_FRAME
 _VCD_VCD_FRAMESENTRY.containing_type = _VCD_VCD
+_VCD_VCD_STREAMSENTRY.fields_by_name['value'].message_type = _VCD_STREAM
+_VCD_VCD_STREAMSENTRY.containing_type = _VCD_VCD
 _VCD_VCD_OBJECTSENTRY.fields_by_name['value'].message_type = _VCD_OBJECT
 _VCD_VCD_OBJECTSENTRY.containing_type = _VCD_VCD
 _VCD_VCD_ONTOLOGIESENTRY.containing_type = _VCD_VCD
@@ -3632,6 +3631,7 @@ _VCD_VCD.fields_by_name['events'].message_type = _VCD_VCD_EVENTSENTRY
 _VCD_VCD.fields_by_name['frame_intervals'].message_type = _VCD_FRAME_INTERVAL
 _VCD_VCD.fields_by_name['frames'].message_type = _VCD_VCD_FRAMESENTRY
 _VCD_VCD.fields_by_name['metadata'].message_type = _VCD_METADATA
+_VCD_VCD.fields_by_name['streams'].message_type = _VCD_VCD_STREAMSENTRY
 _VCD_VCD.fields_by_name['objects'].message_type = _VCD_VCD_OBJECTSENTRY
 _VCD_VCD.fields_by_name['ontologies'].message_type = _VCD_VCD_ONTOLOGIESENTRY
 _VCD_VCD.fields_by_name['relations'].message_type = _VCD_VCD_RELATIONSENTRY
@@ -3904,13 +3904,6 @@ VCD = _reflection.GeneratedProtocolMessageType('VCD', (_message.Message,), {
   ,
 
   'metadata' : _reflection.GeneratedProtocolMessageType('metadata', (_message.Message,), {
-
-    'StreamsEntry' : _reflection.GeneratedProtocolMessageType('StreamsEntry', (_message.Message,), {
-      'DESCRIPTOR' : _VCD_METADATA_STREAMSENTRY,
-      '__module__' : 'vcd_proto_v4_pb2'
-      # @@protoc_insertion_point(class_scope:VCD.VCD.metadata.StreamsEntry)
-      })
-    ,
     'DESCRIPTOR' : _VCD_METADATA,
     '__module__' : 'vcd_proto_v4_pb2'
     # @@protoc_insertion_point(class_scope:VCD.VCD.metadata)
@@ -4080,6 +4073,13 @@ VCD = _reflection.GeneratedProtocolMessageType('VCD', (_message.Message,), {
       })
     ,
 
+    'StreamsEntry' : _reflection.GeneratedProtocolMessageType('StreamsEntry', (_message.Message,), {
+      'DESCRIPTOR' : _VCD_VCD_STREAMSENTRY,
+      '__module__' : 'vcd_proto_v4_pb2'
+      # @@protoc_insertion_point(class_scope:VCD.VCD.Vcd.StreamsEntry)
+      })
+    ,
+
     'ObjectsEntry' : _reflection.GeneratedProtocolMessageType('ObjectsEntry', (_message.Message,), {
       'DESCRIPTOR' : _VCD_VCD_OBJECTSENTRY,
       '__module__' : 'vcd_proto_v4_pb2'
@@ -4155,7 +4155,6 @@ _sym_db.RegisterMessage(VCD.mesh.AreaReferenceEntry)
 _sym_db.RegisterMessage(VCD.mesh.LineReferenceEntry)
 _sym_db.RegisterMessage(VCD.mesh.Point3dEntry)
 _sym_db.RegisterMessage(VCD.metadata)
-_sym_db.RegisterMessage(VCD.metadata.StreamsEntry)
 _sym_db.RegisterMessage(VCD.num)
 _sym_db.RegisterMessage(VCD.object)
 _sym_db.RegisterMessage(VCD.object.ObjectDataPointersEntry)
@@ -4180,6 +4179,7 @@ _sym_db.RegisterMessage(VCD.Vcd.ActionsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.ContextsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.EventsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.FramesEntry)
+_sym_db.RegisterMessage(VCD.Vcd.StreamsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.ObjectsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.OntologiesEntry)
 _sym_db.RegisterMessage(VCD.Vcd.RelationsEntry)
@@ -4198,12 +4198,12 @@ _VCD_FRAME_RELATIONSENTRY._options = None
 _VCD_MESH_AREAREFERENCEENTRY._options = None
 _VCD_MESH_LINEREFERENCEENTRY._options = None
 _VCD_MESH_POINT3DENTRY._options = None
-_VCD_METADATA_STREAMSENTRY._options = None
 _VCD_OBJECT_OBJECTDATAPOINTERSENTRY._options = None
 _VCD_VCD_ACTIONSENTRY._options = None
 _VCD_VCD_CONTEXTSENTRY._options = None
 _VCD_VCD_EVENTSENTRY._options = None
 _VCD_VCD_FRAMESENTRY._options = None
+_VCD_VCD_STREAMSENTRY._options = None
 _VCD_VCD_OBJECTSENTRY._options = None
 _VCD_VCD_ONTOLOGIESENTRY._options = None
 _VCD_VCD_RELATIONSENTRY._options = None

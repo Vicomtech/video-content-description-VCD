@@ -309,12 +309,12 @@ def convert_KITTI_tracking_to_VCD4():
     for count, key in enumerate(kitti_parser.vcds):
         # Store
         vcd_file_name = os.path.join(kitti_tracking_output_vcd_path,
-                                     "vcd_430_kitti_tracking_" + str(count).zfill(4) + ".json")
+                                     "vcd430_kitti_tracking_" + str(count).zfill(4) + ".json")
         print('Storing VCD file...' + vcd_file_name)
         kitti_parser.vcds[key].save(file_name=vcd_file_name)
 
         if count == 0:  # Save a copy of the first trace to tests for further VCD tests
-            vcd_file_name = os.path.join("../../tests/etc/in", "vcd_430_kitti_tracking_" + str(count).zfill(4) + ".json")
+            vcd_file_name = os.path.join("../../tests/etc", "vcd430_kitti_tracking_" + str(count).zfill(4) + ".json")
             kitti_parser.vcds[key].save(file_name=vcd_file_name)
 
 

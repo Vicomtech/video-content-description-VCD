@@ -46,9 +46,9 @@ class TestBasic(unittest.TestCase):
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="weight", val=0.5), frame_value=4)
 
 
-        if not os.path.isfile('./etc/in/test_actions_with_action_data.json'):
-            vcd.save('./etc/in/test_actions_with_action_data.json', True)
-        vcd_read = core.VCD('./etc/in/test_actions_with_action_data.json', validation=True)
+        if not os.path.isfile('./etc/vcd430_test_actions_with_action_data.json'):
+            vcd.save('./etc/vcd430_test_actions_with_action_data.json', True)
+        vcd_read = core.VCD('./etc/vcd430_test_actions_with_action_data.json', validation=True)
         vcd_read_stringified = vcd_read.stringify()
         vcd_stringified = vcd.stringify()
         # print(vcd_stringified)

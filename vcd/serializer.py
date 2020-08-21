@@ -18,6 +18,16 @@ import vcd.proto as proto
 from google.protobuf.json_format import Parse
 from google.protobuf.json_format import MessageToJson
 
+# NOTE: There is a major problem not solved in the conversion JSON -> Proto -> JSON
+# In JSON, we can have an empty string "" as the value of a key-value pair.
+# Though, this is converted to null in Proto, and for some reason, when
+# writing it back to JSON, the entire key-value pair is omitted.
+
+# NOTE: Also, for some reason, booleans in JSON (true/false) are not read by proto
+# and the entire entry is ommitted.
+
+# NOTE: The same happens with empty arrays, which in JSON are [], but then going
+# through proto and then JSON again are lost
 
 def json2proto_bin(vcd_json_file_in, vcd_proto_file_out):
     vcd_message = proto.VCD()
