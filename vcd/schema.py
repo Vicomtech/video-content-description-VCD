@@ -243,7 +243,7 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "object_data": {"$ref": "#/definitions/object_data"},
                 "object_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -260,7 +260,7 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "action_data": {"$ref": "#/definitions/action_data"},
                 "action_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -277,7 +277,7 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "event_data": {"$ref": "#/definitions/event_data"},
                 "event_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -294,7 +294,7 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "context_data": {"$ref": "#/definitions/context_data"},
                 "context_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -311,7 +311,6 @@ vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
                 "rdf_objects": {
                     "type": "array",
                     "item": {"$ref": "#/definitions/rdf_agent"}
@@ -642,7 +641,7 @@ vcd_schema = {
                             [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "minItems": 4,
@@ -664,7 +663,7 @@ vcd_schema = {
                            "of rotation placed at the center of the bounding box (i.e. [x, y]).",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "minItems": 5,
@@ -680,7 +679,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "number"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
@@ -691,7 +690,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
@@ -702,7 +701,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "boolean"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
@@ -713,7 +712,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "minItems": 9,
@@ -729,7 +728,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
                 "mime_type": {"type": "string"},
                 "encoding": {"type": "string"},
@@ -742,7 +741,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "item": {"type": "number"}
@@ -760,7 +759,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
                 "encoding": {"type": "string"},
                 "data_type": {"type": "string"},
@@ -773,7 +772,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "item": {"type": "number"}
@@ -787,7 +786,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "id": {"type": "integer"},
                 "val": {
                     "type": "array",
@@ -804,7 +803,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "id": {"type": "integer"},
                 "val": {
                     "type": "array",
@@ -821,7 +820,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "mode": {"type": "string"},
                 "closed": {"type": "boolean"},
                 "val": {
@@ -851,7 +850,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "closed": {"type": "boolean"},
                 "val": {
                     "type": "array",
@@ -896,7 +895,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "point3d": {
                     "type": "object",
                     "patternProperties": {
@@ -925,7 +924,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "items": {"type": "number"},
@@ -941,7 +940,7 @@ vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "items": {"type": "number"},

@@ -378,7 +378,7 @@ class VCD:
 
     def __add_element(
             self, element_type, name, semantic_type, frame_intervals=None, uid=None, ont_uid=None,
-            stream=None
+            coordinate_system=None
     ):
         if uid is not None:
             assert(isinstance(uid, UID))
@@ -397,7 +397,7 @@ class VCD:
 
         # 2.- Update Root element (['vcd']['element']), overwrites content
         fis_old = self.get_element_frame_intervals(element_type, uid.as_str())
-        self.__create_update_element(element_type, name, semantic_type, frame_intervals, uid_to_assign, ont_uid, stream)
+        self.__create_update_element(element_type, name, semantic_type, frame_intervals, uid_to_assign, ont_uid, coordinate_system)
 
         # 3.- Update frames entries and VCD frame intervals
         if not frame_intervals.empty():
@@ -453,23 +453,23 @@ class VCD:
         name = self.data['vcd'][element_type.name + 's'][uid.as_str()]['name']
         semantic_type = self.data['vcd'][element_type.name + 's'][uid.as_str()]['type']
         ont_uid = None
-        stream = None
+        coordinate_system = None
         if 'ontology_uid' in self.data['vcd'][element_type.name + 's'][uid.as_str()]:
             ont_uid = UID(self.data['vcd'][element_type.name + 's'][uid.as_str()]['ontology_uid'])
-        if 'stream' in self.data['vcd'][element_type.name + 's'][uid.as_str()]:
-            stream = self.data['vcd'][element_type.name + 's'][uid.as_str()]['stream']
+        if 'coordinate_system' in self.data['vcd'][element_type.name + 's'][uid.as_str()]:
+            coordinate_system = self.data['vcd'][element_type.name + 's'][uid.as_str()]['coordinate_system']
 
         # Call __add_element (which internally creates OR updates)
         fis_existing = self.get_element_frame_intervals(element_type, uid.as_str())
         fis_union = fis_existing.union(frame_intervals)
-        self.__add_element(element_type, name, semantic_type, fis_union, uid, ont_uid, stream)
+        self.__add_element(element_type, name, semantic_type, fis_union, uid, ont_uid, coordinate_system)
 
     def __modify_element(self, element_type, uid, name=None, semantic_type=None, frame_intervals=None,
-                         ont_uid=None, stream=None):
-        self.__add_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, stream)
+                         ont_uid=None, coordinate_system=None):
+        self.__add_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, coordinate_system)
 
     def __create_update_element(
-            self, element_type, name, semantic_type, frame_intervals, uid, ont_uid, stream
+            self, element_type, name, semantic_type, frame_intervals, uid, ont_uid, coordinate_system
     ):
         # 1.- Copy from existing or create new entry (this copies everything, including element_data)
         # element_data_pointers and frame intervals
@@ -486,8 +486,8 @@ class VCD:
             element['frame_intervals'] = frame_intervals.get_dict()
         if not ont_uid.is_none() and self.get_ontology(ont_uid.as_str()):
             element['ontology_uid'] = ont_uid.as_str()
-        if stream is not None and self.has_stream(stream):
-            element['stream'] = stream
+        if coordinate_system is not None and self.has_stream(coordinate_system):
+            element['coordinate_system'] = coordinate_system
 
         # 3.- Reshape element_data_poitners according to this new frame intervals
         if not frame_intervals.empty():
@@ -515,16 +515,16 @@ class VCD:
         if frame_intervals is not None and not frame_intervals.empty():
             element = self.get_element(element_type, uid.as_str())
             ont_uid = None
-            stream = None
+            coordinate_system = None
             if 'ontology_uid' in element:
                 ont_uid = UID(element['ontology_uid'])
-            if 'stream' in element:
-                stream = element['stream']
+            if 'coordinate_system' in element:
+                coordinate_system = element['coordinate_system']
 
             # Prepare union of frame intervals to update element
             fis_element = self.get_element_frame_intervals(element_type, uid.as_str())
             fis_union = fis_element.union(frame_intervals)
-            self.__add_element(element_type, element['name'], element['type'], fis_union, uid, ont_uid, stream)
+            self.__add_element(element_type, element['name'], element['type'], fis_union, uid, ont_uid, coordinate_system)
 
         # 2.- Inject/substitute Element_data
         self.__create_update_element_data(element_type, uid, element_data, frame_intervals)
@@ -553,8 +553,8 @@ class VCD:
     def __create_update_element_data(self, element_type, uid, element_data, frame_intervals):
         assert(isinstance(uid, UID))
         # 0.- Check if element_data
-        if 'in_stream' in element_data.data:
-            if not self.has_stream(element_data.data['in_stream']):
+        if 'coordinate_system' in element_data.data:
+            if not self.has_stream(element_data.data['coordinate_system']):
                 return
 
         # 1.- At root XOR frames, copy from existing or create new entry
@@ -945,21 +945,21 @@ class VCD:
             else:
                 return self.__update_element(ElementType.relation, UID(uid), FrameIntervals(frame_value))
 
-    def add_object(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
+    def add_object(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
         return self.__add_element(ElementType.object, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), stream).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
 
-    def add_action(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
+    def add_action(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
         return self.__add_element(ElementType.action, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), stream).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
 
-    def add_event(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
+    def add_event(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
         return self.__add_element(ElementType.event, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), stream).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
 
-    def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, stream=None):
+    def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
         return self.__add_element(ElementType.context, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), stream).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
 
     def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None):
         relation_uid = self.__add_element(
@@ -1086,29 +1086,29 @@ class VCD:
                           "To modify an existing context_data, use modify_context_data.")
         return self.__add_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value))
 
-    def modify_action(self, uid, name=None, semantic_type=None, frame_value = None, ont_uid=None, stream=None):
+    def modify_action(self, uid, name=None, semantic_type=None, frame_value = None, ont_uid=None, coordinate_system=None):
         return self.__modify_element(
-            ElementType.action, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
+            ElementType.action, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
         )
 
-    def modify_object(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
+    def modify_object(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
         return self.__modify_element(
-            ElementType.object, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
+            ElementType.object, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
         )
 
-    def modify_event(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
+    def modify_event(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
         return self.__modify_element(
-            ElementType.event, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
+            ElementType.event, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
         )
 
-    def modify_context(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
+    def modify_context(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
         return self.__modify_element(
-            ElementType.context, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
+            ElementType.context, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
         )
 
-    def modify_relation(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, stream=None):
+    def modify_relation(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
         return self.__modify_element(
-            ElementType.relation, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), stream
+            ElementType.relation, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
         )
 
     def modify_action_data(self, uid, action_data, frame_value):
@@ -1144,13 +1144,14 @@ class VCD:
                         fis_new = FrameIntervals(frame_value)
                         fis_union = fis_existing.union(fis_new)
                         ont_uid = None
-                        stream = None
+                        coordinate_system = None
                         if 'ontology_uid' in element:
                             ont_uid = element['ontology_uid']
-                        if 'stream' in element:
-                            stream = element['stream']
+                        if 'coordinate_system' in element:
+                            coordinate_system = element['coordinate_system']
                         self.__add_element(
-                            element_type, element['name'], element['type'], fis_union, UID(uid), UID(ont_uid), stream
+                            element_type, element['name'], element['type'], fis_union, UID(uid), UID(ont_uid),
+                            coordinate_system
                         )
 
                         # 2.- Inject the new elementdata using the framevalue

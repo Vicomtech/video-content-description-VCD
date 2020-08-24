@@ -58,6 +58,13 @@ class KITTI_Tracking_reader():
         object_reader = csv.reader(object_file, delimiter=' ')
 
         #########################################
+        # CREATE coordinate systems
+        #########################################
+        vcd.add_coordinate_system("odom", cs_type=types.CoordinateSystemType.scene_cs)
+        vcd.add_coordinate_system("vehicle-iso8855", cs_type=types.CoordinateSystemType.local_cs, parent_name="odom")
+        # Sensor coordinate systems are added below
+
+        #########################################
         # READ calibration matrices
         #########################################
         img_width_px = 1236
@@ -85,11 +92,13 @@ class KITTI_Tracking_reader():
                          uri="",
                          description="Velodyne roof",
                          stream_type=core.StreamType.lidar)
-        vcd.add_stream_properties(stream_name="VELO_TOP",
-                                    extrinsics=types.Extrinsics(
-                                        pose_scs_wrt_lcs_4x4=list(pose_velo_wrt_lcs_4x4.flatten())
-                                    ))
-
+        #vcd.add_stream_properties(stream_name="VELO_TOP",
+        #                            extrinsics=types.Extrinsics(
+        #                                pose_scs_wrt_lcs_4x4=list(pose_velo_wrt_lcs_4x4.flatten())
+        #                            ))
+        vcd.add_coordinate_system("VELO_TOP", cs_type=types.CoordinateSystemType.sensor_cs,
+                                  parent_name="vehicle-iso8855",
+                                  pose_wrt_parent=list(pose_velo_wrt_lcs_4x4.flatten()))
 
         #########################################
         # GPS/IMU info
@@ -103,10 +112,13 @@ class KITTI_Tracking_reader():
                          uri="",
                          description="GPS/IMU",
                          stream_type=core.StreamType.other)
-        vcd.add_stream_properties(stream_name="IMU",
-                                    extrinsics=types.Extrinsics(
-                                        pose_scs_wrt_lcs_4x4=list(pose_imu_wrt_lcs_4x4.flatten())
-                                    ))
+        #vcd.add_stream_properties(stream_name="IMU",
+        #                            extrinsics=types.Extrinsics(
+        #                                pose_scs_wrt_lcs_4x4=list(pose_imu_wrt_lcs_4x4.flatten())
+        #                            ))
+        vcd.add_coordinate_system("IMU", cs_type=types.CoordinateSystemType.sensor_cs,
+                                  parent_name="vehicle-iso8855",
+                                  pose_wrt_parent=list(pose_imu_wrt_lcs_4x4.flatten()))
 
 
         #########################################
@@ -153,12 +165,11 @@ class KITTI_Tracking_reader():
                                            height_px=img_height_px,
                                            camera_matrix_3x4=list(left_camera_K3x4.flatten()),
                                            distortion_coeffs_1xN=None
-                                       ),
-                                       extrinsics=types.Extrinsics(
-                                           pose_scs_wrt_lcs_4x4=list(pose_camleft_wrt_lcs_4x4.flatten())
                                        )
                                        )
-
+        vcd.add_coordinate_system("CAM_LEFT", cs_type=types.CoordinateSystemType.sensor_cs,
+                                  parent_name="vehicle-iso8855",
+                                  pose_wrt_parent=list(pose_camleft_wrt_lcs_4x4.flatten()))
 
         vcd.add_stream(stream_name="CAM_RIGHT",
                          uri="",
@@ -170,12 +181,11 @@ class KITTI_Tracking_reader():
                                         height_px=img_height_px,
                                         camera_matrix_3x4=list(right_camera_K3x4.flatten()),
                                         distortion_coeffs_1xN=None
-                                    ),
-                                    extrinsics=types.Extrinsics(
-                                        pose_scs_wrt_lcs_4x4=list(pose_camright_wrt_lcs_4x4.flatten())
                                     )
                                     )
-
+        vcd.add_coordinate_system("CAM_RIGHT", cs_type=types.CoordinateSystemType.sensor_cs,
+                                  parent_name="vehicle-iso8855",
+                                  pose_wrt_parent=list(pose_camright_wrt_lcs_4x4.flatten()))
 
         #########################################
         # ODOMETRY
@@ -224,11 +234,16 @@ class KITTI_Tracking_reader():
         frames_1xN = np.arange(0, odometry_4x4xN.shape[2], 1).reshape((1, odometry_4x4xN.shape[2]))
         r, c = frames_1xN.shape
         for i in range(0, c):
-            vcd.add_odometry(int(frames_1xN[0, i]),
-                                  types.Odometry(
-                                      pose_lcs_wrt_wcs_4x4=list(odometry_4x4xN[:, :, i].flatten())
-                                  )
-                                  )
+            vcd.add_transform(int(frames_1xN[0, i]), transform=types.Transform(
+                src_name="odom",
+                dst_name="vehicle-iso8855",
+                transform_src_to_dst_4x4=list(odometry_4x4xN[:, :, i].flatten())
+            ))
+            #vcd.add_odometry(int(frames_1xN[0, i]),
+            #                      types.Odometry(
+            #                          pose_lcs_wrt_wcs_4x4=list(odometry_4x4xN[:, :, i].flatten())
+            #                      )
+            #                      )
 
         #########################################
         # LABELS
@@ -251,7 +266,7 @@ class KITTI_Tracking_reader():
 
             bounding_box = types.bbox(name="box2D",
                                       val=(left, top, width, height),
-                                      stream='CAM_LEFT')
+                                      coordinate_system='CAM_LEFT')
 
             dimHeight = utils.float_2dec(float(row[10]))
             dimWidth = utils.float_2dec(float(row[11]))
@@ -273,8 +288,9 @@ class KITTI_Tracking_reader():
             cuboid = types.cuboid(name="box3D",
                                   val=(utils.float_2dec(locZ + cam_wrt_rear_axle_z), utils.float_2dec(-locX),
                                        utils.float_2dec(-locY + cam_height), 0, 0, utils.float_2dec(rotY),
-                                       utils.float_2dec(dimWidth), utils.float_2dec(dimLength), utils.float_2dec(dimHeight)))
-            # Note that if no "stream" parameter is given to this cuboid, LCS is assumed
+                                       utils.float_2dec(dimWidth), utils.float_2dec(dimLength), utils.float_2dec(dimHeight)),
+                                  coordinate_system="vehicle-iso8855")
+
 
             if not vcd.has(core.ElementType.object, str(trackID)):
                 # First time

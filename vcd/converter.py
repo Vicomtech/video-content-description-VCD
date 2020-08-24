@@ -673,10 +673,10 @@ class ConverterVCD420toVCD430:
     # 2) "streams" are at root and not inside "metadata"
     # 3) element_data_pointers in VCD 4.3.0 didn't exist in VCD 4.2.0
     # 4) UIDs are stored as strings in VCD 4.3.0 (e.g. ontology_uid)
+    # 5) coordinate_systems
 
     # TODO
-    # 5) Cuboids use quaternions
-    # 6) Arbitrary number of coordinate systems
+    # 6) Cuboids use quaternions
 
     # Other changes are implicitly managed by the VCD 4.3.0 API
 
