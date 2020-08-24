@@ -93,7 +93,8 @@ vcd_schema = {
                     "additionalProperties": False
                 },
                 "metadata": {"$ref": "#/definitions/metadata"},
-                "streams": {"$ref": "#/definitions/streams"}
+                "streams": {"$ref": "#/definitions/streams"},
+                "coordinate_systems": {"$ref": "#/definitions/coordinate_systems"}
             },
             "additionalProperties": False,
             "required": ["metadata"]
@@ -222,6 +223,13 @@ vcd_schema = {
             "patternProperties": {
                 "^": {"$ref": "#/definitions/stream"},
                 },
+            "type": "object",
+            "additionalProperties": False
+        },
+        "coordinate_systems": {
+            "patternProperties": {
+                        "^": {"$ref": "#/definitions/coordinate_system"}
+                    },
             "type": "object",
             "additionalProperties": False
         },
@@ -494,6 +502,37 @@ vcd_schema = {
             },
             "additionalProperties": False
         },
+        "coordinate_system": {
+            "description": "A coordinate_system is a 3D reference frame that act as placeholder"
+                           "of annotations.",
+            "properties": {
+                "type": {"type": "string"},
+                "parent": {"type": "string"},
+                "children": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                "pose_wrt_parent": {
+                    "description": "It is a 4x4 homogeneous matrix, to enable transform from\
+                                    3D Cartersian Systems easily. Note that the pose_children_wrt_parent_4x4 is\
+                                    the transform_parent_to_child_4x4:\
+                                    X_child = pose_child_wrt_parent_4x4 * X_parent\
+                                    X_child = transform_parent_to_child_4x4 * X_parent."
+                                   "NOTE: For camera or other projective systems (3D->2D) this pose is the extrinsic"
+                                   "calibration, the projection itself is encoded as the intrinsic information, which"
+                                   "is labeled inside the corresponding stream.",
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "example": [1.0, 0.0, 0.0, 10.0,
+                                0.0, 1.0, 0.0, 5.0,
+                                0.0, 0.0, 1.0, 1.0,
+                                0.0, 0.0, 0.0, 1.0]
+                },
+                "uid": {"type": "string"}
+            },
+            "required": ["type", "parent"],
+            "additionalProperties": False
+        },
         "stream": {
             "type": "object",
             "description": "A stream describes the source of a data sequence, usually a sensor.",
@@ -568,31 +607,6 @@ vcd_schema = {
                     }
                 }
             }],
-            "extrinsics": {
-                "type": "object",
-                "properties": {
-                    "pose_scs_wrt_lcs_4x4": {
-                        "description": "This is the pose of the Sensor Coordinate Sysmte (SCS)\
-                                       defined for this stream (e.g. camera) with respect to\
-                                       the Local Coordinate System (LCS), e.g. the projection\
-                                       in the ground of the middle of rear-axis in a vehicle, \
-                                       as defined in ISO 8855.\
-                                       It is a 4x4 homogeneous matrix, to enable transform from\
-                                       LCS to SCS easily. Note that the pose_scs_wrt_lcs_4x4 is\
-                                       the transform_lcs_to_scs_4x4:\
-                                       X_scs = pose_scs_wrt_lcs_4x4 * X_lcs\
-                                       X_scs = transform_lcs_wrt_scs_4x4 * X_lcs",
-                        "type": "array",
-                        "minItems": 16,
-                        "maxItems": 16,
-                        "items": {"type": "number"},
-                        "example": [1.0, 0.0, 0.0, 10.0,
-                                    0.0, 1.0, 0.0, 5.0,
-                                    0.0, 0.0, 1.0, 1.0,
-                                    0.0, 0.0, 0.0, 1.0]
-                    }
-                }
-            },
             "sync": {
                 "description": "This is the sync information for this Stream.\
                                If provided inside a certain frame, it can be used\

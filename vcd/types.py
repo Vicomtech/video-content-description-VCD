@@ -16,6 +16,15 @@ from enum import Enum
 import vcd.poly2d as poly
 
 
+class CoordinateSystemType(Enum):
+    sensor_cs = 1  # the coordinate system of a certain sensor
+    local_cs = 2  # e.g. vehicle-ISO8855 in OpenLABEL, or "base_link" in ROS
+    scene_cs = 3  # e.g. "odom" in ROS; starting as the first local-ls
+    geo_utm = 4  # In UTM coordinates
+    geo_wgs84 = 5  # In WGS84 elliptical Earth coordinates
+    custom = 6  # Any other coordinate system
+
+
 class Intrinsics:
     def __init__(self):
         self.data = dict()
@@ -75,16 +84,44 @@ class IntrinsicsFisheye(Intrinsics):
             self.data['intrinsics_fisheye'].update(additional_items)
 
 
-class Extrinsics():
-    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
-        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
-        assert (len(pose_scs_wrt_lcs_4x4) == 16)
+class Transform:
+    def __init__(self, src_name, dst_name, transform_src_to_dst_4x4, **additional_items):
+        assert (isinstance(transform_src_to_dst_4x4, list))
+        assert (len(transform_src_to_dst_4x4) == 16)
+        assert (isinstance(src_name, str))
+        assert (isinstance(dst_name, str))
         self.data = dict()
-        self.data['extrinsics'] = dict()
-        self.data['extrinsics']['pose_scs_wrt_lcs_4x4'] = pose_scs_wrt_lcs_4x4
-
+        name = src_name + "_to_" + dst_name
+        self.data[name] = dict()
+        self.data[name]['src'] = src_name
+        self.data[name]['dst'] = dst_name
+        self.data[name]['transform_src_to_dst_4x4'] = transform_src_to_dst_4x4
         if additional_items is not None:
-            self.data['extrinsics'].update(additional_items)
+            self.data[name].update(additional_items)
+
+
+class Pose(Transform):
+    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
+        # NOTE: the pose of subject_name system wrt to reference_name system is the transform
+        # from the reference_name system to the subject_name system
+        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
+
+
+class Extrinsics(Transform):
+    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
+        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
+
+
+#class Extrinsics():
+#    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
+#        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
+#        assert (len(pose_scs_wrt_lcs_4x4) == 16)
+#        self.data = dict()
+#        self.data['extrinsics'] = dict()
+#        self.data['extrinsics']['pose_scs_wrt_lcs_4x4'] = pose_scs_wrt_lcs_4x4
+
+#        if additional_items is not None:
+#            self.data['extrinsics'].update(additional_items)
 
 
 class StreamSync:
@@ -109,17 +146,18 @@ class StreamSync:
             self.data['sync'].update(additional_items)
 
 
-class Odometry():
-    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
-        self.data = dict()
-        self.data['odometry'] = dict()
-        assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
-        assert (len(pose_lcs_wrt_wcs_4x4) == 16)
+#class Odometry(Transform):
+#    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
+#        Transform.__init__(self, 'wcs', 'lcs', pose_lcs_wrt_wcs_4x4, additional_properties)
+        #self.data = dict()
+        #self.data['odometry'] = dict()
+        #assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
+        #assert (len(pose_lcs_wrt_wcs_4x4) == 16)
 
-        self.data['odometry']['pose_lcs_wrt_wcs_4x4'] = pose_lcs_wrt_wcs_4x4
+        #self.data['odometry']['pose_lcs_wrt_wcs_4x4'] = pose_lcs_wrt_wcs_4x4
 
-        if additional_properties is not None:
-            self.data['odometry'].update(additional_properties)
+        #if additional_properties is not None:
+        #    self.data['odometry'].update(additional_properties)
 
 
 class ObjectDataType(Enum):

@@ -707,6 +707,38 @@ class VCD:
         self.data['vcd']['ontologies'][str(length)] = ontology_name
         return str(length)
 
+    def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=[], uid=None):
+        assert(isinstance(cs_type, types.CoordinateSystemType))
+        # Create entry
+        self.data['vcd'].setdefault('coordinate_systems', {})
+        self.data['vcd']['coordinate_systems'][name] = {'type': cs_type.name,
+                                                        'parent': parent_name,
+                                                        'pose_wrt_parent': pose_wrt_parent,
+                                                        'children': []}
+        if uid is not None:
+            assert(isinstance(uid, str))
+            self.data['vcd']['coordinate_systems'][name].update({"uid": uid})
+
+        # Update parents
+        if parent_name != "":
+            found = False
+            for n, cs in self.data['vcd']['coordinate_systems'].items():
+                if n == parent_name:
+                    found = True
+                    cs['children'].append(name)
+            if not found:
+                warnings.warn("WARNING: Creating a coordinate system with a non-defined parent coordinate system."
+                              "Coordinate systems must be introduced in order")
+
+    def add_transform(self, frame_num, transform):
+        assert (isinstance(frame_num, int))
+        assert(isinstance(transform, types.Transform))
+
+        self.__add_frame(frame_num)  # this function internally checks if the frame already exists
+        self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
+        self.data['vcd']['frames'][frame_num]['frame_properties'].setdefault('transforms', dict())
+        self.data['vcd']['frames'][frame_num]['frame_properties']['transforms'].update(transform.data)
+
     def add_stream(self, stream_name, uri, description, stream_type):
         assert(isinstance(stream_name, str))
         assert(isinstance(uri, str))
@@ -734,22 +766,23 @@ class VCD:
             assert (isinstance(properties, dict))
             self.data['vcd']['frames'][frame_num]['frame_properties'].update(properties)
 
-    def add_odometry(self, frame_num, odometry):
-        assert(isinstance(frame_num, int))
-        assert(isinstance(odometry, types.Odometry))
+    #def add_odometry(self, frame_num, odometry):
+    #    assert(isinstance(frame_num, int))
+    #    assert(isinstance(odometry, types.Odometry))
 
-        self.__add_frame(frame_num)  # this function internally checks if the frame already exists
-        self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
-        self.data['vcd']['frames'][frame_num]['frame_properties'].update(odometry.data)
+    #    self.__add_frame(frame_num)  # this function internally checks if the frame already exists
+    #    self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
+    #    self.data['vcd']['frames'][frame_num]['frame_properties'].update(odometry.data)
 
-    def add_stream_properties(self, stream_name, properties=None, intrinsics=None, extrinsics=None, stream_sync=None):
+    #def add_stream_properties(self, stream_name, properties=None, intrinsics=None, extrinsics=None, stream_sync=None):
+    def add_stream_properties(self, stream_name, properties=None, intrinsics=None, stream_sync=None):
         has_arguments = False
         if intrinsics is not None:
             assert(isinstance(intrinsics, types.Intrinsics))
             has_arguments = True
-        if extrinsics is not None:
-            assert(isinstance(extrinsics, types.Extrinsics))
-            has_arguments = True
+        #if extrinsics is not None:
+        #    assert(isinstance(extrinsics, types.Extrinsics))
+        #    has_arguments = True
         if properties is not None:
             assert(isinstance(properties, dict))  # "Properties of Stream should be defined as a dictionary"
             has_arguments = True
@@ -783,9 +816,9 @@ class VCD:
                         if intrinsics is not None:
                             self.data['vcd']['streams'][stream_name]['stream_properties'].\
                                 update(intrinsics.data)
-                        if extrinsics is not None:
-                            self.data['vcd']['streams'][stream_name]['stream_properties'].\
-                                update(extrinsics.data)
+                        #if extrinsics is not None:
+                        #    self.data['vcd']['streams'][stream_name]['stream_properties'].\
+                        #        update(extrinsics.data)
                         if stream_sync is not None:
                             if stream_sync.data:
                                 self.data['vcd']['streams'][stream_name]['stream_properties'].\
@@ -804,9 +837,9 @@ class VCD:
                         if intrinsics is not None:
                             frame['frame_properties']['streams'][stream_name]['stream_properties'].\
                                 update(intrinsics.data)
-                        if extrinsics is not None:
-                            frame['frame_properties']['streams'][stream_name]['stream_properties'].\
-                                update(extrinsics.data)
+                        #if extrinsics is not None:
+                        #    frame['frame_properties']['streams'][stream_name]['stream_properties'].\
+                        #        update(extrinsics.data)
 
                         if stream_sync.data:
                             frame['frame_properties']['streams'][stream_name]['stream_properties'].\
