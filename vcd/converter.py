@@ -557,10 +557,8 @@ class ConverterVCD330toVCD430:
                             self.__add_attributes(object_data, currentObjectData)
 
                             # Add the object_data to the object
-                            if not vcd_430.has_element_data(core.ElementType.object, uid, currentObjectData):
-                                vcd_430.add_object_data(uid, currentObjectData, frame_num)
-                            else:
-                                vcd_430.update_object_data(uid, currentObjectData, frame_num)
+                            vcd_430.add_object_data(uid, currentObjectData, frame_num)
+
         if 'actions' in root:
             for action in root['actions']:
                 uid = str(action['uid'])
@@ -569,11 +567,8 @@ class ConverterVCD330toVCD430:
                 if 'ontologyUID' in action:
                     ontologyUID = str(action['ontologyUID'])
                 typeSemantic = action.get('type', '')  # required in VCD 4.0, not in VCD 3.3.0
+                vcd_430.add_action(name, typeSemantic, frame_num, uid, ontologyUID)
 
-                if not vcd_430.has(core.ElementType.action, uid):
-                    vcd_430.add_action(name, typeSemantic, frame_num, uid, ontologyUID)
-                else:
-                    vcd_430.update_action(uid, frame_num)
         if 'events' in root:
             for event in root['events']:
                 uid = str(event['uid'])
@@ -582,11 +577,8 @@ class ConverterVCD330toVCD430:
                 if 'ontologyUID' in event:
                     ontologyUID = str(event['ontologyUID'])
                 typeSemantic = event.get('type', '')
+                vcd_430.add_event(name, typeSemantic, frame_num, uid, ontologyUID)
 
-                if not vcd_430.has(core.ElementType.event, uid):
-                    vcd_430.add_event(name, typeSemantic, frame_num, uid, ontologyUID)
-                else:
-                    vcd_430.update_event(uid, frame_num)
         if 'contexts' in root:
             for context in root['contexts']:
                 uid = str(context['uid'])
@@ -595,11 +587,8 @@ class ConverterVCD330toVCD430:
                 if 'ontologyUID' in context:
                     ontologyUID = str(context['ontologyUID'])
                 typeSemantic = context.get('type', '')
+                vcd_430.add_context(name, typeSemantic, frame_num, uid, ontologyUID)
 
-                if not vcd_430.has(core.ElementType.context, uid):
-                    vcd_430.add_context(name, typeSemantic, frame_num, uid, ontologyUID)
-                else:
-                    vcd_430.update_context(uid, frame_num)
         if 'relations' in root:
             for relation in root['relations']:
                 uid = str(relation['uid'])
@@ -611,8 +600,8 @@ class ConverterVCD330toVCD430:
                 rdf_objects = relation.get('rdf_objects', None)
                 rdf_subjects = relation.get('rdf_subjects', None)
 
-                if not vcd_430.has(core.ElementType.relation, uid):
-                    vcd_430.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
+                vcd_430.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
+                if not 'rdf_objects' in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
                     for rdf_object in rdf_objects:
                         element_type = None
                         rdf_object_type_str = rdf_object['type']
@@ -628,6 +617,8 @@ class ConverterVCD330toVCD430:
                             warnings.warn("ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.")
 
                         vcd_430.add_rdf(uid, core.RDF.object, str(rdf_object['uid']), element_type)
+
+                if not 'rdf_subjects' in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
                     for rdf_subject in rdf_subjects:
                         element_type = None
                         rdf_object_type_str = rdf_subject['type']
@@ -643,8 +634,7 @@ class ConverterVCD330toVCD430:
                             warnings.warn("ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.")
 
                         vcd_430.add_rdf(uid, core.RDF.subject, str(rdf_subject['uid']), element_type)
-                else:
-                    vcd_430.update_relation(uid, frame_num)
+
 
     def __add_attributes(self, src330, object_data430):
         # Add any attributes

@@ -97,20 +97,20 @@ class TestBasic(unittest.TestCase):
         self.assertDictEqual(fis[1], {'frame_start': 15, 'frame_end': 20})
 
         # Usual "just-one-frame" update for online operation: internally updates frame interval using FUSION (UNION)
-        vcd.update_action(uid1, 21)
+        vcd.add_action('Drinking_5', 'distraction/Drinking', 21, uid1)  # default SetMode is union
         fis = vcd.get_element_frame_intervals(core.ElementType.action, uid1).get_dict()
         self.assertDictEqual(fis[0], {'frame_start': 5, 'frame_end': 10})
         self.assertDictEqual(fis[1], {'frame_start': 15, 'frame_end': 21})
 
         # Entire modification with potential removal and extension
-        vcd.modify_action(uid1, None, None, [(5, 11), (17, 20)])  # adding 11, and deleting 15, 16, and 21
+        vcd.add_action('Drinking_5', 'distraction/Drinking', [(5, 11), (17, 20)], uid1, set_mode=core.SetMode.replace)  # adding 11, and deleting 15, 16, and 21
         fis = vcd.get_element_frame_intervals(core.ElementType.action, uid1).get_dict()
         self.assertDictEqual(fis[0], {'frame_start': 5, 'frame_end': 11})
         self.assertDictEqual(fis[1], {'frame_start': 17, 'frame_end': 20})
 
         # Complex modification of element_data level information
         vcd.add_action_data(uid1, types.text('label', 'manual'), [(5, 5), (11, 11), (20, 20)])
-        vcd.update_action_data(uid1, types.text('label', 'auto'), [(11, 11)]) # this is an update, we want to modify
+        vcd.add_action_data(uid1, types.text('label', 'auto'), [(11, 11)]) # this is an update, we want to modify
         # part of the action_data, without the need to substitute it entirely. This function can alse be used to
         # increase element's range
 
@@ -129,14 +129,14 @@ class TestBasic(unittest.TestCase):
         self.assertDictEqual(fis[0], {'frame_start': 5, 'frame_end': 25})
 
         # Note: any further modification of Action also modifies (e.g. removes) any action_data
-        vcd.modify_action(uid1, None, None, [(5, 11), (15, 19)])  # removing frames 20 and 21, and also from 12 to 14
+        vcd.add_action('Drinking_5', 'distraction/Drinking', [(5, 11), (15, 19)], uid1, set_mode=core.SetMode.replace)  # removing frames 20 and 21, and also from 12 to 14
         fis = vcd.get_element_frame_intervals(core.ElementType.action, uid1).get_dict()
         self.assertDictEqual(fis[0], {'frame_start': 5, 'frame_end': 11})
         self.assertDictEqual(fis[1], {'frame_start': 15, 'frame_end': 19})
         self.assertEqual(vcd.get_action_data(uid1, 'label', 20), None)
 
         # Action data can also be "modified", which means fully substituted
-        vcd.modify_action_data(uid1, types.text('label', 'auto'), [(7, 26), (28, 28)])  # this will remove 5, 6 and add 26 and 28
+        vcd.add_action_data(uid1, types.text('label', 'auto'), [(7, 26), (28, 28)], set_mode=core.SetMode.replace)  # this will remove 5, 6 and add 26 and 28
         fis_ad = vcd.get_action_data_frame_intervals(uid1, 'label').get_dict()
         self.assertDictEqual(fis_ad[0], {'frame_start': 7, 'frame_end': 26})
         self.assertDictEqual(fis_ad[1], {'frame_start': 28, 'frame_end': 28})

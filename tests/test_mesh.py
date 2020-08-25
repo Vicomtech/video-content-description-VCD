@@ -251,10 +251,8 @@ class TestBasic(unittest.TestCase):
 
             # We add and then update. Note we use a different name "parkslot1_dyn", because "parkslot1" is used for
             # a static object_data
-            if frame_num == 0:
-                vcd.add_object_data("0", mesh1_frame, frame_num)
-            else:
-                vcd.update_object_data("0", mesh1_frame, frame_num)
+            vcd.add_object_data("0", mesh1_frame, frame_num)
+
 
         # Save it
         if not os.path.isfile('./etc/vcd430_test_mesh_frame.json'):

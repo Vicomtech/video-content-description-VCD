@@ -59,8 +59,8 @@ class TestBasic(unittest.TestCase):
                 # print("Frame 3, full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
 
             elif 3 <= frameNum <= 11:
-                vcd.update_action(talkingUID, frameNum)
-                vcd.update_context(noisyUID, frameNum)
+                vcd.add_action('Talking', '#Talking', frameNum, talkingUID)
+                vcd.add_context('Noisy', '', frameNum, noisyUID)
 
                 # print("Frame ", frameNum, ", dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
                 # print("Frame ", frameNum, ", full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
@@ -343,6 +343,7 @@ class TestBasic(unittest.TestCase):
             vcd.save('./etc/vcd430_test_kitti_tracking_0_actions.json', False)
 
         vcd_read = core.VCD('./etc/vcd430_test_kitti_tracking_0_actions.json')
+        vcd.save('./etc/prueba.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
 

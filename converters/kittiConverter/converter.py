@@ -296,18 +296,12 @@ class KITTI_Tracking_reader():
                 # First time
                 vcd.add_object(name="", semantic_type=semantic_class, uid=str(trackID))
 
-                vcd.add_object_data(str(trackID), bounding_box, frameNum)
-                vcd.add_object_data(str(trackID), cuboid, frameNum)
-                vcd.add_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
-                vcd.add_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
-                vcd.add_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
-            else:
-                # Already exists, call update
-                vcd.update_object_data(str(trackID), bounding_box, frameNum)
-                vcd.update_object_data(str(trackID), cuboid, frameNum)
-                vcd.update_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
-                vcd.update_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
-                vcd.update_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
+            vcd.add_object_data(str(trackID), bounding_box, frameNum)
+            vcd.add_object_data(str(trackID), cuboid, frameNum)
+            vcd.add_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
+            vcd.add_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
+            vcd.add_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
+
 
         # Return
         return vcd

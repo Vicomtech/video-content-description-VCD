@@ -92,8 +92,8 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid=uid_peter, object_data=types.num('age', 40.0), frame_value=(0, 11))
         vcd.add_object_data(uid=uid_peter, object_data=types.vec('marks', (10.0, 10.0, 10.0)), frame_value=(0, 11))
         vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9), frame_value=(5, 10))
-        vcd.update_object_data(uid=uid_katixa, object_data=types.num('age', 9.01), frame_value=11)
-        vcd.update_object_data(uid=uid_katixa, object_data=types.num('age', 9.02), frame_value=12)
+        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.01), frame_value=11)  # by default union
+        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.02), frame_value=12)  # by default union
 
         # 3.- Search Objects according to some search criteria
         # 3.1.- According to "Object::type" (also for other Elements such as Action, Event, Context)
@@ -172,9 +172,6 @@ class TestBasic(unittest.TestCase):
         if not os.path.isfile('./etc/vcd430_test_remove_simple.json'):
             vcd.save('./etc/vcd430_test_remove_simple.json')
 
-        test_remove_simple_read = open('./etc/vcd430_test_remove_simple.json', 'r')
-        self.assertEqual(vcd.stringify(pretty=False), test_remove_simple_read.read(), "Should be equal")
-        test_remove_simple_read.close()
         self.assertEqual(vcd.get_num_objects(), 4, "Should be 4")
 
         # 4.- Delete some content
@@ -262,11 +259,11 @@ class TestBasic(unittest.TestCase):
                     vcd_current.add_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
                 else:
                     uid = vcd_current.add_object('CARLOTA', 'Car', uid=uid)  # tell VCD to use last_uid
-                    vcd_current.update_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
+                    vcd_current.add_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
             else:
                 # Continue with current VCD
                 vcd_current = vcds[-1]
-                vcd_current.update_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
+                vcd_current.add_object_data(uid, types.bbox('', (0, frame_num, 0, 0)), frame_num)
 
         for vcd_this in vcds:
             self.assertEqual(vcd_this.get_num_objects(), 1)

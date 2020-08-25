@@ -176,6 +176,9 @@ class UID:
         else:
             return False
 
+class SetMode(Enum):
+    union = 1
+    replace = 2
 
 class VCD:
     """
@@ -319,7 +322,6 @@ class VCD:
             self.__set_vcd_frame_intervals(fis_union)
 
     def __add_frame(self, frame_num):
-        # self.data['vcd']['frames'].setdefault(frame_num, {}) # 3.8 secs - 10.000 times
         if 'frames' not in self.data['vcd']:
             self.data['vcd']['frames'] = {}
         if frame_num not in self.data['vcd']['frames']:
@@ -376,99 +378,30 @@ class VCD:
                     frame.setdefault(element_type.name + 's', {})
                     frame[element_type.name + 's'].setdefault(uid.as_str(), {})
 
-    def __add_element(
-            self, element_type, name, semantic_type, frame_intervals=None, uid=None, ont_uid=None,
-            coordinate_system=None
+    def __set_element(
+            self, element_type, name, semantic_type, frame_intervals, uid, ont_uid,
+            coordinate_system, set_mode
     ):
-        if uid is not None:
-            assert(isinstance(uid, UID))
-        else:
-            uid = UID()  # so we don't have more None types
-        if ont_uid is not None:
-            assert(isinstance(ont_uid, UID))
-        else:
-            ont_uid = UID()  # so we don't have more None types
+        assert (isinstance(uid, UID))
+        assert (isinstance(ont_uid, UID))
+        assert (isinstance(frame_intervals, FrameIntervals))
+        assert (isinstance(set_mode, SetMode))
 
-        # 0.- Check if element already exists
-        element_exists = self.has(element_type, uid.as_str())  # note: public functions use int or str for uids
+        fis = frame_intervals
+        if set_mode == SetMode.union:
+            # Union means fusion, we are calling this function to "add" content, not to remove any
+            fis_existing = self.get_element_frame_intervals(element_type, uid.as_str())
+            fis = fis_existing.union(frame_intervals)
 
-        # 1.- Get uid to assign
+        # 0.- Get uid_to_assign
         uid_to_assign = self.__get_uid_to_assign(element_type, uid)  # note: private functions use UID type for uids
 
-        # 2.- Update Root element (['vcd']['element']), overwrites content
-        fis_old = self.get_element_frame_intervals(element_type, uid.as_str())
-        self.__create_update_element(element_type, name, semantic_type, frame_intervals, uid_to_assign, ont_uid, coordinate_system)
+        # 1.- Set the root entries and frames entries
+        self.__set_element_at_root_and_frames(element_type, name, semantic_type, fis, uid_to_assign, ont_uid, coordinate_system)
 
-        # 3.- Update frames entries and VCD frame intervals
-        if not frame_intervals.empty():
-            # 3.1.- Element with explicit frame interval argument, let's study if we need to remove or add
-            if element_exists:
-                # 3.1.1.- Loop over new to add it not inside old
-                fis_new = frame_intervals
-                for fi in fis_new.get():
-                    for f in range(fi[0], fi[1]+1):
-                        is_inside = fis_old.has_frame(f)
-                        if not is_inside:
-                            # New frame is not inside -> let's add this frame
-                            fi_ = FrameIntervals(f)
-                            self.__add_frames(fi_, element_type, uid)
-                            self.__update_vcd_frame_intervals(fi_)
-                # 3.1.2.- Remove frames: loop over old to delete old if not inside new
-                for fi in fis_old.get():
-                    for f in range(fi[0], fi[1]+1):
-                        is_inside = fis_new.has_frame(f)
-                        if not is_inside:
-                            # Old frame not inside new ones -> let's remove this frame
-                            elements_in_frame = self.data['vcd']['frames'][f][element_type.name +'s']
-                            del elements_in_frame[uid.as_str()]
-                            if len(elements_in_frame) == 0:
-                                del self.data['vcd']['frames'][f][element_type.name +'s']
-                                if len(self.data['vcd']['frames'][f]) == 0:
-                                    self.__rm_frame(f)
-            else:
-                # As the element didnt exist before this call, we just need to addframes
-                self.__add_frames(frame_intervals, element_type, uid_to_assign)
-                self.__update_vcd_frame_intervals(frame_intervals)
-        else:
-            # 3.2.- This element does not have a specific frame_interval...
-            vcd_frame_intervals = self.get_frame_intervals()
-            if vcd_frame_intervals.empty():
-                # ... but VCD has already other elements or info that have established some frame intervals
-                # The element is then assumed to exist in all frames: let's add a pointer into all frames (also
-                # for Relations!)
-                self.__add_frames(vcd_frame_intervals, element_type, uid_to_assign)
         return uid_to_assign
 
-    def __update_element(self, element_type, uid, frame_intervals):
-        assert(isinstance(element_type, ElementType))
-        assert(isinstance(uid, UID))
-        assert(isinstance(frame_intervals, FrameIntervals))
-
-        # Check if this uid exists
-        if uid.as_str() not in self.data['vcd'][element_type.name + 's']:
-            warnings.warn("WARNING: trying to update a non-existing Element.")
-            return False
-
-        # Read existing data about this element, so we can call __add_element
-        name = self.data['vcd'][element_type.name + 's'][uid.as_str()]['name']
-        semantic_type = self.data['vcd'][element_type.name + 's'][uid.as_str()]['type']
-        ont_uid = None
-        coordinate_system = None
-        if 'ontology_uid' in self.data['vcd'][element_type.name + 's'][uid.as_str()]:
-            ont_uid = UID(self.data['vcd'][element_type.name + 's'][uid.as_str()]['ontology_uid'])
-        if 'coordinate_system' in self.data['vcd'][element_type.name + 's'][uid.as_str()]:
-            coordinate_system = self.data['vcd'][element_type.name + 's'][uid.as_str()]['coordinate_system']
-
-        # Call __add_element (which internally creates OR updates)
-        fis_existing = self.get_element_frame_intervals(element_type, uid.as_str())
-        fis_union = fis_existing.union(frame_intervals)
-        self.__add_element(element_type, name, semantic_type, fis_union, uid, ont_uid, coordinate_system)
-
-    def __modify_element(self, element_type, uid, name=None, semantic_type=None, frame_intervals=None,
-                         ont_uid=None, coordinate_system=None):
-        self.__add_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, coordinate_system)
-
-    def __create_update_element(
+    def __set_element_at_root_and_frames(
             self, element_type, name, semantic_type, frame_intervals, uid, ont_uid, coordinate_system
     ):
         # 1.- Copy from existing or create new entry (this copies everything, including element_data)
@@ -476,6 +409,10 @@ class VCD:
         self.data['vcd'].setdefault(element_type.name + 's', {})
         self.data['vcd'][element_type.name + 's'].setdefault(uid.as_str(), {})
         element = self.data['vcd'][element_type.name + 's'][uid.as_str()]
+
+        fis_old = FrameIntervals()
+        if 'frame_intervals' in element:
+            fis_old = FrameIntervals(element['frame_intervals'])
 
         # 2.- Copy from arguments
         if name is not None:
@@ -486,16 +423,16 @@ class VCD:
             element['frame_intervals'] = frame_intervals.get_dict()
         if not ont_uid.is_none() and self.get_ontology(ont_uid.as_str()):
             element['ontology_uid'] = ont_uid.as_str()
-        if coordinate_system is not None and self.has_stream(coordinate_system):
+        if coordinate_system is not None and self.has_coordinate_system(coordinate_system):
             element['coordinate_system'] = coordinate_system
 
-        # 3.- Reshape element_data_poitners according to this new frame intervals
+        # 3.- Reshape element_data_pointers according to this new frame intervals
         if not frame_intervals.empty():
             if element_type.name + '_data_pointers' in element:
                 edps = element[element_type.name + '_data_pointers']
                 for edp_name in edps:
-                    # NOW, we have to UPDATE frame intervals of pointers: NOT ADDING
-                    # (to add use MODIFY_ELEMENT_DATA) BUT REMOVING
+                    # NOW, we have to UPDATE frame intervals of pointers because we have modified the frame_intervals
+                    # of the element itself, adn
                     # If we compute the intersection frame_intervals, we can copy that into
                     # element_data_pointers frame intervals
                     fis_int = frame_intervals.intersection(FrameIntervals(edps[edp_name]['frame_intervals']))
@@ -504,37 +441,159 @@ class VCD:
                         element[element_type.name + '_data_pointers'][edp_name] = edps[edp_name]
                         element[element_type.name + '_data_pointers'][edp_name]['frame_intervals'] = fis_int.get_dict()
 
-    def __add_element_data(self, element_type, uid, element_data, frame_intervals):
+        # 4.- Now set at frames
+        element_exists = self.has(element_type, uid.as_str())  # note: public functions use int or str for uids
+        if not frame_intervals.empty():
+            # 2.1.- There is frame_intervals specified
+            if not element_exists:
+                # 2.1.a) Just create the new element
+                self.__add_frames(frame_intervals, element_type, uid)
+                self.__update_vcd_frame_intervals(frame_intervals)
+            else:
+                # 2.1.b) This is a substitution: depending on the new frame_intervals, we may need to delete/add frames
+                # Add
+                fis_new = frame_intervals
+                for fi in fis_new.get():
+                    for f in range(fi[0], fi[1] + 1):
+                        is_inside = fis_old.has_frame(f)
+                        if not is_inside:
+                            # New frame is not inside -> let's add this frame
+                            fi_ = FrameIntervals(f)
+                            self.__add_frames(fi_, element_type, uid)
+                            self.__update_vcd_frame_intervals(fi_)
+                # Remove
+                for fi in fis_old.get():
+                    for f in range(fi[0], fi[1] + 1):
+                        is_inside = fis_new.has_frame(f)
+                        if not is_inside:
+                            # Old frame not inside new ones -> let's remove this frame
+                            elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
+                            del elements_in_frame[uid.as_str()]
+                            if len(elements_in_frame) == 0:
+                                del self.data['vcd']['frames'][f][element_type.name + 's']
+                                if len(self.data['vcd']['frames'][f]) == 0:
+                                    self.__rm_frame(f)
+        else:
+            # 2.2.- The element is declared as static
+            if element_type is not ElementType.relation:  # frame-less relation must remain frame-less
+                vcd_frame_intervals = self.get_frame_intervals()
+                if not vcd_frame_intervals.empty():
+                    # ... but VCD has already other elements or info that have established some frame intervals
+                    # The element is then assumed to exist in all frames: let's add a pointer into all frames
+                    self.__add_frames(vcd_frame_intervals, element_type, uid)
+
+    def __set_element_data(self, element_type, uid, element_data, frame_intervals, set_mode):
         assert(isinstance(uid, UID))
-        # 0.- Check if element
+        assert(isinstance(frame_intervals, FrameIntervals))
+        assert(isinstance(set_mode, SetMode))
+
+        # 0.- Checks
         if not self.has(element_type, uid.as_str()):
+            warnings.warn("WARNING: Trying to set element_data for a non-existing element.")
             return
+        element = self.get_element(element_type, uid.as_str())
 
-        # 1.- If new frameinterval, update root element, frames and vcd
-        # as this frame interval refers to an element_data, we need to NOT delete frames from element
-        if frame_intervals is not None and not frame_intervals.empty():
-            element = self.get_element(element_type, uid.as_str())
-            ont_uid = None
-            coordinate_system = None
-            if 'ontology_uid' in element:
-                ont_uid = UID(element['ontology_uid'])
-            if 'coordinate_system' in element:
-                coordinate_system = element['coordinate_system']
+        # Read existing data about this element, so we can call __set_element
+        name = element['name']
+        semantic_type = element['type']
+        ont_uid = UID(None)
+        cs = None
+        if 'ontology_uid' in element:
+            ont_uid = UID(element['ontology_uid'])
+        if 'coordinate_system' in element:
+            cs = element['coordinate_system']
 
-            # Prepare union of frame intervals to update element
-            fis_element = self.get_element_frame_intervals(element_type, uid.as_str())
-            fis_union = fis_element.union(frame_intervals)
-            self.__add_element(element_type, element['name'], element['type'], fis_union, uid, ont_uid, coordinate_system)
+        if 'coordinate_system' in element_data.data:
+            if not self.has_coordinate_system(element_data.data['coordinate_system']):
+                warnings.warn("WARNING: Trying to set element_data with a non-declared coordinate system.")
+                return
 
-        # 2.- Inject/substitute Element_data
-        self.__create_update_element_data(element_type, uid, element_data, frame_intervals)
+        if frame_intervals.empty() and set_mode == SetMode.union:
+            set_mode = SetMode.replace
 
-        # 3.- Update element_data_pointers
-        # IMPORTANT: here we use frame_intervals, and NOT the fusion, because "add" concept is to create or modify,
-        # but not to update (fuse)
-        self.__create_update_element_data_pointers(element_type, uid, element_data, frame_intervals)
+        if set_mode == SetMode.replace:
+            # Extend also the container Element just in case the frame_interval of this element_data is beyond it
+            # removes/creates frames if needed
+            # This call is to modify an existing element_data, which may imply removing some frames
+            if not frame_intervals.empty():
+                fis_existing = FrameIntervals(element['frame_intervals'])
+                fis_new = frame_intervals
+                fis_union = fis_existing.union(fis_new)
+                self.__set_element(element_type, name, semantic_type, fis_union, uid, ont_uid, cs, set_mode)
+                self.__set_element_data_content_at_frames(element_type, uid, element_data, frame_intervals)
+            else:
+                # This is a static element_data. If it was declared dynamic before, let's remove it
+                self.__set_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, cs, set_mode)
+                self.__set_element_data_content(element_type, element, uid, element_data)
+            # Set the pointers
+            self.__set_element_data_pointers(element_type, uid, element_data, frame_intervals)
+        else:  # set_mode = SetMode.union
+            # This call is to add element_data to the element, substituting content if overlap, otherwise adding
+            # First, extend also the container Element just in case the frame_interval of this element_data is beyond
+            # the currently existing frame_intervals of the Element
+            # internally computes the union
+            self.__set_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, cs, set_mode)
 
-    def __create_update_element_data_pointers(self, element_type, uid, element_data, frame_intervals):
+            if not frame_intervals.empty():
+                fis_existing = FrameIntervals()
+                if element_type.name + '_data_pointers' in element:
+                    edp = element[element_type.name + '_data_pointers']
+                    if element_data.data['name'] in edp:
+                        fis_existing = FrameIntervals(edp[element_data.data['name']]['frame_intervals'])
+                fis_new = frame_intervals
+                fis_union = fis_existing.union(fis_new)
+
+                # Dynamic
+                if element is not None:
+                    # It is not a simple call with the union of frame intervals
+                    # We need to substitute the content for just this frame_interval, without modifying the rest
+                    # that must stay as it was
+                    # Loop over the specified frame_intervals to create or substitute the content
+                    self.__set_element_data_content_at_frames(element_type, uid, element_data, fis_new)
+
+                # Set the pointers (but the pointers we have to update using the union)
+                self.__set_element_data_pointers(element_type, uid, element_data, fis_union)
+            else:
+                # Should not reach here because in this function we are already checking this at the beginning
+                # Just in case the check is removed, let's put here a second call to this function changing the set-mode
+                self.__set_element_data(element_type, uid, element_data, frame_intervals, SetMode.replace)
+
+    def __set_element_data_content_at_frames(self, element_type, uid, element_data, frame_intervals):
+        # Loop over the specified frame_intervals to create or substitute the content
+        # Create entries of the element_data at frames
+        fis = frame_intervals.get()
+        for fi in fis:
+            for f in range(fi[0], fi[1] + 1):
+                # Add element_data entry
+                frame = self.get_frame(f)  # TODO: check deep copy
+                if frame is None:
+                    self.__add_frame(f)
+                    frame = self.get_frame(f)
+
+                frame.setdefault(element_type.name + 's', {})
+                frame[element_type.name + 's'].setdefault(uid.as_str(), {})
+                element = frame[element_type.name + 's'][uid.as_str()]
+                self.__set_element_data_content(element_type, element, uid, element_data)
+
+    @staticmethod
+    def __set_element_data_content(element_type, element, uid, element_data):
+        # Adds the element_data to the corresponding container
+        # If an element_data with same name exists, it is substituted
+        element.setdefault(element_type.name + '_data', {})
+        element[element_type.name + '_data'].setdefault(element_data.type.name, [])
+        # Find if element_data already there
+        list_aux = element[element_type.name + '_data'][element_data.type.name]
+        pos_list = [idx for idx, val in enumerate(list_aux) if val['name'] == element_data.data['name']]
+
+        if len(pos_list) == 0:
+            # Not found, then just push this new element data
+            element[element_type.name + '_data'][element_data.type.name].append(element_data.data)
+        else:
+            # Found: let's substitute
+            pos = pos_list[0]
+            element[element_type.name + '_data'][element_data.type.name][pos] = element_data.data
+
+    def __set_element_data_pointers(self, element_type, uid, element_data, frame_intervals):
         assert(isinstance(uid, UID))
         self.data['vcd'][element_type.name + 's'][uid.as_str()].setdefault(element_type.name + '_data_pointers', {})
         edp = self.data['vcd'][element_type.name + 's'][uid.as_str()][element_type.name + '_data_pointers']
@@ -549,64 +608,6 @@ class VCD:
             for attr_type in element_data.data['attributes']:  # attr_type might be 'boolean', 'text', 'num', or 'vec'
                 for attr in element_data.data['attributes'][attr_type]:
                     edp[element_data.data['name']]['attributes'][attr['name']] = attr_type
-
-    def __create_update_element_data(self, element_type, uid, element_data, frame_intervals):
-        assert(isinstance(uid, UID))
-        # 0.- Check if element_data
-        if 'coordinate_system' in element_data.data:
-            if not self.has_stream(element_data.data['coordinate_system']):
-                return
-
-        # 1.- At root XOR frames, copy from existing or create new entry
-        if frame_intervals.empty():
-            # 1.1.- Static
-            element = self.get_element(element_type, uid.as_str())
-            if element is not None:
-                element.setdefault(element_type.name + '_data', {})
-                element[element_type.name + '_data'].setdefault(element_data.type.name, []) # e.g. bbox
-
-                # Find if element_data already there, if so, replace, otherwise, append
-                list_aux = element[element_type.name + '_data'][element_data.type.name]
-                pos_list = [idx for idx, val in enumerate(list_aux) if val['name'] == element_data.data['name']]
-                if len(pos_list) == 0:
-                    # No: then, just push this new element data
-                    element[element_type.name + '_data'][element_data.type.name].append(element_data.data)
-                else:
-                    # Yes, let's substitute
-                    pos = pos_list[0]
-                    element[element_type.name + '_data'][element_data.type.name][pos] = element_data.data  # TODO: Deep copy?
-            else:
-                warnings.warn("WARNING: trying to add objectdata to non-existing object, uid" + uid)
-        else:
-            # 1.2.- Dynamic (create at frames, which already exist because this function is called after add_element)
-            fis = frame_intervals.get()
-            for fi in fis:
-                for f in range(fi[0], fi[1]+1):
-                    # Add element_data entry
-                    frame = self.get_frame(f)  # TODO: check deep copy
-                    if frame is None:
-                        #warnings.warn("WARNING: create_update_element_data reaches a frame that does not exist."
-                        #              "Inner data flow may be broken!")
-                        self.__add_frame(f)
-                        frame = self.get_frame(f)
-                    frame.setdefault(element_type.name + 's', {})
-                    frame[element_type.name + 's'].setdefault(uid.as_str(), {})
-                    element = frame[element_type.name + 's'][uid.as_str()]
-                    element.setdefault(element_type.name + '_data', {})
-                    element[element_type.name + '_data'].setdefault(element_data.type.name, [])
-
-                    # Find if element_data already there
-                    list_aux = element[element_type.name + '_data'][element_data.type.name]
-                    pos_list = [idx for idx, val in enumerate(list_aux) if val['name'] == element_data.data['name']]
-
-                    if len(pos_list) == 0:
-                        # No, then just push this new element data
-                        element[element_type.name + '_data'][element_data.type.name].append(element_data.data)
-                    else:
-                        # Ok, this is either an error, or a call from modify, let's substitute
-                        pos = pos_list[0]
-                        element[element_type.name + '_data'][element_data.type.name][pos] = element_data.data
-        # Note: don't update here element_data_pointers, they are updated in create_update_element_data_pointers
 
     def __rm_frame(self, frame_num):
         # This function deletes a frame entry from frames, and updates VCD accordingly
@@ -766,15 +767,6 @@ class VCD:
             assert (isinstance(properties, dict))
             self.data['vcd']['frames'][frame_num]['frame_properties'].update(properties)
 
-    #def add_odometry(self, frame_num, odometry):
-    #    assert(isinstance(frame_num, int))
-    #    assert(isinstance(odometry, types.Odometry))
-
-    #    self.__add_frame(frame_num)  # this function internally checks if the frame already exists
-    #    self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
-    #    self.data['vcd']['frames'][frame_num]['frame_properties'].update(odometry.data)
-
-    #def add_stream_properties(self, stream_name, properties=None, intrinsics=None, extrinsics=None, stream_sync=None):
     def add_stream_properties(self, stream_name, properties=None, intrinsics=None, stream_sync=None):
         has_arguments = False
         if intrinsics is not None:
@@ -927,45 +919,31 @@ class VCD:
             else:
                 return json.dumps(frame_static_dynamic)
 
-    def update_object(self, uid, frame_value):
-        # This function is only needed if no add_object_data calls are used, but the object needs to be kept alive
-        return self.__update_element(ElementType.object, UID(uid), FrameIntervals(frame_value))
+    def add_object(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
+                   set_mode=SetMode.union):
+        return self.__set_element(ElementType.object, name, semantic_type, FrameIntervals(frame_value),
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
 
-    def update_action(self, uid, frame_value):
-        return self.__update_element(ElementType.action, UID(uid), FrameIntervals(frame_value))
+    def add_action(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
+                   set_mode=SetMode.union):
+        return self.__set_element(ElementType.action, name, semantic_type, FrameIntervals(frame_value),
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
 
-    def update_context(self, uid, frame_value):
-        return self.__update_element(ElementType.context, UID(uid), FrameIntervals(frame_value))
+    def add_event(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
+                   set_mode=SetMode.union):
+        return self.__set_element(ElementType.event, name, semantic_type, FrameIntervals(frame_value),
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
 
-    def update_relation(self, uid, frame_value):
-        if self.get_relation(uid) is not None:
-            if not self.relation_has_frame_intervals(uid):
-                warnings.warn("WARNING: Trying to update the frame information of a Relation defined as frame-less. "
-                              "Ignoring command.")
-            else:
-                return self.__update_element(ElementType.relation, UID(uid), FrameIntervals(frame_value))
+    def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
+                   set_mode=SetMode.union):
+        return self.__set_element(ElementType.context, name, semantic_type, FrameIntervals(frame_value),
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
 
-    def add_object(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
-        return self.__add_element(ElementType.object, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
-
-    def add_action(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
-        return self.__add_element(ElementType.action, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
-
-    def add_event(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
-        return self.__add_element(ElementType.event, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
-
-    def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None):
-        return self.__add_element(ElementType.context, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system).as_str()
-
-    def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None):
-        relation_uid = self.__add_element(
+    def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None,
+                   set_mode=SetMode.union):
+        relation_uid = self.__set_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
-            uid=UID(uid), ont_uid=UID(ont_uid)
-        )
+            uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None)
         return relation_uid.as_str()
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
@@ -1054,128 +1032,21 @@ class VCD:
 
         return relation_uid
 
-    def add_object_data(self, uid, object_data, frame_value=None):
-        if self.has_element_data(ElementType.object, uid, object_data):
-            warnings.warn("WARNING: This element already has an object_data with this name. "
-                          "This will substitute the content. To add new object_data at new frame_intervals "
-                          "use update_object_data. "
-                          "To modify an existing object_data, use modify_object_data.")
-        return self.__add_element_data(ElementType.object, UID(uid), object_data, FrameIntervals(frame_value))
+    def add_object_data(self, uid, object_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(ElementType.object, UID(uid), object_data, FrameIntervals(frame_value),
+                                       set_mode)
 
-    def add_action_data(self, uid, action_data, frame_value=None):
-        if self.has_element_data(ElementType.object, uid, action_data):
-            warnings.warn("WARNING: This element already has an action_data with this name. "
-                          "This will substitute the content. To add new action_data at new frame_intervals "
-                          "use update_action_data. "
-                          "To modify an existing action_data, use modify_action_data.")
-        return self.__add_element_data(ElementType.action, UID(uid), action_data, FrameIntervals(frame_value))
+    def add_action_data(self, uid, action_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(ElementType.action, UID(uid), action_data, FrameIntervals(frame_value),
+                                       set_mode)
 
-    def add_event_data(self, uid, event_data, frame_value=None):
-        if self.has_element_data(ElementType.object, uid, event_data):
-            warnings.warn("WARNING: This element already has an event_data with this name. "
-                          "This will substitute the content. To add new event_data at new frame_intervals "
-                          "use update_event_data. "
-                          "To modify an existing event_data, use modify_event_data.")
-        return self.__add_element_data(ElementType.evevt, UID(uid), event_data, FrameIntervals(frame_value))
+    def add_event_data(self, uid, event_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(ElementType.evevt, UID(uid), event_data, FrameIntervals(frame_value),
+                                       set_mode)
 
-    def add_context_data(self, uid, context_data, frame_value=None):
-        if self.has_element_data(ElementType.object, uid, context_data):
-            warnings.warn("WARNING: This element already has an context_data with this name. "
-                          "This will substitute the content. To add new context_data at new frame_intervals "
-                          "use update_context_data. "
-                          "To modify an existing context_data, use modify_context_data.")
-        return self.__add_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value))
-
-    def modify_action(self, uid, name=None, semantic_type=None, frame_value = None, ont_uid=None, coordinate_system=None):
-        return self.__modify_element(
-            ElementType.action, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
-        )
-
-    def modify_object(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
-        return self.__modify_element(
-            ElementType.object, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
-        )
-
-    def modify_event(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
-        return self.__modify_element(
-            ElementType.event, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
-        )
-
-    def modify_context(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
-        return self.__modify_element(
-            ElementType.context, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
-        )
-
-    def modify_relation(self, uid, name=None, semantic_type=None, frame_value=None, ont_uid=None, coordinate_system=None):
-        return self.__modify_element(
-            ElementType.relation, UID(uid), name, semantic_type, FrameIntervals(frame_value), UID(ont_uid), coordinate_system
-        )
-
-    def modify_action_data(self, uid, action_data, frame_value):
-        return self.add_action_data(uid, action_data, frame_value)
-
-    def modify_object_data(self, uid, object_data, frame_value):
-        return self.add_object_data(uid, object_data, frame_value)
-
-    def modify_event_data(self, uid, event_data, frame_value):
-        return self.add_event_data(uid, event_data, frame_value)
-
-    def modify_context_data(self, uid, context_data, frame_value):
-        return self.add_context_data(uid, context_data, frame_value)
-
-    def update_element_data(self, element_type, uid, element_data, frame_value=None):
-        assert(isinstance(element_type, ElementType))
-        assert(isinstance(element_data, types.ObjectData))
-        element = self.get_element(element_type, uid)
-
-        if frame_value is not None:
-            # Dynamic
-            if element is not None:
-                if element_type.name + '_data_pointers' in element:
-                    if element_data.data['name'] in element[element_type.name + '_data_pointers']:
-                        # It is not a simple call to addElementData with the union of frame intervals
-                        # We need to substitute the content for just frameValue, without modifying the rest that must
-                        # stay as it was
-
-                        # Similar to what is done in addElementData:
-                        # 1.- Update Root element, farmes and VCD (just in case this call to updateElementData just
-                        # adds one frame)
-                        fis_existing = FrameIntervals(element['frame_intervals'])
-                        fis_new = FrameIntervals(frame_value)
-                        fis_union = fis_existing.union(fis_new)
-                        ont_uid = None
-                        coordinate_system = None
-                        if 'ontology_uid' in element:
-                            ont_uid = element['ontology_uid']
-                        if 'coordinate_system' in element:
-                            coordinate_system = element['coordinate_system']
-                        self.__add_element(
-                            element_type, element['name'], element['type'], fis_union, UID(uid), UID(ont_uid),
-                            coordinate_system
-                        )
-
-                        # 2.- Inject the new elementdata using the framevalue
-                        # this will replace existing content at such frames, or create new entries
-                        self.__create_update_element_data(element_type, UID(uid), element_data, fis_new)
-
-                        # 3.- Update element_data_pointers
-                        self.__create_update_element_data_pointers(element_type, UID(uid), element_data, fis_union)
-        else:
-            # Static: so wa can't fuse frame intervals, this is a substitution
-            if element is not None:
-                self.__add_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value))
-
-    def update_action_data(self, uid, action_data, frame_value=None):
-        return self.update_element_data(ElementType.action, uid, action_data, frame_value)
-
-    def update_object_data(self, uid, object_data, frame_value=None):
-        return self.update_element_data(ElementType.object, uid, object_data, frame_value)
-
-    def update_event_data(self, uid, event_data, frame_value=None):
-        return self.update_element_data(ElementType.event, uid, event_data, frame_value)
-
-    def update_context_data(self, uid, context_data, frame_value=None):
-        return self.update_element_data(ElementType.context, uid, context_data, frame_value)
+    def add_context_data(self, uid, context_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value),
+                                       set_mode)
 
     ##################################################
     # Get / Read
@@ -1410,6 +1281,12 @@ class VCD:
         else:
             return dict()
 
+    def has_coordinate_system(self, cs):
+        if 'coordinate_systems' in self.data['vcd']:
+            if cs in self.data['vcd']['coordinate_systems']:
+                return True
+        return False
+
     def has_stream(self, stream):
         md = self.get_metadata()
         if 'streams' in md:
@@ -1494,11 +1371,10 @@ class VCD:
                 elements_in_frame = self.data['vcd']['frames'][frame_num][element_type.name + 's']
                 if uid in elements_in_frame:
                     del elements_in_frame[uid_str]
-                if len(elements_in_frame) == 0: # objects might have end up empty TODO: test this
+                if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
                     del self.data['vcd']['frames'][frame_num][element_type.name + 's']
-                    if len(self.data['vcd']['frames'][frame_num]) == 0: # this frame may have ended up being empty
+                    if len(self.data['vcd']['frames'][frame_num]) == 0:  # this frame may have ended up being empty
                         del self.data['vcd']['frames'][frame_num]
-
         # Delete this element from summary
         del elements[uid_str]
 

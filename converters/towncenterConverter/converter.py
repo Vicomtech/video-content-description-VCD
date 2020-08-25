@@ -11,6 +11,19 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+"""
+TownCentre dataset
+http://www.robots.ox.ac.uk/ActiveVision/Publications/benfold_reid_cvpr2011/benfold_reid_cvpr2011.html
+
+Copyright Notice
+This material is presented to ensure timely dissemination of scholarly and technical work. 
+Copyright and all rights therein are retained by authors or by other copyright holders. 
+All persons copying this information are expected to adhere to the terms and constraints invoked by 
+each author's copyright. In most cases, these works may not be reposted without the explicit permission 
+of the copyright holder.
+
+"""
+
 import csv
 import os
 import sys
@@ -22,12 +35,12 @@ import vcd.serializer as serializer
 
 
 def convert_town_center_to_VCD4():
-    if not os.path.isfile('./etc/in/townCentreXVID_groundTruth.top'):
+    if not os.path.isfile('./etc/townCentreXVID_groundTruth.top'):
         import urllib.request
         url = 'https://www.robots.ox.ac.uk/ActiveVision/Research/Projects/2009bbenfold_headpose/Datasets/TownCentre-groundtruth.top'
-        urllib.request.urlretrieve(url, './etc/in/townCentreXVID_groundTruth.top')
+        urllib.request.urlretrieve(url, './etc/townCentreXVID_groundTruth.top')
 
-    orig_file_name = "./etc/in/townCentreXVID_groundTruth.top"
+    orig_file_name = "./etc/townCentreXVID_groundTruth.top"
     vcd = core.VCD()
     with open(orig_file_name, newline='') as csvfile:
         my_reader = csv.reader(csvfile, delimiter=',')
@@ -60,20 +73,20 @@ def convert_town_center_to_VCD4():
                 vcd.add_object(name="", semantic_type="Pedestrian",
                                uid=personNumber)
                 if bodyValid:
-                    vcd.add_object_data(personNumber, body, frameNumber)
+                        vcd.add_object_data(personNumber, body, frameNumber)
                 if headValid:
-                    vcd.add_object_data(personNumber, head, frameNumber)
+                        vcd.add_object_data(personNumber, head, frameNumber)
             else:
                 if bodyValid:
                     vcd.add_object_data(personNumber, body, frameNumber)
                 if headValid:
                     vcd.add_object_data(personNumber, head, frameNumber)
 
-    vcd_json_file_name = "./etc/vcd420_towncenter.json"
+    vcd_json_file_name = "./etc/vcd430_towncenter.json"
     vcd.save(vcd_json_file_name, False)
 
-    vcd_proto_file_name = "./etc/vcd420_proto_towncenter.txt"
-    serializer.json2proto_bin(vcd_json_file_name, vcd_proto_file_name)
+    #vcd_proto_file_name = "./etc/vcd430_proto_towncenter.txt"
+    #serializer.json2proto_bin(vcd_json_file_name, vcd_proto_file_name)
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
