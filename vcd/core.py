@@ -176,9 +176,22 @@ class UID:
         else:
             return False
 
+
 class SetMode(Enum):
+    """
+    The SetMode specifies how added content is inserted.
+    SetMode.union is the default value,
+    and determines that any new call to add functions (e.g. add_object, or add_action_data),
+    actually adds content, extending the frame_intervals of the recipient container to the
+    limits defined by the newly provided frame_intervals, effectively extending it to the union
+    of frame_intervals (existing plus new), substituting the content which already existed
+    with coincident frame (and name, uid, etc).
+    SetMode.replace acts replacing old content by new, potentially removing frames if the newly
+    provided frame_intervals are shorter than the existing ones.
+    """
     union = 1
     replace = 2
+
 
 class VCD:
     """
@@ -208,12 +221,13 @@ class VCD:
                     # This is 4.1-2
                     if read_data['vcd']['version'] == "4.2.0":
                         # This is VCD 4.2.0
+                        warnings.warn("WARNING: Converting VCD 4.2.0 to VCD 4.3.0. A full revision is recommended.")
                         self.reset()  # to init object
                         converter.ConverterVCD420toVCD430(read_data, self)  # self is modified internally
 
                     elif read_data['vcd']['version'] == "4.1.0":
                         # This is VCD 4.1.0
-                        # TODO
+                        raise Exception("ERROR: VCD 4.1.0 to VCD 4.3.0 conversion is not implemented.")
                         pass
                 elif 'metadata' in read_data['vcd']:
                     if 'schema_version' in read_data['vcd']['metadata']:
@@ -238,7 +252,7 @@ class VCD:
                         raise Exception("ERROR: This vcd file does not seem to be 4.3.0 nor 4.2.0")
             elif 'VCD' in read_data:
                 # This is 3.x
-                #if read_data['VCD']['version'] == "3.3.0":
+                warnings.warn("WARNING: Converting VCD 3.3.0 to VCD 4.3.0. A full revision is recommended.")
                 # Assuming this is VCD 3.3.0, let's load into VCD 4.3.0
                 self.reset()  # to init object
                 converter.ConverterVCD330toVCD430(read_data, self)  # self is modified internally
@@ -397,7 +411,8 @@ class VCD:
         uid_to_assign = self.__get_uid_to_assign(element_type, uid)  # note: private functions use UID type for uids
 
         # 1.- Set the root entries and frames entries
-        self.__set_element_at_root_and_frames(element_type, name, semantic_type, fis, uid_to_assign, ont_uid, coordinate_system)
+        self.__set_element_at_root_and_frames(element_type, name, semantic_type, fis,
+                                              uid_to_assign, ont_uid, coordinate_system)
 
         return uid_to_assign
 
@@ -565,7 +580,7 @@ class VCD:
         for fi in fis:
             for f in range(fi[0], fi[1] + 1):
                 # Add element_data entry
-                frame = self.get_frame(f)  # TODO: check deep copy
+                frame = self.get_frame(f)
                 if frame is None:
                     self.__add_frame(f)
                     frame = self.get_frame(f)
@@ -627,7 +642,7 @@ class VCD:
                 fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
 
                 # Now substitute
-                self.data['vcd']['frame_intervals'] = fis_dict_new  # TODO: deep copy?
+                self.data['vcd']['frame_intervals'] = fis_dict_new
 
     def __compute_data_pointers(self):
         # WARNING! This function might be extremely slow
@@ -651,7 +666,8 @@ class VCD:
                                     # First, let's create a element_data_pointer at the root
                                     self.data['vcd'][element_type.name + 's'][uid].\
                                         setdefault(element_type.name + '_data_pointers', {})
-                                    edp = self.data['vcd'][element_type.name + 's'][uid][element_type.name + '_data_pointers']
+                                    edp = self.data['vcd'][element_type.name + 's'][uid]
+                                    [element_type.name + '_data_pointers']
 
                                     # Let's loop over the element_data
                                     for ed_type, ed_array in element[element_type.name + '_data'].items():
@@ -772,9 +788,6 @@ class VCD:
         if intrinsics is not None:
             assert(isinstance(intrinsics, types.Intrinsics))
             has_arguments = True
-        #if extrinsics is not None:
-        #    assert(isinstance(extrinsics, types.Extrinsics))
-        #    has_arguments = True
         if properties is not None:
             assert(isinstance(properties, dict))  # "Properties of Stream should be defined as a dictionary"
             has_arguments = True
@@ -808,9 +821,6 @@ class VCD:
                         if intrinsics is not None:
                             self.data['vcd']['streams'][stream_name]['stream_properties'].\
                                 update(intrinsics.data)
-                        #if extrinsics is not None:
-                        #    self.data['vcd']['streams'][stream_name]['stream_properties'].\
-                        #        update(extrinsics.data)
                         if stream_sync is not None:
                             if stream_sync.data:
                                 self.data['vcd']['streams'][stream_name]['stream_properties'].\
@@ -829,9 +839,6 @@ class VCD:
                         if intrinsics is not None:
                             frame['frame_properties']['streams'][stream_name]['stream_properties'].\
                                 update(intrinsics.data)
-                        #if extrinsics is not None:
-                        #    frame['frame_properties']['streams'][stream_name]['stream_properties'].\
-                        #        update(extrinsics.data)
 
                         if stream_sync.data:
                             frame['frame_properties']['streams'][stream_name]['stream_properties'].\
@@ -930,17 +937,17 @@ class VCD:
                                   UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
 
     def add_event(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
-                   set_mode=SetMode.union):
+                  set_mode=SetMode.union):
         return self.__set_element(ElementType.event, name, semantic_type, FrameIntervals(frame_value),
                                   UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
 
     def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
-                   set_mode=SetMode.union):
+                    set_mode=SetMode.union):
         return self.__set_element(ElementType.context, name, semantic_type, FrameIntervals(frame_value),
                                   UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
 
     def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None,
-                   set_mode=SetMode.union):
+                     set_mode=SetMode.union):
         relation_uid = self.__set_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
             uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None)
@@ -1022,7 +1029,8 @@ class VCD:
     def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
                                     relation_uid, ont_uid, frame_value=None):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
-        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid, frame_value=frame_value)
+        relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
+                                         frame_value=frame_value)
         assert(isinstance(subject_type, ElementType))
         assert(isinstance(object_type, ElementType))
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -1185,7 +1193,7 @@ class VCD:
     def get_frames_with_context_data_name(self, uid, data_name):
         return self.get_frames_with_element_data_name(ElementType.context, uid, data_name)
 
-    def get_element_data(self, element_type, uid, data_name, frame_num = None):
+    def get_element_data(self, element_type, uid, data_name, frame_num=None):
         uid_str = UID(uid).as_str()
         if self.has(element_type, uid):
             if frame_num is not None:
@@ -1330,7 +1338,6 @@ class VCD:
     ##################################################
     def rm_element_by_type(self, element_type, semantic_type):
         elements = self.data['vcd'][element_type.name + 's']
-        index = None
 
         # Get Element from summary
         uids_to_remove_str = []
