@@ -1,5 +1,48 @@
 import { VCD, ElementType, RDF } from '../vcd.core'
 import * as types from '../vcd.types'
+import vcd430_test_actions_a from '../../../tests/etc/vcd430_test_actions_a.json'
+import vcd430_test_actions_b from '../../../tests/etc/vcd430_test_actions_b.json'
+import vcd430_test_actions_c from '../../../tests/etc/vcd430_test_actions_c.json'
+import vcd430_test_relations_1 from '../../../tests/etc/vcd430_test_relations_1.json'
+import vcd430_test_relations_2 from '../../../tests/etc/vcd430_test_relations_2.json'
+import vcd430_test_relations_3 from '../../../tests/etc/vcd430_test_relations_3.json'
+
+
+test('test_semantics', () => {
+    let vcd = new VCD()
+
+    // Let's create some contexts, actions, and events
+    let officeUID = vcd.addContext('Room1', '#Office')
+
+    let talking_uid, start_talking_uid, noisy_uid, relation1_uid, relation2_uid;
+    for(let frameNum=0; frameNum<30; frameNum++) {
+        if (frameNum == 3) {
+            start_talking_uid = vcd.addEvent('', '#StartTalking', frameNum)
+            talking_uid = vcd.addAction('', '#Talking', frameNum)
+            noisy_uid = vcd.addContext('', '#Noisy', frameNum)
+
+            let relation1_uid = vcd.addRelation('', '#Starts')
+            vcd.addRdf(relation1_uid, RDF.subject, start_talking_uid, ElementType.event)
+            vcd.addRdf(relation1_uid, RDF.object, talking_uid, ElementType.action)
+
+            let relation2_uid = vcd.addRelation('', '#Causes')
+            vcd.addRdf(relation2_uid, RDF.subject, talking_uid, ElementType.action)
+            vcd.addRdf(relation2_uid, RDF.object, noisy_uid, ElementType.context)
+
+            expect(vcd.getNumRelations()).toBe(2)
+            expect(vcd.getRelation(relation2_uid)['rdf_subjects'].length).toBe(1)
+            expect(vcd.getRelation(relation2_uid)['rdf_subjects'][0]['uid']).toBe(talking_uid)
+        }
+
+        else if( frameNum >= 3 && frameNum <= 11) {            
+            vcd.addAction('', '#Talking', frameNum, talking_uid)
+            vcd.addContext('', '#Noisy', frameNum, noisy_uid)
+        }
+    }
+
+    //console.log(vcd.stringify(false))
+    expect(vcd.stringify(false)).toBe('{"vcd":{"metadata":{"schema_version":"4.3.0"},"contexts":{"0":{"name":"Room1","type":"#Office"},"1":{"name":"","type":"#Noisy","frame_intervals":[{"frame_start":3,"frame_end":11}]}},"events":{"0":{"name":"","type":"#StartTalking","frame_intervals":[{"frame_start":3,"frame_end":3}]}},"frames":{"3":{"events":{"0":{}},"actions":{"0":{}},"contexts":{"1":{}}},"4":{"actions":{"0":{}},"contexts":{"1":{}}},"5":{"actions":{"0":{}},"contexts":{"1":{}}},"6":{"actions":{"0":{}},"contexts":{"1":{}}},"7":{"actions":{"0":{}},"contexts":{"1":{}}},"8":{"actions":{"0":{}},"contexts":{"1":{}}},"9":{"actions":{"0":{}},"contexts":{"1":{}}},"10":{"actions":{"0":{}},"contexts":{"1":{}}},"11":{"actions":{"0":{}},"contexts":{"1":{}}}},"frame_intervals":[{"frame_start":3,"frame_end":11}],"actions":{"0":{"name":"","type":"#Talking","frame_intervals":[{"frame_start":3,"frame_end":11}]}},"relations":{"0":{"name":"","type":"#Starts","rdf_subjects":[{"uid":"0","type":"event"}],"rdf_objects":[{"uid":"0","type":"action"}]},"1":{"name":"","type":"#Causes","rdf_subjects":[{"uid":"0","type":"action"}],"rdf_objects":[{"uid":"1","type":"context"}]}}}}')
+});
 
 test('test_actions', () => {
     // 1.- Create VCD
@@ -44,11 +87,14 @@ test('test_actions', () => {
     vcd_c.addActionData(uid_action2, new types.Num("subject", +uid_car1))
 
     //console.log(vcd_a.stringify(false))
-    expect(vcd_a.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.0","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0","object_data":{"text":[{"name":"action","val":"Walking"}]},"object_data_pointers":{"action":{"type":"text","frame_intervals":[]}}},"1":{"name":"","type":"Car","ontology_uid":"0","object_data":{"text":[{"name":"action","val":"Parked"}]},"object_data_pointers":{"action":{"type":"text","frame_intervals":[]}}}}}}')
+    //expect(vcd_a.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.0","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0","object_data":{"text":[{"name":"action","val":"Walking"}]},"object_data_pointers":{"action":{"type":"text","frame_intervals":[]}}},"1":{"name":"","type":"Car","ontology_uid":"0","object_data":{"text":[{"name":"action","val":"Parked"}]},"object_data_pointers":{"action":{"type":"text","frame_intervals":[]}}}}}}')
+    expect(vcd_a.stringify(false)).toBe(new VCD(vcd430_test_actions_a, false).stringify(false))
     //console.log(vcd_b.stringify(false))
-    expect(vcd_b.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.0","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0"},"1":{"name":"","type":"Car","ontology_uid":"0"}},"actions":{"0":{"name":"","type":"Walking","ontology_uid":"0"},"1":{"name":"","type":"Parked","ontology_uid":"0"}},"relations":{"0":{"name":"","type":"performsAction","ontology_uid":"0","rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"0","type":"action"}]},"1":{"name":"","type":"performsAction","ontology_uid":"0","rdf_subjects":[{"uid":"1","type":"object"}],"rdf_objects":[{"uid":"1","type":"action"}]}}}}')
+    //expect(vcd_b.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.0","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0"},"1":{"name":"","type":"Car","ontology_uid":"0"}},"actions":{"0":{"name":"","type":"Walking","ontology_uid":"0"},"1":{"name":"","type":"Parked","ontology_uid":"0"}},"relations":{"0":{"name":"","type":"performsAction","ontology_uid":"0","rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"0","type":"action"}]},"1":{"name":"","type":"performsAction","ontology_uid":"0","rdf_subjects":[{"uid":"1","type":"object"}],"rdf_objects":[{"uid":"1","type":"action"}]}}}}')
+    expect(vcd_b.stringify(false)).toBe(new VCD(vcd430_test_actions_b, false).stringify(false))
     //console.log(vcd_c.stringify(false))
-    expect(vcd_c.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.0","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0"},"1":{"name":"","type":"Car","ontology_uid":"0"}},"actions":{"0":{"name":"","type":"Walking","ontology_uid":"0","action_data":{"num":[{"name":"subject","val":0}]},"action_data_pointers":{"subject":{"type":"num","frame_intervals":[]}}},"1":{"name":"","type":"Parked","ontology_uid":"0","action_data":{"num":[{"name":"subject","val":1}]},"action_data_pointers":{"subject":{"type":"num","frame_intervals":[]}}}}}}')
+    //expect(vcd_c.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.0","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0"},"1":{"name":"","type":"Car","ontology_uid":"0"}},"actions":{"0":{"name":"","type":"Walking","ontology_uid":"0","action_data":{"num":[{"name":"subject","val":0}]},"action_data_pointers":{"subject":{"type":"num","frame_intervals":[]}}},"1":{"name":"","type":"Parked","ontology_uid":"0","action_data":{"num":[{"name":"subject","val":1}]},"action_data_pointers":{"subject":{"type":"num","frame_intervals":[]}}}}}}')
+    expect(vcd_c.stringify(false)).toBe(new VCD(vcd430_test_actions_c, false).stringify(false))
 });
 
 test('test_relations', () => {
@@ -74,7 +120,8 @@ test('test_relations', () => {
     }
 
     //console.log(vcd.stringify(false))
-    expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"relations":{"0":{}}},"1":{"relations":{"0":{}}},"2":{"relations":{"0":{}}},"3":{"relations":{"0":{}}},"4":{"relations":{"0":{}}},"5":{"relations":{"0":{}}},"6":{"relations":{"0":{}}},"7":{"relations":{"0":{}}},"8":{"relations":{"0":{}}},"9":{"relations":{"0":{}}},"10":{"relations":{"0":{}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":10}],"objects":{"0":{"name":"","type":"Car"},"1":{"name":"","type":"Pedestrian"}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":0,"frame_end":10}],"rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
+    //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"relations":{"0":{}}},"1":{"relations":{"0":{}}},"2":{"relations":{"0":{}}},"3":{"relations":{"0":{}}},"4":{"relations":{"0":{}}},"5":{"relations":{"0":{}}},"6":{"relations":{"0":{}}},"7":{"relations":{"0":{}}},"8":{"relations":{"0":{}}},"9":{"relations":{"0":{}}},"10":{"relations":{"0":{}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":10}],"objects":{"0":{"name":"","type":"Car"},"1":{"name":"","type":"Pedestrian"}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":0,"frame_end":10}],"rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
+    expect(vcd.stringify(false)).toBe(new VCD(vcd430_test_relations_1, false).stringify(false))
 
     // Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
     vcd = new VCD()
@@ -99,7 +146,8 @@ test('test_relations', () => {
     }
 
     //console.log(vcd.stringify(false))
-    expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"8":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"9":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":15}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":7,"frame_end":9}],"rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
+    //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"8":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"9":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":15}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":7,"frame_end":9}],"rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
+    expect(vcd.stringify(false)).toBe(new VCD(vcd430_test_relations_2, false).stringify(false))
 
     // Case 3: RDF elements have frame interval and relation doesn't (so it is left frame-less)
     vcd = new VCD()
@@ -124,6 +172,7 @@ test('test_relations', () => {
     }
 
     //console.log(vcd.stringify(false))
-    expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}}},"8":{"objects":{"0":{},"1":{}}},"9":{"objects":{"0":{},"1":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{},"2":{}}},"16":{"objects":{"2":{}}},"17":{"objects":{"2":{}}},"18":{"objects":{"2":{}}},"19":{"objects":{"2":{}}},"20":{"objects":{"2":{}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":20}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]},"2":{"name":"","type":"Other","frame_intervals":[{"frame_start":15,"frame_end":20}]}},"relations":{"0":{"name":"","type":"isNear","rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
+    //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}}},"8":{"objects":{"0":{},"1":{}}},"9":{"objects":{"0":{},"1":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{},"2":{}}},"16":{"objects":{"2":{}}},"17":{"objects":{"2":{}}},"18":{"objects":{"2":{}}},"19":{"objects":{"2":{}}},"20":{"objects":{"2":{}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":20}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]},"2":{"name":"","type":"Other","frame_intervals":[{"frame_start":15,"frame_end":20}]}},"relations":{"0":{"name":"","type":"isNear","rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
+    expect(vcd.stringify(false)).toBe(new VCD(vcd430_test_relations_3, false).stringify(false))
    
 });

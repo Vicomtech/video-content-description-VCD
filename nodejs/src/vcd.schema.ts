@@ -26,9 +26,6 @@ export const vcd_schema = {
             "type": "object",
             "description": "This is the root VCD element.",
             "properties": {
-                "schema_version": {"type": "string", "enum": [vcd_schema_version]},
-                "file_version": {"type": "string"},
-                "name": {"type": "string"},
                 "frame_intervals": {
                     "type": "array",
                     "item": {"$ref": "#/definitions/frame_interval"}
@@ -36,7 +33,8 @@ export const vcd_schema = {
                 "ontologies": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {"type": "string"},
+                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
+                            {"type": "string"},
                     },
                     "additionalProperties": false
                 },
@@ -95,9 +93,11 @@ export const vcd_schema = {
                     "additionalProperties": false
                 },
                 "metadata": {"$ref": "#/definitions/metadata"},
+                "streams": {"$ref": "#/definitions/streams"},
+                "coordinate_systems": {"$ref": "#/definitions/coordinate_systems"}
             },
             "additionalProperties": false,
-            "required": ["schema_version"]
+            "required": ["metadata"]
         },
         "frame": {
             "type": "object",
@@ -210,23 +210,27 @@ export const vcd_schema = {
         "metadata": {
             "type": "object",
             "properties": {
-                "streams": {
-                    "patternProperties":{
-                        "^": {"$ref": "#/definitions/stream"},
-                    },
-                    "type": "object",
-                    "additionalProperties": false
-                },
-                "properties": {
-                    "type": "object",
-                    "patternProperties": {
-                        "^": {}
-                    },
-                    "additionalProperties": false
-                },
+                "schema_version": {"type": "string", "enum": [vcd_schema_version]},
+                "file_version": {"type": "string"},
+                "name": {"type": "string"},
                 "annotator": {"type": "string"},
                 "comment": {"type": "string"}
             },
+            "additionalProperties": true,
+            "required": ["schema_version"]
+        },
+        "streams": {
+            "patternProperties": {
+                "^": {"$ref": "#/definitions/stream"},
+                },
+            "type": "object",
+            "additionalProperties": false
+        },
+        "coordinate_systems": {
+            "patternProperties": {
+                        "^": {"$ref": "#/definitions/coordinate_system"}
+                    },
+            "type": "object",
             "additionalProperties": false
         },
         "object": {
@@ -239,7 +243,7 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "object_data": {"$ref": "#/definitions/object_data"},
                 "object_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -256,7 +260,7 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "action_data": {"$ref": "#/definitions/action_data"},
                 "action_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -273,7 +277,7 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "event_data": {"$ref": "#/definitions/event_data"},
                 "event_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -290,7 +294,7 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "context_data": {"$ref": "#/definitions/context_data"},
                 "context_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
             },
@@ -307,7 +311,6 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "stream": {"type": "string"},
                 "rdf_objects": {
                     "type": "array",
                     "item": {"$ref": "#/definitions/rdf_agent"}
@@ -343,7 +346,8 @@ export const vcd_schema = {
                 },
                 "type": {
                     "type": "string",
-                    "enum": ["bbox", "rbbox", "num", "text", "boolean", "poly2d", "poly3d", "cuboid", "image", "mat", "binary", "point2d", "point3d", "vec", "line_reference", "area_reference", "mesh"]
+                    "enum": ["bbox", "rbbox", "num", "text", "boolean", "poly2d", "poly3d", "cuboid", "image", "mat",
+                             "binary", "point2d", "point3d", "vec", "line_reference", "area_reference", "mesh"]
                 },
                 "attribute_pointers": {
                     "type": "object",
@@ -497,6 +501,36 @@ export const vcd_schema = {
             },
             "additionalProperties": false
         },
+        "coordinate_system": {
+            "description": "A coordinate_system is a 3D reference frame that act as placeholder of annotations.",
+            "properties": {
+                "type": {"type": "string"},
+                "parent": {"type": "string"},
+                "children": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                "pose_wrt_parent": {
+                    "description": "It is a 4x4 homogeneous matrix, to enable transform from\
+                                    3D Cartersian Systems easily. Note that the pose_children_wrt_parent_4x4 is\
+                                    the transform_parent_to_child_4x4:\
+                                    X_child = pose_child_wrt_parent_4x4 * X_parent\
+                                    X_child = transform_parent_to_child_4x4 * X_parent.\
+                                   NOTE: For camera or other projective systems (3D->2D) this pose is the extrinsic\
+                                   calibration, the projection itself is encoded as the intrinsic information, which\
+                                   is labeled inside the corresponding stream.",
+                    "type": "array",
+                    "items": {"type": "number"},
+                    "example": [1.0, 0.0, 0.0, 10.0,
+                                0.0, 1.0, 0.0, 5.0,
+                                0.0, 0.0, 1.0, 1.0,
+                                0.0, 0.0, 0.0, 1.0]
+                },
+                "uid": {"type": "string"}
+            },
+            "required": ["type", "parent"],
+            "additionalProperties": false
+        },
         "stream": {
             "type": "object",
             "description": "A stream describes the source of a data sequence, usually a sensor.",
@@ -571,31 +605,6 @@ export const vcd_schema = {
                     }
                 }
             }],
-            "extrinsics": {
-                "type": "object",
-                "properties": {
-                    "pose_scs_wrt_lcs_4x4": {
-                        "description": "This is the pose of the Sensor Coordinate Sysmte (SCS)\
-                                       defined for this stream (e.g. camera) with respect to\
-                                       the Local Coordinate System (LCS), e.g. the projection\
-                                       in the ground of the middle of rear-axis in a vehicle, \
-                                       as defined in ISO 8855.\
-                                       It is a 4x4 homogeneous matrix, to enable transform from\
-                                       LCS to SCS easily. Note that the pose_scs_wrt_lcs_4x4 is\
-                                       the transform_lcs_to_scs_4x4:\
-                                       X_scs = pose_scs_wrt_lcs_4x4 * X_lcs\
-                                       X_scs = transform_lcs_wrt_scs_4x4 * X_lcs",
-                        "type": "array",
-                        "minItems": 16,
-                        "maxItems": 16,
-                        "items": {"type": "number"},
-                        "example": [1.0, 0.0, 0.0, 10.0,
-                                    0.0, 1.0, 0.0, 5.0,
-                                    0.0, 0.0, 1.0, 1.0,
-                                    0.0, 0.0, 0.0, 1.0]
-                    }
-                }
-            },
             "sync": {
                 "description": "This is the sync information for this Stream.\
                                If provided inside a certain frame, it can be used\
@@ -631,7 +640,7 @@ export const vcd_schema = {
                             [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "minItems": 4,
@@ -645,13 +654,15 @@ export const vcd_schema = {
         },
         "rbbox": {
             "type": "object",
-            "description": "A 2D rotated bounding box is defined as a 5-dimensional vector [x, y, w, h, alpha], where [x, y] is the centre of the bounding box, and\
-                            [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.\
-                            The angle alpha, in radians, represents the rotation of the rotated bounding box, and is defined as a right-handed rotation, i.e. positive from x to y axes, \
-                            and with the origin of rotation placed at the center of the bounding box (i.e. [x, y]).",
+            "description": "A 2D rotated bounding box is defined as a 5-dimensional vector [x, y, w, h, alpha], where \
+                           [x, y] is the centre of the bounding box, and [w, h] represent the width (horizontal, \
+                           x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively. The \
+                           angle alpha, in radians, represents the rotation of the rotated bounding box, and is \
+                           defined as a right-handed rotation, i.e. positive from x to y axes, and with the origin \
+                           of rotation placed at the center of the bounding box (i.e. [x, y]).",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "minItems": 5,
@@ -667,7 +678,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "number"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
@@ -678,7 +689,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
@@ -689,7 +700,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "boolean"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
@@ -700,7 +711,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "minItems": 9,
@@ -716,7 +727,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
                 "mime_type": {"type": "string"},
                 "encoding": {"type": "string"},
@@ -729,7 +740,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "item": {"type": "number"}
@@ -747,7 +758,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
                 "encoding": {"type": "string"},
                 "data_type": {"type": "string"},
@@ -760,7 +771,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "item": {"type": "number"}
@@ -774,7 +785,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "id": {"type": "integer"},
                 "val": {
                     "type": "array",
@@ -791,7 +802,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "id": {"type": "integer"},
                 "val": {
                     "type": "array",
@@ -808,7 +819,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "mode": {"type": "string"},
                 "closed": {"type": "boolean"},
                 "val": {
@@ -838,7 +849,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "closed": {"type": "boolean"},
                 "val": {
                     "type": "array",
@@ -883,7 +894,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "point3d": {
                     "type": "object",
                     "patternProperties": {
@@ -912,7 +923,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "items": {"type": "number"},
@@ -928,7 +939,7 @@ export const vcd_schema = {
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
-                "stream": {"type": "string"},
+                "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
                     "items": {"type": "number"},

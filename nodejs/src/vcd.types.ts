@@ -17,6 +17,15 @@ function isFloat(n){
     return Number(n) === n && n % 1 !== 0;
 }
 
+export enum CoordinateSystemType {
+	sensor_cs = 1,  // the coordinate system of a certain sensor
+    local_cs = 2,  // e.g. vehicle-ISO8855 in OpenLABEL, or "base_link" in ROS
+    scene_cs = 3,  // e.g. "odom" in ROS; starting as the first local-ls
+    geo_utm = 4,  // In UTM coordinates
+    geo_wgs84 = 5,  // In WGS84 elliptical Earth coordinates
+    custom = 6  // Any other coordinate system
+}
+
 export class Intrinsics{
 	data: object ;
     constructor() {
@@ -106,21 +115,40 @@ export class IntrinsicsFisheye extends Intrinsics {
 	}
 }
 
-export class Extrinsics{
-	data: object;
-    constructor( poseScsWrtLcs4x4: Array<number>, additionalItems){	
-		var num_coeffs = poseScsWrtLcs4x4.length;
+export class Transform {
+	data: object
+	constructor(srcName: string, dstName: string, transformSrcToDst4x4: Array<number>, additionalItems: object = null) {
+		var num_coeffs = transformSrcToDst4x4.length;
 		if(num_coeffs != 16){
-			console.warn("WARNING: poseScsWrtLcs4x4 length not 16");
+			console.warn("WARNING: transformSrcToDst4x4 length not 16");
 			return;
 		}
-        this.data = {};
-        this.data['extrinsics'] = {};
-        this.data['extrinsics']['pose_scs_wrt_lcs_4x4'] = poseScsWrtLcs4x4;
-
-        if(additionalItems != null){			
-			Object.assign(this.data['extrinsics'], additionalItems);
+		this.data = {};
+		let name = srcName + 'To' + dstName
+		this.data[name] = {}
+		this.data[name]['src'] = srcName
+		this.data[name]['dst'] = dstName
+		this.data[name]['transform_src_to_dst_4x4'] = transformSrcToDst4x4
+		
+		if(additionalItems != null){			
+			Object.assign(this.data[name], additionalItems);
 		}
+	}
+}
+
+export class Pose extends Transform {
+	constructor(subjectName: string, referenceName: string, poseSubjectWrtReference4x4: Array<number>, additionalItems: object = null) {
+		// NOTE: the pose of subject_name system wrt to reference_name system is the transform
+        // from the reference_name system to the subject_name system
+		super(referenceName, subjectName, poseSubjectWrtReference4x4, additionalItems)
+	}
+}
+
+export class Extrinsics extends Transform {	
+    constructor(subjectName: string, referenceName: string, poseSubjectWrtReference4x4: Array<number>, additionalItems: object = null) {
+		// NOTE: the pose of subject_name system wrt to reference_name system is the transform
+        // from the reference_name system to the subject_name system
+		super(referenceName, subjectName, poseSubjectWrtReference4x4, additionalItems)
 	}
 }
 
@@ -169,25 +197,6 @@ export class StreamSync{
 	}
 }
 
-export class Odometry{
-	data: object;
-    constructor( poseLcsWrtWcs4x4: Array<number>, additionalProperties){
-        this.data = {};
-        this.data['odometry'] = {};		
-		var num_coeffs = poseLcsWrtWcs4x4.length;
-		if(num_coeffs != 16){
-			console.warn("WARNING: poseLcsWrtWcs4x4 length not 16");
-			return;
-		}
-
-        this.data['odometry']['pose_lcs_wrt_wcs_4x4'] = poseLcsWrtWcs4x4;
-
-        if(additionalProperties != null){			
-			Object.assign(this.data['odometry'], additionalProperties);
-		}
-	}
-}
-
 export enum ObjectDataType {
 	bbox = 1,
 	rbbox,
@@ -217,15 +226,15 @@ export enum Poly2DType {
 export class ObjectData{
 	data: object;
 	type: any;
-    constructor( name: string, stream=null) {        
+    constructor( name: string, cs=null) {        
         this.data = {};
         this.data['name'] = name;
-        if(stream != null){
-			if(typeof stream != "string" && !(stream instanceof String)){
-				console.warn("WARNING: stream not string",stream);
+        if(cs != null){
+			if(typeof cs != "string" && !(cs instanceof String)){
+				console.warn("WARNING: coordinate_system not string", cs);
 				return;
 			}
-            this.data['stream'] = stream;
+            this.data['coordinate_system'] = cs;
 		}
 	}
 	typeName() {
