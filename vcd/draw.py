@@ -246,6 +246,7 @@ class TopView:
                  int(round(_point[1]*self.params.scaleY + self.params.offsetY)))
         return pixel
 
+
 class Image:
     class Params:
         def __init__(self, _colorMap=None):
@@ -260,17 +261,53 @@ class Image:
         self.vcd = vcd
         self.params = Image.Params()
 
-    def draw_bbox(self, _img, _bbox, _object_class, _color):
-        pt1 = (int(round(_bbox[0])), int(round(_bbox[1])))
-        pt2 = (int(round(_bbox[0] + _bbox[2])), int(round(_bbox[1] + _bbox[3])))
+    def draw_bbox(self, _img, _bbox, _object_class, _color, add_border=False):
+        pt1 = (int(round(_bbox[0] - _bbox[2]/2)), int(round(_bbox[1] - _bbox[3]/2)))
+        pt2 = (int(round(_bbox[0] + _bbox[2]/2)), int(round(_bbox[1] + _bbox[3]/2)))
 
         pta = (pt1[0], pt1[1] - 15)
         ptb = (pt2[0], pt1[1])
 
-        cv.rectangle(_img, pta, ptb, _color, 2)
-        cv.rectangle(_img, pta, ptb, _color, -1)
+        if add_border:
+            cv.rectangle(_img, pta, ptb, _color, 2)
+            cv.rectangle(_img, pta, ptb, _color, -1)
         cv.putText(_img, _object_class, (pta[0], pta[1] + 10), cv.FONT_HERSHEY_PLAIN, 0.6, (0,0,0), 1, cv.LINE_AA)
         cv.rectangle(_img, pt1, pt2, _color, 2)
+
+    def draw_trajectory(self, _img, _object_id, _frameNum, _params):
+        object_class = self.vcd.get_object(_object_id)['type']
+        fis = (self.vcd.get_element_frame_intervals(core.ElementType.object, _object_id)).get_dict()
+
+        for fi in fis:
+            prev_center = dict()
+            for f in range(fi['frame_start'], _frameNum + 1):
+                vcd_other_frame = self.vcd.get_frame(f)
+                if 'objects' in vcd_other_frame:
+                    for object_id_this, object in vcd_other_frame['objects'].items():
+                        if object_id_this is not _object_id:
+                            continue
+
+                        # Get value at this frame
+                        if "object_data" in object:
+                            for object_data_key in object['object_data'].keys():
+                                for object_data_item in object['object_data'][object_data_key]:
+                                    if object_data_key == "bbox":
+                                        bbox = object_data_item['val']
+                                        name = object_data_item['name']
+
+                                        center = (int(round(bbox[0])), int(round(bbox[1])))
+
+                                        # this is a dict to allow multiple trajectories
+                                        # (e.g. several bbox per object)
+                                        if prev_center.get(name) is not None:
+                                            cv.line(_img, prev_center[name], center, (0, 0, 0),
+                                                    1, cv.LINE_AA)
+
+                                        cv.circle(_img, center, 2,
+                                                  _params.colorMap[object_class], -1)
+
+                                        prev_center[name] = center
+
 
     def draw(self, _img, _frameNum, _params=None):
         if _params is not None:
@@ -286,9 +323,9 @@ class Image:
                 object_class = self.vcd.get_object(object_id)['type']
 
                 # Colors
-                if self.params.colorMap.get(object_class) is None:
+                if _params.colorMap.get(object_class) is None:
                     # Let's create a new entry for this class
-                    self.params.colorMap[object_class] = (randint(0, 255), randint(0, 255), randint(0, 255))
+                    _params.colorMap[object_class] = (randint(0, 255), randint(0, 255), randint(0, 255))
 
                 # Get current value at this frame
                 if "object_data" in object:
@@ -296,7 +333,10 @@ class Image:
                         for object_data_item in object['object_data'][object_data_key]:
                             if object_data_key == "bbox":
                                 bbox = object_data_item['val']
-                                self.draw_bbox(_img, bbox, object_class, self.params.colorMap[object_class])
+                                bbox_name = object_data_item['name']
+                                text = "(" + object_id + "," + name +")-(" + object_class + ")-(" + bbox_name +")"
+                                self.draw_bbox(_img, bbox, text, _params.colorMap[object_class])
+                                self.draw_trajectory(_img, object_id, _frameNum, _params)
 
 
 class TextDrawer:

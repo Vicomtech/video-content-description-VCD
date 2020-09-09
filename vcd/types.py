@@ -112,18 +112,6 @@ class Extrinsics(Transform):
         Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
 
 
-#class Extrinsics():
-#    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
-#        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
-#        assert (len(pose_scs_wrt_lcs_4x4) == 16)
-#        self.data = dict()
-#        self.data['extrinsics'] = dict()
-#        self.data['extrinsics']['pose_scs_wrt_lcs_4x4'] = pose_scs_wrt_lcs_4x4
-
-#        if additional_items is not None:
-#            self.data['extrinsics'].update(additional_items)
-
-
 class StreamSync:
     def __init__(self, frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items):
         self.data = dict()
@@ -144,20 +132,6 @@ class StreamSync:
                 self.data['sync']['timestamp'] = timestamp_ISO8601
         if additional_items is not None:
             self.data['sync'].update(additional_items)
-
-
-#class Odometry(Transform):
-#    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
-#        Transform.__init__(self, 'wcs', 'lcs', pose_lcs_wrt_wcs_4x4, additional_properties)
-        #self.data = dict()
-        #self.data['odometry'] = dict()
-        #assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
-        #assert (len(pose_lcs_wrt_wcs_4x4) == 16)
-
-        #self.data['odometry']['pose_lcs_wrt_wcs_4x4'] = pose_lcs_wrt_wcs_4x4
-
-        #if additional_properties is not None:
-        #    self.data['odometry'].update(additional_properties)
 
 
 class ObjectDataType(Enum):

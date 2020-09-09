@@ -66,9 +66,10 @@ def convert_town_center_to_VCD4():
             bodyWidth = float((int(1000*bodyRight) - int(1000*bodyLeft))/1000)
             bodyHeight = float((int(1000*bodyBottom) - int(1000*bodyTop))/1000)
 
+            #Note: VCD 4.3.0 defines the bounding box using the center of the box, not the upper-left coordinate
             body = types.bbox(name="body",
-                              val=(bodyLeft, bodyTop, bodyWidth, bodyHeight))
-            head = types.bbox("head", (headLeft, headTop, headWidth, headHeight))
+                              val=((bodyLeft + bodyRight)/2, (bodyBottom + bodyTop)/2, bodyWidth, bodyHeight))
+            head = types.bbox("head", ((headLeft + headRight)/2, (headBottom + headTop)/2, headWidth, headHeight))
             if not vcd.has(core.ElementType.object, personNumber):
                 vcd.add_object(name="", semantic_type="Pedestrian",
                                uid=personNumber)

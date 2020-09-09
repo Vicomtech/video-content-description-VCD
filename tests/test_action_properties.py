@@ -45,7 +45,6 @@ class TestBasic(unittest.TestCase):
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="risk", val=0.7), frame_value=4)
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="weight", val=0.5), frame_value=4)
 
-
         if not os.path.isfile('./etc/vcd430_test_actions_with_action_data.json'):
             vcd.save('./etc/vcd430_test_actions_with_action_data.json', True)
         vcd_read = core.VCD('./etc/vcd430_test_actions_with_action_data.json', validation=True)
@@ -53,7 +52,6 @@ class TestBasic(unittest.TestCase):
         vcd_stringified = vcd.stringify()
         # print(vcd_stringified)
         self.assertEqual(vcd_read_stringified, vcd_stringified)
-
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

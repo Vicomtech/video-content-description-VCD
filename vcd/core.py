@@ -300,7 +300,7 @@ class VCD:
                 # Let's use UUIDs
                 uid_to_assign = UID(str(uuid.uuid4()))
             else:
-                # Let's use integers, and return a string
+                # Let's use integers
                 self.__lastUID[element_type] += 1
                 uid_to_assign = UID(self.__lastUID[element_type])
         else:
@@ -626,10 +626,6 @@ class VCD:
 
     def __rm_frame(self, frame_num):
         # This function deletes a frame entry from frames, and updates VCD accordingly
-        # NOTE: This function does not update corresponding element or element data entries for this frame
-        # (use modifyElement or modifyElementData for such functionality)
-        # this function is left private so users can't use it directly: they have to use modifyElement or
-        # modifyElementData or other of the removal functions
         if 'frames' in self.data['vcd']:
             if frame_num in self.data['vcd']['frames']:
                 del self.data['vcd']['frames'][frame_num]

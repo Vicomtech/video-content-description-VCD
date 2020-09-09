@@ -25,7 +25,7 @@ from vcd import draw
 def draw_towncentre(record_video=False):
     # Get annotations
     # Run ../converters/towncenterConverter/converter.py to generate the json files
-    vcd_file_name = "../converters/towncenterConverter/etc/vcd420_towncenter.json"
+    vcd_file_name = "../converters/towncenterConverter/etc/vcd430_towncenter.json"
     vcd = core.VCD(vcd_file_name)
     drawerCamera = draw.Image(vcd)
     textDrawer = draw.TextDrawer()
