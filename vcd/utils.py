@@ -261,6 +261,8 @@ def inv(m):
             m_inv[:, :, i] = np.linalg.inv(m[:, :, i])
         return m_inv
 
+def identity(dim):
+    return np.identity(dim, dtype=float)
 
 def lat_to_scale(lat):
     # Computes mercator scale from latitude

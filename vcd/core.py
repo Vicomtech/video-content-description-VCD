@@ -141,7 +141,7 @@ class UID:
                 if val == '':
                     self.__set("", -1, False)
                 else:
-                    if val.isnumeric():
+                    if val.strip('-').isnumeric():  # this holds true for "-3" and "3"
                         self.__set(val, int(val), False)
                     elif bool(re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
                                        val)):
@@ -1189,6 +1189,37 @@ class VCD:
     def get_frames_with_context_data_name(self, uid, data_name):
         return self.get_frames_with_element_data_name(ElementType.context, uid, data_name)
 
+    def get_element_data_count_per_type(self, element_type, uid, data_type, frame_num=None):
+        # Returns 0 if no such element exist or if the element does not have the data_type
+        # Returns the count otherwise (e.g. how many "bbox" does this object have)
+        assert(isinstance(data_type, types.ObjectDataType))
+        uid_str = UID(uid).as_str()
+        if self.has(element_type, uid):
+            if frame_num is not None:
+                # Dynamic info
+                if not isinstance(frame_num, int):
+                    warnings.warn("WARNING: Calling get_element_data with a non-integer frame_num.")
+                frame = self.get_frame(frame_num)
+                if frame is not None:
+                    if element_type.name + 's' in frame:
+                        if uid_str in frame[element_type.name + 's']:
+                            element = frame[element_type.name + 's'][uid_str]
+                            for prop in element[element_type.name + '_data']:
+                                if prop == data_type.name:
+                                    return len(element[element_type.name + '_data'][prop])
+                        else: return 0
+                    else: return 0
+            else:
+                # Static info
+                element = self.data['vcd'][element_type.name + 's'][uid_str]
+                for prop in element[element_type.name + '_data']:
+                    for prop in element[element_type.name + '_data']:
+                        if prop == data_type.name:
+                            return len(element[element_type.name + '_data'][prop])
+        else:
+            return 0
+        return 0
+
     def get_element_data(self, element_type, uid, data_name, frame_num=None):
         uid_str = UID(uid).as_str()
         if self.has(element_type, uid):
@@ -1198,12 +1229,18 @@ class VCD:
                     warnings.warn("WARNING: Calling get_element_data with a non-integer frame_num.")
                 frame = self.get_frame(frame_num)
                 if frame is not None:
-                    element = frame[element_type.name + 's'][uid_str]
-                    for prop in element[element_type.name + '_data']:
-                        val_array = element[element_type.name + '_data'][prop]
-                        for val in val_array:
-                            if val['name'] == data_name:
-                                return val
+                    if element_type.name + 's' in frame:
+                        if uid_str in frame[element_type.name + 's']:
+                            element = frame[element_type.name + 's'][uid_str]
+                            for prop in element[element_type.name + '_data']:
+                                val_array = element[element_type.name + '_data'][prop]
+                                for val in val_array:
+                                    if val['name'] == data_name:
+                                        return val
+                        else:
+                            return None
+                    else:
+                        return None
             else:
                 # Static info
                 element = self.data['vcd'][element_type.name + 's'][uid_str]
