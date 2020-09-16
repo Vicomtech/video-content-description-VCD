@@ -72,7 +72,7 @@ def convert_town_center_to_VCD4():
             head = types.bbox("head", ((headLeft + headRight)/2, (headBottom + headTop)/2, headWidth, headHeight))
             if not vcd.has(core.ElementType.object, personNumber):
                 vcd.add_object(name="", semantic_type="Pedestrian",
-                               uid=personNumber)
+                               uid=personNumber, frame_value=frameNumber)
                 if bodyValid:
                         vcd.add_object_data(personNumber, body, frameNumber)
                 if headValid:

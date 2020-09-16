@@ -28,7 +28,8 @@ def draw_towncentre(record_video=False):
     vcd_file_name = "../converters/towncenterConverter/etc/vcd430_towncenter.json"
     vcd = core.VCD(vcd_file_name)
     drawerCamera = draw.Image(vcd)
-    textDrawer = draw.TextDrawer()
+    #textDrawer = draw.TextDrawer()
+    frameInfoDrawer = draw.FrameInfoDrawer(vcd)
 
     # Get the size of the screen
     screen = screeninfo.get_monitors()[0]
@@ -47,7 +48,8 @@ def draw_towncentre(record_video=False):
     colorMap = {'Car': (0, 0, 255), 'Van': (255, 0, 0), 'Truck': (127, 127, 0),
                  'Pedestrian': (0, 255, 0), 'Person_sitting': (0, 127, 127),
                  'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (255, 255, 255)}
-    imageParams = draw.Image.Params(_colorMap=colorMap)
+    imageParams = draw.Image.Params(_colorMap=colorMap,
+                                    _draw_trajectory=True)
     ar = video_width/(video_height*2)
 
     # Video record
@@ -67,7 +69,9 @@ def draw_towncentre(record_video=False):
         drawerCamera.draw(img, f, _params=imageParams)
 
         # VCD text viewer
-        textImg = textDrawer.draw(vcd.stringify_frame(f, pretty=False), cols=400, rows=video_height)
+        #textImg = textDrawer.draw(vcd.stringify_frame(f, pretty=False), cols=400, rows=video_height)
+        textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height, _params=imageParams)
+
 
         # Stack
         outImg = np.hstack((img, textImg))

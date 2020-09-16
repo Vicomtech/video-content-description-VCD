@@ -123,6 +123,14 @@ class FrameIntervals:
     def has_frame(self, frame_num):
         return utils.is_inside_frame_intervals(frame_num, self.fis_num)
 
+    def to_str(self):
+        text = "["
+        for fi in self.fis_num:
+            text += "(" + str(fi[0]) + "," + str(fi[1]) + ")"
+        text += "]"
+
+        return text
+
 
 class UID:
     """

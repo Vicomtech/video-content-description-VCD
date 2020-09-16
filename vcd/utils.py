@@ -15,6 +15,7 @@ VCD is distributed under MIT License. See LICENSE.
 import warnings
 import numpy as np
 from enum import Enum
+from collections import deque, namedtuple
 
 ####################################################
 # Frame intervals
@@ -250,6 +251,12 @@ def create_pose(R, C):
     return P
 
 
+def decompose_pose(pose_4x4):
+    rotation_3x3 = pose_4x4[0:3, 0:3]
+    c_3x1 = pose_4x4[0:3, 3]
+    return rotation_3x3, c_3x1
+
+
 def inv(m):
     if m.ndim == 2:  # just an inversion of a square matrix
         return np.linalg.inv(m)
@@ -261,8 +268,10 @@ def inv(m):
             m_inv[:, :, i] = np.linalg.inv(m[:, :, i])
         return m_inv
 
+
 def identity(dim):
     return np.identity(dim, dtype=float)
+
 
 def lat_to_scale(lat):
     # Computes mercator scale from latitude
@@ -302,6 +311,23 @@ def isR(R):
     I = np.identity(3, dtype=R.dtype)
     n = np.linalg.norm(I - I_)
     return n < 1e-4
+
+
+def R2rvec(R):
+    assert(isR(R))
+    sy = np.sqrt(R[0, 0] * R[0, 0] + R[1, 0] * R[1, 0])
+    singular = sy < 1e-6
+
+    if not singular:
+        rx = np.arctan2(R[2, 1], R[2, 2])
+        ry = np.arctan2(-R[2, 0], sy)
+        rz = np.arctan2(R[1, 0], R[0, 0])
+    else:
+        rx = np.arctan2(-R[1, 2], R[1, 1])
+        ry = np.arctan2(-R[2, 0], sy)
+        rz = 0
+
+    return np.array([[rx], [ry], [rz]])
 
 
 def Rx(angle_rad):
@@ -433,6 +459,240 @@ def convert_oxts_to_pose(oxts):
 
     return poses_4x4xN
 
+
+####################################################
+# Transforms
+####################################################
+# From https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
+# we'll use infinity as a default distance to nodes.
+inf = float('inf')
+Edge = namedtuple('Edge', 'start, end, cost')
+
+
+def make_edge(start, end, cost=1):
+    return Edge(start, end, cost)
+
+
+class Graph:
+    def __init__(self, edges):
+        # let's check that the data is right
+        wrong_edges = [i for i in edges if len(i) not in [2, 3]]
+        if wrong_edges:
+            raise ValueError('Wrong edges data: {}'.format(wrong_edges))
+
+        self.edges = [make_edge(*edge) for edge in edges]
+
+    @property
+    def vertices(self):
+        return set(
+            sum(
+                ([edge.start, edge.end] for edge in self.edges), []
+            )
+        )
+
+    @staticmethod
+    def get_node_pairs(n1, n2, both_ends=True):
+        if both_ends:
+            node_pairs = [[n1, n2], [n2, n1]]
+        else:
+            node_pairs = [[n1, n2]]
+        return node_pairs
+
+    def remove_edge(self, n1, n2, both_ends=True):
+        node_pairs = self.get_node_pairs(n1, n2, both_ends)
+        edges = self.edges[:]
+        for edge in edges:
+            if [edge.start, edge.end] in node_pairs:
+                self.edges.remove(edge)
+
+    def add_edge(self, n1, n2, cost=1, both_ends=True):
+        node_pairs = self.get_node_pairs(n1, n2, both_ends)
+        for edge in self.edges:
+            if [edge.start, edge.end] in node_pairs:
+                return ValueError('Edge {} {} already exists'.format(n1, n2))
+
+        self.edges.append(Edge(start=n1, end=n2, cost=cost))
+        if both_ends:
+            self.edges.append(Edge(start=n2, end=n1, cost=cost))
+
+    @property
+    def neighbours(self):
+        neighbours = {vertex: set() for vertex in self.vertices}
+        for edge in self.edges:
+            neighbours[edge.start].add((edge.end, edge.cost))
+
+        return neighbours
+
+    def dijkstra(self, source, dest):
+        assert source in self.vertices, 'Such source node doesn\'t exist'
+        distances = {vertex: inf for vertex in self.vertices}
+        previous_vertices = {
+            vertex: None for vertex in self.vertices
+        }
+        distances[source] = 0
+        vertices = self.vertices.copy()
+
+        while vertices:
+            current_vertex = min(
+                vertices, key=lambda vertex: distances[vertex])
+            vertices.remove(current_vertex)
+            if distances[current_vertex] == inf:
+                break
+            for neighbour, cost in self.neighbours[current_vertex]:
+                alternative_route = distances[current_vertex] + cost
+                if alternative_route < distances[neighbour]:
+                    distances[neighbour] = alternative_route
+                    previous_vertices[neighbour] = current_vertex
+
+        path, current_vertex = deque(), dest
+        while previous_vertices[current_vertex] is not None:
+            path.appendleft(current_vertex)
+            current_vertex = previous_vertices[current_vertex]
+        if path:
+            path.appendleft(current_vertex)
+        return path
+
+
+def get_transform(vcd, cs_src, cs_dst, frameNum=None):
+    assert(vcd.has_coordinate_system(cs_src))
+    assert(vcd.has_coordinate_system(cs_dst))
+
+    if cs_src == cs_dst:
+        return np.identity(4, 4).flatten().tolist()
+
+    # e.g.
+    # odom->vehicle-is8855->{velo_top, imu}
+    # velo_top->{cam_left, cam_right}
+    # a) get("cam_left", "vehicle-iso8855")
+    # b) get("vehicle-iso8855", "cam_left")
+
+    # Can be tested with vcd430_kitti_tracking_0000.json
+    # transform_src_dst = utils.get_transform(self.vcd, "CAM_LEFT", "VEHICLE-ISO8855", _frameNum)
+    # transform_dst_src = utils.get_transform(self.vcd, "VEHICLE-ISO8855", "CAM_LEFT", _frameNum)
+    # transform_src_dst_ = utils.inv(transform_dst_src)
+    # Check transform_src_dst equals to transform_src_dst_
+
+    list = []
+
+    # Create graph with the poses defined for each coordinate_system
+    # These are poses valid "statically"
+    for cs_name, cs_body in vcd.data['vcd']['coordinate_systems'].items():
+        for child in cs_body['children']:
+            list.append((cs_name, child, 1))
+            list.append((child, cs_name, 1))
+
+    graph = Graph(list)
+    result = graph.dijkstra(cs_src, cs_dst)
+
+    # Let's build the transform using atomic transforms (which exist in VCD)
+    t_4x4 = np.identity(4, dtype=float)
+    for counter, value in enumerate(result):
+        # e.g. a) result = {("cam_left", "velo_top"), ("velo_top", "vehicle-iso8855")}
+        # e.g. b) result = {("vehicle-iso8855", "velo_top"), ("velo_top", "cam_left")}
+        if counter == len(result) - 1:
+            break
+        cs_1 = result[counter]
+        cs_2 = result[counter + 1]
+
+        t_name = cs_1 + "_to_" + cs_2
+        t_name_inv = cs_2 + "_to_" + cs_1
+
+        # NOTE: this entire function works under the consensus that pose_src_wrt_dst = transform_src_to_dst, using
+        # alias rotation of coordinate systems and linear 4x4
+        if frameNum is None:
+            # No frame info, let's read from coordinate_system poses
+            # Check if this edge is from child to parent or viceversa
+            if cs_2 == vcd.data['vcd']['coordinate_systems'][cs_1]['parent']:
+                t_4x4 = (np.array([vcd.data['vcd']['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4, 4)).dot(t_4x4)
+            elif cs_1 == vcd.data['vcd']['coordinate_systems'][cs_2]['parent']:
+                temp = np.array([vcd.data['vcd']['coordinate_systems'][cs_2]['pose_wrt_parent']])
+                t_4x4 = inv(temp.reshape(4, 4)).dot(t_4x4)
+        else:
+            # So the user has asked for a specific frame, let's look for this frame if a transform exist
+            transform_at_this_frame = False
+            if frameNum in vcd.data['vcd']['frames']:
+                if 'transforms' in vcd.data['vcd']['frames'][frameNum]['frame_properties']:
+                    if t_name in vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms']:
+                        transform = vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms'][t_name]
+                        t_4x4 = (np.array([transform['transform_src_to_dst_4x4']]).reshape(4, 4)).dot(t_4x4)
+                        transform_at_this_frame = True
+                    elif t_name_inv in vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms']:
+                        transform = vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms'][t_name_inv]
+                        temp = np.array([transform['transform_src_to_dst_4x4']])
+                        t_4x4 = inv(temp.reshape(4, 4)).dot(t_4x4)
+                        transform_at_this_frame = True
+            if not transform_at_this_frame:
+                # Check if this edge is from child to parent or viceversa
+                if cs_2 == vcd.data['vcd']['coordinate_systems'][cs_1]['parent']:
+                    t_4x4 = (np.array([vcd.data['vcd']['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4, 4)).dot(t_4x4)
+                elif cs_1 == vcd.data['vcd']['coordinate_systems'][cs_2]['parent']:
+                    temp = np.array([vcd.data['vcd']['coordinate_systems'][cs_2]['pose_wrt_parent']])
+                    t_4x4 = inv(temp.reshape(4, 4)).dot(t_4x4)
+
+    return t_4x4.flatten().tolist()
+
+
+def transform_cuboid(cuboid, T_ref_to_dst):
+    # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
+    assert(isinstance(T_ref_to_dst, list))
+    assert(isinstance(cuboid, list))
+    if len(cuboid) == 10:
+        raise Exception("Quaternion transforms not supported yet.")
+
+    assert(len(cuboid) == 9)
+
+    # 1) Obtain pose from cuboid info
+    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+    P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
+    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
+
+    # 2) Concatenate transforms
+    T_obj_to_dst = (np.array(T_ref_to_dst).reshape(4,4)).dot(T_obj_to_ref)    # np.array
+
+    # 3) Obtain new rotation and translation
+    P_obj_wrt_dst = T_obj_to_dst    # np.array
+    R_obj_wrt_dst, C_obj_wrt_dst = decompose_pose(P_obj_wrt_dst)    # np.array
+
+    rvec = R2rvec(R_obj_wrt_dst)
+
+    cuboid_transformed = [C_obj_wrt_dst[0], C_obj_wrt_dst[1], C_obj_wrt_dst[2],
+                          rvec[0][0], rvec[1][0], rvec[2][0],
+                          sx, sy, sz]    # list
+    return cuboid_transformed
+
+
+def generate_cuboid_points_object_4x8(sx, sy, sz):
+    points_cuboid_4x8 = np.array([[-sx / 2, -sx / 2, sx / 2, sx / 2, -sx / 2, -sx / 2, sx / 2, sx / 2],
+                                  [sy / 2, -sy / 2, -sy / 2, sy / 2, sy / 2, -sy / 2, -sy / 2, sy / 2],
+                                  [-sz / 2, -sz / 2, -sz / 2, -sz / 2, sz / 2, sz / 2, sz / 2, sz / 2],
+                                  [1, 1, 1, 1, 1, 1, 1, 1]])
+    return points_cuboid_4x8
+
+
+def generate_cuboid_points_ref_4x8(cuboid):
+    # Cuboid is (x, y, z, rx, ry, rz, sx, sy, sz)
+    # This function converts to 8 4x1 points
+    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+
+    # Create base structure using sizes
+    points_cuboid_4x8 = generate_cuboid_points_object_4x8(sx, sy, sz)
+
+    # Create rotation
+    R_obj_wrt_ref = euler2R([rz, ry, rx])
+
+    # Create location
+    C_ref = np.array([[x, y, z]]).T
+
+    # Create pose from rotation and location
+    P_obj_wrt_ref = create_pose(R_obj_wrt_ref, C_ref)
+    T_obj_to_ref = P_obj_wrt_ref
+
+    points_cuboid_lcs_4x8 = T_obj_to_ref.dot(points_cuboid_4x8)
+    return points_cuboid_lcs_4x8
+
+####################################################
+# Other
+####################################################
 
 def float_2dec(val):
     '''
