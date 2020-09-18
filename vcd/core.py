@@ -1240,11 +1240,23 @@ class VCD:
                     if element_type.name + 's' in frame:
                         if uid_str in frame[element_type.name + 's']:
                             element = frame[element_type.name + 's'][uid_str]
-                            for prop in element[element_type.name + '_data']:
-                                val_array = element[element_type.name + '_data'][prop]
-                                for val in val_array:
-                                    if val['name'] == data_name:
-                                        return val
+                            if element_type.name + '_data' in element:
+                                for prop in element[element_type.name + '_data']:
+                                    val_array = element[element_type.name + '_data'][prop]
+                                    for val in val_array:
+                                        if val['name'] == data_name:
+                                            return val
+                            else:
+                                # The user asked for the object_data of this object for this frame,
+                                # but there is no dynamic info
+                                # Let's try to retrieve static info
+                                element = self.data['vcd'][element_type.name + 's'][uid_str]
+                                for prop in element[element_type.name + '_data']:
+                                    val_array = element[element_type.name + '_data'][prop]
+                                    for val in val_array:
+                                        if val['name'] == data_name:
+                                            return val
+                                return None
                         else:
                             return None
                     else:

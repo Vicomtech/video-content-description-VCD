@@ -14,8 +14,12 @@ VCD is distributed under MIT License. See LICENSE.
 
 import warnings
 import numpy as np
+#import cv2 as cv
+
+import math
+
+from bisect import bisect_left
 from enum import Enum
-from collections import deque, namedtuple
 
 ####################################################
 # Frame intervals
@@ -242,7 +246,7 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
 
 
 ####################################################
-# ROTATION AND ODOMETRY UTILS. See SCL library
+# ROTATION AND ODOMETRY UTILS
 ####################################################
 def create_pose(R, C):
     # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
@@ -255,6 +259,33 @@ def decompose_pose(pose_4x4):
     rotation_3x3 = pose_4x4[0:3, 0:3]
     c_3x1 = pose_4x4[0:3, 3]
     return rotation_3x3, c_3x1
+
+
+def interpolate_pose(poses_dict, timestamp):
+    # Find two adjacent poses between the provided timestamp
+    keys = list(poses_dict.keys())
+
+    # Returns the position where to insert x in list a, assuming it is sorted
+    # if return 0, x is the smallest value (can't interpolate)
+    # if return len(a), x is the largest value (can't interpolate)
+    pos = bisect_left(keys, timestamp)
+
+    if pos == 0:
+        # The provided timestamp is the smallest value
+        return None
+    elif pos == len(keys):
+        # The provided timestamp is the largest value
+        return None
+    else:
+        pose_prev = poses_dict[keys[pos - 1]]
+        pose_next = poses_dict[keys[pos]]
+        diff_pose_between = pose_next - pose_prev
+        time_between = keys[pos] - keys[pos - 1]
+        time_dist = timestamp - keys[pos - 1]
+        time_factor = time_dist / time_between
+        diff_pose = diff_pose_between.dot(time_factor)
+        pose_interpolated = pose_prev + diff_pose
+    return pose_interpolated
 
 
 def inv(m):
@@ -358,8 +389,18 @@ def euler2R(a, seq=EulerSeq.ZYX):
     assert(len(a) == 3)
     assert(isinstance(seq, EulerSeq))
 
-    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a sequence, e.g. "ZYX"
-    # 0, 1 and 2 are identified with XYZ according to the code
+    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a meaning, e.g. "ZYX"
+    # So we can build the Rx, Ry, Rz according to the specified code
+
+    # e.g. a=(0.1, 0.3, 0.2), seq='ZYX', then R0=Rx(0.1), R1=Ry(0.3), R2=Rz(0.2)
+    # The application of the rotations in this function is
+    # R = R0*R1*R2, which must be read from right-to-left
+    # So first R2 is applied, then R1, then R0
+    # If the default 'zyx' sequence is selected, the user is providing a=(rz, ry, rx), and it is applied R=RZ*RY*RX
+
+    # e.g. a=(0.1, 0.4, 0.2), seq='xzz')
+    # R = Rx(0.1)*Rz(0.4)*Rz(0.2)
+
     if seq.name[0] == "X":
         R_0 = Rx(a[0])
     elif seq.name[0] == "Y":
@@ -459,177 +500,78 @@ def convert_oxts_to_pose(oxts):
 
     return poses_4x4xN
 
+####################################################
+# Projections
+####################################################
+def fromPinholeParamsToCameraMatrix3x4(fx, fy, cx, cy):
+    matrix3x4 = [[fx, 0.0, cx, 0.0],
+                 [0.0, fy, cy, 0.0],
+                 [0.0, 0.0, 1.0, 0.0]]
+    return matrix3x4
+
+
+def fromCameraMatrix3x3toCameraMatrix3x4(camera_matrix_3x3):
+    matrix3x4 = np.hstack((camera_matrix_3x3, [[0], [0], [0]]))
+    return matrix3x4
+
+
+def fromCameraMatrix3x4toCameraMatrix3x3(camera_matrix_3x4):
+    matrix3x3 = camera_matrix_3x4[:, 0:3]
+    return matrix3x3
+
+
+def round(number_float):
+    return int(np.round(number_float))
+
+
+def norm(ray):
+    return math.sqrt(ray[0]*ray[0] + ray[1]*ray[1])
+
+
+####################################################
+# RADIAL DISTORTION
+####################################################
+def get_distortion_radius(distortion):
+    # Next equations work only if p1=p2=p3=0 and k4=k5=k6=0
+    # See https://www.wolframalpha.com/input/?i=resolve+1%2B2k_1x%2B3k_2x%5E2%2B4k_3x%5E3%3D0
+    if len(distortion) == 8:
+        return None
+
+    k1 = distortion[0, 0]
+    k2 = distortion[0, 1]
+    p1 = distortion[0, 2]
+    p2 = distortion[0, 3]
+    k3 = distortion[0, 4]
+    if p1 == 0 and p2 == 0:
+        aux0 = -54*(k2**3) + 216*k1*k2*k3 - 432*(k3**2)
+        aux1 = 4*(24*k1*k3-9*(k2**2))**3 + aux0*aux0
+        if aux1 < 0:
+            return None
+        aux2 = aux0 + np.sqrt(aux1)
+        aux3 = -k2/(4*k3) + (1/(15.11905*k3)) * (aux2**(1/3))
+        aux4 = (24*k1*k3-9*(k2**2))/(9.524406*k3*(aux2**(1/3)))
+
+        r2 = aux3 - aux4
+
+        if r2 < 0:
+            return None
+        else:
+            r = np.sqrt(r2)
+            return r
+    else:
+        return None
 
 ####################################################
 # Transforms
 ####################################################
-# From https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
-# we'll use infinity as a default distance to nodes.
-inf = float('inf')
-Edge = namedtuple('Edge', 'start, end, cost')
+def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
+    rows, cols = points3d_4xN.shape
+    assert (points3d_4xN.ndim == 2)
+    assert (rows == 4 and cols >= 1)
 
-
-def make_edge(start, end, cost=1):
-    return Edge(start, end, cost)
-
-
-class Graph:
-    def __init__(self, edges):
-        # let's check that the data is right
-        wrong_edges = [i for i in edges if len(i) not in [2, 3]]
-        if wrong_edges:
-            raise ValueError('Wrong edges data: {}'.format(wrong_edges))
-
-        self.edges = [make_edge(*edge) for edge in edges]
-
-    @property
-    def vertices(self):
-        return set(
-            sum(
-                ([edge.start, edge.end] for edge in self.edges), []
-            )
-        )
-
-    @staticmethod
-    def get_node_pairs(n1, n2, both_ends=True):
-        if both_ends:
-            node_pairs = [[n1, n2], [n2, n1]]
-        else:
-            node_pairs = [[n1, n2]]
-        return node_pairs
-
-    def remove_edge(self, n1, n2, both_ends=True):
-        node_pairs = self.get_node_pairs(n1, n2, both_ends)
-        edges = self.edges[:]
-        for edge in edges:
-            if [edge.start, edge.end] in node_pairs:
-                self.edges.remove(edge)
-
-    def add_edge(self, n1, n2, cost=1, both_ends=True):
-        node_pairs = self.get_node_pairs(n1, n2, both_ends)
-        for edge in self.edges:
-            if [edge.start, edge.end] in node_pairs:
-                return ValueError('Edge {} {} already exists'.format(n1, n2))
-
-        self.edges.append(Edge(start=n1, end=n2, cost=cost))
-        if both_ends:
-            self.edges.append(Edge(start=n2, end=n1, cost=cost))
-
-    @property
-    def neighbours(self):
-        neighbours = {vertex: set() for vertex in self.vertices}
-        for edge in self.edges:
-            neighbours[edge.start].add((edge.end, edge.cost))
-
-        return neighbours
-
-    def dijkstra(self, source, dest):
-        assert source in self.vertices, 'Such source node doesn\'t exist'
-        distances = {vertex: inf for vertex in self.vertices}
-        previous_vertices = {
-            vertex: None for vertex in self.vertices
-        }
-        distances[source] = 0
-        vertices = self.vertices.copy()
-
-        while vertices:
-            current_vertex = min(
-                vertices, key=lambda vertex: distances[vertex])
-            vertices.remove(current_vertex)
-            if distances[current_vertex] == inf:
-                break
-            for neighbour, cost in self.neighbours[current_vertex]:
-                alternative_route = distances[current_vertex] + cost
-                if alternative_route < distances[neighbour]:
-                    distances[neighbour] = alternative_route
-                    previous_vertices[neighbour] = current_vertex
-
-        path, current_vertex = deque(), dest
-        while previous_vertices[current_vertex] is not None:
-            path.appendleft(current_vertex)
-            current_vertex = previous_vertices[current_vertex]
-        if path:
-            path.appendleft(current_vertex)
-        return path
-
-
-def get_transform(vcd, cs_src, cs_dst, frameNum=None):
-    assert(vcd.has_coordinate_system(cs_src))
-    assert(vcd.has_coordinate_system(cs_dst))
-
-    if cs_src == cs_dst:
-        return np.identity(4, 4).flatten().tolist()
-
-    # e.g.
-    # odom->vehicle-is8855->{velo_top, imu}
-    # velo_top->{cam_left, cam_right}
-    # a) get("cam_left", "vehicle-iso8855")
-    # b) get("vehicle-iso8855", "cam_left")
-
-    # Can be tested with vcd430_kitti_tracking_0000.json
-    # transform_src_dst = utils.get_transform(self.vcd, "CAM_LEFT", "VEHICLE-ISO8855", _frameNum)
-    # transform_dst_src = utils.get_transform(self.vcd, "VEHICLE-ISO8855", "CAM_LEFT", _frameNum)
-    # transform_src_dst_ = utils.inv(transform_dst_src)
-    # Check transform_src_dst equals to transform_src_dst_
-
-    list = []
-
-    # Create graph with the poses defined for each coordinate_system
-    # These are poses valid "statically"
-    for cs_name, cs_body in vcd.data['vcd']['coordinate_systems'].items():
-        for child in cs_body['children']:
-            list.append((cs_name, child, 1))
-            list.append((child, cs_name, 1))
-
-    graph = Graph(list)
-    result = graph.dijkstra(cs_src, cs_dst)
-
-    # Let's build the transform using atomic transforms (which exist in VCD)
-    t_4x4 = np.identity(4, dtype=float)
-    for counter, value in enumerate(result):
-        # e.g. a) result = {("cam_left", "velo_top"), ("velo_top", "vehicle-iso8855")}
-        # e.g. b) result = {("vehicle-iso8855", "velo_top"), ("velo_top", "cam_left")}
-        if counter == len(result) - 1:
-            break
-        cs_1 = result[counter]
-        cs_2 = result[counter + 1]
-
-        t_name = cs_1 + "_to_" + cs_2
-        t_name_inv = cs_2 + "_to_" + cs_1
-
-        # NOTE: this entire function works under the consensus that pose_src_wrt_dst = transform_src_to_dst, using
-        # alias rotation of coordinate systems and linear 4x4
-        if frameNum is None:
-            # No frame info, let's read from coordinate_system poses
-            # Check if this edge is from child to parent or viceversa
-            if cs_2 == vcd.data['vcd']['coordinate_systems'][cs_1]['parent']:
-                t_4x4 = (np.array([vcd.data['vcd']['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4, 4)).dot(t_4x4)
-            elif cs_1 == vcd.data['vcd']['coordinate_systems'][cs_2]['parent']:
-                temp = np.array([vcd.data['vcd']['coordinate_systems'][cs_2]['pose_wrt_parent']])
-                t_4x4 = inv(temp.reshape(4, 4)).dot(t_4x4)
-        else:
-            # So the user has asked for a specific frame, let's look for this frame if a transform exist
-            transform_at_this_frame = False
-            if frameNum in vcd.data['vcd']['frames']:
-                if 'transforms' in vcd.data['vcd']['frames'][frameNum]['frame_properties']:
-                    if t_name in vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms']:
-                        transform = vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms'][t_name]
-                        t_4x4 = (np.array([transform['transform_src_to_dst_4x4']]).reshape(4, 4)).dot(t_4x4)
-                        transform_at_this_frame = True
-                    elif t_name_inv in vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms']:
-                        transform = vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms'][t_name_inv]
-                        temp = np.array([transform['transform_src_to_dst_4x4']])
-                        t_4x4 = inv(temp.reshape(4, 4)).dot(t_4x4)
-                        transform_at_this_frame = True
-            if not transform_at_this_frame:
-                # Check if this edge is from child to parent or viceversa
-                if cs_2 == vcd.data['vcd']['coordinate_systems'][cs_1]['parent']:
-                    t_4x4 = (np.array([vcd.data['vcd']['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4, 4)).dot(t_4x4)
-                elif cs_1 == vcd.data['vcd']['coordinate_systems'][cs_2]['parent']:
-                    temp = np.array([vcd.data['vcd']['coordinate_systems'][cs_2]['pose_wrt_parent']])
-                    t_4x4 = inv(temp.reshape(4, 4)).dot(t_4x4)
-
-    return t_4x4.flatten().tolist()
+    # Convert first to scs
+    points3d_dst_4xN = T_src_to_dst.dot(points3d_4xN)
+    return points3d_dst_4xN
 
 
 def transform_cuboid(cuboid, T_ref_to_dst):
@@ -659,6 +601,14 @@ def transform_cuboid(cuboid, T_ref_to_dst):
                           rvec[0][0], rvec[1][0], rvec[2][0],
                           sx, sy, sz]    # list
     return cuboid_transformed
+
+
+def transform_plane(plane, T_ref_to_dst):
+    # plane = (a, b, c, d)
+    # such that ax + by + cz + d = 0
+    # plane_transformed = transpose(invert(T))* plane
+    plane_transformed = inv(T_ref_to_dst).transpose().dot(np.array(plane).reshape(4, 1))
+    return plane_transformed.flatten().tolist()
 
 
 def generate_cuboid_points_object_4x8(sx, sy, sz):
@@ -693,7 +643,6 @@ def generate_cuboid_points_ref_4x8(cuboid):
 ####################################################
 # Other
 ####################################################
-
 def float_2dec(val):
     '''
     This function is useful to print float into JSON with only 2 decimals
@@ -708,3 +657,36 @@ def get_key(my_dict, val):
 
     return "key doesn't exist"
 
+
+def is_inside_image(width, height, x, y):
+    return width > x > 0 and height > y > 0
+
+
+def bounding_rect(points2d_3xN):
+    x = points2d_3xN[0, :]
+    y = points2d_3xN[1, :]
+    x_min = np.min(x)
+    x_max = np.max(x)
+    y_min = np.min(y)
+    y_max = np.max(y)
+
+    return np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))
+
+
+def generate_grid(x_params, y_params, z_params):
+    xls = np.linspace(x_params[0], x_params[1], x_params[2]),
+    yls = np.linspace(y_params[0], y_params[1], y_params[2]),
+    zls = np.linspace(z_params[0], z_params[1], z_params[2])
+    xm, ym, zm = np.meshgrid(xls, yls, zls)
+
+    return xm, ym, zm
+
+
+def grid_as_4xN_points3d(xm, ym, zm):
+    xm_row = xm.reshape(1, -1)
+    ym_row = ym.reshape(1, -1)
+    zm_row = zm.reshape(1, -1)
+    pad_row = np.zeros(xm_row.shape, np.float)
+    pad_row[0, :] = 1.0
+    points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
+    return points3d_vcs_4xN

@@ -295,9 +295,9 @@ class cuboid(ObjectDataGeometry):
         else:
             self.use_quaternion = True
         if isinstance(val, tuple):
-            self.data['val'] = val
+            self.data['val'] = list(val)
         elif isinstance(val, list):
-            self.data['val'] = tuple(val)
+            self.data['val'] = val
         self.type = ObjectDataType.cuboid
 
 

@@ -21,6 +21,7 @@ import numpy as np
 import math
 from vcd import core
 from vcd import draw
+from vcd import scl
 
 
 def draw_kitti_tracking(sequence_number=0, record_video=False):
@@ -29,9 +30,11 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
     #vcd_file_name = "../tests/etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
     vcd_file_name = "../converters/kittiConverter/etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
     vcd = core.VCD(vcd_file_name)
-    drawerTopView1 = draw.TopView(vcd, "vehicle-iso8855")
-    drawerTopView2 = draw.TopView(vcd, "odom")
-    drawerCamera = draw.Image(vcd)
+    scene = scl.Scene(vcd)  # scl.Scene has functions to project images, transforms, etc.
+
+    drawerTopView1 = draw.TopView(scene, "vehicle-iso8855")
+    drawerTopView2 = draw.TopView(scene, "odom")
+    drawerCamera = draw.Image(scene, "CAM_LEFT")
     frameInfoDrawer = draw.FrameInfoDrawer(vcd)
 
     # Get the size of the screen
@@ -50,12 +53,13 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
     # Prepare color map
     colorMap = {'Car': (0, 0, 255), 'Van': (255, 0, 0), 'Truck': (127, 127, 0),
                  'Pedestrian': (0, 255, 0), 'Person_sitting': (0, 127, 127),
-                 'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (255, 255, 255),
+                 'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (0, 255, 255),
                 'Cyclist': (0, 127, 255),
                 'Ego-car': (127, 127, 127)}
     imageParams = draw.Image.Params(_colorMap=colorMap,
                                     _draw_trajectory=False,
-                                    _ignore_classes={"DontCare"})
+                                    _ignore_classes={"DontCare"},
+                                    _draw_types={"bbox", "cuboid"})
     ar = video_width/(video_height*2)
 
     # Next values define which region of the selected coordinate_system is to be monitored by the TopView

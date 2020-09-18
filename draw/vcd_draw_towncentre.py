@@ -20,14 +20,16 @@ import numpy as np
 import math
 from vcd import core
 from vcd import draw
-
+from vcd import scl
 
 def draw_towncentre(record_video=False):
     # Get annotations
     # Run ../converters/towncenterConverter/converter.py to generate the json files
     vcd_file_name = "../converters/towncenterConverter/etc/vcd430_towncenter.json"
     vcd = core.VCD(vcd_file_name)
-    drawerCamera = draw.Image(vcd)
+    scene = scl.Scene(vcd)
+
+    drawerCamera = draw.Image(scene)
     #textDrawer = draw.TextDrawer()
     frameInfoDrawer = draw.FrameInfoDrawer(vcd)
 
@@ -59,7 +61,7 @@ def draw_towncentre(record_video=False):
 
     # Loop over video
     f = 0
-    while(True):
+    while True:
         # Capture frame
         ret, img = video_cap.read()
         if ret is not True:
