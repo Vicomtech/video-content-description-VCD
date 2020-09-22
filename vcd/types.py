@@ -48,7 +48,7 @@ class IntrinsicsPinhole(Intrinsics):
         else:
             assert (isinstance(distortion_coeffs_1xN, list))
             num_coeffs = len(distortion_coeffs_1xN)
-            assert(5 <= num_coeffs <= 14)
+            assert(4 <= num_coeffs <= 14)
         self.data['intrinsics_pinhole']['distortion_coeffs_1xN'] = distortion_coeffs_1xN
 
         if additional_items is not None:
