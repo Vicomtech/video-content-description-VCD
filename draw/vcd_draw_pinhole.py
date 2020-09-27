@@ -235,7 +235,7 @@ def add_some_objects(vcd):
                                 8.0, 3.1, 2.5),
                            coordinate_system="vehicle-iso8855")
     vcd.add_object_data(uid2, cuboid2, frame_value=0)
-
+    
     #########################################
     # Points3d (Walls)
     #########################################
@@ -388,18 +388,11 @@ def draw_scene(vcd):
     cam_rear = scene.get_camera("CAM_REAR")
     cam_left = scene.get_camera("CAM_LEFT")
     cam_right = scene.get_camera("CAM_RIGHT")
-    img_front_und = cv.undistort(img_front,
-                                 cam_front.K_3x3,
-                                 cam_front.d)
-    img_rear_und = cv.undistort(img_rear,
-                                cam_rear.K_3x3,
-                                cam_rear.d)
-    img_left_und = cv.undistort(img_left,
-                                cam_left.K_3x3,
-                                cam_left.d)
-    img_right_und = cv.undistort(img_right,
-                                 cam_right.K_3x3,
-                                 cam_right.d)
+
+    img_front_und = cam_front.undistort_image(img_front)
+    img_rear_und = cam_rear.undistort_image(img_rear)
+    img_left_und = cam_left.undistort_image(img_left)
+    img_right_und = cam_right.undistort_image(img_right)
 
     # Draw the text
     textImg = frameInfoDrawer.draw(0, cols=400, rows=img_height_px * 2, _params=imageParams)
@@ -426,7 +419,7 @@ def draw_scene(vcd):
                                          _stepX=1.0, _stepY=1.0,
                                         _draw_grid=False)
 
-    topView = drawerTopView.draw(0, _params=topviewParams)
+    topView = drawerTopView.draw(imgs=None, frameNum=0, _params=topviewParams)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)
@@ -434,7 +427,7 @@ def draw_scene(vcd):
     cv.imshow("Cameras undistorted", mosaic_und)
     cv.namedWindow("VCD info")
     cv.imshow("VCD info", textImg)
-    cv.namedWindow("TopView")
+    cv.namedWindow("TopView", cv.WINDOW_NORMAL)
     cv.imshow("TopView", topView)
     cv.waitKey(0)
 

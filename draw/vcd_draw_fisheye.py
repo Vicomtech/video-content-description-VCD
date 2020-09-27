@@ -259,27 +259,6 @@ def draw_scene(vcd):
     drawer_left.draw(img_left, 0, _params=imageParams)
     drawer_right.draw(img_right, 0, _params=imageParams)
 
-
-    '''
-    # Undistort
-    cam_front = scene.get_camera("CAM_FRONT")
-    cam_rear = scene.get_camera("CAM_REAR")
-    cam_left = scene.get_camera("CAM_LEFT")
-    cam_right = scene.get_camera("CAM_RIGHT")
-    img_front_und = cv.undistort(img_front,
-                                 cam_front.K_3x3,
-                                 cam_front.d)
-    img_rear_und = cv.undistort(img_rear,
-                                cam_rear.K_3x3,
-                                cam_rear.d)
-    img_left_und = cv.undistort(img_left,
-                                cam_left.K_3x3,
-                                cam_left.d)
-    img_right_und = cv.undistort(img_right,
-                                 cam_right.K_3x3,
-                                 cam_right.d)
-    '''
-
     # Draw the text
     textImg = frameInfoDrawer.draw(0, cols=400, rows=img_height_px * 2, _params=imageParams)
 
@@ -305,7 +284,7 @@ def draw_scene(vcd):
                                         _stepX=1.0, _stepY=1.0,
                                         _draw_grid=False)
 
-    topView = drawerTopView.draw(0, _params=topviewParams)
+    topView = drawerTopView.draw(imgs=None, frameNum=0, _params=topviewParams)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)

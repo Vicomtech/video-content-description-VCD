@@ -100,8 +100,8 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
         drawerCamera.draw(img, f, _params=imageParams)
 
         # Top View
-        topView1 = drawerTopView1.draw(f, _params=topviewParams1)
-        topView2 = drawerTopView2.draw(f, _params=topviewParams2)
+        topView1 = drawerTopView1.draw(imgs=None, frameNum=f, _params=topviewParams1)
+        topView2 = drawerTopView2.draw(imgs=None, frameNum=f, _params=topviewParams2)
 
         # VCD text viewer
         textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height*5, _params=imageParams)

@@ -250,7 +250,11 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
 ####################################################
 def create_pose(R, C):
     # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
-    temp = np.hstack((R, C))
+    if C.shape[0] == 3:
+        temp = np.hstack((R, C))
+    elif C.shape[0] == 4:
+        C = C[0:3, :]
+        temp = np.hstack((R, C))
     P = np.vstack((temp, np.array([0, 0, 0, 1])))  # P is 4x4
     return P
 
@@ -500,9 +504,31 @@ def convert_oxts_to_pose(oxts):
 
     return poses_4x4xN
 
+
+def get_point3d_of_plane(plane):
+    # Provided a plane (a, b, c, d), obtain a point that belongs to the plane
+    a, b, c, d = plane
+    if a != 0:
+        return np.array([[-d / a, 0, 0, 1]]).transpose()
+    elif b!= 0:
+        return np.array([[0, -d / b, 0, 1]]).transpose()
+    elif c != 0:
+        return np.array([[0, 0, -d / c, 1]]).transpose()
+    else:
+        return None
+
+
 ####################################################
 # Projections
 ####################################################
+def homography_from_pose(K_3x4, P_4x4, dim_zero=2):
+    # dim_zero can be 0, 1 or 2, meaning X, Y or Z
+    # For instance, dim_zero=0, means Z=0, so we can null the third column of the Pose
+    KP = K_3x4.dot(P_4x4)
+    H = np.delete(KP, dim_zero, 1)
+    return H
+
+
 def fromPinholeParamsToCameraMatrix3x4(fx, fy, cx, cy):
     matrix3x4 = [[fx, 0.0, cx, 0.0],
                  [0.0, fy, cy, 0.0],
@@ -564,10 +590,21 @@ def get_distortion_radius(distortion):
 ####################################################
 # Transforms
 ####################################################
+def apply_transform(transform_JxM, data_MxN):
+    # e.g. K_3x3, points_3xN
+    J = transform_JxM.shape[0]
+    N = data_MxN.shape[1]
+    assert(transform_JxM.shape[1] == data_MxN.shape[0])
+    data_out = transform_JxM.dot(data_MxN)  # output is JxN
+    data_out[:, N] /= data_out[J-1, N]
+    return data_out
+
 def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
     rows, cols = points3d_4xN.shape
     assert (points3d_4xN.ndim == 2)
-    assert (rows == 4 and cols >= 1)
+    #assert (rows == 4 and cols >= 1)
+    if cols < 1:
+        return np.array([])
 
     # Convert first to scs
     points3d_dst_4xN = T_src_to_dst.dot(points3d_4xN)
@@ -607,7 +644,8 @@ def transform_plane(plane, T_ref_to_dst):
     # plane = (a, b, c, d)
     # such that ax + by + cz + d = 0
     # plane_transformed = transpose(invert(T))* plane
-    plane_transformed = inv(T_ref_to_dst).transpose().dot(np.array(plane).reshape(4, 1))
+    T = np.array(T_ref_to_dst).reshape(4, 4)
+    plane_transformed = inv(T).transpose().dot(np.array(plane).reshape(4, 1))
     return plane_transformed.flatten().tolist()
 
 
@@ -690,3 +728,16 @@ def grid_as_4xN_points3d(xm, ym, zm):
     pad_row[0, :] = 1.0
     points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
     return points3d_vcs_4xN
+
+def from_MxN_to_OpenCV_Nx1xM(array_MxN):
+    M, N = array_MxN.shape
+    array_Nx1xM = np.float32(array_MxN[0:M, np.newaxis, :]).transpose()
+    return array_Nx1xM
+
+def from_OpenCV_Nx1xM_to_MxN(array_Nx1xM):
+    N = array_Nx1xM.shape[0]
+    M = array_Nx1xM.shape[2]
+    array_MxN = array_Nx1xM
+    array_MxN.shape = (N, M)
+    return array_MxN
+

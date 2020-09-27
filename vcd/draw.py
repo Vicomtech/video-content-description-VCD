@@ -179,7 +179,7 @@ class TopView:
         self.coordinate_system = coordinate_system
         self.params = TopView.Params()
 
-    def draw(self, frameNum, uid=None, _drawTrajectory=True, _params=None):
+    def draw(self, imgs, frameNum, uid=None, _drawTrajectory=True, _params=None):
         self.topView = None
         if _params is not None:
             assert(isinstance(_params, TopView.Params))
@@ -187,6 +187,17 @@ class TopView:
 
         # Base
         self.topView = np.zeros((self.params.imgSize[1], self.params.imgSize[0], 3), np.uint8)  # Needs to be here
+
+        # Base images
+        if imgs is not None:
+            assert(isinstance(imgs, dict))
+            # should be {"CAM_FRONT": img_front, "CAM_REAR": img_rear}
+            for key, val in imgs.items():
+                assert self.scene.vcd.has_coordinate_system(key)
+
+        self.draw_BEVs(imgs, frameNum)
+
+        # Base grids
         self.draw_topview_base()
 
         # Draw objects
@@ -384,7 +395,6 @@ class TopView:
 
                             self.draw_points3d(_img, points3d_4xN_transformed, color)
 
-
     def draw_objects_at_frame(self, uid, _frameNum, _drawTrajectory):
         img = self.topView
 
@@ -419,6 +429,19 @@ class TopView:
                     self.draw_object_data(object_, object_class,
                                                img, object_id, _frameNum, _drawTrajectory)
 
+    def draw_BEVs(self, imgs, _frameNum):
+        """
+        This function retrieves cameras from VCD and
+        :param _frameNum:
+        :return:
+        """
+        #for cam_name, img in imgs.items():
+        #    cam = self.scene.get_camera(cam_name, _frameNum)
+        #    if cam.is_distorted():
+        #        # Create undistorted
+        pass
+
+
     def size2Pixel(self, _size):
         return (int(round(_size[0] * abs(self.params.scaleX))),
                 int(round(_size[1] * abs(self.params.scaleY))))
@@ -427,7 +450,6 @@ class TopView:
         pixel = (int(round(_point[0]*self.params.scaleX + self.params.offsetX)),
                  int(round(_point[1]*self.params.scaleY + self.params.offsetY)))
         return pixel
-
 
 class Image:
     '''
@@ -463,21 +485,20 @@ class Image:
         if camera_coordinate_system is not None:
             assert (scene.vcd.has_coordinate_system(camera_coordinate_system))
         self.camera_coordinate_system = camera_coordinate_system
+        self.camera = self.scene.get_camera(self.camera_coordinate_system)
         self.params = Image.Params()
 
     def draw_points3d(self, _img, points3d_4xN, _color):
-        cam = self.scene.get_camera(self.camera_coordinate_system)
         # this function may return LESS than N points IF 3D points are BEHIND the camera
-        points2d_4xN, idx_valid = cam.project_points3d(points3d_4xN)
-        if points2d_4xN is None:
+        points2d_3xN, idx_valid = self.camera.project_points3d(points3d_4xN)
+        if points2d_3xN is None:
             return
-        rows, cols = points2d_4xN.shape
+        rows, cols = points2d_3xN.shape
         for i in range(0, cols):
             if idx_valid[i]:
-                if np.isnan(points2d_4xN[0, i]) or np.isnan(points2d_4xN[1, i]):
-                    a = 2
+                if np.isnan(points2d_3xN[0, i]) or np.isnan(points2d_3xN[1, i]):
                     continue
-                cv.circle(_img, (utils.round(points2d_4xN[0, i]), utils.round(points2d_4xN[1, i])), 2, _color, -1)
+                cv.circle(_img, (utils.round(points2d_3xN[0, i]), utils.round(points2d_3xN[1, i])), 2, _color, -1)
 
     def draw_cuboid(self, _img, _cuboid_vals, _class, _color):
         assert (isinstance(_cuboid_vals, list))
@@ -487,8 +508,7 @@ class Image:
         # Generate object coordinates
         points3d_4x8 = utils.generate_cuboid_points_ref_4x8(_cuboid_vals)
 
-        cam = self.scene.get_camera(self.camera_coordinate_system)
-        points2d_4x8, idx_valid = cam.project_points3d(points3d_4x8)  # this function may return LESS than 8 points IF 3D points are BEHIND the camera
+        points2d_4x8, idx_valid = self.camera.project_points3d(points3d_4x8)  # this function may return LESS than 8 points IF 3D points are BEHIND the camera
         if points2d_4x8 is None:
             return
 
@@ -549,8 +569,8 @@ class Image:
 
                                         prev_center[name] = center
 
+    '''
     def draw_barrel_distortion_grid(self, img, color, only_outer=True, extended=False):
-        cam = self.scene.get_camera(self.camera_coordinate_system)
         # Define grid in undistorted space and then apply distortPoint
         height, width = img.shape[:2]
 
@@ -562,10 +582,11 @@ class Image:
         yEnd = height
 
         if extended:
-            xStart = int(-2 * width)
-            xEnd = int(width + 2 * width)
-            yStart = int(-2 * height)
-            yEnd = int(height + 2 * height)
+            factor = 1
+            xStart = int(-factor * width)
+            xEnd = int(width + factor * width)
+            yStart = int(-factor * height)
+            yEnd = int(height + factor * height)
 
         stepX = (xEnd - xStart) / num_steps
         stepY = (yEnd - yStart) / num_steps
@@ -579,10 +600,11 @@ class Image:
 
                 pA = (x, y, 1)  # (i * stepX, j * stepY)
                 pB = (x + stepX, y, 1)  # ((i+1) * stepX, j * stepY)
-                if x + stepX > width:
-                    continue
-                pDA = cam.distort_points2d(np.array(pA).reshape(3, 1))
-                pDB = cam.distort_points2d(np.array(pB).reshape(3, 1))
+                if not extended:
+                    if x + stepX > width:
+                        continue
+                pDA = self.camera.distort_points2d(np.array(pA).reshape(3, 1))
+                pDB = self.camera.distort_points2d(np.array(pB).reshape(3, 1))
 
                 # cv2.circle(imgDist, pointDistA, 3, bgr, -1)
                 if 0 <= pDA[0, 0] < width and 0 <= pDA[1, 0] < height and \
@@ -601,10 +623,11 @@ class Image:
                         continue
                 pA = (x, y, 1)  # (i * stepX, j * stepY)
                 pB = (x, y + stepY, 1)  # (i * stepX, (j + 1) * stepY)
-                if y + stepY > height:
-                    continue
-                pDA = cam.distort_points2d(np.array(pA).reshape(3, 1))
-                pDB = cam.distort_points2d(np.array(pB).reshape(3, 1))
+                if not extended:
+                    if y + stepY > height:
+                        continue
+                pDA = self.camera.distort_points2d(np.array(pA).reshape(3, 1))
+                pDB = self.camera.distort_points2d(np.array(pB).reshape(3, 1))
 
                 # cv2.circle(imgDist, pointDistA, 3, bgr, -1)
                 if 0 <= pDA[0, 0] < width and 0 <= pDA[1, 0] < height and \
@@ -615,55 +638,29 @@ class Image:
                     cv.line(img, (utils.round(pDA[0, 0]), utils.round(pDA[1, 0])),
                             (utils.round(pDB[0, 0]), utils.round(pDB[1, 0])), color_to_use, 2)
 
-    '''def draw_barrel_distortion_limits(self, img, num_steps=20, margin=300):
-        cam = self.scene.get_camera(self.camera_coordinate_system)
-
-        height, width = img.shape[:2]
-
-        # Create extended image
-        #margin = width // 2
-        imExt = np.zeros((height + 2 * margin, width + 2 * margin, 3), np.uint8)
-        imExt[margin:margin + height, margin:margin + width] = img
-        cv.namedWindow("extended", cv.WINDOW_NORMAL)
-
-        # Debug, see where the points fall if undistorted
-        xStart = 0
-        xEnd = width
-        yStart = 0
-        yEnd = height
-        stepX = (xEnd - xStart) / num_steps
-        stepY = (yEnd - yStart) / num_steps
-
-        # Lines in X
-        for y in np.linspace(yStart, yEnd, num_steps + 1):
-            for x in np.linspace(xStart, xEnd, num_steps + 1):
-                pA = (x, y, 1)  # (i * stepX, j * stepY)
-                pB = (x + stepX, y, 1)  # ((i+1) * stepX, j * stepY)
-                if x + stepX > width:
-                    continue
-
-                pUA = cam.undistort_points2d(np.array(pA).reshape(3, 1))
-                pUB = cam.undistort_points2d(np.array(pB).reshape(3, 1))
-
-                cv.line(imExt, (utils.round(pUA[0, 0] + margin), utils.round(pUA[1, 0] + margin)),
-                        (utils.round(pUB[0, 0] + margin), utils.round(pUB[1, 0] + margin)), (0, 255, 0), 2)
-
-        # Lines in X
-        for y in np.linspace(yStart, yEnd, num_steps + 1):
-            for x in np.linspace(xStart, xEnd, num_steps + 1):
-                pA = (x, y, 1)  # (i * stepX, j * stepY)
-                pB = (x, y + stepY, 1)  # (i * stepX, (j + 1) * stepY)
-                pUA = cam.undistort_points2d(np.array(pA).reshape(3, 1))
-                pUB = cam.undistort_points2d(np.array(pB).reshape(3, 1))
-
-                if y + stepY > height:
-                    continue
-
-                cv.line(imExt, (utils.round(pUA[0, 0] + margin), utils.round(pUA[1, 0] + margin)),
-                        (utils.round(pUB[0, 0] + margin), utils.round(pUB[1, 0] + margin)), (0, 255, 0), 2)
-
-        cv.imshow("extended", imExt)
-        cv.waitKey(0)
+        # r_limit
+        if self.camera.r_limit is not None:
+            # r_limit is a radius limit in calibrated coordinates
+            # It might be possible to draw it by sampling points of a circle r in the undistorted domain
+            # and apply distortPoints to them
+            num_points = 100
+            points2d_und_3xN = np.ones((3, num_points), dtype=np.float)
+            count = 0
+            for angle in np.linspace(0, 2 * np.pi, num_points, endpoint=False):
+                x = np.sin(angle) * self.camera.r_limit
+                y = np.cos(angle) * self.camera.r_limit
+                points2d_und_3xN[0, count] = x
+                points2d_und_3xN[1, count] = y
+                count += 1
+            points2d_und_3xN = self.camera.K_3x3.dot(points2d_und_3xN)
+            points2d_dist_3xN = self.camera.distort_points2d(points2d_und_3xN)
+            point2d_prev = None
+            for point2d in points2d_dist_3xN.transpose():
+                x = utils.round(point2d[0])
+                y = utils.round(point2d[1])
+                if point2d_prev is not None:
+                    cv.line(img, point2d_prev, (x, y), (0, 255, 255), 3)
+                point2d_prev = (x, y)
     '''
 
     def draw(self, _img, _frameNum, _params=None):
@@ -749,8 +746,11 @@ class Image:
                        (margin, margin),
                        cv.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1, cv.LINE_AA)
 
-        if self.params.draw_barrel:
-            self.draw_barrel_distortion_grid(_img, (0, 255, 0), False)
+        # Draw barrel
+        # if self.params.draw_barrel:
+        #    self.draw_barrel_distortion_grid(_img, (0, 255, 0), False, False)
+
+
 
 class FrameInfoDrawer:
     # This class draws Element information in a window

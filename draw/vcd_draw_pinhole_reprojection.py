@@ -117,7 +117,15 @@ def add_some_objects(vcd):
     #########################################
     # Points3d (Ground)
     #########################################
-    xm, ym, zm = utils.generate_grid(x_params=(0, 20, 21), y_params=(-20, 20, 41), z_params=(0, 0, 1))
+    step_x = 1.0
+    step_y = 1.0
+    x_min = 0
+    x_max = 50
+    y_min = -20
+    y_max = 20
+    num_points_x = int((x_max - x_min)/step_x)
+    num_points_y = int((y_max - y_min)/step_y)
+    xm, ym, zm = utils.generate_grid(x_params=(x_min, x_max, num_points_x + 1), y_params=(y_min, y_max, num_points_y+1), z_params=(0, 0, 1))
     points3d_4xN = utils.grid_as_4xN_points3d(xm, ym, zm)
     uid_ground_1 = vcd.add_object(name="ground_x_pos", semantic_type="Ground", frame_value=0)
     mat_ground = types.mat(name="points_rep",
@@ -336,10 +344,7 @@ def draw_scene(vcd):
 
     # Undistort
     cam_front = scene.get_camera("CAM_FRONT")
-    img_front_und = cv.undistort(img_front,
-                                 cam_front.K_3x3,
-                                 cam_front.d)
-
+    img_front_und = cam_front.undistort_image(img_front)
 
     # Draw the text
     textImg = frameInfoDrawer.draw(0, cols=400, rows=img_height_px * 2, _params=imageParams)
@@ -358,7 +363,7 @@ def draw_scene(vcd):
                                          _stepX=1.0, _stepY=1.0,
                                         _draw_grid=False)
 
-    topView = drawerTopView.draw(0, _params=topviewParams)
+    topView = drawerTopView.draw(imgs=None, frameNum=0, _params=topviewParams)
 
     cv.namedWindow("front", cv.WINDOW_NORMAL)
     cv.imshow("front", img_front)
