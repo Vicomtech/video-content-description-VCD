@@ -11,8 +11,6 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
-
 import sys
 sys.path.insert(0, ".")
 from random import seed
@@ -59,7 +57,7 @@ class SetupViewer:
 
     def plot_setup(self, axes=None):
         for cs_name, cs in self.scene.vcd.data['vcd']['coordinate_systems'].items():
-            T = self.scene.get_transform(cs_name, self.coordinate_system)
+            T, static = self.scene.get_transform(cs_name, self.coordinate_system)
             L=2.0
             if cs['type'] == 'sensor_cs':
                 L=0.5
@@ -72,7 +70,7 @@ class SetupViewer:
                     cuboid_cs = object['object_data']['cuboid'][0]['coordinate_system']
                     cuboid_vals = object['object_data']['cuboid'][0]['val']
 
-                    t = self.scene.get_transform(cuboid_cs, self.coordinate_system)
+                    t, static = self.scene.get_transform(cuboid_cs, self.coordinate_system)
                     cuboid_vals_transformed = utils.transform_cuboid(cuboid_vals, t)
 
                     p = utils.generate_cuboid_points_ref_4x8(cuboid_vals_transformed)
@@ -115,7 +113,8 @@ class TopView:
 
         def __init__(self, _stepX=None, _stepY=None, _background_color=None,_imgSize=None, _rangeX=None, _rangeY=None,
                      _colorMap=None, _ignore_classes=None,
-                     _draw_grid=None):
+                     _draw_grid=None,
+                     _draw_only_current_image=None):
             self.imgSize = (1920, 1080)  # width, height
             if _imgSize is not None:
                 assert (isinstance(_imgSize, tuple))
@@ -138,6 +137,10 @@ class TopView:
 
             self.offsetX = round(-self.rangeX[0] * self.scaleX)
             self.offsetY = round(-self.rangeY[1] * self.scaleY)
+
+            self.S = np.array([[self.scaleX, 0, self.offsetX],
+                               [0, self.scaleY, self.offsetY],
+                               [0, 0, 1]])
 
             self.stepX = 1.0
             if _stepX is not None:
@@ -169,6 +172,11 @@ class TopView:
             else:
                 self.draw_grid = _draw_grid
 
+            if _draw_only_current_image is None:
+                self.draw_only_current_image = True
+            else:
+                self.draw_only_current_image = _draw_only_current_image
+
     def __init__(self, scene, coordinate_system):
         # scene contains the VCD and helper functions for transforms and projections
         assert(isinstance(scene, scl.Scene))
@@ -179,7 +187,75 @@ class TopView:
         self.coordinate_system = coordinate_system
         self.params = TopView.Params()
 
-    def draw(self, imgs, frameNum, uid=None, _drawTrajectory=True, _params=None):
+        self.images = {}
+
+    def add_images(self, imgs, frameNum):
+        """
+        This function adds images to the TopView representation. By specifying the frame num and the camera name,
+        several images can be loaded in one single call. Images should be provided
+        as dictionary: {"CAM_FRONT": img_front, "CAM_REAR": img_rear}
+
+        The function pre-computes all the necessary variables to create the TopView, such as the homography from
+        image plane to world plane, or the camera region of interest, which is stored in scene.cameras dictionary
+        :param imgs: dictionary of images
+        :param frameNum: frame number
+        :return: nothing
+        """
+        # Base images
+        if imgs is not None:
+            assert (isinstance(imgs, dict))
+            # should be {"CAM_FRONT": img_front, "CAM_REAR": img_rear}
+            for cam_name, img in imgs.items():
+                assert self.scene.vcd.has_coordinate_system(cam_name)
+                cam = self.scene.get_camera(cam_name, frameNum)  # this call creates an entry inside scene
+                #self.scene.cameras[frameNum][cam_name]['img'] = img
+
+                self.images.setdefault(cam_name, {})
+                self.images[cam_name].setdefault(frameNum, {})
+                self.images[cam_name][frameNum]['img'] = img
+
+                # Create transforms for BEV (from undistorted domain!)
+                t_ref_to_cam_4x4, static = self.scene.get_transform(self.coordinate_system, cam_name, frameNum)
+                temp = cam.K_und_3x4.dot(t_ref_to_cam_4x4)
+                H_3x3 = np.delete(temp, 2, 1)  # delete 3rd column, corresponding to Z=0 in self.coordinate_system
+                H_3x3[:, :] /= H_3x3[2, 2]  # last element should be 1 for a planar homography
+                H_inv_3x3 = utils.inv(H_3x3)
+                H_inv_3x3[:, :] /= H_inv_3x3[2, 2]
+                # H_3x3 converts from world plane Z=0 in self.coordinate_system, into undistorted camera image plane
+                # H_inv_3x3 converts from image plane into world plane Z=0
+
+                self.images[cam_name][frameNum]['H'] = H_3x3
+                self.images[cam_name][frameNum]['Hinv'] = H_inv_3x3
+
+                # Coverage
+                pts_coverage = self.scene.camera_roi_z0(cam_name, self.coordinate_system, frameNum)
+                self.images[cam_name][frameNum]['coverage'] = pts_coverage
+
+                '''
+                # Prepare for opencv
+                img_draw = img
+                pts_coverage = (pts_coverage[0:2, :]).transpose()
+                pts_coverage = pts_coverage.reshape((-1, 1, 2))
+                cv.fillConvexPoly(img_draw, pts_coverage, (0, 0, 255))
+                #cv.polylines(img_draw, [pts_coverage], isClosed=True, color=(0, 0, 255))
+                cv.imshow("coverage", img_draw)
+                cv.waitKey(0)
+                '''
+
+                # TODO compute remaps for higher efficiency. Warning: TopView is designed to allow modifying params
+                # at each call of draw(), which means the zoom, offset of the topview might change from call to call
+                # and therefore the remaps would need to be recomputed
+
+    def draw(self, frameNum, uid=None, _drawTrajectory=True, _params=None):
+        """
+        This is the main drawing function for the TopView drawer. If explres the provided params to select different
+        options.
+        :param frameNum: frame number
+        :param uid: unique identifier of object to be drawn (if None, all are drawn)
+        :param _drawTrajectory: boolean to draw the trajectory of objects
+        :param _params: additional parameters
+        :return: the TopView image
+        """
         self.topView = None
         if _params is not None:
             assert(isinstance(_params, TopView.Params))
@@ -187,15 +263,10 @@ class TopView:
 
         # Base
         self.topView = np.zeros((self.params.imgSize[1], self.params.imgSize[0], 3), np.uint8)  # Needs to be here
+        self.topView.fill(self.params.backgroundColor)
 
-        # Base images
-        if imgs is not None:
-            assert(isinstance(imgs, dict))
-            # should be {"CAM_FRONT": img_front, "CAM_REAR": img_rear}
-            for key, val in imgs.items():
-                assert self.scene.vcd.has_coordinate_system(key)
-
-        self.draw_BEVs(imgs, frameNum)
+        # Draw BEW
+        self.draw_BEVs(frameNum)
 
         # Base grids
         self.draw_topview_base()
@@ -234,7 +305,7 @@ class TopView:
                    cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
 
     def draw_topview_base(self):
-        self.topView.fill(self.params.backgroundColor)
+        #self.topView.fill(self.params.backgroundColor)
 
         if self.params.draw_grid:
             # Grid x (1/2)
@@ -347,7 +418,7 @@ class TopView:
                                     if cs_data != self.coordinate_system:
                                         src_cs = cs_data
                                         dst_cs = self.coordinate_system
-                                        transform_src_dst = self.scene.get_transform(src_cs,
+                                        transform_src_dst, static = self.scene.get_transform(src_cs,
                                                                                 dst_cs, f)
                                         if transform_src_dst is not None:
                                             cuboid_vals_transformed = utils.transform_cuboid(
@@ -429,18 +500,52 @@ class TopView:
                     self.draw_object_data(object_, object_class,
                                                img, object_id, _frameNum, _drawTrajectory)
 
-    def draw_BEVs(self, imgs, _frameNum):
+    def draw_BEV(self, _frameNum, cam_name):
+        img = self.images[cam_name][_frameNum]['img']
+        cam = self.scene.cameras[cam_name][_frameNum]['cam']
+
+        if 'Hinv' in self.images[cam_name][_frameNum]:
+            img_und = cam.undistort_image(img)
+
+            # Coverage only
+            if 'coverage' in self.images[cam_name][_frameNum]:
+                pts_coverage = self.images[cam_name][_frameNum]['coverage']
+                pts_coverage = (pts_coverage[0:2, :]).transpose()
+                pts_coverage = pts_coverage.reshape((-1, 1, 2))
+                mask_cov = np.full((img.shape[0], img.shape[1]), 0, dtype=np.uint8)
+                cv.fillConvexPoly(mask_cov, pts_coverage, 255)
+                img_und = cv.bitwise_and(img_und, img_und, mask=mask_cov)
+
+            # Get the transform from undistorted image to world plane Z=0
+            H_inv = self.images[cam_name][_frameNum]['Hinv']
+
+            # Scaled to pixels
+            H = self.params.S.dot(H_inv)
+
+            # Get the BEV
+            bev = cv.warpPerspective(img_und, H, self.params.imgSize)
+
+            # Mask zero-pixels
+            mask = (bev > 0)
+            self.topView[mask] = bev[mask]
+
+    def draw_BEVs(self, _frameNum):
         """
-        This function retrieves cameras from VCD and
+        This function draws BEVs into the topview
         :param _frameNum:
         :return:
         """
-        #for cam_name, img in imgs.items():
-        #    cam = self.scene.get_camera(cam_name, _frameNum)
-        #    if cam.is_distorted():
-        #        # Create undistorted
-        pass
-
+        draw_only_last = self.params.draw_only_current_image
+        if draw_only_last:
+            for cam_name in self.images:
+                if _frameNum in self.images[cam_name]:
+                        self.draw_BEV(_frameNum=_frameNum, cam_name=cam_name)
+        else:
+            # Let's draw all previous images as well
+            for cam_name in self.images:
+                for f in self.images[cam_name]:
+                    if f >= 0:  # Ignore -1 code
+                        self.draw_BEV(_frameNum=f, cam_name=cam_name)
 
     def size2Pixel(self, _size):
         return (int(round(_size[0] * abs(self.params.scaleX))),
@@ -750,8 +855,6 @@ class Image:
         # if self.params.draw_barrel:
         #    self.draw_barrel_distortion_grid(_img, (0, 255, 0), False, False)
 
-
-
 class FrameInfoDrawer:
     # This class draws Element information in a window
     class Params:
@@ -818,7 +921,6 @@ class FrameInfoDrawer:
                 count += 1
 
         return img
-
 
 class TextDrawer:
     def __init__(self):

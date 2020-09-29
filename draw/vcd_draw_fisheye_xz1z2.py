@@ -441,7 +441,7 @@ def draw_scene(vcd):
                                         _stepX=1.0, _stepY=1.0,
                                         _draw_grid=False)
 
-    topView1 = drawerTopView1.draw(imgs=None, frameNum=0, _params=topviewParams)
+    topView1 = drawerTopView1.draw(frameNum=0, _params=topviewParams)
     #topView2 = drawerTopView2.draw(0, _params=topviewParams)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)

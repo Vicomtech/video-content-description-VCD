@@ -167,8 +167,8 @@ class KITTI_Tracking_reader():
         #########################################
         # CREATE SENSORS coordinate system: CAM
         #########################################
-        img_width_px = 1236
-        img_height_px = 366  # these are rectified dimensions
+        img_width_px = 1242
+        img_height_px = 375  # these are rectified dimensions
         calib_matrices = {}
         for row in calib_reader:
             calib_matrices[row[0]] = [float(x) for x in row[1:] if
@@ -319,7 +319,7 @@ def convert_KITTI_tracking_to_VCD4():
     kitti_tracking_base_path = "../../../../../data/kitti/tracking"
     kitti_tracking_output_vcd_path = "./etc"
 
-    num = None  # use None for all
+    num = 0  # use None for all
 
     # Create scenes
     kitti_parser = KITTI_Tracking_reader(kitti_tracking_base_path, num)

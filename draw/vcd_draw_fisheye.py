@@ -284,7 +284,7 @@ def draw_scene(vcd):
                                         _stepX=1.0, _stepY=1.0,
                                         _draw_grid=False)
 
-    topView = drawerTopView.draw(imgs=None, frameNum=0, _params=topviewParams)
+    topView = drawerTopView.draw(frameNum=0, _params=topviewParams)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)

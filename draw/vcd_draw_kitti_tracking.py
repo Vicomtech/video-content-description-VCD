@@ -12,6 +12,7 @@ VCD is distributed under MIT License. See LICENSE.
 """
 
 
+import copy
 import os
 import sys
 sys.path.insert(0, "..")
@@ -72,15 +73,16 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
                                         _rangeY=rangeY,
                                         _stepX=1.0, _stepY=1.0,
                                         _ignore_classes={"DontCare"})
-    rangeX = (-5.0, 140.0)
-    rangeY = (-((rangeX[1] - rangeX[0]) / ar) / 2, ((rangeX[1] - rangeX[0]) / ar) / 2)
+    rangeX = (0.0, 80.0)
+    rangeY = (-5, 25) #(-((rangeX[1] - rangeX[0]) / ar) / 2, ((rangeX[1] - rangeX[0]) / ar) / 2)
     topviewParams2 = draw.TopView.Params(_colorMap=colorMap,
                                          _imgSize=(video_width, video_height * 2),
                                          _background_color=255,
                                          _rangeX=rangeX,
                                          _rangeY=rangeY,
                                          _stepX=5.0, _stepY=5.0,
-                                         _ignore_classes={"DontCare"})
+                                         _ignore_classes={"DontCare"},
+                                         _draw_only_current_image=False)
 
     # Video record
     if record_video:
@@ -96,25 +98,28 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
             cv.waitKey(0)
             break
 
-        # Camera
-        drawerCamera.draw(img, f, _params=imageParams)
-
         # Top View
-        topView1 = drawerTopView1.draw(imgs=None, frameNum=f, _params=topviewParams1)
-        topView2 = drawerTopView2.draw(imgs=None, frameNum=f, _params=topviewParams2)
+        drawerTopView1.add_images({'CAM_LEFT': img}, f)
+        topView1 = drawerTopView1.draw(frameNum=f, _params=topviewParams1)
+        drawerTopView2.add_images({'CAM_LEFT': img}, f)
+        topView2 = drawerTopView2.draw(frameNum=f, _params=topviewParams2)
+
+        # Camera
+        img_out = copy.deepcopy(img)
+        drawerCamera.draw(img_out, f, _params=imageParams)
 
         # VCD text viewer
         textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height*5, _params=imageParams)
 
         # Stack
-        stack1 = np.vstack((img, topView1))
+        stack1 = np.vstack((img_out, topView1))
         stack1 = np.vstack((stack1, topView2))
-        outImg = np.hstack((stack1, textImg))
-        cv.imshow('KITTI Tracking', outImg)
+        mosaic = np.hstack((stack1, textImg))
+        cv.imshow('KITTI Tracking', mosaic)
         cv.waitKey(1)
 
         if record_video:
-            video_writer.write(outImg)
+            video_writer.write(mosaic)
 
         # Update frame num
         f += 1

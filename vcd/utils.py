@@ -613,12 +613,12 @@ def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
 
 def transform_cuboid(cuboid, T_ref_to_dst):
     # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
-    assert(isinstance(T_ref_to_dst, list))
     assert(isinstance(cuboid, list))
     if len(cuboid) == 10:
         raise Exception("Quaternion transforms not supported yet.")
 
     assert(len(cuboid) == 9)
+    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
 
     # 1) Obtain pose from cuboid info
     x, y, z, rx, ry, rz, sx, sy, sz = cuboid
@@ -626,7 +626,7 @@ def transform_cuboid(cuboid, T_ref_to_dst):
     T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
 
     # 2) Concatenate transforms
-    T_obj_to_dst = (np.array(T_ref_to_dst).reshape(4,4)).dot(T_obj_to_ref)    # np.array
+    T_obj_to_dst = T_ref_to_dst.dot(T_obj_to_ref)    # np.array
 
     # 3) Obtain new rotation and translation
     P_obj_wrt_dst = T_obj_to_dst    # np.array
