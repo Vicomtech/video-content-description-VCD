@@ -809,7 +809,8 @@ class CameraPinhole(Camera):
                                                                                             size=self.img_size_undist, m1type=cv.CV_16SC2)
         else:
             self.K_und_3x3 = self.K_3x3
-            self.K_und_3x4 = self.K_3x4
+
+        self.K_und_3x4 = utils.fromCameraMatrix3x3toCameraMatrix3x4(self.K_und_3x3)
 
         Camera.__init__(self, camera_intrinsics['width_px'],
                         camera_intrinsics['height_px'],
