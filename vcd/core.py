@@ -957,6 +957,11 @@ class VCD:
             uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None)
         return relation_uid.as_str()
 
+    def add_element(self, element_type, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
+                    set_mode=SetMode.union):
+        return self.__set_element(element_type, name, semantic_type, FrameIntervals(frame_value),
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode).as_str()
+
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
         assert(isinstance(element_type, ElementType))
         assert(isinstance(rdf_type, RDF))
