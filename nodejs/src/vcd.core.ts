@@ -939,6 +939,10 @@ export class VCD {
         return relation_uid.asStr()
     }
 
+    public addElement(elementType: ElementType, name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, setMode: SetMode = SetMode.union) {
+        return this.setElement(elementType, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), null, setMode).asStr()                
+    }
+
     public addRdf(relationUid: string | number, rdfType: RDF, elementUid: string | number, elementType: ElementType) {
         let elementTypeName = ElementType[elementType]
         let rel_uid = new UID(relationUid)
