@@ -1064,6 +1064,10 @@ class VCD:
     def add_context_data(self, uid, context_data, frame_value=None, set_mode=SetMode.union):
         return self.__set_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value),
                                        set_mode)
+    
+    def add_element_data(self, element_type, uid, context_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(element_type, UID(uid), context_data, FrameIntervals(frame_value),
+                                       set_mode)
 
     ##################################################
     # Get / Read

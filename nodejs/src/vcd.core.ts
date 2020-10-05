@@ -1026,6 +1026,10 @@ export class VCD {
         return this.setElementData(ElementType.event, new UID(uid), eventData, new FrameIntervals(frameValue), setMode)        
     }
 
+    public addElementData(elementType: ElementType, uid: string | number, eventData: types.ObjectData, frameValue = null, setMode: SetMode = SetMode.union) {
+        return this.setElementData(elementType, new UID(uid), eventData, new FrameIntervals(frameValue), setMode)        
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Get / Read
     ////////////////////////////////////////////////////////////////////////////////////////////////////    
