@@ -239,7 +239,8 @@ class Scene:
 
             # Reproject into self.coordinate_system Z=0 plane
             point3d_4x1, valid = self.reproject_points2d_3xN(points2d_3xN=point2d_dist_3x1, plane=(0, 0, 1, 0),
-                                                             cs_cam=camera_name, cs_dst=cs, frameNum=frameNum)
+                                                             cs_cam=camera_name, cs_dst=cs, frameNum=frameNum,
+                                                             apply_undistorsion=False)
             # Transform back to camera coordinate system
             point3d_4x1 = self.transform_points3d_4xN(points3d_4xN=point3d_4x1, cs_src=cs, cs_dst=camera_name,
                                                       frameNum=frameNum)
@@ -350,7 +351,8 @@ class Scene:
             # Reproject into self.coordinate_system Z=0 plane
             point_A_3x1 = np.array([[point_A[0], point_A[1], 1]]).transpose()
             point_A_3d_4x1, valid = self.reproject_points2d_3xN(points2d_3xN=point_A_3x1, plane=(0, 0, 1, 0),
-                                                                cs_cam=camera_name, cs_dst=cs, frameNum=frameNum)
+                                                                cs_cam=camera_name, cs_dst=cs, frameNum=frameNum,
+                                                                apply_undistorsion=False)
             # Transform back to camera coordinate system
             point_A_3d_4x1 = self.transform_points3d_4xN(points3d_4xN=point_A_3d_4x1, cs_src=cs, cs_dst=camera_name,
                                                                frameNum=frameNum)
@@ -362,7 +364,8 @@ class Scene:
                 # Check if B
                 point_B_3x1 = np.array([[point_B[0], point_B[1], 1]]).transpose()
                 point_B_3d_4x1, valid = self.reproject_points2d_3xN(points2d_3xN=point_B_3x1, plane=(0, 0, 1, 0),
-                                                                    cs_cam=camera_name, cs_dst=cs, frameNum=frameNum)
+                                                                    cs_cam=camera_name, cs_dst=cs, frameNum=frameNum,
+                                                                    apply_undistorsion=False)
                 # Transform back to camera coordinate system
                 point_B_3d_4x1 = self.transform_points3d_4xN(points3d_4xN=point_B_3d_4x1, cs_src=cs, cs_dst=camera_name,
                                                                frameNum=frameNum)
@@ -695,7 +698,7 @@ class Scene:
             return points2d_3xN, idx_valid
         return np.array([[]]), []
 
-    def reproject_points2d_3xN(self, points2d_3xN, plane, cs_cam, cs_dst, frameNum=None):
+    def reproject_points2d_3xN(self, points2d_3xN, plane, cs_cam, cs_dst, frameNum=None, apply_undistorsion=True):
         # This function calls a camera (cs_cam) to reproject points2d in the image plane into
         # a plane defined in the cs_dst.
         # The obtained 3D points are expressed in cs_dst.
@@ -703,7 +706,7 @@ class Scene:
         cam = self.get_camera(cs_cam, frameNum)
         plane_cam = self.transform_plane(plane, cs_dst, cs_cam, frameNum) # first convert plane into cam cs
         N = points2d_3xN.shape[1]
-        points3d_3xN_cs_cam, idx_valid = cam.reproject_points2d(points2d_3xN, plane_cam)
+        points3d_3xN_cs_cam, idx_valid = cam.reproject_points2d(points2d_3xN, plane_cam, apply_undistorsion)
         if points3d_3xN_cs_cam.shape[1] > 0:
             points3d_3xN_cs_cam_filt = points3d_3xN_cs_cam[:, idx_valid]
             points3d_4xN_cs_dst_filt = self.transform_points3d_4xN(points3d_3xN_cs_cam_filt, cs_cam, cs_dst, frameNum)
@@ -1032,7 +1035,7 @@ class CameraPinhole(Camera):
 
         return points2d_3xN, idx_valid
 
-    def reproject_points2d(self, points2D_3xN, plane_cs):
+    def reproject_points2d(self, points2D_3xN, plane_cs, apply_undistorsion = True):
         """
         This function takes 2D points in the (distorted) image and traces back a 3D ray from the camera optical axis
         through the point and gets the intersection with a defined world plane (in the form (a, b, c, d)).
@@ -1053,7 +1056,7 @@ class CameraPinhole(Camera):
         """
         # First, undistort point, so we can project back linear rays
         points2D_und_3xN = points2D_3xN
-        if self.is_distorted():
+        if self.is_distorted() and apply_undistorsion:
             points2D_und_3xN = self.undistort_points2d(points2D_3xN)
 
         N = points2D_und_3xN.shape[1]
