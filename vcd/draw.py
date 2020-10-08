@@ -177,7 +177,7 @@ class TopView:
             else:
                 self.draw_only_current_image = _draw_only_current_image
 
-    def __init__(self, scene, coordinate_system):
+    def __init__(self, scene, coordinate_system, params=None):
         # scene contains the VCD and helper functions for transforms and projections
         assert(isinstance(scene, scl.Scene))
         self.scene = scene
@@ -185,7 +185,10 @@ class TopView:
         # center of the TopView, e.g. "odom" or "vehicle-iso8855"
         assert(scene.vcd.has_coordinate_system(coordinate_system))
         self.coordinate_system = coordinate_system
-        self.params = TopView.Params()
+        if params is not None:
+            self.params = params
+        else:
+            self.params = TopView.Params()
 
         self.images = {}
 
@@ -215,32 +218,66 @@ class TopView:
                 self.images[cam_name][frameNum]['img'] = img
 
                 # Create transforms for BEV (from undistorted domain!)
-                t_ref_to_cam_4x4, static = self.scene.get_transform(self.coordinate_system, cam_name, frameNum)
-                temp = cam.K_und_3x4.dot(t_ref_to_cam_4x4)
-                H_3x3 = np.delete(temp, 2, 1)  # delete 3rd column, corresponding to Z=0 in self.coordinate_system
-                H_3x3[:, :] /= H_3x3[2, 2]  # last element should be 1 for a planar homography
-                H_inv_3x3 = utils.inv(H_3x3)
-                H_inv_3x3[:, :] /= H_inv_3x3[2, 2]
-                # H_3x3 converts from world plane Z=0 in self.coordinate_system, into undistorted camera image plane
-                # H_inv_3x3 converts from image plane into world plane Z=0
+                if 0:
+                    t_ref_to_cam_4x4, static = self.scene.get_transform(self.coordinate_system, cam_name, frameNum)
+                    temp = cam.K_und_3x4.dot(t_ref_to_cam_4x4)
+                    H_3x3 = np.delete(temp, 2, 1)  # delete 3rd column, corresponding to Z=0 in self.coordinate_system
+                    H_3x3[:, :] /= H_3x3[2, 2]  # last element should be 1 for a planar homography
+                    H_inv_3x3 = utils.inv(H_3x3)
+                    H_inv_3x3[:, :] /= H_inv_3x3[2, 2]
+                    # H_3x3 converts from world plane Z=0 in self.coordinate_system, into undistorted camera image plane
+                    # H_inv_3x3 converts from image plane into world plane Z=0
 
-                self.images[cam_name][frameNum]['H'] = H_3x3
-                self.images[cam_name][frameNum]['Hinv'] = H_inv_3x3
+                    self.images[cam_name][frameNum]['H'] = H_3x3
+                    self.images[cam_name][frameNum]['Hinv'] = H_inv_3x3
 
-                # Coverage
-                pts_coverage = self.scene.camera_roi_z0(cam_name, self.coordinate_system, frameNum)
-                self.images[cam_name][frameNum]['coverage'] = pts_coverage
+                    # Coverage
+                    pts_coverage = self.scene.camera_roi_z0(cam_name, self.coordinate_system, frameNum)
+                    self.images[cam_name][frameNum]['coverage'] = pts_coverage
 
-                '''
-                # Prepare for opencv
-                img_draw = img
-                pts_coverage = (pts_coverage[0:2, :]).transpose()
-                pts_coverage = pts_coverage.reshape((-1, 1, 2))
-                cv.fillConvexPoly(img_draw, pts_coverage, (0, 0, 255))
-                #cv.polylines(img_draw, [pts_coverage], isClosed=True, color=(0, 0, 255))
-                cv.imshow("coverage", img_draw)
-                cv.waitKey(0)
-                '''
+                    '''
+                    # Prepare for opencv
+                    img_draw = img
+                    pts_coverage = (pts_coverage[0:2, :]).transpose()
+                    pts_coverage = pts_coverage.reshape((-1, 1, 2))
+                    cv.fillConvexPoly(img_draw, pts_coverage, (0, 0, 255))
+                    #cv.polylines(img_draw, [pts_coverage], isClosed=True, color=(0, 0, 255))
+                    cv.imshow("coverage", img_draw)
+                    cv.waitKey(0)
+                    '''
+                else:
+                    # Use remaps directly from original (distorted domain) to reference z=0 plane
+                    # Loop over points of the TopView
+                    # Check if point when converted to camera coordinate system is in Zc>0
+                    # Find projection in image and assign to map
+                    h = self.params.imgSize[1]
+                    w = self.params.imgSize[0]
+                    mapX = np.zeros((h, w), dtype=np.float32)
+                    mapY = np.zeros((h, w), dtype=np.float32)
+
+                    #TODO: test
+                    for i in range(0, h):
+                        # Read all pixels pos of this row
+                        points2d_z0_3xN = np.array([np.linspace(0, w - 1, num=w),
+                                                     i * np.ones(w),
+                                                     np.ones(w)])
+                        temp = utils.inv(self.params.S).dot(points2d_z0_3xN) # from pixels to points 3d
+                        points3d_z0_4xN = np.vstack((temp[0, :], temp[1, :], np.zeros(w), temp[2, :]))
+
+                        # Convert into camera coordinate system
+                        t_ref_to_cam_4x4, static = self.scene.get_transform(self.coordinate_system, cam_name, frameNum)
+                        points3d_cam_4xN = t_ref_to_cam_4x4.dot(points3d_z0_4xN)
+
+                        # Project into image
+                        points2d_dist_3xN, idx_valid = cam.project_points3d(points3d_cam_4xN)
+
+                        # Assign into map
+                        mapX[i, :] = points2d_dist_3xN[0, :]
+                        mapY[i, :] = points2d_dist_3xN[1, :]
+
+                    self.images[cam_name][frameNum]['mapX'] = mapX
+                    self.images[cam_name][frameNum]['mapY'] = mapY
+
 
                 # TODO compute remaps for higher efficiency. Warning: TopView is designed to allow modifying params
                 # at each call of draw(), which means the zoom, offset of the topview might change from call to call
@@ -504,30 +541,43 @@ class TopView:
         img = self.images[cam_name][_frameNum]['img']
         cam = self.scene.cameras[cam_name][_frameNum]['cam']
 
-        if 'Hinv' in self.images[cam_name][_frameNum]:
-            img_und = cam.undistort_image(img)
+        if 0:
+            if 'Hinv' in self.images[cam_name][_frameNum]:
+                img_und = cam.undistort_image(img)
 
-            # Coverage only
-            if 'coverage' in self.images[cam_name][_frameNum]:
-                pts_coverage = self.images[cam_name][_frameNum]['coverage']
-                pts_coverage = (pts_coverage[0:2, :]).transpose()
-                pts_coverage = pts_coverage.reshape((-1, 1, 2))
-                mask_cov = np.full((img.shape[0], img.shape[1]), 0, dtype=np.uint8)
-                cv.fillConvexPoly(mask_cov, pts_coverage, 255)
-                img_und = cv.bitwise_and(img_und, img_und, mask=mask_cov)
+                # Coverage only
+                if 'coverage' in self.images[cam_name][_frameNum]:
+                    pts_coverage = self.images[cam_name][_frameNum]['coverage']
+                    pts_coverage = (pts_coverage[0:2, :]).transpose()
+                    pts_coverage = pts_coverage.reshape((-1, 1, 2))
+                    mask_cov = np.full((img.shape[0], img.shape[1]), 0, dtype=np.uint8)
+                    cv.fillConvexPoly(mask_cov, pts_coverage, 255)
+                    img_und = cv.bitwise_and(img_und, img_und, mask=mask_cov)
 
-            # Get the transform from undistorted image to world plane Z=0
-            H_inv = self.images[cam_name][_frameNum]['Hinv']
+                # Get the transform from undistorted image to world plane Z=0
+                H_inv = self.images[cam_name][_frameNum]['Hinv']
 
-            # Scaled to pixels
-            H = self.params.S.dot(H_inv)
+                # Scaled to pixels
+                H = self.params.S.dot(H_inv)
 
-            # Get the BEV
-            bev = cv.warpPerspective(img_und, H, self.params.imgSize)
+                # Get the BEV
+                bev = cv.warpPerspective(img_und, H, self.params.imgSize)
 
-            # Mask zero-pixels
+                # Mask zero-pixels
+                mask = (bev > 0)
+                self.topView[mask] = bev[mask]
+        else:
+            mapX = self.images[cam_name][_frameNum]['mapX']
+            mapY = self.images[cam_name][_frameNum]['mapY']
+            bev = cv.remap(img, mapX, mapY, interpolation=cv.INTER_LINEAR,
+                            borderMode=cv.BORDER_CONSTANT)
+
+            #cv.imshow('bev', bev)
+            #cv.waitKey(0)
+
             mask = (bev > 0)
             self.topView[mask] = bev[mask]
+
 
     def draw_BEVs(self, _frameNum):
         """

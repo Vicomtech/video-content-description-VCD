@@ -33,8 +33,6 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
     vcd = core.VCD(vcd_file_name)
     scene = scl.Scene(vcd)  # scl.Scene has functions to project images, transforms, etc.
 
-    drawerTopView1 = draw.TopView(scene, "vehicle-iso8855")
-    drawerTopView2 = draw.TopView(scene, "odom")
     drawerCamera = draw.Image(scene, "CAM_LEFT")
     frameInfoDrawer = draw.FrameInfoDrawer(vcd)
 
@@ -73,6 +71,7 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
                                         _rangeY=rangeY,
                                         _stepX=1.0, _stepY=1.0,
                                         _ignore_classes={"DontCare"})
+    drawerTopView1 = draw.TopView(scene, "vehicle-iso8855", topviewParams1)
     rangeX = (0.0, 80.0)
     rangeY = (-5, 25) #(-((rangeX[1] - rangeX[0]) / ar) / 2, ((rangeX[1] - rangeX[0]) / ar) / 2)
     topviewParams2 = draw.TopView.Params(_colorMap=colorMap,
@@ -83,6 +82,7 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
                                          _stepX=5.0, _stepY=5.0,
                                          _ignore_classes={"DontCare"},
                                          _draw_only_current_image=False)
+    drawerTopView2 = draw.TopView(scene, "odom", topviewParams2)
 
     # Video record
     if record_video:

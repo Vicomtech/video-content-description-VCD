@@ -729,10 +729,12 @@ def grid_as_4xN_points3d(xm, ym, zm):
     points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
     return points3d_vcs_4xN
 
+
 def from_MxN_to_OpenCV_Nx1xM(array_MxN):
     M, N = array_MxN.shape
     array_Nx1xM = np.float32(array_MxN[0:M, np.newaxis, :]).transpose()
     return array_Nx1xM
+
 
 def from_OpenCV_Nx1xM_to_MxN(array_Nx1xM):
     N = array_Nx1xM.shape[0]
@@ -740,4 +742,19 @@ def from_OpenCV_Nx1xM_to_MxN(array_Nx1xM):
     array_MxN = array_Nx1xM
     array_MxN.shape = (N, M)
     return array_MxN
+
+
+def filter_outside(points2d_3xN, img_size, idx_valid):
+    width, height = img_size
+    N = points2d_3xN.shape[1]
+    # Remove those outside the limits of the image (after distortion)
+    for i in range(0, N):
+        if idx_valid[i]:  # ignore those already filtered
+            x = points2d_3xN[0, i]
+            y = points2d_3xN[1, i]
+
+            if not (0 <= x < width and 0 <= y < height):
+                idx_valid[i] = False
+                points2d_3xN[:, i] = np.nan
+    return points2d_3xN, idx_valid
 
