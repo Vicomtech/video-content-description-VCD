@@ -1075,6 +1075,10 @@ class VCD:
     def get_data(self):
         return self.data
 
+    def has_elements(self, element_type):
+        element_type_name = element_type.name
+        return element_type_name + 's' in self.data['vcd']
+
     def has_objects(self):
         return 'objects' in self.data['vcd']
 
@@ -1144,6 +1148,31 @@ class VCD:
 
     def get_relation(self, uid):
         return self.get_element(ElementType.relation, uid)
+
+    def get_element_uid_by_name(self, element_type, name):
+        assert (self.has_elements(element_type))
+        element_type_name = element_type.name
+        elements = self.data['vcd'][element_type_name + 's']
+        for uid, element in elements.items():
+            name_element = element['name']
+            if name_element == name:
+                return uid
+        return None
+
+    def get_object_uid_by_name(self, name):
+        return self.get_element_uid_by_name(ElementType.object, name)
+
+    def get_action_uid_by_name(self, name):
+        return self.get_element_uid_by_name(ElementType.action, name)
+
+    def get_context_uid_by_name(self, name):
+        return self.get_element_uid_by_name(ElementType.context, name)
+
+    def get_event_uid_by_name(self, name):
+        return self.get_element_uid_by_name(ElementType.event, name)
+
+    def get_relation_uid_by_name(self, name):
+        return self.get_element_uid_by_name(ElementType.relation, name)
 
     def get_frame(self, frame_num):
         if 'frames' not in self.data['vcd']:
