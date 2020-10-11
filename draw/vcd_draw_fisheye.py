@@ -228,9 +228,6 @@ def draw_scene(vcd):
     drawer_right = draw.Image(scene, "CAM_RIGHT")
 
     frameInfoDrawer = draw.FrameInfoDrawer(vcd)
-
-    drawerTopView = draw.TopView(scene, "vehicle-iso8855")
-
     setupViewer = draw.SetupViewer(scene, "vehicle-iso8855")
 
     # Class colormap
@@ -276,15 +273,16 @@ def draw_scene(vcd):
     ar = topview_width / topview_height
     rangeX = (-30.0, 30.0)
     rangeY = (-((rangeX[1] - rangeX[0]) / ar) / 2, ((rangeX[1] - rangeX[0]) / ar) / 2)
-    topviewParams = draw.TopView.Params(_colorMap=colorMap,
-                                        _imgSize=(topview_width, topview_height),
-                                        _background_color=255,
-                                        _rangeX=rangeX,
-                                        _rangeY=rangeY,
-                                        _stepX=1.0, _stepY=1.0,
-                                        _draw_grid=False)
+    topviewParams = draw.TopView.Params(colorMap=colorMap,
+                                        topViewSize=(topview_width, topview_height),
+                                        background_color=255,
+                                        rangeX=rangeX,
+                                        rangeY=rangeY,
+                                        stepX=1.0, stepY=1.0,
+                                        draw_grid=False)
+    drawerTopView = draw.TopView(scene, "vehicle-iso8855", params=topviewParams)
 
-    topView = drawerTopView.draw(frameNum=0, _params=topviewParams)
+    topView = drawerTopView.draw(frameNum=0)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)

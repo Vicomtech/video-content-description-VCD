@@ -11,6 +11,7 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+import copy
 import sys
 sys.path.insert(0, ".")
 from random import seed
@@ -111,29 +112,29 @@ class TopView:
         For Vehicle cases, we adopt ISO8855: origin at rear axle at ground, x-to-front, y-to-left
         '''
 
-        def __init__(self, _stepX=None, _stepY=None, _background_color=None,_imgSize=None, _rangeX=None, _rangeY=None,
-                     _colorMap=None, _ignore_classes=None,
-                     _draw_grid=None,
-                     _draw_only_current_image=None):
-            self.imgSize = (1920, 1080)  # width, height
-            if _imgSize is not None:
-                assert (isinstance(_imgSize, tuple))
-                self.imgSize = _imgSize
+        def __init__(self, stepX=None, stepY=None, background_color=None, topViewSize=None, rangeX=None, rangeY=None,
+                     colorMap=None, ignore_classes=None,
+                     draw_grid=None,
+                     draw_only_current_image=None):
+            self.topViewSize = (1920, 1080)  # width, height
+            if topViewSize is not None:
+                assert (isinstance(topViewSize, tuple))
+                self.topViewSize = topViewSize
 
-            self.ar = self.imgSize[0] / self.imgSize[1]
+            self.ar = self.topViewSize[0] / self.topViewSize[1]
 
             self.rangeX = (-80.0, 80.0)
-            if _rangeX is not None:
-                assert (isinstance(_rangeX, tuple))
-                self.rangeX = _rangeX
+            if rangeX is not None:
+                assert (isinstance(rangeX, tuple))
+                self.rangeX = rangeX
 
             self.rangeY = (self.rangeX[0] / self.ar, self.rangeX[1] / self.ar)
-            if _rangeY is not None:
-                assert (isinstance(_rangeX, tuple))
-                self.rangeY = _rangeY
+            if rangeY is not None:
+                assert (isinstance(rangeX, tuple))
+                self.rangeY = rangeY
 
-            self.scaleX = self.imgSize[0] / (self.rangeX[1] - self.rangeX[0])
-            self.scaleY = -self.imgSize[1] / (self.rangeY[1] - self.rangeY[0])
+            self.scaleX = self.topViewSize[0] / (self.rangeX[1] - self.rangeX[0])
+            self.scaleY = -self.topViewSize[1] / (self.rangeY[1] - self.rangeY[0])
 
             self.offsetX = round(-self.rangeX[0] * self.scaleX)
             self.offsetY = round(-self.rangeY[1] * self.scaleY)
@@ -143,39 +144,39 @@ class TopView:
                                [0, 0, 1]])
 
             self.stepX = 1.0
-            if _stepX is not None:
-                self.stepX = _stepX
+            if stepX is not None:
+                self.stepX = stepX
             self.stepY = 1.0
-            if _stepY is not None:
-                self.stepY = _stepY
+            if stepY is not None:
+                self.stepY = stepY
 
             self.gridLinesThickness = 1
             self.backgroundColor = 255
-            if _background_color is not None:
-                self.backgroundColor = _background_color
+            if background_color is not None:
+                self.backgroundColor = background_color
 
             self.gridTextColor = (0, 0, 0)
 
-            if _colorMap is None:
+            if colorMap is None:
                 self.colorMap = dict()
             else:
-                assert (isinstance(_colorMap, dict))
-                self.colorMap = _colorMap
+                assert (isinstance(colorMap, dict))
+                self.colorMap = colorMap
 
-            if _ignore_classes is None:
+            if ignore_classes is None:
                 self.ignore_classes = dict()
             else:
-                self.ignore_classes = _ignore_classes
+                self.ignore_classes = ignore_classes
 
-            if _draw_grid is None:
+            if draw_grid is None:
                 self.draw_grid = True
             else:
-                self.draw_grid = _draw_grid
+                self.draw_grid = draw_grid
 
-            if _draw_only_current_image is None:
+            if draw_only_current_image is None:
                 self.draw_only_current_image = True
             else:
-                self.draw_only_current_image = _draw_only_current_image
+                self.draw_only_current_image = draw_only_current_image
 
     def __init__(self, scene, coordinate_system, params=None):
         # scene contains the VCD and helper functions for transforms and projections
@@ -190,6 +191,9 @@ class TopView:
         else:
             self.params = TopView.Params()
 
+        # Start topView base with a background color
+        self.topView = np.zeros((self.params.topViewSize[1], self.params.topViewSize[0], 3), np.uint8)  # Needs to be here
+        self.topView.fill(self.params.backgroundColor) 
         self.images = {}
 
     def add_images(self, imgs, frameNum):
@@ -208,82 +212,86 @@ class TopView:
         if imgs is not None:
             assert (isinstance(imgs, dict))
             # should be {"CAM_FRONT": img_front, "CAM_REAR": img_rear}
+
+            # This option creates 1 remap for the entire topview, and not 1 per camera
+            # The key idea is to weight the contribution of each camera depending on the distance betw point and cam
+            # Instead of storing the result in self.images[cam_name] and then paint them in drawBEV, we can store
+            # in self.images[frameNum] directly
+            h = self.params.topViewSize[1]
+            w = self.params.topViewSize[0]
+            num_cams = len(imgs)
+            cams = {}
+            need_to_recompute_weights_acc = False
+            need_to_recompute_maps = {}
+            need_to_recompute_weights = {}
             for cam_name, img in imgs.items():
                 assert self.scene.vcd.has_coordinate_system(cam_name)
-                cam = self.scene.get_camera(cam_name, frameNum)  # this call creates an entry inside scene
-                #self.scene.cameras[frameNum][cam_name]['img'] = img
-
+                cam = self.scene.get_camera(cam_name, frameNum, compute_remaps=False)  # this call creates an entry inside scene
+                cams[cam_name] = cam
                 self.images.setdefault(cam_name, {})
-                self.images[cam_name].setdefault(frameNum, {})
-                self.images[cam_name][frameNum]['img'] = img
+                self.images[cam_name]['img'] = img
+                t_ref_to_cam_4x4, static = self.scene.get_transform(self.coordinate_system, cam_name, frameNum)
 
-                # Create transforms for BEV (from undistorted domain!)
-                if 0:
+                # Compute distances to this camera and add to weight map
+                need_to_recompute_maps[cam_name] = False
+                need_to_recompute_weights[cam_name] = False
+
+                if (num_cams > 1 and not static) or (
+                        num_cams > 1 and static and 'weights' not in self.images[cam_name]):
+                    need_to_recompute_weights[cam_name] = True
+                    need_to_recompute_weights_acc = True
+
+                if (not static) or (static and 'mapX' not in self.images[cam_name]):
+                    need_to_recompute_maps[cam_name] = True
+
+
+                if need_to_recompute_maps[cam_name]:
+                    print(cam_name + ' top view remap computation...')
+                    self.images[cam_name]['mapX'] = np.zeros((h, w), dtype=np.float32)
+                    self.images[cam_name]['mapY'] = np.zeros((h, w), dtype=np.float32)
+
+                if need_to_recompute_weights[cam_name]:
+                    print(cam_name + ' top view weights computation...')
+                    self.images[cam_name].setdefault('weights', np.zeros((h, w, 3), dtype=np.float32))
+
+            # Loop over top view domain
+            for i in range(0, h):
+                # Read all pixels pos of this row
+                points2d_z0_3xN = np.array([np.linspace(0, w - 1, num=w),
+                                            i * np.ones(w),
+                                            np.ones(w)])
+                # from pixels to points 3d
+                temp = utils.inv(self.params.S).dot(points2d_z0_3xN)
+                # hom. coords.
+                points3d_z0_4xN = np.vstack((temp[0, :], temp[1, :], np.zeros(w), temp[2, :]))
+
+                # Loop over cameras
+                for idx, (cam_name, cam) in enumerate(cams.items()):
+                    # Convert into camera coordinate system for all M cameras
                     t_ref_to_cam_4x4, static = self.scene.get_transform(self.coordinate_system, cam_name, frameNum)
-                    temp = cam.K_und_3x4.dot(t_ref_to_cam_4x4)
-                    H_3x3 = np.delete(temp, 2, 1)  # delete 3rd column, corresponding to Z=0 in self.coordinate_system
-                    H_3x3[:, :] /= H_3x3[2, 2]  # last element should be 1 for a planar homography
-                    H_inv_3x3 = utils.inv(H_3x3)
-                    H_inv_3x3[:, :] /= H_inv_3x3[2, 2]
-                    # H_3x3 converts from world plane Z=0 in self.coordinate_system, into undistorted camera image plane
-                    # H_inv_3x3 converts from image plane into world plane Z=0
+                    points3d_cam_4xN = t_ref_to_cam_4x4.dot(points3d_z0_4xN)
 
-                    self.images[cam_name][frameNum]['H'] = H_3x3
-                    self.images[cam_name][frameNum]['Hinv'] = H_inv_3x3
+                    if need_to_recompute_weights[cam_name]:
+                            self.images[cam_name]['weights'][i, :, 0] = 1.0/np.linalg.norm(points3d_cam_4xN, axis=0)
+                            self.images[cam_name]['weights'][i, :, 1] = self.images[cam_name]['weights'][i, :, 0]
+                            self.images[cam_name]['weights'][i, :, 2] = self.images[cam_name]['weights'][i, :, 0]
 
-                    # Coverage
-                    pts_coverage = self.scene.camera_roi_z0(cam_name, self.coordinate_system, frameNum)
-                    self.images[cam_name][frameNum]['coverage'] = pts_coverage
-
-                    '''
-                    # Prepare for opencv
-                    img_draw = img
-                    pts_coverage = (pts_coverage[0:2, :]).transpose()
-                    pts_coverage = pts_coverage.reshape((-1, 1, 2))
-                    cv.fillConvexPoly(img_draw, pts_coverage, (0, 0, 255))
-                    #cv.polylines(img_draw, [pts_coverage], isClosed=True, color=(0, 0, 255))
-                    cv.imshow("coverage", img_draw)
-                    cv.waitKey(0)
-                    '''
-                else:
-                    # Use remaps directly from original (distorted domain) to reference z=0 plane
-                    # Loop over points of the TopView
-                    # Check if point when converted to camera coordinate system is in Zc>0
-                    # Find projection in image and assign to map
-                    h = self.params.imgSize[1]
-                    w = self.params.imgSize[0]
-                    mapX = np.zeros((h, w), dtype=np.float32)
-                    mapY = np.zeros((h, w), dtype=np.float32)
-
-                    #TODO: test
-                    for i in range(0, h):
-                        # Read all pixels pos of this row
-                        points2d_z0_3xN = np.array([np.linspace(0, w - 1, num=w),
-                                                     i * np.ones(w),
-                                                     np.ones(w)])
-                        temp = utils.inv(self.params.S).dot(points2d_z0_3xN) # from pixels to points 3d
-                        points3d_z0_4xN = np.vstack((temp[0, :], temp[1, :], np.zeros(w), temp[2, :]))
-
-                        # Convert into camera coordinate system
-                        t_ref_to_cam_4x4, static = self.scene.get_transform(self.coordinate_system, cam_name, frameNum)
-                        points3d_cam_4xN = t_ref_to_cam_4x4.dot(points3d_z0_4xN)
-
+                    if need_to_recompute_maps[cam_name]:
                         # Project into image
                         points2d_dist_3xN, idx_valid = cam.project_points3d(points3d_cam_4xN)
 
                         # Assign into map
-                        mapX[i, :] = points2d_dist_3xN[0, :]
-                        mapY[i, :] = points2d_dist_3xN[1, :]
+                        self.images[cam_name]['mapX'][i, :] = points2d_dist_3xN[0, :]
+                        self.images[cam_name]['mapY'][i, :] = points2d_dist_3xN[1, :]
 
-                    self.images[cam_name][frameNum]['mapX'] = mapX
-                    self.images[cam_name][frameNum]['mapY'] = mapY
+            # Compute accumulated weights if more than 1 camera
+            if need_to_recompute_weights_acc:
+                self.images['weights_acc'] = np.zeros((h, w, 3), dtype=np.float32)
+                for idx, (cam_name, cam) in enumerate(cams.items()):
+                    self.images['weights_acc'] = cv.add(self.images[cam_name]['weights'], self.images['weights_acc'])
 
 
-                # TODO compute remaps for higher efficiency. Warning: TopView is designed to allow modifying params
-                # at each call of draw(), which means the zoom, offset of the topview might change from call to call
-                # and therefore the remaps would need to be recomputed
-
-    def draw(self, frameNum, uid=None, _drawTrajectory=True, _params=None):
+    def draw(self, frameNum, uid=None, _drawTrajectory=True):
         """
         This is the main drawing function for the TopView drawer. If explres the provided params to select different
         options.
@@ -293,52 +301,52 @@ class TopView:
         :param _params: additional parameters
         :return: the TopView image
         """
-        self.topView = None
-        if _params is not None:
-            assert(isinstance(_params, TopView.Params))
-            self.params = _params
+        # Base top view is used from previous iteration
+        if self.params.draw_only_current_image:
+            self.topView = np.zeros((self.params.topViewSize[1], self.params.topViewSize[0], 3),
+                                    np.uint8)  # Needs to be here
+            self.topView.fill(self.params.backgroundColor)
 
-        # Base
-        self.topView = np.zeros((self.params.imgSize[1], self.params.imgSize[0], 3), np.uint8)  # Needs to be here
-        self.topView.fill(self.params.backgroundColor)
-
-        # Draw BEW
+            # Draw BEW
         self.draw_BEVs(frameNum)
 
         # Base grids
         self.draw_topview_base()
 
         # Draw objects
-        self.draw_objects_at_frame(uid, frameNum, _drawTrajectory)
+        topViewWithObjects = copy.deepcopy(self.topView)
+        self.draw_objects_at_frame(topViewWithObjects, uid, frameNum, _drawTrajectory)
 
         # Draw frame info
-        self.draw_info(frameNum)
+        self.draw_info(topViewWithObjects, frameNum)
 
-        return self.topView
+        return topViewWithObjects
 
-    def draw_info(self, frameNum):
-        cv.putText(self.topView, "Img. Size(px): " + str(self.params.imgSize[0]) + " x " + str(self.params.imgSize[1]),
-                   (self.params.imgSize[0] - 250, self.params.imgSize[1] - 140),
+    def draw_info(self, topView, frameNum):
+        h = topView.shape[0]
+        w = topView.shape[1]
+        cv.putText(topView, "Img. Size(px): " + str(w) + " x " + str(h),
+                   (w - 250, h - 140),
                    cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
-        cv.putText(self.topView, "Frame: " + str(frameNum),
-                   (self.params.imgSize[0] - 250, self.params.imgSize[1] - 120),
+        cv.putText(topView, "Frame: " + str(frameNum),
+                   (w - 250, h - 120),
                    cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
-        cv.putText(self.topView, "CS: " + str(self.coordinate_system),
-                   (self.params.imgSize[0] - 250, self.params.imgSize[1] - 100),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
-
-        cv.putText(self.topView, "RangeX (m): (" + str(self.params.rangeX[0]) + ", " + str(self.params.rangeX[1]) + ")",
-                   (self.params.imgSize[0] - 250, self.params.imgSize[1] - 80),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
-        cv.putText(self.topView, "RangeY (m): (" + str(self.params.rangeX[0]) + ", " + str(self.params.rangeX[1]) + ")",
-                   (self.params.imgSize[0] - 250, self.params.imgSize[1] - 60),
+        cv.putText(topView, "CS: " + str(self.coordinate_system),
+                   (w - 250, h - 100),
                    cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
 
-        cv.putText(self.topView, "OffsetX (px): (" + str(self.params.offsetX) + ", " + str(self.params.offsetX) + ")",
-                   (self.params.imgSize[0] - 250, self.params.imgSize[1] - 40),
+        cv.putText(topView, "RangeX (m): (" + str(self.params.rangeX[0]) + ", " + str(self.params.rangeX[1]) + ")",
+                   (w - 250, h - 80),
                    cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
-        cv.putText(self.topView, "OffsetY (px): (" + str(self.params.offsetY) + ", " + str(self.params.offsetY) + ")",
-                   (self.params.imgSize[0] - 250, self.params.imgSize[1] - 20),
+        cv.putText(topView, "RangeY (m): (" + str(self.params.rangeX[0]) + ", " + str(self.params.rangeX[1]) + ")",
+                   (w - 250, h - 60),
+                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+
+        cv.putText(topView, "OffsetX (px): (" + str(self.params.offsetX) + ", " + str(self.params.offsetX) + ")",
+                   (w - 250, h - 40),
+                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+        cv.putText(topView, "OffsetY (px): (" + str(self.params.offsetY) + ", " + str(self.params.offsetY) + ")",
+                   (w - 250, h - 20),
                    cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
 
     def draw_topview_base(self):
@@ -503,8 +511,8 @@ class TopView:
 
                             self.draw_points3d(_img, points3d_4xN_transformed, color)
 
-    def draw_objects_at_frame(self, uid, _frameNum, _drawTrajectory):
-        img = self.topView
+    def draw_objects_at_frame(self, topView, uid, _frameNum, _drawTrajectory):
+        img = topView
 
         # Explore objects at this VCD frame
         vcd_frame = self.scene.vcd.get_frame(_frameNum)
@@ -538,46 +546,27 @@ class TopView:
                                                img, object_id, _frameNum, _drawTrajectory)
 
     def draw_BEV(self, _frameNum, cam_name):
-        img = self.images[cam_name][_frameNum]['img']
-        cam = self.scene.cameras[cam_name][_frameNum]['cam']
+        img = self.images[cam_name]['img']
+        h = self.params.topViewSize[1]
+        w = self.params.topViewSize[0]
 
-        if 0:
-            if 'Hinv' in self.images[cam_name][_frameNum]:
-                img_und = cam.undistort_image(img)
+        mapX = self.images[cam_name]['mapX']
+        mapY = self.images[cam_name]['mapY']
+        bev = cv.remap(img, mapX, mapY, interpolation=cv.INTER_LINEAR,
+                        borderMode=cv.BORDER_CONSTANT)
 
-                # Coverage only
-                if 'coverage' in self.images[cam_name][_frameNum]:
-                    pts_coverage = self.images[cam_name][_frameNum]['coverage']
-                    pts_coverage = (pts_coverage[0:2, :]).transpose()
-                    pts_coverage = pts_coverage.reshape((-1, 1, 2))
-                    mask_cov = np.full((img.shape[0], img.shape[1]), 0, dtype=np.uint8)
-                    cv.fillConvexPoly(mask_cov, pts_coverage, 255)
-                    img_und = cv.bitwise_and(img_und, img_und, mask=mask_cov)
+        bev32 = np.float32(bev)
+        if 'weights' in self.images[cam_name]:
+            cv.multiply(self.images[cam_name]['weights'], bev32, bev32)
 
-                # Get the transform from undistorted image to world plane Z=0
-                H_inv = self.images[cam_name][_frameNum]['Hinv']
+        #cv.imshow('bev' + cam_name, bev)
+        #cv.waitKey(1)
 
-                # Scaled to pixels
-                H = self.params.S.dot(H_inv)
+        #bev832 = np.uint8(bev32)
+        #cv.imshow('bev8' + cam_name, bev832)
+        #cv.waitKey(1)
 
-                # Get the BEV
-                bev = cv.warpPerspective(img_und, H, self.params.imgSize)
-
-                # Mask zero-pixels
-                mask = (bev > 0)
-                self.topView[mask] = bev[mask]
-        else:
-            mapX = self.images[cam_name][_frameNum]['mapX']
-            mapY = self.images[cam_name][_frameNum]['mapY']
-            bev = cv.remap(img, mapX, mapY, interpolation=cv.INTER_LINEAR,
-                            borderMode=cv.BORDER_CONSTANT)
-
-            #cv.imshow('bev', bev)
-            #cv.waitKey(0)
-
-            mask = (bev > 0)
-            self.topView[mask] = bev[mask]
-
+        return bev32
 
     def draw_BEVs(self, _frameNum):
         """
@@ -585,17 +574,35 @@ class TopView:
         :param _frameNum:
         :return:
         """
-        draw_only_last = self.params.draw_only_current_image
-        if draw_only_last:
-            for cam_name in self.images:
-                if _frameNum in self.images[cam_name]:
-                        self.draw_BEV(_frameNum=_frameNum, cam_name=cam_name)
+        num_cams = len(self.images)
+        if num_cams == 0:
+            return
+
+        h = self.params.topViewSize[1]
+        w = self.params.topViewSize[0]
+        # Prepare image with drawing for this call
+        acc32 = np.zeros((h, w, 3), dtype=np.float32)  # black background
+
+        for cam_name in self.images:
+            if self.scene.get_camera(cam_name, _frameNum) is not None:
+                temp32 = self.draw_BEV(_frameNum=_frameNum, cam_name=cam_name)
+                #mask = np.zeros((h, w), dtype=np.uint8)
+                #mask[temp32 > 0] = 255
+                #mask = (temp32 > 0)
+                if num_cams > 1:
+                    acc32 = cv.add(temp32, acc32)
+        if num_cams > 1:
+            acc32 /= self.images['weights_acc']
         else:
-            # Let's draw all previous images as well
-            for cam_name in self.images:
-                for f in self.images[cam_name]:
-                    if f >= 0:  # Ignore -1 code
-                        self.draw_BEV(_frameNum=f, cam_name=cam_name)
+            acc32 = temp32
+        acc8 = np.uint8(acc32)
+        #cv.imshow('acc', acc8)
+        #cv.waitKey(1)
+
+        # Copy into topView only new pixels
+        nonzero = (acc8>0)
+        self.topView[nonzero] = acc8[nonzero]
+
 
     def size2Pixel(self, _size):
         return (int(round(_size[0] * abs(self.params.scaleX))),

@@ -64,25 +64,25 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
     # Next values define which region of the selected coordinate_system is to be monitored by the TopView
     rangeX = (-5.0, 55.0)
     rangeY = (-((rangeX[1] - rangeX[0])/ar)/2, ((rangeX[1] - rangeX[0])/ar)/2)
-    topviewParams1 = draw.TopView.Params(_colorMap=colorMap,
-                                        _imgSize=(video_width, video_height*2),
-                                        _background_color=255,
-                                        _rangeX=rangeX,
-                                        _rangeY=rangeY,
-                                        _stepX=1.0, _stepY=1.0,
-                                        _ignore_classes={"DontCare"})
-    drawerTopView1 = draw.TopView(scene, "vehicle-iso8855", topviewParams1)
+    topviewParams1 = draw.TopView.Params(colorMap=colorMap,
+                                        topViewSize=(video_width, video_height*2),
+                                        background_color=255,
+                                        rangeX=rangeX,
+                                        rangeY=rangeY,
+                                        stepX=1.0, stepY=1.0,
+                                        ignore_classes={"DontCare"})
+    drawerTopView1 = draw.TopView(scene, "vehicle-iso8855", params=topviewParams1)
     rangeX = (0.0, 80.0)
     rangeY = (-5, 25) #(-((rangeX[1] - rangeX[0]) / ar) / 2, ((rangeX[1] - rangeX[0]) / ar) / 2)
-    topviewParams2 = draw.TopView.Params(_colorMap=colorMap,
-                                         _imgSize=(video_width, video_height * 2),
-                                         _background_color=255,
-                                         _rangeX=rangeX,
-                                         _rangeY=rangeY,
-                                         _stepX=5.0, _stepY=5.0,
-                                         _ignore_classes={"DontCare"},
-                                         _draw_only_current_image=False)
-    drawerTopView2 = draw.TopView(scene, "odom", topviewParams2)
+    topviewParams2 = draw.TopView.Params(colorMap=colorMap,
+                                         topViewSize=(video_width, video_height * 2),
+                                         background_color=255,
+                                         rangeX=rangeX,
+                                         rangeY=rangeY,
+                                         stepX=5.0, stepY=5.0,
+                                         ignore_classes={"DontCare"},
+                                         draw_only_current_image=False)
+    drawerTopView2 = draw.TopView(scene, "odom", params=topviewParams2)
 
     # Video record
     if record_video:
@@ -100,9 +100,9 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
 
         # Top View
         drawerTopView1.add_images({'CAM_LEFT': img}, f)
-        topView1 = drawerTopView1.draw(frameNum=f, _params=topviewParams1)
+        topView1 = drawerTopView1.draw(frameNum=f)
         drawerTopView2.add_images({'CAM_LEFT': img}, f)
-        topView2 = drawerTopView2.draw(frameNum=f, _params=topviewParams2)
+        topView2 = drawerTopView2.draw(frameNum=f)
 
         # Camera
         img_out = copy.deepcopy(img)

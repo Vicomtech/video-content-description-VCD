@@ -262,17 +262,16 @@ def draw_scene(vcd):
     ar = topview_width / topview_height
     rangeX = (-15.0, 15.0)
     rangeY = (-((rangeX[1] - rangeX[0]) / ar) / 2, ((rangeX[1] - rangeX[0]) / ar) / 2)
-    topviewParams = draw.TopView.Params(_colorMap=colorMap,
-                                        _imgSize=(topview_width, topview_height),
-                                        _background_color=255,
-                                        _rangeX=rangeX,
-                                        _rangeY=rangeY,
-                                        _stepX=1.0, _stepY=1.0,
-                                        _draw_grid=False)
+    topviewParams = draw.TopView.Params(colorMap=colorMap,
+                                        topViewSize=(topview_width, topview_height),
+                                        background_color=255,
+                                        rangeX=rangeX,
+                                        rangeY=rangeY,
+                                        stepX=1.0, stepY=1.0,
+                                        draw_grid=False)
     drawerTopView1 = draw.TopView(scene, "vehicle-iso8855", params=topviewParams)
-    #drawerTopView1.add_images({'CAM_LEFT': img_left, 'CAM_FRONT': img_front, 'CAM_REAR': img_rear, 'CAM_RIGHT': img_right}, frameNum=0)
-    drawerTopView1.add_images({'CAM_LEFT': img_left}, frameNum=0)
-    topView1 = drawerTopView1.draw(frameNum=0, _params=topviewParams)
+    drawerTopView1.add_images({'CAM_LEFT': img_left, 'CAM_FRONT': img_front, 'CAM_REAR': img_rear, 'CAM_RIGHT': img_right}, frameNum=0)
+    topView1 = drawerTopView1.draw(frameNum=0)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)
@@ -407,4 +406,5 @@ if __name__ == '__main__':
 
     vcd = simple_setup_4_cams_fisheye()
     vcd = add_some_objects(vcd)  # so let's add the same objects as in vcd_draw_pinhole
+
     draw_scene(vcd)

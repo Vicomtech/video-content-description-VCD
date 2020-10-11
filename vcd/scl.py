@@ -15,6 +15,7 @@ import numpy as np
 import warnings
 import cv2 as cv
 from collections import deque, namedtuple
+import time
 
 from numpy import float64
 
@@ -499,7 +500,7 @@ class Scene:
 
         return line, points_horz
 
-    def get_camera(self, camera_name, frameNum=None):
+    def get_camera(self, camera_name, frameNum=None, compute_remaps=False):
         """
         This function explores the VCD content searching for the camera parameters of camera "camera_name", specific
         for frameNum if specified (or static information if None).
@@ -531,9 +532,9 @@ class Scene:
                 if 'stream_properties' in self.vcd.data['vcd']['streams'][camera_name]:
                     sp = self.vcd.data['vcd']['streams'][camera_name]['stream_properties']
                     if 'intrinsics_pinhole' in sp:
-                        camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, uri, description)
+                        camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
                     elif 'intrinsics_fisheye' in sp:
-                        camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, uri, description)
+                        camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
         else:
             return None
 
@@ -547,9 +548,9 @@ class Scene:
                             sp = vcd_frame['frame_properties']['streams'][camera_name][
                                 'stream_properties']
                         if 'intrinsics_pinhole' in sp:
-                            camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, uri, description)
+                            camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
                         elif 'intrinsics_fisheye' in sp:
-                            camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, uri, description)
+                            camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
 
         # Update store
         self.cameras.setdefault(camera_name, {})
@@ -770,7 +771,7 @@ class CameraPinhole(Camera):
     Otherwise (5 or more), it is assumed to be traditional "radial" distortion, as in:
     https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html
     '"""
-    def __init__(self, camera_intrinsics, name, description, uri):
+    def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False):
         self.K_3x4 = np.array(camera_intrinsics['camera_matrix_3x4']).reshape(3, 4)
         rows, cols, = self.K_3x4.shape
         assert (rows == 3 and cols == 4)
@@ -796,12 +797,14 @@ class CameraPinhole(Camera):
                                                                                        balance=1,
                                                                                        new_size=self.img_size_undist, fov_scale=1)
 
-                # NOTE: using m1type=cv.CV_16SC2 leads to fixed point representation, which is reported to be faster, but
-                # less accurate. In addition, interpreting the maps in 16SC2 is not trivial because there are indices
-                # of interpolated values (see https://docs.opencv.org/3.1.0/da/d54/group__imgproc__transform.html#gab75ef31ce5cdfb5c44b6da5f3b908ea4)
-                self.mapX_to_und_16SC2, self.mapY_to_und_16SC2 = cv.fisheye.initUndistortRectifyMap(self.K_3x3, self.d_1xN, np.eye(3),
-                                                                                                    self.K_und_3x3, self.img_size_undist, cv.CV_16SC2)
-
+                self.mapX_to_und_16SC2 = None
+                self.mapY_to_und_16SC2 = None
+                if compute_remaps:
+                    # NOTE: using m1type=cv.CV_16SC2 leads to fixed point representation, which is reported to be faster, but
+                    # less accurate. In addition, interpreting the maps in 16SC2 is not trivial because there are indices
+                    # of interpolated values (see https://docs.opencv.org/3.1.0/da/d54/group__imgproc__transform.html#gab75ef31ce5cdfb5c44b6da5f3b908ea4)
+                    print("CameraPinhole(fisheye): Compute remaps for undistortion...")
+                    self.__compute_remaps()
 
             else:
                 # alpha = 0.0 means NO black points in undistorted image
@@ -809,10 +812,11 @@ class CameraPinhole(Camera):
                 aux = cv.getOptimalNewCameraMatrix(self.K_3x3, self.d_1xN, self.img_size_dist, alpha=0.0,
                                                               newImgSize=self.img_size_undist)
                 self.K_und_3x3 = aux[0]
-                self.mapX_to_und_16SC2, self.mapY_to_und_16SC2 = cv.initUndistortRectifyMap(self.K_3x3, self.d_1xN,
-                                                                                            R=np.eye(3),
-                                                                                            newCameraMatrix=self.K_und_3x3,
-                                                                                            size=self.img_size_undist, m1type=cv.CV_16SC2)
+                self.mapX_to_und_16SC2 = None
+                self.mapY_to_und_16SC2 = None
+                if compute_remaps:
+                    self.__compute_remaps()
+
         else:
             self.K_und_3x3 = self.K_3x3
 
@@ -821,6 +825,21 @@ class CameraPinhole(Camera):
         Camera.__init__(self, camera_intrinsics['width_px'],
                         camera_intrinsics['height_px'],
                         name, description, uri)
+
+    def __has_remaps(self):
+        if self.mapX_to_und_16SC2 is None or self.mapY_to_und_16SC2 is None:
+            return False
+        return True
+
+    def __compute_remaps(self):
+        start = time.time()
+        self.mapX_to_und_16SC2, self.mapY_to_und_16SC2 = cv.initUndistortRectifyMap(self.K_3x3, self.d_1xN,
+                                                                                    R=np.eye(3),
+                                                                                    newCameraMatrix=self.K_und_3x3,
+                                                                                    size=self.img_size_undist,
+                                                                                    m1type=cv.CV_16SC2)
+        end = time.time()
+        print("CameraPinhole(radial): Compute remaps for undistortion... ", end - start)
 
     def __test_undistortion(self, img, img_und):
         # Let's test if we project a 3D point into the distorted image
@@ -849,6 +868,8 @@ class CameraPinhole(Camera):
     def undistort_image(self, img):
         if not self.is_distorted():
             return img
+        if not self.__has_remaps():
+            self.__compute_remaps()
         # cv.remap works for both models cv. and cv.fisheye
         return cv.remap(img, self.mapX_to_und_16SC2, self.mapY_to_und_16SC2, interpolation=cv.INTER_LINEAR,
                         borderMode=cv.BORDER_CONSTANT)
@@ -1085,7 +1106,7 @@ class CameraPinhole(Camera):
 
 
 class CameraFisheye(Camera):
-    def __init__(self, camera_intrinsics, name, description, uri):
+    def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False):
         self.cx = camera_intrinsics['center_x']
         self.cy = camera_intrinsics['center_y']
         self.img_size_dist = (camera_intrinsics['width_px'], camera_intrinsics['height_px'])
@@ -1106,18 +1127,33 @@ class CameraFisheye(Camera):
         # Inverse distortion (from radius in image to incidence angle)
         self.d_inv_1x4 = self.__invert_polynomial(self.d_1x4)
 
-        # TODO: compute undistorted K and maps
         self.K_und_3x3 = self.estimate_new_camera_matrix_for_undistort_rectify(img_size_orig=self.img_size_dist,
                                                                                balance=0.9,
                                                                                img_size_dst=self.img_size_undist,
-                                                                                fov_scale=1.0)
-        self.mapX_to_und_16SC2, self.mapY_to_und_16SC2 = self.init_undistort_rectify_map(self.K_und_3x3,
-                                                                                         self.img_size_undist)
+                                                                               fov_scale=1.0)
         self.K_und_3x4 = utils.fromCameraMatrix3x3toCameraMatrix3x4(self.K_und_3x3)
+
+        self.mapX_to_und_16SC2 = None
+        self.mapY_to_und_16SC2 = None
+
+        if compute_remaps:
+            self.__compute_remaps()
 
         Camera.__init__(self, camera_intrinsics['width_px'],
                         camera_intrinsics['height_px'],
                         name, description, uri)
+
+    def __has_remaps(self):
+        if self.mapX_to_und_16SC2 is None or self.mapY_to_und_16SC2 is None:
+            return False
+        return True
+
+    def __compute_remaps(self):
+        start = time.time()
+        self.mapX_to_und_16SC2, self.mapY_to_und_16SC2 = self.init_undistort_rectify_map(self.K_und_3x3,
+                                                                                         self.img_size_undist)
+        end = time.time()
+        print("CameraFisheye: Compute remaps for undistortion... ", end - start)
 
     def __apply_polynomial(self, x, k1, k2, k3, k4):
         x2 = x * x
@@ -1153,6 +1189,8 @@ class CameraFisheye(Camera):
     def undistort_image(self, img):
         if not self.is_distorted():
             return img
+        if not self.__has_remaps():
+            self.__compute_remaps()
         return cv.remap(img, self.mapX_to_und_16SC2, self.mapY_to_und_16SC2, interpolation=cv.INTER_LINEAR,
                         borderMode=cv.BORDER_CONSTANT)
 
@@ -1296,6 +1334,8 @@ class CameraFisheye(Camera):
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
         else:
+            if not self.__has_remaps():
+                self.__compute_remaps()
             points2d_3xN = self.K_und_3x3.dot(rays3d_3xN)
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_undist, idx_valid)
@@ -1422,8 +1462,3 @@ class CameraFisheye(Camera):
         p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
         p3d_4xN = np.transpose(p3dNx4)
         return p3d_4xN, idx_valid
-
-#class Lidar(Sensor):
-#    # TODO
-#    def __init__(self, P_scs_wrt_lcs, name, description, uri, **properties):
-#        Sensor.__init__(self, P_scs_wrt_lcs, name, description, uri, **properties)
