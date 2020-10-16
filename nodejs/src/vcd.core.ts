@@ -1251,13 +1251,40 @@ export class VCD {
                 }
                 let frame = this.getFrame(frameNum)
                 if(frame != null) {
-                    let element = frame[elementTypeName + 's'][uid_str]
-                    for (const prop in element[elementTypeName + '_data']) {
-                        var valArray = element[elementTypeName + '_data'][prop];
-                        for (var i = 0; i < valArray.length; i++) {
-                            var val = valArray[i];
-                            if (val['name'] == dataName) {
-                                return val;
+                    if(elementTypeName + 's' in frame) {
+                        if(uid_str in frame[elementTypeName + 's']) {
+                            let element = frame[elementTypeName + 's'][uid_str]
+                            if(elementTypeName + '_data' in element) {
+                                for (const prop in element[elementTypeName + '_data']) {
+                                    var valArray = element[elementTypeName + '_data'][prop];
+                                    for (var i = 0; i < valArray.length; i++) {
+                                        var val = valArray[i];
+                                        if (val['name'] == dataName) {
+                                            return val;
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                // The user asked for the element data of this element for this frame,
+                                // but there is no dynamic info
+                                // Let's try to return static info
+                                if(elementTypeName + 's' in this.data['vcd']) {
+                                    if(uid_str in this.data['vcd'][elementTypeName + 's']) {
+                                        let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+                                        if(elementTypeName + '_data' in element) {
+                                            for (const prop in element[elementTypeName + '_data']) {
+                                                var valArray = element[elementTypeName + '_data'][prop];
+                                                for (var i = 0; i < valArray.length; i++) {
+                                                    var val = valArray[i];
+                                                    if (val['name'] == dataName) {
+                                                        return val;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1265,13 +1292,19 @@ export class VCD {
             }
             else{
                 // Static info
-                let element = this.data['vcd'][elementTypeName + 's'][uid_str]
-                for (const prop in element[elementTypeName + '_data']) {
-                    var valArray = element[elementTypeName + '_data'][prop];
-                    for (var i = 0; i < valArray.length; i++) {
-                        var val = valArray[i];
-                        if (val['name'] == dataName) {
-                            return val;
+                if(elementTypeName + 's' in this.data['vcd']) {
+                    if(uid_str in this.data['vcd'][elementTypeName + 's']) {
+                        let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+                        if(elementTypeName + '_data' in element) {
+                            for (const prop in element[elementTypeName + '_data']) {
+                                var valArray = element[elementTypeName + '_data'][prop];
+                                for (var i = 0; i < valArray.length; i++) {
+                                    var val = valArray[i];
+                                    if (val['name'] == dataName) {
+                                        return val;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -1300,10 +1333,14 @@ export class VCD {
         let uid_str = new UID(uid).asStr()
         if( this.has(elementType, uid)){
             let elementTypeName = ElementType[elementType]
-            let element = this.data['vcd'][elementTypeName + 's'][uid_str]
-            if(elementTypeName + '_data_pointers' in element) {
-                if( dataName in element[elementTypeName + '_data_pointers']) {
-                    return element[elementTypeName + '_data_pointers'][dataName]
+            if(elementTypeName + 's' in this.data['vcd']) {
+                if(uid_str in this.data['vcd'][elementTypeName + 's']) {
+                    let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+                    if(elementTypeName + '_data_pointers' in element) {
+                        if(dataName in element[elementTypeName + '_data_pointers']) {
+                            return element[elementTypeName + '_data_pointers'][dataName]
+                        }
+                    }
                 }
             }
         }

@@ -1288,25 +1288,24 @@ class VCD:
                                 # The user asked for the object_data of this object for this frame,
                                 # but there is no dynamic info
                                 # Let's try to retrieve static info
-                                element = self.data['vcd'][element_type.name + 's'][uid_str]
-                                for prop in element[element_type.name + '_data']:
-                                    val_array = element[element_type.name + '_data'][prop]
-                                    for val in val_array:
-                                        if val['name'] == data_name:
-                                            return val
-                                return None
-                        else:
-                            return None
-                    else:
-                        return None
+                                if element_type.name + 's' in self.data['vcd']:
+                                    if uid_str in self.data['vcd'][element_type.name + 's']:
+                                        element = self.data['vcd'][element_type.name + 's'][uid_str]
+                                        for prop in element[element_type.name + '_data']:
+                                            val_array = element[element_type.name + '_data'][prop]
+                                            for val in val_array:
+                                                if val['name'] == data_name:
+                                                    return val
             else:
                 # Static info
-                element = self.data['vcd'][element_type.name + 's'][uid_str]
-                for prop in element[element_type.name + '_data']:
-                    val_array = element[element_type.name + '_data'][prop]
-                    for val in val_array:
-                        if val['name'] == data_name:
-                            return val
+                if element_type.name + 's' in self.data['vcd']:
+                    if uid_str in self.data['vcd'][element_type.name + 's']:
+                        element = self.data['vcd'][element_type.name + 's'][uid_str]
+                        for prop in element[element_type.name + '_data']:
+                            val_array = element[element_type.name + '_data'][prop]
+                            for val in val_array:
+                                if val['name'] == data_name:
+                                    return val
         else:
             warnings.warn("WARNING: Asking element data from a non-existing Element.")
         return None
@@ -1326,10 +1325,12 @@ class VCD:
     def get_element_data_pointer(self, element_type, uid, data_name):
         uid_str = UID(uid).as_str()
         if self.has(element_type, uid):
-            element = self.data['vcd'][element_type.name + 's'][uid_str]
-            if element_type.name + '_data_pointers' in element:
-                if data_name in element[element_type.name + '_data_pointers']:
-                    return element[element_type.name + '_data_pointers'][data_name]
+            if element_type.name + 's' in self.data['vcd']:
+                if uid_str in self.data['vcd'][element_type.name + 's']:
+                    element = self.data['vcd'][element_type.name + 's'][uid_str]
+                    if element_type.name + '_data_pointers' in element:
+                        if data_name in element[element_type.name + '_data_pointers']:
+                            return element[element_type.name + '_data_pointers'][data_name]
         else:
             warnings.warn("WARNING: Asking element data from a non-existing Element.")
         return None
