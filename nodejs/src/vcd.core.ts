@@ -397,7 +397,7 @@ export class VCD {
         // 0.- Get uid_to_assign
         let uidToAssign = this.getUidToAssign(elementType, uid) // NOTE: private functions use UID type for uids
 
-        // 1.- Set the root and frames entires
+        // 1.- Set the root and frames entries
         this.setElementAtRootAndFrames(elementType, name, semanticType, fis, uidToAssign, ontUid, coordinateSystem)
 
         return uidToAssign
@@ -428,7 +428,7 @@ export class VCD {
                 let edps = element[elementTypeName + '_data_pointers']
                 for(let edp_name in edps) {
                     // NOW, we have to UPDATE frame intervals of pointers because we have modified the frame_intervals
-                    // of the element itself, adn
+                    // of the element itself, and
                     // If we compute the intersection frame_intervals, we can copy that into
                     // element_data_pointers frame intervals
                     let fisInt = frameIntervals.intersection(new FrameIntervals(edps[edp_name]['frame_intervals']))
@@ -466,6 +466,34 @@ export class VCD {
                     }
                 }
                 // Remove
+                if(fisOld.empty()) {
+                    // Ok, the element was originally static (thus with fisOld empty)
+                    // so potentially there are pointers of the element in all frames (in case there are frames)
+                    // Now the element is declared with a specific frame intervals. Then we first need to remove all element
+                    // entries (pointers) in all frames
+                    let vcdFrameIntervals = this.getFrameIntervals()
+                    if(!vcdFrameIntervals.empty()) {
+                        for(let fi of vcdFrameIntervals.get()) {
+                            for(let f=fi[0]; f<=fi[1]; f++) {
+                                let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
+                                let uidstr = uid.asStr()
+                                if(uidstr in elementsInFrame) {
+                                    delete elementsInFrame[uidstr] // removes this element entry in this frame
+
+                                    if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
+                                        delete this.data['vcd']['frames'][f][elementTypeName + 's']
+                
+                                        if(Object.keys(this.data['vcd']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
+                                            // So VCD now has no info in this frame, let's remove it from VCD frame interval
+                                            this.rmFrame(f) // removes the frame and updates VCD frame interval accordingly
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                // Next loop for is for the case fisOld wasn't empty, so we just need to remove old content
                 for(let fi of fisOld.get()) {
                     for(let f=fi[0]; f<=fi[1]; f++) {
                         let isInside = fisNew.hasFrame(f)
@@ -487,7 +515,7 @@ export class VCD {
             }
         }
         else {
-            // 2.2.- The element is declared as static
+            // 2.2.- The element is now declared as static
             if(elementType != ElementType.relation) {  // frame-less relations remain frame-less
                 let vcdFrameIntervals = this.getFrameIntervals()
                 if(!vcdFrameIntervals.empty()) {
