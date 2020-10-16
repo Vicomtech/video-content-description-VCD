@@ -485,6 +485,25 @@ class VCD:
                             self.__add_frames(fi_, element_type, uid)
                             self.__update_vcd_frame_intervals(fi_)
                 # Remove
+                if fis_old.empty():
+                    # Ok, the element was originally static (thus with fisOld empty)
+                    # so potentially there are pointers of the element in all frames (in case there are frames)
+                    # Now the element is declared with a specific frame intervals. Then we first need to remove all element
+                    # entries (pointers) in all frames
+                    vcd_frame_intervals = self.get_frame_intervals()
+                    if not vcd_frame_intervals.empty():
+                        for fi in vcd_frame_intervals.get():
+                            for f in range(fi[0], fi[1] + 1):
+                                elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
+                                uidstr = uid.as_str()
+                                if uidstr in elements_in_frame:
+                                    del elements_in_frame[uidstr]
+                                    if len(elements_in_frame) == 0:
+                                        del self.data['vcd']['frames'][f][element_type.name + 's']
+                                        if len(self.data['vcd']['frames'][f]) == 0:
+                                            self.__rm_frame(f)
+
+                # Next loop for is for the case fis_old wasn't empty, so we just need to remove old content
                 for fi in fis_old.get():
                     for f in range(fi[0], fi[1] + 1):
                         is_inside = fis_new.has_frame(f)
