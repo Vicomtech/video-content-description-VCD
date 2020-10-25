@@ -136,15 +136,15 @@ test('test_object_change_from_static_to_dynamic', () => {
     // CASE A)  (when VCD has no other object with frames)
     // Let's add a static object
     let vcd_a = new VCD()
-    let uid_a = vcd_a.addObject("Enara", "Children")
+    let uid_a = vcd_a.addObject("Enara", "Child")
 
     // Let's add some object data
     vcd_a.addObjectData(uid_a, new types.Text("FavouriteColor", "Pink"));    
-    expect(vcd_a.getObjectData(uid_a, 'FavouriteColor', 3)).toStrictEqual(null) // null, no 'someName' at frame 3
+    expect(vcd_a.getObjectData(uid_a, 'FavouriteColor', 3)).toStrictEqual(null) // null, no 'FavouriteColor' at frame 3
     expect(vcd_a.getObjectData(uid_a, 'FavouriteColor')['val']).toBe('Pink')  // no frameNum provided, then, asking for root-level object-data
 
     // Let's modify the object so it has a certain frame Interval (object_data frame intervals remain void)
-    vcd_a.addObject("Enara", "Children", [5, 10], uid_a)
+    vcd_a.addObject("Enara", "Child", [5, 10], uid_a)
 
     // Check that the element data is now also defined for this frame interval (and thus removed from the root)    
     expect(vcd_a.getObjectData(uid_a, 'FavouriteColor', 3)).toStrictEqual(null) // null, no 'FavouriteColor' at frame 3
@@ -154,11 +154,11 @@ test('test_object_change_from_static_to_dynamic', () => {
     // CASE B (when VCD has some other frame intervals already defined): VCD should behave exactly the same
     let vcd_b = new VCD()
     vcd_b.addObject("room1", "Room", [0, 10])
-    let uid_b = vcd_b.addObject("Enara", "Children")
+    let uid_b = vcd_b.addObject("Enara", "Child")
     vcd_b.addObjectData(uid_b, new types.Text("FavouriteColor", "Pink"));    
     expect(vcd_b.getObjectData(uid_b, 'FavouriteColor', 3)).toStrictEqual(null) 
     expect(vcd_b.getObjectData(uid_b, 'FavouriteColor')['val']).toBe('Pink')   
-    vcd_b.addObject("Enara", "Children", [5, 10], uid_b)
+    vcd_b.addObject("Enara", "Child", [5, 10], uid_b)
     expect(vcd_b.getObjectData(uid_b, 'FavouriteColor', 3)).toStrictEqual(null) 
     expect(vcd_b.getObjectData(uid_b, 'FavouriteColor')['val']).toBe('Pink') 
     expect(vcd_b.getObjectData(uid_b, 'FavouriteColor', 8)['val']).toBe('Pink')
@@ -170,20 +170,20 @@ test('test_object_change_from_dynamic_to_static', () => {
 
     // Dynamic->Static
     // Let's add a static object
-    let uid1 = vcd.addObject("Enara", "Children", [5, 10])
+    let uid1 = vcd.addObject("Enara", "Child", [5, 10])
 
     // Let's add some object data
     vcd.addObjectData(uid1, new types.Text("FavouriteColor", "Pink"));  // defined static (but element has already frame intervals)
     vcd.addObjectData(uid1, new types.Vec("Position", [1.0, 5.0]), 8);  
 
-    vcd.addObject("Enara", "Children", null, uid1, null, null, SetMode.replace)  // SetMode.replace to force deleting the old frame interval
+    vcd.addObject("Enara", "Child", null, uid1, null, null, SetMode.replace)  // SetMode.replace to force deleting the old frame interval
     // NOTE: declaring an element as static (with null frameIntervals) when it had non-static ElementData and with SetMode.replace makes VCD to remove the non-static ElementData
     expect(vcd.getObjectData(uid1, 'FavouriteColor', 8)).toStrictEqual(null) // this object_data was never static
     expect(vcd.getObjectData(uid1, 'FavouriteColor')['val']).toBe("Pink")  // Yes, there should be the object data at the root
     
     // "Position" does not exist anymore
     expect(vcd.getObjectData(uid1, 'Position', 8)).toStrictEqual(null) // this object_data is now static-only
-    expect(vcd.getObjectData(uid1, 'Position')).toStrictEqual(null)  // Yes, now is static (exist at the root)
+    expect(vcd.getObjectData(uid1, 'Position')).toStrictEqual(null)  
 });
 
 // TODO: test modify Relation also

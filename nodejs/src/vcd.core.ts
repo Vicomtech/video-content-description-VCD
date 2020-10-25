@@ -91,6 +91,13 @@ export class FrameIntervals {
     get() {
         return this.fisNum
     }
+    getLength() {
+        let length = 0
+        for(let fi of this.fisNum) {
+            length += fi[1] + 1 - fi[0]
+        }
+        return length
+    }
 
     rmFrame(frameNum: number) {
         this.fisDict = utils.rmFrameFromFrameIntervals(this.fisDict, frameNum)
@@ -105,6 +112,23 @@ export class FrameIntervals {
     intersection(frameIntervals: FrameIntervals): FrameIntervals {
         let fisInt = utils.intersectionBetweenFrameIntervalArrays(this.fisNum, frameIntervals.get())
         return new FrameIntervals(fisInt)
+    }
+
+    equals(frameIntervals: FrameIntervals): boolean {
+        let fisInt = this.intersection(frameIntervals)
+        let fisUnion = this.union(frameIntervals)
+        if(fisInt.getLength() == fisUnion.getLength()) return true
+        else return false
+    }
+    contains(frameIntervals: FrameIntervals): boolean {
+        let fisInt = this.intersection(frameIntervals)
+        if(fisInt.getLength() == frameIntervals.getLength()) return true
+        else return false
+    }
+    isContainedBy(frameIntervals: FrameIntervals): boolean {
+        let fisInt = this.intersection(frameIntervals)
+        if(fisInt.getLength() == this.getLength()) return true
+        else return false
     }
 
     getOuter() {
@@ -588,7 +612,7 @@ export class VCD {
                 if(this.hasElementData(elementType, uid.asStr(), elementData)) {
                     let fisOld = this.getElementDataFrameIntervals(elementType, uid.asStr(), elementData.data['name'])
                     if(!fisOld.empty())
-                        this.rmElementDataFromFramesByName(elementType, uid, elementData['name'], fisOld)
+                        this.rmElementDataFromFramesByName(elementType, uid, elementData.data['name'], fisOld)
                 }
                 this.setElementDataContent(elementType, element, uid, elementData)
             }
@@ -755,6 +779,41 @@ export class VCD {
                         }
                     }
                 }   
+            }
+        }
+
+        // Clean-up data pointers of object_data that no longer exist!
+        // Note, element_data_pointers are correctly updated, but there might be some now declared as static
+        // corresponding to element_data that was dynamic but now has been removed when the element changed to static
+        if(this.has(elementType, uid.asStr())) {
+            let element = this.data['vcd'][elementTypeName + 's'][uid.asStr()]
+            if(elementTypeName + '_data_pointers' in element) {
+                let edps = element[elementTypeName + '_data_pointers']
+                let edp_names_to_delete = []
+                for(let edp_name in edps) {
+                    let fis_ed = new FrameIntervals(edps[edp_name]['frame_intervals'])
+                    if(fis_ed.empty()) {
+                        // CHeck if element_Data exists
+                        let ed_type = edps[edp_name]['type']
+                        let found = false
+                        if(elementTypeName + '_data' in element) {
+                            if(ed_type in element[elementTypeName + '_data']) {
+                                for(let ed in element[elementTypeName + '_data'][ed_type]) {
+                                    if(ed['name'] == edp_name) {
+                                        found = true
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        if(!found) {
+                            edp_names_to_delete.push(edp_name)
+                        }
+                    }
+                }
+                for(let edp_name of edp_names_to_delete) {
+                    delete element[elementTypeName + '_data_pointers'][edp_name]
+                }
             }
         }
     }
@@ -1184,6 +1243,18 @@ export class VCD {
         }
     }
 
+    public hasFrame(frameNum: number) {
+        if (!this.data['vcd']['frames']) {
+            return false
+        }
+        else {
+            if(frameNum in this.data['vcd']['frames'])
+                return true
+            else
+                return false
+        }
+    }
+
     public getAll(elementType: ElementType) {
         //
         //Returns all elements of the specified ElementType.
@@ -1261,22 +1332,10 @@ export class VCD {
         return this.getElement(ElementType.relation, uid);
     }
 
-    public hasFrame(frameNum: number) {
-        if (!this.data['vcd']['frames']) {
-            return false
-        }
-        else {
-            if(frameNum in this.data['vcd']['frames'])
-                return true
-            else
-                return false
-        }
-    }
-
     public getFrame(frameNum: number) {
         if (this.data['vcd']['frames']) {
             if(frameNum in this.data['vcd']['frames'])
-            return this.data['vcd']['frames'][frameNum];
+                return this.data['vcd']['frames'][frameNum];
         }
         return null
     }
