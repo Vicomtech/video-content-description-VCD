@@ -146,6 +146,71 @@ class TestBasic(unittest.TestCase):
         self.assertDictEqual(fis[0], {'frame_start': 5, 'frame_end': 26})
         self.assertDictEqual(fis[1], {'frame_start': 28, 'frame_end': 28})
 
+        # Move completely the frame intervals of an element
+        shift = 100
+        vcd.add_action('Drinking_5', 'distraction/Drinking', [(5 + shift, 26 + shift), (28 + shift, 28 + shift)],
+                       uid1, set_mode=core.SetMode.replace)
+
+        res = vcd.get_action_data(uid1, 'label', 5)
+        self.assertEqual(res, None)
+
+    def test_object_change_from_static_to_dynamic(self):
+        # Static->Dynamic
+
+        # Case A) (when VCD has no other object with frames)
+        vcd_a = core.VCD()
+        uid_a = vcd_a.add_object("Enara", "Child")
+
+        # Let's add some object data
+        vcd_a.add_object_data(uid=uid_a, object_data=types.text(name="FavouriteColor", val="Pink"))
+        self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor', frame_num=3), None)
+        self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor')['val'], 'Pink')
+
+        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_a_before.json'):
+            vcd_a.save('./etc/vcd430_test_object_change_from_static_to_dynamic_a_before.json')
+
+        # Let's modify the object so it has a certain frame interval (object_data frame intervals remain void)
+        vcd_a.add_object(name="Enara", semantic_type="Child", uid=uid_a, frame_value=[(5, 10)])
+
+        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_a_after.json'):
+            vcd_a.save('./etc/vcd430_test_object_change_from_static_to_dynamic_a_after.json')
+
+        # Check that the element data is now also defined for this frame interval (and thus removed from the root)
+        self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor', frame_num=3), None)
+        self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor')['val'], 'Pink')
+        self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor', frame_num=8)['val'], 'Pink')
+
+        # Case B (when VCD has some other frame intervals already defined): VCD should behave exactly the same
+        vcd_b = core.VCD()
+        vcd_b.add_object(name="room1", semantic_type="Room", frame_value=[(0, 10)])
+        uid_b = vcd_b.add_object(name="Enara", semantic_type="Child")
+        vcd_b.add_object_data(uid=uid_b, object_data=types.text(name="FavouriteColor", val="Pink"))
+        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_b_before.json'):
+            vcd_b.save('./etc/vcd430_test_object_change_from_static_to_dynamic_b_before.json')
+        self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=3), None)
+        self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor')['val'], 'Pink')
+        vcd_b.add_object(name="Enara", semantic_type="Child", uid=uid_b, frame_value=[(5, 10)])
+        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_b_after.json'):
+            vcd_b.save('./etc/vcd430_test_object_change_from_static_to_dynamic_b_after.json')
+        self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=3), None)
+        self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor')['val'], 'Pink')
+        self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=8)['val'], 'Pink')
+
+    def test_object_change_from_dynamic_to_static(self):
+        vcd = core.VCD()
+        uid1 = vcd.add_object("Enara", "Child")
+        vcd.add_object_data(uid=uid1, object_data=types.text(name="FavouriteColor", val="Pink"))
+        vcd.add_object_data(uid=uid1, object_data=types.vec(name="Position", val=(1.0, 5.0)), frame_value=8)
+        if not os.path.isfile('./etc/vcd430_test_object_change_from_dynamic_to_static_before.json'):
+            vcd.save('./etc/vcd430_test_object_change_from_dynamic_to_static_before.json')
+        vcd.add_object(name="Enara", semantic_type="Child", uid=uid1, set_mode=core.SetMode.replace)
+        if not os.path.isfile('./etc/vcd430_test_object_change_from_dynamic_to_static_after.json'):
+            vcd.save('./etc/vcd430_test_object_change_from_dynamic_to_static_after.json')
+        self.assertEqual(vcd.get_object_data(uid=uid1, data_name='FavouriteColor', frame_num=8), None)
+        self.assertEqual(vcd.get_object_data(uid=uid1, data_name='FavouriteColor')['val'], 'Pink')
+        self.assertEqual(vcd.get_object_data(uid=uid1, data_name='Position', frame_num=8), None)
+        self.assertEqual(vcd.get_object_data(uid=uid1, data_name='Position'), None)
+
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

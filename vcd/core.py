@@ -77,6 +77,11 @@ class FrameIntervals:
                     self.fis_dict = utils.as_frame_intervals_array_dict(frame_value)
                     self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
                     self.fis_num = utils.as_frame_intervals_array_tuples(self.fis_dict)
+                elif all(isinstance(x, list) for x in frame_value):
+                    # This is possibly a list of list, e.g. [[0, 10], [12, 15]], instead of the above case list of tupl
+                    self.fis_dict = utils.as_frame_intervals_array_dict(frame_value)
+                    self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
+                    self.fis_num = utils.as_frame_intervals_array_tuples(self.fis_dict)
                 elif all(isinstance(x, dict) for x in frame_value):
                     # User provided a list of dict
                     self.fis_dict = frame_value
@@ -105,6 +110,12 @@ class FrameIntervals:
     def get(self):
         return self.fis_num
 
+    def get_length(self):
+        length = 0
+        for fi in self.fis_num:
+            length += fi[1] + 1 - fi[0]
+        return length
+
     def rm_frame(self, frame_num):
         self.fis_dict = utils.rm_frame_from_frame_intervals(self.fis_dict, frame_num)
         self.fis_num = utils.as_frame_intervals_array_tuples(self.fis_dict)
@@ -116,6 +127,31 @@ class FrameIntervals:
     def intersection(self, frame_intervals):
         fis_int = utils.intersection_between_frame_interval_arrays(self.fis_num, frame_intervals.get())
         return FrameIntervals(fis_int)
+
+    def equals(self, frame_intervals):
+        fis_int = self.intersection(frame_intervals)
+        fis_union = self.union(frame_intervals)
+
+        if fis_int.get_length() == fis_union.get_length():
+            return True
+        else:
+            return False
+
+    def contains(self, frame_intervals):
+        fis_int = self.intersection(frame_intervals)
+
+        if fis_int.get_length() == frame_intervals.get_length():
+            return True
+        else:
+            return False
+
+    def is_contained_by(self, frame_intervals):
+        fis_int = self.intersection(frame_intervals)
+
+        if fis_int.get_length() == self.get_length():
+            return True
+        else:
+            return False
 
     def get_outer(self):
         return utils.get_outer_frame_interval(self.fis_dict)
@@ -429,6 +465,7 @@ class VCD:
     ):
         # 1.- Copy from existing or create new entry (this copies everything, including element_data)
         # element_data_pointers and frame intervals
+        element_existed = self.has(element_type, uid.as_str())# note: public functions use int or str for uids
         self.data['vcd'].setdefault(element_type.name + 's', {})
         self.data['vcd'][element_type.name + 's'].setdefault(uid.as_str(), {})
         element = self.data['vcd'][element_type.name + 's'][uid.as_str()]
@@ -442,7 +479,10 @@ class VCD:
             element['name'] = name
         if semantic_type is not None:
             element['type'] = semantic_type
-        if not frame_intervals.empty():
+        if not frame_intervals.empty() or (element_existed and not fis_old.empty()):
+            # So, either the newFis has something, or the fisOld had something (in which case needs to be substituted)
+            # Under the previous control, no 'frame_intervals' field is added to newly created static elements
+            # -> should 'frame_intervals' be mandatory
             element['frame_intervals'] = frame_intervals.get_dict()
         if not ont_uid.is_none() and self.get_ontology(ont_uid.as_str()):
             element['ontology_uid'] = ont_uid.as_str()
@@ -450,25 +490,26 @@ class VCD:
             element['coordinate_system'] = coordinate_system
 
         # 3.- Reshape element_data_pointers according to this new frame intervals
-        if not frame_intervals.empty():
-            if element_type.name + '_data_pointers' in element:
-                edps = element[element_type.name + '_data_pointers']
-                for edp_name in edps:
-                    # NOW, we have to UPDATE frame intervals of pointers because we have modified the frame_intervals
-                    # of the element itself, adn
-                    # If we compute the intersection frame_intervals, we can copy that into
-                    # element_data_pointers frame intervals
+        if element_type.name + '_data_pointers' in element:
+            edps = element[element_type.name + '_data_pointers']
+            for edp_name in edps:
+                # NOW, we have to UPDATE frame intervals of pointers because we have modified the frame_intervals
+                # of the element itself, adn
+                # If we compute the intersection frame_intervals, we can copy that into
+                # element_data_pointers frame intervals
+                fis_int = FrameIntervals()
+                if not frame_intervals.empty():
                     fis_int = frame_intervals.intersection(FrameIntervals(edps[edp_name]['frame_intervals']))
-                    if not fis_int.empty():
-                        element.setdefault(element_type.name + '_data_pointers', {})
-                        element[element_type.name + '_data_pointers'][edp_name] = edps[edp_name]
-                        element[element_type.name + '_data_pointers'][edp_name]['frame_intervals'] = fis_int.get_dict()
+
+                # Update the pointers
+                element.setdefault(element_type.name + '_data_pointers', {})
+                element[element_type.name + '_data_pointers'][edp_name] = edps[edp_name]
+                element[element_type.name + '_data_pointers'][edp_name]['frame_intervals'] = fis_int.get_dict()
 
         # 4.- Now set at frames
-        element_exists = self.has(element_type, uid.as_str())  # note: public functions use int or str for uids
         if not frame_intervals.empty():
             # 2.1.- There is frame_intervals specified
-            if not element_exists:
+            if not element_existed:
                 # 2.1.a) Just create the new element
                 self.__add_frames(frame_intervals, element_type, uid)
                 self.__update_vcd_frame_intervals(frame_intervals)
@@ -485,23 +526,24 @@ class VCD:
                             self.__add_frames(fi_, element_type, uid)
                             self.__update_vcd_frame_intervals(fi_)
                 # Remove
-                if fis_old.empty():
+                if element_existed and fis_old.empty():
                     # Ok, the element was originally static (thus with fisOld empty)
                     # so potentially there are pointers of the element in all frames (in case there are frames)
-                    # Now the element is declared with a specific frame intervals. Then we first need to remove all element
-                    # entries (pointers) in all frames
+                    # Now the element is declared with a specific frame intervals. Then we first need to remove all
+                    # element entries (pointers) in all OTHER frames
                     vcd_frame_intervals = self.get_frame_intervals()
                     if not vcd_frame_intervals.empty():
                         for fi in vcd_frame_intervals.get():
                             for f in range(fi[0], fi[1] + 1):
-                                elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
-                                uidstr = uid.as_str()
-                                if uidstr in elements_in_frame:
-                                    del elements_in_frame[uidstr]
-                                    if len(elements_in_frame) == 0:
-                                        del self.data['vcd']['frames'][f][element_type.name + 's']
-                                        if len(self.data['vcd']['frames'][f]) == 0:
-                                            self.__rm_frame(f)
+                                if not fis_new.has_frame(f):  # Only for those OTHER frames not those just added
+                                    elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
+                                    uidstr = uid.as_str()
+                                    if uidstr in elements_in_frame:
+                                        del elements_in_frame[uidstr]
+                                        if len(elements_in_frame) == 0:
+                                            del self.data['vcd']['frames'][f][element_type.name + 's']
+                                            if len(self.data['vcd']['frames'][f]) == 0:
+                                                self.__rm_frame(f)
 
                 # Next loop for is for the case fis_old wasn't empty, so we just need to remove old content
                 for fi in fis_old.get():
@@ -523,6 +565,11 @@ class VCD:
                     # ... but VCD has already other elements or info that have established some frame intervals
                     # The element is then assumed to exist in all frames: let's add a pointer into all frames
                     self.__add_frames(vcd_frame_intervals, element_type, uid)
+
+            # But, if the element existed previously, and it was dynamic, there is already information inside frames.
+            # If there is element_data at frames, they are removed
+            if not fis_old.empty():
+                self.rm_element_data_from_frames(element_type, uid, fis_old)
 
     def __set_element_data(self, element_type, uid, element_data, frame_intervals, set_mode):
         assert(isinstance(uid, UID))
@@ -565,7 +612,11 @@ class VCD:
                 self.__set_element_data_content_at_frames(element_type, uid, element_data, frame_intervals)
             else:
                 # This is a static element_data. If it was declared dynamic before, let's remove it
-                self.__set_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, cs, set_mode)
+                #self.__set_element(element_type, name, semantic_type, frame_intervals, uid, ont_uid, cs, set_mode)
+                if self.has_element_data(element_type, uid.as_str(), element_data):
+                    fis_old = self.get_element_data_frame_intervals(element_type, uid.as_str(), element_data.data['name'])
+                    if not fis_old.empty():
+                        self.rm_element_data_from_frames_by_name(element_type, uid, element_data.data['name'], fis_old)
                 self.__set_element_data_content(element_type, element, uid, element_data)
             # Set the pointers
             self.__set_element_data_pointers(element_type, uid, element_data, frame_intervals)
@@ -704,6 +755,60 @@ class VCD:
                                             fis_exist.union(FrameIntervals(frame_num))  # So, let's fuse with this frame
                                             edp[name]['frame_intervals'] = fis_exist.get_dict()  # overwrite
                                             # No need to manage attributes
+
+    def rm_element_data_from_frames_by_name(self, element_type, uid, element_data_name, frame_intervals):
+        for fi in frame_intervals.get():
+            for f in range(fi[0], fi[1] + 1):
+                if self.has_frame(f):
+                    frame = self.data['vcd']['frames'][f]
+                    if element_type.name + 's' in frame:
+                        if uid.as_str() in frame[element_type.name + 's']:
+                            element = frame[element_type.name + 's'][uid.as_str()]
+                            if element_type.name + '_data' in element:
+                                # Delete only the element_data with the specified name
+                                for prop in element[element_type.name + '_data']:
+                                    val_array = element[element_type.name + '_data'][prop]
+                                    for i in range(0, len(val_array)):
+                                        val = val_array[i]
+                                        if val['name'] == element_data_name:
+                                            del element[element_type.name + '_data'][prop][i]
+
+    def rm_element_data_from_frames(self, element_type, uid, frame_intervals):
+        for fi in frame_intervals.get():
+            for f in range(fi[0], fi[1] + 1):
+                if self.has_frame(f):
+                    frame = self.data['vcd']['frames'][f]
+                    if element_type.name + 's' in frame:
+                        if uid.as_str() in frame[element_type.name + 's']:
+                            element = frame[element_type.name + 's'][uid.as_str()]
+                            if element_type.name + '_data' in element:
+                                # Delete all its former dyamic element_data entries at old fis
+                                del element[element_type.name + '_data']
+
+        # Clean-up data pointers of object_data that no longer exist!
+        # Note, element_data_pointers are correctly updated, but there might be some now declared as static
+        # corresponding to element_data that was dynamic but now has been removed when the element changed to static
+        if self.has(element_type, uid.as_str()):
+            element = self.data['vcd'][element_type.name + 's'][uid.as_str()]
+            if element_type.name + '_data_pointers' in element:
+                edps = element[element_type.name + '_data_pointers']
+                edp_names_to_delete = []
+                for edp_name in edps:
+                    fis_ed = FrameIntervals(edps[edp_name]['frame_intervals'])
+                    if fis_ed.empty():
+                        # Check if element_data exists
+                        ed_type = edps[edp_name]['type']
+                        found = False
+                        if element_type.name + '_data' in element:
+                            if ed_type in element[element_type.name + '_data']:
+                                for ed in element[element_type.name + '_data'][ed_type]:
+                                    if ed['name'] == edp_name:
+                                        found = True
+                                        break
+                        if not found:
+                            edp_names_to_delete.append(edp_name)
+                for edp_name in edp_names_to_delete:
+                    del element[element_type.name + '_data_pointers'][edp_name]
 
     ##################################################
     # Public API: add, update
@@ -1133,6 +1238,15 @@ class VCD:
             name = element_data.data['name']
             return name in self.data['vcd'][element_type.name + 's'][uid_str][element_type.name + '_data_pointers']
 
+    def has_frame(self, frame_num):
+        if 'frames' not in self.data['vcd']:
+            return False
+        else:
+            if frame_num in self.data['vcd']['frames']:
+                return True
+            else:
+                return False
+
     def get_all(self, element_type):
         """
         Returns all elements of the specified ElementType.
@@ -1286,47 +1400,54 @@ class VCD:
         return 0
 
     def get_element_data(self, element_type, uid, data_name, frame_num=None):
+        element_exists = self.has(element_type, uid)
+        vcd_has_frames = not self.get_frame_intervals().empty()
+
+        if not element_exists:  # the element does not exist
+            return None
+
+        if not vcd_has_frames and frame_num is not None:  # don't ask for frame-specific info in a VCD without frames
+            return None
+
+        frame_num_is_number = isinstance(frame_num, int)
         uid_str = UID(uid).as_str()
-        if self.has(element_type, uid):
-            if frame_num is not None:
-                # Dynamic info
-                if not isinstance(frame_num, int):
-                    warnings.warn("WARNING: Calling get_element_data with a non-integer frame_num.")
-                frame = self.get_frame(frame_num)
-                if frame is not None:
-                    if element_type.name + 's' in frame:
-                        if uid_str in frame[element_type.name + 's']:
-                            element = frame[element_type.name + 's'][uid_str]
-                            if element_type.name + '_data' in element:
-                                for prop in element[element_type.name + '_data']:
-                                    val_array = element[element_type.name + '_data'][prop]
-                                    for val in val_array:
-                                        if val['name'] == data_name:
-                                            return val
-                            else:
-                                # The user asked for the object_data of this object for this frame,
-                                # but there is no dynamic info
-                                # Let's try to retrieve static info
-                                if element_type.name + 's' in self.data['vcd']:
-                                    if uid_str in self.data['vcd'][element_type.name + 's']:
-                                        element = self.data['vcd'][element_type.name + 's'][uid_str]
-                                        for prop in element[element_type.name + '_data']:
-                                            val_array = element[element_type.name + '_data'][prop]
-                                            for val in val_array:
-                                                if val['name'] == data_name:
-                                                    return val
-            else:
-                # Static info
-                if element_type.name + 's' in self.data['vcd']:
-                    if uid_str in self.data['vcd'][element_type.name + 's']:
-                        element = self.data['vcd'][element_type.name + 's'][uid_str]
-                        for prop in element[element_type.name + '_data']:
-                            val_array = element[element_type.name + '_data'][prop]
-                            for val in val_array:
-                                if val['name'] == data_name:
-                                    return val
+
+        if frame_num is not None and frame_num_is_number:
+            # The user is asking for frame-specific attributes
+            element_exists_in_this_frame = self.get_element_frame_intervals(element_type, uid).has_frame(frame_num)
+            found_in_frame = False
+            frame = self.get_frame(frame_num)
+
+            if frame is not None:
+                if element_type.name + 's' in frame:
+                    if uid_str in frame[element_type.name + 's']:
+                        element = frame[element_type.name + 's'][uid_str]
+                        if element_type.name + '_data' in element:
+                            for prop in element[element_type.name + '_data']:
+                                val_array = element[element_type.name + '_data'][prop]
+                                for val in val_array:
+                                    if val['name'] == data_name:
+                                        found_in_frame = True
+                                        return val
+            if not found_in_frame:
+                # The user has asked to get an element_data for a certain frame, but there is no info about this
+                # element or element_data at this frame
+                if not element_exists_in_this_frame:
+                    return None
+                element = self.data['vcd'][element_type.name + 's'][uid_str]  # the element exists because of prev. ctrl
+                for prop in element[element_type.name + '_data']:
+                    val_array = element[element_type.name + '_data'][prop]
+                    for val in val_array:
+                        if val['name'] == data_name:
+                            return val
         else:
-            warnings.warn("WARNING: Asking element data from a non-existing Element.")
+            # The user is asking for static attributes at the root of the element
+            element = self.data['vcd'][element_type.name + 's'][uid_str]  # the element exists because of prev. ctrl
+            for prop in element[element_type.name + '_data']:
+                val_array = element[element_type.name + '_data'][prop]
+                for val in val_array:
+                    if val['name'] == data_name:
+                        return val
         return None
 
     def get_object_data(self, uid, data_name, frame_num=None):
