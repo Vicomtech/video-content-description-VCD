@@ -405,47 +405,58 @@ export class VCD {
 
     private setElementAtRootAndFrames(elementType: ElementType, name: string, semanticType: string, frameIntervals: FrameIntervals, uid: UID, ontUid: UID, coordinateSystem: string) {
         // 1.- Copy from existing or create new entry (this copies everything, including element_data)
+        let elementExisted = this.has(elementType, uid.asStr())
         let elementTypeName = ElementType[elementType];
-        this.data['vcd'][elementTypeName + 's'] = this.data['vcd'][elementTypeName + 's'] || {}
-        this.data['vcd'][elementTypeName + 's'][uid.asStr()] = this.data['vcd'][elementTypeName + 's'][uid.asStr()] || {}
-        let element = this.data['vcd'][elementTypeName + 's'][uid.asStr()]
+        this.data['vcd'][elementTypeName + 's'] = this.data['vcd'][elementTypeName + 's'] || {}  // creates an entry for this elementype if not existing already, e.g. "objects"
+        this.data['vcd'][elementTypeName + 's'][uid.asStr()] = this.data['vcd'][elementTypeName + 's'][uid.asStr()] || {} // creates an entry for this element if not existing already
+        let element = this.data['vcd'][elementTypeName + 's'][uid.asStr()]  // read the element at the root (might be empty if created in this call)
 
+        //let fisOld = new FrameIntervals()
         let fisOld = new FrameIntervals()
         if('frame_intervals' in element) {
-            fisOld = new FrameIntervals(element['frame_intervals'])
+            fisOld = new FrameIntervals(element['frame_intervals']) // might be empty
         }
+
+        // Next body of the function considers the following 3 cases
+        // 1.1.- Subcase A: if it existed, but defined as static, and now we are given a non-empty frame intervals: static->dynamic        
+        // 1.2.- Subcase B: if it existed, but defined as non-static (with frame intervals), and we are given now an empty frameInterval: dynamic -> static        
+        // 1.3.- Subcase C: static->static, dynamic->dynamic
+        // Note that "element" also may contain static element_data at root
 
         // 2.- Copy from arguments
         if(name != null) element['name'] = name
-        if(semanticType != null) element['type'] = semanticType
-        if(!frameIntervals.empty()) element['frame_intervals'] = frameIntervals.getDict()
+        if(semanticType != null) element['type'] = semanticType        
+        if(!frameIntervals.empty() || (elementExisted && !fisOld.empty()))
+            element['frame_intervals'] = frameIntervals.getDict()  // so, either the newFis has something, or the fisOld had something (in which case needs to be substituted)
+        // Under the previous control, no 'frame_intervals' field is added to newly created static elements -> should 'frame_intervals' be mandatory?
+        
         if(!ontUid.isNone() && this.getOntology(ontUid.asStr())) element['ontology_uid'] = ontUid.asStr()
         if(coordinateSystem != null && this.hasCoordinateSystem(coordinateSystem)) element['coordinate_system'] = coordinateSystem
 
         // 3.- Reshape element_data_pointers according to this new frame_intervals
-        if(!frameIntervals.empty()) {
-            if(elementTypeName + '_data_pointers' in element) {
-                let edps = element[elementTypeName + '_data_pointers']
-                for(let edp_name in edps) {
-                    // NOW, we have to UPDATE frame intervals of pointers because we have modified the frame_intervals
-                    // of the element itself, and
-                    // If we compute the intersection frame_intervals, we can copy that into
-                    // element_data_pointers frame intervals
-                    let fisInt = frameIntervals.intersection(new FrameIntervals(edps[edp_name]['frame_intervals']))
-                    if(!fisInt.empty()) {
-                        element[elementTypeName + '_data_pointers'] = element[elementTypeName + '_data_pointers'] || {}
-                        element[elementTypeName + '_data_pointers'][edp_name] = edps[edp_name]
-                        element[elementTypeName + '_data_pointers'][edp_name]['frame_intervals'] = fisInt.getDict()
-                    }
-                }
+        // Also if the new frameIntervals is empty, in which case, we convert all element data into static        
+        if(elementTypeName + '_data_pointers' in element) {
+            let edps = element[elementTypeName + '_data_pointers']
+            for(let edp_name in edps) {
+                // NOW, we have to UPDATE frame intervals of pointers because we have modified the frame_intervals
+                // of the element itself, and
+                // If we compute the intersection frame_intervals, we can copy that into
+                // element_data_pointers frame intervals
+                let fisInt = new FrameIntervals()
+                if(!frameIntervals.empty())
+                    fisInt = frameIntervals.intersection(new FrameIntervals(edps[edp_name]['frame_intervals']))
+                
+                // Update the pointers
+                element[elementTypeName + '_data_pointers'] = element[elementTypeName + '_data_pointers'] || {}
+                element[elementTypeName + '_data_pointers'][edp_name] = edps[edp_name]
+                element[elementTypeName + '_data_pointers'][edp_name]['frame_intervals'] = fisInt.getDict()                
             }
         }
-
+        
         // 4.- Now set at frames
-        let elementExists = this.has(elementType, uid.asStr())
         if(!frameIntervals.empty()) {
             // 2.1.- There is frame_intervals specified
-            if(!elementExists) {
+            if(!elementExisted) {
                 // 2.1.a) Just create the new element
                 this.addFrames(frameIntervals, elementType, uid)
                 this.updateVCDFrameIntervals(frameIntervals)
@@ -466,26 +477,28 @@ export class VCD {
                     }
                 }
                 // Remove
-                if(fisOld.empty()) {
+                if(elementExisted && fisOld.empty()) {
                     // Ok, the element was originally static (thus with fisOld empty)
                     // so potentially there are pointers of the element in all frames (in case there are frames)
                     // Now the element is declared with a specific frame intervals. Then we first need to remove all element
-                    // entries (pointers) in all frames
+                    // entries (pointers) in all OTHER frames
                     let vcdFrameIntervals = this.getFrameIntervals()
                     if(!vcdFrameIntervals.empty()) {
                         for(let fi of vcdFrameIntervals.get()) {
                             for(let f=fi[0]; f<=fi[1]; f++) {
-                                let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
-                                let uidstr = uid.asStr()
-                                if(uidstr in elementsInFrame) {
-                                    delete elementsInFrame[uidstr] // removes this element entry in this frame
+                                if(!fisNew.hasFrame(f)) {  // Only for those OTHER frames not those just added
+                                    let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
+                                    let uidstr = uid.asStr()
+                                    if(uidstr in elementsInFrame) {
+                                        delete elementsInFrame[uidstr] // removes this element entry in this frame
 
-                                    if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
-                                        delete this.data['vcd']['frames'][f][elementTypeName + 's']
-                
-                                        if(Object.keys(this.data['vcd']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
-                                            // So VCD now has no info in this frame, let's remove it from VCD frame interval
-                                            this.rmFrame(f) // removes the frame and updates VCD frame interval accordingly
+                                        if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
+                                            delete this.data['vcd']['frames'][f][elementTypeName + 's']
+                    
+                                            if(Object.keys(this.data['vcd']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
+                                                // So VCD now has no info in this frame, let's remove it from VCD frame interval
+                                                this.rmFrame(f) // removes the frame and updates VCD frame interval accordingly
+                                            }
                                         }
                                     }
                                 }
@@ -515,7 +528,8 @@ export class VCD {
             }
         }
         else {
-            // 2.2.- The element is now declared as static
+            // 2.2.- The element is declared as static
+            // If the VCD has frame intervals, then, Element needs to be added as a pointer in all VCD frames
             if(elementType != ElementType.relation) {  // frame-less relations remain frame-less
                 let vcdFrameIntervals = this.getFrameIntervals()
                 if(!vcdFrameIntervals.empty()) {
@@ -524,6 +538,12 @@ export class VCD {
                     this.addFrames(vcdFrameIntervals, elementType, uid)
                 }
             }            
+
+            // But, if the element existed previously, and it was dynamic, there is already information inside frames. If there is elementData at frames, they are removed
+            if(!fisOld.empty()) {
+                // Let's check the elementData at those frames
+                this.rmElementDataFromFrames(elementType, uid, fisOld)                
+            }
         }
     }
 
@@ -563,8 +583,13 @@ export class VCD {
                 this.setElementDataContentAtFrames(elementType, uid, elementData, frameIntervals)
             }
             else {
-                // This is a static element_data. If it was declared dynamic before, let's remove it
-                this.setElement(elementType, name, semanticType, frameIntervals, uid, ontUid, cs, setMode)
+                // This is a static element_data. If it was declared dynamic BEFORE, let's remove it
+                //this.setElement(elementType, name, semanticType, frameIntervals, uid, ontUid, cs, setMode)  // Why this call to set element? let's do just the modification of the elementData                
+                if(this.hasElementData(elementType, uid.asStr(), elementData)) {
+                    let fisOld = this.getElementDataFrameIntervals(elementType, uid.asStr(), elementData.data['name'])
+                    if(!fisOld.empty())
+                        this.rmElementDataFromFramesByName(elementType, uid, elementData['name'], fisOld)
+                }
                 this.setElementDataContent(elementType, element, uid, elementData)
             }
             // Set the pointers
@@ -685,6 +710,54 @@ export class VCD {
             }
         }        
     }    
+
+    private rmElementDataFromFramesByName(elementType: ElementType, uid: UID, elementDataName: string, frameIntervals: FrameIntervals) {
+        let elementTypeName = ElementType[elementType];
+        for(let fi of frameIntervals.get()) {
+            for(let f=fi[0]; f<=fi[1]; f++) {
+                if(this.hasFrame(f)) {
+                    let frame = this.data['vcd']['frames'][f]
+                    if(elementTypeName + 's' in frame) {
+                        if(uid.asStr() in frame[elementTypeName + 's']) {
+                            let element = frame[elementTypeName + 's'][uid.asStr()]
+                            if(elementTypeName + '_data' in element) {
+                                // delete only the element_data with the specified name
+                                for (const prop in element[elementTypeName + '_data']) {
+                                    var valArray = element[elementTypeName + '_data'][prop];
+                                    for (var i = 0; i < valArray.length; i++) {
+                                        var val = valArray[i];
+                                        if (val['name'] == elementDataName) {
+                                            delete element[elementTypeName + '_data'][prop][i]
+                                        }
+                                    }
+                                }
+                            }                     
+                        }
+                    }
+                }   
+            }
+        }
+    }
+
+    private rmElementDataFromFrames(elementType: ElementType, uid: UID, frameIntervals: FrameIntervals) {        
+        let elementTypeName = ElementType[elementType];
+        for(let fi of frameIntervals.get()) {
+            for(let f=fi[0]; f<=fi[1]; f++) {
+                if(this.hasFrame(f)) {
+                    let frame = this.data['vcd']['frames'][f]
+                    if(elementTypeName + 's' in frame) {
+                        if(uid.asStr() in frame[elementTypeName + 's']) {
+                            let element = frame[elementTypeName + 's'][uid.asStr()]
+                            if(elementTypeName + '_data' in element) {
+                                // delete all its former dynamic element_data entries at old fis
+                                delete element[elementTypeName + '_data']  
+                            }                     
+                        }
+                    }
+                }   
+            }
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Public API: add, update
@@ -1188,6 +1261,18 @@ export class VCD {
         return this.getElement(ElementType.relation, uid);
     }
 
+    public hasFrame(frameNum: number) {
+        if (!this.data['vcd']['frames']) {
+            return false
+        }
+        else {
+            if(frameNum in this.data['vcd']['frames'])
+                return true
+            else
+                return false
+        }
+    }
+
     public getFrame(frameNum: number) {
         if (this.data['vcd']['frames']) {
             if(frameNum in this.data['vcd']['frames'])
@@ -1268,79 +1353,81 @@ export class VCD {
         return this.getFramesWithElementDataName(ElementType.context, uid, dataName)
     }
 
-    public getElementData(elementType: ElementType, uid: string | number, dataName: string, frameNum = null) {
+    public getElementData(elementType: ElementType, uid: string | number, dataName: string, frameNum = null) {        
+        let elementExists = this.has(elementType, uid)
+        let vcdHasFrames = !this.getFrameIntervals().empty()
+        
+        if(!elementExists){ // the element does not exist
+            return null
+        }
+
+        if(!vcdHasFrames && frameNum != null) { // don't ask for frame-specific info in a VCD without frames
+            return null
+        }
+
+        let elementTypeName = ElementType[elementType]
+        let frameNumIsNumber = Number.isInteger(frameNum)
         let uid_str = new UID(uid).asStr()
-        if( this.has(elementType, uid)){
-            let elementTypeName = ElementType[elementType]
-            if(frameNum != null) {
-                // Dynamic info
-                if(!Number.isInteger(frameNum)) {
-                    console.warn("WARNING: Calling getElementData with a non-integer frameNum: " + typeof frameNum)
-                }
-                let frame = this.getFrame(frameNum)
-                if(frame != null) {
-                    if(elementTypeName + 's' in frame) {
-                        if(uid_str in frame[elementTypeName + 's']) {
-                            let element = frame[elementTypeName + 's'][uid_str]
-                            if(elementTypeName + '_data' in element) {
-                                for (const prop in element[elementTypeName + '_data']) {
-                                    var valArray = element[elementTypeName + '_data'][prop];
-                                    for (var i = 0; i < valArray.length; i++) {
-                                        var val = valArray[i];
-                                        if (val['name'] == dataName) {
-                                            return val;
-                                        }
-                                    }
-                                }
-                            }
-                            else {
-                                // The user asked for the element data of this element for this frame,
-                                // but there is no dynamic info
-                                // Let's try to return static info
-                                if(elementTypeName + 's' in this.data['vcd']) {
-                                    if(uid_str in this.data['vcd'][elementTypeName + 's']) {
-                                        let element = this.data['vcd'][elementTypeName + 's'][uid_str]
-                                        if(elementTypeName + '_data' in element) {
-                                            for (const prop in element[elementTypeName + '_data']) {
-                                                var valArray = element[elementTypeName + '_data'][prop];
-                                                for (var i = 0; i < valArray.length; i++) {
-                                                    var val = valArray[i];
-                                                    if (val['name'] == dataName) {
-                                                        return val;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }                
-            }
-            else{
-                // Static info
-                if(elementTypeName + 's' in this.data['vcd']) {
-                    if(uid_str in this.data['vcd'][elementTypeName + 's']) {
-                        let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+
+        if(frameNum != null && frameNumIsNumber) {            
+            // The user is asking for frame-specific attributes
+            let elementExistInThisFrame = this.getElementFrameIntervals(elementType, uid).hasFrame(frameNum)               
+            let foundInFrame = false;
+            let frame = this.getFrame(frameNum)
+            if(frame != null) {
+                if(elementTypeName + 's' in frame) {
+                    if(uid_str in frame[elementTypeName + 's']) {
+                        let element = frame[elementTypeName + 's'][uid_str]
                         if(elementTypeName + '_data' in element) {
                             for (const prop in element[elementTypeName + '_data']) {
                                 var valArray = element[elementTypeName + '_data'][prop];
                                 for (var i = 0; i < valArray.length; i++) {
                                     var val = valArray[i];
                                     if (val['name'] == dataName) {
+                                        foundInFrame = true;
                                         return val;
                                     }
                                 }
                             }
-                        }
+                        }                            
                     }
                 }
             }
+            if(!foundInFrame) {
+                // The user has asked to get an ElementData for a certain Frame, but there is not info
+                // about this element or elementData at this frame.
+                // Let's check whether the elementData is static at the root AND the Element is defined for this frame            
+                if(!elementExistInThisFrame)
+                    return null                
+                let element = this.data['vcd'][elementTypeName + 's'][uid_str]  // the element exists because of previous controls
+                if(elementTypeName + '_data' in element) {
+                    for (const prop in element[elementTypeName + '_data']) {
+                        var valArray = element[elementTypeName + '_data'][prop];
+                        for (var i = 0; i < valArray.length; i++) {
+                            var val = valArray[i];
+                            if (val['name'] == dataName) {
+                                return val;
+                            }
+                        }
+                    }
+                }                
+            }
         }
         else {
-            console.warn("WARNING: Asking element data from a non-existing Element.")
-        } 
+            // The user is asking for static attributes at the root of the element            
+            let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+            if(elementTypeName + '_data' in element) {
+                for (const prop in element[elementTypeName + '_data']) {
+                    var valArray = element[elementTypeName + '_data'][prop];
+                    for (var i = 0; i < valArray.length; i++) {
+                        var val = valArray[i];
+                        if (val['name'] == dataName) {
+                            return val;
+                        }
+                    }
+                }
+            }            
+        }
         return null
     }
 
