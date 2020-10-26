@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.1" />
 <title>vcd.types API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.2.0 …" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="VCD (Video Content Description) library v4.3.0 …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -20,25 +22,25 @@
 <h1 class="title">Module <code>vcd.types</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.2.0</p>
+<p>VCD (Video Content Description) library v4.3.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.2.0.
+<p>VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -48,7 +50,16 @@ from enum import Enum
 import vcd.poly2d as poly
 
 
-class Intrinsics():
+class CoordinateSystemType(Enum):
+    sensor_cs = 1  # the coordinate system of a certain sensor
+    local_cs = 2  # e.g. vehicle-ISO8855 in OpenLABEL, or &#34;base_link&#34; in ROS
+    scene_cs = 3  # e.g. &#34;odom&#34; in ROS; starting as the first local-ls
+    geo_utm = 4  # In UTM coordinates
+    geo_wgs84 = 5  # In WGS84 elliptical Earth coordinates
+    custom = 6  # Any other coordinate system
+
+
+class Intrinsics:
     def __init__(self):
         self.data = dict()
 
@@ -71,12 +82,11 @@ class IntrinsicsPinhole(Intrinsics):
         else:
             assert (isinstance(distortion_coeffs_1xN, list))
             num_coeffs = len(distortion_coeffs_1xN)
-            assert(5 &lt;= num_coeffs &lt;= 14)
+            assert(4 &lt;= num_coeffs &lt;= 14)
         self.data[&#39;intrinsics_pinhole&#39;][&#39;distortion_coeffs_1xN&#39;] = distortion_coeffs_1xN
 
         if additional_items is not None:
             self.data[&#39;intrinsics_pinhole&#39;].update(additional_items)
-
 
 
 class IntrinsicsFisheye(Intrinsics):
@@ -108,19 +118,35 @@ class IntrinsicsFisheye(Intrinsics):
             self.data[&#39;intrinsics_fisheye&#39;].update(additional_items)
 
 
-class Extrinsics():
-    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
-        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
-        assert (len(pose_scs_wrt_lcs_4x4) == 16)
+class Transform:
+    def __init__(self, src_name, dst_name, transform_src_to_dst_4x4, **additional_items):
+        assert (isinstance(transform_src_to_dst_4x4, list))
+        assert (len(transform_src_to_dst_4x4) == 16)
+        assert (isinstance(src_name, str))
+        assert (isinstance(dst_name, str))
         self.data = dict()
-        self.data[&#39;extrinsics&#39;] = dict()
-        self.data[&#39;extrinsics&#39;][&#39;pose_scs_wrt_lcs_4x4&#39;] = pose_scs_wrt_lcs_4x4
-
+        name = src_name + &#34;_to_&#34; + dst_name
+        self.data[name] = dict()
+        self.data[name][&#39;src&#39;] = src_name
+        self.data[name][&#39;dst&#39;] = dst_name
+        self.data[name][&#39;transform_src_to_dst_4x4&#39;] = transform_src_to_dst_4x4
         if additional_items is not None:
-            self.data[&#39;extrinsics&#39;].update(additional_items)
+            self.data[name].update(additional_items)
 
 
-class StreamSync():
+class Pose(Transform):
+    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
+        # NOTE: the pose of subject_name system wrt to reference_name system is the transform
+        # from the reference_name system to the subject_name system
+        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
+
+
+class Extrinsics(Transform):
+    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
+        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
+
+
+class StreamSync:
     def __init__(self, frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items):
         self.data = dict()
         self.data[&#39;sync&#39;] = dict()
@@ -142,36 +168,24 @@ class StreamSync():
             self.data[&#39;sync&#39;].update(additional_items)
 
 
-class Odometry():
-    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
-        self.data = dict()
-        self.data[&#39;odometry&#39;] = dict()
-        assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
-        assert (len(pose_lcs_wrt_wcs_4x4) == 16)
-
-        self.data[&#39;odometry&#39;][&#39;pose_lcs_wrt_wcs_4x4&#39;] = pose_lcs_wrt_wcs_4x4
-
-        if additional_properties is not None:
-            self.data[&#39;odometry&#39;].update(additional_properties)
-
-
 class ObjectDataType(Enum):
     bbox = 1
-    num = 2
-    text = 3
-    boolean = 4
-    poly2d = 5
-    poly3d = 6
-    cuboid = 7
-    image = 8
-    mat = 9
-    binary = 10
-    point2d = 11
-    point3d = 12
-    vec = 13
-    line_reference = 14
-    area_reference = 15
-    mesh = 16
+    rbbox = 2
+    num = 3
+    text = 4
+    boolean = 5
+    poly2d = 6
+    poly3d = 7
+    cuboid = 8
+    image = 9
+    mat = 10
+    binary = 11
+    point2d = 12
+    point3d = 13
+    vec = 14
+    line_reference = 15
+    area_reference = 16
+    mesh = 17
 
 
 class Poly2DType(Enum):
@@ -185,32 +199,42 @@ class Poly2DType(Enum):
 
 
 class ObjectData:
-    def __init__(self, name, stream=None):
+    def __init__(self, name, coordinate_system=None):
         assert(isinstance(name, str))
         self.data = dict()
         self.data[&#39;name&#39;] = name
-        if stream is not None:
-            assert (isinstance(stream, str))
-            self.data[&#39;stream&#39;] = stream
+        if coordinate_system is not None:
+            assert (isinstance(coordinate_system, str))
+            self.data[&#39;coordinate_system&#39;] = coordinate_system
 
     def add_attribute(self, object_data):
         assert(isinstance(object_data, ObjectData))
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
-        if object_data.type.name not in self.data[&#39;attributes&#39;]:
-            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
 
-        self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)
+        if object_data.type.name in self.data[&#39;attributes&#39;]:
+            # Find if element_data already there, if so, replace, otherwise, append
+            list_aux = self.data[&#39;attributes&#39;][object_data.type.name]
+            pos_list = [idx for idx, val in enumerate(list_aux) if val[&#39;name&#39;] == object_data.data[&#39;name&#39;]]
+            if len(pos_list) == 0:
+                # No: then, just push this new object data
+                self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)
+            else:
+                # Ok, exists, so let&#39;s substitute
+                pos = pos_list[0]
+                self.data[&#39;attributes&#39;][object_data.type.name][pos] = object_data.data
+        else:
+            self.data[&#39;attributes&#39;][object_data.type.name] = [object_data.data]
 
 
 class ObjectDataGeometry(ObjectData):
-    def __init__(self, name, stream=None):
-        ObjectData.__init__(self, name, stream)  # Calling parent class
+    def __init__(self, name, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)  # Calling parent class
 
 
 class bbox(ObjectDataGeometry):
-    def __init__(self, name, val, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert (len(val) == 4)
         if isinstance(val, tuple):
@@ -220,33 +244,45 @@ class bbox(ObjectDataGeometry):
         self.type = ObjectDataType.bbox
 
 
+class rbbox(ObjectDataGeometry):
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
+        assert (isinstance(val, (tuple, list)))
+        assert (len(val) == 5)
+        if isinstance(val, tuple):
+            self.data[&#39;val&#39;] = val
+        elif isinstance(val, list):
+            self.data[&#39;val&#39;] = tuple(val)
+        self.type = ObjectDataType.rbbox
+
+
 class num(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert isinstance(val, (int, float))
         self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.num
 
 
 class text(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert(isinstance(val, str))
         self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.text
 
 
 class boolean(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert(isinstance(val, bool))
         self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.boolean
 
 
 class poly2d(ObjectDataGeometry):
-    def __init__(self, name, val, mode, closed, hierarchy=None, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, mode, closed, hierarchy=None, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
@@ -271,8 +307,8 @@ class poly2d(ObjectDataGeometry):
 
 
 class poly3d(ObjectDataGeometry):
-    def __init__(self, name, val, closed, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, closed, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert (isinstance(closed, bool))
         if isinstance(val, tuple):
@@ -284,14 +320,18 @@ class poly3d(ObjectDataGeometry):
 
 
 class cuboid(ObjectDataGeometry):
-    def __init__(self, name, val, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
-        assert (len(val) == 9)
+        assert (len(val) == 9 or len(val) == 10)
+        if len(val) == 9:
+            self.use_quaternion = False
+        else:
+            self.use_quaternion = True
         if isinstance(val, tuple):
-            self.data[&#39;val&#39;] = val
+            self.data[&#39;val&#39;] = list(val)
         elif isinstance(val, list):
-            self.data[&#39;val&#39;] = tuple(val)
+            self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.cuboid
 
 
@@ -310,8 +350,8 @@ class image(ObjectData):
     compr_params=[int(cv2.IMWRITE_PNG_COMPRESSION), 9]
     result, payload = cv2.imencode(&#39;.png&#39;, img, compr_params)
     &#39;&#39;&#39;
-    def __init__(self, name, val, mimeType, encoding, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, mimeType, encoding, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert(isinstance(val, str))
         assert(isinstance(mimeType, str))
         assert(isinstance(encoding, str))
@@ -322,8 +362,8 @@ class image(ObjectData):
 
 
 class mat(ObjectData):
-    def __init__(self, name, val, channels, width, height, dataType, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, channels, width, height, dataType, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(width, int))
         assert (isinstance(height, int))
@@ -342,8 +382,8 @@ class mat(ObjectData):
 
 
 class binary(ObjectData):
-    def __init__(self, name, val, dataType, encoding, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, dataType, encoding, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert(isinstance(val, str))
         assert(isinstance(dataType, str))
         assert(isinstance(encoding, str))
@@ -354,8 +394,8 @@ class binary(ObjectData):
 
 
 class vec(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
@@ -365,8 +405,8 @@ class vec(ObjectData):
 
 
 class point2d(ObjectDataGeometry):
-    def __init__(self, name, val, id=None, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, id=None, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)) and len(val) == 2)
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
@@ -379,8 +419,8 @@ class point2d(ObjectDataGeometry):
 
 
 class point3d(ObjectDataGeometry):
-    def __init__(self, name, val, id=None, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, id=None, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)) and len(val) == 3)
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
@@ -393,8 +433,8 @@ class point3d(ObjectDataGeometry):
 
 
 class GeometricReference(ObjectDataGeometry):
-    def __init__(self, name, val, reference_type, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(reference_type, ObjectDataType))
         self.data[&#39;reference_type&#39;] = reference_type.name
         if val is not None:
@@ -403,30 +443,30 @@ class GeometricReference(ObjectDataGeometry):
 
 
 class lineReference(GeometricReference):
-    def __init__(self, name, val, reference_type, stream=None):
-        GeometricReference.__init__(self, name, val, reference_type, stream)
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)
 
 
 class areaReference(GeometricReference):
-    def __init__(self, name, val, reference_type, stream=None):
-        GeometricReference.__init__(self, name, val, reference_type, stream)
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)
 
 
 class volumeReference(GeometricReference):
-    def __init__(self, name, val, reference_type, stream=None):
-        GeometricReference.__init__(self, name, val, reference_type, stream)
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)
 
 
 class mesh(ObjectDataGeometry):
-    def __init__(self, name, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
-        self.pid = 0
-        self.eid = 0
-        self.aid = 0
-        self.vid = 0
-        self.data[&#39;point3d&#39;] = dict()
-        self.data[&#39;line_reference&#39;] = dict()
-        self.data[&#39;area_reference&#39;] = dict()
+    def __init__(self, name, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
+        self.pid = &#34;0&#34;
+        self.eid = &#34;0&#34;
+        self.aid = &#34;0&#34;
+        self.vid = &#34;0&#34;
+        self.data[&#39;point3d&#39;] = {}
+        self.data[&#39;line_reference&#39;] = {}
+        self.data[&#39;area_reference&#39;] = {}
         self.type = ObjectDataType.mesh
 
     # Vertex
@@ -441,10 +481,10 @@ class mesh(ObjectDataGeometry):
                 idx = id
             else:
                 idx = id
-                self.pid = idx + 1
+                self.pid = str(int(idx) + 1)
         else:
             idx = self.pid
-            self.pid += 1
+            self.pid = str(int(self.pid) + 1)
 
         self.data.setdefault(&#39;point3d&#39;, dict())
         self.data[&#39;point3d&#39;][idx] = p3d.data
@@ -459,10 +499,10 @@ class mesh(ObjectDataGeometry):
                 idx = id
             else:
                 idx = id
-                self.eid = idx + 1
+                self.eid = str(int(idx) + 1)
         else:
             idx = self.eid
-            self.eid += 1
+            self.eid = str(int(self.eid) + 1)
 
         self.data.setdefault(&#39;line_reference&#39;, dict())
         self.data[&#39;line_reference&#39;][idx] = lref.data
@@ -477,10 +517,10 @@ class mesh(ObjectDataGeometry):
                 idx = id
             else:
                 idx = id
-                self.aid = idx + 1
+                self.aid = str(int(idx) + 1)
         else:
             idx = self.aid
-            self.aid += 1
+            self.aid = str(int(self.aid) + 1)
 
         self.data.setdefault(&#39;area_reference&#39;, dict())
         self.data[&#39;area_reference&#39;][idx] = aref.data
@@ -527,41 +567,88 @@ class mesh(ObjectDataGeometry):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="vcd.types.Extrinsics"><code class="flex name class">
-<span>class <span class="ident">Extrinsics</span></span>
-<span>(</span><span>pose_scs_wrt_lcs_4x4, **additional_items)</span>
+<dt id="vcd.types.CoordinateSystemType"><code class="flex name class">
+<span>class <span class="ident">CoordinateSystemType</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"><p>An enumeration.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Extrinsics():
-    def __init__(self, pose_scs_wrt_lcs_4x4, **additional_items):
-        assert(isinstance(pose_scs_wrt_lcs_4x4, list))
-        assert (len(pose_scs_wrt_lcs_4x4) == 16)
-        self.data = dict()
-        self.data[&#39;extrinsics&#39;] = dict()
-        self.data[&#39;extrinsics&#39;][&#39;pose_scs_wrt_lcs_4x4&#39;] = pose_scs_wrt_lcs_4x4
-
-        if additional_items is not None:
-            self.data[&#39;extrinsics&#39;].update(additional_items)</code></pre>
+<pre><code class="python">class CoordinateSystemType(Enum):
+    sensor_cs = 1  # the coordinate system of a certain sensor
+    local_cs = 2  # e.g. vehicle-ISO8855 in OpenLABEL, or &#34;base_link&#34; in ROS
+    scene_cs = 3  # e.g. &#34;odom&#34; in ROS; starting as the first local-ls
+    geo_utm = 4  # In UTM coordinates
+    geo_wgs84 = 5  # In WGS84 elliptical Earth coordinates
+    custom = 6  # Any other coordinate system</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="vcd.types.CoordinateSystemType.custom"><code class="name">var <span class="ident">custom</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="vcd.types.CoordinateSystemType.geo_utm"><code class="name">var <span class="ident">geo_utm</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="vcd.types.CoordinateSystemType.geo_wgs84"><code class="name">var <span class="ident">geo_wgs84</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="vcd.types.CoordinateSystemType.local_cs"><code class="name">var <span class="ident">local_cs</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="vcd.types.CoordinateSystemType.scene_cs"><code class="name">var <span class="ident">scene_cs</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="vcd.types.CoordinateSystemType.sensor_cs"><code class="name">var <span class="ident">sensor_cs</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="vcd.types.Extrinsics"><code class="flex name class">
+<span>class <span class="ident">Extrinsics</span></span>
+<span>(</span><span>subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Extrinsics(Transform):
+    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
+        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="vcd.types.Transform" href="#vcd.types.Transform">Transform</a></li>
+</ul>
 </dd>
 <dt id="vcd.types.GeometricReference"><code class="flex name class">
 <span>class <span class="ident">GeometricReference</span></span>
-<span>(</span><span>name, val, reference_type, stream=None)</span>
+<span>(</span><span>name, val, reference_type, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class GeometricReference(ObjectDataGeometry):
-    def __init__(self, name, val, reference_type, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(reference_type, ObjectDataType))
         self.data[&#39;reference_type&#39;] = reference_type.name
         if val is not None:
@@ -584,12 +671,12 @@ class mesh(ObjectDataGeometry):
 <span>class <span class="ident">Intrinsics</span></span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Intrinsics():
+<pre><code class="python">class Intrinsics:
     def __init__(self):
         self.data = dict()</code></pre>
 </details>
@@ -604,7 +691,7 @@ class mesh(ObjectDataGeometry):
 <span>(</span><span>width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y, radius_x, radius_y, **additional_items)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -647,7 +734,7 @@ class mesh(ObjectDataGeometry):
 <span>(</span><span>width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -670,7 +757,7 @@ class mesh(ObjectDataGeometry):
         else:
             assert (isinstance(distortion_coeffs_1xN, list))
             num_coeffs = len(distortion_coeffs_1xN)
-            assert(5 &lt;= num_coeffs &lt;= 14)
+            assert(4 &lt;= num_coeffs &lt;= 14)
         self.data[&#39;intrinsics_pinhole&#39;][&#39;distortion_coeffs_1xN&#39;] = distortion_coeffs_1xN
 
         if additional_items is not None:
@@ -683,31 +770,41 @@ class mesh(ObjectDataGeometry):
 </dd>
 <dt id="vcd.types.ObjectData"><code class="flex name class">
 <span>class <span class="ident">ObjectData</span></span>
-<span>(</span><span>name, stream=None)</span>
+<span>(</span><span>name, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ObjectData:
-    def __init__(self, name, stream=None):
+    def __init__(self, name, coordinate_system=None):
         assert(isinstance(name, str))
         self.data = dict()
         self.data[&#39;name&#39;] = name
-        if stream is not None:
-            assert (isinstance(stream, str))
-            self.data[&#39;stream&#39;] = stream
+        if coordinate_system is not None:
+            assert (isinstance(coordinate_system, str))
+            self.data[&#39;coordinate_system&#39;] = coordinate_system
 
     def add_attribute(self, object_data):
         assert(isinstance(object_data, ObjectData))
         assert(not isinstance(object_data, ObjectDataGeometry))
         self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
-        if object_data.type.name not in self.data[&#39;attributes&#39;]:
-            self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
 
-        self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)</code></pre>
+        if object_data.type.name in self.data[&#39;attributes&#39;]:
+            # Find if element_data already there, if so, replace, otherwise, append
+            list_aux = self.data[&#39;attributes&#39;][object_data.type.name]
+            pos_list = [idx for idx, val in enumerate(list_aux) if val[&#39;name&#39;] == object_data.data[&#39;name&#39;]]
+            if len(pos_list) == 0:
+                # No: then, just push this new object data
+                self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)
+            else:
+                # Ok, exists, so let&#39;s substitute
+                pos = pos_list[0]
+                self.data[&#39;attributes&#39;][object_data.type.name][pos] = object_data.data
+        else:
+            self.data[&#39;attributes&#39;][object_data.type.name] = [object_data.data]</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -726,7 +823,7 @@ class mesh(ObjectDataGeometry):
 <span>def <span class="ident">add_attribute</span></span>(<span>self, object_data)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -735,27 +832,37 @@ class mesh(ObjectDataGeometry):
     assert(isinstance(object_data, ObjectData))
     assert(not isinstance(object_data, ObjectDataGeometry))
     self.data.setdefault(&#39;attributes&#39;, {})  # Creates &#39;attributes&#39; if it does not exist
-    if object_data.type.name not in self.data[&#39;attributes&#39;]:
-        self.data[&#39;attributes&#39;].setdefault(object_data.type.name, [])
 
-    self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)</code></pre>
+    if object_data.type.name in self.data[&#39;attributes&#39;]:
+        # Find if element_data already there, if so, replace, otherwise, append
+        list_aux = self.data[&#39;attributes&#39;][object_data.type.name]
+        pos_list = [idx for idx, val in enumerate(list_aux) if val[&#39;name&#39;] == object_data.data[&#39;name&#39;]]
+        if len(pos_list) == 0:
+            # No: then, just push this new object data
+            self.data[&#39;attributes&#39;][object_data.type.name].append(object_data.data)
+        else:
+            # Ok, exists, so let&#39;s substitute
+            pos = pos_list[0]
+            self.data[&#39;attributes&#39;][object_data.type.name][pos] = object_data.data
+    else:
+        self.data[&#39;attributes&#39;][object_data.type.name] = [object_data.data]</code></pre>
 </details>
 </dd>
 </dl>
 </dd>
 <dt id="vcd.types.ObjectDataGeometry"><code class="flex name class">
 <span>class <span class="ident">ObjectDataGeometry</span></span>
-<span>(</span><span>name, stream=None)</span>
+<span>(</span><span>name, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ObjectDataGeometry(ObjectData):
-    def __init__(self, name, stream=None):
-        ObjectData.__init__(self, name, stream)  # Calling parent class</code></pre>
+    def __init__(self, name, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)  # Calling parent class</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -771,6 +878,7 @@ class mesh(ObjectDataGeometry):
 <li><a title="vcd.types.point3d" href="#vcd.types.point3d">point3d</a></li>
 <li><a title="vcd.types.poly2d" href="#vcd.types.poly2d">poly2d</a></li>
 <li><a title="vcd.types.poly3d" href="#vcd.types.poly3d">poly3d</a></li>
+<li><a title="vcd.types.rbbox" href="#vcd.types.rbbox">rbbox</a></li>
 </ul>
 </dd>
 <dt id="vcd.types.ObjectDataType"><code class="flex name class">
@@ -778,28 +886,29 @@ class mesh(ObjectDataGeometry):
 <span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"><p>An enumeration.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class ObjectDataType(Enum):
     bbox = 1
-    num = 2
-    text = 3
-    boolean = 4
-    poly2d = 5
-    poly3d = 6
-    cuboid = 7
-    image = 8
-    mat = 9
-    binary = 10
-    point2d = 11
-    point3d = 12
-    vec = 13
-    line_reference = 14
-    area_reference = 15
-    mesh = 16</code></pre>
+    rbbox = 2
+    num = 3
+    text = 4
+    boolean = 5
+    poly2d = 6
+    poly3d = 7
+    cuboid = 8
+    image = 9
+    mat = 10
+    binary = 11
+    point2d = 12
+    point3d = 13
+    vec = 14
+    line_reference = 15
+    area_reference = 16
+    mesh = 17</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -809,99 +918,80 @@ class mesh(ObjectDataGeometry):
 <dl>
 <dt id="vcd.types.ObjectDataType.area_reference"><code class="name">var <span class="ident">area_reference</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.bbox"><code class="name">var <span class="ident">bbox</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.binary"><code class="name">var <span class="ident">binary</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.boolean"><code class="name">var <span class="ident">boolean</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.cuboid"><code class="name">var <span class="ident">cuboid</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.image"><code class="name">var <span class="ident">image</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.line_reference"><code class="name">var <span class="ident">line_reference</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.mat"><code class="name">var <span class="ident">mat</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.mesh"><code class="name">var <span class="ident">mesh</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.num"><code class="name">var <span class="ident">num</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.point2d"><code class="name">var <span class="ident">point2d</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.point3d"><code class="name">var <span class="ident">point3d</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.poly2d"><code class="name">var <span class="ident">poly2d</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.poly3d"><code class="name">var <span class="ident">poly3d</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
+</dd>
+<dt id="vcd.types.ObjectDataType.rbbox"><code class="name">var <span class="ident">rbbox</span></code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.text"><code class="name">var <span class="ident">text</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.ObjectDataType.vec"><code class="name">var <span class="ident">vec</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 </dl>
-</dd>
-<dt id="vcd.types.Odometry"><code class="flex name class">
-<span>class <span class="ident">Odometry</span></span>
-<span>(</span><span>pose_lcs_wrt_wcs_4x4, **additional_properties)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Odometry():
-    def __init__(self, pose_lcs_wrt_wcs_4x4, **additional_properties):
-        self.data = dict()
-        self.data[&#39;odometry&#39;] = dict()
-        assert (isinstance(pose_lcs_wrt_wcs_4x4, list))
-        assert (len(pose_lcs_wrt_wcs_4x4) == 16)
-
-        self.data[&#39;odometry&#39;][&#39;pose_lcs_wrt_wcs_4x4&#39;] = pose_lcs_wrt_wcs_4x4
-
-        if additional_properties is not None:
-            self.data[&#39;odometry&#39;].update(additional_properties)</code></pre>
-</details>
 </dd>
 <dt id="vcd.types.Poly2DType"><code class="flex name class">
 <span>class <span class="ident">Poly2DType</span></span>
 <span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"><p>An enumeration.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -923,29 +1013,50 @@ class mesh(ObjectDataGeometry):
 <dl>
 <dt id="vcd.types.Poly2DType.MODE_POLY2D_ABSOLUTE"><code class="name">var <span class="ident">MODE_POLY2D_ABSOLUTE</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.Poly2DType.MODE_POLY2D_RS6FCC"><code class="name">var <span class="ident">MODE_POLY2D_RS6FCC</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.types.Poly2DType.MODE_POLY2D_SRF6DCC"><code class="name">var <span class="ident">MODE_POLY2D_SRF6DCC</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 </dl>
+</dd>
+<dt id="vcd.types.Pose"><code class="flex name class">
+<span>class <span class="ident">Pose</span></span>
+<span>(</span><span>subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Pose(Transform):
+    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
+        # NOTE: the pose of subject_name system wrt to reference_name system is the transform
+        # from the reference_name system to the subject_name system
+        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="vcd.types.Transform" href="#vcd.types.Transform">Transform</a></li>
+</ul>
 </dd>
 <dt id="vcd.types.StreamSync"><code class="flex name class">
 <span>class <span class="ident">StreamSync</span></span>
 <span>(</span><span>frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class StreamSync():
+<pre><code class="python">class StreamSync:
     def __init__(self, frame_vcd=None, frame_stream=None, timestamp_ISO8601=None, frame_shift=None, **additional_items):
         self.data = dict()
         self.data[&#39;sync&#39;] = dict()
@@ -967,19 +1078,50 @@ class mesh(ObjectDataGeometry):
             self.data[&#39;sync&#39;].update(additional_items)</code></pre>
 </details>
 </dd>
-<dt id="vcd.types.areaReference"><code class="flex name class">
-<span>class <span class="ident">areaReference</span></span>
-<span>(</span><span>name, val, reference_type, stream=None)</span>
+<dt id="vcd.types.Transform"><code class="flex name class">
+<span>class <span class="ident">Transform</span></span>
+<span>(</span><span>src_name, dst_name, transform_src_to_dst_4x4, **additional_items)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Transform:
+    def __init__(self, src_name, dst_name, transform_src_to_dst_4x4, **additional_items):
+        assert (isinstance(transform_src_to_dst_4x4, list))
+        assert (len(transform_src_to_dst_4x4) == 16)
+        assert (isinstance(src_name, str))
+        assert (isinstance(dst_name, str))
+        self.data = dict()
+        name = src_name + &#34;_to_&#34; + dst_name
+        self.data[name] = dict()
+        self.data[name][&#39;src&#39;] = src_name
+        self.data[name][&#39;dst&#39;] = dst_name
+        self.data[name][&#39;transform_src_to_dst_4x4&#39;] = transform_src_to_dst_4x4
+        if additional_items is not None:
+            self.data[name].update(additional_items)</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="vcd.types.Extrinsics" href="#vcd.types.Extrinsics">Extrinsics</a></li>
+<li><a title="vcd.types.Pose" href="#vcd.types.Pose">Pose</a></li>
+</ul>
+</dd>
+<dt id="vcd.types.areaReference"><code class="flex name class">
+<span>class <span class="ident">areaReference</span></span>
+<span>(</span><span>name, val, reference_type, coordinate_system=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class areaReference(GeometricReference):
-    def __init__(self, name, val, reference_type, stream=None):
-        GeometricReference.__init__(self, name, val, reference_type, stream)</code></pre>
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -990,17 +1132,17 @@ class mesh(ObjectDataGeometry):
 </dd>
 <dt id="vcd.types.bbox"><code class="flex name class">
 <span>class <span class="ident">bbox</span></span>
-<span>(</span><span>name, val, stream=None)</span>
+<span>(</span><span>name, val, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class bbox(ObjectDataGeometry):
-    def __init__(self, name, val, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert (len(val) == 4)
         if isinstance(val, tuple):
@@ -1017,17 +1159,17 @@ class mesh(ObjectDataGeometry):
 </dd>
 <dt id="vcd.types.binary"><code class="flex name class">
 <span>class <span class="ident">binary</span></span>
-<span>(</span><span>name, val, dataType, encoding, stream=None)</span>
+<span>(</span><span>name, val, dataType, encoding, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class binary(ObjectData):
-    def __init__(self, name, val, dataType, encoding, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, dataType, encoding, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert(isinstance(val, str))
         assert(isinstance(dataType, str))
         assert(isinstance(encoding, str))
@@ -1043,17 +1185,17 @@ class mesh(ObjectDataGeometry):
 </dd>
 <dt id="vcd.types.boolean"><code class="flex name class">
 <span>class <span class="ident">boolean</span></span>
-<span>(</span><span>name, val, stream=None)</span>
+<span>(</span><span>name, val, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class boolean(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert(isinstance(val, bool))
         self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.boolean</code></pre>
@@ -1065,23 +1207,27 @@ class mesh(ObjectDataGeometry):
 </dd>
 <dt id="vcd.types.cuboid"><code class="flex name class">
 <span>class <span class="ident">cuboid</span></span>
-<span>(</span><span>name, val, stream=None)</span>
+<span>(</span><span>name, val, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class cuboid(ObjectDataGeometry):
-    def __init__(self, name, val, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
-        assert (len(val) == 9)
+        assert (len(val) == 9 or len(val) == 10)
+        if len(val) == 9:
+            self.use_quaternion = False
+        else:
+            self.use_quaternion = True
         if isinstance(val, tuple):
-            self.data[&#39;val&#39;] = val
+            self.data[&#39;val&#39;] = list(val)
         elif isinstance(val, list):
-            self.data[&#39;val&#39;] = tuple(val)
+            self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.cuboid</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -1092,10 +1238,10 @@ class mesh(ObjectDataGeometry):
 </dd>
 <dt id="vcd.types.image"><code class="flex name class">
 <span>class <span class="ident">image</span></span>
-<span>(</span><span>name, val, mimeType, encoding, stream=None)</span>
+<span>(</span><span>name, val, mimeType, encoding, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>This class hosts image data, in buffer format. It can be used with any codification, although base64 and webp
+<div class="desc"><p>This class hosts image data, in buffer format. It can be used with any codification, although base64 and webp
 are suggested.</p>
 <p>mimeType: "image/png", "image/jpeg", .. as in <a href="https://www.sitepoint.com/mime-types-complete-list/">https://www.sitepoint.com/mime-types-complete-list/</a>
 encoding: "base64", "ascii", .. as in <a href="https://docs.python.org/2.4/lib/standard-encodings.html">https://docs.python.org/2.4/lib/standard-encodings.html</a></p>
@@ -1103,7 +1249,7 @@ encoding: "base64", "ascii", .. as in <a href="https://docs.python.org/2.4/lib/s
 <p>OpenCV can be used to encode:
 img = cv2.imread(file_name, 1)
 compr_params=[int(cv2.IMWRITE_PNG_COMPRESSION), 9]
-result, payload = cv2.imencode('.png', img, compr_params)</p></section>
+result, payload = cv2.imencode('.png', img, compr_params)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1123,8 +1269,8 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
     compr_params=[int(cv2.IMWRITE_PNG_COMPRESSION), 9]
     result, payload = cv2.imencode(&#39;.png&#39;, img, compr_params)
     &#39;&#39;&#39;
-    def __init__(self, name, val, mimeType, encoding, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, mimeType, encoding, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert(isinstance(val, str))
         assert(isinstance(mimeType, str))
         assert(isinstance(encoding, str))
@@ -1140,17 +1286,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.lineReference"><code class="flex name class">
 <span>class <span class="ident">lineReference</span></span>
-<span>(</span><span>name, val, reference_type, stream=None)</span>
+<span>(</span><span>name, val, reference_type, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class lineReference(GeometricReference):
-    def __init__(self, name, val, reference_type, stream=None):
-        GeometricReference.__init__(self, name, val, reference_type, stream)</code></pre>
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1161,17 +1307,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.mat"><code class="flex name class">
 <span>class <span class="ident">mat</span></span>
-<span>(</span><span>name, val, channels, width, height, dataType, stream=None)</span>
+<span>(</span><span>name, val, channels, width, height, dataType, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class mat(ObjectData):
-    def __init__(self, name, val, channels, width, height, dataType, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, channels, width, height, dataType, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(width, int))
         assert (isinstance(height, int))
@@ -1195,24 +1341,24 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.mesh"><code class="flex name class">
 <span>class <span class="ident">mesh</span></span>
-<span>(</span><span>name, stream=None)</span>
+<span>(</span><span>name, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class mesh(ObjectDataGeometry):
-    def __init__(self, name, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
-        self.pid = 0
-        self.eid = 0
-        self.aid = 0
-        self.vid = 0
-        self.data[&#39;point3d&#39;] = dict()
-        self.data[&#39;line_reference&#39;] = dict()
-        self.data[&#39;area_reference&#39;] = dict()
+    def __init__(self, name, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
+        self.pid = &#34;0&#34;
+        self.eid = &#34;0&#34;
+        self.aid = &#34;0&#34;
+        self.vid = &#34;0&#34;
+        self.data[&#39;point3d&#39;] = {}
+        self.data[&#39;line_reference&#39;] = {}
+        self.data[&#39;area_reference&#39;] = {}
         self.type = ObjectDataType.mesh
 
     # Vertex
@@ -1227,10 +1373,10 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
                 idx = id
             else:
                 idx = id
-                self.pid = idx + 1
+                self.pid = str(int(idx) + 1)
         else:
             idx = self.pid
-            self.pid += 1
+            self.pid = str(int(self.pid) + 1)
 
         self.data.setdefault(&#39;point3d&#39;, dict())
         self.data[&#39;point3d&#39;][idx] = p3d.data
@@ -1245,10 +1391,10 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
                 idx = id
             else:
                 idx = id
-                self.eid = idx + 1
+                self.eid = str(int(idx) + 1)
         else:
             idx = self.eid
-            self.eid += 1
+            self.eid = str(int(self.eid) + 1)
 
         self.data.setdefault(&#39;line_reference&#39;, dict())
         self.data[&#39;line_reference&#39;][idx] = lref.data
@@ -1263,10 +1409,10 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
                 idx = id
             else:
                 idx = id
-                self.aid = idx + 1
+                self.aid = str(int(idx) + 1)
         else:
             idx = self.aid
-            self.aid += 1
+            self.aid = str(int(self.aid) + 1)
 
         self.data.setdefault(&#39;area_reference&#39;, dict())
         self.data[&#39;area_reference&#39;][idx] = aref.data
@@ -1314,7 +1460,7 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <span>def <span class="ident">add_area</span></span>(<span>self, aref, id=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1327,10 +1473,10 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
             idx = id
         else:
             idx = id
-            self.aid = idx + 1
+            self.aid = str(int(idx) + 1)
     else:
         idx = self.aid
-        self.aid += 1
+        self.aid = str(int(self.aid) + 1)
 
     self.data.setdefault(&#39;area_reference&#39;, dict())
     self.data[&#39;area_reference&#39;][idx] = aref.data
@@ -1341,7 +1487,7 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <span>def <span class="ident">add_edge</span></span>(<span>self, lref, id=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1354,10 +1500,10 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
             idx = id
         else:
             idx = id
-            self.eid = idx + 1
+            self.eid = str(int(idx) + 1)
     else:
         idx = self.eid
-        self.eid += 1
+        self.eid = str(int(self.eid) + 1)
 
     self.data.setdefault(&#39;line_reference&#39;, dict())
     self.data[&#39;line_reference&#39;][idx] = lref.data
@@ -1368,7 +1514,7 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <span>def <span class="ident">add_vertex</span></span>(<span>self, p3d, id=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1384,10 +1530,10 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
             idx = id
         else:
             idx = id
-            self.pid = idx + 1
+            self.pid = str(int(idx) + 1)
     else:
         idx = self.pid
-        self.pid += 1
+        self.pid = str(int(self.pid) + 1)
 
     self.data.setdefault(&#39;point3d&#39;, dict())
     self.data[&#39;point3d&#39;][idx] = p3d.data
@@ -1398,7 +1544,7 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <span>def <span class="ident">get_mesh_geometry_as_string</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1439,17 +1585,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.num"><code class="flex name class">
 <span>class <span class="ident">num</span></span>
-<span>(</span><span>name, val, stream=None)</span>
+<span>(</span><span>name, val, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class num(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert isinstance(val, (int, float))
         self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.num</code></pre>
@@ -1461,17 +1607,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.point2d"><code class="flex name class">
 <span>class <span class="ident">point2d</span></span>
-<span>(</span><span>name, val, id=None, stream=None)</span>
+<span>(</span><span>name, val, id=None, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class point2d(ObjectDataGeometry):
-    def __init__(self, name, val, id=None, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, id=None, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)) and len(val) == 2)
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
@@ -1490,17 +1636,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.point3d"><code class="flex name class">
 <span>class <span class="ident">point3d</span></span>
-<span>(</span><span>name, val, id=None, stream=None)</span>
+<span>(</span><span>name, val, id=None, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class point3d(ObjectDataGeometry):
-    def __init__(self, name, val, id=None, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, id=None, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)) and len(val) == 3)
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
@@ -1519,17 +1665,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.poly2d"><code class="flex name class">
 <span>class <span class="ident">poly2d</span></span>
-<span>(</span><span>name, val, mode, closed, hierarchy=None, stream=None)</span>
+<span>(</span><span>name, val, mode, closed, hierarchy=None, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class poly2d(ObjectDataGeometry):
-    def __init__(self, name, val, mode, closed, hierarchy=None, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, mode, closed, hierarchy=None, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
@@ -1560,17 +1706,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.poly3d"><code class="flex name class">
 <span>class <span class="ident">poly3d</span></span>
-<span>(</span><span>name, val, closed, stream=None)</span>
+<span>(</span><span>name, val, closed, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class poly3d(ObjectDataGeometry):
-    def __init__(self, name, val, closed, stream=None):
-        ObjectDataGeometry.__init__(self, name, stream)
+    def __init__(self, name, val, closed, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         assert (isinstance(closed, bool))
         if isinstance(val, tuple):
@@ -1586,19 +1732,46 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <li><a title="vcd.types.ObjectData" href="#vcd.types.ObjectData">ObjectData</a></li>
 </ul>
 </dd>
-<dt id="vcd.types.text"><code class="flex name class">
-<span>class <span class="ident">text</span></span>
-<span>(</span><span>name, val, stream=None)</span>
+<dt id="vcd.types.rbbox"><code class="flex name class">
+<span>class <span class="ident">rbbox</span></span>
+<span>(</span><span>name, val, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class rbbox(ObjectDataGeometry):
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system)
+        assert (isinstance(val, (tuple, list)))
+        assert (len(val) == 5)
+        if isinstance(val, tuple):
+            self.data[&#39;val&#39;] = val
+        elif isinstance(val, list):
+            self.data[&#39;val&#39;] = tuple(val)
+        self.type = ObjectDataType.rbbox</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="vcd.types.ObjectDataGeometry" href="#vcd.types.ObjectDataGeometry">ObjectDataGeometry</a></li>
+<li><a title="vcd.types.ObjectData" href="#vcd.types.ObjectData">ObjectData</a></li>
+</ul>
+</dd>
+<dt id="vcd.types.text"><code class="flex name class">
+<span>class <span class="ident">text</span></span>
+<span>(</span><span>name, val, coordinate_system=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class text(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert(isinstance(val, str))
         self.data[&#39;val&#39;] = val
         self.type = ObjectDataType.text</code></pre>
@@ -1610,17 +1783,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.vec"><code class="flex name class">
 <span>class <span class="ident">vec</span></span>
-<span>(</span><span>name, val, stream=None)</span>
+<span>(</span><span>name, val, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class vec(ObjectData):
-    def __init__(self, name, val, stream=None):
-        ObjectData.__init__(self, name, stream)
+    def __init__(self, name, val, coordinate_system=None):
+        ObjectData.__init__(self, name, coordinate_system)
         assert (isinstance(val, (tuple, list)))
         if isinstance(val, tuple):
             self.data[&#39;val&#39;] = val
@@ -1635,17 +1808,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </dd>
 <dt id="vcd.types.volumeReference"><code class="flex name class">
 <span>class <span class="ident">volumeReference</span></span>
-<span>(</span><span>name, val, reference_type, stream=None)</span>
+<span>(</span><span>name, val, reference_type, coordinate_system=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class volumeReference(GeometricReference):
-    def __init__(self, name, val, reference_type, stream=None):
-        GeometricReference.__init__(self, name, val, reference_type, stream)</code></pre>
+    def __init__(self, name, val, reference_type, coordinate_system=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -1670,6 +1843,17 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
+<li>
+<h4><code><a title="vcd.types.CoordinateSystemType" href="#vcd.types.CoordinateSystemType">CoordinateSystemType</a></code></h4>
+<ul class="two-column">
+<li><code><a title="vcd.types.CoordinateSystemType.custom" href="#vcd.types.CoordinateSystemType.custom">custom</a></code></li>
+<li><code><a title="vcd.types.CoordinateSystemType.geo_utm" href="#vcd.types.CoordinateSystemType.geo_utm">geo_utm</a></code></li>
+<li><code><a title="vcd.types.CoordinateSystemType.geo_wgs84" href="#vcd.types.CoordinateSystemType.geo_wgs84">geo_wgs84</a></code></li>
+<li><code><a title="vcd.types.CoordinateSystemType.local_cs" href="#vcd.types.CoordinateSystemType.local_cs">local_cs</a></code></li>
+<li><code><a title="vcd.types.CoordinateSystemType.scene_cs" href="#vcd.types.CoordinateSystemType.scene_cs">scene_cs</a></code></li>
+<li><code><a title="vcd.types.CoordinateSystemType.sensor_cs" href="#vcd.types.CoordinateSystemType.sensor_cs">sensor_cs</a></code></li>
+</ul>
+</li>
 <li>
 <h4><code><a title="vcd.types.Extrinsics" href="#vcd.types.Extrinsics">Extrinsics</a></code></h4>
 </li>
@@ -1711,12 +1895,10 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <li><code><a title="vcd.types.ObjectDataType.point3d" href="#vcd.types.ObjectDataType.point3d">point3d</a></code></li>
 <li><code><a title="vcd.types.ObjectDataType.poly2d" href="#vcd.types.ObjectDataType.poly2d">poly2d</a></code></li>
 <li><code><a title="vcd.types.ObjectDataType.poly3d" href="#vcd.types.ObjectDataType.poly3d">poly3d</a></code></li>
+<li><code><a title="vcd.types.ObjectDataType.rbbox" href="#vcd.types.ObjectDataType.rbbox">rbbox</a></code></li>
 <li><code><a title="vcd.types.ObjectDataType.text" href="#vcd.types.ObjectDataType.text">text</a></code></li>
 <li><code><a title="vcd.types.ObjectDataType.vec" href="#vcd.types.ObjectDataType.vec">vec</a></code></li>
 </ul>
-</li>
-<li>
-<h4><code><a title="vcd.types.Odometry" href="#vcd.types.Odometry">Odometry</a></code></h4>
 </li>
 <li>
 <h4><code><a title="vcd.types.Poly2DType" href="#vcd.types.Poly2DType">Poly2DType</a></code></h4>
@@ -1727,7 +1909,13 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </ul>
 </li>
 <li>
+<h4><code><a title="vcd.types.Pose" href="#vcd.types.Pose">Pose</a></code></h4>
+</li>
+<li>
 <h4><code><a title="vcd.types.StreamSync" href="#vcd.types.StreamSync">StreamSync</a></code></h4>
+</li>
+<li>
+<h4><code><a title="vcd.types.Transform" href="#vcd.types.Transform">Transform</a></code></h4>
 </li>
 <li>
 <h4><code><a title="vcd.types.areaReference" href="#vcd.types.areaReference">areaReference</a></code></h4>
@@ -1778,6 +1966,9 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 <h4><code><a title="vcd.types.poly3d" href="#vcd.types.poly3d">poly3d</a></code></h4>
 </li>
 <li>
+<h4><code><a title="vcd.types.rbbox" href="#vcd.types.rbbox">rbbox</a></code></h4>
+</li>
+<li>
 <h4><code><a title="vcd.types.text" href="#vcd.types.text">text</a></code></h4>
 </li>
 <li>
@@ -1792,9 +1983,7 @@ result, payload = cv2.imencode('.png', img, compr_params)</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

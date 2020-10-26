@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.1" />
 <title>vcd.utils API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.2.0 …" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="VCD (Video Content Description) library v4.3.0 …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -20,25 +22,25 @@
 <h1 class="title">Module <code>vcd.utils</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.2.0</p>
+<p>VCD (Video Content Description) library v4.3.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.2.0.
+<p>VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -46,11 +48,40 @@ VCD is distributed under MIT License. See LICENSE.
 
 import warnings
 import numpy as np
+#import cv2 as cv
+
+import math
+
+from bisect import bisect_left
 from enum import Enum
 
 ####################################################
 # Frame intervals
 ####################################################
+def intersection_between_frame_interval_arrays(fisA, fisB):
+    assert (isinstance(fisA, list))
+    assert (isinstance(fisB, list))
+    fis_int = []
+    for fiA in fisA:
+        assert(isinstance(fiA, tuple))
+        for fiB in fisB:
+            assert(isinstance(fiB, tuple))
+            fi_int = intersection_between_frame_intervals(fiA, fiB)
+            if fi_int is not None:
+                fis_int.append(fi_int)
+    return fis_int
+
+
+def intersection_between_frame_intervals(fiA, fiB):
+    max_start_val = max(fiA[0], fiB[0])
+    min_end_val = min(fiA[1], fiB[1])
+
+    if max_start_val &lt;= min_end_val:
+        return [max_start_val, min_end_val]
+    else:
+        return None
+
+
 def intersects(fi_a, fi_b):
     max_start_val = max(fi_a[&#39;frame_start&#39;], fi_b[&#39;frame_start&#39;])
     min_end_val = min(fi_a[&#39;frame_end&#39;], fi_b[&#39;frame_end&#39;])
@@ -62,6 +93,17 @@ def consecutive(fi_a, fi_b):
         return True
     else:
         return False
+
+
+def is_inside_frame_intervals(frame_num, frame_intervals):
+    for fi in frame_intervals:
+        if is_inside_frame_interval(frame_num, fi):
+            return True
+    return False
+
+
+def is_inside_frame_interval(frame_num, frame_interval):
+    return frame_interval[0] &lt;= frame_num &lt;= frame_interval[1]
 
 
 def is_inside(frame_num, frame_interval):
@@ -177,10 +219,15 @@ def fuse_frame_interval_dict(frame_interval, frame_intervals):
 def fuse_frame_intervals(frame_intervals):
     # This functions receives a list of frame_intervals and returns another one with
     # non-overlapping intervals
-    # e.g. input: [(0, 5), (3, 6), (8, 10)]
-    #      output:[(0, 6), (8, 10)]
+    # e.g.input: [{&#39;frame_start&#39;: 0, &#39;frame_end&#39;: 5}, {&#39;frame_start&#39;: 3, &#39;frame_end&#39;: 6},
+    #               {&#39;frame_start&#39;: 8, &#39;frame_end&#39;: 10}]
+    # output: [{&#39;frame_start&#39;: 0, &#39;frame_end&#39;: 6}, {&#39;frame_start&#39;: 8, &#39;frame_end&#39;: 10}]
+
     assert(isinstance(frame_intervals, list))
     num_fis = len(frame_intervals)
+
+    if num_fis == 0:
+        return []
 
     if num_fis == 1:
         return frame_intervals
@@ -191,17 +238,92 @@ def fuse_frame_intervals(frame_intervals):
     while i &lt; num_fis:
         frame_intervals_fused = fuse_frame_interval_dict(frame_intervals[i], frame_intervals_fused)
         i += 1
-    return frame_intervals_fused
+
+    frame_intervals_fused_sorted = sort_frame_intervals(frame_intervals_fused)
+    return frame_intervals_fused_sorted
+
+
+def get_frame_start(a):
+    return a[&#39;frame_start&#39;]
+
+
+def sort_frame_intervals(frame_intervals):
+    # This function assumes frame intervals have already been fused, otherwise, there might be problems
+    frame_intervals.sort(key=get_frame_start)
+    return frame_intervals
+
+
+def rm_frame_from_frame_intervals(frame_intervals, frame_num):
+    fi_dict_new = []
+    for fi in frame_intervals:
+        if frame_num &lt; fi[&#39;frame_start&#39;]:
+            fi_dict_new.append(fi)
+            continue
+        if frame_num == fi[&#39;frame_start&#39;]:
+            # Start frame, just remove it
+            if fi[&#39;frame_end&#39;] &gt; frame_num:
+                fi_dict_new.append({&#39;frame_start&#39;: frame_num + 1, &#39;frame_end&#39;: fi[&#39;frame_end&#39;]})
+                continue
+        elif frame_num &lt; fi[&#39;frame_end&#39;]:
+            # Inside! Need to split
+            for f in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
+                if f == frame_num:
+                    fi_dict_new.append({&#39;frame_start&#39;: fi[&#39;frame_start&#39;], &#39;frame_end&#39;: frame_num - 1})
+                    fi_dict_new.append({&#39;frame_start&#39;: frame_num + 1, &#39;frame_end&#39;: fi[&#39;frame_end&#39;]})
+        elif frame_num == fi[&#39;frame_end&#39;]:
+            # End frame just remove it
+            # no need to check if fi[&#39;frame_start&#39;] &gt; frame_num backwards as we are in the else if
+            fi_dict_new.append({&#39;frame_start&#39;: fi[&#39;frame_start&#39;], &#39;frame_end&#39;: frame_num - 1})
+        else:
+            fi_dict_new.append(fi)
+    return fi_dict_new
 
 
 ####################################################
-# ROTATION AND ODOMETRY UTILS. See SCL library
+# ROTATION AND ODOMETRY UTILS
 ####################################################
 def create_pose(R, C):
     # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
-    temp = np.hstack((R, C))
+    if C.shape[0] == 3:
+        temp = np.hstack((R, C))
+    elif C.shape[0] == 4:
+        C = C[0:3, :]
+        temp = np.hstack((R, C))
     P = np.vstack((temp, np.array([0, 0, 0, 1])))  # P is 4x4
     return P
+
+
+def decompose_pose(pose_4x4):
+    rotation_3x3 = pose_4x4[0:3, 0:3]
+    c_3x1 = pose_4x4[0:3, 3]
+    return rotation_3x3, c_3x1
+
+
+def interpolate_pose(poses_dict, timestamp):
+    # Find two adjacent poses between the provided timestamp
+    keys = list(poses_dict.keys())
+
+    # Returns the position where to insert x in list a, assuming it is sorted
+    # if return 0, x is the smallest value (can&#39;t interpolate)
+    # if return len(a), x is the largest value (can&#39;t interpolate)
+    pos = bisect_left(keys, timestamp)
+
+    if pos == 0:
+        # The provided timestamp is the smallest value
+        return None
+    elif pos == len(keys):
+        # The provided timestamp is the largest value
+        return None
+    else:
+        pose_prev = poses_dict[keys[pos - 1]]
+        pose_next = poses_dict[keys[pos]]
+        diff_pose_between = pose_next - pose_prev
+        time_between = keys[pos] - keys[pos - 1]
+        time_dist = timestamp - keys[pos - 1]
+        time_factor = time_dist / time_between
+        diff_pose = diff_pose_between.dot(time_factor)
+        pose_interpolated = pose_prev + diff_pose
+    return pose_interpolated
 
 
 def inv(m):
@@ -214,6 +336,10 @@ def inv(m):
         for i in range(0, n):
             m_inv[:, :, i] = np.linalg.inv(m[:, :, i])
         return m_inv
+
+
+def identity(dim):
+    return np.identity(dim, dtype=float)
 
 
 def lat_to_scale(lat):
@@ -256,6 +382,23 @@ def isR(R):
     return n &lt; 1e-4
 
 
+def R2rvec(R):
+    assert(isR(R))
+    sy = np.sqrt(R[0, 0] * R[0, 0] + R[1, 0] * R[1, 0])
+    singular = sy &lt; 1e-6
+
+    if not singular:
+        rx = np.arctan2(R[2, 1], R[2, 2])
+        ry = np.arctan2(-R[2, 0], sy)
+        rz = np.arctan2(R[1, 0], R[0, 0])
+    else:
+        rx = np.arctan2(-R[1, 2], R[1, 1])
+        ry = np.arctan2(-R[2, 0], sy)
+        rz = 0
+
+    return np.array([[rx], [ry], [rz]])
+
+
 def Rx(angle_rad):
     return np.array([[1, 0, 0],
                     [0, np.cos(angle_rad), -np.sin(angle_rad)],
@@ -284,8 +427,18 @@ def euler2R(a, seq=EulerSeq.ZYX):
     assert(len(a) == 3)
     assert(isinstance(seq, EulerSeq))
 
-    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a sequence, e.g. &#34;ZYX&#34;
-    # 0, 1 and 2 are identified with XYZ according to the code
+    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a meaning, e.g. &#34;ZYX&#34;
+    # So we can build the Rx, Ry, Rz according to the specified code
+
+    # e.g. a=(0.1, 0.3, 0.2), seq=&#39;ZYX&#39;, then R0=Rx(0.1), R1=Ry(0.3), R2=Rz(0.2)
+    # The application of the rotations in this function is
+    # R = R0*R1*R2, which must be read from right-to-left
+    # So first R2 is applied, then R1, then R0
+    # If the default &#39;zyx&#39; sequence is selected, the user is providing a=(rz, ry, rx), and it is applied R=RZ*RY*RX
+
+    # e.g. a=(0.1, 0.4, 0.2), seq=&#39;xzz&#39;)
+    # R = Rx(0.1)*Rz(0.4)*Rz(0.2)
+
     if seq.name[0] == &#34;X&#34;:
         R_0 = Rx(a[0])
     elif seq.name[0] == &#34;Y&#34;:
@@ -386,6 +539,182 @@ def convert_oxts_to_pose(oxts):
     return poses_4x4xN
 
 
+def get_point3d_of_plane(plane):
+    # Provided a plane (a, b, c, d), obtain a point that belongs to the plane
+    a, b, c, d = plane
+    if a != 0:
+        return np.array([[-d / a, 0, 0, 1]]).transpose()
+    elif b!= 0:
+        return np.array([[0, -d / b, 0, 1]]).transpose()
+    elif c != 0:
+        return np.array([[0, 0, -d / c, 1]]).transpose()
+    else:
+        return None
+
+
+####################################################
+# Projections
+####################################################
+def homography_from_pose(K_3x4, P_4x4, dim_zero=2):
+    # dim_zero can be 0, 1 or 2, meaning X, Y or Z
+    # For instance, dim_zero=0, means Z=0, so we can null the third column of the Pose
+    KP = K_3x4.dot(P_4x4)
+    H = np.delete(KP, dim_zero, 1)
+    return H
+
+
+def fromPinholeParamsToCameraMatrix3x4(fx, fy, cx, cy):
+    matrix3x4 = [[fx, 0.0, cx, 0.0],
+                 [0.0, fy, cy, 0.0],
+                 [0.0, 0.0, 1.0, 0.0]]
+    return matrix3x4
+
+
+def fromCameraMatrix3x3toCameraMatrix3x4(camera_matrix_3x3):
+    matrix3x4 = np.hstack((camera_matrix_3x3, [[0], [0], [0]]))
+    return matrix3x4
+
+
+def fromCameraMatrix3x4toCameraMatrix3x3(camera_matrix_3x4):
+    matrix3x3 = camera_matrix_3x4[:, 0:3]
+    return matrix3x3
+
+
+def round(number_float):
+    return int(np.round(number_float))
+
+
+def norm(ray):
+    return math.sqrt(ray[0]*ray[0] + ray[1]*ray[1])
+
+
+####################################################
+# RADIAL DISTORTION
+####################################################
+def get_distortion_radius(distortion):
+    # Next equations work only if p1=p2=p3=0 and k4=k5=k6=0
+    # See https://www.wolframalpha.com/input/?i=resolve+1%2B2k_1x%2B3k_2x%5E2%2B4k_3x%5E3%3D0
+    if len(distortion) == 8:
+        return None
+
+    k1 = distortion[0, 0]
+    k2 = distortion[0, 1]
+    p1 = distortion[0, 2]
+    p2 = distortion[0, 3]
+    k3 = distortion[0, 4]
+    if p1 == 0 and p2 == 0:
+        aux0 = -54*(k2**3) + 216*k1*k2*k3 - 432*(k3**2)
+        aux1 = 4*(24*k1*k3-9*(k2**2))**3 + aux0*aux0
+        if aux1 &lt; 0:
+            return None
+        aux2 = aux0 + np.sqrt(aux1)
+        aux3 = -k2/(4*k3) + (1/(15.11905*k3)) * (aux2**(1/3))
+        aux4 = (24*k1*k3-9*(k2**2))/(9.524406*k3*(aux2**(1/3)))
+
+        r2 = aux3 - aux4
+
+        if r2 &lt; 0:
+            return None
+        else:
+            r = np.sqrt(r2)
+            return r
+    else:
+        return None
+
+####################################################
+# Transforms
+####################################################
+def apply_transform(transform_JxM, data_MxN):
+    # e.g. K_3x3, points_3xN
+    J = transform_JxM.shape[0]
+    N = data_MxN.shape[1]
+    assert(transform_JxM.shape[1] == data_MxN.shape[0])
+    data_out = transform_JxM.dot(data_MxN)  # output is JxN
+    data_out[:, N] /= data_out[J-1, N]
+    return data_out
+
+def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
+    rows, cols = points3d_4xN.shape
+    assert (points3d_4xN.ndim == 2)
+    #assert (rows == 4 and cols &gt;= 1)
+    if cols &lt; 1:
+        return np.array([])
+
+    # Convert first to scs
+    points3d_dst_4xN = T_src_to_dst.dot(points3d_4xN)
+    return points3d_dst_4xN
+
+
+def transform_cuboid(cuboid, T_ref_to_dst):
+    # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
+    assert(isinstance(cuboid, list))
+    if len(cuboid) == 10:
+        raise Exception(&#34;Quaternion transforms not supported yet.&#34;)
+
+    assert(len(cuboid) == 9)
+    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
+
+    # 1) Obtain pose from cuboid info
+    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+    P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
+    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
+
+    # 2) Concatenate transforms
+    T_obj_to_dst = T_ref_to_dst.dot(T_obj_to_ref)    # np.array
+
+    # 3) Obtain new rotation and translation
+    P_obj_wrt_dst = T_obj_to_dst    # np.array
+    R_obj_wrt_dst, C_obj_wrt_dst = decompose_pose(P_obj_wrt_dst)    # np.array
+
+    rvec = R2rvec(R_obj_wrt_dst)
+
+    cuboid_transformed = [C_obj_wrt_dst[0], C_obj_wrt_dst[1], C_obj_wrt_dst[2],
+                          rvec[0][0], rvec[1][0], rvec[2][0],
+                          sx, sy, sz]    # list
+    return cuboid_transformed
+
+
+def transform_plane(plane, T_ref_to_dst):
+    # plane = (a, b, c, d)
+    # such that ax + by + cz + d = 0
+    # plane_transformed = transpose(invert(T))* plane
+    T = np.array(T_ref_to_dst).reshape(4, 4)
+    plane_transformed = inv(T).transpose().dot(np.array(plane).reshape(4, 1))
+    return plane_transformed.flatten().tolist()
+
+
+def generate_cuboid_points_object_4x8(sx, sy, sz):
+    points_cuboid_4x8 = np.array([[-sx / 2, -sx / 2, sx / 2, sx / 2, -sx / 2, -sx / 2, sx / 2, sx / 2],
+                                  [sy / 2, -sy / 2, -sy / 2, sy / 2, sy / 2, -sy / 2, -sy / 2, sy / 2],
+                                  [-sz / 2, -sz / 2, -sz / 2, -sz / 2, sz / 2, sz / 2, sz / 2, sz / 2],
+                                  [1, 1, 1, 1, 1, 1, 1, 1]])
+    return points_cuboid_4x8
+
+
+def generate_cuboid_points_ref_4x8(cuboid):
+    # Cuboid is (x, y, z, rx, ry, rz, sx, sy, sz)
+    # This function converts to 8 4x1 points
+    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+
+    # Create base structure using sizes
+    points_cuboid_4x8 = generate_cuboid_points_object_4x8(sx, sy, sz)
+
+    # Create rotation
+    R_obj_wrt_ref = euler2R([rz, ry, rx])
+
+    # Create location
+    C_ref = np.array([[x, y, z]]).T
+
+    # Create pose from rotation and location
+    P_obj_wrt_ref = create_pose(R_obj_wrt_ref, C_ref)
+    T_obj_to_ref = P_obj_wrt_ref
+
+    points_cuboid_lcs_4x8 = T_obj_to_ref.dot(points_cuboid_4x8)
+    return points_cuboid_lcs_4x8
+
+####################################################
+# Other
+####################################################
 def float_2dec(val):
     &#39;&#39;&#39;
     This function is useful to print float into JSON with only 2 decimals
@@ -398,7 +727,70 @@ def get_key(my_dict, val):
         if val == value:
             return key
 
-    return &#34;key doesn&#39;t exist&#34;</code></pre>
+    return &#34;key doesn&#39;t exist&#34;
+
+
+def is_inside_image(width, height, x, y):
+    return width &gt; x &gt; 0 and height &gt; y &gt; 0
+
+
+def bounding_rect(points2d_3xN):
+    x = points2d_3xN[0, :]
+    y = points2d_3xN[1, :]
+    x_min = np.min(x)
+    x_max = np.max(x)
+    y_min = np.min(y)
+    y_max = np.max(y)
+
+    return np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))
+
+
+def generate_grid(x_params, y_params, z_params):
+    xls = np.linspace(x_params[0], x_params[1], x_params[2]),
+    yls = np.linspace(y_params[0], y_params[1], y_params[2]),
+    zls = np.linspace(z_params[0], z_params[1], z_params[2])
+    xm, ym, zm = np.meshgrid(xls, yls, zls)
+
+    return xm, ym, zm
+
+
+def grid_as_4xN_points3d(xm, ym, zm):
+    xm_row = xm.reshape(1, -1)
+    ym_row = ym.reshape(1, -1)
+    zm_row = zm.reshape(1, -1)
+    pad_row = np.zeros(xm_row.shape, np.float)
+    pad_row[0, :] = 1.0
+    points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
+    return points3d_vcs_4xN
+
+
+def from_MxN_to_OpenCV_Nx1xM(array_MxN):
+    M, N = array_MxN.shape
+    array_Nx1xM = np.float32(array_MxN[0:M, np.newaxis, :]).transpose()
+    return array_Nx1xM
+
+
+def from_OpenCV_Nx1xM_to_MxN(array_Nx1xM):
+    N = array_Nx1xM.shape[0]
+    M = array_Nx1xM.shape[2]
+    array_MxN = array_Nx1xM
+    array_MxN.shape = (N, M)
+    return array_MxN
+
+
+def filter_outside(points2d_3xN, img_size, idx_valid):
+    width, height = img_size
+    N = points2d_3xN.shape[1]
+    # Remove those outside the limits of the image (after distortion)
+    for i in range(0, N):
+        if idx_valid[i]:  # ignore those already filtered
+            x = points2d_3xN[0, i]
+            y = points2d_3xN[1, i]
+
+            if not (0 &lt;= x &lt; width and 0 &lt;= y &lt; height):
+                idx_valid[i] = False
+                points2d_3xN[:, i] = np.nan
+    return points2d_3xN, idx_valid</code></pre>
 </details>
 </section>
 <section>
@@ -408,11 +800,37 @@ def get_key(my_dict, val):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="vcd.utils.R2rvec"><code class="name flex">
+<span>def <span class="ident">R2rvec</span></span>(<span>R)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def R2rvec(R):
+    assert(isR(R))
+    sy = np.sqrt(R[0, 0] * R[0, 0] + R[1, 0] * R[1, 0])
+    singular = sy &lt; 1e-6
+
+    if not singular:
+        rx = np.arctan2(R[2, 1], R[2, 2])
+        ry = np.arctan2(-R[2, 0], sy)
+        rz = np.arctan2(R[1, 0], R[0, 0])
+    else:
+        rx = np.arctan2(-R[1, 2], R[1, 1])
+        ry = np.arctan2(-R[2, 0], sy)
+        rz = 0
+
+    return np.array([[rx], [ry], [rz]])</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.Rx"><code class="name flex">
 <span>def <span class="ident">Rx</span></span>(<span>angle_rad)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -428,7 +846,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">Ry</span></span>(<span>angle_rad)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -444,7 +862,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">Rz</span></span>(<span>angle_rad)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -456,11 +874,30 @@ def get_key(my_dict, val):
                     ])</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.apply_transform"><code class="name flex">
+<span>def <span class="ident">apply_transform</span></span>(<span>transform_JxM, data_MxN)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_transform(transform_JxM, data_MxN):
+    # e.g. K_3x3, points_3xN
+    J = transform_JxM.shape[0]
+    N = data_MxN.shape[1]
+    assert(transform_JxM.shape[1] == data_MxN.shape[0])
+    data_out = transform_JxM.dot(data_MxN)  # output is JxN
+    data_out[:, N] /= data_out[J-1, N]
+    return data_out</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.as_frame_interval_dict"><code class="name flex">
 <span>def <span class="ident">as_frame_interval_dict</span></span>(<span>frame_value)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -478,7 +915,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">as_frame_intervals_array_dict</span></span>(<span>frame_value)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -510,7 +947,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">as_frame_intervals_array_tuples</span></span>(<span>frame_intervals_array_of_dict)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -525,11 +962,31 @@ def get_key(my_dict, val):
     return fi_tuples</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.bounding_rect"><code class="name flex">
+<span>def <span class="ident">bounding_rect</span></span>(<span>points2d_3xN)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bounding_rect(points2d_3xN):
+    x = points2d_3xN[0, :]
+    y = points2d_3xN[1, :]
+    x_min = np.min(x)
+    x_max = np.max(x)
+    y_min = np.min(y)
+    y_max = np.max(y)
+
+    return np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.consecutive"><code class="name flex">
 <span>def <span class="ident">consecutive</span></span>(<span>fi_a, fi_b)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -545,7 +1002,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">convert_oxts_to_pose</span></span>(<span>oxts)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -619,23 +1076,42 @@ def get_key(my_dict, val):
 <span>def <span class="ident">create_pose</span></span>(<span>R, C)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def create_pose(R, C):
     # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
-    temp = np.hstack((R, C))
+    if C.shape[0] == 3:
+        temp = np.hstack((R, C))
+    elif C.shape[0] == 4:
+        C = C[0:3, :]
+        temp = np.hstack((R, C))
     P = np.vstack((temp, np.array([0, 0, 0, 1])))  # P is 4x4
     return P</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.decompose_pose"><code class="name flex">
+<span>def <span class="ident">decompose_pose</span></span>(<span>pose_4x4)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def decompose_pose(pose_4x4):
+    rotation_3x3 = pose_4x4[0:3, 0:3]
+    c_3x1 = pose_4x4[0:3, 3]
+    return rotation_3x3, c_3x1</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.euler2R"><code class="name flex">
 <span>def <span class="ident">euler2R</span></span>(<span>a, seq=EulerSeq.ZYX)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -647,8 +1123,18 @@ def get_key(my_dict, val):
     assert(len(a) == 3)
     assert(isinstance(seq, EulerSeq))
 
-    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a sequence, e.g. &#34;ZYX&#34;
-    # 0, 1 and 2 are identified with XYZ according to the code
+    # The user introduces 3 angles a=(a[0], a[1], a[2]), and a meaning, e.g. &#34;ZYX&#34;
+    # So we can build the Rx, Ry, Rz according to the specified code
+
+    # e.g. a=(0.1, 0.3, 0.2), seq=&#39;ZYX&#39;, then R0=Rx(0.1), R1=Ry(0.3), R2=Rz(0.2)
+    # The application of the rotations in this function is
+    # R = R0*R1*R2, which must be read from right-to-left
+    # So first R2 is applied, then R1, then R0
+    # If the default &#39;zyx&#39; sequence is selected, the user is providing a=(rz, ry, rx), and it is applied R=RZ*RY*RX
+
+    # e.g. a=(0.1, 0.4, 0.2), seq=&#39;xzz&#39;)
+    # R = Rx(0.1)*Rz(0.4)*Rz(0.2)
+
     if seq.name[0] == &#34;X&#34;:
         R_0 = Rx(a[0])
     elif seq.name[0] == &#34;Y&#34;:
@@ -684,11 +1170,35 @@ def get_key(my_dict, val):
     return R</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.filter_outside"><code class="name flex">
+<span>def <span class="ident">filter_outside</span></span>(<span>points2d_3xN, img_size, idx_valid)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def filter_outside(points2d_3xN, img_size, idx_valid):
+    width, height = img_size
+    N = points2d_3xN.shape[1]
+    # Remove those outside the limits of the image (after distortion)
+    for i in range(0, N):
+        if idx_valid[i]:  # ignore those already filtered
+            x = points2d_3xN[0, i]
+            y = points2d_3xN[1, i]
+
+            if not (0 &lt;= x &lt; width and 0 &lt;= y &lt; height):
+                idx_valid[i] = False
+                points2d_3xN[:, i] = np.nan
+    return points2d_3xN, idx_valid</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.float_2dec"><code class="name flex">
 <span>def <span class="ident">float_2dec</span></span>(<span>val)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>This function is useful to print float into JSON with only 2 decimals</p></section>
+<div class="desc"><p>This function is useful to print float into JSON with only 2 decimals</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -704,7 +1214,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">frame_interval_is_inside</span></span>(<span>frame_intervals_a, frame_intervals_b)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -727,11 +1237,87 @@ def get_key(my_dict, val):
     return all_inside</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.fromCameraMatrix3x3toCameraMatrix3x4"><code class="name flex">
+<span>def <span class="ident">fromCameraMatrix3x3toCameraMatrix3x4</span></span>(<span>camera_matrix_3x3)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fromCameraMatrix3x3toCameraMatrix3x4(camera_matrix_3x3):
+    matrix3x4 = np.hstack((camera_matrix_3x3, [[0], [0], [0]]))
+    return matrix3x4</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.fromCameraMatrix3x4toCameraMatrix3x3"><code class="name flex">
+<span>def <span class="ident">fromCameraMatrix3x4toCameraMatrix3x3</span></span>(<span>camera_matrix_3x4)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fromCameraMatrix3x4toCameraMatrix3x3(camera_matrix_3x4):
+    matrix3x3 = camera_matrix_3x4[:, 0:3]
+    return matrix3x3</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.fromPinholeParamsToCameraMatrix3x4"><code class="name flex">
+<span>def <span class="ident">fromPinholeParamsToCameraMatrix3x4</span></span>(<span>fx, fy, cx, cy)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fromPinholeParamsToCameraMatrix3x4(fx, fy, cx, cy):
+    matrix3x4 = [[fx, 0.0, cx, 0.0],
+                 [0.0, fy, cy, 0.0],
+                 [0.0, 0.0, 1.0, 0.0]]
+    return matrix3x4</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.from_MxN_to_OpenCV_Nx1xM"><code class="name flex">
+<span>def <span class="ident">from_MxN_to_OpenCV_Nx1xM</span></span>(<span>array_MxN)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def from_MxN_to_OpenCV_Nx1xM(array_MxN):
+    M, N = array_MxN.shape
+    array_Nx1xM = np.float32(array_MxN[0:M, np.newaxis, :]).transpose()
+    return array_Nx1xM</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.from_OpenCV_Nx1xM_to_MxN"><code class="name flex">
+<span>def <span class="ident">from_OpenCV_Nx1xM_to_MxN</span></span>(<span>array_Nx1xM)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def from_OpenCV_Nx1xM_to_MxN(array_Nx1xM):
+    N = array_Nx1xM.shape[0]
+    M = array_Nx1xM.shape[2]
+    array_MxN = array_Nx1xM
+    array_MxN.shape = (N, M)
+    return array_MxN</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.fuse_frame_interval_dict"><code class="name flex">
 <span>def <span class="ident">fuse_frame_interval_dict</span></span>(<span>frame_interval, frame_intervals)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -773,7 +1359,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">fuse_frame_intervals</span></span>(<span>frame_intervals)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -781,10 +1367,15 @@ def get_key(my_dict, val):
 <pre><code class="python">def fuse_frame_intervals(frame_intervals):
     # This functions receives a list of frame_intervals and returns another one with
     # non-overlapping intervals
-    # e.g. input: [(0, 5), (3, 6), (8, 10)]
-    #      output:[(0, 6), (8, 10)]
+    # e.g.input: [{&#39;frame_start&#39;: 0, &#39;frame_end&#39;: 5}, {&#39;frame_start&#39;: 3, &#39;frame_end&#39;: 6},
+    #               {&#39;frame_start&#39;: 8, &#39;frame_end&#39;: 10}]
+    # output: [{&#39;frame_start&#39;: 0, &#39;frame_end&#39;: 6}, {&#39;frame_start&#39;: 8, &#39;frame_end&#39;: 10}]
+
     assert(isinstance(frame_intervals, list))
     num_fis = len(frame_intervals)
+
+    if num_fis == 0:
+        return []
 
     if num_fis == 1:
         return frame_intervals
@@ -795,14 +1386,135 @@ def get_key(my_dict, val):
     while i &lt; num_fis:
         frame_intervals_fused = fuse_frame_interval_dict(frame_intervals[i], frame_intervals_fused)
         i += 1
-    return frame_intervals_fused</code></pre>
+
+    frame_intervals_fused_sorted = sort_frame_intervals(frame_intervals_fused)
+    return frame_intervals_fused_sorted</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.generate_cuboid_points_object_4x8"><code class="name flex">
+<span>def <span class="ident">generate_cuboid_points_object_4x8</span></span>(<span>sx, sy, sz)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_cuboid_points_object_4x8(sx, sy, sz):
+    points_cuboid_4x8 = np.array([[-sx / 2, -sx / 2, sx / 2, sx / 2, -sx / 2, -sx / 2, sx / 2, sx / 2],
+                                  [sy / 2, -sy / 2, -sy / 2, sy / 2, sy / 2, -sy / 2, -sy / 2, sy / 2],
+                                  [-sz / 2, -sz / 2, -sz / 2, -sz / 2, sz / 2, sz / 2, sz / 2, sz / 2],
+                                  [1, 1, 1, 1, 1, 1, 1, 1]])
+    return points_cuboid_4x8</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.generate_cuboid_points_ref_4x8"><code class="name flex">
+<span>def <span class="ident">generate_cuboid_points_ref_4x8</span></span>(<span>cuboid)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_cuboid_points_ref_4x8(cuboid):
+    # Cuboid is (x, y, z, rx, ry, rz, sx, sy, sz)
+    # This function converts to 8 4x1 points
+    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+
+    # Create base structure using sizes
+    points_cuboid_4x8 = generate_cuboid_points_object_4x8(sx, sy, sz)
+
+    # Create rotation
+    R_obj_wrt_ref = euler2R([rz, ry, rx])
+
+    # Create location
+    C_ref = np.array([[x, y, z]]).T
+
+    # Create pose from rotation and location
+    P_obj_wrt_ref = create_pose(R_obj_wrt_ref, C_ref)
+    T_obj_to_ref = P_obj_wrt_ref
+
+    points_cuboid_lcs_4x8 = T_obj_to_ref.dot(points_cuboid_4x8)
+    return points_cuboid_lcs_4x8</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.generate_grid"><code class="name flex">
+<span>def <span class="ident">generate_grid</span></span>(<span>x_params, y_params, z_params)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_grid(x_params, y_params, z_params):
+    xls = np.linspace(x_params[0], x_params[1], x_params[2]),
+    yls = np.linspace(y_params[0], y_params[1], y_params[2]),
+    zls = np.linspace(z_params[0], z_params[1], z_params[2])
+    xm, ym, zm = np.meshgrid(xls, yls, zls)
+
+    return xm, ym, zm</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.get_distortion_radius"><code class="name flex">
+<span>def <span class="ident">get_distortion_radius</span></span>(<span>distortion)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_distortion_radius(distortion):
+    # Next equations work only if p1=p2=p3=0 and k4=k5=k6=0
+    # See https://www.wolframalpha.com/input/?i=resolve+1%2B2k_1x%2B3k_2x%5E2%2B4k_3x%5E3%3D0
+    if len(distortion) == 8:
+        return None
+
+    k1 = distortion[0, 0]
+    k2 = distortion[0, 1]
+    p1 = distortion[0, 2]
+    p2 = distortion[0, 3]
+    k3 = distortion[0, 4]
+    if p1 == 0 and p2 == 0:
+        aux0 = -54*(k2**3) + 216*k1*k2*k3 - 432*(k3**2)
+        aux1 = 4*(24*k1*k3-9*(k2**2))**3 + aux0*aux0
+        if aux1 &lt; 0:
+            return None
+        aux2 = aux0 + np.sqrt(aux1)
+        aux3 = -k2/(4*k3) + (1/(15.11905*k3)) * (aux2**(1/3))
+        aux4 = (24*k1*k3-9*(k2**2))/(9.524406*k3*(aux2**(1/3)))
+
+        r2 = aux3 - aux4
+
+        if r2 &lt; 0:
+            return None
+        else:
+            r = np.sqrt(r2)
+            return r
+    else:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.get_frame_start"><code class="name flex">
+<span>def <span class="ident">get_frame_start</span></span>(<span>a)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_frame_start(a):
+    return a[&#39;frame_start&#39;]</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.get_key"><code class="name flex">
 <span>def <span class="ident">get_key</span></span>(<span>my_dict, val)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -819,7 +1531,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">get_outer_frame_interval</span></span>(<span>frame_intervals)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -837,11 +1549,160 @@ def get_key(my_dict, val):
     return outer</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.get_point3d_of_plane"><code class="name flex">
+<span>def <span class="ident">get_point3d_of_plane</span></span>(<span>plane)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_point3d_of_plane(plane):
+    # Provided a plane (a, b, c, d), obtain a point that belongs to the plane
+    a, b, c, d = plane
+    if a != 0:
+        return np.array([[-d / a, 0, 0, 1]]).transpose()
+    elif b!= 0:
+        return np.array([[0, -d / b, 0, 1]]).transpose()
+    elif c != 0:
+        return np.array([[0, 0, -d / c, 1]]).transpose()
+    else:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.grid_as_4xN_points3d"><code class="name flex">
+<span>def <span class="ident">grid_as_4xN_points3d</span></span>(<span>xm, ym, zm)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def grid_as_4xN_points3d(xm, ym, zm):
+    xm_row = xm.reshape(1, -1)
+    ym_row = ym.reshape(1, -1)
+    zm_row = zm.reshape(1, -1)
+    pad_row = np.zeros(xm_row.shape, np.float)
+    pad_row[0, :] = 1.0
+    points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
+    return points3d_vcs_4xN</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.homography_from_pose"><code class="name flex">
+<span>def <span class="ident">homography_from_pose</span></span>(<span>K_3x4, P_4x4, dim_zero=2)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def homography_from_pose(K_3x4, P_4x4, dim_zero=2):
+    # dim_zero can be 0, 1 or 2, meaning X, Y or Z
+    # For instance, dim_zero=0, means Z=0, so we can null the third column of the Pose
+    KP = K_3x4.dot(P_4x4)
+    H = np.delete(KP, dim_zero, 1)
+    return H</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.identity"><code class="name flex">
+<span>def <span class="ident">identity</span></span>(<span>dim)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def identity(dim):
+    return np.identity(dim, dtype=float)</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.interpolate_pose"><code class="name flex">
+<span>def <span class="ident">interpolate_pose</span></span>(<span>poses_dict, timestamp)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def interpolate_pose(poses_dict, timestamp):
+    # Find two adjacent poses between the provided timestamp
+    keys = list(poses_dict.keys())
+
+    # Returns the position where to insert x in list a, assuming it is sorted
+    # if return 0, x is the smallest value (can&#39;t interpolate)
+    # if return len(a), x is the largest value (can&#39;t interpolate)
+    pos = bisect_left(keys, timestamp)
+
+    if pos == 0:
+        # The provided timestamp is the smallest value
+        return None
+    elif pos == len(keys):
+        # The provided timestamp is the largest value
+        return None
+    else:
+        pose_prev = poses_dict[keys[pos - 1]]
+        pose_next = poses_dict[keys[pos]]
+        diff_pose_between = pose_next - pose_prev
+        time_between = keys[pos] - keys[pos - 1]
+        time_dist = timestamp - keys[pos - 1]
+        time_factor = time_dist / time_between
+        diff_pose = diff_pose_between.dot(time_factor)
+        pose_interpolated = pose_prev + diff_pose
+    return pose_interpolated</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.intersection_between_frame_interval_arrays"><code class="name flex">
+<span>def <span class="ident">intersection_between_frame_interval_arrays</span></span>(<span>fisA, fisB)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def intersection_between_frame_interval_arrays(fisA, fisB):
+    assert (isinstance(fisA, list))
+    assert (isinstance(fisB, list))
+    fis_int = []
+    for fiA in fisA:
+        assert(isinstance(fiA, tuple))
+        for fiB in fisB:
+            assert(isinstance(fiB, tuple))
+            fi_int = intersection_between_frame_intervals(fiA, fiB)
+            if fi_int is not None:
+                fis_int.append(fi_int)
+    return fis_int</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.intersection_between_frame_intervals"><code class="name flex">
+<span>def <span class="ident">intersection_between_frame_intervals</span></span>(<span>fiA, fiB)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def intersection_between_frame_intervals(fiA, fiB):
+    max_start_val = max(fiA[0], fiB[0])
+    min_end_val = min(fiA[1], fiB[1])
+
+    if max_start_val &lt;= min_end_val:
+        return [max_start_val, min_end_val]
+    else:
+        return None</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.intersects"><code class="name flex">
 <span>def <span class="ident">intersects</span></span>(<span>fi_a, fi_b)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -856,7 +1717,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">inv</span></span>(<span>m)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -877,7 +1738,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">isR</span></span>(<span>R)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -895,7 +1756,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">is_inside</span></span>(<span>frame_num, frame_interval)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -904,11 +1765,53 @@ def get_key(my_dict, val):
     return frame_interval[&#39;frame_start&#39;] &lt;= frame_num &lt;= frame_interval[&#39;frame_end&#39;]</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.is_inside_frame_interval"><code class="name flex">
+<span>def <span class="ident">is_inside_frame_interval</span></span>(<span>frame_num, frame_interval)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_inside_frame_interval(frame_num, frame_interval):
+    return frame_interval[0] &lt;= frame_num &lt;= frame_interval[1]</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.is_inside_frame_intervals"><code class="name flex">
+<span>def <span class="ident">is_inside_frame_intervals</span></span>(<span>frame_num, frame_intervals)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_inside_frame_intervals(frame_num, frame_intervals):
+    for fi in frame_intervals:
+        if is_inside_frame_interval(frame_num, fi):
+            return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.is_inside_image"><code class="name flex">
+<span>def <span class="ident">is_inside_image</span></span>(<span>width, height, x, y)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_inside_image(width, height, x, y):
+    return width &gt; x &gt; 0 and height &gt; y &gt; 0</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.lat_to_scale"><code class="name flex">
 <span>def <span class="ident">lat_to_scale</span></span>(<span>lat)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -923,7 +1826,7 @@ def get_key(my_dict, val):
 <span>def <span class="ident">latlon_to_mercator</span></span>(<span>lat, lon, scale)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -936,6 +1839,159 @@ def get_key(my_dict, val):
     return mx, my</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.norm"><code class="name flex">
+<span>def <span class="ident">norm</span></span>(<span>ray)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def norm(ray):
+    return math.sqrt(ray[0]*ray[0] + ray[1]*ray[1])</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.rm_frame_from_frame_intervals"><code class="name flex">
+<span>def <span class="ident">rm_frame_from_frame_intervals</span></span>(<span>frame_intervals, frame_num)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rm_frame_from_frame_intervals(frame_intervals, frame_num):
+    fi_dict_new = []
+    for fi in frame_intervals:
+        if frame_num &lt; fi[&#39;frame_start&#39;]:
+            fi_dict_new.append(fi)
+            continue
+        if frame_num == fi[&#39;frame_start&#39;]:
+            # Start frame, just remove it
+            if fi[&#39;frame_end&#39;] &gt; frame_num:
+                fi_dict_new.append({&#39;frame_start&#39;: frame_num + 1, &#39;frame_end&#39;: fi[&#39;frame_end&#39;]})
+                continue
+        elif frame_num &lt; fi[&#39;frame_end&#39;]:
+            # Inside! Need to split
+            for f in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
+                if f == frame_num:
+                    fi_dict_new.append({&#39;frame_start&#39;: fi[&#39;frame_start&#39;], &#39;frame_end&#39;: frame_num - 1})
+                    fi_dict_new.append({&#39;frame_start&#39;: frame_num + 1, &#39;frame_end&#39;: fi[&#39;frame_end&#39;]})
+        elif frame_num == fi[&#39;frame_end&#39;]:
+            # End frame just remove it
+            # no need to check if fi[&#39;frame_start&#39;] &gt; frame_num backwards as we are in the else if
+            fi_dict_new.append({&#39;frame_start&#39;: fi[&#39;frame_start&#39;], &#39;frame_end&#39;: frame_num - 1})
+        else:
+            fi_dict_new.append(fi)
+    return fi_dict_new</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.round"><code class="name flex">
+<span>def <span class="ident">round</span></span>(<span>number_float)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def round(number_float):
+    return int(np.round(number_float))</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.sort_frame_intervals"><code class="name flex">
+<span>def <span class="ident">sort_frame_intervals</span></span>(<span>frame_intervals)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sort_frame_intervals(frame_intervals):
+    # This function assumes frame intervals have already been fused, otherwise, there might be problems
+    frame_intervals.sort(key=get_frame_start)
+    return frame_intervals</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.transform_cuboid"><code class="name flex">
+<span>def <span class="ident">transform_cuboid</span></span>(<span>cuboid, T_ref_to_dst)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transform_cuboid(cuboid, T_ref_to_dst):
+    # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
+    assert(isinstance(cuboid, list))
+    if len(cuboid) == 10:
+        raise Exception(&#34;Quaternion transforms not supported yet.&#34;)
+
+    assert(len(cuboid) == 9)
+    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
+
+    # 1) Obtain pose from cuboid info
+    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+    P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
+    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
+
+    # 2) Concatenate transforms
+    T_obj_to_dst = T_ref_to_dst.dot(T_obj_to_ref)    # np.array
+
+    # 3) Obtain new rotation and translation
+    P_obj_wrt_dst = T_obj_to_dst    # np.array
+    R_obj_wrt_dst, C_obj_wrt_dst = decompose_pose(P_obj_wrt_dst)    # np.array
+
+    rvec = R2rvec(R_obj_wrt_dst)
+
+    cuboid_transformed = [C_obj_wrt_dst[0], C_obj_wrt_dst[1], C_obj_wrt_dst[2],
+                          rvec[0][0], rvec[1][0], rvec[2][0],
+                          sx, sy, sz]    # list
+    return cuboid_transformed</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.transform_plane"><code class="name flex">
+<span>def <span class="ident">transform_plane</span></span>(<span>plane, T_ref_to_dst)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transform_plane(plane, T_ref_to_dst):
+    # plane = (a, b, c, d)
+    # such that ax + by + cz + d = 0
+    # plane_transformed = transpose(invert(T))* plane
+    T = np.array(T_ref_to_dst).reshape(4, 4)
+    plane_transformed = inv(T).transpose().dot(np.array(plane).reshape(4, 1))
+    return plane_transformed.flatten().tolist()</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.transform_points3d_4xN"><code class="name flex">
+<span>def <span class="ident">transform_points3d_4xN</span></span>(<span>points3d_4xN, T_src_to_dst)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
+    rows, cols = points3d_4xN.shape
+    assert (points3d_4xN.ndim == 2)
+    #assert (rows == 4 and cols &gt;= 1)
+    if cols &lt; 1:
+        return np.array([])
+
+    # Convert first to scs
+    points3d_dst_4xN = T_src_to_dst.dot(points3d_4xN)
+    return points3d_dst_4xN</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 <section>
@@ -946,7 +2002,7 @@ def get_key(my_dict, val):
 <span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"><p>An enumeration.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -975,51 +2031,51 @@ def get_key(my_dict, val):
 <dl>
 <dt id="vcd.utils.EulerSeq.XYX"><code class="name">var <span class="ident">XYX</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.XYZ"><code class="name">var <span class="ident">XYZ</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.XZX"><code class="name">var <span class="ident">XZX</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.XZY"><code class="name">var <span class="ident">XZY</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.YXY"><code class="name">var <span class="ident">YXY</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.YXZ"><code class="name">var <span class="ident">YXZ</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.YZX"><code class="name">var <span class="ident">YZX</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.YZY"><code class="name">var <span class="ident">YZY</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.ZXY"><code class="name">var <span class="ident">ZXY</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.ZXZ"><code class="name">var <span class="ident">ZXZ</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.ZYX"><code class="name">var <span class="ident">ZYX</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.utils.EulerSeq.ZYZ"><code class="name">var <span class="ident">ZYZ</span></code></dt>
 <dd>
-<section class="desc"><p>An enumeration.</p></section>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -1039,28 +2095,60 @@ def get_key(my_dict, val):
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="vcd.utils.R2rvec" href="#vcd.utils.R2rvec">R2rvec</a></code></li>
 <li><code><a title="vcd.utils.Rx" href="#vcd.utils.Rx">Rx</a></code></li>
 <li><code><a title="vcd.utils.Ry" href="#vcd.utils.Ry">Ry</a></code></li>
 <li><code><a title="vcd.utils.Rz" href="#vcd.utils.Rz">Rz</a></code></li>
+<li><code><a title="vcd.utils.apply_transform" href="#vcd.utils.apply_transform">apply_transform</a></code></li>
 <li><code><a title="vcd.utils.as_frame_interval_dict" href="#vcd.utils.as_frame_interval_dict">as_frame_interval_dict</a></code></li>
 <li><code><a title="vcd.utils.as_frame_intervals_array_dict" href="#vcd.utils.as_frame_intervals_array_dict">as_frame_intervals_array_dict</a></code></li>
 <li><code><a title="vcd.utils.as_frame_intervals_array_tuples" href="#vcd.utils.as_frame_intervals_array_tuples">as_frame_intervals_array_tuples</a></code></li>
+<li><code><a title="vcd.utils.bounding_rect" href="#vcd.utils.bounding_rect">bounding_rect</a></code></li>
 <li><code><a title="vcd.utils.consecutive" href="#vcd.utils.consecutive">consecutive</a></code></li>
 <li><code><a title="vcd.utils.convert_oxts_to_pose" href="#vcd.utils.convert_oxts_to_pose">convert_oxts_to_pose</a></code></li>
 <li><code><a title="vcd.utils.create_pose" href="#vcd.utils.create_pose">create_pose</a></code></li>
+<li><code><a title="vcd.utils.decompose_pose" href="#vcd.utils.decompose_pose">decompose_pose</a></code></li>
 <li><code><a title="vcd.utils.euler2R" href="#vcd.utils.euler2R">euler2R</a></code></li>
+<li><code><a title="vcd.utils.filter_outside" href="#vcd.utils.filter_outside">filter_outside</a></code></li>
 <li><code><a title="vcd.utils.float_2dec" href="#vcd.utils.float_2dec">float_2dec</a></code></li>
 <li><code><a title="vcd.utils.frame_interval_is_inside" href="#vcd.utils.frame_interval_is_inside">frame_interval_is_inside</a></code></li>
+<li><code><a title="vcd.utils.fromCameraMatrix3x3toCameraMatrix3x4" href="#vcd.utils.fromCameraMatrix3x3toCameraMatrix3x4">fromCameraMatrix3x3toCameraMatrix3x4</a></code></li>
+<li><code><a title="vcd.utils.fromCameraMatrix3x4toCameraMatrix3x3" href="#vcd.utils.fromCameraMatrix3x4toCameraMatrix3x3">fromCameraMatrix3x4toCameraMatrix3x3</a></code></li>
+<li><code><a title="vcd.utils.fromPinholeParamsToCameraMatrix3x4" href="#vcd.utils.fromPinholeParamsToCameraMatrix3x4">fromPinholeParamsToCameraMatrix3x4</a></code></li>
+<li><code><a title="vcd.utils.from_MxN_to_OpenCV_Nx1xM" href="#vcd.utils.from_MxN_to_OpenCV_Nx1xM">from_MxN_to_OpenCV_Nx1xM</a></code></li>
+<li><code><a title="vcd.utils.from_OpenCV_Nx1xM_to_MxN" href="#vcd.utils.from_OpenCV_Nx1xM_to_MxN">from_OpenCV_Nx1xM_to_MxN</a></code></li>
 <li><code><a title="vcd.utils.fuse_frame_interval_dict" href="#vcd.utils.fuse_frame_interval_dict">fuse_frame_interval_dict</a></code></li>
 <li><code><a title="vcd.utils.fuse_frame_intervals" href="#vcd.utils.fuse_frame_intervals">fuse_frame_intervals</a></code></li>
+<li><code><a title="vcd.utils.generate_cuboid_points_object_4x8" href="#vcd.utils.generate_cuboid_points_object_4x8">generate_cuboid_points_object_4x8</a></code></li>
+<li><code><a title="vcd.utils.generate_cuboid_points_ref_4x8" href="#vcd.utils.generate_cuboid_points_ref_4x8">generate_cuboid_points_ref_4x8</a></code></li>
+<li><code><a title="vcd.utils.generate_grid" href="#vcd.utils.generate_grid">generate_grid</a></code></li>
+<li><code><a title="vcd.utils.get_distortion_radius" href="#vcd.utils.get_distortion_radius">get_distortion_radius</a></code></li>
+<li><code><a title="vcd.utils.get_frame_start" href="#vcd.utils.get_frame_start">get_frame_start</a></code></li>
 <li><code><a title="vcd.utils.get_key" href="#vcd.utils.get_key">get_key</a></code></li>
 <li><code><a title="vcd.utils.get_outer_frame_interval" href="#vcd.utils.get_outer_frame_interval">get_outer_frame_interval</a></code></li>
+<li><code><a title="vcd.utils.get_point3d_of_plane" href="#vcd.utils.get_point3d_of_plane">get_point3d_of_plane</a></code></li>
+<li><code><a title="vcd.utils.grid_as_4xN_points3d" href="#vcd.utils.grid_as_4xN_points3d">grid_as_4xN_points3d</a></code></li>
+<li><code><a title="vcd.utils.homography_from_pose" href="#vcd.utils.homography_from_pose">homography_from_pose</a></code></li>
+<li><code><a title="vcd.utils.identity" href="#vcd.utils.identity">identity</a></code></li>
+<li><code><a title="vcd.utils.interpolate_pose" href="#vcd.utils.interpolate_pose">interpolate_pose</a></code></li>
+<li><code><a title="vcd.utils.intersection_between_frame_interval_arrays" href="#vcd.utils.intersection_between_frame_interval_arrays">intersection_between_frame_interval_arrays</a></code></li>
+<li><code><a title="vcd.utils.intersection_between_frame_intervals" href="#vcd.utils.intersection_between_frame_intervals">intersection_between_frame_intervals</a></code></li>
 <li><code><a title="vcd.utils.intersects" href="#vcd.utils.intersects">intersects</a></code></li>
 <li><code><a title="vcd.utils.inv" href="#vcd.utils.inv">inv</a></code></li>
 <li><code><a title="vcd.utils.isR" href="#vcd.utils.isR">isR</a></code></li>
 <li><code><a title="vcd.utils.is_inside" href="#vcd.utils.is_inside">is_inside</a></code></li>
+<li><code><a title="vcd.utils.is_inside_frame_interval" href="#vcd.utils.is_inside_frame_interval">is_inside_frame_interval</a></code></li>
+<li><code><a title="vcd.utils.is_inside_frame_intervals" href="#vcd.utils.is_inside_frame_intervals">is_inside_frame_intervals</a></code></li>
+<li><code><a title="vcd.utils.is_inside_image" href="#vcd.utils.is_inside_image">is_inside_image</a></code></li>
 <li><code><a title="vcd.utils.lat_to_scale" href="#vcd.utils.lat_to_scale">lat_to_scale</a></code></li>
 <li><code><a title="vcd.utils.latlon_to_mercator" href="#vcd.utils.latlon_to_mercator">latlon_to_mercator</a></code></li>
+<li><code><a title="vcd.utils.norm" href="#vcd.utils.norm">norm</a></code></li>
+<li><code><a title="vcd.utils.rm_frame_from_frame_intervals" href="#vcd.utils.rm_frame_from_frame_intervals">rm_frame_from_frame_intervals</a></code></li>
+<li><code><a title="vcd.utils.round" href="#vcd.utils.round">round</a></code></li>
+<li><code><a title="vcd.utils.sort_frame_intervals" href="#vcd.utils.sort_frame_intervals">sort_frame_intervals</a></code></li>
+<li><code><a title="vcd.utils.transform_cuboid" href="#vcd.utils.transform_cuboid">transform_cuboid</a></code></li>
+<li><code><a title="vcd.utils.transform_plane" href="#vcd.utils.transform_plane">transform_plane</a></code></li>
+<li><code><a title="vcd.utils.transform_points3d_4xN" href="#vcd.utils.transform_points3d_4xN">transform_points3d_4xN</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
@@ -1088,9 +2176,7 @@ def get_key(my_dict, val):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>
