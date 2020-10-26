@@ -17,6 +17,7 @@ import * as schema from "./vcd.schema"
 
 import Ajv from 'ajv'
 import { v4 as uuidv4 } from 'uuid'
+import { type } from "os"
 
 export enum ElementType {
     object = 0,
@@ -592,7 +593,7 @@ export class VCD {
                 return
             }
         }
-        if(frameIntervals.empty() && setMode == SetMode.union)
+        if(frameIntervals.empty() && setMode == SetMode.union && !(elementData instanceof types.Mesh))
             setMode = SetMode.replace
 
         if(setMode == SetMode.replace) {
@@ -614,7 +615,7 @@ export class VCD {
                     if(!fisOld.empty())
                         this.rmElementDataFromFramesByName(elementType, uid, elementData.data['name'], fisOld)
                 }
-                this.setElementDataContent(elementType, element, uid, elementData)
+                this.setElementDataContent(elementType, element, elementData)
             }
             // Set the pointers
             this.setElementDataPointers(elementType, uid, elementData, frameIntervals)
@@ -648,10 +649,9 @@ export class VCD {
                 // Set the pointers (but the pointers we have to update using the union)
                 this.setElementDataPointers(elementType, uid, elementData, fisUnion)
             }
-            else {
-                // Should not reach here because in this function we are already checking this at the beginning
-                // Just in case the check is removed, let's put here a second call to this function changing the set-mode
-                this.setElementData(elementType, uid, elementData, frameIntervals, SetMode.replace)
+            else if (elementData instanceof types.Mesh){
+                // This is only for mesh type, which can have both static and dynamic attributes
+                this.setElementDataContent(elementType, element, elementData)
             }
         }
     }
@@ -672,12 +672,12 @@ export class VCD {
                 frame[elementTypeName + 's'] = frame[elementTypeName + 's'] || {}
                 frame[elementTypeName + 's'][uid.asStr()] = frame[elementTypeName + 's'][uid.asStr()] || {}
                 let element = frame[elementTypeName + 's'][uid.asStr()]
-                this.setElementDataContent(elementType, element, uid, elementData)
+                this.setElementDataContent(elementType, element, elementData)
             }
         }
     }
 
-    private setElementDataContent(elementType: ElementType, element: object, uid: UID, elementData: types.ObjectData ) {
+    private setElementDataContent(elementType: ElementType, element: object, elementData: types.ObjectData ) {
         // Adds the element_data to the corresponding container
         // If an element_data with same name exists, it is substituted
         let elementTypeName = ElementType[elementType]
