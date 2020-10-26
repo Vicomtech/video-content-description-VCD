@@ -25,7 +25,7 @@ test = os.listdir(dir_name)
 #            os.remove(os.path.join(dir_name, item))
 
 os.system("python test_basic.py && "
-          #"python test_converters.py && "
+          "python test_converters.py && "
           "python test_sanity.py && "
           # "python test_serializer.py &&"
           "python test_mesh.py &&"

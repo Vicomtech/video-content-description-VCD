@@ -343,7 +343,7 @@ class TestBasic(unittest.TestCase):
             vcd.save('./etc/vcd430_test_kitti_tracking_0_actions.json', False)
 
         vcd_read = core.VCD('./etc/vcd430_test_kitti_tracking_0_actions.json')
-        vcd.save('./etc/prueba.json')
+        # vcd.save('./etc/prueba.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
 

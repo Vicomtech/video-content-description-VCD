@@ -597,7 +597,7 @@ class VCD:
                 warnings.warn("WARNING: Trying to set element_data with a non-declared coordinate system.")
                 return
 
-        if frame_intervals.empty() and set_mode == SetMode.union:
+        if frame_intervals.empty() and set_mode == SetMode.union and not isinstance(element_data, types.mesh):
             set_mode = SetMode.replace
 
         if set_mode == SetMode.replace:
@@ -617,7 +617,7 @@ class VCD:
                     fis_old = self.get_element_data_frame_intervals(element_type, uid.as_str(), element_data.data['name'])
                     if not fis_old.empty():
                         self.rm_element_data_from_frames_by_name(element_type, uid, element_data.data['name'], fis_old)
-                self.__set_element_data_content(element_type, element, uid, element_data)
+                self.__set_element_data_content(element_type, element, element_data)
             # Set the pointers
             self.__set_element_data_pointers(element_type, uid, element_data, frame_intervals)
         else:  # set_mode = SetMode.union
@@ -646,10 +646,10 @@ class VCD:
 
                 # Set the pointers (but the pointers we have to update using the union)
                 self.__set_element_data_pointers(element_type, uid, element_data, fis_union)
-            else:
-                # Should not reach here because in this function we are already checking this at the beginning
-                # Just in case the check is removed, let's put here a second call to this function changing the set-mode
-                self.__set_element_data(element_type, uid, element_data, frame_intervals, SetMode.replace)
+            elif isinstance(element_data, types.mesh):
+                # This is only for mesh case that can have this static part
+                # (because it is an object data type which is both static and dynamic)
+                self.__set_element_data_content(element_type, element, element_data)
 
     def __set_element_data_content_at_frames(self, element_type, uid, element_data, frame_intervals):
         # Loop over the specified frame_intervals to create or substitute the content
@@ -666,10 +666,10 @@ class VCD:
                 frame.setdefault(element_type.name + 's', {})
                 frame[element_type.name + 's'].setdefault(uid.as_str(), {})
                 element = frame[element_type.name + 's'][uid.as_str()]
-                self.__set_element_data_content(element_type, element, uid, element_data)
+                self.__set_element_data_content(element_type, element, element_data)
 
     @staticmethod
-    def __set_element_data_content(element_type, element, uid, element_data):
+    def __set_element_data_content(element_type, element, element_data):
         # Adds the element_data to the corresponding container
         # If an element_data with same name exists, it is substituted
         element.setdefault(element_type.name + '_data', {})
