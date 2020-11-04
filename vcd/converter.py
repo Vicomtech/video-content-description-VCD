@@ -601,7 +601,8 @@ class ConverterVCD330toVCD430:
                 rdf_subjects = relation.get('rdf_subjects', None)
 
                 vcd_430.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
-                if not 'rdf_objects' in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
+                relation = vcd_430.get_element(core.ElementType.relation, uid)
+                if not 'rdf_objects' in relation or len(relation['rdf_objects']) == 0:  # just add once
                     for rdf_object in rdf_objects:
                         element_type = None
                         rdf_object_type_str = rdf_object['type']
@@ -618,7 +619,7 @@ class ConverterVCD330toVCD430:
 
                         vcd_430.add_rdf(uid, core.RDF.object, str(rdf_object['uid']), element_type)
 
-                if not 'rdf_subjects' in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
+                if not 'rdf_subjects' in relation or len(relation['rdf_subjects']) == 0:  # just add once
                     for rdf_subject in rdf_subjects:
                         element_type = None
                         rdf_object_type_str = rdf_subject['type']

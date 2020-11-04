@@ -489,6 +489,13 @@ class VCD:
         if coordinate_system is not None and self.has_coordinate_system(coordinate_system):
             element['coordinate_system'] = coordinate_system
 
+        # 2.bis.- For Relations obligue to have rdf_objects and rdf_subjects entries (to be compliant with schema)
+        if element_type is ElementType.relation:
+            if 'rdf_objects' not in element:
+                element['rdf_objects'] = []
+            if 'rdf_subjects' not in element:
+                element['rdf_subjects'] = []
+
         # 3.- Reshape element_data_pointers according to this new frame intervals
         if element_type.name + '_data_pointers' in element:
             edps = element[element_type.name + '_data_pointers']

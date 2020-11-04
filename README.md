@@ -5,7 +5,7 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The syntax(see ./schema/vcd_schema_json-v4.2.1.json), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see ./schema/vcd_schema_json-v4.3.0.json), as a JSON Schema file, contains the full description of the VCD structure.
 
 
 ## Details
@@ -58,7 +58,7 @@ import vcd.core as core
 import vcd.types as types
 
 # Load a VCD file
-myVCD = core.vcd('./tests/etc/vcd421_semantics_fw.json')
+myVCD = core.vcd('./tests/etc/vcd430_test_kitti_tracking_0_actions.json')
 
 # Access data directly
 metadata = myVCD.data['vcd']['metadata']
@@ -84,7 +84,16 @@ This validation function is optionally called when saving to JSON files.
 
 VCD is defined as a syntax, and as such, different versions imply differences in the syntax or data structure. In addition, each version has a dedicated library version compatible with it.
 
-Last version is VCD 4.2.1.
+Last version is VCD 4.3.0.
+
+Main changes at VCD 4.3.0 from VCD 4.2.0 are:
+* Integrated SCL (Scene Configuration Library) into VCD
+* Automatic drawing functions for multi-sensor set-ups (e.g. topview)
+* Improved API functions for offline VCD edition
+* Added Typescript API for web applications
+* Common set of test files for Python and Typescript APIs
+* Simplified Relations construction
+* Preliminar work on Ontology connection with Neo4j
 
 Main changes at VCD 4.2.1 from VCD 4.1.0 are:
 * Improved Frame-message creation
@@ -134,15 +143,26 @@ VCD has evolved as follows:
     * Native Python JSON serialization
     * Google's Protocol Buffer serialization
     * Object data 'num' for single numbers, 'vec' for arrays of numbers
-* VCD 4.1-2 (2020)
+* VCD 4.1-3 (2020)
     * Explicit definition of intrinsics, extrinsics and odometry
     * Enhanced timestamping and sync information
     * Enhanced semantics management (RDF triplets)
+    * Integrated SCL and complex calibration set-ups
+    * Drawing functions
+    * Preliminar work on Ontology and Neo4j connection
 
 
 ## Related projects
 
 VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART.
+
+## OpenLABEL
+
+Along with the development of VCD, we are participating in the definition of the incoming labeling standard for the automotive sector: ASAM OpenLABEL.
+
+https://www.asam.net/project-detail/scenario-storage-and-labelling/
+
+VCD 4.3.0 is shaped to be compliant with the format defined in OpenLABEL concept paper. As the standard evolves into a standardisation project, VCD will evolve as well to become the first labeling toolset compliant with the standard.
 
 ## Credits
 
@@ -155,7 +175,7 @@ Main developers:
 * Orti Senderos - osenderos@vicomtech.org
 
 Contributors:
-Thanks to Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia and many others in Vicomtech. 
+Thanks to Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta, Andoni Mujika and many others in Vicomtech. 
 
 ## License
 
