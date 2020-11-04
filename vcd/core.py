@@ -1518,6 +1518,12 @@ class VCD:
     def get_num_relations(self):
         return self.get_num_elements(ElementType.relation)
 
+    def get_elements_uids(self, element_type: ElementType):
+        if self.has_elements(element_type):
+            return self.data['vcd'][element_type.name + 's'].keys()
+        else:
+            return {}
+
     def get_ontology(self, ont_uid):
         ont_uid_str = UID(ont_uid).as_str()
         if 'ontologies' in self.data['vcd']:

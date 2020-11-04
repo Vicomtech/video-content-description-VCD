@@ -1575,6 +1575,16 @@ export class VCD {
         return this.getNumElements(ElementType.relation);
     }
 
+    public getElementsUids(elementType: ElementType) {
+        let elementTypeName = ElementType[elementType]
+        if(elementTypeName + 's' in this.data['vcd']) {
+            return Object.keys(this.data['vcd'][elementTypeName + 's'])
+        }
+        else {
+            return {}
+        }
+    }
+
     public getOntology(ontUid: string | number) {
         let ond_uid_str = new UID(ontUid).asStr()
         if (this.data['vcd']['ontologies']) {
