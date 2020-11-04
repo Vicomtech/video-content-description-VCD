@@ -1549,7 +1549,10 @@ export class VCD {
 
     public getNumElements(elementType: ElementType) {
         let elementTypeName = ElementType[elementType]
-        return Object.keys(this.data['vcd'][elementTypeName + 's']).length        
+        if(elementTypeName + 's' in this.data['vcd'])
+            return Object.keys(this.data['vcd'][elementTypeName + 's']).length        
+        else
+            return 0
     }
 
     public getNumObjects() {

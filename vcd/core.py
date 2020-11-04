@@ -1498,7 +1498,10 @@ class VCD:
         return self.get_element_data_frame_intervals(ElementType.context, uid, data_name)
 
     def get_num_elements(self, element_type):
-        return len(self.data['vcd'][element_type.name + 's'])
+        if self.has_elements(element_type):
+            return len(self.data['vcd'][element_type.name + 's'])
+        else:
+            return 0
 
     def get_num_objects(self):
         return self.get_num_elements(ElementType.object)
