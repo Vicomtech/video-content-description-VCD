@@ -458,6 +458,13 @@ export class VCD {
         if(!ontUid.isNone() && this.getOntology(ontUid.asStr())) element['ontology_uid'] = ontUid.asStr()
         if(coordinateSystem != null && this.hasCoordinateSystem(coordinateSystem)) element['coordinate_system'] = coordinateSystem
 
+        // 2.bis.- Add mandatory rdf_subjects and rdf_objects to Relation
+        if (elementType == ElementType.relation)
+        {
+            if(!('rdf_subjects' in element)) element['rdf_subjects'] = []
+            if(!('rdf_objects' in element)) element['rdf_objects'] = []
+        }
+
         // 3.- Reshape element_data_pointers according to this new frame_intervals
         // Also if the new frameIntervals is empty, in which case, we convert all element data into static        
         if(elementTypeName + '_data_pointers' in element) {
