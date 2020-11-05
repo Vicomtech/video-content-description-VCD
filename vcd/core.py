@@ -491,10 +491,10 @@ class VCD:
 
         # 2.bis.- For Relations obligue to have rdf_objects and rdf_subjects entries (to be compliant with schema)
         if element_type is ElementType.relation:
-            if 'rdf_objects' not in element:
-                element['rdf_objects'] = []
             if 'rdf_subjects' not in element:
                 element['rdf_subjects'] = []
+            if 'rdf_objects' not in element:
+                element['rdf_objects'] = []
 
         # 3.- Reshape element_data_pointers according to this new frame intervals
         if element_type.name + '_data_pointers' in element:
@@ -1086,8 +1086,8 @@ class VCD:
         if set_mode == SetMode.replace and uid is not None:
             if self.has(ElementType.relation, uid):
                 relation = self.data['vcd']['relations'][UID(uid).as_str()]
-                relation['rdf_objects'] = []
                 relation['rdf_subjects'] = []
+                relation['rdf_objects'] = []
 
         relation_uid = self.__set_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
