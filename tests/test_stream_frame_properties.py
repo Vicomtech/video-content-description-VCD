@@ -157,6 +157,18 @@ class TestBasic(unittest.TestCase):
             status="interpolated",  # we can add any thing (it is permitted by VCD schema)
         ))
 
+        self.assertEqual(len(vcd.get_streams()), 2)
+        self.assertEqual(vcd.has_stream('Camera1'), True)
+        self.assertEqual(vcd.get_stream('Camera1')['uri'], './somePath/someVideo1.mp4')
+        self.assertEqual(vcd.get_stream('Camera1')['description'], 'Description 1')
+        self.assertEqual(vcd.get_stream('Camera1')['type'], 'camera')
+        self.assertEqual(vcd.get_stream('Non-Valid_Stream'), None)
+
+        self.assertEqual(len(vcd.get_coordinate_systems()), 4)
+        self.assertEqual(vcd.has_coordinate_system('vehicle-iso8855'), True)
+        self.assertEqual(vcd.get_coordinate_system('vehicle-iso8855')['parent'], 'odom')
+        self.assertEqual(vcd.get_coordinate_system('Non-existing-Coordinate'), None)
+
         if not os.path.isfile('./etc/vcd430_test_stream_frame_properties.json'):
             vcd.save('./etc/vcd430_test_stream_frame_properties.json', True)
 

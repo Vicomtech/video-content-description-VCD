@@ -1620,10 +1620,22 @@ export class VCD {
         return false
     }
 
-    public hasStream(stream: string): boolean {
-        let md = this.getMetadata()
-        if('streams' in md) {            
-            let streamName = StreamType[stream] 
+    public getCoordinateSystems(): Array<object> {
+        if('coordinate_systems' in this.data['vcd']) {
+            return this.data['vcd']['coordinate_systems']
+        }
+        else return []
+    }
+
+    public getCoordinateSystem(cs: string) {
+        if(this.hasCoordinateSystem(cs)) {
+            return this.data['vcd']['streams'][cs]
+        }
+        else return null
+    }
+
+    public hasStream(streamName: string): boolean {        
+        if('streams' in this.data['vcd']) {                        
             if (streamName in this.data['vcd']['streams']) {
                 return true
             }             
@@ -1631,6 +1643,20 @@ export class VCD {
                 return false
             }
         }
+    }
+
+    public getStreams(): Array<object> {
+        if('streams' in this.data['vcd']) {
+            return this.data['vcd']['streams']
+        }
+        else return []
+    }
+
+    public getStream(streamName: string) {
+        if(this.hasStream(streamName)) {
+            return this.data['vcd']['streams'][streamName]
+        }
+        else return null
     }
 
     public getFrameIntervals(): FrameIntervals {

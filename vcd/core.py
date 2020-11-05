@@ -1549,14 +1549,36 @@ class VCD:
                 return True
         return False
 
-    def has_stream(self, stream):
-        md = self.get_metadata()
-        if 'streams' in md:
-            stream_name = StreamType[stream]
+    def get_coordinate_systems(self):
+        if 'coordinate_systems' in self.data['vcd']:
+            return self.data['vcd']['coordinate_systems']
+        else:
+            return []
+
+    def get_coordinate_system(self, coordinate_system):
+        if self.has_coordinate_system(coordinate_system):
+            return self.data['vcd']['coordinate_systems'][coordinate_system]
+        else:
+            return None
+
+    def has_stream(self, stream_name):
+        if 'streams' in self.data['vcd']:
             if stream_name in self.data['vcd']['streams']:
                 return True
             else:
                 return False
+
+    def get_streams(self):
+        if 'streams' in self.data['vcd']:
+            return self.data['vcd']['streams']
+        else:
+            return []
+
+    def get_stream(self, stream_name):
+        if self.has_stream(stream_name):
+            return self.data['vcd']['streams'][stream_name]
+        else:
+            return None
 
     def get_frame_intervals(self):
         if 'frame_intervals' in self.data['vcd']:
