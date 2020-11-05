@@ -211,6 +211,50 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_object_data(uid=uid1, data_name='Position', frame_num=8), None)
         self.assertEqual(vcd.get_object_data(uid=uid1, data_name='Position'), None)
 
+    def test_modify_relations(self):
+        vcd = core.VCD()
+
+        # Relation without frameintervals
+        uid_car1 = vcd.add_object('car1', 'car')
+        uid_car2 = vcd.add_object('car2', 'car')
+        uid_car3 = vcd.add_object('car3', 'car')
+        uid_relation1 = vcd.add_relation_object_object('follows1', 'follows', uid_car1, uid_car2)
+
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_subjects'][0]['uid'], uid_car1)
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_subjects'][0]['type'], 'object')
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_objects'][0]['uid'], uid_car2)
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_objects'][0]['type'], 'object')
+        self.assertEqual(len(vcd.get_relation(uid_relation1)['rdf_objects']), 1)
+
+        uid_relation1 = vcd.add_relation_object_object('follows1', 'follows', uid_car1, uid_car3, uid_relation1,
+                                                       set_mode=core.SetMode.replace)
+
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_subjects'][0]['uid'], uid_car1)
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_subjects'][0]['type'], 'object')
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_objects'][0]['uid'], uid_car3)
+        self.assertEqual(vcd.get_relation(uid_relation1)['rdf_objects'][0]['type'], 'object')
+        self.assertEqual(len(vcd.get_relation(uid_relation1)['rdf_objects']), 1)
+
+        # Relation with frameintervals
+        uid_ped1 = vcd.add_object('ped1', 'ped', [0, 10])
+        uid_ped2 = vcd.add_object('ped2', 'ped', [3, 7])
+        uid_relation2 = vcd.add_relation_object_object('follows2', 'follow', uid_ped2, uid_ped1, frame_value=[5, 6])
+
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_subjects'][0]['uid'], uid_ped2)
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_subjects'][0]['type'], 'object')
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_objects'][0]['uid'], uid_ped1)
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_objects'][0]['type'], 'object')
+        self.assertEqual(len(vcd.get_relation(uid_relation2)['rdf_objects']), 1)
+
+        uid_relation2 = vcd.add_relation_object_object('follows2', 'follow', uid_ped2, uid_car1, uid_relation2,
+                                                       frame_value=[5, 6], set_mode=core.SetMode.replace)
+
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_subjects'][0]['uid'], uid_ped2)
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_subjects'][0]['type'], 'object')
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_objects'][0]['uid'], uid_car1)
+        self.assertEqual(vcd.get_relation(uid_relation2)['rdf_objects'][0]['type'], 'object')
+        self.assertEqual(len(vcd.get_relation(uid_relation2)['rdf_objects']), 1)
+
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

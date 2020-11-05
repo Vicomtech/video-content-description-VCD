@@ -1083,6 +1083,12 @@ class VCD:
 
     def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None,
                      set_mode=SetMode.union):
+        if set_mode == SetMode.replace and uid is not None:
+            if self.has(ElementType.relation, uid):
+                relation = self.data['vcd']['relations'][UID(uid).as_str()]
+                relation['rdf_objects'] = []
+                relation['rdf_subjects'] = []
+
         relation_uid = self.__set_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
             uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None)
@@ -1119,10 +1125,10 @@ class VCD:
                     )
 
     def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1131,10 +1137,10 @@ class VCD:
         return relation_uid
 
     def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid_1, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1143,10 +1149,10 @@ class VCD:
         return relation_uid
 
     def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid_1, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1155,10 +1161,10 @@ class VCD:
         return relation_uid
 
     def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1167,10 +1173,10 @@ class VCD:
         return relation_uid
 
     def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
-                                    relation_uid, ont_uid, frame_value=None):
+                                    relation_uid, ont_uid, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         assert(isinstance(subject_type, ElementType))
         assert(isinstance(object_type, ElementType))
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
