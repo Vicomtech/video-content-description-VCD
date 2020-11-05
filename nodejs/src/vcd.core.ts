@@ -1102,6 +1102,15 @@ export class VCD {
     }
 
     public addRelation(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, setMode: SetMode = SetMode.union) {
+        if(setMode == SetMode.replace && uid != null)
+        {            
+            if(this.has(ElementType.relation, uid))
+            {
+                let relation = this.data['vcd']['relations'][(new UID(uid)).asStr()]
+                relation['rdf_subjects'] = []
+                relation['rdf_objects'] = []
+            }            
+        }
         let relation_uid = this.setElement(ElementType.relation, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), null, setMode)        
         return relation_uid.asStr()
     }
@@ -1141,37 +1150,37 @@ export class VCD {
         }
     }
 
-    public addRelationObjectAction(name: string, semanticType: string, objectUid: string | number, actionUid: string | number, relationUid = null, ontUid = null, frameValue=null) {
+    public addRelationObjectAction(name: string, semanticType: string, objectUid: string | number, actionUid: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
         // Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
         this.addRdf(relationUid, RDF.subject, objectUid, ElementType.object)
         this.addRdf(relationUid, RDF.object, actionUid, ElementType.action)
         return relationUid
     }
 
-    public addRelationActionAction(name: string, semanticType: string, actionUid1: string | number, actionUid2: string | number, relationUid = null, ontUid = null, frameValue=null) {
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+    public addRelationActionAction(name: string, semanticType: string, actionUid1: string | number, actionUid2: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
         this.addRdf(relationUid, RDF.subject, actionUid1, ElementType.action)
         this.addRdf(relationUid, RDF.object, actionUid2, ElementType.action)
         return relationUid
     }
 
-    public addRelationObjectObject(name: string, semanticType: string, objectUid1: string | number, objectUid2: string | number, relationUid = null, ontUid = null, frameValue=null) {
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+    public addRelationObjectObject(name: string, semanticType: string, objectUid1: string | number, objectUid2: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
         this.addRdf(relationUid, RDF.subject, objectUid1, ElementType.object)
         this.addRdf(relationUid, RDF.object, objectUid2, ElementType.object)
         return relationUid
     }
 
-    public addRelationActionObject(name: string, semanticType: string, actionUid: string | number, objectUid: string | number, relationUid = null, ontUid = null, frameValue=null) {
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+    public addRelationActionObject(name: string, semanticType: string, actionUid: string | number, objectUid: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
         this.addRdf(relationUid, RDF.subject, actionUid, ElementType.action)
         this.addRdf(relationUid, RDF.object, objectUid, ElementType.object)
         return relationUid
     }
 
-    public addRelationSubjectObject(name: string, semanticType: string, subjectType: ElementType, subjectUid: string | number, objectType: ElementType, objectUid: string | number, relationUid: null, ontUid: null, frameValue = null) {
-        let uid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid)
+    public addRelationSubjectObject(name: string, semanticType: string, subjectType: ElementType, subjectUid: string | number, objectType: ElementType, objectUid: string | number, relationUid: null, ontUid: null, frameValue = null, setMode: SetMode = SetMode.union) {
+        let uid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
         this.addRdf(uid, RDF.subject, subjectUid, subjectType)
         this.addRdf(uid, RDF.object, objectUid, objectType)
         return uid

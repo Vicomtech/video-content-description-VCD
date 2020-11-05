@@ -186,4 +186,45 @@ test('test_object_change_from_dynamic_to_static', () => {
     expect(vcd.getObjectData(uid1, 'Position')).toStrictEqual(null)  
 });
 
-// TODO: test modify Relation also
+test('test_modify_relations', () => {
+    let vcd = new VCD()
+
+    // Relation without frameintervals
+    let uidCar1 = vcd.addObject('car1', 'car')
+    let uidCar2 = vcd.addObject('car2', 'car')
+    let uidCar3 = vcd.addObject('car3', 'car')
+    let uidRelation1 = vcd.addRelationObjectObject('follows1', 'follows', uidCar1, uidCar2)
+
+    expect(vcd.getRelation(uidRelation1)['rdf_subjects'][0]['uid']).toBe(uidCar1)
+    expect(vcd.getRelation(uidRelation1)['rdf_subjects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation1)['rdf_objects'][0]['uid']).toBe(uidCar2)
+    expect(vcd.getRelation(uidRelation1)['rdf_objects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation1)['rdf_objects'].length).toBe(1)
+
+    uidRelation1 = vcd.addRelationObjectObject('follows1', 'follows', uidCar1, uidCar3, uidRelation1, null, null, SetMode.replace)
+
+    expect(vcd.getRelation(uidRelation1)['rdf_subjects'][0]['uid']).toBe(uidCar1)
+    expect(vcd.getRelation(uidRelation1)['rdf_subjects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation1)['rdf_objects'][0]['uid']).toBe(uidCar3)
+    expect(vcd.getRelation(uidRelation1)['rdf_objects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation1)['rdf_objects'].length).toBe(1)
+
+    // Relation with frameintervals
+    let uidPed1 = vcd.addObject('ped1', 'ped', [0, 10])
+    let uidPed2 = vcd.addObject('ped2', 'ped', [3, 7])
+    let uidRelation2 = vcd.addRelationObjectObject('follows2', 'follow', uidPed2, uidPed1, null, null, [5, 6])
+
+    expect(vcd.getRelation(uidRelation2)['rdf_subjects'][0]['uid']).toBe(uidPed2)
+    expect(vcd.getRelation(uidRelation2)['rdf_subjects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation2)['rdf_objects'][0]['uid']).toBe(uidPed1)
+    expect(vcd.getRelation(uidRelation2)['rdf_objects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation2)['rdf_objects'].length).toBe(1)
+
+    uidRelation2 = vcd.addRelationObjectObject('follows2', 'follow', uidPed2, uidCar1, uidRelation2, null, [5, 6], SetMode.replace)
+
+    expect(vcd.getRelation(uidRelation2)['rdf_subjects'][0]['uid']).toBe(uidPed2)
+    expect(vcd.getRelation(uidRelation2)['rdf_subjects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation2)['rdf_objects'][0]['uid']).toBe(uidCar1)
+    expect(vcd.getRelation(uidRelation2)['rdf_objects'][0]['type']).toBe('object')
+    expect(vcd.getRelation(uidRelation2)['rdf_objects'].length).toBe(1)
+});
