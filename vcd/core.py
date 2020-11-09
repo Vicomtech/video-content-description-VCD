@@ -1404,15 +1404,16 @@ class VCD:
                             for prop in element[element_type.name + '_data']:
                                 if prop == data_type.name:
                                     return len(element[element_type.name + '_data'][prop])
-                        else: return 0
-                    else: return 0
+                        else:
+                            return 0
+                    else:
+                        return 0
             else:
                 # Static info
                 element = self.data['vcd'][element_type.name + 's'][uid_str]
                 for prop in element[element_type.name + '_data']:
-                    for prop in element[element_type.name + '_data']:
-                        if prop == data_type.name:
-                            return len(element[element_type.name + '_data'][prop])
+                    if prop == data_type.name:
+                        return len(element[element_type.name + '_data'][prop])
         else:
             return 0
         return 0
@@ -1531,15 +1532,16 @@ class VCD:
 
     def get_elements_uids(self, element_type: ElementType):
         if self.has_elements(element_type):
-            return self.data['vcd'][element_type.name + 's'].keys()
+            list_of_uids = copy.deepcopy(self.data['vcd'][element_type.name + 's'].keys())
+            return list_of_uids
         else:
-            return {}
+            return []
 
     def get_ontology(self, ont_uid):
         ont_uid_str = UID(ont_uid).as_str()
         if 'ontologies' in self.data['vcd']:
             if ont_uid_str in self.data['vcd']['ontologies']:
-                return self.data['vcd']['ontologies'][ont_uid_str]
+                return copy.deepcopy(self.data['vcd']['ontologies'][ont_uid_str])
         return None
 
     def get_metadata(self):
@@ -1556,13 +1558,13 @@ class VCD:
 
     def get_coordinate_systems(self):
         if 'coordinate_systems' in self.data['vcd']:
-            return self.data['vcd']['coordinate_systems']
+            return copy.deepcopy(self.data['vcd']['coordinate_systems'])
         else:
             return []
 
     def get_coordinate_system(self, coordinate_system):
         if self.has_coordinate_system(coordinate_system):
-            return self.data['vcd']['coordinate_systems'][coordinate_system]
+            return copy.deepcopy(self.data['vcd']['coordinate_systems'][coordinate_system])
         else:
             return None
 
@@ -1575,13 +1577,13 @@ class VCD:
 
     def get_streams(self):
         if 'streams' in self.data['vcd']:
-            return self.data['vcd']['streams']
+            return copy.deepcopy(self.data['vcd']['streams'])
         else:
             return []
 
     def get_stream(self, stream_name):
         if self.has_stream(stream_name):
-            return self.data['vcd']['streams'][stream_name]
+            return copy.deepcopy(self.data['vcd']['streams'][stream_name])
         else:
             return None
 
