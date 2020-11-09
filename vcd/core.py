@@ -256,8 +256,8 @@ class VCD:
             #    json_file,
             #    object_hook=lambda d: {int(k) if k.lstrip('-').isdigit() else k: v for k, v in d.items()}
             # )
-            read_data = json.load(json_file)  # Open without converting strings to integers
 
+            read_data = json.load(json_file)  # Open without converting strings to integers
             # Check VERSION
             if 'vcd' in read_data:
                 # This is 4.x
@@ -266,6 +266,11 @@ class VCD:
                     if read_data['vcd']['version'] == "4.2.0":
                         # This is VCD 4.2.0
                         warnings.warn("WARNING: Converting VCD 4.2.0 to VCD 4.3.0. A full revision is recommended.")
+                        # Convert frame entries to int
+                        frames = read_data['vcd']['frames']
+                        if frames:  # So frames is not empty
+                            read_data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
+
                         self.reset()  # to init object
                         converter.ConverterVCD420toVCD430(read_data, self)  # self is modified internally
 

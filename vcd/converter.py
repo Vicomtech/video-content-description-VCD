@@ -714,7 +714,8 @@ class ConverterVCD420toVCD430:
             fis = vcd_430_data['vcd']['frame_intervals']
             for fi in fis:
                 for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
-                    frame = vcd_430_data['vcd']['frames'][str(frame_num)]  # warning: at this point, the key is str
+                    #frame = vcd_430_data['vcd']['frames'][str(frame_num)]  # warning: at this point, the key is str
+                    frame = vcd_430_data['vcd']['frames'][frame_num]  # warning: at this point, the key is str
                     for element_type in core.ElementType:
                         if element_type.name + 's' in frame:  # e.g. "objects", "actions"...
                             for uid, element in frame[element_type.name + 's'].items():
