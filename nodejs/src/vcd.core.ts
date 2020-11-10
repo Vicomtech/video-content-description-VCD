@@ -1751,27 +1751,30 @@ export class VCD {
         if(!this.hasElements(elementType))
             return
 
-        var elements = this.data['vcd'][elementTypeName + 's'];
+        
         let uid_str = new UID(uid).asStr()
 
         // Get Element from summary
         if(!this.has(elementType, uid)) return
 
         // Remove from Frames: let's read frameIntervals from summary
+        var elements = this.data['vcd'][elementTypeName + 's'];
         let element = elements[uid_str];
-        for (var i = 0; i < element['frame_intervals'].length; i++) {
-            var fi = element['frame_intervals'][i];
-            for (var frameNum = fi['frame_start']; frameNum < fi['frame_end'] + 1; frameNum++) {
-                var elementsInFrame = this.data['vcd']['frames'][frameNum][elementTypeName + 's'];
-                if (uid in elementsInFrame) {
-                    delete elementsInFrame[uid_str];
-                }
-                if (Object.keys(elementsInFrame).length == 0) {  // objects might have end up empty TODO: test this
-                    delete this.data['vcd']['frames'][frameNum][elementTypeName + 's']
+        if('frame_intervals' in element) {
+            for (var i = 0; i < element['frame_intervals'].length; i++) {
+                var fi = element['frame_intervals'][i];
+                for (var frameNum = fi['frame_start']; frameNum < fi['frame_end'] + 1; frameNum++) {
+                    var elementsInFrame = this.data['vcd']['frames'][frameNum][elementTypeName + 's'];
+                    if (uid in elementsInFrame) {
+                        delete elementsInFrame[uid_str];
+                    }
+                    if (Object.keys(elementsInFrame).length == 0) {  // objects might have end up empty TODO: test this
+                        delete this.data['vcd']['frames'][frameNum][elementTypeName + 's']
 
-                    if(Object.keys(this.data['vcd']['frames'][frameNum]).length == 0) { // this frame may have ended up being empty
-                        delete this.data['vcd']['frames'][frameNum]
-                        this.rmFrame(frameNum)
+                        if(Object.keys(this.data['vcd']['frames'][frameNum]).length == 0) { // this frame may have ended up being empty
+                            delete this.data['vcd']['frames'][frameNum]
+                            this.rmFrame(frameNum)
+                        }
                     }
                 }
             }
