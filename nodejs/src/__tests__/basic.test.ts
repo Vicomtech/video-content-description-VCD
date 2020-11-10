@@ -162,6 +162,8 @@ test('test_remove_simple', () => {
     vcd.rmObject(car1_uid)
     expect(vcd.getNumObjects()).toBe(0)
 
+    expect(vcd.getFrameIntervals().empty()).toBe(true)
+
 });
 
 test('test_metadata', () => {

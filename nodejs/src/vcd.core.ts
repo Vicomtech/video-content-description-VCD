@@ -731,14 +731,19 @@ export class VCD {
         if('frames' in this.data['vcd']){
             if(frameNum in this.data['vcd']['frames']){
                 delete this.data['vcd']['frames'][frameNum]
-                                
-                // Remove from VCD frame intervals
-                var fisDict = this.data['vcd']['frame_intervals'] || [];        
-                var fisDictNew = utils.rmFrameFromFrameIntervals(fisDict, frameNum)                
-
-                // Now substitute                
-                this.data['vcd']['frame_intervals'] = fisDictNew;
             }
+            if(this.data['vcd']['frames'].length == 0)
+                delete this.data['vcd']['frames']
+        }        
+        // Remove from VCD frame intervals
+        if('frame_intervals' in this.data['vcd']) {
+            var fisDict = this.data['vcd']['frame_intervals'];        
+            var fisDictNew = utils.rmFrameFromFrameIntervals(fisDict, frameNum)                
+
+            // Now substitute                
+            this.data['vcd']['frame_intervals'] = fisDictNew;
+            if(this.data['vcd']['frame_intervals'].length == 0)
+                delete this.data['vcd']['frame_intervals']
         }        
     }    
 
@@ -1211,6 +1216,11 @@ export class VCD {
     ////////////////////////////////////////////////////////////////////////////////////////////////////    
     public getData(): object {
         return this.data;
+    }
+
+    public hasElements(elementType: ElementType ) {
+        let elementTypeName = ElementType[elementType]
+        return (elementTypeName + 's' in this.data['vcd'])
     }
     
     public hasObjects(): boolean{
@@ -1737,7 +1747,10 @@ export class VCD {
     }
     
     public rmElement(elementType: ElementType, uid: string | number) {
-        let elementTypeName = ElementType[elementType]
+        let elementTypeName = ElementType[elementType]        
+        if(!this.hasElements(elementType))
+            return
+
         var elements = this.data['vcd'][elementTypeName + 's'];
         let uid_str = new UID(uid).asStr()
 
@@ -1758,6 +1771,7 @@ export class VCD {
 
                     if(Object.keys(this.data['vcd']['frames'][frameNum]).length == 0) { // this frame may have ended up being empty
                         delete this.data['vcd']['frames'][frameNum]
+                        this.rmFrame(frameNum)
                     }
                 }
             }
@@ -1765,6 +1779,9 @@ export class VCD {
 
         // Delete this element from summary
         delete elements[uid_str];
+        if(elements.length==0) {
+            delete this.data['vcd'][elementTypeName + 's']
+        }
     }
 
     public rmObject(uid: string | number) {

@@ -234,6 +234,10 @@ export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNu
                 fiDictNew.push({'frame_start': frameNum + 1, 'frame_end': fi['frame_end']})
                 continue
             }
+            else {
+                // So we have arrived here because frame_start and frame_end and frameNum coincides, so let's delete it entirely
+                return []
+            }
         }
         else if(frameNum < fi['frame_end']) {
             // Inside! Need to split
