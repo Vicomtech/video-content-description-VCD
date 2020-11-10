@@ -186,6 +186,8 @@ class TestBasic(unittest.TestCase):
         vcd.rm_object(uid=car1_uid)
         self.assertEqual(vcd.get_num_objects(), 0, "Should be 0")
 
+        self.assertEqual(vcd.get_frame_intervals().empty(), True)
+
     # Load
     def test_load(self):
         # 1.- Create VCD from file

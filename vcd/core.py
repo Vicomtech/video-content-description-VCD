@@ -719,16 +719,20 @@ class VCD:
         if 'frames' in self.data['vcd']:
             if frame_num in self.data['vcd']['frames']:
                 del self.data['vcd']['frames'][frame_num]
+            if len(self.data['vcd']['frames']) == 0:
+                del self.data['vcd']['frames']
 
-                # Remove from VCD frame intervals
-                if 'frame_intervals' in self.data['vcd']:
-                    fis_dict = self.data['vcd']['frame_intervals']
-                else:
-                    fis_dict = []
-                fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
+        # Remove from VCD frame intervals
+        if 'frame_intervals' in self.data['vcd']:
+            fis_dict = self.data['vcd']['frame_intervals']
+            fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
 
-                # Now substitute
+            # Now substitute
+            if len(fis_dict_new) == 0:
+                del self.data['vcd']['frame_intervals']
+            else:
                 self.data['vcd']['frame_intervals'] = fis_dict_new
+
 
     def __compute_data_pointers(self):
         # WARNING! This function might be extremely slow
@@ -1647,26 +1651,33 @@ class VCD:
 
     def rm_element(self, element_type, uid):
         uid_str = UID(uid).as_str()
-        elements = self.data['vcd'][element_type.name + 's']
+        if not self.has_elements(element_type):
+            return
 
         # Get element from summary
         if not self.has(element_type, uid):
             return
 
         # Remove from frames: let's read frame_intervals from summary
+        elements = self.data['vcd'][element_type.name + 's']
         element = elements[uid_str]
-        for i in range(0, len(element['frame_intervals'])):
-            fi = element['frame_intervals'][i]
-            for frame_num in range(fi['frame_start'], fi['frame_end']+1):
-                elements_in_frame = self.data['vcd']['frames'][frame_num][element_type.name + 's']
-                if uid in elements_in_frame:
-                    del elements_in_frame[uid_str]
-                if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
-                    del self.data['vcd']['frames'][frame_num][element_type.name + 's']
-                    if len(self.data['vcd']['frames'][frame_num]) == 0:  # this frame may have ended up being empty
-                        del self.data['vcd']['frames'][frame_num]
+        if 'frame_intervals' in element:
+            for i in range(0, len(element['frame_intervals'])):
+                fi = element['frame_intervals'][i]
+                for frame_num in range(fi['frame_start'], fi['frame_end']+1):
+                    elements_in_frame = self.data['vcd']['frames'][frame_num][element_type.name + 's']
+                    if uid in elements_in_frame:
+                        del elements_in_frame[uid_str]
+                    if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
+                        del self.data['vcd']['frames'][frame_num][element_type.name + 's']
+                        if len(self.data['vcd']['frames'][frame_num]) == 0:  # this frame may have ended up being empty
+                            del self.data['vcd']['frames'][frame_num]
+                            self.__rm_frame(frame_num)
+
         # Delete this element from summary
         del elements[uid_str]
+        if len(elements) == 0:
+            del self.data['vcd'][element_type.name + 's']
 
     def rm_object(self, uid):
         self.rm_element(ElementType.object, uid)
