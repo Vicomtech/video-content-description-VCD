@@ -432,9 +432,10 @@ export class VCD {
         // 1.- Copy from existing or create new entry (this copies everything, including element_data)
         let elementExisted = this.has(elementType, uid.asStr())
         let elementTypeName = ElementType[elementType];
+        let uidstr = uid.asStr()
         this.data['vcd'][elementTypeName + 's'] = this.data['vcd'][elementTypeName + 's'] || {}  // creates an entry for this elementype if not existing already, e.g. "objects"
-        this.data['vcd'][elementTypeName + 's'][uid.asStr()] = this.data['vcd'][elementTypeName + 's'][uid.asStr()] || {} // creates an entry for this element if not existing already
-        let element = this.data['vcd'][elementTypeName + 's'][uid.asStr()]  // read the element at the root (might be empty if created in this call)
+        this.data['vcd'][elementTypeName + 's'][uidstr] = this.data['vcd'][elementTypeName + 's'][uidstr] || {} // creates an entry for this element if not existing already
+        let element = this.data['vcd'][elementTypeName + 's'][uidstr]  // read the element at the root (might be empty if created in this call)
 
         //let fisOld = new FrameIntervals()
         let fisOld = new FrameIntervals()
@@ -520,7 +521,6 @@ export class VCD {
                             for(let f=fi[0]; f<=fi[1]; f++) {
                                 if(!fisNew.hasFrame(f)) {  // Only for those OTHER frames not those just added
                                     let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
-                                    let uidstr = uid.asStr()
                                     if(uidstr in elementsInFrame) {
                                         delete elementsInFrame[uidstr] // removes this element entry in this frame
 
@@ -545,7 +545,7 @@ export class VCD {
                         if(!isInside) {
                             // Old frame not inside new ones -> let's remove this frame
                             let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
-                            delete elementsInFrame[uid.asStr()] // removes this element entry in this frame
+                            delete elementsInFrame[uidstr] // removes this element entry in this frame
                             if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
                                 delete this.data['vcd']['frames'][f][elementTypeName + 's']
         
@@ -575,6 +575,22 @@ export class VCD {
             if(!fisOld.empty()) {
                 // Let's check the elementData at those frames
                 this.rmElementDataFromFrames(elementType, uid, fisOld)                
+
+                // Additionally, we need to remove element entries at frames, and frames entirely to clean-up
+                for(let fi of fisOld.get()) {
+                    for(let f=fi[0]; f<=fi[1]; f++) {
+                        let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
+                        delete elementsInFrame[uidstr]
+                        // Clean-up
+                        if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
+                            delete this.data['vcd']['frames'][f][elementTypeName + 's']    
+                            if(Object.keys(this.data['vcd']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
+                                // So VCD now has no info in this frame, let's remove it from VCD frame interval
+                                this.rmFrame(f) // removes the frame and updates VCD frame interval accordingly
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -1454,22 +1470,22 @@ export class VCD {
         let frameNumIsNumber = Number.isInteger(frameNum)
         let uid_str = new UID(uid).asStr()
 
+        let elementExistInThisFrame = false
         if(frameNum != null && frameNumIsNumber) {            
-            // The user is asking for frame-specific attributes
-            let elementExistInThisFrame = this.getElementFrameIntervals(elementType, uid).hasFrame(frameNum)               
+            
             let foundInFrame = false;
             let frame = this.getFrame(frameNum)
             if(frame != null) {
                 if(elementTypeName + 's' in frame) {
                     if(uid_str in frame[elementTypeName + 's']) {
+                        elementExistInThisFrame = true
                         let element = frame[elementTypeName + 's'][uid_str]
                         if(elementTypeName + '_data' in element) {
                             for (const prop in element[elementTypeName + '_data']) {
                                 var valArray = element[elementTypeName + '_data'][prop];
                                 for (var i = 0; i < valArray.length; i++) {
                                     var val = valArray[i];
-                                    if (val['name'] == dataName) {
-                                        foundInFrame = true;
+                                    if (val['name'] == dataName) {                                       
                                         return val;
                                     }
                                 }

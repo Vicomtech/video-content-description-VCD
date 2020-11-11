@@ -151,12 +151,15 @@ test('test_object_change_from_static_to_dynamic', () => {
     expect(vcd_a.getObjectData(uid_a, 'FavouriteColor')['val']).toBe('Pink')   // asked without specifying frameNum -> looking at root
     expect(vcd_a.getObjectData(uid_a, 'FavouriteColor', 8)['val']).toBe('Pink') // asking in a frame inside the limits of the element's fis -> return its value at root
 
-    // CASE B (when VCD has some other frame intervals already defined): VCD should behave exactly the same
+    // CASE B (when VCD has some other frame intervals already defined): VCD's getElementData behaves differently
+    // In this case, as the VCD has frames, the object is assumed to exist in all the scene
+    // when the user asks for element_data at certain frame, VCD looks for element_data at that frame, and if there
+    // is nothing, it then searches at the static part
     let vcd_b = new VCD()
     vcd_b.addObject("room1", "Room", [0, 10])
     let uid_b = vcd_b.addObject("Enara", "Child")
     vcd_b.addObjectData(uid_b, new types.Text("FavouriteColor", "Pink"));    
-    expect(vcd_b.getObjectData(uid_b, 'FavouriteColor', 3)).toStrictEqual(null) 
+    expect(vcd_b.getObjectData(uid_b, 'FavouriteColor', 3)['val']).toStrictEqual('Pink') 
     expect(vcd_b.getObjectData(uid_b, 'FavouriteColor')['val']).toBe('Pink')   
     vcd_b.addObject("Enara", "Child", [5, 10], uid_b)
     expect(vcd_b.getObjectData(uid_b, 'FavouriteColor', 3)).toStrictEqual(null) 

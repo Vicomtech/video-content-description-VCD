@@ -470,10 +470,11 @@ class VCD:
     ):
         # 1.- Copy from existing or create new entry (this copies everything, including element_data)
         # element_data_pointers and frame intervals
-        element_existed = self.has(element_type, uid.as_str())# note: public functions use int or str for uids
+        uidstr = uid.as_str()
+        element_existed = self.has(element_type, uidstr)# note: public functions use int or str for uids
         self.data['vcd'].setdefault(element_type.name + 's', {})
-        self.data['vcd'][element_type.name + 's'].setdefault(uid.as_str(), {})
-        element = self.data['vcd'][element_type.name + 's'][uid.as_str()]
+        self.data['vcd'][element_type.name + 's'].setdefault(uidstr, {})
+        element = self.data['vcd'][element_type.name + 's'][uidstr]
 
         fis_old = FrameIntervals()
         if 'frame_intervals' in element:
@@ -549,7 +550,6 @@ class VCD:
                             for f in range(fi[0], fi[1] + 1):
                                 if not fis_new.has_frame(f):  # Only for those OTHER frames not those just added
                                     elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
-                                    uidstr = uid.as_str()
                                     if uidstr in elements_in_frame:
                                         del elements_in_frame[uidstr]
                                         if len(elements_in_frame) == 0:
@@ -564,7 +564,7 @@ class VCD:
                         if not is_inside:
                             # Old frame not inside new ones -> let's remove this frame
                             elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
-                            del elements_in_frame[uid.as_str()]
+                            del elements_in_frame[uidstr]
                             if len(elements_in_frame) == 0:
                                 del self.data['vcd']['frames'][f][element_type.name + 's']
                                 if len(self.data['vcd']['frames'][f]) == 0:
@@ -582,6 +582,17 @@ class VCD:
             # If there is element_data at frames, they are removed
             if not fis_old.empty():
                 self.rm_element_data_from_frames(element_type, uid, fis_old)
+
+                # Additionally, we need to remove element entries at frames, and frames entirely to clean-up
+                for fi in fis_old.get():
+                    for f in range(fi[0], fi[1] + 1):
+                        elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
+                        del elements_in_frame[uidstr]
+                        # Clean-up
+                        if len(elements_in_frame) == 0:
+                            del self.data['vcd']['frames'][f][element_type.name + 's']
+                            if len(self.data['vcd']['frames'][f]) == 0:
+                                self.__rm_frame(f)
 
     def __set_element_data(self, element_type, uid, element_data, frame_intervals, set_mode):
         assert(isinstance(uid, UID))
@@ -1435,22 +1446,22 @@ class VCD:
         frame_num_is_number = isinstance(frame_num, int)
         uid_str = UID(uid).as_str()
 
+        element_exists_in_this_frame = False
         if frame_num is not None and frame_num_is_number:
             # The user is asking for frame-specific attributes
-            element_exists_in_this_frame = self.get_element_frame_intervals(element_type, uid).has_frame(frame_num)
+
             found_in_frame = False
             frame = self.get_frame(frame_num)
-
             if frame is not None:
                 if element_type.name + 's' in frame:
                     if uid_str in frame[element_type.name + 's']:
+                        element_exists_in_this_frame = True
                         element = frame[element_type.name + 's'][uid_str]
                         if element_type.name + '_data' in element:
                             for prop in element[element_type.name + '_data']:
                                 val_array = element[element_type.name + '_data'][prop]
                                 for val in val_array:
                                     if val['name'] == data_name:
-                                        found_in_frame = True
                                         return val
             if not found_in_frame:
                 # The user has asked to get an element_data for a certain frame, but there is no info about this

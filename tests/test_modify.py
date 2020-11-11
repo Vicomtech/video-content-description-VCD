@@ -180,14 +180,17 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor')['val'], 'Pink')
         self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor', frame_num=8)['val'], 'Pink')
 
-        # Case B (when VCD has some other frame intervals already defined): VCD should behave exactly the same
+        # Case B (when VCD has some other frame intervals already defined): VCD's get_element_data behaves differently
         vcd_b = core.VCD()
         vcd_b.add_object(name="room1", semantic_type="Room", frame_value=[(0, 10)])
         uid_b = vcd_b.add_object(name="Enara", semantic_type="Child")
         vcd_b.add_object_data(uid=uid_b, object_data=types.text(name="FavouriteColor", val="Pink"))
         if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_b_before.json'):
             vcd_b.save('./etc/vcd430_test_object_change_from_static_to_dynamic_b_before.json')
-        self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=3), None)
+        # In this case, as the VCD has frames, the object is assumed to exist in all the scene
+        # when the user asks for element_data at certain frame, VCD looks for element_data at that frame, and if there
+        # is nothing, it then searches at the static part
+        self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=3)['val'], 'Pink')
         self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor')['val'], 'Pink')
         vcd_b.add_object(name="Enara", semantic_type="Child", uid=uid_b, frame_value=[(5, 10)])
         if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_b_after.json'):
