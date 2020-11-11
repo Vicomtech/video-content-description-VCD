@@ -86,6 +86,13 @@ class TestBasic(unittest.TestCase):
         uid_peter = vcd.add_object(name='peter', semantic_type='#Adult')
         uid_katixa = vcd.add_object(name='katixa', semantic_type='#Child')
 
+        list_uids = vcd.get_elements_uids(core.ElementType.object)
+        self.assertEqual(len(list_uids), 3)
+        self.assertEqual(list_uids[0], uid_marcos)
+        self.assertEqual(list_uids[1], uid_peter)
+        self.assertEqual(list_uids[2], uid_katixa)
+
+
         vcd.add_object_data(uid=uid_marcos, object_data=types.num('age', 37.0), frame_value=(0, 10))
         vcd.add_object_data(uid=uid_marcos, object_data=types.num('height', 1.75), frame_value=(0, 10))
         vcd.add_object_data(uid=uid_marcos, object_data=types.vec('marks', (5.0, 5.0, 5.0)), frame_value=(0, 10))

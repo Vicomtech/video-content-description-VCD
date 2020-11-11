@@ -58,6 +58,12 @@ test('test_create_search_mid', () => {
     let uid_peter = vcd.addObject('peter', '#Adult')
     let uid_katixa = vcd.addObject('katixa', '#Child')
 
+    let list_of_uids = vcd.getElementsUids(ElementType.object)
+    expect((list_of_uids.length)).toBe(3)
+    expect(list_of_uids[0]).toBe(uid_marcos)
+    expect(list_of_uids[1]).toBe(uid_peter)
+    expect(list_of_uids[2]).toBe(uid_katixa)
+
     vcd.addObjectData(uid_marcos, new types.Num('age', 37.0), [0, 10])
     vcd.addObjectData(uid_marcos, new types.Num('height', 1.75), [0, 10])
     vcd.addObjectData(uid_marcos, new types.Vec('marks', [5.0, 5.0, 5.0]), [0, 10])    

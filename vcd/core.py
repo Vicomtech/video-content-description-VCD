@@ -1536,7 +1536,7 @@ class VCD:
 
     def get_elements_uids(self, element_type: ElementType):
         if self.has_elements(element_type):
-            list_of_uids = copy.deepcopy(self.data['vcd'][element_type.name + 's'].keys())
+            list_of_uids = list(self.data['vcd'][element_type.name + 's'].keys())
             return list_of_uids
         else:
             return []

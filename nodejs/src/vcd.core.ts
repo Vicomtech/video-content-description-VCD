@@ -1594,13 +1594,13 @@ export class VCD {
         return this.getNumElements(ElementType.relation);
     }
 
-    public getElementsUids(elementType: ElementType) {
+    public getElementsUids(elementType: ElementType): string[] {
         let elementTypeName = ElementType[elementType]
         if(elementTypeName + 's' in this.data['vcd']) {
             return Object.keys(this.data['vcd'][elementTypeName + 's'])
         }
         else {
-            return {}
+            return []
         }
     }
 
