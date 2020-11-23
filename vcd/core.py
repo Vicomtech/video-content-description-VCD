@@ -1193,7 +1193,7 @@ class VCD:
         return relation_uid
 
     def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
-                                    relation_uid, ont_uid, frame_value=None, set_mode=SetMode.union):
+                                    relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
                                          frame_value=frame_value, set_mode=set_mode)
@@ -1222,8 +1222,8 @@ class VCD:
         return self.__set_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value),
                                        set_mode)
     
-    def add_element_data(self, element_type, uid, context_data, frame_value=None, set_mode=SetMode.union):
-        return self.__set_element_data(element_type, UID(uid), context_data, FrameIntervals(frame_value),
+    def add_element_data(self, element_type, uid, element_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value),
                                        set_mode)
 
     ##################################################
@@ -1594,7 +1594,7 @@ class VCD:
         if 'streams' in self.data['vcd']:
             return copy.deepcopy(self.data['vcd']['streams'])
         else:
-            return []
+            return {}
 
     def get_stream(self, stream_name):
         if self.has_stream(stream_name):

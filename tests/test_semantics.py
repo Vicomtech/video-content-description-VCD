@@ -266,7 +266,7 @@ class TestBasic(unittest.TestCase):
         vcd.add_context(name="", semantic_type="Sunny")
 
         # Ego-vehicle (3)
-        uid_ego = vcd.add_object(name="Ego-vehicle", semantic_type="Car")
+        uid_ego = vcd.get_object_uid_by_name(name="Egocar")
 
         # The objects already labeled are the pedestrians, cars, vans, etc. Inspecting the VCD we can see the uids
         # of the main actors
@@ -346,7 +346,98 @@ class TestBasic(unittest.TestCase):
         # vcd.save('./etc/prueba.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
+    def test_scene_KITTI_Tracking_3(self):
+        sequence_number = 3
+        vcd_file_name = "./etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(
+            4) + ".json"
+        vcd = core.VCD(vcd_file_name)
+
+        frame_num_last = vcd.get_frame_intervals().get_outer()['frame_end']
+
+        '''
+        "In a city, being sunny, the ego-vehicle drives in the left lane of a single-way two-lanes road, 
+        Two other cars drive in the right lane. When the cars pass the ego-vehicle, then the ego-vehicle changes 
+        to the right lane, and then the ego-vehicle drives in the right lane."
+        '''
+        vcd.add_metadata_properties({"cnl_text": "In a city, being sunny, the ego-vehicle drives in the left lane of a single-way two-lanes road, Two other cars drive in the right lane. When the cars pass the ego-vehicle, then the ego-vehicle changes to the right lane, and then the ego-vehicle drives in the right lane."})
+
+        # Let's add VCD entries following the order
+        # Contexts (1-2)
+        vcd.add_context(name="City1", semantic_type="City")
+        vcd.add_context(name="Sunny1", semantic_type="Sunny")
+
+        # Add non-labeled actors (Ego-vehicle and lanes)
+        uid_ego = vcd.get_object_uid_by_name(name="Egocar")
+        uid_lane_left = vcd.add_object(name="Lane1", semantic_type="Lane")
+        uid_lane_right = vcd.add_object(name="Lane2", semantic_type="Lane")
+        uid_road = vcd.add_object(name="Road1", semantic_type="Road")
+
+        vcd.add_element_data(element_type=core.ElementType.object, uid=uid_lane_left, element_data=types.text(name="Position", val="Left"))
+        vcd.add_element_data(element_type=core.ElementType.object, uid=uid_lane_right, element_data=types.text(name="Position", val="Right"))
+        vcd.add_element_data(element_type=core.ElementType.object, uid=uid_road, element_data=types.text(name="Direction", val="Single-way"))
+        vcd.add_element_data(element_type=core.ElementType.object, uid=uid_road, element_data=types.num(name="NumberOfLanes", val=2))
+
+        vcd.add_relation_object_object(name="", semantic_type="isPartOf", object_uid_1=uid_lane_left, object_uid_2=uid_road)
+        vcd.add_relation_object_object(name="", semantic_type="isPartOf", object_uid_1=uid_lane_right, object_uid_2=uid_road)
+
+        # Actors
+        uid_car_a = "0"   # (0, 75)
+        uid_car_b = "1"   # (22, 143)
+        uid_car_other_a = "3"
+        uid_car_other_b = "4"
+        uid_van = "5"
+        uid_car_other_c = "6"
+        uid_car_other_d = "7"
+        uid_car_other_e = "8"
+
+        # Actions
+        # Driving straight before lane change
+        uid_action_drive_straight_1 = vcd.add_action(name="DriveStraight1", semantic_type="DriveStraight", frame_value=[(0, 31)])  # Approx. at frame 31, the ego vehicle starts changing lane
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_ego, action_uid=uid_action_drive_straight_1)
+        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_lane_left,
+                                       action_uid=uid_action_drive_straight_1)
+
+        uid_action_drive_straight_2 = vcd.add_action(name="DriveStraight2", semantic_type="DriveStraight", frame_value=vcd.get_element_frame_intervals(element_type=core.ElementType.object, uid=uid_car_a).get())
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_car_a, action_uid=uid_action_drive_straight_2)
+        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_lane_right,
+                                       action_uid=uid_action_drive_straight_2)
+
+        uid_action_drive_straight_3 = vcd.add_action(name="DriveStraight3", semantic_type="DriveStraight", frame_value=vcd.get_element_frame_intervals(element_type=core.ElementType.object, uid=uid_car_b).get())
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_car_b, action_uid=uid_action_drive_straight_3)
+        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_lane_right,
+                                       action_uid=uid_action_drive_straight_3)
+
+        # Lane changing (event and action)
+        uid_action_lane_change = vcd.add_action(name="LaneChange1", semantic_type="LaneChange", frame_value=[(33, 75)])
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_ego, action_uid=uid_action_lane_change)
+        #uid_event_pass = vcd.add_event(name="CarB_passes_EgoCar", semantic_type="Pass", frame_value=32)
+        #vcd.add_relation_subject_object(name="", semantic_type="Causes", subject_type=core.ElementType.event, subject_uid=uid_event_pass,
+        #                                object_type=core.ElementType.action, object_uid=uid_action_lane_change)
+
+        uid_event_pass = vcd.add_event(name="Pass1", semantic_type="Pass", frame_value=32)
+        vcd.add_relation_subject_object(name="", semantic_type="isSubjectOfEvent", subject_type=core.ElementType.object, subject_uid=uid_car_b,
+                                        object_type=core.ElementType.event, object_uid=uid_event_pass)
+        vcd.add_relation_subject_object(name="", semantic_type="isObjectOfEvent", subject_type=core.ElementType.object,
+                                        subject_uid=uid_ego,
+                                        object_type=core.ElementType.event, object_uid=uid_event_pass)
+        vcd.add_relation_subject_object(name="", semantic_type="causes", subject_type=core.ElementType.event,
+                                        subject_uid=uid_event_pass,
+                                        object_type=core.ElementType.action, object_uid=uid_action_lane_change)
+
+
+        # Driving straight after lane change
+        uid_action_drive_straight_4 = vcd.add_action(name="DriveStraight1", semantic_type="DriveStraight", frame_value=[(76, frame_num_last)])  # Approx. at frame 31, the ego vehicle starts changing lane
+        vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_ego, action_uid=uid_action_drive_straight_4)
+        vcd.add_relation_object_action(name="", semantic_type="isObjectOfAction", object_uid=uid_lane_right,
+                                       action_uid=uid_action_drive_straight_4)
+
+        vcd.add_relation_action_action(name="", semantic_type="meets", action_uid_1=uid_action_lane_change, action_uid_2=uid_action_drive_straight_4, frame_value=75)
+
+        # Store
+        if not os.path.isfile('./etc/vcd430_kitti_tracking_0003_actions.json'):
+            vcd.save('./etc/vcd430_kitti_tracking_0003_actions.json', False)
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))
     unittest.main()
+

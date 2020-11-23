@@ -928,7 +928,8 @@ class FrameInfoDrawer:
         self.params = FrameInfoDrawer.Params()
 
     def draw_base(self, _img, _frameNum):
-        text = "Frame: " + str(_frameNum)
+        last_frame = self.vcd.get_frame_intervals().get()[-1][1]
+        text = "Frame: " + str(_frameNum) + " / " + str(last_frame)
         margin = 20
         cv.putText(_img, text,
                    (margin, margin),
