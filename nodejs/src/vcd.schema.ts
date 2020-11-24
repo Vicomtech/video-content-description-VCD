@@ -33,7 +33,7 @@ export const vcd_schema = {
                 "ontologies": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
                             {"type": "string"},
                     },
                     "additionalProperties": false
@@ -50,7 +50,7 @@ export const vcd_schema = {
                 "objects": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/object"
                         }
                     },
@@ -59,7 +59,7 @@ export const vcd_schema = {
                 "actions": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/action"
                         }
                     },
@@ -68,7 +68,7 @@ export const vcd_schema = {
                 "events": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/event"
                         }
                     },
@@ -77,7 +77,7 @@ export const vcd_schema = {
                 "contexts": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/context"
                         }
                     },
@@ -86,7 +86,7 @@ export const vcd_schema = {
                 "relations": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "$ref": "#/definitions/relation"
                         }
                     },
@@ -105,7 +105,7 @@ export const vcd_schema = {
                 "objects": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "object_data": {"$ref": "#/definitions/object_data"},
@@ -118,7 +118,7 @@ export const vcd_schema = {
                 "events": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "event_data": {"$ref": "#/definitions/event_data"},
@@ -131,7 +131,7 @@ export const vcd_schema = {
                 "actions": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "action_data": {"$ref": "#/definitions/action_data"},
@@ -144,7 +144,7 @@ export const vcd_schema = {
                 "contexts": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "type": "object",
                             "properties": {
                                 "context_data": {"$ref": "#/definitions/context_data"},
@@ -157,7 +157,7 @@ export const vcd_schema = {
                 "relations": {
                     "type": "object",
                     "patternProperties": {
-                        "^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {}
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {}
                     },
                     "additionalProperties": false
                 },

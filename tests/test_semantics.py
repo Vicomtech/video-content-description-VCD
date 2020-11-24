@@ -435,7 +435,7 @@ class TestBasic(unittest.TestCase):
 
         # Store
         if not os.path.isfile('./etc/vcd430_kitti_tracking_0003_actions.json'):
-            vcd.save('./etc/vcd430_kitti_tracking_0003_actions.json', False)
+            vcd.save('./etc/vcd430_kitti_tracking_0003_actions.json', validate=True)
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

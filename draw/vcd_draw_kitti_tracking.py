@@ -25,7 +25,7 @@ from vcd import draw
 from vcd import scl
 
 
-def draw_kitti_tracking(sequence_number=0, record_video=False):
+def draw_kitti_tracking(sequence_number, record_video, draw_images):
     # Get annotations
     # Run ../converters/kittiConverter/converter.py to generate the json files
     #vcd_file_name = "../tests/etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
@@ -54,7 +54,7 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
                  'Pedestrian': (0, 255, 0), 'Person_sitting': (0, 127, 127),
                  'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (0, 255, 255),
                 'Cyclist': (0, 127, 255),
-                'Ego-car': (127, 127, 127)}
+                'Egocar': (127, 127, 127)}
     imageParams = draw.Image.Params(_colorMap=colorMap,
                                     _draw_trajectory=False,
                                     _ignore_classes={"DontCare"},
@@ -72,8 +72,16 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
                                         stepX=1.0, stepY=1.0,
                                         ignore_classes={"DontCare"})
     drawerTopView1 = draw.TopView(scene, "vehicle-iso8855", params=topviewParams1)
-    rangeX = (0.0, 80.0)
-    rangeY = (-5, 25) #(-((rangeX[1] - rangeX[0]) / ar) / 2, ((rangeX[1] - rangeX[0]) / ar) / 2)
+    if sequence_number == 0:
+        rangeX = (0.0, 80.0)
+        rangeY = (-25, 25)
+    elif sequence_number == 3:
+        rangeX = (0.0, 250.0)
+        rangeY = (-25, 25)
+    elif sequence_number == 5:
+        rangeX = (0.0, 500.0)
+        rangeY = (-5, 50)
+
     topviewParams2 = draw.TopView.Params(colorMap=colorMap,
                                          topViewSize=(video_width, video_height * 2),
                                          background_color=255,
@@ -99,9 +107,11 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
             break
 
         # Top View
-        drawerTopView1.add_images({'CAM_LEFT': img}, f)
+        if draw_images:
+            drawerTopView1.add_images({'CAM_LEFT': img}, f)
         topView1 = drawerTopView1.draw(frameNum=f)
-        drawerTopView2.add_images({'CAM_LEFT': img}, f)
+        if draw_images:
+            drawerTopView2.add_images({'CAM_LEFT': img}, f)
         topView2 = drawerTopView2.draw(frameNum=f)
 
         # Camera
@@ -133,6 +143,6 @@ def draw_kitti_tracking(sequence_number=0, record_video=False):
 if __name__ == "__main__":
     print("Running " + os.path.basename(__file__))
 
-    draw_kitti_tracking(sequence_number=0, record_video=False)
+    draw_kitti_tracking(sequence_number=5, record_video=True, draw_images=False)
 
 

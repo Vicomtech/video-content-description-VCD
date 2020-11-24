@@ -291,7 +291,11 @@ class KITTI_Tracking_reader():
 
             if not vcd.has(core.ElementType.object, str(trackID)):
                 # First time
-                vcd.add_object(name="", semantic_type=semantic_class, uid=str(trackID), frame_value=frameNum)
+                if trackID >= 0:
+                    vcd.add_object(name=semantic_class + str(trackID), semantic_type=semantic_class, uid=str(trackID), frame_value=frameNum)
+                else:  # so this is for DontCare object
+                    vcd.add_object(name=semantic_class, semantic_type=semantic_class, uid=str(trackID),
+                                   frame_value=frameNum)
 
             vcd.add_object_data(str(trackID), bounding_box, frameNum)
             vcd.add_object_data(str(trackID), cuboid, frameNum)
@@ -302,7 +306,7 @@ class KITTI_Tracking_reader():
         #########################################
         # Ego-vehicle
         #########################################
-        vcd.add_object(name="Ego-car", semantic_type="Ego-car", uid=str(-2))
+        vcd.add_object(name="Egocar", semantic_type="Egocar", uid=str(-2))
 
         cuboid_ego = types.cuboid(name="box3D",
                                   val=(1.35, 0.0, 0.736,
@@ -314,12 +318,13 @@ class KITTI_Tracking_reader():
         # Return
         return vcd
 
+
 def convert_KITTI_tracking_to_VCD4():
     # Base paths
     kitti_tracking_base_path = "../../../../../data/kitti/tracking"
     kitti_tracking_output_vcd_path = "./etc"
 
-    num = 0  # use None for all
+    num = None  # use None for all
 
     # Create scenes
     kitti_parser = KITTI_Tracking_reader(kitti_tracking_base_path, num)
