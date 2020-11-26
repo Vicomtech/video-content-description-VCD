@@ -1,0 +1,1385 @@
+{
+    "vcd": {
+        "frames": {},
+        "schema_version": "4.3.0",
+        "frame_intervals": [],
+        "objects": {
+            "0": {
+                "name": "Instance 1",
+                "type": "human--rider--bicyclist",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "765",
+                                "306",
+                                "2",
+                                "4",
+                                "0",
+                                "JRRRRRRRRRRQKKKKKKKKKKKKKKKKKKKKKBRRRRRRRRRRn/JRCKKKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRRRRCM///wR///9J6PR4R6PR6PCPR6PR4R6Pn/JwRyOCOCORwn+BX+BIRyIRCORCIRyIRCORCORCIRyIRCORE/yP//yP//yP+ExW"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "1": {
+                "name": "Instance 2",
+                "type": "human--rider--bicyclist",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "963",
+                                "188",
+                                "3",
+                                "4",
+                                "0",
+                                "JRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQZ+R/+R+v/4J0//xAKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRnyP/6P/6P/6P/6P1J//////////4CICICICORARATP/yP///CP/gLRRSKBQBRAR9IRAX/CP/yP/yP/6P/yZARyICICICICICICORARARARAn//4BP//An/R//4R//4R//4CP//CP//AR/A"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "2": {
+                "name": "Instance 3",
+                "type": "human--rider--bicyclist",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1023",
+                                "189",
+                                "5",
+                                "8",
+                                "0",
+                                "J/+RRRRRmCPAAR+R4ACPAAR+R4ACPyPAAR4RmTPR/AS/AA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "3": {
+                "name": "Instance 4",
+                "type": "object--support--pole",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "318",
+                                "333",
+                                "2",
+                                "7",
+                                "0",
+                                "JyORyORyOnhRQKKK+w"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "4": {
+                "name": "Instance 5",
+                "type": "object--traffic-light",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "189",
+                                "213",
+                                "11",
+                                "31",
+                                "0",
+                                "BB04nmCOASIARA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "5": {
+                "name": "object 0",
+                "type": "construction--barrier--curb",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "338",
+                                "531",
+                                "39",
+                                "68",
+                                "1",
+                                "IBQPRyIAAAEABQEyORwQRA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "6": {
+                "name": "object 1",
+                "type": "construction--barrier--fence",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "246",
+                                "473",
+                                "12",
+                                "12",
+                                "0",
+                                "/AAAAABXn//AAAAARE4BX4AAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "7": {
+                "name": "object 2",
+                "type": "construction--flat--bike-lane",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "415",
+                                "479",
+                                "2",
+                                "7",
+                                "1",
+                                "BQK4KyOBRBhRzCJ/BoKKBQKBQKBQKBQKBQKBQKBQKBQKBQKBQWxCNP//////+CP/////+1BwRyORwRyORwRyOCORyOCORyOCIMOCOySCOJTKOKE2ExWBIJ2RE2iPJmKBKZR2R2KCI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "8": {
+                "name": "object 3",
+                "type": "construction--flat--crosswalk-plain",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "318",
+                                "546",
+                                "4",
+                                "10",
+                                "1",
+                                "mABZQKKBQKKBRQKBRQKKBRQKBRQKKBQKKBRQKBRQKORv/2R//R//R/+wR//R+AgAR6PR6IA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "9": {
+                "name": "object 4",
+                "type": "construction--flat--road",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "144",
+                                "482",
+                                "8",
+                                "7",
+                                "0",
+                                "J4gAAAgAAARAgAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                9,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "10": {
+                "name": "object 5",
+                "type": "construction--flat--sidewalk",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "496",
+                                "482",
+                                "3",
+                                "6",
+                                "0",
+                                "/4BaBQBQBQBQBRRCKKKIVKORARARyICICORARyICICORARARyIh////////////+R/////////////AmRALX////AiCBQBXATX/BX/////KxWBWKwKxWBWKwKxWBWKwKxWBWKwJxWmKgBWAKwK+JwCaAKAJKKKCKIRRRCKIRQXBXAK4K4BXBXAK4K4BWgRwRyILQBKICIRARF/wBaKBPAR84K4BXBXAK/8RyORwRyORyIJ/AJyIE4J//A"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "11": {
+                "name": "object 6",
+                "type": "construction--structure--building",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "688",
+                                "51",
+                                "2",
+                                "4",
+                                "1",
+                                "JQKKBQKKBRQKKBQKKBRQKKBQKKBn+BX+JyInxXhRRCKKK/yaIRRRCKKIRRKKKIRRCKKK+R+QKCRRRRP+BRQKKKKBROR6PR6P4K+BIRTWBXCIRCaISyPIRyITRCK6QKCORyIRyMKIRRPwR+BCOCOORwRyaBWQKwKzVJWBWBQf/RRRQKKKIKxWKRRQKKKJ6YKxQREQKBQK4K5KBTXBXEIRRCIRCKIaxWKEBWB/5CKIoIRRJRQKJCKITXwhRUKIRRRCKJCORwKxPwR/E6P/R+CIn/+K/K+BX5Xwn4RRRR/IRCBWJ4JRCKRROCPyOJE/8wK/K+BX5XwK/K+BX5XwNBCKPCP5X4K/BXIpR6PCPR6PR4R6PR6PCPR6Z///6P//+BKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRn/JRRRRRRRRRRQKKKKKKKKKKKKKKKKKKKKKBRRRRRRRRRRTWKxP1/+R+BKKBS/+R///////CP//////+R///////CP///n/////+BpxP//JCOpORyII"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "12": {
+                "name": "object 7",
+                "type": "human--person",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "694",
+                                "430",
+                                "2",
+                                "4",
+                                "0",
+                                "JyIR0KK+JyC5X4K/BX6PCKIRRRCKIRRRCKIKKKmKxh4n4K5XBXK5WJwnBXyOCORwRCBWKB/4"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "13": {
+                "name": "object 8",
+                "type": "human--rider--bicyclist",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "407",
+                                "463",
+                                "2",
+                                "3",
+                                "1",
+                                "IKXBOhQK4R4QKhR5P/R1xX4K/xXyORRBQhQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "14": {
+                "name": "object 9",
+                "type": "human--rider--bicyclist",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "407",
+                                "463",
+                                "2",
+                                "3",
+                                "1",
+                                "IKXBOhQK4R4QKhR5P/R1xX4K/xXyORRBQhQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "15": {
+                "name": "object 10",
+                "type": "human--rider--bicyclist",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "407",
+                                "463",
+                                "2",
+                                "3",
+                                "1",
+                                "IKXBOhQK4R4QKhR5P/R1xX4K/xXyORRBQhQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "16": {
+                "name": "object 11",
+                "type": "marking--general",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "464",
+                                "544",
+                                "4",
+                                "10",
+                                "0",
+                                "wR6PR6On4Ca0RCIRCIRCIRCKIRCIRCIRCIR"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "17": {
+                "name": "object 12",
+                "type": "nature--sky",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "0",
+                                "2",
+                                "5",
+                                "0",
+                                "/////////////////////+yWKwRWKDRCIRCIRP0///RRCKKIRRRCKP/K/+CIRRCIhRRRRaBWKBRQKKKKBRCORCNP4J/CRPByOCIP+EBXBKIRyIRCOuxXBa+K4K+KKIRRJWKxWKxiKKKBRRRRRPRwmRyOCOCOTKKCIRCIRQKBRQKBQKIRCQRyIRiIRCOKKM+yYKxWKxRQKaKKKwKxRCIRBRQKKKKBRRRRRpyOIKxWKCRQRRCIRRCaxQKxJQKxQKKKKRRQKeR6ODWKwWK+KwIRnK4OBXBWpIRCIRCJBWKBRyIaBQKBXRyOCOR/KKKKKKKKKKJyOyOyP2R6RCOKBWM/wXR4MK4LX+K/CIRyIgK2KxKKBRRQKMKBQKBRa/+R2R6awKwJwK4K4K0RyIRCxWxWBWxWa/2J2K0COn5X4JQKKBQKKBRQKKBQKKBRQKKBQKKBTP8CORyZyIn/8xa/////BP//wR/////+R/////+CP/////yP+1JRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRQX/2nxP2R+BKIRTXJwR+R/6P1IKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKP+J/R//yP/4R//yPgRCh/wR/yP+R/wR/yPBKKKKKP//2S//////////////////+"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "18": {
+                "name": "object 13",
+                "type": "marking--general",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "464",
+                                "544",
+                                "4",
+                                "10",
+                                "0",
+                                "wR6PR6On4Ca0RCIRCIRCIRCKIRCIRCIRCIR"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "19": {
+                "name": "object 14",
+                "type": "nature--vegetation",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "567",
+                                "95",
+                                "2",
+                                "3",
+                                "0",
+                                "J+R4R//+NJQKBQKJRQKKKBRmK4KBIRyIRyIRyIRyIRCORC+R/P/4JWKBQRCIPyP/R4R4R0KKKKKKKKKK/4RyPRyPxQKBQMRyKBWKEIRCIRCL5X5WX5XxKIXK/BWPKxmR+R0KBRRKKKKBWKBUxQKxhCKIRCKIKIIKxWKCCPZRRRRRQKKKKBRSIRCKxXKKKMKBRWKxWKh/5KKKCIRCIaIRyOJCIRQKBQKKBQKIRCIRxRpOR6PRyOJ6P0KKKKKBRRRh0yRCIRBKKKBRQKKKBRRP////n5X//4K///K/0////5P//4K//////5X//////K8////////8KKKBQJCYKaKRCM/4n//4K////////+K//0//5P///+SKKBRRP4JyORyORyOTP//ExP//E4n//5zX/+J//5X//Ba//0//K////////+K///0////xP4R//6PERCKIRRCKIRRCIRRCKIRnyPBQKJ04IKDRRIKCKOR1By+KJ5On6PK/5Py4R6KIRRRRCKKxWKxWKBp//////xX+KxOn//////+R/////4J/4TP///KBQKxWKxX/+K///R/6P/R/6P+R/yP+R5dOR8//0CPR6PR4R6PR6P4R//R4J/6P4mK6OREKIRRRCKJKKJ/BhCKIhQKKhRCLIRRC/+XKBIKxWMRRCIRCKIRPxXxhQM4K+KBQKBDCOKxUPEKKKBRRBWKxSKKKBRRR//gK5XKZMxXKBxQMOR6OQR6IX4R/EKIRRKORCORyIKBB4KIRhCORC6PJCMIRCPxXMKIn4K/6PCPCPCOhQKKKKBRX/0KKKIIKB/R/BRRRCKIRRRhRCKKIRRRCMP/BRRRCKKJ4K/4K4n/+MxXBXK4KxCIRyJOK/K/K85X"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "20": {
+                "name": "object 15",
+                "type": "object--bike-rack",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "886",
+                                "184",
+                                "8",
+                                "12",
+                                "1",
+                                "JRCMyOE8+EAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                12,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "21": {
+                "name": "object 16",
+                "type": "object--billboard",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "963",
+                                "188",
+                                "3",
+                                "10",
+                                "1",
+                                "JRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQWwR+AR+AR+yPwCPwCP2R+AR+EARyICICICICICICORARARARAn+xP4E4CP4R/CP4CP4R/AR4"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "22": {
+                "name": "object 17",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "981",
+                                "436",
+                                "2",
+                                "5",
+                                "0",
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "23": {
+                "name": "object 18",
+                "type": "object--support--pole",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "894",
+                                "190",
+                                "3",
+                                "13",
+                                "1",
+                                "+BOn4R/yP+R/AR/yP+R/yO20BaKKRQKAKICOFIRAXR4CPAR+R4CPAR4CPyPAR4CPyPAR4CPyPAQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "24": {
+                "name": "object 19",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "981",
+                                "436",
+                                "2",
+                                "5",
+                                "0",
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "25": {
+                "name": "object 20",
+                "type": "object--traffic-light",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "189",
+                                "213",
+                                "3",
+                                "6",
+                                "1",
+                                "BB+An//AgBP/4CP/+FJ/yP+E4K8IRBAKwKBONJQBSKBQKBQCIP4R/CRyIA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "26": {
+                "name": "object 21",
+                "type": "object--traffic-sign--front",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "999",
+                                "330",
+                                "8",
+                                "17",
+                                "0",
+                                "J/AAn/AAn4AAANOR6PC"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "27": {
+                "name": "object 22",
+                "type": "object--vehicle--bicycle",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "421",
+                                "482",
+                                "4",
+                                "5",
+                                "0",
+                                "IWRyNJgK6IC"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "28": {
+                "name": "object 23",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "981",
+                                "436",
+                                "2",
+                                "5",
+                                "0",
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "29": {
+                "name": "object 24",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "981",
+                                "436",
+                                "2",
+                                "5",
+                                "0",
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "30": {
+                "name": "object 25",
+                "type": "object--bike-rack",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "886",
+                                "184",
+                                "8",
+                                "12",
+                                "1",
+                                "JRCMyOE8+EAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                12,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "31": {
+                "name": "object 26",
+                "type": "object--bike-rack",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "886",
+                                "184",
+                                "8",
+                                "12",
+                                "1",
+                                "JRCMyOE8+EAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                12,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            }
+        }
+    }
+}

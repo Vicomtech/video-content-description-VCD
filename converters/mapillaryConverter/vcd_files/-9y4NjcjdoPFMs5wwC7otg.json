@@ -1,0 +1,2116 @@
+{
+    "vcd": {
+        "frames": {},
+        "schema_version": "4.3.0",
+        "frame_intervals": [],
+        "objects": {
+            "0": {
+                "name": "Instance 1",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2937",
+                                "965",
+                                "5",
+                                "29",
+                                "1",
+                                "JCICIRCICIRCICIRCICIRCICISKKIRRRCKIRRDKIRCKIRUKKKIRRpPCPR6PCPR4R6PR4R6PCPR6PCP2gCORAAS2AR4AR4ACPAAR4AR4ACPAAR4AR4ACPAAR4AR4ACO2xWBWBWBWBQBRCIRRCIRCIRRCIRBCICIRARCICIRARCICOARwCOAoAKAJwAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                8,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "1": {
+                "name": "Instance 2",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2367",
+                                "725",
+                                "5",
+                                "10",
+                                "1",
+                                "4AR/wR/wR/wR/wR4ApP4AR/ACP4AR/ACP4AnnAAK/ABX4AK/ABOR4R4R4R4R4R4R4R4REBX+I"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "2": {
+                "name": "Instance 3",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2397",
+                                "710",
+                                "11",
+                                "23",
+                                "1",
+                                "yORyORyORyORyORAAE5XK5XK5p///A"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "3": {
+                "name": "Instance 4",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1565",
+                                "826",
+                                "11",
+                                "134",
+                                "0",
+                                "yOnmw"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                9,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "4": {
+                "name": "Instance 5",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1561",
+                                "680",
+                                "13",
+                                "12",
+                                "1",
+                                "4BX4AK/ABX4AK/ABXE//////n/////AgAAAAABQAAAAABQAAAAABQAAAAABQAAAAABQAAAAABQAAAAABQAAAAABQAAAAABQAAAAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "5": {
+                "name": "Instance 6",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "743",
+                                "695",
+                                "5",
+                                "11",
+                                "0",
+                                "wCPR6PR6PR6PRxPAR4R4CPCPAR4RwAFOKxQABWKAC4CP4AR/ACP4An////+AAQKAKAKAKAK"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                6,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "6": {
+                "name": "Instance 7",
+                "type": "object--support--pole",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "585",
+                                "655",
+                                "4",
+                                "11",
+                                "1",
+                                "4R/AR/AR2CBWBWBWKwKwKwKxWBWBWKwWwR4R4CPCPAR4R4EwR6PR6PR6PR6PR6OCRARARARARA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "7": {
+                "name": "Instance 8",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "287",
+                                "880",
+                                "3",
+                                "4",
+                                "0",
+                                "IKAKAKQR6PRCRARyICIQKKBRQKKBhQKBQKBQKPR6OR6PR6OR6PiIRCIRCIRCM//K/+K//K/+K//"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "8": {
+                "name": "Instance 9",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2569",
+                                "1427",
+                                "4",
+                                "8",
+                                "1",
+                                "J/AEyKKM6BQBSI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "9": {
+                "name": "Instance 10",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1816",
+                                "1201",
+                                "2",
+                                "4",
+                                "0",
+                                "JiORSxhhXQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "10": {
+                "name": "Instance 11",
+                "type": "object--support--pole",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1786",
+                                "1526",
+                                "2",
+                                "3",
+                                "1",
+                                "IKBv///KKKKKKKKKKKKKKKKxXKxXKxXKxXKxXJ8///0//xIn4hCIRCIRA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "11": {
+                "name": "Instance 12",
+                "type": "object--support--pole",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1576",
+                                "1531",
+                                "0",
+                                "0",
+                                "0",
+                                ""
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "12": {
+                "name": "Instance 13",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1898",
+                                "1193",
+                                "6",
+                                "7",
+                                "0",
+                                "+K4AAK//AAR////4AR////4AR////4AR////4AR6PmKgR//4R//4R//6P//CP//CP//R//4R//4R/ACAP/AA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "13": {
+                "name": "Instance 14",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1825",
+                                "1207",
+                                "6",
+                                "54",
+                                "1",
+                                "BSKIRARCIRCICIR/222AACP+2wAAmm22CPCPR4R4R22AARCIRCIRARCIRCI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "14": {
+                "name": "Instance 15",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3503",
+                                "675",
+                                "7",
+                                "12",
+                                "0",
+                                "BRQKKBRQKKBRWK5XK5XKAAJ//wBX/+AAK//wAK//wABX/+ABX/+AAK//wAK//wABX/+ABX/+AAK//wAK//wABX/+ABX/+AAK//wAK/+AAn/4AAE///////////////////////////////////////4AAJAARwAR1J+R+R+R0R4AR4AR4AR4ACPACPACPAAR4AR0ABQAKABQAKABQAKABQAKABQA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                6,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "15": {
+                "name": "Instance 16",
+                "type": "object--support--pole",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2582",
+                                "1486",
+                                "3",
+                                "5",
+                                "1",
+                                "JyOCORwRyOCORwRyOEKBQKn//4BX//4BX//+K///AKR6OCPoIRRCKIRRCKIRXAK4BXAK4BXAI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "16": {
+                "name": "Instance 17",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2570",
+                                "1431",
+                                "2",
+                                "3",
+                                "0",
+                                "KmKxWKxXKxWK5WKxWK5WJ///5X//00///xX///E5XK5XK5XKxXK5XK5"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "17": {
+                "name": "Instance 18",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2177",
+                                "1481",
+                                "3",
+                                "8",
+                                "0",
+                                "+AR/6P/R/6P/R/6P+wpwKwDyOpyP6P4R/R/CP4R/R2BP////////////////////////4K/+wK//K/+wK//K/+wK//KwE+AnK//K//BX/5X/4K//K//BX/5X/////////////////////+xJWKxWKxQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "18": {
+                "name": "Instance 19",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3013",
+                                "915",
+                                "6",
+                                "6",
+                                "1",
+                                "JAACIAAR6IAARAACKIRRRRCKKIRRRRCKKIRRRRCKKIRRRRCKKIRRRRCKKIRRRRCKKIRRRRCKKIRRRRCKKIRRRRCKKIRRRRCZ/8/4n/ACP///CP///R///4R///4R///4R///4R///6P///CP///CP///CP///CP///R///4R///4R///4R///4R///6P///CP///CP/AB4AhRRn//EAACKKKKP4R//AR//CP/4CP/4R//AR//CP/4CP/4R//AR//AR//ACP/4CP/4AR//ACP/4AR//AR//ACP/4AR//ACP/4CP/4AR//ACP/4AR//AR//ACP/4AR//ACP/4CP/4AR/BKKKKIRRRRRRRRRRCKKKKKKKKIRRRRRRRRRRCKKKKKKKKKIRRRRRRRRRCKKKKKKKKKIRRRRRRRRRCKKKKKKKKKIRRRRR4AAR4AAR4AAUfAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "19": {
+                "name": "Instance 20",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1226",
+                                "1796",
+                                "3",
+                                "5",
+                                "1",
+                                "JCIRCIRCIRCIRCIQCOCPwR/Ry6PyPCPCOWh6yKKKJ/BBRRhCKwQMKKIP/xBARgBh4EKKKxOBXJRRRhXAQMwK///4CPARCICIRRQKBSKKBRRX///w"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "20": {
+                "name": "Instance 21",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": true
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1601",
+                                "1796",
+                                "3",
+                                "6",
+                                "1",
+                                "J/wCP/RRRRRRRRhRRQKKBRRQKKKBRQKKIIKBQBhwCwQKEIRWAKwBJQKKBQKBRQK/AR//yP//CPRCNJ/wQMxXKxP/R/wCP/R//+K/BX4BX4JCORgKIKKMIX/RAhQBQBX/+AK//6OCORwRwRARRCIRRJCICKBmAhQKK4BKKKKKKKBRRQKKKKBRRSxWKxQBWKxX////wA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "21": {
+                "name": "object 0",
+                "type": "construction--barrier--curb",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1523",
+                                "1837",
+                                "2",
+                                "8",
+                                "0",
+                                "J4R6PCPCPCPR4R4R4R4R6PCPCO2R+CPwR+CPwR+CPwR20+mR/2R/yP2CP2R+wR+R+R4R+R+R+R4R+R+R+R4oJBQOwOwTWKBQSKK"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                6,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "22": {
+                "name": "object 1",
+                "type": "construction--barrier--fence",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "293",
+                                "2",
+                                "4",
+                                "0",
+                                "//////////8IRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCOR4R4R4R4R4R4R4R4R4R4R4R4R4R4R4R4R4R4R6PCPCPCPCPCPCPCPCPCPCPCPCPCPCPCPCPwK4K1OCCPCOBXBXBXK4K4K4K5XBXBXK4K4K4K5XBXBXBXK4K4K5XBXBXBXK4K4K5XBWCOCORyOCORwRyOCORyOCORwRyOCORyOCORwRyORwRyOCORwRyORwRyOCORyOCORwRyOCORyOCORwRyOCORyOCORCORCORCORCIRyIRyIRyIRyIRyIRyIRyIRyIRCORCORCORCORCORCORCORCORCIRyIRyIRyIRyIRyIRyIRyIRyIRCORCORCORCORCORCORCORCORCIRyIRyIRyIRyIRyIRyIRyIRyIRCORCORCORCORC"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "23": {
+                "name": "object 2",
+                "type": "construction--barrier--guard-rail",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3608",
+                                "1556",
+                                "4",
+                                "6",
+                                "1",
+                                "xXK5XK5XyP4CP4AR/ACP4CP4AR/ACP4CP4AR/ACP4CP4AR/ACP4CPFJ/yP4AR/yP4AR/yP+R/ACP+mR+R+R+R4AR+R+R+R4AR+R+R+R4AR+R+R+R4AR+R+R+RxIRCIRCIn/4"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "24": {
+                "name": "object 3",
+                "type": "construction--barrier--other-barrier",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "378",
+                                "43",
+                                "232",
+                                "0",
+                                "+wAAAAAAAAAAAnR6OpRARCIRCICIRCIRARCIRCICIRCIRARCIRCICIRCIRARCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "25": {
+                "name": "object 4",
+                "type": "construction--barrier--other-barrier",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "378",
+                                "43",
+                                "232",
+                                "0",
+                                "+wAAAAAAAAAAAnR6OpRARCIRCICIRCIRARCIRCICIRCIRARCIRCICIRCIRARCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCIRRCIRCIRCIRCIRCKIRCIRCIRCIRCIRCKIRCIRCIRCIRCIRRCIRCIRCIRCIRCI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                10,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "26": {
+                "name": "object 5",
+                "type": "construction--flat--road",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2092",
+                                "1759",
+                                "2",
+                                "-1",
+                                "0",
+                                "m"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                22,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "27": {
+                "name": "object 6",
+                "type": "construction--structure--bridge",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "292",
+                                "2",
+                                "-1",
+                                "0",
+                                "QRFy"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                38,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "28": {
+                "name": "object 7",
+                "type": "construction--structure--building",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3983",
+                                "1066",
+                                "6",
+                                "9",
+                                "0",
+                                "JyORwRyORyORwRyORyORwRyORyORyOCORyORyOCORyWAR6PR6PR6OAR8RCKIRRCKIRRRCKIRRCKIRRCKIRRCKKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCKKIRRCKIRRCKIRRCKIRRRCKIRRCKIRRCKIRRCK"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                15,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "29": {
+                "name": "object 8",
+                "type": "marking--general",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1497",
+                                "1864",
+                                "3",
+                                "8",
+                                "0",
+                                "pP2LIRRCKIRRCAKxWBWP//CP//2R//+yP/wLIRCIRCIRCIRCKIRCIRFBRRRRZ6P4CP4R/4CP/AR/4C"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                6
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "30": {
+                "name": "object 9",
+                "type": "nature--sky",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "326",
+                                "0",
+                                "3",
+                                "7",
+                                "1",
+                                "QBWBWBWBWBWAKwKwKwKCCKIRCIRRCIRRCIRCKITP/+AKKKKKKKKKKKKKKKKKKKKKKKKKKKKCKKKKIRRRRCKKKKIRRRRRIKAKBQBQBSyOyPR6OyIE//xCORARyIBQBQKAKIBWxWAK2K2KEwRwRwCOCOARwRwRyOCOCZRRRCKIRRRCKIRRRCKIRRR//hQKKBRRQKKBRQKBQKBQKBQKAKBQKBQKBQJRRRRRRRRRCKKKKKKKKKKAKAKBQBQBQKAKAKwBXBXAK4KwICOCOARwCOCORRCIRRCKIRCKIRCKIRRCIRRJCIRRCIRCIRRCIRCIRRCIn//BRRRRCKKKIRRRCn/////wBCICICICICIOAR+COn4BBQBQBQBQBQM///////////wR////////////////4hQKBQKAKBQKJ/2TBRRQKKKBRRS/4K/4K/4K/4K/4K/5X/BX/BX/BX/BX/BX/BX/BX/BX0AK/+xX2LXwBXwBXwBXwBXwBXwBXwBXwBXwBXwBP//8+K/4K/4K/4K/4K/4K/5X/BX/BX/BX/BX/BX///4BX///+K////AK////xX///4BX///+K/+AnwR+ALOE/+BQnCPxP/////////BP//4n//+AK////AK////xX///4BX///+K////AK////xX///4BX///+K////AK////xX///4BX///+K////AK////xX///4mBXwBXwBXwBXwBXKKBRQKKBRQKKLWKxWKxWKxWKxWKxPR/CP4CP4R/CP4CP4R/CP4RnyP+AR/wCP+AR/wCP+AR/wCP+AR/wCZwR4CPAR4CPCPAR4CPAR4CPAR4CPAR4CPCPAR4CPAR4CPAR4CPAR4CPCPAR4Ch2R2R6OyOyOyOyPR2R2R2R2R2R6OyOyOyOyPR2R2R2R2R6OyOyX///////////////////////////////////////////////////////////////////////////4"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                8,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "31": {
+                "name": "object 10",
+                "type": "marking--general",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1497",
+                                "1864",
+                                "3",
+                                "8",
+                                "0",
+                                "pP2LIRRCKIRRCAKxWBWP//CP//2R//+yP/wLIRCIRCIRCIRCKIRCIRFBRRRRZ6P4CP4R/4CP/AR/4C"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                6
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "32": {
+                "name": "object 11",
+                "type": "nature--vegetation",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "0",
+                                "0",
+                                "2",
+                                "3",
+                                "1",
+                                "////////////////////////////////////////////////6CORyIRyORyORCORyIRyIRyIRyIRyIRyIRyIRyIRCORCORCORCORCORCORCORCORCIRyIRyIRyIRyIRyIRyIRyIRyIRCORCORCORCORCORCORCORCORCIRyIRyIRyIRyIRyIRyIRyIRyIRCORCORCORCOR6ORyPRyPRyPRyOR6OR6OR6ORyPRyPRyOR6OR6OR6ORyPRyPRyOR6OR6OR6ORyPRyPRyPRyOR6OX+n///CP///6P/xP///////+hCKKIRRRRCKKKK//////JCIRRCIRCIRRCIRCIRRCIiKIRCKIRRCIRRCIRRCKIRCKPR4R+R+R4Ry4K/xX/K/xXxWKxQKxWKBWKxRRRRRRRRRRCKKKKKKKKMBQKBQKBQKxQKBQKBQKBQKKBRQKKKBRQKJ////4RRRCKIRRRCKIRRRCKIRRRpPCPCPR4R4R+R4R+R4R4JBX5X5XxX5WRWKBWKCPRyPRC/////BOR/R/CP4R/R5BWKxQKxSRRRRRCKKKKIRRRRCKKKKIKKKKKKKKKKKKKKKKKKKKKKKKKKKK/////9JCKIRCIRRCIRRCIRCKIOK4K4K4K+K4K4K4K4Kw"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                19,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "33": {
+                "name": "object 12",
+                "type": "object--bike-rack",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1326",
+                                "1186",
+                                "6",
+                                "12",
+                                "1",
+                                "wK5XK5Wn0//wA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "34": {
+                "name": "object 13",
+                "type": "object--billboard",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3431",
+                                "1181",
+                                "4",
+                                "10",
+                                "0",
+                                "J/4CP/CP/CP/AR/4R/4R/4CP/CP/AR/4R/4R/4CP/E+yP/2R/+ACP/2R/+yP2CICIRARhRRRRp5X4BX4BXJ//+yP//2R//+yP//2CP//2R//wRCICIRARCIRARCICIRARCIRARCICIRCICIRARCIRARCICIRRCKIRRCKIRSACOCORyOCORwRyORECPyPyZwR4R6PCPCI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "35": {
+                "name": "object 14",
+                "type": "object--junction-box",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "838",
+                                "1696",
+                                "4",
+                                "8",
+                                "0",
+                                "yPR6PR6On+AK/wNPABX/K4An//+"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "36": {
+                "name": "object 15",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2582",
+                                "1486",
+                                "3",
+                                "5",
+                                "1",
+                                "JyOCORwRyOCORwRyOEKBQKn//4BX//4BX//+K///AKR6OCPoIRRCKIRRCKIRXAK4BXAK4BXAI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                15,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "37": {
+                "name": "object 16",
+                "type": "object--street-light",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "287",
+                                "880",
+                                "3",
+                                "4",
+                                "0",
+                                "IKAKAKQR6PRCRARyICIQKKBRQKKBhQKBQKBQKPR6OR6PR6OR6PiIRCIRCIRCM//K/+K//K/+K//"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                9,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "38": {
+                "name": "object 17",
+                "type": "object--support--pole",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3503",
+                                "675",
+                                "7",
+                                "12",
+                                "0",
+                                "BRQKKBRQKKBRWK5XK5XKAAJ//wBX/+AAK//wAK//wABX/+ABX/+AAK//wAK//wABX/+ABX/+AAK//wAK//wABX/+ABX/+AAK//wAK/+AAn/4AAE///////////////////////////////////////4AAJAARwAR1J+R+R+R0R4AR4AR4AR4ACPACPACPAAR4AR0ABQAKABQAKABQAKABQAKABQA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                29,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "39": {
+                "name": "object 18",
+                "type": "object--support--traffic-sign-frame",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2053",
+                                "1198",
+                                "2",
+                                "4",
+                                "0",
+                                "///mKBWKxWKBWKxQKxWKxQKxWKBWKxWKBWKxQKxWKxQKxPwR/+R/+CP/yPxOBWBXKwK5WBXKwK5WBXKwK5WBXKwK5WBp//+n5X5X5X5X5XwK/K/K/K/J///////////////////////4R6QR/wnCP//6P/J/9J/4R/4R/+R/4R/4R/4R/4R/+R/4R4JKxQKBQKxQKBQKxQKBWKBQKBWKBQKxQKBQKxQKBQKxQNJWKBWKgKxQKxQKBWKBWKBWKBQKxQKxQKBWKBWKBWKBQKxQKxQJ//////+JBWKxWBWKxWKxWKxWKwKxWKxWKxWKxWBWKxWNJWKBWKhRQKKKKKBRRRRRQKKKKKBRRRRQKKKKKBRRRRQKKKKKKBRRRRQKKKxWKwKxWKxWBWKxWKwKxWKxWBWKxWKwKxWKxWBWKxWKwKxW"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "40": {
+                "name": "object 19",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2582",
+                                "1486",
+                                "3",
+                                "5",
+                                "1",
+                                "JyOCORwRyOCORwRyOEKBQKn//4BX//4BX//+K///AKR6OCPoIRRCKIRRCKIRXAK4BXAK4BXAI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                15,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "41": {
+                "name": "object 20",
+                "type": "object--traffic-light",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "585",
+                                "655",
+                                "4",
+                                "5",
+                                "0",
+                                "/AR//yP/+R+QK5XKxXK5XKxXK5WK5XK5WK5QAX4AR//6P//R//8///////////+QKAKAKAKAKX/BIAR/CPSICICICICI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                9,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "42": {
+                "name": "object 21",
+                "type": "object--traffic-sign--back",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2034",
+                                "1184",
+                                "2",
+                                "4",
+                                "1",
+                                "wR4R+R4R4R4R4R+R4R4R4R4R+R4R4R4R4R+R4RyKKKKJPwR/R+CP8RRCM/MIRRCKIRRByPh+R+R+R+R+R6OCPRwR8yOnBXwK/K/K/K/K/J//+LWBXKwK5WBXKwK5WBXKwKFJ+R4R+R+R4R+R4R+R+SxQKxWKBWKxWKBWKxQKxWKxQKxP//wLWKxWBWKxWKwKxWKxWBWKxWiPyOmBXKwK5WBXKwKwK5WBXKwK5WA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                15,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "43": {
+                "name": "object 22",
+                "type": "object--traffic-sign--front",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3743",
+                                "825",
+                                "3",
+                                "9",
+                                "1",
+                                "J/CP4R/CP4R/CP4R/CP4R/CP4R/CP4R/CP4R/J1IRyORyORCwCPAR4R4CPAR4R4CPAR4R4CPAR4CPCPAR4CPCPAR4CPCPAR4CPAR4R4CPAR4R4CPAR4R4COApPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCPwCBQBQBQBQBSwR6PR6OwCPR6PR6PR6PR6OwCPR6PR6PR6PR6OwCPR6PR6PR6PR6OwCPR6PQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "44": {
+                "name": "object 23",
+                "type": "construction--barrier--guard-rail",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "3608",
+                                "1556",
+                                "4",
+                                "6",
+                                "1",
+                                "xXK5XK5XyP4CP4AR/ACP4CP4AR/ACP4CP4AR/ACP4CP4AR/ACP4CPFJ/yP4AR/yP4AR/yP+R/ACP+mR+R+R+R4AR+R+R+R4AR+R+R+R4AR+R+R+R4AR+R+R+RxIRCIRCIn/4"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "45": {
+                "name": "object 24",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2582",
+                                "1486",
+                                "3",
+                                "5",
+                                "1",
+                                "JyOCORwRyOCORwRyOEKBQKn//4BX//4BX//+K///AKR6OCPoIRRCKIRRCKIRXAK4BXAK4BXAI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                15,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "46": {
+                "name": "object 25",
+                "type": "object--phone-booth",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "2582",
+                                "1486",
+                                "3",
+                                "5",
+                                "1",
+                                "JyOCORwRyOCORwRyOEKBQKn//4BX//4BX//+K///AKR6OCPoIRRCKIRRCKIRXAK4BXAK4BXAI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                15,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "47": {
+                "name": "object 26",
+                "type": "object--bike-rack",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1326",
+                                "1186",
+                                "6",
+                                "12",
+                                "1",
+                                "wK5XK5Wn0//wA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            },
+            "48": {
+                "name": "object 27",
+                "type": "object--bike-rack",
+                "object_data": {
+                    "boolean": [
+                        {
+                            "name": "isInstance",
+                            "val": false
+                        }
+                    ],
+                    "poly2d": [
+                        {
+                            "name": "contour",
+                            "val": [
+                                "1326",
+                                "1186",
+                                "6",
+                                "12",
+                                "1",
+                                "wK5XK5Wn0//wA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
+            }
+        }
+    }
+}
