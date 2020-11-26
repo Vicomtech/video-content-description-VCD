@@ -635,7 +635,8 @@ class ConverterVCD330toVCD430:
                 rdf_subjects = relation.get(&#39;rdf_subjects&#39;, None)
 
                 vcd_430.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
-                if not &#39;rdf_objects&#39; in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
+                relation = vcd_430.get_element(core.ElementType.relation, uid)
+                if not &#39;rdf_objects&#39; in relation or len(relation[&#39;rdf_objects&#39;]) == 0:  # just add once
                     for rdf_object in rdf_objects:
                         element_type = None
                         rdf_object_type_str = rdf_object[&#39;type&#39;]
@@ -652,7 +653,7 @@ class ConverterVCD330toVCD430:
 
                         vcd_430.add_rdf(uid, core.RDF.object, str(rdf_object[&#39;uid&#39;]), element_type)
 
-                if not &#39;rdf_subjects&#39; in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
+                if not &#39;rdf_subjects&#39; in relation or len(relation[&#39;rdf_subjects&#39;]) == 0:  # just add once
                     for rdf_subject in rdf_subjects:
                         element_type = None
                         rdf_object_type_str = rdf_subject[&#39;type&#39;]
@@ -747,7 +748,8 @@ class ConverterVCD420toVCD430:
             fis = vcd_430_data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
             for fi in fis:
                 for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
-                    frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][str(frame_num)]  # warning: at this point, the key is str
+                    #frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][str(frame_num)]  # warning: at this point, the key is str
+                    frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]  # warning: at this point, the key is str
                     for element_type in core.ElementType:
                         if element_type.name + &#39;s&#39; in frame:  # e.g. &#34;objects&#34;, &#34;actions&#34;...
                             for uid, element in frame[element_type.name + &#39;s&#39;].items():
@@ -1029,7 +1031,8 @@ class ConverterVCD420toVCD430:
                 rdf_subjects = relation.get(&#39;rdf_subjects&#39;, None)
 
                 vcd_430.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
-                if not &#39;rdf_objects&#39; in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
+                relation = vcd_430.get_element(core.ElementType.relation, uid)
+                if not &#39;rdf_objects&#39; in relation or len(relation[&#39;rdf_objects&#39;]) == 0:  # just add once
                     for rdf_object in rdf_objects:
                         element_type = None
                         rdf_object_type_str = rdf_object[&#39;type&#39;]
@@ -1046,7 +1049,7 @@ class ConverterVCD420toVCD430:
 
                         vcd_430.add_rdf(uid, core.RDF.object, str(rdf_object[&#39;uid&#39;]), element_type)
 
-                if not &#39;rdf_subjects&#39; in vcd_430.get_element(core.ElementType.relation, uid):  # just add once
+                if not &#39;rdf_subjects&#39; in relation or len(relation[&#39;rdf_subjects&#39;]) == 0:  # just add once
                     for rdf_subject in rdf_subjects:
                         element_type = None
                         rdf_object_type_str = rdf_subject[&#39;type&#39;]
@@ -1151,7 +1154,8 @@ class ConverterVCD420toVCD430:
             fis = vcd_430_data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
             for fi in fis:
                 for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
-                    frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][str(frame_num)]  # warning: at this point, the key is str
+                    #frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][str(frame_num)]  # warning: at this point, the key is str
+                    frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]  # warning: at this point, the key is str
                     for element_type in core.ElementType:
                         if element_type.name + &#39;s&#39; in frame:  # e.g. &#34;objects&#34;, &#34;actions&#34;...
                             for uid, element in frame[element_type.name + &#39;s&#39;].items():

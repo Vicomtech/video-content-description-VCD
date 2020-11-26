@@ -1,3 +1,4 @@
+![VCD Video Content Description](doc/logo/VCD_logo_2020.png)
 # Video Content Description (VCD)
 
 VCD is a metadata format designed to enable the description of scene information, particularly efficient for discrete data series, such as image or point-cloud sequences from sensor data.
@@ -5,14 +6,17 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The syntax(see ./schema/vcd_schema_json-v4.3.0.json), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see [vcd_schema_json-v4.3.0.json](./schema/vcd_schema_json-v4.3.0.json)), as a JSON Schema file, contains the full description of the VCD structure.
 
+![VCD](doc/logo/image.svg)
 
 ## Details
 
 More details can be found at the project's website: https://vcd.vicomtech.org
 
 ## Install
+
+### Python
 
 Using pip (Python >3.6)):
 
@@ -21,7 +25,7 @@ pip install vcd
 ```
 
 VCD can be also used cloning this repository. And adding the files to a location the Python environment recognizes.
-You can also use the provided setup.py file to install if from the source:
+You can also use the provided [setup.py](setup.py) file to install if from the source:
 
 ```
 pip uninstall vcd
@@ -29,9 +33,19 @@ python setup.py build
 python setup.py install
 ```
 
+### Typescript
+
+NPM packages can be used
+
+```
+npm install vcd
+```
+
 ## Usage
 
-VCD Python API exposes functions to load, create, manipulate and serialize VCD content. Samples and use cases can be found in the test folder( see ./tests/).
+### Python
+
+VCD Python API exposes functions to load, create, manipulate and serialize VCD content. Samples and use cases can be found in the test folder( see [tests](tests)).
 
 As a basic example, VCD can be used in a Python script as follows:
 
@@ -44,6 +58,7 @@ myVCD = core.VCD()
 
 # Add Objects, Actions, etc.
 uid = myVCD.add_object(name='someName', semantic_type='#Pedestrian')
+myVCD.add_object_data(uid=uid, object_data=types.bbox(name="head", val=[0, 0, 100, 200]))
 
 ...
 
@@ -79,6 +94,13 @@ myVCD.validate(stringified_vcd)
 ``` 
 
 This validation function is optionally called when saving to JSON files.
+
+### Typescript
+
+The Typescript API follows entirely the Python API, and thus [core.py](vcd/core.py) and [vcd.core.ts](nodejs/src/vcd.core.ts) are mostly equivalent.
+The testing scripts in Typescript and in Python use the same base JSON files.
+
+See examples in [nodejs/src/\__tests\__](nodejs/src/__tests__)
 
 ## Versions
 

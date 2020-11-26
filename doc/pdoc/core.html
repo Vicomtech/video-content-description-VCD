@@ -290,8 +290,8 @@ class VCD:
             #    json_file,
             #    object_hook=lambda d: {int(k) if k.lstrip(&#39;-&#39;).isdigit() else k: v for k, v in d.items()}
             # )
-            read_data = json.load(json_file)  # Open without converting strings to integers
 
+            read_data = json.load(json_file)  # Open without converting strings to integers
             # Check VERSION
             if &#39;vcd&#39; in read_data:
                 # This is 4.x
@@ -300,6 +300,11 @@ class VCD:
                     if read_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.2.0&#34;:
                         # This is VCD 4.2.0
                         warnings.warn(&#34;WARNING: Converting VCD 4.2.0 to VCD 4.3.0. A full revision is recommended.&#34;)
+                        # Convert frame entries to int
+                        frames = read_data[&#39;vcd&#39;][&#39;frames&#39;]
+                        if frames:  # So frames is not empty
+                            read_data[&#39;vcd&#39;][&#39;frames&#39;] = {int(key): value for key, value in frames.items()}
+
                         self.reset()  # to init object
                         converter.ConverterVCD420toVCD430(read_data, self)  # self is modified internally
 
@@ -499,10 +504,11 @@ class VCD:
     ):
         # 1.- Copy from existing or create new entry (this copies everything, including element_data)
         # element_data_pointers and frame intervals
-        element_existed = self.has(element_type, uid.as_str())# note: public functions use int or str for uids
+        uidstr = uid.as_str()
+        element_existed = self.has(element_type, uidstr)# note: public functions use int or str for uids
         self.data[&#39;vcd&#39;].setdefault(element_type.name + &#39;s&#39;, {})
-        self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].setdefault(uid.as_str(), {})
-        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid.as_str()]
+        self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].setdefault(uidstr, {})
+        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uidstr]
 
         fis_old = FrameIntervals()
         if &#39;frame_intervals&#39; in element:
@@ -522,6 +528,13 @@ class VCD:
             element[&#39;ontology_uid&#39;] = ont_uid.as_str()
         if coordinate_system is not None and self.has_coordinate_system(coordinate_system):
             element[&#39;coordinate_system&#39;] = coordinate_system
+
+        # 2.bis.- For Relations obligue to have rdf_objects and rdf_subjects entries (to be compliant with schema)
+        if element_type is ElementType.relation:
+            if &#39;rdf_subjects&#39; not in element:
+                element[&#39;rdf_subjects&#39;] = []
+            if &#39;rdf_objects&#39; not in element:
+                element[&#39;rdf_objects&#39;] = []
 
         # 3.- Reshape element_data_pointers according to this new frame intervals
         if element_type.name + &#39;_data_pointers&#39; in element:
@@ -571,7 +584,6 @@ class VCD:
                             for f in range(fi[0], fi[1] + 1):
                                 if not fis_new.has_frame(f):  # Only for those OTHER frames not those just added
                                     elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
-                                    uidstr = uid.as_str()
                                     if uidstr in elements_in_frame:
                                         del elements_in_frame[uidstr]
                                         if len(elements_in_frame) == 0:
@@ -586,7 +598,7 @@ class VCD:
                         if not is_inside:
                             # Old frame not inside new ones -&gt; let&#39;s remove this frame
                             elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
-                            del elements_in_frame[uid.as_str()]
+                            del elements_in_frame[uidstr]
                             if len(elements_in_frame) == 0:
                                 del self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
                                 if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][f]) == 0:
@@ -604,6 +616,17 @@ class VCD:
             # If there is element_data at frames, they are removed
             if not fis_old.empty():
                 self.rm_element_data_from_frames(element_type, uid, fis_old)
+
+                # Additionally, we need to remove element entries at frames, and frames entirely to clean-up
+                for fi in fis_old.get():
+                    for f in range(fi[0], fi[1] + 1):
+                        elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
+                        del elements_in_frame[uidstr]
+                        # Clean-up
+                        if len(elements_in_frame) == 0:
+                            del self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
+                            if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][f]) == 0:
+                                self.__rm_frame(f)
 
     def __set_element_data(self, element_type, uid, element_data, frame_intervals, set_mode):
         assert(isinstance(uid, UID))
@@ -741,16 +764,20 @@ class VCD:
         if &#39;frames&#39; in self.data[&#39;vcd&#39;]:
             if frame_num in self.data[&#39;vcd&#39;][&#39;frames&#39;]:
                 del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+            if len(self.data[&#39;vcd&#39;][&#39;frames&#39;]) == 0:
+                del self.data[&#39;vcd&#39;][&#39;frames&#39;]
 
-                # Remove from VCD frame intervals
-                if &#39;frame_intervals&#39; in self.data[&#39;vcd&#39;]:
-                    fis_dict = self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
-                else:
-                    fis_dict = []
-                fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
+        # Remove from VCD frame intervals
+        if &#39;frame_intervals&#39; in self.data[&#39;vcd&#39;]:
+            fis_dict = self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+            fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
 
-                # Now substitute
+            # Now substitute
+            if len(fis_dict_new) == 0:
+                del self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+            else:
                 self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;] = fis_dict_new
+
 
     def __compute_data_pointers(self):
         # WARNING! This function might be extremely slow
@@ -1110,6 +1137,12 @@ class VCD:
 
     def add_relation(self, name, semantic_type=&#39;&#39;, frame_value=None, uid=None, ont_uid=None,
                      set_mode=SetMode.union):
+        if set_mode == SetMode.replace and uid is not None:
+            if self.has(ElementType.relation, uid):
+                relation = self.data[&#39;vcd&#39;][&#39;relations&#39;][UID(uid).as_str()]
+                relation[&#39;rdf_subjects&#39;] = []
+                relation[&#39;rdf_objects&#39;] = []
+
         relation_uid = self.__set_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
             uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None)
@@ -1146,10 +1179,10 @@ class VCD:
                     )
 
     def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1158,10 +1191,10 @@ class VCD:
         return relation_uid
 
     def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid_1, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1170,10 +1203,10 @@ class VCD:
         return relation_uid
 
     def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid_1, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1182,10 +1215,10 @@ class VCD:
         return relation_uid
 
     def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1194,10 +1227,10 @@ class VCD:
         return relation_uid
 
     def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
-                                    relation_uid, ont_uid, frame_value=None):
+                                    relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         assert(isinstance(subject_type, ElementType))
         assert(isinstance(object_type, ElementType))
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -1223,8 +1256,8 @@ class VCD:
         return self.__set_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value),
                                        set_mode)
     
-    def add_element_data(self, element_type, uid, context_data, frame_value=None, set_mode=SetMode.union):
-        return self.__set_element_data(element_type, UID(uid), context_data, FrameIntervals(frame_value),
+    def add_element_data(self, element_type, uid, element_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value),
                                        set_mode)
 
     ##################################################
@@ -1420,15 +1453,16 @@ class VCD:
                             for prop in element[element_type.name + &#39;_data&#39;]:
                                 if prop == data_type.name:
                                     return len(element[element_type.name + &#39;_data&#39;][prop])
-                        else: return 0
-                    else: return 0
+                        else:
+                            return 0
+                    else:
+                        return 0
             else:
                 # Static info
                 element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid_str]
                 for prop in element[element_type.name + &#39;_data&#39;]:
-                    for prop in element[element_type.name + &#39;_data&#39;]:
-                        if prop == data_type.name:
-                            return len(element[element_type.name + &#39;_data&#39;][prop])
+                    if prop == data_type.name:
+                        return len(element[element_type.name + &#39;_data&#39;][prop])
         else:
             return 0
         return 0
@@ -1446,22 +1480,22 @@ class VCD:
         frame_num_is_number = isinstance(frame_num, int)
         uid_str = UID(uid).as_str()
 
+        element_exists_in_this_frame = False
         if frame_num is not None and frame_num_is_number:
             # The user is asking for frame-specific attributes
-            element_exists_in_this_frame = self.get_element_frame_intervals(element_type, uid).has_frame(frame_num)
+
             found_in_frame = False
             frame = self.get_frame(frame_num)
-
             if frame is not None:
                 if element_type.name + &#39;s&#39; in frame:
                     if uid_str in frame[element_type.name + &#39;s&#39;]:
+                        element_exists_in_this_frame = True
                         element = frame[element_type.name + &#39;s&#39;][uid_str]
                         if element_type.name + &#39;_data&#39; in element:
                             for prop in element[element_type.name + &#39;_data&#39;]:
                                 val_array = element[element_type.name + &#39;_data&#39;][prop]
                                 for val in val_array:
                                     if val[&#39;name&#39;] == data_name:
-                                        found_in_frame = True
                                         return val
             if not found_in_frame:
                 # The user has asked to get an element_data for a certain frame, but there is no info about this
@@ -1525,7 +1559,10 @@ class VCD:
         return self.get_element_data_frame_intervals(ElementType.context, uid, data_name)
 
     def get_num_elements(self, element_type):
-        return len(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;])
+        if self.has_elements(element_type):
+            return len(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;])
+        else:
+            return 0
 
     def get_num_objects(self):
         return self.get_num_elements(ElementType.object)
@@ -1542,11 +1579,18 @@ class VCD:
     def get_num_relations(self):
         return self.get_num_elements(ElementType.relation)
 
+    def get_elements_uids(self, element_type: ElementType):
+        if self.has_elements(element_type):
+            list_of_uids = list(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].keys())
+            return list_of_uids
+        else:
+            return []
+
     def get_ontology(self, ont_uid):
         ont_uid_str = UID(ont_uid).as_str()
         if &#39;ontologies&#39; in self.data[&#39;vcd&#39;]:
             if ont_uid_str in self.data[&#39;vcd&#39;][&#39;ontologies&#39;]:
-                return self.data[&#39;vcd&#39;][&#39;ontologies&#39;][ont_uid_str]
+                return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;ontologies&#39;][ont_uid_str])
         return None
 
     def get_metadata(self):
@@ -1561,14 +1605,36 @@ class VCD:
                 return True
         return False
 
-    def has_stream(self, stream):
-        md = self.get_metadata()
-        if &#39;streams&#39; in md:
-            stream_name = StreamType[stream]
+    def get_coordinate_systems(self):
+        if &#39;coordinate_systems&#39; in self.data[&#39;vcd&#39;]:
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;])
+        else:
+            return []
+
+    def get_coordinate_system(self, coordinate_system):
+        if self.has_coordinate_system(coordinate_system):
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][coordinate_system])
+        else:
+            return None
+
+    def has_stream(self, stream_name):
+        if &#39;streams&#39; in self.data[&#39;vcd&#39;]:
             if stream_name in self.data[&#39;vcd&#39;][&#39;streams&#39;]:
                 return True
             else:
                 return False
+
+    def get_streams(self):
+        if &#39;streams&#39; in self.data[&#39;vcd&#39;]:
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;streams&#39;])
+        else:
+            return {}
+
+    def get_stream(self, stream_name):
+        if self.has_stream(stream_name):
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;streams&#39;][stream_name])
+        else:
+            return None
 
     def get_frame_intervals(self):
         if &#39;frame_intervals&#39; in self.data[&#39;vcd&#39;]:
@@ -1630,26 +1696,33 @@ class VCD:
 
     def rm_element(self, element_type, uid):
         uid_str = UID(uid).as_str()
-        elements = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
+        if not self.has_elements(element_type):
+            return
 
         # Get element from summary
         if not self.has(element_type, uid):
             return
 
         # Remove from frames: let&#39;s read frame_intervals from summary
+        elements = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
         element = elements[uid_str]
-        for i in range(0, len(element[&#39;frame_intervals&#39;])):
-            fi = element[&#39;frame_intervals&#39;][i]
-            for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;]+1):
-                elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
-                if uid in elements_in_frame:
-                    del elements_in_frame[uid_str]
-                if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
-                    del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
-                    if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]) == 0:  # this frame may have ended up being empty
-                        del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+        if &#39;frame_intervals&#39; in element:
+            for i in range(0, len(element[&#39;frame_intervals&#39;])):
+                fi = element[&#39;frame_intervals&#39;][i]
+                for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;]+1):
+                    elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
+                    if uid in elements_in_frame:
+                        del elements_in_frame[uid_str]
+                    if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
+                        del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
+                        if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]) == 0:  # this frame may have ended up being empty
+                            del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+                            self.__rm_frame(frame_num)
+
         # Delete this element from summary
         del elements[uid_str]
+        if len(elements) == 0:
+            del self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
 
     def rm_object(self, uid):
         self.rm_element(ElementType.object, uid)
@@ -2335,8 +2408,8 @@ data into JSON strings.</p></div>
             #    json_file,
             #    object_hook=lambda d: {int(k) if k.lstrip(&#39;-&#39;).isdigit() else k: v for k, v in d.items()}
             # )
-            read_data = json.load(json_file)  # Open without converting strings to integers
 
+            read_data = json.load(json_file)  # Open without converting strings to integers
             # Check VERSION
             if &#39;vcd&#39; in read_data:
                 # This is 4.x
@@ -2345,6 +2418,11 @@ data into JSON strings.</p></div>
                     if read_data[&#39;vcd&#39;][&#39;version&#39;] == &#34;4.2.0&#34;:
                         # This is VCD 4.2.0
                         warnings.warn(&#34;WARNING: Converting VCD 4.2.0 to VCD 4.3.0. A full revision is recommended.&#34;)
+                        # Convert frame entries to int
+                        frames = read_data[&#39;vcd&#39;][&#39;frames&#39;]
+                        if frames:  # So frames is not empty
+                            read_data[&#39;vcd&#39;][&#39;frames&#39;] = {int(key): value for key, value in frames.items()}
+
                         self.reset()  # to init object
                         converter.ConverterVCD420toVCD430(read_data, self)  # self is modified internally
 
@@ -2544,10 +2622,11 @@ data into JSON strings.</p></div>
     ):
         # 1.- Copy from existing or create new entry (this copies everything, including element_data)
         # element_data_pointers and frame intervals
-        element_existed = self.has(element_type, uid.as_str())# note: public functions use int or str for uids
+        uidstr = uid.as_str()
+        element_existed = self.has(element_type, uidstr)# note: public functions use int or str for uids
         self.data[&#39;vcd&#39;].setdefault(element_type.name + &#39;s&#39;, {})
-        self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].setdefault(uid.as_str(), {})
-        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid.as_str()]
+        self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].setdefault(uidstr, {})
+        element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uidstr]
 
         fis_old = FrameIntervals()
         if &#39;frame_intervals&#39; in element:
@@ -2567,6 +2646,13 @@ data into JSON strings.</p></div>
             element[&#39;ontology_uid&#39;] = ont_uid.as_str()
         if coordinate_system is not None and self.has_coordinate_system(coordinate_system):
             element[&#39;coordinate_system&#39;] = coordinate_system
+
+        # 2.bis.- For Relations obligue to have rdf_objects and rdf_subjects entries (to be compliant with schema)
+        if element_type is ElementType.relation:
+            if &#39;rdf_subjects&#39; not in element:
+                element[&#39;rdf_subjects&#39;] = []
+            if &#39;rdf_objects&#39; not in element:
+                element[&#39;rdf_objects&#39;] = []
 
         # 3.- Reshape element_data_pointers according to this new frame intervals
         if element_type.name + &#39;_data_pointers&#39; in element:
@@ -2616,7 +2702,6 @@ data into JSON strings.</p></div>
                             for f in range(fi[0], fi[1] + 1):
                                 if not fis_new.has_frame(f):  # Only for those OTHER frames not those just added
                                     elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
-                                    uidstr = uid.as_str()
                                     if uidstr in elements_in_frame:
                                         del elements_in_frame[uidstr]
                                         if len(elements_in_frame) == 0:
@@ -2631,7 +2716,7 @@ data into JSON strings.</p></div>
                         if not is_inside:
                             # Old frame not inside new ones -&gt; let&#39;s remove this frame
                             elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
-                            del elements_in_frame[uid.as_str()]
+                            del elements_in_frame[uidstr]
                             if len(elements_in_frame) == 0:
                                 del self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
                                 if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][f]) == 0:
@@ -2649,6 +2734,17 @@ data into JSON strings.</p></div>
             # If there is element_data at frames, they are removed
             if not fis_old.empty():
                 self.rm_element_data_from_frames(element_type, uid, fis_old)
+
+                # Additionally, we need to remove element entries at frames, and frames entirely to clean-up
+                for fi in fis_old.get():
+                    for f in range(fi[0], fi[1] + 1):
+                        elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
+                        del elements_in_frame[uidstr]
+                        # Clean-up
+                        if len(elements_in_frame) == 0:
+                            del self.data[&#39;vcd&#39;][&#39;frames&#39;][f][element_type.name + &#39;s&#39;]
+                            if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][f]) == 0:
+                                self.__rm_frame(f)
 
     def __set_element_data(self, element_type, uid, element_data, frame_intervals, set_mode):
         assert(isinstance(uid, UID))
@@ -2786,16 +2882,20 @@ data into JSON strings.</p></div>
         if &#39;frames&#39; in self.data[&#39;vcd&#39;]:
             if frame_num in self.data[&#39;vcd&#39;][&#39;frames&#39;]:
                 del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+            if len(self.data[&#39;vcd&#39;][&#39;frames&#39;]) == 0:
+                del self.data[&#39;vcd&#39;][&#39;frames&#39;]
 
-                # Remove from VCD frame intervals
-                if &#39;frame_intervals&#39; in self.data[&#39;vcd&#39;]:
-                    fis_dict = self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
-                else:
-                    fis_dict = []
-                fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
+        # Remove from VCD frame intervals
+        if &#39;frame_intervals&#39; in self.data[&#39;vcd&#39;]:
+            fis_dict = self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+            fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
 
-                # Now substitute
+            # Now substitute
+            if len(fis_dict_new) == 0:
+                del self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+            else:
                 self.data[&#39;vcd&#39;][&#39;frame_intervals&#39;] = fis_dict_new
+
 
     def __compute_data_pointers(self):
         # WARNING! This function might be extremely slow
@@ -3155,6 +3255,12 @@ data into JSON strings.</p></div>
 
     def add_relation(self, name, semantic_type=&#39;&#39;, frame_value=None, uid=None, ont_uid=None,
                      set_mode=SetMode.union):
+        if set_mode == SetMode.replace and uid is not None:
+            if self.has(ElementType.relation, uid):
+                relation = self.data[&#39;vcd&#39;][&#39;relations&#39;][UID(uid).as_str()]
+                relation[&#39;rdf_subjects&#39;] = []
+                relation[&#39;rdf_objects&#39;] = []
+
         relation_uid = self.__set_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
             uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None)
@@ -3191,10 +3297,10 @@ data into JSON strings.</p></div>
                     )
 
     def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -3203,10 +3309,10 @@ data into JSON strings.</p></div>
         return relation_uid
 
     def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid_1, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -3215,10 +3321,10 @@ data into JSON strings.</p></div>
         return relation_uid
 
     def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid_1, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -3227,10 +3333,10 @@ data into JSON strings.</p></div>
         return relation_uid
 
     def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -3239,10 +3345,10 @@ data into JSON strings.</p></div>
         return relation_uid
 
     def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
-                                    relation_uid, ont_uid, frame_value=None):
+                                    relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value)
+                                         frame_value=frame_value, set_mode=set_mode)
         assert(isinstance(subject_type, ElementType))
         assert(isinstance(object_type, ElementType))
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -3268,8 +3374,8 @@ data into JSON strings.</p></div>
         return self.__set_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value),
                                        set_mode)
     
-    def add_element_data(self, element_type, uid, context_data, frame_value=None, set_mode=SetMode.union):
-        return self.__set_element_data(element_type, UID(uid), context_data, FrameIntervals(frame_value),
+    def add_element_data(self, element_type, uid, element_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value),
                                        set_mode)
 
     ##################################################
@@ -3465,15 +3571,16 @@ data into JSON strings.</p></div>
                             for prop in element[element_type.name + &#39;_data&#39;]:
                                 if prop == data_type.name:
                                     return len(element[element_type.name + &#39;_data&#39;][prop])
-                        else: return 0
-                    else: return 0
+                        else:
+                            return 0
+                    else:
+                        return 0
             else:
                 # Static info
                 element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid_str]
                 for prop in element[element_type.name + &#39;_data&#39;]:
-                    for prop in element[element_type.name + &#39;_data&#39;]:
-                        if prop == data_type.name:
-                            return len(element[element_type.name + &#39;_data&#39;][prop])
+                    if prop == data_type.name:
+                        return len(element[element_type.name + &#39;_data&#39;][prop])
         else:
             return 0
         return 0
@@ -3491,22 +3598,22 @@ data into JSON strings.</p></div>
         frame_num_is_number = isinstance(frame_num, int)
         uid_str = UID(uid).as_str()
 
+        element_exists_in_this_frame = False
         if frame_num is not None and frame_num_is_number:
             # The user is asking for frame-specific attributes
-            element_exists_in_this_frame = self.get_element_frame_intervals(element_type, uid).has_frame(frame_num)
+
             found_in_frame = False
             frame = self.get_frame(frame_num)
-
             if frame is not None:
                 if element_type.name + &#39;s&#39; in frame:
                     if uid_str in frame[element_type.name + &#39;s&#39;]:
+                        element_exists_in_this_frame = True
                         element = frame[element_type.name + &#39;s&#39;][uid_str]
                         if element_type.name + &#39;_data&#39; in element:
                             for prop in element[element_type.name + &#39;_data&#39;]:
                                 val_array = element[element_type.name + &#39;_data&#39;][prop]
                                 for val in val_array:
                                     if val[&#39;name&#39;] == data_name:
-                                        found_in_frame = True
                                         return val
             if not found_in_frame:
                 # The user has asked to get an element_data for a certain frame, but there is no info about this
@@ -3570,7 +3677,10 @@ data into JSON strings.</p></div>
         return self.get_element_data_frame_intervals(ElementType.context, uid, data_name)
 
     def get_num_elements(self, element_type):
-        return len(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;])
+        if self.has_elements(element_type):
+            return len(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;])
+        else:
+            return 0
 
     def get_num_objects(self):
         return self.get_num_elements(ElementType.object)
@@ -3587,11 +3697,18 @@ data into JSON strings.</p></div>
     def get_num_relations(self):
         return self.get_num_elements(ElementType.relation)
 
+    def get_elements_uids(self, element_type: ElementType):
+        if self.has_elements(element_type):
+            list_of_uids = list(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].keys())
+            return list_of_uids
+        else:
+            return []
+
     def get_ontology(self, ont_uid):
         ont_uid_str = UID(ont_uid).as_str()
         if &#39;ontologies&#39; in self.data[&#39;vcd&#39;]:
             if ont_uid_str in self.data[&#39;vcd&#39;][&#39;ontologies&#39;]:
-                return self.data[&#39;vcd&#39;][&#39;ontologies&#39;][ont_uid_str]
+                return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;ontologies&#39;][ont_uid_str])
         return None
 
     def get_metadata(self):
@@ -3606,14 +3723,36 @@ data into JSON strings.</p></div>
                 return True
         return False
 
-    def has_stream(self, stream):
-        md = self.get_metadata()
-        if &#39;streams&#39; in md:
-            stream_name = StreamType[stream]
+    def get_coordinate_systems(self):
+        if &#39;coordinate_systems&#39; in self.data[&#39;vcd&#39;]:
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;])
+        else:
+            return []
+
+    def get_coordinate_system(self, coordinate_system):
+        if self.has_coordinate_system(coordinate_system):
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][coordinate_system])
+        else:
+            return None
+
+    def has_stream(self, stream_name):
+        if &#39;streams&#39; in self.data[&#39;vcd&#39;]:
             if stream_name in self.data[&#39;vcd&#39;][&#39;streams&#39;]:
                 return True
             else:
                 return False
+
+    def get_streams(self):
+        if &#39;streams&#39; in self.data[&#39;vcd&#39;]:
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;streams&#39;])
+        else:
+            return {}
+
+    def get_stream(self, stream_name):
+        if self.has_stream(stream_name):
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;streams&#39;][stream_name])
+        else:
+            return None
 
     def get_frame_intervals(self):
         if &#39;frame_intervals&#39; in self.data[&#39;vcd&#39;]:
@@ -3675,26 +3814,33 @@ data into JSON strings.</p></div>
 
     def rm_element(self, element_type, uid):
         uid_str = UID(uid).as_str()
-        elements = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
+        if not self.has_elements(element_type):
+            return
 
         # Get element from summary
         if not self.has(element_type, uid):
             return
 
         # Remove from frames: let&#39;s read frame_intervals from summary
+        elements = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
         element = elements[uid_str]
-        for i in range(0, len(element[&#39;frame_intervals&#39;])):
-            fi = element[&#39;frame_intervals&#39;][i]
-            for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;]+1):
-                elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
-                if uid in elements_in_frame:
-                    del elements_in_frame[uid_str]
-                if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
-                    del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
-                    if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]) == 0:  # this frame may have ended up being empty
-                        del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+        if &#39;frame_intervals&#39; in element:
+            for i in range(0, len(element[&#39;frame_intervals&#39;])):
+                fi = element[&#39;frame_intervals&#39;][i]
+                for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;]+1):
+                    elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
+                    if uid in elements_in_frame:
+                        del elements_in_frame[uid_str]
+                    if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
+                        del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
+                        if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]) == 0:  # this frame may have ended up being empty
+                            del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+                            self.__rm_frame(frame_num)
+
         # Delete this element from summary
         del elements[uid_str]
+        if len(elements) == 0:
+            del self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
 
     def rm_object(self, uid):
         self.rm_element(ElementType.object, uid)
@@ -3852,7 +3998,7 @@ data into JSON strings.</p></div>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_element_data"><code class="name flex">
-<span>def <span class="ident">add_element_data</span></span>(<span>self, element_type, uid, context_data, frame_value=None, set_mode=SetMode.union)</span>
+<span>def <span class="ident">add_element_data</span></span>(<span>self, element_type, uid, element_data, frame_value=None, set_mode=SetMode.union)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -3860,8 +4006,8 @@ data into JSON strings.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_element_data(self, element_type, uid, context_data, frame_value=None, set_mode=SetMode.union):
-    return self.__set_element_data(element_type, UID(uid), context_data, FrameIntervals(frame_value),
+<pre><code class="python">def add_element_data(self, element_type, uid, element_data, frame_value=None, set_mode=SetMode.union):
+    return self.__set_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value),
                                    set_mode)</code></pre>
 </details>
 </dd>
@@ -4057,6 +4203,12 @@ data into JSON strings.</p></div>
 </summary>
 <pre><code class="python">def add_relation(self, name, semantic_type=&#39;&#39;, frame_value=None, uid=None, ont_uid=None,
                  set_mode=SetMode.union):
+    if set_mode == SetMode.replace and uid is not None:
+        if self.has(ElementType.relation, uid):
+            relation = self.data[&#39;vcd&#39;][&#39;relations&#39;][UID(uid).as_str()]
+            relation[&#39;rdf_subjects&#39;] = []
+            relation[&#39;rdf_objects&#39;] = []
+
     relation_uid = self.__set_element(
         ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
         uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None)
@@ -4064,7 +4216,7 @@ data into JSON strings.</p></div>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_relation_action_action"><code class="name flex">
-<span>def <span class="ident">add_relation_action_action</span></span>(<span>self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None, ont_uid=None, frame_value=None)</span>
+<span>def <span class="ident">add_relation_action_action</span></span>(<span>self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4073,10 +4225,10 @@ data into JSON strings.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
-                               ont_uid=None, frame_value=None):
+                               ont_uid=None, frame_value=None, set_mode=SetMode.union):
     # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
     relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                     frame_value=frame_value)
+                                     frame_value=frame_value, set_mode=set_mode)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                  element_uid=action_uid_1, element_type=ElementType.action)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -4086,7 +4238,7 @@ data into JSON strings.</p></div>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_relation_action_object"><code class="name flex">
-<span>def <span class="ident">add_relation_action_object</span></span>(<span>self, name, semantic_type, action_uid, object_uid, relation_uid=None, ont_uid=None, frame_value=None)</span>
+<span>def <span class="ident">add_relation_action_object</span></span>(<span>self, name, semantic_type, action_uid, object_uid, relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4095,10 +4247,10 @@ data into JSON strings.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
-                               ont_uid=None, frame_value=None):
+                               ont_uid=None, frame_value=None, set_mode=SetMode.union):
     # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
     relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                     frame_value=frame_value)
+                                     frame_value=frame_value, set_mode=set_mode)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                  element_uid=action_uid, element_type=ElementType.action)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -4108,7 +4260,7 @@ data into JSON strings.</p></div>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_relation_object_action"><code class="name flex">
-<span>def <span class="ident">add_relation_object_action</span></span>(<span>self, name, semantic_type, object_uid, action_uid, relation_uid=None, ont_uid=None, frame_value=None)</span>
+<span>def <span class="ident">add_relation_object_action</span></span>(<span>self, name, semantic_type, object_uid, action_uid, relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4117,10 +4269,10 @@ data into JSON strings.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
-                               ont_uid=None, frame_value=None):
+                               ont_uid=None, frame_value=None, set_mode=SetMode.union):
     # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
     relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                     frame_value=frame_value)
+                                     frame_value=frame_value, set_mode=set_mode)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                  element_uid=object_uid, element_type=ElementType.object)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -4130,7 +4282,7 @@ data into JSON strings.</p></div>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_relation_object_object"><code class="name flex">
-<span>def <span class="ident">add_relation_object_object</span></span>(<span>self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None, ont_uid=None, frame_value=None)</span>
+<span>def <span class="ident">add_relation_object_object</span></span>(<span>self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4139,10 +4291,10 @@ data into JSON strings.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
-                               ont_uid=None, frame_value=None):
+                               ont_uid=None, frame_value=None, set_mode=SetMode.union):
     # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
     relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                     frame_value=frame_value)
+                                     frame_value=frame_value, set_mode=set_mode)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                  element_uid=object_uid_1, element_type=ElementType.object)
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -4152,7 +4304,7 @@ data into JSON strings.</p></div>
 </details>
 </dd>
 <dt id="vcd.core.VCD.add_relation_subject_object"><code class="name flex">
-<span>def <span class="ident">add_relation_subject_object</span></span>(<span>self, name, semantic_type, subject_type, subject_uid, object_type, object_uid, relation_uid, ont_uid, frame_value=None)</span>
+<span>def <span class="ident">add_relation_subject_object</span></span>(<span>self, name, semantic_type, subject_type, subject_uid, object_type, object_uid, relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -4161,10 +4313,10 @@ data into JSON strings.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
-                                relation_uid, ont_uid, frame_value=None):
+                                relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union):
     # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
     relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                     frame_value=frame_value)
+                                     frame_value=frame_value, set_mode=set_mode)
     assert(isinstance(subject_type, ElementType))
     assert(isinstance(object_type, ElementType))
     self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -4456,6 +4608,38 @@ e.g. all Object's or Context's</p></div>
     return self.get_elements_with_element_data_name(ElementType.context, data_name)</code></pre>
 </details>
 </dd>
+<dt id="vcd.core.VCD.get_coordinate_system"><code class="name flex">
+<span>def <span class="ident">get_coordinate_system</span></span>(<span>self, coordinate_system)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_coordinate_system(self, coordinate_system):
+    if self.has_coordinate_system(coordinate_system):
+        return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][coordinate_system])
+    else:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.get_coordinate_systems"><code class="name flex">
+<span>def <span class="ident">get_coordinate_systems</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_coordinate_systems(self):
+    if &#39;coordinate_systems&#39; in self.data[&#39;vcd&#39;]:
+        return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;])
+    else:
+        return []</code></pre>
+</details>
+</dd>
 <dt id="vcd.core.VCD.get_data"><code class="name flex">
 <span>def <span class="ident">get_data</span></span>(<span>self)</span>
 </code></dt>
@@ -4513,22 +4697,22 @@ e.g. all Object's or Context's</p></div>
     frame_num_is_number = isinstance(frame_num, int)
     uid_str = UID(uid).as_str()
 
+    element_exists_in_this_frame = False
     if frame_num is not None and frame_num_is_number:
         # The user is asking for frame-specific attributes
-        element_exists_in_this_frame = self.get_element_frame_intervals(element_type, uid).has_frame(frame_num)
+
         found_in_frame = False
         frame = self.get_frame(frame_num)
-
         if frame is not None:
             if element_type.name + &#39;s&#39; in frame:
                 if uid_str in frame[element_type.name + &#39;s&#39;]:
+                    element_exists_in_this_frame = True
                     element = frame[element_type.name + &#39;s&#39;][uid_str]
                     if element_type.name + &#39;_data&#39; in element:
                         for prop in element[element_type.name + &#39;_data&#39;]:
                             val_array = element[element_type.name + &#39;_data&#39;][prop]
                             for val in val_array:
                                 if val[&#39;name&#39;] == data_name:
-                                    found_in_frame = True
                                     return val
         if not found_in_frame:
             # The user has asked to get an element_data for a certain frame, but there is no info about this
@@ -4579,15 +4763,16 @@ e.g. all Object's or Context's</p></div>
                         for prop in element[element_type.name + &#39;_data&#39;]:
                             if prop == data_type.name:
                                 return len(element[element_type.name + &#39;_data&#39;][prop])
-                    else: return 0
-                else: return 0
+                    else:
+                        return 0
+                else:
+                    return 0
         else:
             # Static info
             element = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid_str]
             for prop in element[element_type.name + &#39;_data&#39;]:
-                for prop in element[element_type.name + &#39;_data&#39;]:
-                    if prop == data_type.name:
-                        return len(element[element_type.name + &#39;_data&#39;][prop])
+                if prop == data_type.name:
+                    return len(element[element_type.name + &#39;_data&#39;][prop])
     else:
         return 0
     return 0</code></pre>
@@ -4685,6 +4870,23 @@ e.g. all Object's or Context's</p></div>
         if element[&#39;type&#39;] == semantic_type:
             uids_str.append(uid_str)
     return uids_str</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.get_elements_uids"><code class="name flex">
+<span>def <span class="ident">get_elements_uids</span></span>(<span>self, element_type: <a title="vcd.core.ElementType" href="#vcd.core.ElementType">ElementType</a>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_elements_uids(self, element_type: ElementType):
+    if self.has_elements(element_type):
+        list_of_uids = list(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].keys())
+        return list_of_uids
+    else:
+        return []</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.get_elements_with_element_data_name"><code class="name flex">
@@ -4930,7 +5132,10 @@ e.g. all Object's or Context's</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_num_elements(self, element_type):
-    return len(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;])</code></pre>
+    if self.has_elements(element_type):
+        return len(self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;])
+    else:
+        return 0</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.get_num_events"><code class="name flex">
@@ -5050,7 +5255,7 @@ e.g. all Object's or Context's</p></div>
     ont_uid_str = UID(ont_uid).as_str()
     if &#39;ontologies&#39; in self.data[&#39;vcd&#39;]:
         if ont_uid_str in self.data[&#39;vcd&#39;][&#39;ontologies&#39;]:
-            return self.data[&#39;vcd&#39;][&#39;ontologies&#39;][ont_uid_str]
+            return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;ontologies&#39;][ont_uid_str])
     return None</code></pre>
 </details>
 </dd>
@@ -5078,6 +5283,38 @@ e.g. all Object's or Context's</p></div>
 </summary>
 <pre><code class="python">def get_relation_uid_by_name(self, name):
     return self.get_element_uid_by_name(ElementType.relation, name)</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.get_stream"><code class="name flex">
+<span>def <span class="ident">get_stream</span></span>(<span>self, stream_name)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_stream(self, stream_name):
+    if self.has_stream(stream_name):
+        return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;streams&#39;][stream_name])
+    else:
+        return None</code></pre>
+</details>
+</dd>
+<dt id="vcd.core.VCD.get_streams"><code class="name flex">
+<span>def <span class="ident">get_streams</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_streams(self):
+    if &#39;streams&#39; in self.data[&#39;vcd&#39;]:
+        return copy.deepcopy(self.data[&#39;vcd&#39;][&#39;streams&#39;])
+    else:
+        return {}</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.has"><code class="name flex">
@@ -5235,7 +5472,7 @@ e.g. all Object's or Context's</p></div>
 </details>
 </dd>
 <dt id="vcd.core.VCD.has_stream"><code class="name flex">
-<span>def <span class="ident">has_stream</span></span>(<span>self, stream)</span>
+<span>def <span class="ident">has_stream</span></span>(<span>self, stream_name)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -5243,10 +5480,8 @@ e.g. all Object's or Context's</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def has_stream(self, stream):
-    md = self.get_metadata()
-    if &#39;streams&#39; in md:
-        stream_name = StreamType[stream]
+<pre><code class="python">def has_stream(self, stream_name):
+    if &#39;streams&#39; in self.data[&#39;vcd&#39;]:
         if stream_name in self.data[&#39;vcd&#39;][&#39;streams&#39;]:
             return True
         else:
@@ -5367,26 +5602,33 @@ e.g. all Object's or Context's</p></div>
 </summary>
 <pre><code class="python">def rm_element(self, element_type, uid):
     uid_str = UID(uid).as_str()
-    elements = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
+    if not self.has_elements(element_type):
+        return
 
     # Get element from summary
     if not self.has(element_type, uid):
         return
 
     # Remove from frames: let&#39;s read frame_intervals from summary
+    elements = self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]
     element = elements[uid_str]
-    for i in range(0, len(element[&#39;frame_intervals&#39;])):
-        fi = element[&#39;frame_intervals&#39;][i]
-        for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;]+1):
-            elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
-            if uid in elements_in_frame:
-                del elements_in_frame[uid_str]
-            if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
-                del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
-                if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]) == 0:  # this frame may have ended up being empty
-                    del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+    if &#39;frame_intervals&#39; in element:
+        for i in range(0, len(element[&#39;frame_intervals&#39;])):
+            fi = element[&#39;frame_intervals&#39;][i]
+            for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;]+1):
+                elements_in_frame = self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
+                if uid in elements_in_frame:
+                    del elements_in_frame[uid_str]
+                if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
+                    del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num][element_type.name + &#39;s&#39;]
+                    if len(self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]) == 0:  # this frame may have ended up being empty
+                        del self.data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+                        self.__rm_frame(frame_num)
+
     # Delete this element from summary
-    del elements[uid_str]</code></pre>
+    del elements[uid_str]
+    if len(elements) == 0:
+        del self.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;]</code></pre>
 </details>
 </dd>
 <dt id="vcd.core.VCD.rm_element_by_type"><code class="name flex">
@@ -5827,6 +6069,8 @@ e.g. all Object's or Context's</p></div>
 <li><code><a title="vcd.core.VCD.get_context_data_frame_intervals" href="#vcd.core.VCD.get_context_data_frame_intervals">get_context_data_frame_intervals</a></code></li>
 <li><code><a title="vcd.core.VCD.get_context_uid_by_name" href="#vcd.core.VCD.get_context_uid_by_name">get_context_uid_by_name</a></code></li>
 <li><code><a title="vcd.core.VCD.get_contexts_with_context_data_name" href="#vcd.core.VCD.get_contexts_with_context_data_name">get_contexts_with_context_data_name</a></code></li>
+<li><code><a title="vcd.core.VCD.get_coordinate_system" href="#vcd.core.VCD.get_coordinate_system">get_coordinate_system</a></code></li>
+<li><code><a title="vcd.core.VCD.get_coordinate_systems" href="#vcd.core.VCD.get_coordinate_systems">get_coordinate_systems</a></code></li>
 <li><code><a title="vcd.core.VCD.get_data" href="#vcd.core.VCD.get_data">get_data</a></code></li>
 <li><code><a title="vcd.core.VCD.get_element" href="#vcd.core.VCD.get_element">get_element</a></code></li>
 <li><code><a title="vcd.core.VCD.get_element_data" href="#vcd.core.VCD.get_element_data">get_element_data</a></code></li>
@@ -5836,6 +6080,7 @@ e.g. all Object's or Context's</p></div>
 <li><code><a title="vcd.core.VCD.get_element_frame_intervals" href="#vcd.core.VCD.get_element_frame_intervals">get_element_frame_intervals</a></code></li>
 <li><code><a title="vcd.core.VCD.get_element_uid_by_name" href="#vcd.core.VCD.get_element_uid_by_name">get_element_uid_by_name</a></code></li>
 <li><code><a title="vcd.core.VCD.get_elements_of_type" href="#vcd.core.VCD.get_elements_of_type">get_elements_of_type</a></code></li>
+<li><code><a title="vcd.core.VCD.get_elements_uids" href="#vcd.core.VCD.get_elements_uids">get_elements_uids</a></code></li>
 <li><code><a title="vcd.core.VCD.get_elements_with_element_data_name" href="#vcd.core.VCD.get_elements_with_element_data_name">get_elements_with_element_data_name</a></code></li>
 <li><code><a title="vcd.core.VCD.get_event" href="#vcd.core.VCD.get_event">get_event</a></code></li>
 <li><code><a title="vcd.core.VCD.get_event_data" href="#vcd.core.VCD.get_event_data">get_event_data</a></code></li>
@@ -5864,6 +6109,8 @@ e.g. all Object's or Context's</p></div>
 <li><code><a title="vcd.core.VCD.get_ontology" href="#vcd.core.VCD.get_ontology">get_ontology</a></code></li>
 <li><code><a title="vcd.core.VCD.get_relation" href="#vcd.core.VCD.get_relation">get_relation</a></code></li>
 <li><code><a title="vcd.core.VCD.get_relation_uid_by_name" href="#vcd.core.VCD.get_relation_uid_by_name">get_relation_uid_by_name</a></code></li>
+<li><code><a title="vcd.core.VCD.get_stream" href="#vcd.core.VCD.get_stream">get_stream</a></code></li>
+<li><code><a title="vcd.core.VCD.get_streams" href="#vcd.core.VCD.get_streams">get_streams</a></code></li>
 <li><code><a title="vcd.core.VCD.has" href="#vcd.core.VCD.has">has</a></code></li>
 <li><code><a title="vcd.core.VCD.has_actions" href="#vcd.core.VCD.has_actions">has_actions</a></code></li>
 <li><code><a title="vcd.core.VCD.has_contexts" href="#vcd.core.VCD.has_contexts">has_contexts</a></code></li>

@@ -67,7 +67,7 @@ vcd_schema = {
                 &#34;ontologies&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;:
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;:
                             {&#34;type&#34;: &#34;string&#34;},
                     },
                     &#34;additionalProperties&#34;: False
@@ -84,7 +84,7 @@ vcd_schema = {
                 &#34;objects&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;$ref&#34;: &#34;#/definitions/object&#34;
                         }
                     },
@@ -93,7 +93,7 @@ vcd_schema = {
                 &#34;actions&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;$ref&#34;: &#34;#/definitions/action&#34;
                         }
                     },
@@ -102,7 +102,7 @@ vcd_schema = {
                 &#34;events&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;$ref&#34;: &#34;#/definitions/event&#34;
                         }
                     },
@@ -111,7 +111,7 @@ vcd_schema = {
                 &#34;contexts&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;$ref&#34;: &#34;#/definitions/context&#34;
                         }
                     },
@@ -120,7 +120,7 @@ vcd_schema = {
                 &#34;relations&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;$ref&#34;: &#34;#/definitions/relation&#34;
                         }
                     },
@@ -139,7 +139,7 @@ vcd_schema = {
                 &#34;objects&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;type&#34;: &#34;object&#34;,
                             &#34;properties&#34;: {
                                 &#34;object_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/object_data&#34;},
@@ -152,7 +152,7 @@ vcd_schema = {
                 &#34;events&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;type&#34;: &#34;object&#34;,
                             &#34;properties&#34;: {
                                 &#34;event_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/event_data&#34;},
@@ -165,7 +165,7 @@ vcd_schema = {
                 &#34;actions&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;type&#34;: &#34;object&#34;,
                             &#34;properties&#34;: {
                                 &#34;action_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/action_data&#34;},
@@ -178,7 +178,7 @@ vcd_schema = {
                 &#34;contexts&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
                             &#34;type&#34;: &#34;object&#34;,
                             &#34;properties&#34;: {
                                 &#34;context_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/context_data&#34;},
@@ -191,7 +191,7 @@ vcd_schema = {
                 &#34;relations&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^([0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {}
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {}
                     },
                     &#34;additionalProperties&#34;: False
                 },

@@ -264,6 +264,9 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
             if fi[&#39;frame_end&#39;] &gt; frame_num:
                 fi_dict_new.append({&#39;frame_start&#39;: frame_num + 1, &#39;frame_end&#39;: fi[&#39;frame_end&#39;]})
                 continue
+            else:
+                # So, we are removing 4 from [(4, 4)], let&#39;s return empty
+                return []
         elif frame_num &lt; fi[&#39;frame_end&#39;]:
             # Inside! Need to split
             for f in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
@@ -1872,6 +1875,9 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
             if fi[&#39;frame_end&#39;] &gt; frame_num:
                 fi_dict_new.append({&#39;frame_start&#39;: frame_num + 1, &#39;frame_end&#39;: fi[&#39;frame_end&#39;]})
                 continue
+            else:
+                # So, we are removing 4 from [(4, 4)], let&#39;s return empty
+                return []
         elif frame_num &lt; fi[&#39;frame_end&#39;]:
             # Inside! Need to split
             for f in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
