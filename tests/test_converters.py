@@ -14,10 +14,7 @@ VCD is distributed under MIT License. See LICENSE.
 import vcd.core as core
 
 import unittest
-import json
 import os
-import sys
-sys.path.insert(0, "..")
 
 
 class TestBasic(unittest.TestCase):

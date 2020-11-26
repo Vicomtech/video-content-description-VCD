@@ -12,7 +12,6 @@ VCD is distributed under MIT License. See LICENSE.
 """
 import numpy as np
 import math
-import time
 
 
 def computeRS6FCC(coords):

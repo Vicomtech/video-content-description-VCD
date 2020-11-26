@@ -12,9 +12,6 @@ VCD is distributed under MIT License. See LICENSE.
 """
 
 import copy
-import sys
-sys.path.insert(0, ".")
-from random import seed
 from random import randint
 import vcd.core as core
 import vcd.utils as utils

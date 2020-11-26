@@ -13,10 +13,9 @@ VCD is distributed under MIT License. See LICENSE.
 
 
 import unittest
-import sys
-sys.path.insert(0, "..")
 import vcd.core as core
 import vcd.sanity as sanity
+
 
 class TestBasic(unittest.TestCase):
     def test_sanity_frame_intervals(self):

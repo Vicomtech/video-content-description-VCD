@@ -11,9 +11,6 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
-import sys
-sys.path.insert(0, "..")
 import vcd.proto as proto
 from google.protobuf.json_format import Parse
 from google.protobuf.json_format import MessageToJson

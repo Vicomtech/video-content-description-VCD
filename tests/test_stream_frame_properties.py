@@ -11,11 +11,9 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-from datetime import date, datetime
+from datetime import datetime
 import unittest
 import os
-import sys
-sys.path.insert(0, "..")
 import vcd.core as core
 import vcd.types as types
 

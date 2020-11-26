@@ -19,8 +19,6 @@ import numpy as np
 from PIL import Image
 import json
 import base64
-import sys
-sys.path.insert(0, "..")
 import vcd.core as core
 import vcd.types as types
 import vcd.poly2d as poly

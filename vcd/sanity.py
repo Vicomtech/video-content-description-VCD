@@ -11,12 +11,9 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
-
-import sys
-sys.path.insert(0, ".")
 import vcd.core as core
 import vcd.utils as utils
+
 
 def check_frame_intervals(vcd):
     # This function analyzes a given vcd content and evaluates its internal coherence

@@ -11,10 +11,8 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
 import warnings
 import numpy as np
-#import cv2 as cv
 
 import math
 
