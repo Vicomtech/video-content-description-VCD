@@ -330,19 +330,19 @@ class TestBasic(unittest.TestCase):
                 vcd.add_relation_object_action(name="", semantic_type="isSubjectOfAction", object_uid=uid_obj_aux, action_uid=uid_act_aux)
 
         # Store frame 0 - static and dynamic
-        if not os.path.isfile('./etc/vcd430_test_kitti_tracking_0_frame_0_static-dynamic.json'):
-            vcd.save_frame(frame_num=0, file_name='./etc/vcd430_test_kitti_tracking_0_frame_0_static-dynamic.json', dynamic_only=False)
+        if not os.path.isfile('./etc/vcd430_kitti_tracking_0000_frame_0_static-dynamic.json'):
+            vcd.save_frame(frame_num=0, file_name='./etc/vcd430_kitti_tracking_0000_frame_0_static-dynamic.json', dynamic_only=False)
 
         # Same but dynamic only
-        if not os.path.isfile('./etc/vcd430_test_kitti_tracking_0_frame_0_dynamic.json'):
-            vcd.save_frame(frame_num=0, file_name='./etc/vcd430_test_kitti_tracking_0_frame_0_dynamic.json',
+        if not os.path.isfile('./etc/vcd430_kitti_tracking_0000_frame_0_dynamic.json'):
+            vcd.save_frame(frame_num=0, file_name='./etc/vcd430_kitti_tracking_0000_frame_0_dynamic.json',
                            dynamic_only=True)
 
         # Store
-        if not os.path.isfile('./etc/vcd430_test_kitti_tracking_0_actions.json'):
-            vcd.save('./etc/vcd430_test_kitti_tracking_0_actions.json', False)
+        if not os.path.isfile('./etc/vcd430_kitti_tracking_0000_actions.json'):
+            vcd.save('./etc/vcd430_kitti_tracking_0000_actions.json', False)
 
-        vcd_read = core.VCD('./etc/vcd430_test_kitti_tracking_0_actions.json')
+        vcd_read = core.VCD('./etc/vcd430_kitti_tracking_0000_actions.json')
         # vcd.save('./etc/prueba.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
