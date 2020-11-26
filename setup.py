@@ -19,7 +19,7 @@ setuptools.setup(
     install_requires=[
         'jsonschema>=3.2',
         'protobuf',
-		'numpy'
+		'numpy>=1.19.0,<1.19.4'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
