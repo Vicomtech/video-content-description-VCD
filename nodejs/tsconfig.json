@@ -1,0 +1,17 @@
+{
+	"compilerOptions" : {		
+		"target" : "es6",		
+		"module" : "commonjs",
+		"outDir" : "lib",
+		"strict" : false,
+		"noImplicitAny" : false,
+		"declaration" : true,
+		"esModuleInterop" : true,
+		"skipLibCheck" : true,
+		"forceConsistentCasingInFileNames" : true,
+		"sourceMap": true,
+		"resolveJsonModule": true
+	},
+	"include": ["src"],
+	"exclude": ["node_modules", "**/__tests__/*"] 
+}

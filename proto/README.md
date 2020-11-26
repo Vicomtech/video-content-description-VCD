@@ -23,6 +23,8 @@ protoc --proto_path=vcd_proto-v4.proto --python_out=vcd_proto_v4_pb2.py
 ````
 
 The script **python_object_from_proto.py** can be used to launch the build.
+Finally, the file **vcd_proto_v4_pb2.py** is also renamed and copied as **proto.py** 
+inside the main vcd folder. 
 
 Finally, the scripts in **json2proto_bin.py** and **proto_bin2json.py** 
 can be safely used to convert JSON-proto and viceversa. Some examples of conversion

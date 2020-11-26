@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -20,15 +20,18 @@ import numpy as np
 import math
 from vcd import core
 from vcd import draw
-
+from vcd import scl
 
 def draw_towncentre(record_video=False):
     # Get annotations
     # Run ../converters/towncenterConverter/converter.py to generate the json files
-    vcd_file_name = "../converters/towncenterConverter/etc/vcd420_towncenter.json"
+    vcd_file_name = "../converters/towncenterConverter/etc/vcd430_towncenter.json"
     vcd = core.VCD(vcd_file_name)
-    drawerCamera = draw.Image(vcd)
-    textDrawer = draw.TextDrawer()
+    scene = scl.Scene(vcd)
+
+    drawerCamera = draw.Image(scene)
+    #textDrawer = draw.TextDrawer()
+    frameInfoDrawer = draw.FrameInfoDrawer(vcd)
 
     # Get the size of the screen
     screen = screeninfo.get_monitors()[0]
@@ -47,7 +50,8 @@ def draw_towncentre(record_video=False):
     colorMap = {'Car': (0, 0, 255), 'Van': (255, 0, 0), 'Truck': (127, 127, 0),
                  'Pedestrian': (0, 255, 0), 'Person_sitting': (0, 127, 127),
                  'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (255, 255, 255)}
-    imageParams = draw.Image.Params(_colorMap=colorMap)
+    imageParams = draw.Image.Params(_colorMap=colorMap,
+                                    _draw_trajectory=True)
     ar = video_width/(video_height*2)
 
     # Video record
@@ -57,7 +61,7 @@ def draw_towncentre(record_video=False):
 
     # Loop over video
     f = 0
-    while(True):
+    while True:
         # Capture frame
         ret, img = video_cap.read()
         if ret is not True:
@@ -67,7 +71,9 @@ def draw_towncentre(record_video=False):
         drawerCamera.draw(img, f, _params=imageParams)
 
         # VCD text viewer
-        textImg = textDrawer.draw(vcd.stringify_frame(f, pretty=False), cols=400, rows=video_height)
+        #textImg = textDrawer.draw(vcd.stringify_frame(f, pretty=False), cols=400, rows=video_height)
+        textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height, _params=imageParams)
+
 
         # Stack
         outImg = np.hstack((img, textImg))

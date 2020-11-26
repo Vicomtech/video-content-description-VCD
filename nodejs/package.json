@@ -1,0 +1,37 @@
+{
+  "name": "vcd-ts",
+  "version": "4.3.0",
+  "description": "Typescript VCD (Video Content Description)",
+  "main": "lib/vcd.js",
+  "types": "lib/vcd.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "test": "jest --config jestconfig.json",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vicomtech/video-content-description-VCD"
+  },
+  "keywords": [
+    "VCD",
+    "Labeling",
+    "Node.js"
+  ],
+  "author": "Marcos Nieto",
+  "license": "ISC",
+  "homepage": "https://github.com/Vicomtech/video-content-description-VCD#readme",
+  "dependencies": {
+    "ajv": "^6.12.3",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.3",
+    "@types/node": "^14.6.0",
+    "jest": "^26.1.0",
+    "ts-jest": "^26.1.1",
+    "typescript": "^3.9.5"
+  }
+}

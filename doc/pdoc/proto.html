@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.1" />
 <title>vcd.proto API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.2.0 …" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -20,31 +22,11 @@
 <h1 class="title">Module <code>vcd.proto</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.2.0</p>
-<p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
-<p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
-(Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.2.0.
-VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.2.0
-
-Project website: http://vcd.vicomtech.org
-
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
-(Spain) all rights reserved.
-
-VCD is a Python library to create and manage VCD content version 4.2.0.
-VCD is distributed under MIT License. See LICENSE.
-
-&#34;&#34;&#34;
-
-
-# -*- coding: utf-8 -*-
+<pre><code class="python"># -*- coding: utf-8 -*-
 # Generated by the protocol buffer compiler.  DO NOT EDIT!
 # source: vcd_proto-v4.proto
 
@@ -66,12 +48,83 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package=&#39;VCD&#39;,
   syntax=&#39;proto3&#39;,
   serialized_options=None,
-  serialized_pb=b&#39;\n\x12vcd_proto-v4.proto\x12\x03VCD\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1bgoogle/protobuf/empty.proto\&#34;\xf8,\n\x03VCD\x12\x19\n\x03vcd\x18\x01 \x01(\x0b\x32\x0c.VCD.VCD.Vcd\x1a|\n\x06\x61\x63tion\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\x05\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x1a\x64\n\x0e\x61rea_reference\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\x82\x01\n\nattributes\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1aZ\n\x04\x62\x62ox\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\x81\x01\n\x06\x62inary\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\x10\n\x08\x65ncoding\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1a]\n\x07\x62oolean\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x08\x1a}\n\x07\x63ontext\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\x05\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x1a\\\n\x06\x63uboid\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a{\n\x05\x65vent\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\x05\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x1a\xb9\x01\n\x10\x66rame_properties\x12\x37\n\x07streams\x18\x03 \x03(\x0b\x32&amp;.VCD.VCD.frame_properties.StreamsEntry\x12+\n\nproperties\x18\x02 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1a\xc4\x05\n\x05\x66rame\x12,\n\x07\x61\x63tions\x18\x01 \x03(\x0b\x32\x1b.VCD.VCD.frame.ActionsEntry\x12.\n\x08\x63ontexts\x18\x02 \x03(\x0b\x32\x1c.VCD.VCD.frame.ContextsEntry\x12*\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x1a.VCD.VCD.frame.EventsEntry\x12\x31\n\x10\x66rame_properties\x18\x04 \x01(\x0b\x32\x17.google.protobuf.Struct\x12,\n\x07objects\x18\x05 \x03(\x0b\x32\x1b.VCD.VCD.frame.ObjectsEntry\x12\x30\n\trelations\x18\x06 \x03(\x0b\x32\x1d.VCD.VCD.frame.RelationsEntry\x1a\x46\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Empty:\x02\x38\x01\x1aG\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Empty:\x02\x38\x01\x1a\x45\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Empty:\x02\x38\x01\x1a\x34\n\x07Objects\x12)\n\x0bobject_data\x18\x01 \x01(\x0b\x32\x14.VCD.VCD.object_data\x1a\x46\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.VCD.VCD.frame.Objects:\x02\x38\x01\x1aH\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Empty:\x02\x38\x01\x1a\x38\n\x0e\x66rame_interval\x12\x13\n\x0b\x66rame_start\x18\x01 \x01(\x05\x12\x11\n\tframe_end\x18\x02 \x01(\x05\x1a\x80\x01\n\x05image\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x65ncoding\x18\x02 \x01(\t\x12\x11\n\tmime_type\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1ag\n\x0eline_reference\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0e\n\x06number\x18\x04 \x03(\x02\x1a\x9d\x01\n\x03mat\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x63hannels\x18\x02 \x01(\x02\x12\x11\n\tdata_type\x18\x03 \x01(\t\x12\x0e\n\x06height\x18\x04 \x01(\x02\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0b\n\x03val\x18\x07 \x03(\x02\x12\r\n\x05width\x18\x08 \x01(\x02\x1a\xa5\x03\n\x04mesh\x12\x38\n\x0e\x61rea_reference\x18\x01 \x03(\x0b\x32 .VCD.VCD.mesh.AreaReferenceEntry\x12\x38\n\x0eline_reference\x18\x02 \x03(\x0b\x32 .VCD.VCD.mesh.LineReferenceEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12+\n\x07point3d\x18\x04 \x03(\x0b\x32\x1a.VCD.VCD.mesh.Point3dEntry\x12\x0e\n\x06stream\x18\x05 \x01(\t\x1aM\n\x12\x41reaReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12&amp;\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.area_reference:\x02\x38\x01\x1aM\n\x12LineReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12&amp;\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.line_reference:\x02\x38\x01\x1a@\n\x0cPoint3dEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.point3d:\x02\x38\x01\x1a\xcd\x01\n\x08metadata\x12\x11\n\tannotator\x18\x01 \x01(\t\x12\x0f\n\x07\x63omment\x18\x02 \x01(\t\x12/\n\x07streams\x18\x03 \x03(\x0b\x32\x1e.VCD.VCD.metadata.StreamsEntry\x12+\n\nproperties\x18\x04 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1aY\n\x03num\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x02\x1a\xa7\x01\n\x06object\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12)\n\x0bobject_data\x18\x03 \x01(\x0b\x32\x14.VCD.VCD.object_data\x12\x14\n\x0contology_uid\x18\x04 \x01(\x05\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0c\n\x04type\x18\x06 \x01(\t\x1a\xa3\x04\n\x0bobject_data\x12\x1b\n\x04\x62\x62ox\x18\x01 \x03(\x0b\x32\r.VCD.VCD.bbox\x12\x1f\n\x06\x62inary\x18\x02 \x03(\x0b\x32\x0f.VCD.VCD.binary\x12!\n\x07\x62oolean\x18\x03 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x1f\n\x06\x63uboid\x18\x04 \x03(\x0b\x32\x0f.VCD.VCD.cuboid\x12\x1d\n\x05image\x18\x05 \x03(\x0b\x32\x0e.VCD.VCD.image\x12\x19\n\x03mat\x18\x06 \x03(\x0b\x32\x0c.VCD.VCD.mat\x12\x19\n\x03num\x18\x07 \x03(\x0b\x32\x0c.VCD.VCD.num\x12!\n\x07point2d\x18\x08 \x03(\x0b\x32\x10.VCD.VCD.point2d\x12!\n\x07point3d\x18\t \x03(\x0b\x32\x10.VCD.VCD.point3d\x12\x1f\n\x06poly2d\x18\n \x03(\x0b\x32\x0f.VCD.VCD.poly2d\x12\x1f\n\x06poly3d\x18\x0b \x03(\x0b\x32\x0f.VCD.VCD.poly3d\x12\x1b\n\x04text\x18\x0c \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\r \x03(\x0b\x32\x0c.VCD.VCD.vec\x12/\n\x0e\x61rea_reference\x18\x0e \x03(\x0b\x32\x17.VCD.VCD.area_reference\x12/\n\x0eline_reference\x18\x0f \x03(\x0b\x32\x17.VCD.VCD.line_reference\x12\x1b\n\x04mesh\x18\x10 \x03(\x0b\x32\r.VCD.VCD.mesh\x1a]\n\x07point2d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x1a]\n\x07point3d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x1a\xa5\x01\n\x06poly2d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04mode\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12#\n\x03val\x18\x06 \x03(\x0b\x32\x16.google.protobuf.Value\x12\x11\n\thierarchy\x18\x07 \x03(\x05\x1al\n\x06poly3d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x1a&amp;\n\trdf_agent\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\x05\x1a\xd1\x01\n\x08relation\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\x05\x12\&#39;\n\x0brdf_objects\x18\x04 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12(\n\x0crdf_subjects\x18\x05 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0c\n\x04type\x18\x07 \x01(\t\x1al\n\x06stream\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x32\n\x11stream_properties\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x12\x0c\n\x04type\x18\x04 \x01(\t\x12\x0b\n\x03uri\x18\x05 \x01(\t\x1aZ\n\x04text\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\t\x1a\xf2\x06\n\x03Vcd\x12*\n\x07\x61\x63tions\x18\x01 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ActionsEntry\x12,\n\x08\x63ontexts\x18\x02 \x03(\x0b\x32\x1a.VCD.VCD.Vcd.ContextsEntry\x12(\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x18.VCD.VCD.Vcd.EventsEntry\x12\x30\n\x0f\x66rame_intervals\x18\x04 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12(\n\x06\x66rames\x18\x05 \x03(\x0b\x32\x18.VCD.VCD.Vcd.FramesEntry\x12#\n\x08metadata\x18\x06 \x01(\x0b\x32\x11.VCD.VCD.metadata\x12\x0c\n\x04name\x18\x07 \x01(\t\x12*\n\x07objects\x18\x08 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ObjectsEntry\x12\x30\n\nontologies\x18\t \x03(\x0b\x32\x1c.VCD.VCD.Vcd.OntologiesEntry\x12.\n\trelations\x18\n \x03(\x0b\x32\x1b.VCD.VCD.Vcd.RelationsEntry\x12\x0f\n\x07version\x18\x0b \x01(\t\x1a?\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.action:\x02\x38\x01\x1a\x41\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.context:\x02\x38\x01\x1a=\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.event:\x02\x38\x01\x1a=\n\x0b\x46ramesEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.frame:\x02\x38\x01\x1a?\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.object:\x02\x38\x01\x1a\x31\n\x0fOntologiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x43\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.VCD.VCD.relation:\x02\x38\x01\x1aY\n\x03vec\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x62\x06proto3&#39;
+  serialized_pb=b&#39;\n\x12vcd_proto-v4.proto\x12\x03VCD\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1bgoogle/protobuf/empty.proto\&#34;\xf3@\n\x03VCD\x12\x19\n\x03vcd\x18\x01 \x01(\x0b\x32\x0c.VCD.VCD.Vcd\x1a\xc8\x02\n\x06\x61\x63tion\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12)\n\x0b\x61\x63tion_data\x18\x06 \x01(\x0b\x32\x14.VCD.VCD.action_data\x12\x45\n\x14\x61\x63tion_data_pointers\x18\x07 \x03(\x0b\x32\&#39;.VCD.VCD.action.ActionDataPointersEntry\x1aX\n\x17\x41\x63tionDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x83\x01\n\x0b\x61\x63tion_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\x83\x01\n\x14\x65lement_data_pointer\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x30\n\x0f\x66rame_intervals\x18\x02 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12+\n\nattributes\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a|\n\x0e\x61rea_reference\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x12\x16\n\x0ereference_type\x18\x05 \x01(\t\x1a\x82\x01\n\nattributes\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1aZ\n\x04\x62\x62ox\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a[\n\x05rbbox\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\x81\x01\n\x06\x62inary\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x11\n\tdata_type\x18\x02 \x01(\t\x12\x10\n\x08\x65ncoding\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1a]\n\x07\x62oolean\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x08\x1a\xcf\x02\n\x07\x63ontext\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12+\n\x0c\x63ontext_data\x18\x06 \x01(\x0b\x32\x15.VCD.VCD.context_data\x12H\n\x15\x63ontext_data_pointers\x18\x07 \x03(\x0b\x32).VCD.VCD.context.ContextDataPointersEntry\x1aY\n\x18\x43ontextDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x84\x01\n\x0c\x63ontext_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\\\n\x06\x63uboid\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x1a\xc1\x02\n\x05\x65vent\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0c\n\x04type\x18\x05 \x01(\t\x12\&#39;\n\nevent_data\x18\x06 \x01(\x0b\x32\x13.VCD.VCD.event_data\x12\x42\n\x13\x65vent_data_pointers\x18\x07 \x03(\x0b\x32%.VCD.VCD.event.EventDataPointersEntry\x1aW\n\x16\x45ventDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\x82\x01\n\nevent_data\x12!\n\x07\x62oolean\x18\x01 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x19\n\x03num\x18\x02 \x03(\x0b\x32\x0c.VCD.VCD.num\x12\x1b\n\x04text\x18\x03 \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x04 \x03(\x0b\x32\x0c.VCD.VCD.vec\x1a\xde\x01\n\x10\x66rame_properties\x12\x37\n\x07streams\x18\x01 \x03(\x0b\x32&amp;.VCD.VCD.frame_properties.StreamsEntry\x12#\n\x08odometry\x18\x02 \x01(\x0b\x32\x11.VCD.VCD.odometry\x12+\n\nproperties\x18\x03 \x01(\x0b\x32\x17.google.protobuf.Struct\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1a\xe6\x06\n\x05\x66rame\x12\x31\n\x10\x66rame_properties\x18\x01 \x01(\x0b\x32\x17.google.protobuf.Struct\x12,\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32\x1b.VCD.VCD.frame.ActionsEntry\x12.\n\x08\x63ontexts\x18\x03 \x03(\x0b\x32\x1c.VCD.VCD.frame.ContextsEntry\x12*\n\x06\x65vents\x18\x04 \x03(\x0b\x32\x1a.VCD.VCD.frame.EventsEntry\x12,\n\x07objects\x18\x05 \x03(\x0b\x32\x1b.VCD.VCD.frame.ObjectsEntry\x12\x30\n\trelations\x18\x06 \x03(\x0b\x32\x1d.VCD.VCD.frame.RelationsEntry\x1a\x34\n\x07\x41\x63tions\x12)\n\x0b\x61\x63tion_data\x18\x01 \x01(\x0b\x32\x14.VCD.VCD.action_data\x1a\x31\n\x06\x45vents\x12\&#39;\n\nevent_data\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.event_data\x1a\x37\n\x08\x43ontexts\x12+\n\x0c\x63ontext_data\x18\x01 \x01(\x0b\x32\x15.VCD.VCD.context_data\x1a\x34\n\x07Objects\x12)\n\x0bobject_data\x18\x01 \x01(\x0b\x32\x14.VCD.VCD.object_data\x1a\x46\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.VCD.VCD.frame.Actions:\x02\x38\x01\x1aH\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&amp;\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.frame.Contexts:\x02\x38\x01\x1a\x44\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12$\n\x05value\x18\x02 \x01(\x0b\x32\x15.VCD.VCD.frame.Events:\x02\x38\x01\x1a\x46\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.VCD.VCD.frame.Objects:\x02\x38\x01\x1aH\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Empty:\x02\x38\x01\x1a\x38\n\x0e\x66rame_interval\x12\x13\n\x0b\x66rame_start\x18\x01 \x01(\x05\x12\x11\n\tframe_end\x18\x02 \x01(\x05\x1a\x80\x01\n\x05image\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x65ncoding\x18\x02 \x01(\t\x12\x11\n\tmime_type\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0b\n\x03val\x18\x06 \x01(\t\x1a\x7f\n\x0eline_reference\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0e\n\x06number\x18\x04 \x03(\x02\x12\x16\n\x0ereference_type\x18\x05 \x01(\t\x1a\x9d\x01\n\x03mat\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x10\n\x08\x63hannels\x18\x02 \x01(\x02\x12\x11\n\tdata_type\x18\x03 \x01(\t\x12\x0e\n\x06height\x18\x04 \x01(\x02\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0b\n\x03val\x18\x07 \x03(\x02\x12\r\n\x05width\x18\x08 \x01(\x02\x1a\xa5\x03\n\x04mesh\x12\x38\n\x0e\x61rea_reference\x18\x01 \x03(\x0b\x32 .VCD.VCD.mesh.AreaReferenceEntry\x12\x38\n\x0eline_reference\x18\x02 \x03(\x0b\x32 .VCD.VCD.mesh.LineReferenceEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12+\n\x07point3d\x18\x04 \x03(\x0b\x32\x1a.VCD.VCD.mesh.Point3dEntry\x12\x0e\n\x06stream\x18\x05 \x01(\t\x1aM\n\x12\x41reaReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&amp;\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.area_reference:\x02\x38\x01\x1aM\n\x12LineReferenceEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12&amp;\n\x05value\x18\x02 \x01(\x0b\x32\x17.VCD.VCD.line_reference:\x02\x38\x01\x1a@\n\x0cPoint3dEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.point3d:\x02\x38\x01\x1a\x97\x01\n\x08metadata\x12\x11\n\tannotator\x18\x01 \x01(\t\x12\x0f\n\x07\x63omment\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x16\n\x0eschema_version\x18\x04 \x01(\t\x12\x14\n\x0c\x66ile_version\x18\x05 \x01(\t\x12+\n\nproperties\x18\x06 \x01(\x0b\x32\x17.google.protobuf.Struct\x1aY\n\x03num\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\x02\x1a\xc8\x02\n\x06object\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12)\n\x0bobject_data\x18\x03 \x01(\x0b\x32\x14.VCD.VCD.object_data\x12\x14\n\x0contology_uid\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12\x0c\n\x04type\x18\x06 \x01(\t\x12\x45\n\x14object_data_pointers\x18\x07 \x03(\x0b\x32\&#39;.VCD.VCD.object.ObjectDataPointersEntry\x1aX\n\x17ObjectDataPointersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12,\n\x05value\x18\x02 \x01(\x0b\x32\x1d.VCD.VCD.element_data_pointer:\x02\x38\x01\x1a\xc2\x04\n\x0bobject_data\x12\x1b\n\x04\x62\x62ox\x18\x01 \x03(\x0b\x32\r.VCD.VCD.bbox\x12\x1d\n\x05rbbox\x18\x02 \x03(\x0b\x32\x0e.VCD.VCD.rbbox\x12\x1f\n\x06\x62inary\x18\x03 \x03(\x0b\x32\x0f.VCD.VCD.binary\x12!\n\x07\x62oolean\x18\x04 \x03(\x0b\x32\x10.VCD.VCD.boolean\x12\x1f\n\x06\x63uboid\x18\x05 \x03(\x0b\x32\x0f.VCD.VCD.cuboid\x12\x1d\n\x05image\x18\x06 \x03(\x0b\x32\x0e.VCD.VCD.image\x12\x19\n\x03mat\x18\x07 \x03(\x0b\x32\x0c.VCD.VCD.mat\x12\x19\n\x03num\x18\x08 \x03(\x0b\x32\x0c.VCD.VCD.num\x12!\n\x07point2d\x18\t \x03(\x0b\x32\x10.VCD.VCD.point2d\x12!\n\x07point3d\x18\n \x03(\x0b\x32\x10.VCD.VCD.point3d\x12\x1f\n\x06poly2d\x18\x0b \x03(\x0b\x32\x0f.VCD.VCD.poly2d\x12\x1f\n\x06poly3d\x18\x0c \x03(\x0b\x32\x0f.VCD.VCD.poly3d\x12\x1b\n\x04text\x18\r \x03(\x0b\x32\r.VCD.VCD.text\x12\x19\n\x03vec\x18\x0e \x03(\x0b\x32\x0c.VCD.VCD.vec\x12/\n\x0e\x61rea_reference\x18\x0f \x03(\x0b\x32\x17.VCD.VCD.area_reference\x12/\n\x0eline_reference\x18\x10 \x03(\x0b\x32\x17.VCD.VCD.line_reference\x12\x1b\n\x04mesh\x18\x11 \x03(\x0b\x32\r.VCD.VCD.mesh\x1a\x39\n\x08odometry\x12\x1c\n\x14pose_lcs_wrt_wcs_4x4\x18\x01 \x03(\x02\x12\x0f\n\x07\x63omment\x18\x02 \x01(\t\x1ai\n\x07point2d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x12\n\n\x02id\x18\x06 \x01(\t\x1ai\n\x07point3d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x12\n\n\x02id\x18\x06 \x01(\t\x1a\xa5\x01\n\x06poly2d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04mode\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0e\n\x06stream\x18\x05 \x01(\t\x12#\n\x03val\x18\x06 \x03(\x0b\x32\x16.google.protobuf.Value\x12\x11\n\thierarchy\x18\x07 \x03(\x05\x1al\n\x06poly3d\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0e\n\x06\x63losed\x18\x02 \x01(\x08\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0e\n\x06stream\x18\x04 \x01(\t\x12\x0b\n\x03val\x18\x05 \x03(\x02\x1a&amp;\n\trdf_agent\x12\x0c\n\x04type\x18\x01 \x01(\t\x12\x0b\n\x03uid\x18\x02 \x01(\t\x1a\xd1\x01\n\x08relation\x12\x30\n\x0f\x66rame_intervals\x18\x01 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x14\n\x0contology_uid\x18\x03 \x01(\t\x12\&#39;\n\x0brdf_objects\x18\x04 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12(\n\x0crdf_subjects\x18\x05 \x03(\x0b\x32\x12.VCD.VCD.rdf_agent\x12\x0e\n\x06stream\x18\x06 \x01(\t\x12\x0c\n\x04type\x18\x07 \x01(\t\x1a\xdd\x01\n\x11stream_properties\x12\&#39;\n\nextrinsics\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.extrinsics\x12\x39\n\x12intrinsics_pinhole\x18\x02 \x01(\x0b\x32\x1b.VCD.VCD.intrinsics_pinholeH\x00\x12\x39\n\x12intrinsics_fisheye\x18\x03 \x01(\x0b\x32\x1b.VCD.VCD.intrinsics_fisheyeH\x00\x12\x1b\n\x04sync\x18\x04 \x01(\x0b\x32\r.VCD.VCD.syncB\x0c\n\nintrinsics\x1a\x64\n\x12intrinsics_pinhole\x12\x10\n\x08width_px\x18\x01 \x01(\x05\x12\x11\n\theight_px\x18\x02 \x01(\x05\x12\x15\n\rcamera_matrix\x18\x03 \x03(\x02\x12\x12\n\ndistortion\x18\x04 \x03(\x02\x1a\xb2\x01\n\x12intrinsics_fisheye\x12\x10\n\x08width_px\x18\x01 \x01(\x05\x12\x11\n\theight_px\x18\x02 \x01(\x05\x12\x0f\n\x07\x66ov_deg\x18\x03 \x01(\x02\x12\x13\n\x0b\x63\x65nter_x_px\x18\x04 \x01(\x02\x12\x13\n\x0b\x63\x65nter_y_px\x18\x05 \x01(\x02\x12\x13\n\x0bradius_x_px\x18\x06 \x01(\x02\x12\x13\n\x0bradius_y_px\x18\x07 \x01(\x02\x12\x12\n\nlens_coeff\x18\x08 \x03(\x02\x1a*\n\nextrinsics\x12\x1c\n\x14pose_scs_wrt_lcs_4x4\x18\x01 \x03(\x02\x1a\xa3\x01\n\x06stream\x12\x13\n\x0b\x64\x65scription\x18\x01 \x01(\t\x12\x35\n\x11stream_properties\x18\x03 \x01(\x0b\x32\x1a.VCD.VCD.stream_properties\x12\x0b\n\x03uri\x18\x05 \x01(\t\&#34;@\n\x04type\x12\n\n\x06\x63\x61mera\x10\x00\x12\t\n\x05lidar\x10\x01\x12\t\n\x05radar\x10\x02\x12\x0b\n\x07gps_imu\x10\x03\x12\t\n\x05other\x10\x04\x1a\x63\n\x04sync\x12\x15\n\x0b\x66rame_shift\x18\x01 \x01(\x05H\x00\x12;\n\x13timestamp_and_frame\x18\x02 \x01(\x0b\x32\x1c.VCD.VCD.timestamp_and_frameH\x00\x42\x07\n\x05props\x1a\x37\n\x13timestamp_and_frame\x12\x11\n\ttimestamp\x18\x01 \x01(\t\x12\r\n\x05\x66rame\x18\x02 \x01(\x05\x1aZ\n\x04text\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x01(\t\x1a\xc0\x07\n\x03Vcd\x12*\n\x07\x61\x63tions\x18\x01 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ActionsEntry\x12,\n\x08\x63ontexts\x18\x02 \x03(\x0b\x32\x1a.VCD.VCD.Vcd.ContextsEntry\x12(\n\x06\x65vents\x18\x03 \x03(\x0b\x32\x18.VCD.VCD.Vcd.EventsEntry\x12\x30\n\x0f\x66rame_intervals\x18\x04 \x03(\x0b\x32\x17.VCD.VCD.frame_interval\x12(\n\x06\x66rames\x18\x05 \x03(\x0b\x32\x18.VCD.VCD.Vcd.FramesEntry\x12#\n\x08metadata\x18\x06 \x01(\x0b\x32\x11.VCD.VCD.metadata\x12*\n\x07streams\x18\x07 \x03(\x0b\x32\x19.VCD.VCD.Vcd.StreamsEntry\x12*\n\x07objects\x18\x08 \x03(\x0b\x32\x19.VCD.VCD.Vcd.ObjectsEntry\x12\x30\n\nontologies\x18\t \x03(\x0b\x32\x1c.VCD.VCD.Vcd.OntologiesEntry\x12.\n\trelations\x18\n \x03(\x0b\x32\x1b.VCD.VCD.Vcd.RelationsEntry\x1a?\n\x0c\x41\x63tionsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.action:\x02\x38\x01\x1a\x41\n\rContextsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1f\n\x05value\x18\x02 \x01(\x0b\x32\x10.VCD.VCD.context:\x02\x38\x01\x1a=\n\x0b\x45ventsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.event:\x02\x38\x01\x1a=\n\x0b\x46ramesEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.VCD.VCD.frame:\x02\x38\x01\x1a?\n\x0cStreamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.stream:\x02\x38\x01\x1a?\n\x0cObjectsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1e\n\x05value\x18\x02 \x01(\x0b\x32\x0f.VCD.VCD.object:\x02\x38\x01\x1a\x31\n\x0fOntologiesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x43\n\x0eRelationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12 \n\x05value\x18\x02 \x01(\x0b\x32\x11.VCD.VCD.relation:\x02\x38\x01\x1aY\n\x03vec\x12\&#39;\n\nattributes\x18\x01 \x01(\x0b\x32\x13.VCD.VCD.attributes\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0e\n\x06stream\x18\x03 \x01(\t\x12\x0b\n\x03val\x18\x04 \x03(\x02\x62\x06proto3&#39;
   ,
   dependencies=[google_dot_protobuf_dot_struct__pb2.DESCRIPTOR,google_dot_protobuf_dot_empty__pb2.DESCRIPTOR,])
 
 
 
+_VCD_STREAM_TYPE = _descriptor.EnumDescriptor(
+  name=&#39;type&#39;,
+  full_name=&#39;VCD.VCD.stream.type&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name=&#39;camera&#39;, index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name=&#39;lidar&#39;, index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name=&#39;radar&#39;, index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name=&#39;gps_imu&#39;, index=3, number=3,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name=&#39;other&#39;, index=4, number=4,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=7026,
+  serialized_end=7090,
+)
+_sym_db.RegisterEnumDescriptor(_VCD_STREAM_TYPE)
+
+
+_VCD_ACTION_ACTIONDATAPOINTERSENTRY = _descriptor.Descriptor(
+  name=&#39;ActionDataPointersEntry&#39;,
+  full_name=&#39;VCD.VCD.action.ActionDataPointersEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.action.ActionDataPointersEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.action.ActionDataPointersEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=362,
+  serialized_end=450,
+)
 
 _VCD_ACTION = _descriptor.Descriptor(
   name=&#39;action&#39;,
@@ -96,8 +149,8 @@ _VCD_ACTION = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name=&#39;ontology_uid&#39;, full_name=&#39;VCD.VCD.action.ontology_uid&#39;, index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -115,6 +168,71 @@ _VCD_ACTION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;action_data&#39;, full_name=&#39;VCD.VCD.action.action_data&#39;, index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;action_data_pointers&#39;, full_name=&#39;VCD.VCD.action.action_data_pointers&#39;, index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_VCD_ACTION_ACTIONDATAPOINTERSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=122,
+  serialized_end=450,
+)
+
+_VCD_ACTION_DATA = _descriptor.Descriptor(
+  name=&#39;action_data&#39;,
+  full_name=&#39;VCD.VCD.action_data&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;boolean&#39;, full_name=&#39;VCD.VCD.action_data.boolean&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;num&#39;, full_name=&#39;VCD.VCD.action_data.num&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;text&#39;, full_name=&#39;VCD.VCD.action_data.text&#39;, index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;vec&#39;, full_name=&#39;VCD.VCD.action_data.vec&#39;, index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -127,8 +245,52 @@ _VCD_ACTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=121,
-  serialized_end=245,
+  serialized_start=453,
+  serialized_end=584,
+)
+
+_VCD_ELEMENT_DATA_POINTER = _descriptor.Descriptor(
+  name=&#39;element_data_pointer&#39;,
+  full_name=&#39;VCD.VCD.element_data_pointer&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;type&#39;, full_name=&#39;VCD.VCD.element_data_pointer.type&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;frame_intervals&#39;, full_name=&#39;VCD.VCD.element_data_pointer.frame_intervals&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;attributes&#39;, full_name=&#39;VCD.VCD.element_data_pointer.attributes&#39;, index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=587,
+  serialized_end=718,
 )
 
 _VCD_AREA_REFERENCE = _descriptor.Descriptor(
@@ -166,6 +328,13 @@ _VCD_AREA_REFERENCE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;reference_type&#39;, full_name=&#39;VCD.VCD.area_reference.reference_type&#39;, index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -178,8 +347,8 @@ _VCD_AREA_REFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=247,
-  serialized_end=347,
+  serialized_start=720,
+  serialized_end=844,
 )
 
 _VCD_ATTRIBUTES = _descriptor.Descriptor(
@@ -229,8 +398,8 @@ _VCD_ATTRIBUTES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=350,
-  serialized_end=480,
+  serialized_start=847,
+  serialized_end=977,
 )
 
 _VCD_BBOX = _descriptor.Descriptor(
@@ -280,8 +449,59 @@ _VCD_BBOX = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=482,
-  serialized_end=572,
+  serialized_start=979,
+  serialized_end=1069,
+)
+
+_VCD_RBBOX = _descriptor.Descriptor(
+  name=&#39;rbbox&#39;,
+  full_name=&#39;VCD.VCD.rbbox&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;attributes&#39;, full_name=&#39;VCD.VCD.rbbox.attributes&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;name&#39;, full_name=&#39;VCD.VCD.rbbox.name&#39;, index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;stream&#39;, full_name=&#39;VCD.VCD.rbbox.stream&#39;, index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;val&#39;, full_name=&#39;VCD.VCD.rbbox.val&#39;, index=3,
+      number=4, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1071,
+  serialized_end=1162,
 )
 
 _VCD_BINARY = _descriptor.Descriptor(
@@ -345,8 +565,8 @@ _VCD_BINARY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=575,
-  serialized_end=704,
+  serialized_start=1165,
+  serialized_end=1294,
 )
 
 _VCD_BOOLEAN = _descriptor.Descriptor(
@@ -396,8 +616,45 @@ _VCD_BOOLEAN = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=706,
-  serialized_end=799,
+  serialized_start=1296,
+  serialized_end=1389,
+)
+
+_VCD_CONTEXT_CONTEXTDATAPOINTERSENTRY = _descriptor.Descriptor(
+  name=&#39;ContextDataPointersEntry&#39;,
+  full_name=&#39;VCD.VCD.context.ContextDataPointersEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.context.ContextDataPointersEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.context.ContextDataPointersEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1638,
+  serialized_end=1727,
 )
 
 _VCD_CONTEXT = _descriptor.Descriptor(
@@ -423,8 +680,8 @@ _VCD_CONTEXT = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name=&#39;ontology_uid&#39;, full_name=&#39;VCD.VCD.context.ontology_uid&#39;, index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -442,6 +699,71 @@ _VCD_CONTEXT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;context_data&#39;, full_name=&#39;VCD.VCD.context.context_data&#39;, index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;context_data_pointers&#39;, full_name=&#39;VCD.VCD.context.context_data_pointers&#39;, index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_VCD_CONTEXT_CONTEXTDATAPOINTERSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1392,
+  serialized_end=1727,
+)
+
+_VCD_CONTEXT_DATA = _descriptor.Descriptor(
+  name=&#39;context_data&#39;,
+  full_name=&#39;VCD.VCD.context_data&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;boolean&#39;, full_name=&#39;VCD.VCD.context_data.boolean&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;num&#39;, full_name=&#39;VCD.VCD.context_data.num&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;text&#39;, full_name=&#39;VCD.VCD.context_data.text&#39;, index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;vec&#39;, full_name=&#39;VCD.VCD.context_data.vec&#39;, index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -454,8 +776,8 @@ _VCD_CONTEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=801,
-  serialized_end=926,
+  serialized_start=1730,
+  serialized_end=1862,
 )
 
 _VCD_CUBOID = _descriptor.Descriptor(
@@ -505,8 +827,45 @@ _VCD_CUBOID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=928,
-  serialized_end=1020,
+  serialized_start=1864,
+  serialized_end=1956,
+)
+
+_VCD_EVENT_EVENTDATAPOINTERSENTRY = _descriptor.Descriptor(
+  name=&#39;EventDataPointersEntry&#39;,
+  full_name=&#39;VCD.VCD.event.EventDataPointersEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.event.EventDataPointersEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.event.EventDataPointersEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2193,
+  serialized_end=2280,
 )
 
 _VCD_EVENT = _descriptor.Descriptor(
@@ -532,8 +891,8 @@ _VCD_EVENT = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name=&#39;ontology_uid&#39;, full_name=&#39;VCD.VCD.event.ontology_uid&#39;, index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -551,6 +910,71 @@ _VCD_EVENT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;event_data&#39;, full_name=&#39;VCD.VCD.event.event_data&#39;, index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;event_data_pointers&#39;, full_name=&#39;VCD.VCD.event.event_data_pointers&#39;, index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_VCD_EVENT_EVENTDATAPOINTERSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1959,
+  serialized_end=2280,
+)
+
+_VCD_EVENT_DATA = _descriptor.Descriptor(
+  name=&#39;event_data&#39;,
+  full_name=&#39;VCD.VCD.event_data&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;boolean&#39;, full_name=&#39;VCD.VCD.event_data.boolean&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;num&#39;, full_name=&#39;VCD.VCD.event_data.num&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;text&#39;, full_name=&#39;VCD.VCD.event_data.text&#39;, index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;vec&#39;, full_name=&#39;VCD.VCD.event_data.vec&#39;, index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -563,8 +987,8 @@ _VCD_EVENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1022,
-  serialized_end=1145,
+  serialized_start=2283,
+  serialized_end=2413,
 )
 
 _VCD_FRAME_PROPERTIES_STREAMSENTRY = _descriptor.Descriptor(
@@ -600,8 +1024,8 @@ _VCD_FRAME_PROPERTIES_STREAMSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1270,
-  serialized_end=1333,
+  serialized_start=2575,
+  serialized_end=2638,
 )
 
 _VCD_FRAME_PROPERTIES = _descriptor.Descriptor(
@@ -613,14 +1037,21 @@ _VCD_FRAME_PROPERTIES = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;streams&#39;, full_name=&#39;VCD.VCD.frame_properties.streams&#39;, index=0,
-      number=3, type=11, cpp_type=10, label=3,
+      number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;properties&#39;, full_name=&#39;VCD.VCD.frame_properties.properties&#39;, index=1,
+      name=&#39;odometry&#39;, full_name=&#39;VCD.VCD.frame_properties.odometry&#39;, index=1,
       number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;properties&#39;, full_name=&#39;VCD.VCD.frame_properties.properties&#39;, index=2,
+      number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -637,27 +1068,20 @@ _VCD_FRAME_PROPERTIES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1148,
-  serialized_end=1333,
+  serialized_start=2416,
+  serialized_end=2638,
 )
 
-_VCD_FRAME_ACTIONSENTRY = _descriptor.Descriptor(
-  name=&#39;ActionsEntry&#39;,
-  full_name=&#39;VCD.VCD.frame.ActionsEntry&#39;,
+_VCD_FRAME_ACTIONS = _descriptor.Descriptor(
+  name=&#39;Actions&#39;,
+  full_name=&#39;VCD.VCD.frame.Actions&#39;,
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.ActionsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name=&#39;value&#39;, full_name=&#39;VCD.VCD.frame.ActionsEntry.value&#39;, index=1,
-      number=2, type=11, cpp_type=10, label=1,
+      name=&#39;action_data&#39;, full_name=&#39;VCD.VCD.frame.Actions.action_data&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -668,33 +1092,26 @@ _VCD_FRAME_ACTIONSENTRY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=b&#39;8\001&#39;,
+  serialized_options=None,
   is_extendable=False,
   syntax=&#39;proto3&#39;,
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1630,
-  serialized_end=1700,
+  serialized_start=2935,
+  serialized_end=2987,
 )
 
-_VCD_FRAME_CONTEXTSENTRY = _descriptor.Descriptor(
-  name=&#39;ContextsEntry&#39;,
-  full_name=&#39;VCD.VCD.frame.ContextsEntry&#39;,
+_VCD_FRAME_EVENTS = _descriptor.Descriptor(
+  name=&#39;Events&#39;,
+  full_name=&#39;VCD.VCD.frame.Events&#39;,
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.ContextsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name=&#39;value&#39;, full_name=&#39;VCD.VCD.frame.ContextsEntry.value&#39;, index=1,
-      number=2, type=11, cpp_type=10, label=1,
+      name=&#39;event_data&#39;, full_name=&#39;VCD.VCD.frame.Events.event_data&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -705,33 +1122,26 @@ _VCD_FRAME_CONTEXTSENTRY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=b&#39;8\001&#39;,
+  serialized_options=None,
   is_extendable=False,
   syntax=&#39;proto3&#39;,
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1702,
-  serialized_end=1773,
+  serialized_start=2989,
+  serialized_end=3038,
 )
 
-_VCD_FRAME_EVENTSENTRY = _descriptor.Descriptor(
-  name=&#39;EventsEntry&#39;,
-  full_name=&#39;VCD.VCD.frame.EventsEntry&#39;,
+_VCD_FRAME_CONTEXTS = _descriptor.Descriptor(
+  name=&#39;Contexts&#39;,
+  full_name=&#39;VCD.VCD.frame.Contexts&#39;,
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.EventsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name=&#39;value&#39;, full_name=&#39;VCD.VCD.frame.EventsEntry.value&#39;, index=1,
-      number=2, type=11, cpp_type=10, label=1,
+      name=&#39;context_data&#39;, full_name=&#39;VCD.VCD.frame.Contexts.context_data&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -742,14 +1152,14 @@ _VCD_FRAME_EVENTSENTRY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
   ],
-  serialized_options=b&#39;8\001&#39;,
+  serialized_options=None,
   is_extendable=False,
   syntax=&#39;proto3&#39;,
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1775,
-  serialized_end=1844,
+  serialized_start=3040,
+  serialized_end=3095,
 )
 
 _VCD_FRAME_OBJECTS = _descriptor.Descriptor(
@@ -778,8 +1188,119 @@ _VCD_FRAME_OBJECTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1846,
-  serialized_end=1898,
+  serialized_start=3097,
+  serialized_end=3149,
+)
+
+_VCD_FRAME_ACTIONSENTRY = _descriptor.Descriptor(
+  name=&#39;ActionsEntry&#39;,
+  full_name=&#39;VCD.VCD.frame.ActionsEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.ActionsEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.frame.ActionsEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3151,
+  serialized_end=3221,
+)
+
+_VCD_FRAME_CONTEXTSENTRY = _descriptor.Descriptor(
+  name=&#39;ContextsEntry&#39;,
+  full_name=&#39;VCD.VCD.frame.ContextsEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.ContextsEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.frame.ContextsEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3223,
+  serialized_end=3295,
+)
+
+_VCD_FRAME_EVENTSENTRY = _descriptor.Descriptor(
+  name=&#39;EventsEntry&#39;,
+  full_name=&#39;VCD.VCD.frame.EventsEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.EventsEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.frame.EventsEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3297,
+  serialized_end=3365,
 )
 
 _VCD_FRAME_OBJECTSENTRY = _descriptor.Descriptor(
@@ -791,8 +1312,8 @@ _VCD_FRAME_OBJECTSENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.ObjectsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -815,8 +1336,8 @@ _VCD_FRAME_OBJECTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1900,
-  serialized_end=1970,
+  serialized_start=3367,
+  serialized_end=3437,
 )
 
 _VCD_FRAME_RELATIONSENTRY = _descriptor.Descriptor(
@@ -828,8 +1349,8 @@ _VCD_FRAME_RELATIONSENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.frame.RelationsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -852,8 +1373,8 @@ _VCD_FRAME_RELATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1972,
-  serialized_end=2044,
+  serialized_start=3439,
+  serialized_end=3511,
 )
 
 _VCD_FRAME = _descriptor.Descriptor(
@@ -864,30 +1385,30 @@ _VCD_FRAME = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name=&#39;actions&#39;, full_name=&#39;VCD.VCD.frame.actions&#39;, index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      name=&#39;frame_properties&#39;, full_name=&#39;VCD.VCD.frame.frame_properties&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;contexts&#39;, full_name=&#39;VCD.VCD.frame.contexts&#39;, index=1,
+      name=&#39;actions&#39;, full_name=&#39;VCD.VCD.frame.actions&#39;, index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;events&#39;, full_name=&#39;VCD.VCD.frame.events&#39;, index=2,
+      name=&#39;contexts&#39;, full_name=&#39;VCD.VCD.frame.contexts&#39;, index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;frame_properties&#39;, full_name=&#39;VCD.VCD.frame.frame_properties&#39;, index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name=&#39;events&#39;, full_name=&#39;VCD.VCD.frame.events&#39;, index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -908,7 +1429,7 @@ _VCD_FRAME = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_VCD_FRAME_ACTIONSENTRY, _VCD_FRAME_CONTEXTSENTRY, _VCD_FRAME_EVENTSENTRY, _VCD_FRAME_OBJECTS, _VCD_FRAME_OBJECTSENTRY, _VCD_FRAME_RELATIONSENTRY, ],
+  nested_types=[_VCD_FRAME_ACTIONS, _VCD_FRAME_EVENTS, _VCD_FRAME_CONTEXTS, _VCD_FRAME_OBJECTS, _VCD_FRAME_ACTIONSENTRY, _VCD_FRAME_CONTEXTSENTRY, _VCD_FRAME_EVENTSENTRY, _VCD_FRAME_OBJECTSENTRY, _VCD_FRAME_RELATIONSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -917,8 +1438,8 @@ _VCD_FRAME = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1336,
-  serialized_end=2044,
+  serialized_start=2641,
+  serialized_end=3511,
 )
 
 _VCD_FRAME_INTERVAL = _descriptor.Descriptor(
@@ -954,8 +1475,8 @@ _VCD_FRAME_INTERVAL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2046,
-  serialized_end=2102,
+  serialized_start=3513,
+  serialized_end=3569,
 )
 
 _VCD_IMAGE = _descriptor.Descriptor(
@@ -1019,8 +1540,8 @@ _VCD_IMAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2105,
-  serialized_end=2233,
+  serialized_start=3572,
+  serialized_end=3700,
 )
 
 _VCD_LINE_REFERENCE = _descriptor.Descriptor(
@@ -1058,6 +1579,13 @@ _VCD_LINE_REFERENCE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;reference_type&#39;, full_name=&#39;VCD.VCD.line_reference.reference_type&#39;, index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -1070,8 +1598,8 @@ _VCD_LINE_REFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2235,
-  serialized_end=2338,
+  serialized_start=3702,
+  serialized_end=3829,
 )
 
 _VCD_MAT = _descriptor.Descriptor(
@@ -1149,8 +1677,8 @@ _VCD_MAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2341,
-  serialized_end=2498,
+  serialized_start=3832,
+  serialized_end=3989,
 )
 
 _VCD_MESH_AREAREFERENCEENTRY = _descriptor.Descriptor(
@@ -1162,8 +1690,8 @@ _VCD_MESH_AREAREFERENCEENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.mesh.AreaReferenceEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1186,8 +1714,8 @@ _VCD_MESH_AREAREFERENCEENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2700,
-  serialized_end=2777,
+  serialized_start=4191,
+  serialized_end=4268,
 )
 
 _VCD_MESH_LINEREFERENCEENTRY = _descriptor.Descriptor(
@@ -1199,8 +1727,8 @@ _VCD_MESH_LINEREFERENCEENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.mesh.LineReferenceEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1223,8 +1751,8 @@ _VCD_MESH_LINEREFERENCEENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2779,
-  serialized_end=2856,
+  serialized_start=4270,
+  serialized_end=4347,
 )
 
 _VCD_MESH_POINT3DENTRY = _descriptor.Descriptor(
@@ -1236,8 +1764,8 @@ _VCD_MESH_POINT3DENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.mesh.Point3dEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1260,8 +1788,8 @@ _VCD_MESH_POINT3DENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2858,
-  serialized_end=2922,
+  serialized_start=4349,
+  serialized_end=4413,
 )
 
 _VCD_MESH = _descriptor.Descriptor(
@@ -1318,45 +1846,8 @@ _VCD_MESH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2501,
-  serialized_end=2922,
-)
-
-_VCD_METADATA_STREAMSENTRY = _descriptor.Descriptor(
-  name=&#39;StreamsEntry&#39;,
-  full_name=&#39;VCD.VCD.metadata.StreamsEntry&#39;,
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name=&#39;key&#39;, full_name=&#39;VCD.VCD.metadata.StreamsEntry.key&#39;, index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name=&#39;value&#39;, full_name=&#39;VCD.VCD.metadata.StreamsEntry.value&#39;, index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b&#39;8\001&#39;,
-  is_extendable=False,
-  syntax=&#39;proto3&#39;,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1270,
-  serialized_end=1333,
+  serialized_start=3992,
+  serialized_end=4413,
 )
 
 _VCD_METADATA = _descriptor.Descriptor(
@@ -1381,15 +1872,29 @@ _VCD_METADATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;streams&#39;, full_name=&#39;VCD.VCD.metadata.streams&#39;, index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      name=&#39;name&#39;, full_name=&#39;VCD.VCD.metadata.name&#39;, index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;properties&#39;, full_name=&#39;VCD.VCD.metadata.properties&#39;, index=3,
-      number=4, type=11, cpp_type=10, label=1,
+      name=&#39;schema_version&#39;, full_name=&#39;VCD.VCD.metadata.schema_version&#39;, index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;file_version&#39;, full_name=&#39;VCD.VCD.metadata.file_version&#39;, index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;properties&#39;, full_name=&#39;VCD.VCD.metadata.properties&#39;, index=5,
+      number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1397,7 +1902,7 @@ _VCD_METADATA = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_VCD_METADATA_STREAMSENTRY, ],
+  nested_types=[],
   enum_types=[
   ],
   serialized_options=None,
@@ -1406,8 +1911,8 @@ _VCD_METADATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2925,
-  serialized_end=3130,
+  serialized_start=4416,
+  serialized_end=4567,
 )
 
 _VCD_NUM = _descriptor.Descriptor(
@@ -1457,8 +1962,45 @@ _VCD_NUM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3132,
-  serialized_end=3221,
+  serialized_start=4569,
+  serialized_end=4658,
+)
+
+_VCD_OBJECT_OBJECTDATAPOINTERSENTRY = _descriptor.Descriptor(
+  name=&#39;ObjectDataPointersEntry&#39;,
+  full_name=&#39;VCD.VCD.object.ObjectDataPointersEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.object.ObjectDataPointersEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.object.ObjectDataPointersEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4901,
+  serialized_end=4989,
 )
 
 _VCD_OBJECT = _descriptor.Descriptor(
@@ -1491,8 +2033,8 @@ _VCD_OBJECT = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name=&#39;ontology_uid&#39;, full_name=&#39;VCD.VCD.object.ontology_uid&#39;, index=3,
-      number=4, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1510,10 +2052,17 @@ _VCD_OBJECT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;object_data_pointers&#39;, full_name=&#39;VCD.VCD.object.object_data_pointers&#39;, index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_VCD_OBJECT_OBJECTDATAPOINTERSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -1522,8 +2071,8 @@ _VCD_OBJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3224,
-  serialized_end=3391,
+  serialized_start=4661,
+  serialized_end=4989,
 )
 
 _VCD_OBJECT_DATA = _descriptor.Descriptor(
@@ -1541,106 +2090,113 @@ _VCD_OBJECT_DATA = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;binary&#39;, full_name=&#39;VCD.VCD.object_data.binary&#39;, index=1,
+      name=&#39;rbbox&#39;, full_name=&#39;VCD.VCD.object_data.rbbox&#39;, index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;boolean&#39;, full_name=&#39;VCD.VCD.object_data.boolean&#39;, index=2,
+      name=&#39;binary&#39;, full_name=&#39;VCD.VCD.object_data.binary&#39;, index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;cuboid&#39;, full_name=&#39;VCD.VCD.object_data.cuboid&#39;, index=3,
+      name=&#39;boolean&#39;, full_name=&#39;VCD.VCD.object_data.boolean&#39;, index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;image&#39;, full_name=&#39;VCD.VCD.object_data.image&#39;, index=4,
+      name=&#39;cuboid&#39;, full_name=&#39;VCD.VCD.object_data.cuboid&#39;, index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;mat&#39;, full_name=&#39;VCD.VCD.object_data.mat&#39;, index=5,
+      name=&#39;image&#39;, full_name=&#39;VCD.VCD.object_data.image&#39;, index=5,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;num&#39;, full_name=&#39;VCD.VCD.object_data.num&#39;, index=6,
+      name=&#39;mat&#39;, full_name=&#39;VCD.VCD.object_data.mat&#39;, index=6,
       number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;point2d&#39;, full_name=&#39;VCD.VCD.object_data.point2d&#39;, index=7,
+      name=&#39;num&#39;, full_name=&#39;VCD.VCD.object_data.num&#39;, index=7,
       number=8, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;point3d&#39;, full_name=&#39;VCD.VCD.object_data.point3d&#39;, index=8,
+      name=&#39;point2d&#39;, full_name=&#39;VCD.VCD.object_data.point2d&#39;, index=8,
       number=9, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;poly2d&#39;, full_name=&#39;VCD.VCD.object_data.poly2d&#39;, index=9,
+      name=&#39;point3d&#39;, full_name=&#39;VCD.VCD.object_data.point3d&#39;, index=9,
       number=10, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;poly3d&#39;, full_name=&#39;VCD.VCD.object_data.poly3d&#39;, index=10,
+      name=&#39;poly2d&#39;, full_name=&#39;VCD.VCD.object_data.poly2d&#39;, index=10,
       number=11, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;text&#39;, full_name=&#39;VCD.VCD.object_data.text&#39;, index=11,
+      name=&#39;poly3d&#39;, full_name=&#39;VCD.VCD.object_data.poly3d&#39;, index=11,
       number=12, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;vec&#39;, full_name=&#39;VCD.VCD.object_data.vec&#39;, index=12,
+      name=&#39;text&#39;, full_name=&#39;VCD.VCD.object_data.text&#39;, index=12,
       number=13, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;area_reference&#39;, full_name=&#39;VCD.VCD.object_data.area_reference&#39;, index=13,
+      name=&#39;vec&#39;, full_name=&#39;VCD.VCD.object_data.vec&#39;, index=13,
       number=14, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;line_reference&#39;, full_name=&#39;VCD.VCD.object_data.line_reference&#39;, index=14,
+      name=&#39;area_reference&#39;, full_name=&#39;VCD.VCD.object_data.area_reference&#39;, index=14,
       number=15, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;mesh&#39;, full_name=&#39;VCD.VCD.object_data.mesh&#39;, index=15,
+      name=&#39;line_reference&#39;, full_name=&#39;VCD.VCD.object_data.line_reference&#39;, index=15,
       number=16, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;mesh&#39;, full_name=&#39;VCD.VCD.object_data.mesh&#39;, index=16,
+      number=17, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1657,8 +2213,45 @@ _VCD_OBJECT_DATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3394,
-  serialized_end=3941,
+  serialized_start=4992,
+  serialized_end=5570,
+)
+
+_VCD_ODOMETRY = _descriptor.Descriptor(
+  name=&#39;odometry&#39;,
+  full_name=&#39;VCD.VCD.odometry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;pose_lcs_wrt_wcs_4x4&#39;, full_name=&#39;VCD.VCD.odometry.pose_lcs_wrt_wcs_4x4&#39;, index=0,
+      number=1, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;comment&#39;, full_name=&#39;VCD.VCD.odometry.comment&#39;, index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5572,
+  serialized_end=5629,
 )
 
 _VCD_POINT2D = _descriptor.Descriptor(
@@ -1696,6 +2289,13 @@ _VCD_POINT2D = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;id&#39;, full_name=&#39;VCD.VCD.point2d.id&#39;, index=4,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -1708,8 +2308,8 @@ _VCD_POINT2D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3943,
-  serialized_end=4036,
+  serialized_start=5631,
+  serialized_end=5736,
 )
 
 _VCD_POINT3D = _descriptor.Descriptor(
@@ -1747,6 +2347,13 @@ _VCD_POINT3D = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;id&#39;, full_name=&#39;VCD.VCD.point3d.id&#39;, index=4,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -1759,8 +2366,8 @@ _VCD_POINT3D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4038,
-  serialized_end=4131,
+  serialized_start=5738,
+  serialized_end=5843,
 )
 
 _VCD_POLY2D = _descriptor.Descriptor(
@@ -1831,8 +2438,8 @@ _VCD_POLY2D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4134,
-  serialized_end=4299,
+  serialized_start=5846,
+  serialized_end=6011,
 )
 
 _VCD_POLY3D = _descriptor.Descriptor(
@@ -1889,8 +2496,8 @@ _VCD_POLY3D = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4301,
-  serialized_end=4409,
+  serialized_start=6013,
+  serialized_end=6121,
 )
 
 _VCD_RDF_AGENT = _descriptor.Descriptor(
@@ -1909,8 +2516,8 @@ _VCD_RDF_AGENT = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name=&#39;uid&#39;, full_name=&#39;VCD.VCD.rdf_agent.uid&#39;, index=1,
-      number=2, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1926,8 +2533,8 @@ _VCD_RDF_AGENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4411,
-  serialized_end=4449,
+  serialized_start=6123,
+  serialized_end=6161,
 )
 
 _VCD_RELATION = _descriptor.Descriptor(
@@ -1953,8 +2560,8 @@ _VCD_RELATION = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name=&#39;ontology_uid&#39;, full_name=&#39;VCD.VCD.relation.ontology_uid&#39;, index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -1998,8 +2605,222 @@ _VCD_RELATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4452,
-  serialized_end=4661,
+  serialized_start=6164,
+  serialized_end=6373,
+)
+
+_VCD_STREAM_PROPERTIES = _descriptor.Descriptor(
+  name=&#39;stream_properties&#39;,
+  full_name=&#39;VCD.VCD.stream_properties&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;extrinsics&#39;, full_name=&#39;VCD.VCD.stream_properties.extrinsics&#39;, index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;intrinsics_pinhole&#39;, full_name=&#39;VCD.VCD.stream_properties.intrinsics_pinhole&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;intrinsics_fisheye&#39;, full_name=&#39;VCD.VCD.stream_properties.intrinsics_fisheye&#39;, index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;sync&#39;, full_name=&#39;VCD.VCD.stream_properties.sync&#39;, index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name=&#39;intrinsics&#39;, full_name=&#39;VCD.VCD.stream_properties.intrinsics&#39;,
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=6376,
+  serialized_end=6597,
+)
+
+_VCD_INTRINSICS_PINHOLE = _descriptor.Descriptor(
+  name=&#39;intrinsics_pinhole&#39;,
+  full_name=&#39;VCD.VCD.intrinsics_pinhole&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;width_px&#39;, full_name=&#39;VCD.VCD.intrinsics_pinhole.width_px&#39;, index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;height_px&#39;, full_name=&#39;VCD.VCD.intrinsics_pinhole.height_px&#39;, index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;camera_matrix&#39;, full_name=&#39;VCD.VCD.intrinsics_pinhole.camera_matrix&#39;, index=2,
+      number=3, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;distortion&#39;, full_name=&#39;VCD.VCD.intrinsics_pinhole.distortion&#39;, index=3,
+      number=4, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6599,
+  serialized_end=6699,
+)
+
+_VCD_INTRINSICS_FISHEYE = _descriptor.Descriptor(
+  name=&#39;intrinsics_fisheye&#39;,
+  full_name=&#39;VCD.VCD.intrinsics_fisheye&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;width_px&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.width_px&#39;, index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;height_px&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.height_px&#39;, index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;fov_deg&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.fov_deg&#39;, index=2,
+      number=3, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;center_x_px&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.center_x_px&#39;, index=3,
+      number=4, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;center_y_px&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.center_y_px&#39;, index=4,
+      number=5, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;radius_x_px&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.radius_x_px&#39;, index=5,
+      number=6, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;radius_y_px&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.radius_y_px&#39;, index=6,
+      number=7, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;lens_coeff&#39;, full_name=&#39;VCD.VCD.intrinsics_fisheye.lens_coeff&#39;, index=7,
+      number=8, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6702,
+  serialized_end=6880,
+)
+
+_VCD_EXTRINSICS = _descriptor.Descriptor(
+  name=&#39;extrinsics&#39;,
+  full_name=&#39;VCD.VCD.extrinsics&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;pose_scs_wrt_lcs_4x4&#39;, full_name=&#39;VCD.VCD.extrinsics.pose_scs_wrt_lcs_4x4&#39;, index=0,
+      number=1, type=2, cpp_type=6, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6882,
+  serialized_end=6924,
 )
 
 _VCD_STREAM = _descriptor.Descriptor(
@@ -2024,16 +2845,87 @@ _VCD_STREAM = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;type&#39;, full_name=&#39;VCD.VCD.stream.type&#39;, index=2,
-      number=4, type=9, cpp_type=9, label=1,
+      name=&#39;uri&#39;, full_name=&#39;VCD.VCD.stream.uri&#39;, index=2,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _VCD_STREAM_TYPE,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=6927,
+  serialized_end=7090,
+)
+
+_VCD_SYNC = _descriptor.Descriptor(
+  name=&#39;sync&#39;,
+  full_name=&#39;VCD.VCD.sync&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;frame_shift&#39;, full_name=&#39;VCD.VCD.sync.frame_shift&#39;, index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;timestamp_and_frame&#39;, full_name=&#39;VCD.VCD.sync.timestamp_and_frame&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name=&#39;props&#39;, full_name=&#39;VCD.VCD.sync.props&#39;,
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=7092,
+  serialized_end=7191,
+)
+
+_VCD_TIMESTAMP_AND_FRAME = _descriptor.Descriptor(
+  name=&#39;timestamp_and_frame&#39;,
+  full_name=&#39;VCD.VCD.timestamp_and_frame&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;timestamp&#39;, full_name=&#39;VCD.VCD.timestamp_and_frame.timestamp&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;uri&#39;, full_name=&#39;VCD.VCD.stream.uri&#39;, index=3,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      name=&#39;frame&#39;, full_name=&#39;VCD.VCD.timestamp_and_frame.frame&#39;, index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2049,8 +2941,8 @@ _VCD_STREAM = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4663,
-  serialized_end=4771,
+  serialized_start=7193,
+  serialized_end=7248,
 )
 
 _VCD_TEXT = _descriptor.Descriptor(
@@ -2100,8 +2992,8 @@ _VCD_TEXT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4773,
-  serialized_end=4863,
+  serialized_start=7250,
+  serialized_end=7340,
 )
 
 _VCD_VCD_ACTIONSENTRY = _descriptor.Descriptor(
@@ -2113,8 +3005,8 @@ _VCD_VCD_ACTIONSENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.Vcd.ActionsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2137,8 +3029,8 @@ _VCD_VCD_ACTIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5307,
-  serialized_end=5370,
+  serialized_start=7797,
+  serialized_end=7860,
 )
 
 _VCD_VCD_CONTEXTSENTRY = _descriptor.Descriptor(
@@ -2150,8 +3042,8 @@ _VCD_VCD_CONTEXTSENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.Vcd.ContextsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2174,8 +3066,8 @@ _VCD_VCD_CONTEXTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5372,
-  serialized_end=5437,
+  serialized_start=7862,
+  serialized_end=7927,
 )
 
 _VCD_VCD_EVENTSENTRY = _descriptor.Descriptor(
@@ -2187,8 +3079,8 @@ _VCD_VCD_EVENTSENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.Vcd.EventsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2211,8 +3103,8 @@ _VCD_VCD_EVENTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5439,
-  serialized_end=5500,
+  serialized_start=7929,
+  serialized_end=7990,
 )
 
 _VCD_VCD_FRAMESENTRY = _descriptor.Descriptor(
@@ -2248,8 +3140,45 @@ _VCD_VCD_FRAMESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5502,
-  serialized_end=5563,
+  serialized_start=7992,
+  serialized_end=8053,
+)
+
+_VCD_VCD_STREAMSENTRY = _descriptor.Descriptor(
+  name=&#39;StreamsEntry&#39;,
+  full_name=&#39;VCD.VCD.Vcd.StreamsEntry&#39;,
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name=&#39;key&#39;, full_name=&#39;VCD.VCD.Vcd.StreamsEntry.key&#39;, index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name=&#39;value&#39;, full_name=&#39;VCD.VCD.Vcd.StreamsEntry.value&#39;, index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b&#39;8\001&#39;,
+  is_extendable=False,
+  syntax=&#39;proto3&#39;,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2575,
+  serialized_end=2638,
 )
 
 _VCD_VCD_OBJECTSENTRY = _descriptor.Descriptor(
@@ -2261,8 +3190,8 @@ _VCD_VCD_OBJECTSENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.Vcd.ObjectsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2285,8 +3214,8 @@ _VCD_VCD_OBJECTSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5565,
-  serialized_end=5628,
+  serialized_start=8120,
+  serialized_end=8183,
 )
 
 _VCD_VCD_ONTOLOGIESENTRY = _descriptor.Descriptor(
@@ -2298,8 +3227,8 @@ _VCD_VCD_ONTOLOGIESENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.Vcd.OntologiesEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2322,8 +3251,8 @@ _VCD_VCD_ONTOLOGIESENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5630,
-  serialized_end=5679,
+  serialized_start=8185,
+  serialized_end=8234,
 )
 
 _VCD_VCD_RELATIONSENTRY = _descriptor.Descriptor(
@@ -2335,8 +3264,8 @@ _VCD_VCD_RELATIONSENTRY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name=&#39;key&#39;, full_name=&#39;VCD.VCD.Vcd.RelationsEntry.key&#39;, index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2359,8 +3288,8 @@ _VCD_VCD_RELATIONSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5681,
-  serialized_end=5748,
+  serialized_start=8236,
+  serialized_end=8303,
 )
 
 _VCD_VCD = _descriptor.Descriptor(
@@ -2413,9 +3342,9 @@ _VCD_VCD = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name=&#39;name&#39;, full_name=&#39;VCD.VCD.Vcd.name&#39;, index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
+      name=&#39;streams&#39;, full_name=&#39;VCD.VCD.Vcd.streams&#39;, index=6,
+      number=7, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -2440,17 +3369,10 @@ _VCD_VCD = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name=&#39;version&#39;, full_name=&#39;VCD.VCD.Vcd.version&#39;, index=10,
-      number=11, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b&#34;&#34;.decode(&#39;utf-8&#39;),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
-  nested_types=[_VCD_VCD_ACTIONSENTRY, _VCD_VCD_CONTEXTSENTRY, _VCD_VCD_EVENTSENTRY, _VCD_VCD_FRAMESENTRY, _VCD_VCD_OBJECTSENTRY, _VCD_VCD_ONTOLOGIESENTRY, _VCD_VCD_RELATIONSENTRY, ],
+  nested_types=[_VCD_VCD_ACTIONSENTRY, _VCD_VCD_CONTEXTSENTRY, _VCD_VCD_EVENTSENTRY, _VCD_VCD_FRAMESENTRY, _VCD_VCD_STREAMSENTRY, _VCD_VCD_OBJECTSENTRY, _VCD_VCD_ONTOLOGIESENTRY, _VCD_VCD_RELATIONSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -2459,8 +3381,8 @@ _VCD_VCD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4866,
-  serialized_end=5748,
+  serialized_start=7343,
+  serialized_end=8303,
 )
 
 _VCD_VEC = _descriptor.Descriptor(
@@ -2510,8 +3432,8 @@ _VCD_VEC = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5750,
-  serialized_end=5839,
+  serialized_start=8305,
+  serialized_end=8394,
 )
 
 _VCD = _descriptor.Descriptor(
@@ -2531,7 +3453,7 @@ _VCD = _descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_VCD_ACTION, _VCD_AREA_REFERENCE, _VCD_ATTRIBUTES, _VCD_BBOX, _VCD_BINARY, _VCD_BOOLEAN, _VCD_CONTEXT, _VCD_CUBOID, _VCD_EVENT, _VCD_FRAME_PROPERTIES, _VCD_FRAME, _VCD_FRAME_INTERVAL, _VCD_IMAGE, _VCD_LINE_REFERENCE, _VCD_MAT, _VCD_MESH, _VCD_METADATA, _VCD_NUM, _VCD_OBJECT, _VCD_OBJECT_DATA, _VCD_POINT2D, _VCD_POINT3D, _VCD_POLY2D, _VCD_POLY3D, _VCD_RDF_AGENT, _VCD_RELATION, _VCD_STREAM, _VCD_TEXT, _VCD_VCD, _VCD_VEC, ],
+  nested_types=[_VCD_ACTION, _VCD_ACTION_DATA, _VCD_ELEMENT_DATA_POINTER, _VCD_AREA_REFERENCE, _VCD_ATTRIBUTES, _VCD_BBOX, _VCD_RBBOX, _VCD_BINARY, _VCD_BOOLEAN, _VCD_CONTEXT, _VCD_CONTEXT_DATA, _VCD_CUBOID, _VCD_EVENT, _VCD_EVENT_DATA, _VCD_FRAME_PROPERTIES, _VCD_FRAME, _VCD_FRAME_INTERVAL, _VCD_IMAGE, _VCD_LINE_REFERENCE, _VCD_MAT, _VCD_MESH, _VCD_METADATA, _VCD_NUM, _VCD_OBJECT, _VCD_OBJECT_DATA, _VCD_ODOMETRY, _VCD_POINT2D, _VCD_POINT3D, _VCD_POLY2D, _VCD_POLY3D, _VCD_RDF_AGENT, _VCD_RELATION, _VCD_STREAM_PROPERTIES, _VCD_INTRINSICS_PINHOLE, _VCD_INTRINSICS_FISHEYE, _VCD_EXTRINSICS, _VCD_STREAM, _VCD_SYNC, _VCD_TIMESTAMP_AND_FRAME, _VCD_TEXT, _VCD_VCD, _VCD_VEC, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -2541,11 +3463,23 @@ _VCD = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=87,
-  serialized_end=5839,
+  serialized_end=8394,
 )
 
+_VCD_ACTION_ACTIONDATAPOINTERSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_ELEMENT_DATA_POINTER
+_VCD_ACTION_ACTIONDATAPOINTERSENTRY.containing_type = _VCD_ACTION
 _VCD_ACTION.fields_by_name[&#39;frame_intervals&#39;].message_type = _VCD_FRAME_INTERVAL
+_VCD_ACTION.fields_by_name[&#39;action_data&#39;].message_type = _VCD_ACTION_DATA
+_VCD_ACTION.fields_by_name[&#39;action_data_pointers&#39;].message_type = _VCD_ACTION_ACTIONDATAPOINTERSENTRY
 _VCD_ACTION.containing_type = _VCD
+_VCD_ACTION_DATA.fields_by_name[&#39;boolean&#39;].message_type = _VCD_BOOLEAN
+_VCD_ACTION_DATA.fields_by_name[&#39;num&#39;].message_type = _VCD_NUM
+_VCD_ACTION_DATA.fields_by_name[&#39;text&#39;].message_type = _VCD_TEXT
+_VCD_ACTION_DATA.fields_by_name[&#39;vec&#39;].message_type = _VCD_VEC
+_VCD_ACTION_DATA.containing_type = _VCD
+_VCD_ELEMENT_DATA_POINTER.fields_by_name[&#39;frame_intervals&#39;].message_type = _VCD_FRAME_INTERVAL
+_VCD_ELEMENT_DATA_POINTER.fields_by_name[&#39;attributes&#39;].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
+_VCD_ELEMENT_DATA_POINTER.containing_type = _VCD
 _VCD_AREA_REFERENCE.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_AREA_REFERENCE.containing_type = _VCD
 _VCD_ATTRIBUTES.fields_by_name[&#39;boolean&#39;].message_type = _VCD_BOOLEAN
@@ -2555,37 +3489,64 @@ _VCD_ATTRIBUTES.fields_by_name[&#39;vec&#39;].message_type = _VCD_VEC
 _VCD_ATTRIBUTES.containing_type = _VCD
 _VCD_BBOX.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_BBOX.containing_type = _VCD
+_VCD_RBBOX.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
+_VCD_RBBOX.containing_type = _VCD
 _VCD_BINARY.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_BINARY.containing_type = _VCD
 _VCD_BOOLEAN.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_BOOLEAN.containing_type = _VCD
+_VCD_CONTEXT_CONTEXTDATAPOINTERSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_ELEMENT_DATA_POINTER
+_VCD_CONTEXT_CONTEXTDATAPOINTERSENTRY.containing_type = _VCD_CONTEXT
 _VCD_CONTEXT.fields_by_name[&#39;frame_intervals&#39;].message_type = _VCD_FRAME_INTERVAL
+_VCD_CONTEXT.fields_by_name[&#39;context_data&#39;].message_type = _VCD_CONTEXT_DATA
+_VCD_CONTEXT.fields_by_name[&#39;context_data_pointers&#39;].message_type = _VCD_CONTEXT_CONTEXTDATAPOINTERSENTRY
 _VCD_CONTEXT.containing_type = _VCD
+_VCD_CONTEXT_DATA.fields_by_name[&#39;boolean&#39;].message_type = _VCD_BOOLEAN
+_VCD_CONTEXT_DATA.fields_by_name[&#39;num&#39;].message_type = _VCD_NUM
+_VCD_CONTEXT_DATA.fields_by_name[&#39;text&#39;].message_type = _VCD_TEXT
+_VCD_CONTEXT_DATA.fields_by_name[&#39;vec&#39;].message_type = _VCD_VEC
+_VCD_CONTEXT_DATA.containing_type = _VCD
 _VCD_CUBOID.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_CUBOID.containing_type = _VCD
+_VCD_EVENT_EVENTDATAPOINTERSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_ELEMENT_DATA_POINTER
+_VCD_EVENT_EVENTDATAPOINTERSENTRY.containing_type = _VCD_EVENT
 _VCD_EVENT.fields_by_name[&#39;frame_intervals&#39;].message_type = _VCD_FRAME_INTERVAL
+_VCD_EVENT.fields_by_name[&#39;event_data&#39;].message_type = _VCD_EVENT_DATA
+_VCD_EVENT.fields_by_name[&#39;event_data_pointers&#39;].message_type = _VCD_EVENT_EVENTDATAPOINTERSENTRY
 _VCD_EVENT.containing_type = _VCD
+_VCD_EVENT_DATA.fields_by_name[&#39;boolean&#39;].message_type = _VCD_BOOLEAN
+_VCD_EVENT_DATA.fields_by_name[&#39;num&#39;].message_type = _VCD_NUM
+_VCD_EVENT_DATA.fields_by_name[&#39;text&#39;].message_type = _VCD_TEXT
+_VCD_EVENT_DATA.fields_by_name[&#39;vec&#39;].message_type = _VCD_VEC
+_VCD_EVENT_DATA.containing_type = _VCD
 _VCD_FRAME_PROPERTIES_STREAMSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_STREAM
 _VCD_FRAME_PROPERTIES_STREAMSENTRY.containing_type = _VCD_FRAME_PROPERTIES
 _VCD_FRAME_PROPERTIES.fields_by_name[&#39;streams&#39;].message_type = _VCD_FRAME_PROPERTIES_STREAMSENTRY
+_VCD_FRAME_PROPERTIES.fields_by_name[&#39;odometry&#39;].message_type = _VCD_ODOMETRY
 _VCD_FRAME_PROPERTIES.fields_by_name[&#39;properties&#39;].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _VCD_FRAME_PROPERTIES.containing_type = _VCD
-_VCD_FRAME_ACTIONSENTRY.fields_by_name[&#39;value&#39;].message_type = google_dot_protobuf_dot_empty__pb2._EMPTY
-_VCD_FRAME_ACTIONSENTRY.containing_type = _VCD_FRAME
-_VCD_FRAME_CONTEXTSENTRY.fields_by_name[&#39;value&#39;].message_type = google_dot_protobuf_dot_empty__pb2._EMPTY
-_VCD_FRAME_CONTEXTSENTRY.containing_type = _VCD_FRAME
-_VCD_FRAME_EVENTSENTRY.fields_by_name[&#39;value&#39;].message_type = google_dot_protobuf_dot_empty__pb2._EMPTY
-_VCD_FRAME_EVENTSENTRY.containing_type = _VCD_FRAME
+_VCD_FRAME_ACTIONS.fields_by_name[&#39;action_data&#39;].message_type = _VCD_ACTION_DATA
+_VCD_FRAME_ACTIONS.containing_type = _VCD_FRAME
+_VCD_FRAME_EVENTS.fields_by_name[&#39;event_data&#39;].message_type = _VCD_EVENT_DATA
+_VCD_FRAME_EVENTS.containing_type = _VCD_FRAME
+_VCD_FRAME_CONTEXTS.fields_by_name[&#39;context_data&#39;].message_type = _VCD_CONTEXT_DATA
+_VCD_FRAME_CONTEXTS.containing_type = _VCD_FRAME
 _VCD_FRAME_OBJECTS.fields_by_name[&#39;object_data&#39;].message_type = _VCD_OBJECT_DATA
 _VCD_FRAME_OBJECTS.containing_type = _VCD_FRAME
+_VCD_FRAME_ACTIONSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_FRAME_ACTIONS
+_VCD_FRAME_ACTIONSENTRY.containing_type = _VCD_FRAME
+_VCD_FRAME_CONTEXTSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_FRAME_CONTEXTS
+_VCD_FRAME_CONTEXTSENTRY.containing_type = _VCD_FRAME
+_VCD_FRAME_EVENTSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_FRAME_EVENTS
+_VCD_FRAME_EVENTSENTRY.containing_type = _VCD_FRAME
 _VCD_FRAME_OBJECTSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_FRAME_OBJECTS
 _VCD_FRAME_OBJECTSENTRY.containing_type = _VCD_FRAME
 _VCD_FRAME_RELATIONSENTRY.fields_by_name[&#39;value&#39;].message_type = google_dot_protobuf_dot_empty__pb2._EMPTY
 _VCD_FRAME_RELATIONSENTRY.containing_type = _VCD_FRAME
+_VCD_FRAME.fields_by_name[&#39;frame_properties&#39;].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _VCD_FRAME.fields_by_name[&#39;actions&#39;].message_type = _VCD_FRAME_ACTIONSENTRY
 _VCD_FRAME.fields_by_name[&#39;contexts&#39;].message_type = _VCD_FRAME_CONTEXTSENTRY
 _VCD_FRAME.fields_by_name[&#39;events&#39;].message_type = _VCD_FRAME_EVENTSENTRY
-_VCD_FRAME.fields_by_name[&#39;frame_properties&#39;].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _VCD_FRAME.fields_by_name[&#39;objects&#39;].message_type = _VCD_FRAME_OBJECTSENTRY
 _VCD_FRAME.fields_by_name[&#39;relations&#39;].message_type = _VCD_FRAME_RELATIONSENTRY
 _VCD_FRAME.containing_type = _VCD
@@ -2606,17 +3567,18 @@ _VCD_MESH.fields_by_name[&#39;area_reference&#39;].message_type = _VCD_MESH_AREA
 _VCD_MESH.fields_by_name[&#39;line_reference&#39;].message_type = _VCD_MESH_LINEREFERENCEENTRY
 _VCD_MESH.fields_by_name[&#39;point3d&#39;].message_type = _VCD_MESH_POINT3DENTRY
 _VCD_MESH.containing_type = _VCD
-_VCD_METADATA_STREAMSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_STREAM
-_VCD_METADATA_STREAMSENTRY.containing_type = _VCD_METADATA
-_VCD_METADATA.fields_by_name[&#39;streams&#39;].message_type = _VCD_METADATA_STREAMSENTRY
 _VCD_METADATA.fields_by_name[&#39;properties&#39;].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
 _VCD_METADATA.containing_type = _VCD
 _VCD_NUM.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_NUM.containing_type = _VCD
+_VCD_OBJECT_OBJECTDATAPOINTERSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_ELEMENT_DATA_POINTER
+_VCD_OBJECT_OBJECTDATAPOINTERSENTRY.containing_type = _VCD_OBJECT
 _VCD_OBJECT.fields_by_name[&#39;frame_intervals&#39;].message_type = _VCD_FRAME_INTERVAL
 _VCD_OBJECT.fields_by_name[&#39;object_data&#39;].message_type = _VCD_OBJECT_DATA
+_VCD_OBJECT.fields_by_name[&#39;object_data_pointers&#39;].message_type = _VCD_OBJECT_OBJECTDATAPOINTERSENTRY
 _VCD_OBJECT.containing_type = _VCD
 _VCD_OBJECT_DATA.fields_by_name[&#39;bbox&#39;].message_type = _VCD_BBOX
+_VCD_OBJECT_DATA.fields_by_name[&#39;rbbox&#39;].message_type = _VCD_RBBOX
 _VCD_OBJECT_DATA.fields_by_name[&#39;binary&#39;].message_type = _VCD_BINARY
 _VCD_OBJECT_DATA.fields_by_name[&#39;boolean&#39;].message_type = _VCD_BOOLEAN
 _VCD_OBJECT_DATA.fields_by_name[&#39;cuboid&#39;].message_type = _VCD_CUBOID
@@ -2633,6 +3595,7 @@ _VCD_OBJECT_DATA.fields_by_name[&#39;area_reference&#39;].message_type = _VCD_AR
 _VCD_OBJECT_DATA.fields_by_name[&#39;line_reference&#39;].message_type = _VCD_LINE_REFERENCE
 _VCD_OBJECT_DATA.fields_by_name[&#39;mesh&#39;].message_type = _VCD_MESH
 _VCD_OBJECT_DATA.containing_type = _VCD
+_VCD_ODOMETRY.containing_type = _VCD
 _VCD_POINT2D.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_POINT2D.containing_type = _VCD
 _VCD_POINT3D.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
@@ -2647,8 +3610,32 @@ _VCD_RELATION.fields_by_name[&#39;frame_intervals&#39;].message_type = _VCD_FRAM
 _VCD_RELATION.fields_by_name[&#39;rdf_objects&#39;].message_type = _VCD_RDF_AGENT
 _VCD_RELATION.fields_by_name[&#39;rdf_subjects&#39;].message_type = _VCD_RDF_AGENT
 _VCD_RELATION.containing_type = _VCD
-_VCD_STREAM.fields_by_name[&#39;stream_properties&#39;].message_type = google_dot_protobuf_dot_struct__pb2._STRUCT
+_VCD_STREAM_PROPERTIES.fields_by_name[&#39;extrinsics&#39;].message_type = _VCD_EXTRINSICS
+_VCD_STREAM_PROPERTIES.fields_by_name[&#39;intrinsics_pinhole&#39;].message_type = _VCD_INTRINSICS_PINHOLE
+_VCD_STREAM_PROPERTIES.fields_by_name[&#39;intrinsics_fisheye&#39;].message_type = _VCD_INTRINSICS_FISHEYE
+_VCD_STREAM_PROPERTIES.fields_by_name[&#39;sync&#39;].message_type = _VCD_SYNC
+_VCD_STREAM_PROPERTIES.containing_type = _VCD
+_VCD_STREAM_PROPERTIES.oneofs_by_name[&#39;intrinsics&#39;].fields.append(
+  _VCD_STREAM_PROPERTIES.fields_by_name[&#39;intrinsics_pinhole&#39;])
+_VCD_STREAM_PROPERTIES.fields_by_name[&#39;intrinsics_pinhole&#39;].containing_oneof = _VCD_STREAM_PROPERTIES.oneofs_by_name[&#39;intrinsics&#39;]
+_VCD_STREAM_PROPERTIES.oneofs_by_name[&#39;intrinsics&#39;].fields.append(
+  _VCD_STREAM_PROPERTIES.fields_by_name[&#39;intrinsics_fisheye&#39;])
+_VCD_STREAM_PROPERTIES.fields_by_name[&#39;intrinsics_fisheye&#39;].containing_oneof = _VCD_STREAM_PROPERTIES.oneofs_by_name[&#39;intrinsics&#39;]
+_VCD_INTRINSICS_PINHOLE.containing_type = _VCD
+_VCD_INTRINSICS_FISHEYE.containing_type = _VCD
+_VCD_EXTRINSICS.containing_type = _VCD
+_VCD_STREAM.fields_by_name[&#39;stream_properties&#39;].message_type = _VCD_STREAM_PROPERTIES
 _VCD_STREAM.containing_type = _VCD
+_VCD_STREAM_TYPE.containing_type = _VCD_STREAM
+_VCD_SYNC.fields_by_name[&#39;timestamp_and_frame&#39;].message_type = _VCD_TIMESTAMP_AND_FRAME
+_VCD_SYNC.containing_type = _VCD
+_VCD_SYNC.oneofs_by_name[&#39;props&#39;].fields.append(
+  _VCD_SYNC.fields_by_name[&#39;frame_shift&#39;])
+_VCD_SYNC.fields_by_name[&#39;frame_shift&#39;].containing_oneof = _VCD_SYNC.oneofs_by_name[&#39;props&#39;]
+_VCD_SYNC.oneofs_by_name[&#39;props&#39;].fields.append(
+  _VCD_SYNC.fields_by_name[&#39;timestamp_and_frame&#39;])
+_VCD_SYNC.fields_by_name[&#39;timestamp_and_frame&#39;].containing_oneof = _VCD_SYNC.oneofs_by_name[&#39;props&#39;]
+_VCD_TIMESTAMP_AND_FRAME.containing_type = _VCD
 _VCD_TEXT.fields_by_name[&#39;attributes&#39;].message_type = _VCD_ATTRIBUTES
 _VCD_TEXT.containing_type = _VCD
 _VCD_VCD_ACTIONSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_ACTION
@@ -2659,6 +3646,8 @@ _VCD_VCD_EVENTSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_EVENT
 _VCD_VCD_EVENTSENTRY.containing_type = _VCD_VCD
 _VCD_VCD_FRAMESENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_FRAME
 _VCD_VCD_FRAMESENTRY.containing_type = _VCD_VCD
+_VCD_VCD_STREAMSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_STREAM
+_VCD_VCD_STREAMSENTRY.containing_type = _VCD_VCD
 _VCD_VCD_OBJECTSENTRY.fields_by_name[&#39;value&#39;].message_type = _VCD_OBJECT
 _VCD_VCD_OBJECTSENTRY.containing_type = _VCD_VCD
 _VCD_VCD_ONTOLOGIESENTRY.containing_type = _VCD_VCD
@@ -2670,6 +3659,7 @@ _VCD_VCD.fields_by_name[&#39;events&#39;].message_type = _VCD_VCD_EVENTSENTRY
 _VCD_VCD.fields_by_name[&#39;frame_intervals&#39;].message_type = _VCD_FRAME_INTERVAL
 _VCD_VCD.fields_by_name[&#39;frames&#39;].message_type = _VCD_VCD_FRAMESENTRY
 _VCD_VCD.fields_by_name[&#39;metadata&#39;].message_type = _VCD_METADATA
+_VCD_VCD.fields_by_name[&#39;streams&#39;].message_type = _VCD_VCD_STREAMSENTRY
 _VCD_VCD.fields_by_name[&#39;objects&#39;].message_type = _VCD_VCD_OBJECTSENTRY
 _VCD_VCD.fields_by_name[&#39;ontologies&#39;].message_type = _VCD_VCD_ONTOLOGIESENTRY
 _VCD_VCD.fields_by_name[&#39;relations&#39;].message_type = _VCD_VCD_RELATIONSENTRY
@@ -2683,9 +3673,30 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,), {
 
   &#39;action&#39; : _reflection.GeneratedProtocolMessageType(&#39;action&#39;, (_message.Message,), {
+
+    &#39;ActionDataPointersEntry&#39; : _reflection.GeneratedProtocolMessageType(&#39;ActionDataPointersEntry&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_ACTION_ACTIONDATAPOINTERSENTRY,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.action.ActionDataPointersEntry)
+      })
+    ,
     &#39;DESCRIPTOR&#39; : _VCD_ACTION,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
     # @@protoc_insertion_point(class_scope:VCD.VCD.action)
+    })
+  ,
+
+  &#39;action_data&#39; : _reflection.GeneratedProtocolMessageType(&#39;action_data&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_ACTION_DATA,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.action_data)
+    })
+  ,
+
+  &#39;element_data_pointer&#39; : _reflection.GeneratedProtocolMessageType(&#39;element_data_pointer&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_ELEMENT_DATA_POINTER,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.element_data_pointer)
     })
   ,
 
@@ -2710,6 +3721,13 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
     })
   ,
 
+  &#39;rbbox&#39; : _reflection.GeneratedProtocolMessageType(&#39;rbbox&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_RBBOX,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.rbbox)
+    })
+  ,
+
   &#39;binary&#39; : _reflection.GeneratedProtocolMessageType(&#39;binary&#39;, (_message.Message,), {
     &#39;DESCRIPTOR&#39; : _VCD_BINARY,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
@@ -2725,9 +3743,23 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
   ,
 
   &#39;context&#39; : _reflection.GeneratedProtocolMessageType(&#39;context&#39;, (_message.Message,), {
+
+    &#39;ContextDataPointersEntry&#39; : _reflection.GeneratedProtocolMessageType(&#39;ContextDataPointersEntry&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_CONTEXT_CONTEXTDATAPOINTERSENTRY,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.context.ContextDataPointersEntry)
+      })
+    ,
     &#39;DESCRIPTOR&#39; : _VCD_CONTEXT,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
     # @@protoc_insertion_point(class_scope:VCD.VCD.context)
+    })
+  ,
+
+  &#39;context_data&#39; : _reflection.GeneratedProtocolMessageType(&#39;context_data&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_CONTEXT_DATA,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.context_data)
     })
   ,
 
@@ -2739,9 +3771,23 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
   ,
 
   &#39;event&#39; : _reflection.GeneratedProtocolMessageType(&#39;event&#39;, (_message.Message,), {
+
+    &#39;EventDataPointersEntry&#39; : _reflection.GeneratedProtocolMessageType(&#39;EventDataPointersEntry&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_EVENT_EVENTDATAPOINTERSENTRY,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.event.EventDataPointersEntry)
+      })
+    ,
     &#39;DESCRIPTOR&#39; : _VCD_EVENT,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
     # @@protoc_insertion_point(class_scope:VCD.VCD.event)
+    })
+  ,
+
+  &#39;event_data&#39; : _reflection.GeneratedProtocolMessageType(&#39;event_data&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_EVENT_DATA,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.event_data)
     })
   ,
 
@@ -2761,6 +3807,34 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
 
   &#39;frame&#39; : _reflection.GeneratedProtocolMessageType(&#39;frame&#39;, (_message.Message,), {
 
+    &#39;Actions&#39; : _reflection.GeneratedProtocolMessageType(&#39;Actions&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_FRAME_ACTIONS,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.frame.Actions)
+      })
+    ,
+
+    &#39;Events&#39; : _reflection.GeneratedProtocolMessageType(&#39;Events&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_FRAME_EVENTS,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.frame.Events)
+      })
+    ,
+
+    &#39;Contexts&#39; : _reflection.GeneratedProtocolMessageType(&#39;Contexts&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_FRAME_CONTEXTS,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.frame.Contexts)
+      })
+    ,
+
+    &#39;Objects&#39; : _reflection.GeneratedProtocolMessageType(&#39;Objects&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_FRAME_OBJECTS,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.frame.Objects)
+      })
+    ,
+
     &#39;ActionsEntry&#39; : _reflection.GeneratedProtocolMessageType(&#39;ActionsEntry&#39;, (_message.Message,), {
       &#39;DESCRIPTOR&#39; : _VCD_FRAME_ACTIONSENTRY,
       &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
@@ -2779,13 +3853,6 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
       &#39;DESCRIPTOR&#39; : _VCD_FRAME_EVENTSENTRY,
       &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
       # @@protoc_insertion_point(class_scope:VCD.VCD.frame.EventsEntry)
-      })
-    ,
-
-    &#39;Objects&#39; : _reflection.GeneratedProtocolMessageType(&#39;Objects&#39;, (_message.Message,), {
-      &#39;DESCRIPTOR&#39; : _VCD_FRAME_OBJECTS,
-      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
-      # @@protoc_insertion_point(class_scope:VCD.VCD.frame.Objects)
       })
     ,
 
@@ -2865,13 +3932,6 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
   ,
 
   &#39;metadata&#39; : _reflection.GeneratedProtocolMessageType(&#39;metadata&#39;, (_message.Message,), {
-
-    &#39;StreamsEntry&#39; : _reflection.GeneratedProtocolMessageType(&#39;StreamsEntry&#39;, (_message.Message,), {
-      &#39;DESCRIPTOR&#39; : _VCD_METADATA_STREAMSENTRY,
-      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
-      # @@protoc_insertion_point(class_scope:VCD.VCD.metadata.StreamsEntry)
-      })
-    ,
     &#39;DESCRIPTOR&#39; : _VCD_METADATA,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
     # @@protoc_insertion_point(class_scope:VCD.VCD.metadata)
@@ -2886,6 +3946,13 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
   ,
 
   &#39;object&#39; : _reflection.GeneratedProtocolMessageType(&#39;object&#39;, (_message.Message,), {
+
+    &#39;ObjectDataPointersEntry&#39; : _reflection.GeneratedProtocolMessageType(&#39;ObjectDataPointersEntry&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_OBJECT_OBJECTDATAPOINTERSENTRY,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.object.ObjectDataPointersEntry)
+      })
+    ,
     &#39;DESCRIPTOR&#39; : _VCD_OBJECT,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
     # @@protoc_insertion_point(class_scope:VCD.VCD.object)
@@ -2896,6 +3963,13 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
     &#39;DESCRIPTOR&#39; : _VCD_OBJECT_DATA,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
     # @@protoc_insertion_point(class_scope:VCD.VCD.object_data)
+    })
+  ,
+
+  &#39;odometry&#39; : _reflection.GeneratedProtocolMessageType(&#39;odometry&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_ODOMETRY,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.odometry)
     })
   ,
 
@@ -2941,10 +4015,52 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
     })
   ,
 
+  &#39;stream_properties&#39; : _reflection.GeneratedProtocolMessageType(&#39;stream_properties&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_STREAM_PROPERTIES,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.stream_properties)
+    })
+  ,
+
+  &#39;intrinsics_pinhole&#39; : _reflection.GeneratedProtocolMessageType(&#39;intrinsics_pinhole&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_INTRINSICS_PINHOLE,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.intrinsics_pinhole)
+    })
+  ,
+
+  &#39;intrinsics_fisheye&#39; : _reflection.GeneratedProtocolMessageType(&#39;intrinsics_fisheye&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_INTRINSICS_FISHEYE,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.intrinsics_fisheye)
+    })
+  ,
+
+  &#39;extrinsics&#39; : _reflection.GeneratedProtocolMessageType(&#39;extrinsics&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_EXTRINSICS,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.extrinsics)
+    })
+  ,
+
   &#39;stream&#39; : _reflection.GeneratedProtocolMessageType(&#39;stream&#39;, (_message.Message,), {
     &#39;DESCRIPTOR&#39; : _VCD_STREAM,
     &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
     # @@protoc_insertion_point(class_scope:VCD.VCD.stream)
+    })
+  ,
+
+  &#39;sync&#39; : _reflection.GeneratedProtocolMessageType(&#39;sync&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_SYNC,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.sync)
+    })
+  ,
+
+  &#39;timestamp_and_frame&#39; : _reflection.GeneratedProtocolMessageType(&#39;timestamp_and_frame&#39;, (_message.Message,), {
+    &#39;DESCRIPTOR&#39; : _VCD_TIMESTAMP_AND_FRAME,
+    &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+    # @@protoc_insertion_point(class_scope:VCD.VCD.timestamp_and_frame)
     })
   ,
 
@@ -2982,6 +4098,13 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
       &#39;DESCRIPTOR&#39; : _VCD_VCD_FRAMESENTRY,
       &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
       # @@protoc_insertion_point(class_scope:VCD.VCD.Vcd.FramesEntry)
+      })
+    ,
+
+    &#39;StreamsEntry&#39; : _reflection.GeneratedProtocolMessageType(&#39;StreamsEntry&#39;, (_message.Message,), {
+      &#39;DESCRIPTOR&#39; : _VCD_VCD_STREAMSENTRY,
+      &#39;__module__&#39; : &#39;vcd_proto_v4_pb2&#39;
+      # @@protoc_insertion_point(class_scope:VCD.VCD.Vcd.StreamsEntry)
       })
     ,
 
@@ -3023,21 +4146,32 @@ VCD = _reflection.GeneratedProtocolMessageType(&#39;VCD&#39;, (_message.Message,
   })
 _sym_db.RegisterMessage(VCD)
 _sym_db.RegisterMessage(VCD.action)
+_sym_db.RegisterMessage(VCD.action.ActionDataPointersEntry)
+_sym_db.RegisterMessage(VCD.action_data)
+_sym_db.RegisterMessage(VCD.element_data_pointer)
 _sym_db.RegisterMessage(VCD.area_reference)
 _sym_db.RegisterMessage(VCD.attributes)
 _sym_db.RegisterMessage(VCD.bbox)
+_sym_db.RegisterMessage(VCD.rbbox)
 _sym_db.RegisterMessage(VCD.binary)
 _sym_db.RegisterMessage(VCD.boolean)
 _sym_db.RegisterMessage(VCD.context)
+_sym_db.RegisterMessage(VCD.context.ContextDataPointersEntry)
+_sym_db.RegisterMessage(VCD.context_data)
 _sym_db.RegisterMessage(VCD.cuboid)
 _sym_db.RegisterMessage(VCD.event)
+_sym_db.RegisterMessage(VCD.event.EventDataPointersEntry)
+_sym_db.RegisterMessage(VCD.event_data)
 _sym_db.RegisterMessage(VCD.frame_properties)
 _sym_db.RegisterMessage(VCD.frame_properties.StreamsEntry)
 _sym_db.RegisterMessage(VCD.frame)
+_sym_db.RegisterMessage(VCD.frame.Actions)
+_sym_db.RegisterMessage(VCD.frame.Events)
+_sym_db.RegisterMessage(VCD.frame.Contexts)
+_sym_db.RegisterMessage(VCD.frame.Objects)
 _sym_db.RegisterMessage(VCD.frame.ActionsEntry)
 _sym_db.RegisterMessage(VCD.frame.ContextsEntry)
 _sym_db.RegisterMessage(VCD.frame.EventsEntry)
-_sym_db.RegisterMessage(VCD.frame.Objects)
 _sym_db.RegisterMessage(VCD.frame.ObjectsEntry)
 _sym_db.RegisterMessage(VCD.frame.RelationsEntry)
 _sym_db.RegisterMessage(VCD.frame_interval)
@@ -3049,29 +4183,40 @@ _sym_db.RegisterMessage(VCD.mesh.AreaReferenceEntry)
 _sym_db.RegisterMessage(VCD.mesh.LineReferenceEntry)
 _sym_db.RegisterMessage(VCD.mesh.Point3dEntry)
 _sym_db.RegisterMessage(VCD.metadata)
-_sym_db.RegisterMessage(VCD.metadata.StreamsEntry)
 _sym_db.RegisterMessage(VCD.num)
 _sym_db.RegisterMessage(VCD.object)
+_sym_db.RegisterMessage(VCD.object.ObjectDataPointersEntry)
 _sym_db.RegisterMessage(VCD.object_data)
+_sym_db.RegisterMessage(VCD.odometry)
 _sym_db.RegisterMessage(VCD.point2d)
 _sym_db.RegisterMessage(VCD.point3d)
 _sym_db.RegisterMessage(VCD.poly2d)
 _sym_db.RegisterMessage(VCD.poly3d)
 _sym_db.RegisterMessage(VCD.rdf_agent)
 _sym_db.RegisterMessage(VCD.relation)
+_sym_db.RegisterMessage(VCD.stream_properties)
+_sym_db.RegisterMessage(VCD.intrinsics_pinhole)
+_sym_db.RegisterMessage(VCD.intrinsics_fisheye)
+_sym_db.RegisterMessage(VCD.extrinsics)
 _sym_db.RegisterMessage(VCD.stream)
+_sym_db.RegisterMessage(VCD.sync)
+_sym_db.RegisterMessage(VCD.timestamp_and_frame)
 _sym_db.RegisterMessage(VCD.text)
 _sym_db.RegisterMessage(VCD.Vcd)
 _sym_db.RegisterMessage(VCD.Vcd.ActionsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.ContextsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.EventsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.FramesEntry)
+_sym_db.RegisterMessage(VCD.Vcd.StreamsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.ObjectsEntry)
 _sym_db.RegisterMessage(VCD.Vcd.OntologiesEntry)
 _sym_db.RegisterMessage(VCD.Vcd.RelationsEntry)
 _sym_db.RegisterMessage(VCD.vec)
 
 
+_VCD_ACTION_ACTIONDATAPOINTERSENTRY._options = None
+_VCD_CONTEXT_CONTEXTDATAPOINTERSENTRY._options = None
+_VCD_EVENT_EVENTDATAPOINTERSENTRY._options = None
 _VCD_FRAME_PROPERTIES_STREAMSENTRY._options = None
 _VCD_FRAME_ACTIONSENTRY._options = None
 _VCD_FRAME_CONTEXTSENTRY._options = None
@@ -3081,11 +4226,12 @@ _VCD_FRAME_RELATIONSENTRY._options = None
 _VCD_MESH_AREAREFERENCEENTRY._options = None
 _VCD_MESH_LINEREFERENCEENTRY._options = None
 _VCD_MESH_POINT3DENTRY._options = None
-_VCD_METADATA_STREAMSENTRY._options = None
+_VCD_OBJECT_OBJECTDATAPOINTERSENTRY._options = None
 _VCD_VCD_ACTIONSENTRY._options = None
 _VCD_VCD_CONTEXTSENTRY._options = None
 _VCD_VCD_EVENTSENTRY._options = None
 _VCD_VCD_FRAMESENTRY._options = None
+_VCD_VCD_STREAMSENTRY._options = None
 _VCD_VCD_OBJECTSENTRY._options = None
 _VCD_VCD_ONTOLOGIESENTRY._options = None
 _VCD_VCD_RELATIONSENTRY._options = None
@@ -3106,18 +4252,11 @@ _VCD_VCD_RELATIONSENTRY._options = None
 <span>(</span><span>**kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>google.protobuf.message.Message</li>
@@ -3126,520 +4265,347 @@ Not sure how to best express at this point.</p></section>
 <dl>
 <dt id="vcd.proto.VCD.DESCRIPTOR"><code class="name">var <span class="ident">DESCRIPTOR</span></code></dt>
 <dd>
-<section class="desc"><p>Descriptor for a protocol message type.</p>
-<p>A Descriptor instance has the following attributes:</p>
-<p>name: (str) Name of this protocol message type.
-full_name: (str) Fully-qualified name of this protocol message type,
-which will include protocol "package" name and the name of any
-enclosing types.</p>
-<p>containing_type: (Descriptor) Reference to the descriptor of the
-type containing us, or None if this is top-level.</p>
-<p>fields: (list of FieldDescriptors) Field descriptors for all
-fields in this type.
-fields_by_number: (dict int -&gt; FieldDescriptor) Same FieldDescriptor
-objects as in |fields|, but indexed by "number" attribute in each
-FieldDescriptor.
-fields_by_name: (dict str -&gt; FieldDescriptor) Same FieldDescriptor
-objects as in |fields|, but indexed by "name" attribute in each
-FieldDescriptor.
-fields_by_camelcase_name: (dict str -&gt; FieldDescriptor) Same
-FieldDescriptor objects as in |fields|, but indexed by
-"camelcase_name" attribute in each FieldDescriptor.</p>
-<p>nested_types: (list of Descriptors) Descriptor references
-for all protocol message types nested within this one.
-nested_types_by_name: (dict str -&gt; Descriptor) Same Descriptor
-objects as in |nested_types|, but indexed by "name" attribute
-in each Descriptor.</p>
-<p>enum_types: (list of EnumDescriptors) EnumDescriptor references
-for all enums contained within this type.
-enum_types_by_name: (dict str -&gt;EnumDescriptor) Same EnumDescriptor
-objects as in |enum_types|, but indexed by "name" attribute
-in each EnumDescriptor.
-enum_values_by_name: (dict str -&gt; EnumValueDescriptor) Dict mapping
-from enum value name to EnumValueDescriptor for that value.</p>
-<p>extensions: (list of FieldDescriptor) All extensions defined directly
-within this message type (NOT within a nested type).
-extensions_by_name: (dict, string -&gt; FieldDescriptor) Same FieldDescriptor
-objects as |extensions|, but indexed by "name" attribute of each
-FieldDescriptor.</p>
-<p>is_extendable:
-Does this type define any extension ranges?</p>
-<p>oneofs: (list of OneofDescriptor) The list of descriptors for oneof fields
-in this message.
-oneofs_by_name: (dict str -&gt; OneofDescriptor) Same objects as in |oneofs|,
-but indexed by "name" attribute.</p>
-<p>file: (FileDescriptor) Reference to file descriptor.</p></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.proto.VCD.VCD_FIELD_NUMBER"><code class="name">var <span class="ident">VCD_FIELD_NUMBER</span></code></dt>
 <dd>
-<section class="desc"><p>int([x]) -&gt; integer
-int(x, base=10) -&gt; integer</p>
-<p>Convert a number or string to an integer, or return 0 if no arguments
-are given.
-If x is a number, return x.<strong>int</strong>().
-For floating point
-numbers, this truncates towards zero.</p>
-<p>If x is not a number or if base is given, then x must be a string,
-bytes, or bytearray instance representing an integer literal in the
-given base.
-The literal can be preceded by '+' or '-' and be surrounded
-by whitespace.
-The base defaults to 10.
-Valid bases are 0 and 2-36.
-Base 0 means to interpret the base from the string as an integer literal.</p>
-<pre><code>&gt;&gt;&gt; int('0b100', base=0)
-4
-</code></pre></section>
+<div class="desc"></div>
 </dd>
 <dt id="vcd.proto.VCD.Vcd"><code class="name">var <span class="ident">Vcd</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.action"><code class="name">var <span class="ident">action</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.action_data"><code class="name">var <span class="ident">action_data</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.area_reference"><code class="name">var <span class="ident">area_reference</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.attributes"><code class="name">var <span class="ident">attributes</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.bbox"><code class="name">var <span class="ident">bbox</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.binary"><code class="name">var <span class="ident">binary</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.boolean"><code class="name">var <span class="ident">boolean</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.context"><code class="name">var <span class="ident">context</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.context_data"><code class="name">var <span class="ident">context_data</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.cuboid"><code class="name">var <span class="ident">cuboid</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.element_data_pointer"><code class="name">var <span class="ident">element_data_pointer</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.event"><code class="name">var <span class="ident">event</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.event_data"><code class="name">var <span class="ident">event_data</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.extrinsics"><code class="name">var <span class="ident">extrinsics</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.frame"><code class="name">var <span class="ident">frame</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.frame_interval"><code class="name">var <span class="ident">frame_interval</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.frame_properties"><code class="name">var <span class="ident">frame_properties</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.image"><code class="name">var <span class="ident">image</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.intrinsics_fisheye"><code class="name">var <span class="ident">intrinsics_fisheye</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.intrinsics_pinhole"><code class="name">var <span class="ident">intrinsics_pinhole</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.line_reference"><code class="name">var <span class="ident">line_reference</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.mat"><code class="name">var <span class="ident">mat</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.mesh"><code class="name">var <span class="ident">mesh</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.metadata"><code class="name">var <span class="ident">metadata</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.num"><code class="name">var <span class="ident">num</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.object"><code class="name">var <span class="ident">object</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.object_data"><code class="name">var <span class="ident">object_data</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.odometry"><code class="name">var <span class="ident">odometry</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.point2d"><code class="name">var <span class="ident">point2d</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.point3d"><code class="name">var <span class="ident">point3d</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.poly2d"><code class="name">var <span class="ident">poly2d</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.poly3d"><code class="name">var <span class="ident">poly3d</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.rbbox"><code class="name">var <span class="ident">rbbox</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.rdf_agent"><code class="name">var <span class="ident">rdf_agent</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.relation"><code class="name">var <span class="ident">relation</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.stream"><code class="name">var <span class="ident">stream</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.stream_properties"><code class="name">var <span class="ident">stream_properties</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.sync"><code class="name">var <span class="ident">sync</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.text"><code class="name">var <span class="ident">text</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
+</dd>
+<dt id="vcd.proto.VCD.timestamp_and_frame"><code class="name">var <span class="ident">timestamp_and_frame</span></code></dt>
+<dd>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
+<p>Protocol message classes are almost always generated by the protocol
+compiler.
+These generated types subclass Message and implement the methods
+shown below.</p></div>
 </dd>
 <dt id="vcd.proto.VCD.vec"><code class="name">var <span class="ident">vec</span></code></dt>
 <dd>
-<section class="desc"><p>Abstract base class for protocol messages.</p>
+<div class="desc"><p>Abstract base class for protocol messages.</p>
 <p>Protocol message classes are almost always generated by the protocol
 compiler.
 These generated types subclass Message and implement the methods
-shown below.</p>
-<p>TODO(robinson): Link to an HTML document here.</p>
-<p>TODO(robinson): Document that instances of this class will also
-have an Extensions attribute with <strong>getitem</strong> and <strong>setitem</strong>.
-Again, not sure how to best convey this.</p>
-<p>TODO(robinson): Document that the class must also have a static
-RegisterExtension(extension_field) method.
-Not sure how to best express at this point.</p></section>
+shown below.</p></div>
 </dd>
 </dl>
 <h3>Static methods</h3>
@@ -3648,7 +4614,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">FromString</span></span>(<span>s)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3663,7 +4629,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">RegisterExtension</span></span>(<span>extension_handle)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3681,7 +4647,7 @@ Not sure how to best express at this point.</p></section>
 <dl>
 <dt id="vcd.proto.VCD.vcd"><code class="name">var <span class="ident">vcd</span></code></dt>
 <dd>
-<section class="desc"><p>Getter for vcd.</p></section>
+<div class="desc"><p>Getter for vcd.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3709,7 +4675,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">ByteSize</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3740,7 +4706,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">Clear</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3762,7 +4728,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">ClearField</span></span>(<span>self, field_name)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3805,7 +4771,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">DiscardUnknownFields</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3830,14 +4796,11 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">FindInitializationErrors</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Finds required fields which are not initialized.</p>
+<div class="desc"><p>Finds required fields which are not initialized.</p>
 <h2 id="returns">Returns</h2>
-<dl>
-<dt><code>A</code> <code>list</code> of <code>strings.</code>
-<code>Each</code> <code>string</code> <code>is</code> <code>a</code> <code>path</code> <code>to</code> <code>an</code> <code>uninitialized</code> <code>field</code> <code>from</code></dt>
-<dd>&nbsp;</dd>
-</dl>
-<p>the top-level message, e.g. "foo.bar[5].baz".</p></section>
+<p>A list of strings.
+Each string is a path to an uninitialized field from
+the top-level message, e.g. "foo.bar[5].baz".</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3891,7 +4854,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">HasField</span></span>(<span>self, field_name)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3919,7 +4882,7 @@ Not sure how to best express at this point.</p></section>
 <span>def <span class="ident">IsInitialized</span></span>(<span>self, errors=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Checks if all required fields of a message are set.</p>
+<div class="desc"><p>Checks if all required fields of a message are set.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>errors</code></strong></dt>
@@ -3927,7 +4890,7 @@ Not sure how to best express at this point.</p></section>
 paths of all missing required fields.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
-<p>True iff the specified message has all required fields set.</p></section>
+<p>True iff the specified message has all required fields set.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3976,7 +4939,7 @@ paths of all missing required fields.</dd>
 <span>def <span class="ident">ListFields</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -3991,7 +4954,7 @@ paths of all missing required fields.</dd>
 <span>def <span class="ident">MergeFrom</span></span>(<span>self, msg)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4042,7 +5005,7 @@ paths of all missing required fields.</dd>
 <span>def <span class="ident">MergeFromString</span></span>(<span>self, serialized)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4073,7 +5036,7 @@ paths of all missing required fields.</dd>
 <span>def <span class="ident">SerializePartialToString</span></span>(<span>self, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4088,7 +5051,7 @@ paths of all missing required fields.</dd>
 <span>def <span class="ident">SerializeToString</span></span>(<span>self, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4106,8 +5069,8 @@ paths of all missing required fields.</dd>
 <span>def <span class="ident">SetInParent</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Sets the _cached_byte_size_dirty bit to true,
-and propagates this to our listener iff this was a state change.</p></section>
+<div class="desc"><p>Sets the _cached_byte_size_dirty bit to true,
+and propagates this to our listener iff this was a state change.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4132,7 +5095,7 @@ and propagates this to our listener iff this was a state change.</p></section>
 <span>def <span class="ident">UnknownFields</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4148,7 +5111,7 @@ and propagates this to our listener iff this was a state change.</p></section>
 <span>def <span class="ident">WhichOneof</span></span>(<span>self, oneof_name)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Returns the name of the currently set field inside a oneof, or None.</p></section>
+<div class="desc"><p>Returns the name of the currently set field inside a oneof, or None.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -4210,18 +5173,25 @@ and propagates this to our listener iff this was a state change.</p></section>
 <li><code><a title="vcd.proto.VCD.Vcd" href="#vcd.proto.VCD.Vcd">Vcd</a></code></li>
 <li><code><a title="vcd.proto.VCD.WhichOneof" href="#vcd.proto.VCD.WhichOneof">WhichOneof</a></code></li>
 <li><code><a title="vcd.proto.VCD.action" href="#vcd.proto.VCD.action">action</a></code></li>
+<li><code><a title="vcd.proto.VCD.action_data" href="#vcd.proto.VCD.action_data">action_data</a></code></li>
 <li><code><a title="vcd.proto.VCD.area_reference" href="#vcd.proto.VCD.area_reference">area_reference</a></code></li>
 <li><code><a title="vcd.proto.VCD.attributes" href="#vcd.proto.VCD.attributes">attributes</a></code></li>
 <li><code><a title="vcd.proto.VCD.bbox" href="#vcd.proto.VCD.bbox">bbox</a></code></li>
 <li><code><a title="vcd.proto.VCD.binary" href="#vcd.proto.VCD.binary">binary</a></code></li>
 <li><code><a title="vcd.proto.VCD.boolean" href="#vcd.proto.VCD.boolean">boolean</a></code></li>
 <li><code><a title="vcd.proto.VCD.context" href="#vcd.proto.VCD.context">context</a></code></li>
+<li><code><a title="vcd.proto.VCD.context_data" href="#vcd.proto.VCD.context_data">context_data</a></code></li>
 <li><code><a title="vcd.proto.VCD.cuboid" href="#vcd.proto.VCD.cuboid">cuboid</a></code></li>
+<li><code><a title="vcd.proto.VCD.element_data_pointer" href="#vcd.proto.VCD.element_data_pointer">element_data_pointer</a></code></li>
 <li><code><a title="vcd.proto.VCD.event" href="#vcd.proto.VCD.event">event</a></code></li>
+<li><code><a title="vcd.proto.VCD.event_data" href="#vcd.proto.VCD.event_data">event_data</a></code></li>
+<li><code><a title="vcd.proto.VCD.extrinsics" href="#vcd.proto.VCD.extrinsics">extrinsics</a></code></li>
 <li><code><a title="vcd.proto.VCD.frame" href="#vcd.proto.VCD.frame">frame</a></code></li>
 <li><code><a title="vcd.proto.VCD.frame_interval" href="#vcd.proto.VCD.frame_interval">frame_interval</a></code></li>
 <li><code><a title="vcd.proto.VCD.frame_properties" href="#vcd.proto.VCD.frame_properties">frame_properties</a></code></li>
 <li><code><a title="vcd.proto.VCD.image" href="#vcd.proto.VCD.image">image</a></code></li>
+<li><code><a title="vcd.proto.VCD.intrinsics_fisheye" href="#vcd.proto.VCD.intrinsics_fisheye">intrinsics_fisheye</a></code></li>
+<li><code><a title="vcd.proto.VCD.intrinsics_pinhole" href="#vcd.proto.VCD.intrinsics_pinhole">intrinsics_pinhole</a></code></li>
 <li><code><a title="vcd.proto.VCD.line_reference" href="#vcd.proto.VCD.line_reference">line_reference</a></code></li>
 <li><code><a title="vcd.proto.VCD.mat" href="#vcd.proto.VCD.mat">mat</a></code></li>
 <li><code><a title="vcd.proto.VCD.mesh" href="#vcd.proto.VCD.mesh">mesh</a></code></li>
@@ -4229,14 +5199,19 @@ and propagates this to our listener iff this was a state change.</p></section>
 <li><code><a title="vcd.proto.VCD.num" href="#vcd.proto.VCD.num">num</a></code></li>
 <li><code><a title="vcd.proto.VCD.object" href="#vcd.proto.VCD.object">object</a></code></li>
 <li><code><a title="vcd.proto.VCD.object_data" href="#vcd.proto.VCD.object_data">object_data</a></code></li>
+<li><code><a title="vcd.proto.VCD.odometry" href="#vcd.proto.VCD.odometry">odometry</a></code></li>
 <li><code><a title="vcd.proto.VCD.point2d" href="#vcd.proto.VCD.point2d">point2d</a></code></li>
 <li><code><a title="vcd.proto.VCD.point3d" href="#vcd.proto.VCD.point3d">point3d</a></code></li>
 <li><code><a title="vcd.proto.VCD.poly2d" href="#vcd.proto.VCD.poly2d">poly2d</a></code></li>
 <li><code><a title="vcd.proto.VCD.poly3d" href="#vcd.proto.VCD.poly3d">poly3d</a></code></li>
+<li><code><a title="vcd.proto.VCD.rbbox" href="#vcd.proto.VCD.rbbox">rbbox</a></code></li>
 <li><code><a title="vcd.proto.VCD.rdf_agent" href="#vcd.proto.VCD.rdf_agent">rdf_agent</a></code></li>
 <li><code><a title="vcd.proto.VCD.relation" href="#vcd.proto.VCD.relation">relation</a></code></li>
 <li><code><a title="vcd.proto.VCD.stream" href="#vcd.proto.VCD.stream">stream</a></code></li>
+<li><code><a title="vcd.proto.VCD.stream_properties" href="#vcd.proto.VCD.stream_properties">stream_properties</a></code></li>
+<li><code><a title="vcd.proto.VCD.sync" href="#vcd.proto.VCD.sync">sync</a></code></li>
 <li><code><a title="vcd.proto.VCD.text" href="#vcd.proto.VCD.text">text</a></code></li>
+<li><code><a title="vcd.proto.VCD.timestamp_and_frame" href="#vcd.proto.VCD.timestamp_and_frame">timestamp_and_frame</a></code></li>
 <li><code><a title="vcd.proto.VCD.vcd" href="#vcd.proto.VCD.vcd">vcd</a></code></li>
 <li><code><a title="vcd.proto.VCD.vec" href="#vcd.proto.VCD.vec">vec</a></code></li>
 </ul>
@@ -4247,9 +5222,7 @@ and propagates this to our listener iff this was a state change.</p></section>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

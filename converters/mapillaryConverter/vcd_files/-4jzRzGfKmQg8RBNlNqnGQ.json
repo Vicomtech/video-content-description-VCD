@@ -1,11 +1,12 @@
 {
     "vcd": {
-        "frame_intervals": [],
         "frames": {},
+        "schema_version": "4.3.0",
+        "frame_intervals": [],
         "objects": {
             "0": {
-                "frame_intervals": [],
-                "name": "object 0",
+                "name": "Instance 1",
+                "type": "human--rider--bicyclist",
                 "object_data": {
                     "boolean": [
                         {
@@ -15,97 +16,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "432",
-                                "471",
-                                "0",
-                                "2wRwgmK2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "581",
-                                "449",
-                                "0",
-                                "xQIRC2ARRRR4COwEBRp4LIRARCICMANIRyOCPJEAR2R0KIKIR"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "974",
-                                "388",
-                                "0",
-                                "/+IOAR2R2R2RwCOyOyCOCOCOwCOAQBWxWAK2KyIRARCIRARCMAKBAKAKAKQBQBQKAKAMICICICICOKBRRQKK+2wMICIRARCICICIRAn//+2wE/2wJ/4"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "331",
-                                "347",
-                                "1",
-                                "IX4nNPBXm2wA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "765",
                                 "306",
+                                "2",
+                                "4",
                                 "0",
-                                "JRRRRRRRRRRQKKKKKKKKKKKKKKKKKKKKKBRRRRRRRRRRm2xKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRn22R+2wpOCOCOARwRwRwRwCOCOCOCOARwRwm2xORARyORAR02wBW2AJCICIRCICIRCICIRCICIRARCIRARCIRARE2wR+wR+wR2wEAKA"
+                                "JRRRRRRRRRRQKKKKKKKKKKKKKKKKKKKKKBRRRRRRRRRRn/JRCKKKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRRRRCM///wR///9J6PR4R6PR6PCPR6PR4R6Pn/JwRyOCOCORwn+BX+BIRyIRCORCIRyIRCORCORCIRyIRCORE/yP//yP//yP+ExW"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "human--rider--bicyclist"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "1": {
-                "frame_intervals": [],
-                "name": "object 5",
+                "name": "Instance 2",
+                "type": "human--rider--bicyclist",
                 "object_data": {
                     "boolean": [
                         {
@@ -115,80 +59,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "419",
-                                "468",
-                                "0",
-                                "BWyIRBWCOCNJgKAJmwR2EJA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "694",
-                                "430",
-                                "0",
-                                "JARCIEKK2JAQWBW2K2xWwCOARRCKKIRRCKKIRRBRRUAKAMOAm2KwKwBWBWBQBOmAK2RyICORCBQBQO2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "179",
-                                "250",
-                                "0",
-                                "+2yP22FJ6PE2BW0IRBAKwKBONJQBSKBQKBQCI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "963",
                                 "188",
-                                "1",
-                                "JRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQZ2CPR2F4BOnwIBRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKM2CPCPCPCPCOwpP//2wCICICICORARATPR+2wCO20BaKKRQKAKICOFIRAW2wR6PR4R6ZARyICICICICICICORARARARAn2wBP2E22R+yP2R+wR+yP2CO2A"
+                                "3",
+                                "4",
+                                "0",
+                                "JRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQZ+R/+R+v/4J0//xAKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRnyP/6P/6P/6P/6P1J//////////4CICICICORARATP/yP///CP/gLRRSKBQBRAR9IRAX/CP/yP/yP/6P/yZARyICICICICICICORARARARAn//4BP//An/R//4R//4R//4CP//CP//AR/A"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "human--rider--bicyclist"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "2": {
-                "frame_intervals": [],
-                "name": "object 9",
+                "name": "Instance 3",
+                "type": "human--rider--bicyclist",
                 "object_data": {
                     "boolean": [
                         {
@@ -198,97 +102,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                -1,
-                                1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "407",
-                                "463",
-                                "1",
-                                "IKWBIEKBWCOCBQPhECKJSKyIBWwBWARARRBQhQ"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                -1,
-                                -1,
-                                0
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "401",
-                                "492",
-                                "0",
-                                "pb"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "880",
-                                "431",
-                                "0",
-                                "BQKKQKAKYCICKAKAKAK22C2BARwCOAR+FJ2ApIRARCIRARCOK2KwBWxQBwCOAWARARQBQKJRRpBRQKxW"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "225",
-                                "243",
-                                "0",
-                                "2BW2wBW2wBW2wBQBOgJ2m2K+2K+2K+2BX2xX2wK+2K+2K+2BX2xX2xW202xp2xXwK+K+BXwK+BXwK+K+BXwK+BXwK+K+BWxP22hRQKKKBRQKKKSIRCIIBIEKAKAKAKAKhRCKK2BWxWw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "1023",
                                 "189",
-                                "1",
-                                "J+2wCKKKKM2R22R22CO2yO2yO2wR22R22CO2yO2RmATOwCPyXwA"
+                                "5",
+                                "8",
+                                "0",
+                                "J/+RRRRRmCPAAR+R4ACPAAR+R4ACPyPAAR4RmTPR/AS/AA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "human--rider--bicyclist"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "3": {
-                "frame_intervals": [],
-                "name": "object 14",
+                "name": "Instance 4",
+                "type": "object--support--pole",
                 "object_data": {
                     "boolean": [
                         {
@@ -298,46 +145,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
-                                "513",
-                                "366",
-                                "1",
-                                "J2wn+CP/+2R/wmwBpyOwCOwCOwCO2R2yO2R+K22AKAKAKAKBQI"
-                            ]
-                        },
-                        {
+                                "318",
+                                "333",
+                                "2",
+                                "7",
+                                "0",
+                                "JyORyORyOnhRQKKK+w"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
                             "closed": true,
                             "hierarchy": [
                                 -1,
                                 0,
                                 -1,
                                 -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "318",
-                                "333",
-                                "0",
-                                "JARARARARARAmwhRQKKK22"
                             ]
                         }
                     ]
                 },
-                "type": "object--support--pole"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "4": {
-                "frame_intervals": [],
-                "name": "object 16",
+                "name": "Instance 5",
+                "type": "object--traffic-light",
                 "object_data": {
                     "boolean": [
                         {
@@ -347,29 +188,40 @@
                     ],
                     "poly2d": [
                         {
+                            "name": "contour",
+                            "val": [
+                                "189",
+                                "213",
+                                "11",
+                                "31",
+                                "0",
+                                "BB04nmCOASIARA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
                             "closed": true,
                             "hierarchy": [
                                 -1,
                                 -1,
                                 -1,
                                 -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "189",
-                                "213",
-                                "0",
-                                "BB2wE/An4m2yO2wSORA"
                             ]
                         }
                     ]
                 },
-                "type": "object--traffic-light"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "5": {
-                "frame_intervals": [],
-                "name": "object 17",
+                "name": "object 0",
+                "type": "construction--barrier--curb",
                 "object_data": {
                     "boolean": [
                         {
@@ -379,97 +231,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "242",
-                                "586",
-                                "1",
-                                "JRCKIRRRCKIRRRCKIRvCORyICOQ"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "1020",
-                                "542",
-                                "1",
-                                "gNI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "181",
-                                "538",
-                                "0",
-                                "J///6P/+202ApP//2yP///wE2A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "845",
-                                "533",
-                                "0",
-                                "yOn/4EQBQX/22"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "338",
                                 "531",
-                                "0",
-                                "IBQP/+wCP+2R2AmKAn+2R/2yP+2CCI"
+                                "39",
+                                "68",
+                                "1",
+                                "IBQPRyIAAAEABQEyORwQRA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "construction--barrier--curb"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "6": {
-                "frame_intervals": [],
-                "name": "object 22",
+                "name": "object 1",
+                "type": "construction--barrier--fence",
                 "object_data": {
                     "boolean": [
                         {
@@ -479,63 +274,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "147",
-                                "474",
-                                "0",
-                                "+2BX2ApO2wEwK+2AK22A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "328",
-                                "473",
-                                "0",
-                                "/AK2wFJCKIRCIRRCIRCKImwR6Ow"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "246",
                                 "473",
-                                "1",
-                                "/wBW20//2wRE22AK/A"
+                                "12",
+                                "12",
+                                "0",
+                                "/AAAAABXn//AAAAARE4BX4AAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "construction--barrier--fence"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "7": {
-                "frame_intervals": [],
-                "name": "object 25",
+                "name": "object 2",
+                "type": "construction--flat--bike-lane",
                 "object_data": {
                     "boolean": [
                         {
@@ -545,63 +317,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                -1,
-                                1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "492",
-                                "591",
-                                "1",
-                                "J/2wR/2yP+2CP+2CP+2R/2wRyICORyORARyKBQKBQKBQKBQKBRQKBQKBQKBQKBQKBRQKBQKBQKBQKBQKKBQKBQKBQKBQKBRQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBn2wn/EKKKKKKIRRRRRRRCKKKKKKIO2yO2yO2yBQBQBQBQBQBQBQBWKAKAKAKAKAKAKAKBwCOyOALBWKwKxWKwKxWBWKxWBWKFPK5ZRRRRRCKKKKKKKKKKIRRRRRRRRRRRRCKKKKKKKKKKIRRRRv////2EIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRDW2K2xaIRRCIRCKIRCIRRCIRCKIRCIRRCIRCKIRCIRRCIRCKIU//////////22FJRRCKIRRRCKKIRRCKKIRRCKKIRRRCKIRRRCKKIRRCKKIRRCKKIRRRCKIRRRJwERRRCKKKKKKKKKKKIRRRRRRRRRRRQ"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                -1,
-                                -1,
-                                0
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "199",
-                                "668",
-                                "0",
-                                "pb"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "415",
                                 "479",
-                                "0",
-                                "BQK2AKARxRBhRAYRPNBRQKBQKBQKBQKBQKBQKBQKBQKBQKBQKCwIRp///2wCP//22FByICICORARARyICORARARyICICORBhyOCSCIBKZRAKEwEAKxIJwREwiOwJgBQJTKOCOBQR"
+                                "2",
+                                "7",
+                                "1",
+                                "BQK4KyOBRBhRzCJ/BoKKBQKBQKBQKBQKBQKBQKBQKBQKBQKBQWxCNP//////+CP/////+1BwRyORwRyORwRyOCORyOCORyOCIMOCOySCOJTKOKE2ExWBIJ2RE2iPJmKBKZR2R2KCI"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                0,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "construction--flat--bike-lane"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "8": {
-                "frame_intervals": [],
-                "name": "object 28",
+                "name": "object 3",
+                "type": "construction--flat--crosswalk-plain",
                 "object_data": {
                     "boolean": [
                         {
@@ -611,29 +360,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "318",
                                 "546",
-                                "0",
-                                "mwLKBRQKBRQKKBQKKBRQKKBQKKBRQKBRQKKBQKKBRwRv+wCP+2CP+2CP+2R/2wR4mR2wR2wR2wRA"
+                                "4",
+                                "10",
+                                "1",
+                                "mABZQKKBQKKBRQKBRQKKBRQKBRQKKBQKKBRQKBRQKORv/2R//R//R/+wR//R+AgAR6PR6IA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "construction--flat--crosswalk-plain"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "9": {
-                "frame_intervals": [],
-                "name": "object 29",
+                "name": "object 4",
+                "type": "construction--flat--road",
                 "object_data": {
                     "boolean": [
                         {
@@ -643,199 +403,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "243",
-                                "594",
-                                "0",
-                                "FJ"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "87",
-                                "548",
-                                "0",
-                                "J//+2S2wm2wR22CO2wCO2wR22Ca/22BXK4JCIJARARARARAR2R2COyOyOwR2R+wCP2Ca4BXAnn2wR+2R+2CP2wR+2R+2CP2wR2AmAK+2Kw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                1,
-                                3,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "686",
-                                "542",
-                                "0",
-                                "J/////1AP+2wDP/2wIKKKKKKKKKKKBRRRRRRRRRTP9///R///22R/2wR/2yP+2m2wBXwKEAR+ARQKKKKKBRRRQKKKKKBRRRRQKKKKBRRRRQKKO2yP////20J4BKIRCIRCIRCIRRCIRCIRCIRE////////+R////////+wCWCWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxZ/+2KwKwBWBWAKwKwKwBWBWBWAKwKwBWBWBWAKwKwBWE+CWCICICIRARCICa+2wKKBRRQKyICICICICaAKAKBQBQB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                -1,
-                                -1,
-                                2
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "847",
-                                "546",
-                                "0",
-                                "pb"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "15",
-                                "507",
-                                "0",
-                                "JSwNISKBQ"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                6,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "98",
-                                "501",
-                                "0",
-                                "J22RASE2R2R2Rwh"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                7,
-                                5,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "141",
-                                "498",
-                                "0",
-                                "J22COEmCOyOyO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                8,
-                                6,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "14",
-                                "496",
-                                "1",
-                                "0wSI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                9,
-                                7,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "82",
-                                "490",
-                                "0",
-                                "K0yIm"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                10,
-                                8,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "125",
-                                "484",
-                                "0",
-                                "yOiM2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                9,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "144",
                                 "482",
+                                "8",
+                                "7",
                                 "0",
-                                "J2AmwmwRAmw"
+                                "J4gAAAgAAARAgAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                9,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "construction--flat--road"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "10": {
-                "frame_intervals": [],
-                "name": "object 40",
+                "name": "object 5",
+                "type": "construction--flat--sidewalk",
                 "object_data": {
                     "boolean": [
                         {
@@ -845,114 +446,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "450",
-                                "591",
-                                "0",
-                                "J/2wR/2yP+2CP+2CP+wF/2wR/2yP+2CP+2CP+2R4"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "1023",
-                                "588",
-                                "1",
-                                "J////////+wCP////////AhOFJRRRRRRRRRRRCKKKKKKKKKKKIRRRm2ATBRRRRRRRRRRRRRRQKKKKKKKKKKKKKKBRRRRRRRRRRRRRRQKKKKKKKKKKKKKM//////////////2A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "240",
-                                "585",
-                                "0",
-                                "J+2CIE2LW2JwE2AR+2CP2wR+2R+2CP2wR+2R+2E////+2EQKBQKBQKBQKBQKKBQKBQKBQKBQKBQKKBQKBQKBQKBQKBRQKBQKBQKBQKBQKKBQKBQKBQKBQKBRQKBQKBQKBQKBQKBRQKBQKBQKBQKBQKORAu2ALKIRRCKKIRRCKKIRRC"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "142",
-                                "499",
-                                "1",
-                                "J2R2RwhWJ2AJ0wR2R2R2gKAJ/2whPwTQgIKBwE4n/+2yP///R4mwBQE+yKQKBOwBO022ATP2AI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "398",
-                                "489",
-                                "0",
-                                "JRCKIRRCIRRCKIRRCKIRgJCKIRCIRRCIRCKIS22BOAJ2wgR//2wmAJ2JRRn2m202AR/2yP/+wCBQDIpBQKBQKBQKBQKBQKBQKBQKBQKBQKBQKh"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "496",
                                 "482",
-                                "1",
-                                "+ALQKAKAKAKAKKIRRRRCpRyICICORARARyICORARARyICICOREP////+R/////2AmRALX/2wEQQKAK2ATXwK//2KxWBWKwKxWBWKwKxWBWKwKxWBWKwJxWmKgBWAKwK2xOATQBQBJRRQRRCKKIRRCKC2BWwBWwK2AK2BWwBWwK2AK0COCORBaAJRARCICIvALRQJ2AR2mwK2AK2BWwBX0RyORwRyORyIJ22AJyIE2BP2wA"
+                                "3",
+                                "6",
+                                "0",
+                                "/4BaBQBQBQBQBRRCKKKIVKORARARyICICORARyICICORARARyIh////////////+R/////////////AmRALX////AiCBQBXATX/BX/////KxWBWKwKxWBWKwKxWBWKwKxWBWKwJxWmKgBWAKwK+JwCaAKAJKKKCKIRRRCKIRQXBXAK4K4BXBXAK4K4BWgRwRyILQBKICIRARF/wBaKBPAR84K4BXBXAK/8RyORwRyORyIJ/AJyIE4J//A"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "construction--flat--sidewalk"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "11": {
-                "frame_intervals": [],
-                "name": "object 46",
+                "name": "object 6",
+                "type": "construction--structure--building",
                 "object_data": {
                     "boolean": [
                         {
@@ -962,131 +489,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "498",
-                                "449",
-                                "0",
-                                "xWwBXAmAmyP2A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "1002",
-                                "361",
-                                "0",
-                                "4COwBa+n/E/2wn/+2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "955",
-                                "359",
-                                "1",
-                                "JARARARyICICICICICICORApPR4R6PR22pRwRAOyOyOAR2R2R2RwCX/Am2wJ+2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "776",
-                                "339",
-                                "0",
-                                "KyP2CO2BIRARCIRARCIRARCICIRCICIRCICIRCICIm2AK2wBORARyORAR0woKJARCICeO2wQKAKBCORARyOxWAJ0AKwKmAJwK0wKxWBWKwKxWBWKwKxWBWKwKxWBWK//2K+E+RwCOARAWwO2wKAKAKAKICIEKAKBKKBRaxWKBU2wCP22AR9JARARyICICICP//2wCZ2CPC"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "987",
-                                "276",
-                                "0",
-                                "JCIm2wCP2R22mwiO2R22R22C"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                6,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "474",
-                                "132",
-                                "1",
-                                "2BVJARCIRARCICIuwBW2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                5,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "688",
                                 "51",
-                                "0",
-                                "JQKKBQKKBRQKKBQKKBRQKKBQKKBm2AK2wJARE2KwhRRCKKK2wTRCKKIRRRCKJRRRCKIRRRWyOyBQSKKKJ2wBRQKKKKBRICOCOCOCO2K2BIRTWKwCIRCaISARwIRARCaIRWCQKCICICIRARhRCKJ2COwIRyIBARyICaBQCBWKAapKxWKD22RRRQKKKIKAKAKRRQKKKJwTBQBQREQKBQKwBWBKBTWAKwEIRRCIRCKIaAKAKEBWO2xCKIoIRRJRQKJCKITWwhRUKIRRRCKJCICOKAJ2CO2mCO2yOwRE+K2AK2BWwBWwm2RRRR2AIRCBQBOAJRCKRROR2RAJE22mK2AK2BWwBWwK2AK2BWwBWwNBCKOAR2AK2xW2KwIpRwRwCOCOCOCOARwRwRwRwCOCOCZ+2wR+2xKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRm2xKKKKKKKKKKKBRRRRRRRRRRRRRRRRRRRRQKKKKKKKKKKKaAKAJ2u2wCOwJRQKW2wCP/22R/+2wR/+2yP22E/+xpAJ+AJCIFJARARB"
+                                "2",
+                                "4",
+                                "1",
+                                "JQKKBQKKBRQKKBQKKBRQKKBQKKBn+BX+JyInxXhRRCKKK/yaIRRRCKKIRRKKKIRRCKKK+R+QKCRRRRP+BRQKKKKBROR6PR6P4K+BIRTWBXCIRCaISyPIRyITRCK6QKCORyIRyMKIRRPwR+BCOCOORwRyaBWQKwKzVJWBWBQf/RRRQKKKIKxWKRRQKKKJ6YKxQREQKBQK4K5KBTXBXEIRRCIRCKIaxWKEBWB/5CKIoIRRJRQKJCKITXwhRUKIRRRCKJCORwKxPwR/E6P/R+CIn/+K/K+BX5Xwn4RRRR/IRCBWJ4JRCKRROCPyOJE/8wK/K+BX5XwK/K+BX5XwNBCKPCP5X4K/BXIpR6PCPR6PR4R6PR6PCPR6Z///6P//+BKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRn/JRRRRRRRRRRQKKKKKKKKKKKKKKKKKKKKKBRRRRRRRRRRTWKxP1/+R+BKKBS/+R///////CP//////+R///////CP///n/////+BpxP//JCOpORyII"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                5,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "construction--structure--building"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "12": {
-                "frame_intervals": [],
-                "name": "object 53",
+                "name": "object 7",
+                "type": "human--person",
                 "object_data": {
                     "boolean": [
                         {
@@ -1096,80 +532,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "306",
-                                "460",
-                                "0",
-                                "JEBQKKKmwERCJRh"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "581",
-                                "449",
-                                "0",
-                                "xQIRC2ARRRR4COwEBRp4LIRARCICMANIRyOCPJEAR2R0KIKIR"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "880",
-                                "431",
-                                "0",
-                                "BQKKQKAKYCICKAKAKAK22C2BARwCOAR+FJ2ApIRARCIRARCOK2KwBWxQBwCOAWARARQBQKJRRpBRQKxW"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "694",
                                 "430",
+                                "2",
+                                "4",
                                 "0",
-                                "JARCIEKK2JAQWBW2K2xWwCOARRCKKIRRCKKIRRBRRUAKAMOAm2KwKwBWBWBQBOmAK2RyICORCBQBQO2w"
+                                "JyIR0KK+JyC5X4K/BX6PCKIRRRCKIRRRCKIKKKmKxh4n4K5XBXK5WJwnBXyOCORwRCBWKB/4"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "human--person"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "13": {
-                "frame_intervals": [],
-                "name": "object 57",
+                "name": "object 8",
+                "type": "human--rider--bicyclist",
                 "object_data": {
                     "boolean": [
                         {
@@ -1179,80 +575,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "444",
-                                "472",
-                                "1",
-                                "AKAREhWw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "432",
-                                "471",
-                                "0",
-                                "2wmm2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "419",
-                                "468",
-                                "0",
-                                "BWyIRpJBAREmwR2EJA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "407",
                                 "463",
+                                "2",
+                                "3",
                                 "1",
-                                "IKWBIEKBWCOCBUKOJ2yIFAK2BWwBWARARRBQhQ"
+                                "IKXBOhQK4R4QKhR5P/R1xX4K/xXyORRBQhQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "human--rider--bicyclist"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "14": {
-                "frame_intervals": [],
-                "name": "object 61",
+                "name": "object 9",
+                "type": "human--rider--bicyclist",
                 "object_data": {
                     "boolean": [
                         {
@@ -1262,80 +618,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "444",
-                                "472",
-                                "1",
-                                "AKAREhWw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "432",
-                                "471",
-                                "0",
-                                "2wmm2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "419",
-                                "468",
-                                "0",
-                                "BWyIRpJBAREmwR2EJA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "407",
                                 "463",
+                                "2",
+                                "3",
                                 "1",
-                                "IKWBIEKBWCOCBUKOJ2yIFAK2BWwBWARARRBQhQ"
+                                "IKXBOhQK4R4QKhR5P/R1xX4K/xXyORRBQhQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "human--rider--bicyclist"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "15": {
-                "frame_intervals": [],
-                "name": "object 65",
+                "name": "object 10",
+                "type": "human--rider--bicyclist",
                 "object_data": {
                     "boolean": [
                         {
@@ -1345,80 +661,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "444",
-                                "472",
-                                "1",
-                                "AKAREhWw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "432",
-                                "471",
-                                "0",
-                                "2wmm2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "419",
-                                "468",
-                                "0",
-                                "BWyIRpJBAREmwR2EJA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "407",
                                 "463",
+                                "2",
+                                "3",
                                 "1",
-                                "IKWBIEKBWCOCBUKOJ2yIFAK2BWwBWARARRBQhQ"
+                                "IKXBOhQK4R4QKhR5P/R1xX4K/xXyORRBQhQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "human--rider--bicyclist"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "16": {
-                "frame_intervals": [],
-                "name": "object 69",
+                "name": "object 11",
+                "type": "marking--general",
                 "object_data": {
                     "boolean": [
                         {
@@ -1428,165 +704,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "280",
-                                "678",
-                                "0",
-                                "KIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIU+2EIRRCIRCKIRCIRRCIRCKIRCIRRCIRCKIRCIRRCIRCKIRp2xW2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "200",
-                                "668",
-                                "0",
-                                "JwCOyOAQKAKAKAKAKAKAKAKxQBQBQBQBQBQBQBQO2yO2yO2yRRRRRRRCKKKKKKIRRRRRRU+2wRRRRRCKKKKKKKKKKIRRRRRRRRRRRRCKKKKKKKKKKIRRRRRvBXLAKxWBWKxWBWKwKxWKwKx"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "533",
-                                "648",
-                                "1",
-                                "J+iKKIRRCKKIRRRCKIRRRCKIRRRCKKIRRCKKIRRRCKIRRRCKIRRRCKKIRRCKKX8RRRRRRRRRRRRRQKKKKKKKKKKKKKKKBRRRRRRRRRRRRRQKKKKKKKKKKKKKKI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "76",
-                                "557",
-                                "1",
-                                "J22CO2wR22AR22CO2wm2wnAK4Bh+wR+wCOyOwR2R2R2COyICICICICIECInBXK/22A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "853",
-                                "547",
-                                "0",
-                                "mKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxp8wKwBWBWAKwKwKwBWBWAKwKwKwBWBWBWAKwKwBWB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                6,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "304",
-                                "547",
-                                "0",
-                                "JRQKKKKKBRRRQKKKKKBRRRRQKKKKBRRRRQNwTNLO02CKBRQKBRQKKBQKKBRQKBRQKKBRQKBRQKKBQKKB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                7,
-                                5,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "848",
-                                "546",
-                                "0",
-                                ""
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                8,
-                                6,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "498",
-                                "544",
-                                "1",
-                                "RRRRRRRRRRQKKKKKKKKKKKX/2wp/22A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                7,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "464",
                                 "544",
+                                "4",
+                                "10",
                                 "0",
-                                "wCO2CO2CO2COE+wTWERCIRCIRCIRCKIRCIRCIRCIR"
+                                "wR6PR6On4Ca0RCIRCIRCIRCKIRCIRCIRCIR"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "marking--general"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "17": {
-                "frame_intervals": [],
-                "name": "object 78",
+                "name": "object 12",
+                "type": "nature--sky",
                 "object_data": {
                     "boolean": [
                         {
@@ -1596,46 +747,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
-                                "774",
-                                "316",
-                                "1",
-                                "wR4FKR4Q"
-                            ]
-                        },
-                        {
+                                "0",
+                                "0",
+                                "2",
+                                "5",
+                                "0",
+                                "/////////////////////+yWKwRWKDRCIRCIRP0///RRCKKIRRRCKP/K/+CIRRCIhRRRRaBWKBRQKKKKBRCORCNP4J/CRPByOCIP+EBXBKIRyIRCOuxXBa+K4K+KKIRRJWKxWKxiKKKBRRRRRPRwmRyOCOCOTKKCIRCIRQKBRQKBQKIRCQRyIRiIRCOKKM+yYKxWKxRQKaKKKwKxRCIRBRQKKKKBRRRRRpyOIKxWKCRQRRCIRRCaxQKxJQKxQKKKKRRQKeR6ODWKwWK+KwIRnK4OBXBWpIRCIRCJBWKBRyIaBQKBXRyOCOR/KKKKKKKKKKJyOyOyP2R6RCOKBWM/wXR4MK4LX+K/CIRyIgK2KxKKBRRQKMKBQKBRa/+R2R6awKwJwK4K4K0RyIRCxWxWBWxWa/2J2K0COn5X4JQKKBQKKBRQKKBQKKBRQKKBQKKBTP8CORyZyIn/8xa/////BP//wR/////+R/////+CP/////yP+1JRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRQX/2nxP2R+BKIRTXJwR+R/6P1IKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKP+J/R//yP/4R//yPgRCh/wR/yP+R/wR/yPBKKKKKP//2S//////////////////+"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
                             "closed": true,
                             "hierarchy": [
                                 -1,
                                 0,
                                 -1,
                                 -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "0",
-                                "0",
-                                "0",
-                                "///////2yQBWRQBQaIRCIRCJ2E/RRCKKIRRRCKPK+RCKIREKKKKLQKAKBRQKKKKBRCICIRp2wBO2ASJ2ICORB22EBWxKIRARCIRAuBWxa2BWxWwKKIRRJQBQBQBQBiKKKBRRRRROAR0ARARyORATKKCIRCIRQKBRQKBQKIRCQRARCMRCIRAKKM2yYKAKAKAKKBTRRRWKAKIRCIKKBRRRQKKKKKNICIBBQBQBQSKCKIRCKITQBQKAJKBQBQKKKKRRQKYCOARzQBWQBWwKxCMwBWxxWxQFJCIRCIRIKAKBRARDQKBQKwCICORAR2wKKKKKKKKKKJARwRwR2yOASIRAKBQBm2wWAR2MK2LW2xW2ARCICIgKwKAJRQKKKBRhQKBQKLXARwRwCaxWJxWxWxQERARCIQBWBWKwKAa22AJwKAgRAm2BW2AJQKKBQKKBRQKKBQKKBRQKKBQKKBTO2ECICICZARE+AgBa/+xP22CP/22R/+2wR/+2yO2wFJRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRRQKKKKBRRRQXwmwJ2yOwBKIRTWAJyOwR6OwpBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRR22J2wR+wR+yP2COAgRCh22CO2yO2yO2wR22R2JRRRRR+2wCX/////+w"
                             ]
                         }
                     ]
                 },
-                "type": "nature--sky"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "18": {
-                "frame_intervals": [],
-                "name": "object 80",
+                "name": "object 13",
+                "type": "marking--general",
                 "object_data": {
                     "boolean": [
                         {
@@ -1645,165 +790,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "280",
-                                "678",
-                                "0",
-                                "KIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIRCIU+2EIRRCIRCKIRCIRRCIRCKIRCIRRCIRCKIRCIRRCIRCKIRp2xW2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "200",
-                                "668",
-                                "0",
-                                "JwCOyOAQKAKAKAKAKAKAKAKxQBQBQBQBQBQBQBQO2yO2yO2yRRRRRRRCKKKKKKIRRRRRRU+2wRRRRRCKKKKKKKKKKIRRRRRRRRRRRRCKKKKKKKKKKIRRRRRvBXLAKxWBWKxWBWKwKxWKwKx"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "533",
-                                "648",
-                                "1",
-                                "J+iKKIRRCKKIRRRCKIRRRCKIRRRCKKIRRCKKIRRRCKIRRRCKIRRRCKKIRRCKKX8RRRRRRRRRRRRRQKKKKKKKKKKKKKKKBRRRRRRRRRRRRRQKKKKKKKKKKKKKKI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "76",
-                                "557",
-                                "1",
-                                "J22CO2wR22AR22CO2wm2wnAK4Bh+wR+wCOyOwR2R2R2COyICICICICIECInBXK/22A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "853",
-                                "547",
-                                "0",
-                                "mKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxWKxp8wKwBWBWAKwKwKwBWBWAKwKwKwBWBWBWAKwKwBWB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                6,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "304",
-                                "547",
-                                "0",
-                                "JRQKKKKKBRRRQKKKKKBRRRRQKKKKBRRRRQNwTNLO02CKBRQKBRQKKBQKKBRQKBRQKKBRQKBRQKKBQKKB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                7,
-                                5,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "848",
-                                "546",
-                                "0",
-                                ""
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                8,
-                                6,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "498",
-                                "544",
-                                "1",
-                                "RRRRRRRRRRQKKKKKKKKKKKX/2wp/22A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                7,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "464",
                                 "544",
+                                "4",
+                                "10",
                                 "0",
-                                "wCO2CO2CO2COE+wTWERCIRCIRCIRCKIRCIRCIRCIR"
+                                "wR6PR6On4Ca0RCIRCIRCIRCKIRCIRCIRCIR"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                7,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "marking--general"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "19": {
-                "frame_intervals": [],
-                "name": "object 89",
+                "name": "object 14",
+                "type": "nature--vegetation",
                 "object_data": {
                     "boolean": [
                         {
@@ -1813,80 +833,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "208",
-                                "236",
-                                "0",
-                                "22ASOKBQKBRKAKLWgKwKASIROxWE0AK22AK22AK2yICIRCICIRmx"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                0,
-                                2,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "137",
-                                "211",
-                                "1",
-                                "BRRRRIRCKIR+K6KIRRRCKKIRR/J2EIRCIRCMBQBRxQBp///////+02ORxQKIBWBWAKwBWBp2LRQKBRQKBRVJ+EpZ2BW2BWBWBWBWBWBWBQJ+KBRQKBWBBRRRRCOKAKAK02gBQIKBJ22EBp4JwCOALQBQBQKAK2BWAmwExWwK2xWBOIKB2wpIm2wBO2AgJ4m2BX2wBX2wBX2wBW2wLX+E+BX2xW2mwCPTP22CP2wEAJ+CRCICIRQKKKKBRQKAKA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                -1,
-                                -1,
-                                1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "34",
-                                "455",
-                                "1",
-                                "pZKBQKAKBQKBQKAKBQKLOAR22RwBCIBCIQ"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "567",
                                 "95",
-                                "1",
-                                "JwCOCPANJQKBQKJRQKKKBRgBWBQJCICIRARCICIRARCIRARCwCOx22BKAKBQRCIOAR2yOCOCIEKKKKKKKKKK2wRARyICOAKBQKBiICKBQBQhCIRCIReK2KAWxWAJRCxWwKAOKAMARwCIEKBRRKKKKBQBQKgBQKAMIRRCIRRBRBBQBQBQQRzKKKKKKBRRRQKKRCIRQBWKKKMKBRQBQBQBUO2JRRQRCIRDRCICIBIRCKBQKBRQKBRCIRCIBRpICORyICIBORwEKKKKKBRRRhAgCRCIRBKKKBRQKKKBRRP22mxXwK+K2An22J+BX+2K/2xWn/2hRRQKBITBTRSIRm2E+BX/2AK22AnJ+2ASKKBRROwJARARARARARATPEAJ4mE+IDW2wBPK4LW2wE22K/+wBXwE+2AJ2CPRwiIRRCKIRRCKIRCKIRRCMwCOBQKJAmBBQaKJBQRRARAoICwBROJAmyOK2xOAWCORRCKKKIRRQBQBQBQBQNP+wBWwBQBIE/22AR/wJ2wTP2KBQKAKAKAK22AK+R2yO2R2yOwCOwCOwCOLpAR022AgRyORyOCORyOR2CO2yOBO2R2EAKyICIhRCKKIRRJRROwMIRREKBRUKIRZCKIW2AWKBIKAKAMRRCIRCKIROAKwBhQMwKwBQKBQIYRAKAKhwhRRQKKIKAKAKRRRQKKKO20BWKxTJgBWKBAKBhARyICCORC2COwhRCKJRARCICICIKBBwKIRhCICIWRxIRhCIRwBWMKImwK2yOCOCOCIEKBRRRQKK2wEKKKIIKB2R2BRRRCKIRRRhRCKKIRRRCMO2BRRRCKKJwK2wKwm2wBgBWBWKwKAIRCICJIBWxWxWmKw"
+                                "2",
+                                "3",
+                                "0",
+                                "J+R4R//+NJQKBQKJRQKKKBRmK4KBIRyIRyIRyIRyIRCORC+R/P/4JWKBQRCIPyP/R4R4R0KKKKKKKKKK/4RyPRyPxQKBQMRyKBWKEIRCIRCL5X5WX5XxKIXK/BWPKxmR+R0KBRRKKKKBWKBUxQKxhCKIRCKIKIIKxWKCCPZRRRRRQKKKKBRSIRCKxXKKKMKBRWKxWKh/5KKKCIRCIaIRyOJCIRQKBQKKBQKIRCIRxRpOR6PRyOJ6P0KKKKKBRRRh0yRCIRBKKKBRQKKKBRRP////n5X//4K///K/0////5P//4K//////5X//////K8////////8KKKBQJCYKaKRCM/4n//4K////////+K//0//5P///+SKKBRRP4JyORyORyOTP//ExP//E4n//5zX/+J//5X//Ba//0//K////////+K///0////xP4R//6PERCKIRRCKIRRCIRRCKIRnyPBQKJ04IKDRRIKCKOR1By+KJ5On6PK/5Py4R6KIRRRRCKKxWKxWKBp//////xX+KxOn//////+R/////4J/4TP///KBQKxWKxX/+K///R/6P/R/6P+R/yP+R5dOR8//0CPR6PR4R6PR6P4R//R4J/6P4mK6OREKIRRRCKJKKJ/BhCKIhQKKhRCLIRRC/+XKBIKxWMRRCIRCKIRPxXxhQM4K+KBQKBDCOKxUPEKKKBRRBWKxSKKKBRRR//gK5XKZMxXKBxQMOR6OQR6IX4R/EKIRRKORCORyIKBB4KIRhCORC6PJCMIRCPxXMKIn4K/6PCPCPCOhQKKKKBRX/0KKKIIKB/R/BRRRCKIRRRhRCKKIRRRCMP/BRRRCKKJ4K/4K4n/+MxXBXK4KxCIRyJOK/K/K85X"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                1,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "nature--vegetation"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "20": {
-                "frame_intervals": [],
-                "name": "object 93",
+                "name": "object 15",
+                "type": "object--bike-rack",
                 "object_data": {
                     "boolean": [
                         {
@@ -1896,250 +876,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "703",
-                                "500",
-                                "0",
-                                "m"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "143",
-                                "491",
-                                "1",
-                                "J2CITMRwEK0wR22COEwA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "122",
-                                "478",
-                                "0",
-                                "AQC0QK"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "417",
-                                "477",
-                                "0",
-                                "NI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "134",
-                                "477",
-                                "1",
-                                "wE2AREw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                6,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "447",
-                                "472",
-                                "0",
-                                "2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                7,
-                                5,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "437",
-                                "472",
-                                "1",
-                                "2mEAKA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                8,
-                                6,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "426",
-                                "472",
-                                "1",
-                                "2mEwA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                9,
-                                7,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "42",
-                                "455",
-                                "1",
-                                "AKwKwKwKwKwKwK2wK2FJ/2wEAKwIICO2yO2EwE2ELW2yOJxWBQBQBWRCKKKKWBQKBRQI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                10,
-                                8,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "35",
-                                "455",
-                                "0",
-                                "JCIRCCIWAR22RwFBQKBQBQKBQKBQBQKB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                11,
-                                9,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "0",
-                                "453",
-                                "0",
-                                "//2AmAQKQBWBBREKBUwJxWBWAKwBWBQCKBQCO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                12,
-                                10,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "220",
-                                "365",
-                                "0",
-                                "2wK22E+xP2BX/BX2AJ+2m2AK+BU+xKKM2nwK/2xX+2K/2xXw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                13,
-                                11,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "169",
-                                "363",
-                                "0",
-                                "22AK+2AK+2AK+2AK+2AK+2AK22mwEBQIKP2n2K2wE/J2wK+wK+wK+wK2wBP8+AK0/w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                12,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "886",
                                 "184",
-                                "0",
-                                "JRCM2AR2022n2mA"
+                                "8",
+                                "12",
+                                "1",
+                                "JRCMyOE8+EAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                12,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--bike-rack"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "21": {
-                "frame_intervals": [],
-                "name": "object 107",
+                "name": "object 16",
+                "type": "object--billboard",
                 "object_data": {
                     "boolean": [
                         {
@@ -2149,114 +919,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "219",
-                                "391",
-                                "1",
-                                "wBXwK+BXxXwK2n20+wBX/BX2A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "173",
-                                "391",
-                                "1",
-                                "22K+wK+wK+wK2wn82wBX2xX2wK+2Kw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "765",
-                                "306",
-                                "0",
-                                "JRRRRRRRRRRQKKKKKKKKKKKKKKKKKKKKKBRRRRRRRRRRm2xKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRRRRCKKKIRn22R+2wpOCOCOARwRwRwRwCOCOCOCOARwRwm2xORARyORAR02wBW2AJCICIRCICIRCICIRCICIRARCIRARCIRARE2wR+wR+wR2wEAKA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "888",
-                                "229",
-                                "1",
-                                "IKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQKKKKKBRmwR4R4R4R4R2FJ//+2ARARARARyICICW2yP22AR+2wR+2wCP22AQ"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "1023",
-                                "189",
-                                "1",
-                                "J+2wCKKKKM2R22R22CO2yO2yO2wR22R22CO2yO2RmATOwCPyXwA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "963",
                                 "188",
+                                "3",
+                                "10",
                                 "1",
-                                "JRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQWwR6PR4R6PR4R6O2wEARyICICICICICICORARARARAn2wBP2E22R+yP2R+wR+yP2CO2A"
+                                "JRQKKKKKBRRRQKKKKKBRRRQKKKKKBRRRQWwR+AR+AR+yPwCPwCP2R+AR+EARyICICICICICICORARARARAn+xP4E4CP4R/CP4CP4R/AR4"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                4,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--billboard"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "22": {
-                "frame_intervals": [],
-                "name": "object 113",
+                "name": "object 17",
+                "type": "object--phone-booth",
                 "object_data": {
                     "boolean": [
                         {
@@ -2266,80 +962,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "122",
-                                "481",
-                                "0",
-                                "AK2E0yO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "95",
-                                "480",
-                                "0",
-                                "IKQKAK02m2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "108",
-                                "477",
-                                "0",
-                                "JwE22AmwSAKBQBQB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "981",
                                 "436",
+                                "2",
+                                "5",
                                 "0",
-                                "J2RwCOyOyOyOAR2R2QRwRwR2ARwCAK2KwBWxWRCICIRCICIRgBQIBQBQBSAKAKBQBQBhARARARARxQKKKBRX22BhARCICIRARARCIE///22A"
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--phone-booth"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "23": {
-                "frame_intervals": [],
-                "name": "object 117",
+                "name": "object 18",
+                "type": "object--support--pole",
                 "object_data": {
                     "boolean": [
                         {
@@ -2349,97 +1005,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "974",
-                                "388",
-                                "0",
-                                "/+mAS/4"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "323",
-                                "369",
-                                "0",
-                                "+2xX/2AK/+wK+2AmAn2wBX/2AK/+wBW2yO2A"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "513",
-                                "366",
-                                "1",
-                                "J2wn+CP/+2R/wmwBpyOwCOwCOwCO2R2yO2R+K22AKAKAKAKBQI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "216",
-                                "303",
-                                "1",
-                                "AJ2m2K+2K+2K+2BX2xX2wK+2K+2K+2BX2xX2xW202xp2xXwK+K+BXwK+BXwK+K+BXwK+BXwK+K+BW1LIA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "894",
                                 "190",
+                                "3",
+                                "13",
                                 "1",
-                                "4BOn22R+2wCP22AR+2wR+2wCP22AR+2wCO20BaKKRQKAKICOFIRAW2wR6PR4R6PR6PCPR6PCPR6PCPQ"
+                                "+BOn4R/yP+R/AR/yP+R/yO20BaKKRQKAKICOFIRAXR4CPAR+R4CPAR4CPyPAR4CPyPAR4CPyPAQ"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--support--pole"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "24": {
-                "frame_intervals": [],
-                "name": "object 122",
+                "name": "object 19",
+                "type": "object--phone-booth",
                 "object_data": {
                     "boolean": [
                         {
@@ -2449,80 +1048,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "122",
-                                "481",
-                                "0",
-                                "AK2E0yO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "95",
-                                "480",
-                                "0",
-                                "IKQKAK02m2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "108",
-                                "477",
-                                "0",
-                                "JwE22AmwSAKBQBQB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "981",
                                 "436",
+                                "2",
+                                "5",
                                 "0",
-                                "J2RwCOyOyOyOAR2R2QRwRwR2ARwCAK2KwBWxWRCICIRCICIRgBQIBQBQBSAKAKBQBQBhARARARARxQKKKBRX22BhARCICIRARARCIE///22A"
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--phone-booth"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "25": {
-                "frame_intervals": [],
-                "name": "object 126",
+                "name": "object 20",
+                "type": "object--traffic-light",
                 "object_data": {
                     "boolean": [
                         {
@@ -2532,80 +1091,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "331",
-                                "347",
-                                "1",
-                                "IX4nNPBXm2wA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "318",
-                                "333",
-                                "0",
-                                "JARARARARARAmwhRQKKIP2wE8+2wgB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "225",
-                                "243",
-                                "0",
-                                "2BW2wBW2wBW2wBW1J+2whRQKKKBRQKKKSIRCIIBIEKAKAKAKAKhRCKK2BWxWw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "189",
                                 "213",
+                                "3",
+                                "6",
                                 "1",
-                                "BB2wE/AgBP2wCP22FJ6PE2BW0IRBAKwKBONJQBSKBQKBQCIO2wR22CRyIA"
+                                "BB+An//AgBP/4CP/+FJ/yP+E4K8IRBAKwKBONJQBSKBQKBQCIP4R/CRyIA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--traffic-light"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "26": {
-                "frame_intervals": [],
-                "name": "object 130",
+                "name": "object 21",
+                "type": "object--traffic-sign--front",
                 "object_data": {
                     "boolean": [
                         {
@@ -2615,29 +1134,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "999",
                                 "330",
-                                "1",
-                                "J/2An/2wn+2ANOwCPAR+Q"
+                                "8",
+                                "17",
+                                "0",
+                                "J/AAn/AAn4AAANOR6PC"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                -1,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--traffic-sign--front"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "27": {
-                "frame_intervals": [],
-                "name": "object 131",
+                "name": "object 22",
+                "type": "object--vehicle--bicycle",
                 "object_data": {
                     "boolean": [
                         {
@@ -2647,97 +1177,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "412",
-                                "498",
-                                "1",
-                                "wKoI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "404",
-                                "491",
-                                "1",
-                                "IXhECKKAR2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "443",
-                                "482",
-                                "0",
-                                "yNJgC"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "433",
-                                "482",
-                                "0",
-                                "wEEx"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "421",
                                 "482",
+                                "4",
+                                "5",
                                 "0",
-                                "IWCOCNJgKwCIC"
+                                "IWRyNJgK6IC"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                3,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--vehicle--bicycle"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "28": {
-                "frame_intervals": [],
-                "name": "object 136",
+                "name": "object 23",
+                "type": "object--phone-booth",
                 "object_data": {
                     "boolean": [
                         {
@@ -2747,80 +1220,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "122",
-                                "481",
-                                "0",
-                                "AK2E0yO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "95",
-                                "480",
-                                "0",
-                                "IKQKAK02m2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "108",
-                                "477",
-                                "0",
-                                "JwE22AmwSAKBQBQB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "981",
                                 "436",
+                                "2",
+                                "5",
                                 "0",
-                                "J2RwCOyOyOyOAR2R2QRwRwR2ARwCAK2KwBWxWRCICIRCICIRgBQIBQBQBSAKAKBQBQBhARARARARxQKKKBRX22BhARCICIRARARCIE///22A"
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--phone-booth"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "29": {
-                "frame_intervals": [],
-                "name": "object 140",
+                "name": "object 24",
+                "type": "object--phone-booth",
                 "object_data": {
                     "boolean": [
                         {
@@ -2830,80 +1263,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "122",
-                                "481",
-                                "0",
-                                "AK2E0yO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "95",
-                                "480",
-                                "0",
-                                "IKQKAK02m2w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "108",
-                                "477",
-                                "0",
-                                "JwE22AmwSAKBQBQB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "981",
                                 "436",
+                                "2",
+                                "5",
                                 "0",
-                                "J2RwCOyOyOyOAR2R2QRwRwR2ARwCAK2KwBWxWRCICIRCICIRgBQIBQBQBSAKAKBQBQBhARARARARxQKKKBRX22BhARCICIRARARCIE///22A"
+                                "J4R6PCPCPCPR4R4QR2R2R+CPWK4K5XBWCIRyIRCORCMxQOKxWKWKxQKxWMORyORyOBQKKKBRX//wMORCORCORyIR0//////////2"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                2,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--phone-booth"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "30": {
-                "frame_intervals": [],
-                "name": "object 144",
+                "name": "object 25",
+                "type": "object--bike-rack",
                 "object_data": {
                     "boolean": [
                         {
@@ -2913,250 +1306,40 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "703",
-                                "500",
-                                "0",
-                                "m"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "143",
-                                "491",
-                                "1",
-                                "J2CITMRwEK0wR22COEwA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "122",
-                                "478",
-                                "0",
-                                "AQC0QK"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "417",
-                                "477",
-                                "0",
-                                "NI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "134",
-                                "477",
-                                "1",
-                                "wE2AREw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                6,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "447",
-                                "472",
-                                "0",
-                                "2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                7,
-                                5,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "437",
-                                "472",
-                                "1",
-                                "2mEAKA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                8,
-                                6,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "426",
-                                "472",
-                                "1",
-                                "2mEwA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                9,
-                                7,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "42",
-                                "455",
-                                "1",
-                                "AKwKwKwKwKwKwK2wK2FJ/2wEAKwIICO2yO2EwE2ELW2yOJxWBQBQBWRCKKKKWBQKBRQI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                10,
-                                8,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "35",
-                                "455",
-                                "0",
-                                "JCIRCCIWAR22RwFBQKBQBQKBQKBQBQKB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                11,
-                                9,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "0",
-                                "453",
-                                "0",
-                                "//2AmAQKQBWBBREKBUwJxWBWAKwBWBQCKBQCO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                12,
-                                10,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "220",
-                                "365",
-                                "0",
-                                "2wK22E+xP2BX/BX2AJ+2m2AK+BU+xKKM2nwK/2xX+2K/2xXw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                13,
-                                11,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "169",
-                                "363",
-                                "0",
-                                "22AK+2AK+2AK+2AK+2AK+2AK22mwEBQIKP2n2K2wE/J2wK+wK+wK+wK2wBP8+AK0/w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                12,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "886",
                                 "184",
-                                "0",
-                                "JRCM2AR2022n2mA"
+                                "8",
+                                "12",
+                                "1",
+                                "JRCMyOE8+EAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                12,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--bike-rack"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             },
             "31": {
-                "frame_intervals": [],
-                "name": "object 158",
+                "name": "object 26",
+                "type": "object--bike-rack",
                 "object_data": {
                     "boolean": [
                         {
@@ -3166,248 +1349,37 @@
                     ],
                     "poly2d": [
                         {
-                            "closed": true,
-                            "hierarchy": [
-                                1,
-                                -1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "703",
-                                "500",
-                                "0",
-                                "m"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                2,
-                                0,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "143",
-                                "491",
-                                "1",
-                                "J2CITMRwEK0wR22COEwA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                3,
-                                1,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "122",
-                                "478",
-                                "0",
-                                "AQC0QK"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                4,
-                                2,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "417",
-                                "477",
-                                "0",
-                                "NI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                5,
-                                3,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "134",
-                                "477",
-                                "1",
-                                "wE2AREw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                6,
-                                4,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "447",
-                                "472",
-                                "0",
-                                "2"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                7,
-                                5,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "437",
-                                "472",
-                                "1",
-                                "2mEAKA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                8,
-                                6,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "426",
-                                "472",
-                                "1",
-                                "2mEwA"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                9,
-                                7,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "42",
-                                "455",
-                                "1",
-                                "AKwKwKwKwKwKwK2wK2FJ/2wEAKwIICO2yO2EwE2ELW2yOJxWBQBQBWRCKKKKWBQKBRQI"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                10,
-                                8,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "35",
-                                "455",
-                                "0",
-                                "JCIRCCIWAR22RwFBQKBQBQKBQKBQBQKB"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                11,
-                                9,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "0",
-                                "453",
-                                "0",
-                                "//2AmAQKQBWBBREKBUwJxWBWAKwBWBQCKBQCO"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                12,
-                                10,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "220",
-                                "365",
-                                "0",
-                                "2wK22E+xP2BX/BX2AJ+2m2AK+BU+xKKM2nwK/2xX+2K/2xXw"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                13,
-                                11,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
-                            "name": "contour",
-                            "val": [
-                                "169",
-                                "363",
-                                "0",
-                                "22AK+2AK+2AK+2AK+2AK+2AK22mwEBQIKP2n2K2wE/J2wK+wK+wK+wK2wBP8+AK0/w"
-                            ]
-                        },
-                        {
-                            "closed": true,
-                            "hierarchy": [
-                                -1,
-                                12,
-                                -1,
-                                -1
-                            ],
-                            "mode": "MODE_POLY2D_SRF6DCC",
                             "name": "contour",
                             "val": [
                                 "886",
                                 "184",
-                                "0",
-                                "JRCM2AR2022n2mA"
+                                "8",
+                                "12",
+                                "1",
+                                "JRCMyOE8+EAAA"
+                            ],
+                            "mode": "MODE_POLY2D_RS6FCC",
+                            "closed": true,
+                            "hierarchy": [
+                                -1,
+                                12,
+                                -1,
+                                -1
                             ]
                         }
                     ]
                 },
-                "type": "object--bike-rack"
+                "object_data_pointers": {
+                    "isInstance": {
+                        "type": "boolean",
+                        "frame_intervals": []
+                    },
+                    "contour": {
+                        "type": "poly2d",
+                        "frame_intervals": []
+                    }
+                }
             }
-        },
-        "version": "4.0.0"
+        }
     }
 }

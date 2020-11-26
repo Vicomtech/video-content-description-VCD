@@ -21,6 +21,6 @@ def json2proto_bin(json_path, proto_path):
 if __name__ == "__main__":
 
     proto_file = "proto_files/vcd_proto_test.txt"
-    json_file = "../tests/etc/test_timestamp_metadata.json"
+    json_file = "../test./etc/in/test_timestamp_metadata.json"
 
     json2proto_bin(json_file, proto_file)

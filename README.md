@@ -1,3 +1,4 @@
+![VCD Video Content Description](doc/logo/VCD_logo_2020.png)
 # Video Content Description (VCD)
 
 VCD is a metadata format designed to enable the description of scene information, particularly efficient for discrete data series, such as image or point-cloud sequences from sensor data.
@@ -5,14 +6,17 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The syntax(see ./schema/vcd_schema_json-v4.2.0.json), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see [vcd_schema_json-v4.3.0.json](./schema/vcd_schema_json-v4.3.0.json)), as a JSON Schema file, contains the full description of the VCD structure.
 
+![VCD](doc/logo/image.svg)
 
 ## Details
 
 More details can be found at the project's website: https://vcd.vicomtech.org
 
 ## Install
+
+### Python
 
 Using pip (Python >3.6)):
 
@@ -21,7 +25,7 @@ pip install vcd
 ```
 
 VCD can be also used cloning this repository. And adding the files to a location the Python environment recognizes.
-You can also use the provided setup.py file to install if from the source:
+You can also use the provided [setup.py](setup.py) file to install if from the source:
 
 ```
 pip uninstall vcd
@@ -29,9 +33,19 @@ python setup.py build
 python setup.py install
 ```
 
+### Typescript
+
+NPM packages can be used
+
+```
+npm install vcd
+```
+
 ## Usage
 
-VCD Python API exposes functions to load, create, manipulate and serialize VCD content. Samples and use cases can be found in the test folder( see ./tests/).
+### Python
+
+VCD Python API exposes functions to load, create, manipulate and serialize VCD content. Samples and use cases can be found in the test folder( see [tests](tests)).
 
 As a basic example, VCD can be used in a Python script as follows:
 
@@ -44,6 +58,7 @@ myVCD = core.VCD()
 
 # Add Objects, Actions, etc.
 uid = myVCD.add_object(name='someName', semantic_type='#Pedestrian')
+myVCD.add_object_data(uid=uid, object_data=types.bbox(name="head", val=[0, 0, 100, 200]))
 
 ...
 
@@ -58,7 +73,7 @@ import vcd.core as core
 import vcd.types as types
 
 # Load a VCD file
-myVCD = core.vcd('./tests/etc/vcd420_semantics_fw.json')
+myVCD = core.vcd('./tests/etc/vcd430_test_kitti_tracking_0_actions.json')
 
 # Access data directly
 metadata = myVCD.data['vcd']['metadata']
@@ -80,13 +95,29 @@ myVCD.validate(stringified_vcd)
 
 This validation function is optionally called when saving to JSON files.
 
+### Typescript
+
+The Typescript API follows entirely the Python API, and thus [core.py](vcd/core.py) and [vcd.core.ts](nodejs/src/vcd.core.ts) are mostly equivalent.
+The testing scripts in Typescript and in Python use the same base JSON files.
+
+See examples in [nodejs/src/\__tests\__](nodejs/src/__tests__)
+
 ## Versions
 
 VCD is defined as a syntax, and as such, different versions imply differences in the syntax or data structure. In addition, each version has a dedicated library version compatible with it.
 
-Last version is VCD 4.2.0.
+Last version is VCD 4.3.0.
 
-Main changes at VCD 4.2.0 from VCD 4.1.0 are:
+Main changes at VCD 4.3.0 from VCD 4.2.0 are:
+* Integrated SCL (Scene Configuration Library) into VCD
+* Automatic drawing functions for multi-sensor set-ups (e.g. topview)
+* Improved API functions for offline VCD edition
+* Added Typescript API for web applications
+* Common set of test files for Python and Typescript APIs
+* Simplified Relations construction
+* Preliminar work on Ontology connection with Neo4j
+
+Main changes at VCD 4.2.1 from VCD 4.1.0 are:
 * Improved Frame-message creation
 * Enhanced API for adding Relations and RDFs
 * Added examples for semantic labeling
@@ -134,15 +165,26 @@ VCD has evolved as follows:
     * Native Python JSON serialization
     * Google's Protocol Buffer serialization
     * Object data 'num' for single numbers, 'vec' for arrays of numbers
-* VCD 4.1-2 (2020)
+* VCD 4.1-3 (2020)
     * Explicit definition of intrinsics, extrinsics and odometry
     * Enhanced timestamping and sync information
     * Enhanced semantics management (RDF triplets)
+    * Integrated SCL and complex calibration set-ups
+    * Drawing functions
+    * Preliminar work on Ontology and Neo4j connection
 
 
 ## Related projects
 
 VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART.
+
+## OpenLABEL
+
+Along with the development of VCD, we are participating in the definition of the incoming labeling standard for the automotive sector: ASAM OpenLABEL.
+
+https://www.asam.net/project-detail/scenario-storage-and-labelling/
+
+VCD 4.3.0 is shaped to be compliant with the format defined in OpenLABEL concept paper. As the standard evolves into a standardisation project, VCD will evolve as well to become the first labeling toolset compliant with the standard.
 
 ## Credits
 
@@ -155,7 +197,7 @@ Main developers:
 * Orti Senderos - osenderos@vicomtech.org
 
 Contributors:
-Thanks to Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia and many others in Vicomtech. 
+Thanks to Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta, Andoni Mujika and many others in Vicomtech. 
 
 ## License
 

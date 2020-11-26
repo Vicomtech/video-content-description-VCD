@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -27,6 +27,17 @@ class TestBasic(unittest.TestCase):
         # Fully detailed examples will be introduced for specific datasets such as KITTI tracking and nuScenes
 
         vcd = core.VCD()
+
+        # FIRST: define all the involved coordinate systems
+        vcd.add_coordinate_system("odom", cs_type=types.CoordinateSystemType.scene_cs)
+        vcd.add_coordinate_system("vehicle-iso8855", cs_type=types.CoordinateSystemType.local_cs,
+                                  parent_name="odom",
+                                  pose_wrt_parent=[1.0, 0.0, 0.0, 0.0,
+                                                    0.0, 1.0, 0.0, 0.0,
+                                                    0.0, 0.0, 1.0, 0.0,
+                                                    0.0, 0.0, 0.0, 1.0])
+
+        # SECOND: Add the streams
         vcd.add_stream(stream_name='Camera1',
                        uri='./somePath/someVideo1.mp4',
                        description='Description 1',
@@ -36,7 +47,7 @@ class TestBasic(unittest.TestCase):
                        description='Description 2',
                        stream_type=core.StreamType.camera)
 
-        # Generic stream properties can be added...
+        # THIRD: Generic stream properties can be added...
         # ... for the Stream
         vcd.add_stream_properties(stream_name="Camera1",
                                   properties={"someProperty": "someValue"})
@@ -47,6 +58,7 @@ class TestBasic(unittest.TestCase):
 
         # Sensor-domain-specific information such as INTRINSICS, EXTRINSICS and ODOMETRY can be added as well
         # See schema.py for more details on Coordinate Systems
+        # Extrinsics are added as coordinate systems
         vcd.add_stream_properties(stream_name="Camera1",
                                   intrinsics=types.IntrinsicsPinhole(
                                       width_px=640,
@@ -55,14 +67,15 @@ class TestBasic(unittest.TestCase):
                                                          0.0, 1000.0, 500.0, 0.0,
                                                          0.0, 0.0, 1.0, 0.0],
                                       distortion_coeffs_1xN=None
-                                  ),
-                                  extrinsics=types.Extrinsics(
-                                      pose_scs_wrt_lcs_4x4=[1.0, 0.0, 0.0, 0.0,
-                                                            0.0, 1.0, 0.0, 0.0,
-                                                            0.0, 0.0, 1.0, 0.0,
-                                                            0.0, 0.0, 0.0, 1.0]
                                   )
                                   )
+        vcd.add_coordinate_system("Camera1", cs_type=types.CoordinateSystemType.sensor_cs,
+                                  parent_name="vehicle-iso8855",
+                                  pose_wrt_parent=[1.0, 0.0, 0.0, 0.0,
+                                                    0.0, 1.0, 0.0, 0.0,
+                                                    0.0, 0.0, 1.0, 0.0,
+                                                    0.0, 0.0, 0.0, 1.0])
+
         # Sync info can be added as a shift between the master vcd frame count and each of the sensors
         # e.g. Camera2 may have started 3 frames after Camera1, therefore, to label Elements for Camera2, we can use
         # frame_shift=3 for Camera2
@@ -75,16 +88,16 @@ class TestBasic(unittest.TestCase):
                                                          0.0, 0.0, 1.0, 0.0],
                                       distortion_coeffs_1xN=None
                                   ),
-                                  extrinsics=types.Extrinsics(
-                                      pose_scs_wrt_lcs_4x4=[1.0, 0.0, 0.0, 0.0,
-                                                            0.0, 1.0, 0.0, 0.0,
-                                                            0.0, 0.0, 1.0, 0.0,
-                                                            0.0, 0.0, 0.0, 1.0]
-                                  ),
                                   stream_sync=types.StreamSync(
                                       frame_shift=3
                                   )
                                   )
+        vcd.add_coordinate_system("Camera2", cs_type=types.CoordinateSystemType.sensor_cs,
+                                  parent_name="vehicle-iso8855",
+                                  pose_wrt_parent=[1.0, 0.0, 0.0, 0.0,
+                                                   0.0, 1.0, 0.0, 0.0,
+                                                   0.0, 0.0, 1.0, 0.0,
+                                                   0.0, 0.0, 0.0, 1.0])
 
         # Let's suppose we want to add a master timestamp coming from a GPS or LIDAR sensor
         # Let's create here some dummy timestamps
@@ -113,20 +126,23 @@ class TestBasic(unittest.TestCase):
                                                              0.0, 1001.0, 500.0, 0.0,
                                                              0.0, 0.0, 1.0, 0.0],
                                           distortion_coeffs_1xN=None
-                                      ), extrinsics=types.Extrinsics(
-                                          pose_scs_wrt_lcs_4x4=[1.0, 0.0, 0.0, 0.1,
-                                                                0.0, 1.0, 0.0, 0.1,
-                                                                0.0, 0.0, 1.0, 0.0,
-                                                                0.0, 0.0, 0.0, 1.0]
                                       )
                                       )
+            vcd.add_transform(frame_num, transform=types.Transform(src_name="vehicle-iso8855",
+                                                                   dst_name="Camera1",
+                                                                   transform_src_to_dst_4x4=[1.0, 0.0, 0.0, 0.1,
+                                                                    0.0, 1.0, 0.0, 0.1,
+                                                                    0.0, 0.0, 1.0, 0.0,
+                                                                    0.0, 0.0, 0.0, 1.0]))
 
         # Odometry information is also included as frame_properties
         # Odometry must be provided as pose_lcs_wrt_wcs (i.e. Local Coordinate System wrt World Coordinate System)
         # in the form of pose 4x4 matrices.
         # As additional properties you can include raw GPS/IMU for instance
-        vcd.add_odometry(frame_num=6, odometry=types.Odometry(
-            pose_lcs_wrt_wcs_4x4=[1.0, 0.0, 0.0, 20.0,
+        vcd.add_transform(frame_num=6, transform=types.Transform(
+            src_name="odom",
+            dst_name="vehicle-iso8855",
+            transform_src_to_dst_4x4=[1.0, 0.0, 0.0, 20.0,
                                   0.0, 1.0, 0.0, 20.0,
                                   0.0, 0.0, 1.0, 0.0,
                                   0.0, 0.0, 0.0, 1.0],
@@ -141,10 +157,22 @@ class TestBasic(unittest.TestCase):
             status="interpolated",  # we can add any thing (it is permitted by VCD schema)
         ))
 
-        if not os.path.isfile('./etc/test_stream_frame_properties.json'):
-            vcd.save('./etc/test_stream_frame_properties.json', True)
+        self.assertEqual(len(vcd.get_streams()), 2)
+        self.assertEqual(vcd.has_stream('Camera1'), True)
+        self.assertEqual(vcd.get_stream('Camera1')['uri'], './somePath/someVideo1.mp4')
+        self.assertEqual(vcd.get_stream('Camera1')['description'], 'Description 1')
+        self.assertEqual(vcd.get_stream('Camera1')['type'], 'camera')
+        self.assertEqual(vcd.get_stream('Non-Valid_Stream'), None)
 
-        vcd_read = core.VCD('./etc/test_stream_frame_properties.json', validation=True)
+        self.assertEqual(len(vcd.get_coordinate_systems()), 4)
+        self.assertEqual(vcd.has_coordinate_system('vehicle-iso8855'), True)
+        self.assertEqual(vcd.get_coordinate_system('vehicle-iso8855')['parent'], 'odom')
+        self.assertEqual(vcd.get_coordinate_system('Non-existing-Coordinate'), None)
+
+        if not os.path.isfile('./etc/vcd430_test_stream_frame_properties.json'):
+            vcd.save('./etc/vcd430_test_stream_frame_properties.json', True)
+
+        vcd_read = core.VCD('./etc/vcd430_test_stream_frame_properties.json', validation=True)
         self.assertEqual(vcd_read.stringify(), vcd.stringify())
 
 

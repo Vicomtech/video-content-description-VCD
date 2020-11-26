@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -27,8 +27,8 @@ class TestBasic(unittest.TestCase):
         vcd = core.VCD()
 
         # 2.- Create the Object
-        uid_marcos = vcd.add_object(name='marcos')
-        self.assertEqual(uid_marcos, 0, "Should be 0")
+        uid_marcos = vcd.add_object(name='marcos', semantic_type="person")
+        self.assertEqual(uid_marcos, "0", "Should be 0")
 
         # 3.- Add some data to the object
         vcd.add_object_data(uid=uid_marcos, object_data=types.bbox(name='head', val=(10, 10, 30, 30)))
@@ -36,7 +36,7 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid=uid_marcos, object_data=types.vec(name='speed', val=(0.0, 0.2)))
         vcd.add_object_data(uid=uid_marcos, object_data=types.num(name='accel', val=0.1))
 
-        uid_peter = vcd.add_object(name='peter')
+        uid_peter = vcd.add_object(name='peter', semantic_type="person")
 
         vcd.add_object_data(uid=uid_peter, object_data=types.num(name='age', val=38.0))
         vcd.add_object_data(uid=uid_peter, object_data=types.vec(name='eyeL', val=(0, 0, 10, 10)))
@@ -49,29 +49,29 @@ class TestBasic(unittest.TestCase):
         # 5.- We can ask VCD
         marcos_ref = vcd.get_element(element_type=core.ElementType.object, uid=uid_marcos)
         # print('Found Object: uid = ', uid_marcos, ', name = ', marcosRef['name'])
-        self.assertEqual(uid_marcos, 0, "Should be 0")
+        self.assertEqual(uid_marcos, "0", "Should be 0")
         self.assertEqual(marcos_ref['name'], 'marcos', "Should be marcos")
 
         peter_ref = vcd.get_element(element_type=core.ElementType.object, uid=uid_peter)
         # print('Found Object: uid = ', uid_peter, ', name = ', peterRef['name'])
-        self.assertEqual(uid_peter, 1, "Should be 1")
+        self.assertEqual(uid_peter, "1", "Should be 1")
         self.assertEqual(peter_ref['name'], 'peter', "Should be peter")
 
         # print('VCD string no pretty:\n', vcd_string_nopretty)
         # print('VCD string pretty:\n', vcd_string_pretty)
 
-        if not os.path.isfile('./etc/test_create_search_simple_nopretty.json'):
-            vcd.save('./etc/test_create_search_simple_nopretty.json')
+        if not os.path.isfile('./etc/vcd430_test_create_search_simple_nopretty.json'):
+            vcd.save('./etc/vcd430_test_create_search_simple_nopretty.json')
 
-        vcd_file_nopretty = open("./etc/test_create_search_simple_nopretty.json", "r")
+        vcd_file_nopretty = open("./etc/vcd430_test_create_search_simple_nopretty.json", "r")
         vcd_string_nopretty_read = vcd_file_nopretty.read()
         self.assertEqual(vcd_string_nopretty_read, vcd_string_nopretty, "VCD no-pretty not equal to read file")
         vcd_file_nopretty.close()
 
-        if not os.path.isfile('./etc/test_create_search_simple_pretty.json'):
-            vcd.save('./etc/test_create_search_simple_pretty.json', True)
+        if not os.path.isfile('./etc/vcd430_test_create_search_simple_pretty.json'):
+            vcd.save('./etc/vcd430_test_create_search_simple_pretty.json', True)
 
-        vcd_file_pretty = open("./etc/test_create_search_simple_pretty.json", "r")
+        vcd_file_pretty = open("./etc/vcd430_test_create_search_simple_pretty.json", "r")
         vcd_string_pretty_read = vcd_file_pretty.read()
         self.assertEqual(vcd_string_pretty, vcd_string_pretty_read, "VCD pretty not equal to read file")
         vcd_file_pretty.close()
@@ -86,14 +86,21 @@ class TestBasic(unittest.TestCase):
         uid_peter = vcd.add_object(name='peter', semantic_type='#Adult')
         uid_katixa = vcd.add_object(name='katixa', semantic_type='#Child')
 
+        list_uids = vcd.get_elements_uids(core.ElementType.object)
+        self.assertEqual(len(list_uids), 3)
+        self.assertEqual(list_uids[0], uid_marcos)
+        self.assertEqual(list_uids[1], uid_peter)
+        self.assertEqual(list_uids[2], uid_katixa)
+
+
         vcd.add_object_data(uid=uid_marcos, object_data=types.num('age', 37.0), frame_value=(0, 10))
         vcd.add_object_data(uid=uid_marcos, object_data=types.num('height', 1.75), frame_value=(0, 10))
         vcd.add_object_data(uid=uid_marcos, object_data=types.vec('marks', (5.0, 5.0, 5.0)), frame_value=(0, 10))
         vcd.add_object_data(uid=uid_peter, object_data=types.num('age', 40.0), frame_value=(0, 11))
         vcd.add_object_data(uid=uid_peter, object_data=types.vec('marks', (10.0, 10.0, 10.0)), frame_value=(0, 11))
         vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9), frame_value=(5, 10))
-        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.01), frame_value=11)
-        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.02), frame_value=12)
+        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.01), frame_value=11)  # by default union
+        vcd.add_object_data(uid=uid_katixa, object_data=types.num('age', 9.02), frame_value=12)  # by default union
 
         # 3.- Search Objects according to some search criteria
         # 3.1.- According to "Object::type" (also for other Elements such as Action, Event, Context)
@@ -107,31 +114,32 @@ class TestBasic(unittest.TestCase):
         for uid in uids_age:
             object_ = vcd.get_object(uid=uid)
             # print("Hi there! I'm ", object['name'], " and I have ObjectData with name age")
-            if uid == 0:
+            if uid == "0":
                 self.assertEqual(object_['name'], 'marcos', "Should be marcos")
-            elif uid == 1:
+            elif uid == "1":
                 self.assertEqual(object_['name'], 'peter', "Should be peter")
-            elif uid == 2:
+            elif uid == "2":
                 self.assertEqual(object_['name'], 'katixa', "Should be katixa")
 
             frames_with_age = vcd.get_frames_with_object_data_name(uid=uid, data_name='age')
-            for frame_num in frames_with_age:
-                my_age = vcd.get_object_data(uid=uid, data_name='age', frame_num=frame_num)
-                # print("I am ", myAge['val'], " years old at frame ", frameNum)
+            for frame_interval in frames_with_age.get():
+                for frame_num in range(frame_interval[0], frame_interval[1]+1):
+                    my_age = vcd.get_object_data(uid=uid, data_name='age', frame_num=frame_num)
+                    # print("I am ", myAge['val'], " years old at frame ", frameNum)
 
-                if uid == 0:
-                    self.assertEqual(my_age['val'], 37.0, "Should be 37 for marcos")
-                elif uid == 1:
-                    self.assertEqual(my_age['val'], 40.0, "Should be 40 for peter")
-                elif uid == 2 and frame_num < 11:
-                    self.assertEqual(my_age['val'], 9, "Should be 9 for katixa while frameNum < 11")
-                elif uid == 2:
-                    self.assertEqual(my_age['val'], 9 + 0.01*(frame_num - 10), "Should increase 0.01 per frame for katixa for frameNum >= 11")
+                    if uid == "0":
+                        self.assertEqual(my_age['val'], 37.0, "Should be 37 for marcos")
+                    elif uid == "1":
+                        self.assertEqual(my_age['val'], 40.0, "Should be 40 for peter")
+                    elif uid == "2" and frame_num < 11:
+                        self.assertEqual(my_age['val'], 9, "Should be 9 for katixa while frameNum < 11")
+                    elif uid == "2":
+                        self.assertEqual(my_age['val'], 9 + 0.01*(frame_num - 10), "Should increase 0.01 per frame for katixa for frameNum >= 11")
 
-        if not os.path.isfile('./etc/test_create_search_mid.json'):
-            vcd.save('./etc/test_create_search_mid.json')
+        if not os.path.isfile('./etc/vcd430_test_create_search_mid.json'):
+            vcd.save('./etc/vcd430_test_create_search_mid.json')
 
-        test_create_search_mid_read = open('./etc/test_create_search_mid.json', 'r')
+        test_create_search_mid_read = open('./etc/vcd430_test_create_search_mid.json', 'r')
         stringified_vcd = vcd.stringify(False)
         read_vcd = test_create_search_mid_read.read()
         self.assertEqual(read_vcd, stringified_vcd, "Should be equal")
@@ -168,12 +176,9 @@ class TestBasic(unittest.TestCase):
         # print("Frame 5, dynamic only message: ", vcd.stringify_frame(5, dynamic_only=True))
         # print("Frame 5, full message: ", vcd.stringify_frame(5, dynamic_only=False))
 
-        if not os.path.isfile('./etc/test_remove_simple.json'):
-            vcd.save('./etc/test_remove_simple.json')
+        if not os.path.isfile('./etc/vcd430_test_remove_simple.json'):
+            vcd.save('./etc/vcd430_test_remove_simple.json')
 
-        test_remove_simple_read = open('./etc/test_remove_simple.json', 'r')
-        self.assertEqual(vcd.stringify(pretty=False), test_remove_simple_read.read(), "Should be equal")
-        test_remove_simple_read.close()
         self.assertEqual(vcd.get_num_objects(), 4, "Should be 4")
 
         # 4.- Delete some content
@@ -181,9 +186,6 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_num_objects(), 3, "Should be 3")
         vcd.rm_object_by_type(semantic_type='#StopSign')
         self.assertEqual(vcd.get_num_objects(), 2, "Should be 2")
-        vcd.rm_object_by_frame(uid=person1_uid, frame_interval_tuple=(0, 5))  # After this call, this person has data only between 5 and 10
-        self.assertEqual(vcd.get_object(person1_uid)['frame_intervals'][0]['frame_start'], 6)
-        self.assertEqual(vcd.get_object(person1_uid)['frame_intervals'][0]['frame_end'], 10)
 
         # 5.- Remove all content sequentially
         vcd.rm_object(uid=person1_uid)
@@ -191,12 +193,14 @@ class TestBasic(unittest.TestCase):
         vcd.rm_object(uid=car1_uid)
         self.assertEqual(vcd.get_num_objects(), 0, "Should be 0")
 
+        self.assertEqual(vcd.get_frame_intervals().empty(), True)
+
     # Load
     def test_load(self):
         # 1.- Create VCD from file
-        vcd = core.VCD('./etc/test_create_search_mid.json', validation=True)
-        vcd.save('./etc/test_create_search_mid_saved.json')
-        vcd_read = core.VCD('./etc/test_create_search_mid_saved.json', validation=True)
+        vcd = core.VCD('./etc/vcd430_test_create_search_mid.json', validation=True)
+        vcd.save('./etc/vcd430_test_create_search_mid_saved.json')
+        vcd_read = core.VCD('./etc/vcd430_test_create_search_mid_saved.json', validation=True)
 
         self.assertEqual(vcd_read.stringify(), vcd.stringify())
 
@@ -204,16 +208,23 @@ class TestBasic(unittest.TestCase):
         vcd = core.VCD()
         annotator = "Algorithm001"
         comment = "Annotations produced automatically - SW v0.1"
+        file_version = "2.0"  # This is a versioning for the annotation file itself
+        name = "vcd_" + file_version + "-" + annotator # A friendly name
         vcd.add_annotator(annotator)
         vcd.add_comment(comment)
+        vcd.add_file_version(file_version)
+        vcd.add_name(name)
+
+        # Other customized metadata can be added as well
+        vcd.add_metadata_properties({"target": "Test track", "origin": "synthetic"})
 
         # TODO: vcd.add_metadata_properties (a dictionary just like frame_properties)
 
         self.assertEqual(vcd.get_metadata()['annotator'], annotator)
         self.assertEqual(vcd.get_metadata()['comment'], comment)
 
-        if not os.path.isfile('./etc/test_add_metadata.json'):
-            vcd.save('./etc/test_add_metadata.json')
+        if not os.path.isfile('./etc/vcd430_test_add_metadata.json'):
+            vcd.save('./etc/vcd430_test_add_metadata.json')
 
     # Ontology links
     def test_ontology_list(self):
@@ -235,61 +246,11 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_ontology(ont_uid_1), "http://www.vicomtech.org/viulib/ontology")
         self.assertEqual(vcd.get_ontology(ont_uid_2), "http://www.alternativeURL.org/ontology")
 
-        if not os.path.isfile('./etc/test_ontology.json'):
-            vcd.save('./etc/test_ontology.json', True)
+        if not os.path.isfile('./etc/vcd430_test_ontology.json'):
+            vcd.save('./etc/vcd430_test_ontology.json', True)
 
-        vcd_read = core.VCD('./etc/test_ontology.json', validation=True)
+        vcd_read = core.VCD('./etc/vcd430_test_ontology.json', validation=True)
         self.assertEqual(vcd_read.stringify(), vcd.stringify())
-
-    # Semantics
-    def test_semantics(self):
-        vcd = core.VCD()
-
-        ont_uid_0 = vcd.add_ontology("http://www.vicomtech.org/viulib/ontology")
-        ont_uid_1 = vcd.add_ontology("http://www.alternativeURL.org/ontology")
-
-        # Let's create a static Context
-        officeUID = vcd.add_context('Office', '#Office', frame_value=None, uid=None, ont_uid=ont_uid_0)
-
-        for frameNum in range(0, 30):
-            if frameNum == 3:
-                startTalkingUID = vcd.add_event('StartTalking', '#StartTalking', frameNum, uid=None, ont_uid=ont_uid_0)
-                talkingUID = vcd.add_action('Talking', '#Talking', frameNum, uid=None, ont_uid=ont_uid_0)
-                noisyUID = vcd.add_context('Noisy', '', frameNum)  # No ontology
-
-                relation1UID = vcd.add_relation('', '#Starts', uid=None, ont_uid=ont_uid_0)
-                vcd.add_rdf(relation1UID, core.RDF.subject, startTalkingUID, core.ElementType.event)
-                vcd.add_rdf(relation1UID, core.RDF.object, talkingUID, core.ElementType.action)
-
-                relation2UID = vcd.add_relation('', '#Causes', uid=None, ont_uid=ont_uid_0)
-                vcd.add_rdf(relation2UID, core.RDF.subject, talkingUID, core.ElementType.action)
-                vcd.add_rdf(relation2UID, core.RDF.object, noisyUID, core.ElementType.context)
-
-                self.assertEqual(vcd.get_num_relations(), 2, "Should be 2.")
-                self.assertEqual(len(vcd.get_relation(relation2UID)['rdf_subjects']), 1, "Should be 1")
-                self.assertEqual(
-                    vcd.get_relation(relation2UID)['rdf_subjects'][0]['uid'], talkingUID, "Should be equal"
-                )
-
-                # print("Frame 3, dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
-                # print("Frame 3, full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
-
-            elif 3 <= frameNum <= 11:
-                vcd.update_action(talkingUID, frameNum)
-                vcd.update_context(noisyUID, frameNum)
-                vcd.update_relation(relation2UID, frameNum)
-
-                # print("Frame ", frameNum, ", dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
-                # print("Frame ", frameNum, ", full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
-
-        if not os.path.isfile('./etc/test_semantics.json'):
-            vcd.save('./etc/test_semantics.json', True)
-
-        vcd_read = core.VCD('./etc/test_semantics.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
 
     def test_online_operation(self):
         # Simulate an online operation during 1000 frames
@@ -324,9 +285,9 @@ class TestBasic(unittest.TestCase):
         pedestrian_uid = vcd.add_object(name='', semantic_type='#Pedestrian', frame_value=(0, 30))
         car_uid = vcd.add_object(name='', semantic_type='#Car', frame_value=(20, 30))
 
-        if not os.path.isfile('./etc/test_objects_without_data.json'):
-            vcd.save('./etc/test_objects_without_data.json', True)
-        vcd_read = core.VCD('./etc/test_objects_without_data.json', validation=True)
+        if not os.path.isfile('./etc/vcd430_test_objects_without_data.json'):
+            vcd.save('./etc/vcd430_test_objects_without_data.json', True)
+        vcd_read = core.VCD('./etc/vcd430_test_objects_without_data.json', validation=True)
         vcd_read_stringified = vcd_read.stringify()
         vcd_stringified = vcd.stringify()
         # print(vcd_stringified)
@@ -348,44 +309,14 @@ class TestBasic(unittest.TestCase):
 
         vcd.add_object_data(uid_obj1, box1, 0)
 
-        if not os.path.isfile('./etc/test_nested_object_data.json'):
-            vcd.save('./etc/test_nested_object_data.json', True)
+        if not os.path.isfile('./etc/vcd430_test_nested_object_data.json'):
+            vcd.save('./etc/vcd430_test_nested_object_data.json', True)
 
-        vcd_read = core.VCD('./etc/test_nested_object_data.json', validation=True)
+        vcd_read = core.VCD('./etc/vcd430_test_nested_object_data.json', validation=True)
         vcd_read_stringified = vcd_read.stringify()
         vcd_stringified = vcd.stringify()
         # print(vcd_stringified)
         self.assertEqual(vcd_read_stringified, vcd_stringified)
-
-    def test_polygon2D(self):
-        vcd = core.VCD()
-
-        uid_obj1 = vcd.add_object('someName1', '#Some')
-
-        # Add a polygon with SRF6DCC encoding (list of strings)
-        poly1 = types.poly2d('poly', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
-                     types.Poly2DType.MODE_POLY2D_SRF6DCC, False)
-        self.assertEqual(poly1.data['name'], "poly")
-        self.assertEqual(poly1.data['mode'], "MODE_POLY2D_SRF6DCC")
-        self.assertEqual(poly1.data['closed'], False)
-        vcd.add_object_data(uid_obj1, poly1)
-
-
-
-        # Add a polygon with absolute coordinates (list of numbers)
-        poly2 = types.poly2d('poly', (5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5),
-                     types.Poly2DType.MODE_POLY2D_ABSOLUTE, False)
-        vcd.add_object_data(uid_obj1, poly2)
-
-        if not os.path.isfile('./etc/test_polygon2D.json'):
-            vcd.save('./etc/test_polygon2D.json', True)
-
-        vcd_read = core.VCD('./etc/test_polygon2D.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
-
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

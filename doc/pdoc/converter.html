@@ -3,15 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.7.4" />
+<meta name="generator" content="pdoc 0.9.1" />
 <title>vcd.converter API documentation</title>
-<meta name="description" content="" />
-<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
-<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
-<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
-<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<meta name="description" content="VCD (Video Content Description) library v4.3.0 …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
 <style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
 </head>
 <body>
 <main>
@@ -20,178 +22,759 @@
 <h1 class="title">Module <code>vcd.converter</code></h1>
 </header>
 <section id="section-intro">
+<p>VCD (Video Content Description) library v4.3.0</p>
+<p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
+<p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
+(Spain) all rights reserved.</p>
+<p>VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import os
-import json
-import sys
-sys.path.insert(0, &#34;.&#34;)
+<pre><code class="python">&#34;&#34;&#34;
+VCD (Video Content Description) library v4.3.0
+
+Project website: http://vcd.vicomtech.org
+
+Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+(Spain) all rights reserved.
+
+VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is distributed under MIT License. See LICENSE.
+
+&#34;&#34;&#34;
+
+import warnings
+import copy
+
 import vcd.core as core
 import vcd.types as types
 
 
-class Converter:
-    def __init__(self, src_file):
-        if not os.path.isfile(src_file):
-            raise Exception(&#34;src_file must be a valid file&#34;)
-        self.vcd = {}
+class ConverterVCD430toVCD330:
+    # This class receives a VCD 4.3.0, and creates a VCD 3.3.0 payload
+    # Creates a Frame-wise VCD 3.3.0 JSON payload
 
-    def get(self):
-        return self.vcd
+    # NOTE: Some features of VCD 4.3.0 are NOT supported by VCD 3.3.0
+    # Therefore, some content from a VCD 4.3.0 may not be convertible to VCD 3.3.0
+    # e.g. VCD 4.3.0 supports action_data, event_data, context_data,
+    #      also specific intrinsics and extrinsics information
+
+    # NOTE: This class is left here for future work.
+    # the differences between VCD 4.3.0 and VCD 3.3.0 are so large that it is
+    # miss-leading to have a ConverterVCD430toVCD330 class which works only partially
+    # for some use cases.
+
+    def __init__(self, vcd_430_data):       
+
+        # Create VCD 3.3.0 container
+        vcd_330_data = dict()
+        vcd_330_data[&#39;VCD&#39;] = dict()
+
+        # Root and metadata
+        if &#39;metadata&#39; in vcd_430_data[&#39;vcd&#39;]:
+            if &#39;annotator&#39; in vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_330_data[&#39;VCD&#39;][&#39;annotator&#39;] = vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;annotator&#39;]
+            if &#39;name&#39; in vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_330_data[&#39;VCD&#39;][&#39;name&#39;] = vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;name&#39;]
+            if &#39;comment&#39; in vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_330_data[&#39;VCD&#39;][&#39;scdName&#39;] = vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;comment&#39;]
+        
+        if &#39;streams&#39; in vcd_430_data[&#39;vcd&#39;]:
+            vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;] = dict()
+            for stream in vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;].keys():
+                vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;].setdefault(&#39;stream&#39;, [])
+                if &#39;stream_properties&#39; in vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream]:
+                    vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;][&#39;stream&#39;].append(
+                        {&#34;description&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;description&#39;],
+                         &#34;uri&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;uri&#39;],
+                         &#34;name&#34;: stream,
+                         &#34;type&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;type&#39;],
+                         &#34;streamProperties&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;stream_properties&#39;]}
+                    )
+                else:
+                    vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;][&#39;stream&#39;].append(
+                        {&#34;description&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;description&#39;],
+                         &#34;uri&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;uri&#39;],
+                         &#34;name&#34;: stream,
+                         &#34;type&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;type&#39;]}
+                    )
+
+        # Frame intervals (only the outer frame interval in VCD 3.3.0)
+        fis = vcd_430_data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+        frameStart = 0
+        frameEnd = 0
+        for fi in fis:
+            if fi[&#39;frame_start&#39;] &gt; frameStart:
+                frameStart = fi[&#39;frame_start&#39;]
+            if fi[&#39;frame_end&#39;] &gt; frameEnd:
+                frameEnd = fi[&#39;frame_end&#39;]
+
+        vcd_330_data[&#39;VCD&#39;][&#39;frameInterval&#39;] = {
+            &#39;frameStart&#39;: frameStart,
+            &#39;frameEnd&#39;: frameEnd
+        }
+
+        # Ontologies
+        if &#39;ontologies&#39; in vcd_430_data[&#39;vcd&#39;]:
+            vcd_330_data[&#39;VCD&#39;][&#39;OntologyManager&#39;] = {}
+            vcd_330_data[&#39;VCD&#39;][&#39;OntologyManager&#39;][&#39;ontology&#39;] = []
+            for ontology_uid in vcd_430_data[&#39;vcd&#39;][&#39;ontologies&#39;].keys():
+                vcd_330_data[&#39;VCD&#39;][&#39;OntologyManager&#39;][&#39;ontology&#39;].append(
+                    vcd_430_data[&#39;vcd&#39;][&#39;ontologies&#39;][ontology_uid]
+                )
+
+        # StaticAttributes (objects and potentially contexts if no frame interval inside)
+        if &#39;objects&#39; in vcd_430_data[&#39;vcd&#39;]:
+            for object_key in vcd_430_data[&#39;vcd&#39;][&#39;objects&#39;].keys():
+                object = vcd_430_data[&#39;vcd&#39;][&#39;objects&#39;][object_key]
+
+                #hasFrameIntervals = (&#39;frame_intervals&#39; in object)
+                #if hasFrameIntervals:
+                #    if len(object[&#39;frame_intervals&#39;]) == 0:
+                #        hasFrameIntervals = False
+                #if not hasFrameIntervals:
+                if &#34;object_data&#34; in object:
+                    # This is the static part of object
+                    vcd_330_data[&#39;VCD&#39;].setdefault(&#39;staticAttributes&#39;, dict())
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;].setdefault(&#39;objects&#39;, [])
+
+                    obj = {}
+                    obj.update({&#34;name&#34;: object[&#34;name&#34;]})
+                    obj.update({&#34;type&#34;: object[&#34;type&#34;]})
+                    obj.update({&#34;uid&#34;: object_key})
+                    if &#34;ontology_uid&#34; in object:
+                        obj.update({&#34;ontologyUID&#34;: object[&#34;ontology_uid&#34;]})
+
+                    # Copy object_data into ObjectDataContainer
+                    self.__copy_object_data(object, obj)
+
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;][&#39;objects&#39;].append(obj)
+        if &#39;contexts&#39; in vcd_430_data[&#39;vcd&#39;]:
+            for context_key in vcd_430_data[&#39;vcd&#39;][&#39;contexts&#39;].keys():
+                context4 = vcd_430_data[&#39;vcd&#39;][&#39;contexts&#39;][context_key]
+                hasFrameIntervals = (&#39;frame_intervals&#39; in context4)
+                if hasFrameIntervals:
+                    if len(context4[&#39;frame_intervals&#39;]) == 0:
+                        hasFrameIntervals = False
+
+                if not hasFrameIntervals:
+                    # This is the static part of object
+                    vcd_330_data[&#39;VCD&#39;].setdefault(&#39;staticAttributes&#39;, dict())
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;].setdefault(&#39;contexts&#39;, [])
+
+                    obj = {}
+                    obj.update({&#34;name&#34;: context4[&#34;name&#34;]})
+                    obj.update({&#34;type&#34;: context4[&#34;type&#34;]})
+                    obj.update({&#34;uid&#34;: context_key})
+                    if &#34;ontology_uid&#34; in context4:
+                        obj.update({&#34;ontologyUID&#34;: context4[&#34;ontology_uid&#34;]})
+
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;][&#39;contexts&#39;].append(obj)
+
+        # Dynamic attributes
+        # Actions, Events, Contexts, Objects, Relations -&gt; create entries at &#39;frames&#39;
+        vcd_330_data[&#39;VCD&#39;].setdefault(&#39;frames&#39;, [])
+
+        for frame_num in vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;].keys():
+            frame4 = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+
+            frame3 = dict()
+            frame3.update({&#39;frame&#39;: frame_num})
+
+            for elements in frame4.keys():
+                if elements == &#39;frame_properties&#39;:
+                    if &#39;timestamp&#39; in frame4[&#39;frame_properties&#39;]:
+                        frame3.update({&#39;timestamp&#39;: frame4[&#39;frame_properties&#39;][&#39;timestamp&#39;]})
+                else: #
+                    frame3.setdefault(elements, [])
+                    elements4 = frame4[elements]
+                    for element4_id in elements4:
+                        # In VCD4, within frame, we only have the uid, data is outside
+                        element4_static = vcd_430_data[&#39;vcd&#39;][elements][element4_id]
+                        obj = {}
+                        obj.update({&#34;name&#34;: element4_static[&#34;name&#34;]})
+                        obj.update({&#34;uid&#34;: element4_id})
+                        obj.update({&#34;type&#34;: element4_static[&#34;type&#34;]})
+                        if &#34;ontology_uid&#34; in element4_static:
+                            obj.update({&#34;ontologyUID&#34;: element4_static[&#34;ontology_uid&#34;]})
+
+                        element4_dynamic = elements4[element4_id]
+                        if elements == &#39;objects&#39;:
+                            # Add ObjectDataContainers
+                            self.__copy_object_data(element4_dynamic, obj)
+
+                        elif elements == &#39;relations&#39;:
+                            obj.update({&#34;predicate&#34;: element4_static[&#34;type&#34;]})
+                            if &#39;rdf_subjects&#39; in element4_static:
+                                obj.update({&#39;rdf_subjects&#39;: element4_static[&#39;rdf_subjects&#39;]})
+                            if &#39;rdf_objects&#39; in element4_static:
+                                obj.update({&#39;rdf_objects&#39;: element4_static[&#39;rdf_objects&#39;]})
 
 
-class ConverterVCD330(Converter):
-    def __init__(self, vcd330_file_name):
-        Converter.__init__(self, vcd330_file_name)
+                        frame3[elements].append(obj)
+                vcd_330_data[&#39;VCD&#39;][&#39;frames&#39;].append(frame3)
 
-        # Load JSON file
-        vcd330_json = open(vcd330_file_name)
-        vcd330 = json.load(vcd330_json)
-        vcd330_json.close()
+            return vcd_330_data
 
-        # Explore vcd330_dict to copy content into VCD 400
-        self.vcd = core.VCD()
+    def __add_attributes(self, src430, dst330):
+        if &#39;attributes&#39; in src430:
+            attrib3_dict = {}
+            attrib3_type = &#34;&#34;
+            for attrib4_key in src430[&#39;attributes&#39;].keys():
+                if attrib4_key == &#34;boolean&#34;:
+                    attrib3_dict.setdefault(&#39;bool&#39;, [])
+                    attrib3_type = &#34;bool&#34;
+                elif attrib4_key == &#34;text&#34;:
+                    attrib3_dict.setdefault(&#39;text&#39;, [])
+                    attrib3_type = &#34;text&#34;
+                elif attrib4_key == &#34;num&#34; or attrib4_key == &#34;vec&#34;:
+                    attrib3_dict.setdefault(&#34;num&#34;, [])
+                    attrib3_type = &#34;num&#34;
 
+                for it4 in src430[&#39;attributes&#39;][attrib4_key]:
+                    it3 = {}
+                    it3.update({&#34;name&#34;: it4[&#39;name&#39;]})
+                    if attrib4_key == &#34;num&#34;:
+                        if &#39;val&#39; in it4:
+                            it3.update({&#34;val&#34;: [it4[&#39;val&#39;]]})
+                    else:
+                        if &#39;val&#39; in it4:
+                            it3.update({&#34;val&#34;: it4[&#39;val&#39;]})
+                    if &#34;stream&#34; in it4:
+                        warnings.warn(&#34;WARNING: VCD4.3.0 allows stream info for &#34;
+                                      &#34;bool, num, text and vec, but VCD3.3.0 does not.&#34;)
+                    attrib3_dict[attrib3_type].append(it3)
+            dst330.update({&#34;attributes&#34;: attrib3_dict})
+
+    def __copy_object_data(self, root, obj):
+        odc = {}
+        if &#39;object_data&#39; not in root:
+            return
+        for object_data_key in root[&#39;object_data&#39;].keys():
+            for object_data_item in root[&#39;object_data&#39;][object_data_key]:
+
+                object_data_current = {}
+                object_data_current.update({&#34;name&#34;: object_data_item[&#39;name&#39;]})
+
+                if object_data_key == &#34;num&#34;:  # special case, because vcd4 treats num as single number, while vcd3 requires array
+                    if &#39;val&#39; in object_data_item:
+                        object_data_current.update({&#34;val&#34;: [object_data_item[&#39;val&#39;]]})
+                else:
+                    if &#39;val&#39; in object_data_item:
+                        object_data_current.update({&#34;val&#34;: object_data_item[&#39;val&#39;]})
+                if &#39;stream&#39; in object_data_item:
+                    object_data_current.update({&#34;inStream&#34;: object_data_item[&#39;stream&#39;]})
+
+                # Add attributes
+                self.__add_attributes(object_data_item, object_data_current)
+
+                if object_data_key == &#34;bbox&#34;:
+                    odc.setdefault(&#39;bbox&#39;, [])
+                    odc[&#39;bbox&#39;].append(object_data_current)
+                elif object_data_key == &#34;num&#34;:
+                    odc.setdefault(&#39;num&#39;, [])
+                    odc[&#39;num&#39;].append(object_data_current)
+                elif object_data_key == &#34;vec&#34;:
+                    odc.setdefault(&#39;num&#39;, [])
+                    odc[&#39;num&#39;].append(object_data_current)
+                elif object_data_key == &#34;boolean&#34;:
+                    odc.setdefault(&#39;bool&#39;, [])
+                    odc[&#39;bool&#39;].append(object_data_current)
+                elif object_data_key == &#34;text&#34;:
+                    odc.setdefault(&#39;text&#39;, [])
+                    odc[&#39;text&#39;].append(object_data_current)
+                elif object_data_key == &#34;cuboid&#34;:
+                    odc.setdefault(&#39;cuboid&#39;, [])
+                    odc[&#39;cuboid&#39;].append(object_data_current)
+                elif object_data_key == &#34;poly2d&#34;:
+                    object_data_current.update({&#34;closed&#34;: object_data_item[&#39;closed&#39;]})
+                    object_data_current.update({&#34;mode&#34;: object_data_item[&#39;mode&#39;]})
+                    odc.setdefault(&#39;poly2D&#39;, [])
+                    odc[&#39;poly2D&#39;].append(object_data_current)
+                elif object_data_key == &#34;poly3d&#34;:
+                    object_data_current.update({&#34;closed&#34;: object_data_item[&#39;closed&#39;]})
+                    odc.setdefault(&#39;poly3D&#39;, [])
+                    odc[&#39;poly3D&#39;].append(object_data_current)
+                elif object_data_key == &#34;point2d&#34;:
+                    object_data_current.update({&#34;id&#34;: object_data_item[&#39;id&#39;]})
+                    odc.setdefault(&#39;point2D&#39;, [])
+                    odc[&#39;point2D&#39;].append(object_data_current)
+                elif object_data_key == &#34;point3d&#34;:
+                    object_data_current.update({&#34;id&#34;: object_data_item[&#39;id&#39;]})
+                    odc.setdefault(&#39;point3D&#39;, [])
+                    odc[&#39;point3D&#39;].append(object_data_current)
+                elif object_data_key == &#34;mat&#34;:
+                    object_data_current.update({&#34;channels&#34;: object_data_item[&#39;channels&#39;]})
+                    object_data_current.update({&#34;width&#34;: object_data_item[&#39;width&#39;]})
+                    object_data_current.update({&#34;height&#34;: object_data_item[&#39;height&#39;]})
+                    object_data_current.update({&#34;dataType&#34;: object_data_item[&#39;data_type&#39;]})
+                    odc.setdefault(&#39;mat&#39;, [])
+                    odc[&#39;mat&#39;].append(object_data_current)
+                elif object_data_key == &#34;image&#34;:
+                    object_data_current.update({&#34;encoding&#34;: object_data_item[&#39;encoding&#39;]})
+                    object_data_current.update({&#34;mimeType&#34;: object_data_item[&#39;mime_type&#39;]})
+                    odc.setdefault(&#39;image&#39;, [])
+                    odc[&#39;image&#39;].append(object_data_current)
+                elif object_data_key == &#34;binary&#34;:
+                    object_data_current.update({&#34;dataType&#34;: object_data_item[&#39;data_type&#39;]})
+                    object_data_current.update({&#34;encoding&#34;: object_data_item[&#39;encoding&#39;]})
+                    odc.setdefault(&#39;binary&#39;, [])
+                    odc[&#39;binary&#39;].append(object_data_current)
+                elif object_data_key == &#34;mesh&#34;:
+                    # Area
+                    object_data_current.setdefault(&#34;areaReference&#34;, list())
+                    for key, val in object_data_item[&#39;area_reference&#39;].items():
+                        ref_type430 = val[&#39;reference_type&#39;]
+                        if ref_type430 == &#34;line_reference&#34;:
+                            refType330 = &#34;lineReference&#34;
+                        elif ref_type430 == &#34;point3d&#34;:
+                            refType330 = &#34;point3D&#34;
+                        else:
+                            refType330 = ref_type430
+                        if &#39;val&#39; in val:
+                            object_data_current[&#34;areaReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                    &#34;val&#34;: val.get(&#39;val&#39;)
+                                }
+                            )
+                        else:
+                            object_data_current[&#34;areaReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                }
+                            )
+                        # Add attributes
+                        self.__add_attributes(val, object_data_current[&#34;areaReference&#34;][-1])
+
+                    # Line
+                    object_data_current.setdefault(&#34;lineReference&#34;, list())
+                    for key, val in object_data_item[&#39;line_reference&#39;].items():
+                        ref_type430 = val[&#39;reference_type&#39;]
+                        if ref_type430 == &#34;point3d&#34;:
+                            refType330 = &#34;point3D&#34;
+                        else:
+                            refType330 = ref_type430
+                        if &#39;val&#39; in val:
+                            object_data_current[&#34;lineReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                    &#34;val&#34;: val.get(&#39;val&#39;)
+                                }
+                            )
+                        else:
+                            object_data_current[&#34;lineReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                }
+                            )
+                        # Add attributes
+                        self.__add_attributes(val, object_data_current[&#34;lineReference&#34;][-1])
+
+                    # point3d
+                    object_data_current.setdefault(&#34;point3D&#34;, list())
+                    for key, val in object_data_item[&#39;point3d&#39;].items():
+                        object_data_current[&#39;point3D&#39;].append(
+                            {
+                                &#34;id&#34;: key,
+                                &#34;name&#34;: val[&#39;name&#39;],
+                                &#34;val&#34;: val.get(&#39;val&#39;)
+                            }
+                        )
+
+                        # Add attributes
+                        self.__add_attributes(val, object_data_current[&#39;point3D&#39;][-1])
+
+                    odc.setdefault(&#39;mesh&#39;, [])
+                    odc[&#39;mesh&#39;].append(object_data_current)
+                obj.update({&#39;objectDataContainer&#39;: odc})
+
+
+class ConverterVCD330toVCD430:
+    # This class converts a VCD3.3.0 into VCD4.3.0
+    
+    def __init__(self, vcd_330_data, vcd_430):
         # Main VCD element
-        if &#39;VCD&#39; not in vcd330:
+        if &#39;VCD&#39; not in vcd_330_data:
             raise Exception(&#34;This is not a valid VCD 3.3.0 file.&#34;)
 
         # Metadata and other
-        # NOTE: &#39;scdName&#39; field is lost as VCD 4.0.0 does not support SCD
+        # NOTE: &#39;scdName&#39; field is lost as VCD 4.3.0 does not support SCD
         # NOTE: &#39;frameInterval&#39; from &#39;VCD&#39; is not copied, but computed from frames
-        # NOTE: &#39;guid&#39; in &#39;Object&#39;s is ignored in VCD 4.0.0
-        # NOTE: &#39;mesh&#39; is not supported in VCD 4.0.0
-        # TODO
-        if &#39;annotator&#39; in vcd330[&#39;VCD&#39;]:
-            self.vcd.add_annotator(vcd330[&#39;VCD&#39;][&#39;annotator&#39;])
-        if &#39;name&#39; in vcd330[&#39;VCD&#39;]:
-            self.vcd.add_name(vcd330[&#39;VCD&#39;][&#39;name&#39;])
-        if &#39;MetaData&#39; in vcd330[&#39;VCD&#39;]:
-            metadata = vcd330[&#39;VCD&#39;][&#39;MetaData&#39;]
-            stream = metadata[&#39;stream&#39;]
-            self.vcd.add_stream(
-                stream[&#39;name&#39;], stream[&#39;uri&#39;], stream[&#39;description&#39;], stream[&#39;type&#39;]
-            )
-        if &#39;ontologyManager&#39; in vcd330[&#39;VCD&#39;]:
-            ontologyManager = vcd330[&#39;VCD&#39;][&#39;ontologyManager&#39;]
+        # NOTE: &#39;guid&#39; in &#39;Object&#39;s is ignored in VCD 4.3.0
+        # TODO: Apparently &#39;streamProperties&#34; can exist in VCD3.3.0, although it is not in the schema
+        if &#39;annotator&#39; in vcd_330_data[&#39;VCD&#39;]:
+            vcd_430.add_annotator(vcd_330_data[&#39;VCD&#39;][&#39;annotator&#39;])
+        if &#39;name&#39; in vcd_330_data[&#39;VCD&#39;]:
+            vcd_430.add_name(vcd_330_data[&#39;VCD&#39;][&#39;name&#39;])
+        if &#39;metaData&#39; in vcd_330_data[&#39;VCD&#39;]:
+            metadata = vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;]
+            streams = metadata[&#39;stream&#39;]
+            for stream in streams:
+                stream_type = stream[&#39;type&#39;]
+                if stream_type == &#39;video&#39;:
+                    stream_type = &#39;camera&#39;
+                elif stream_type == &#39;pointcloud&#39; or stream_type == &#39;lidar&#39;:
+                    stream_type = &#39;lidar&#39;
+                vcd_430.add_stream(
+                    stream[&#39;name&#39;], stream[&#39;uri&#39;], stream[&#39;description&#39;], stream_type
+                )
+        if &#39;ontologyManager&#39; in vcd_330_data[&#39;VCD&#39;]:
+            ontologyManager = vcd_330_data[&#39;VCD&#39;][&#39;ontologyManager&#39;]
             for ontology in ontologyManager[&#39;ontology&#39;]:
-                self.vcd.add_ontology(ontology)
-        if &#39;frames&#39; in vcd330[&#39;VCD&#39;]:
+                vcd_430.add_ontology(ontology)
+        if &#39;frames&#39; in vcd_330_data[&#39;VCD&#39;]:
             # This is Frame-wise VCD
-            for frame in vcd330[&#39;VCD&#39;][&#39;frames&#39;]:
+            for frame in vcd_330_data[&#39;VCD&#39;][&#39;frames&#39;]:
                 # A frame has required &#34;frame&#34;, and optional &#34;streamSync&#34;, &#34;frameProperties&#34;, &#34;frame&#34;, &#34;timestamp&#34;
                 # and then &#34;objects&#34;, &#34;actions&#34;, etc.
                 frame_num = frame[&#39;frame&#39;]
                 if &#39;timestamp&#39; in frame:
-                    self.vcd.add_frame_property(frame_num, &#39;timestamp&#39;, frame[&#39;timestamp&#39;])
+                    vcd_430.add_frame_properties(frame_num=frame_num,
+                                                  timestamp=frame[&#39;timestamp&#39;])
                 if &#39;frameProperties&#39; in frame:
+                    frame_properties=dict()
                     for frameProperty in frame[&#39;frameProperties&#39;]:
                         val = frameProperty[&#39;val&#39;]
                         name = frameProperty[&#39;name&#39;]
-                        self.vcd.add_frame_property(frame_num, name, val)
+                        if frameProperty[&#39;name&#39;] == &#39;timestamp&#39;:
+                            vcd_430.add_frame_properties(frame_num, timestamp=val)
+                        else:
+                            frame_properties[name] = val
+                    if frame_properties:
+                        vcd_430.add_frame_properties(frame_num, timestamp=None, properties=frame_properties)
                 if &#39;streamSync&#39; in frame:
                     for streamSyncItem in frame[&#39;streamSync&#39;]:
-                        self.vcd.add_frame_sync(frame_num, streamSyncItem[&#39;name&#39;], streamSyncItem[&#39;frame&#39;])
+                        vcd_430.add_stream_properties(
+                            streamSyncItem[&#39;name&#39;],
+                            stream_sync=types.StreamSync(
+                                    frame_vcd=frame_num,
+                                    frame_stream=streamSyncItem[&#39;frame&#39;]
+                                )
+                        )
 
                 # Now the elements
-                self.__copy_elements(frame, frame_num)
+                self.__copy_elements(vcd_430, frame, frame_num)
 
-        if &#39;staticAttributes&#39; in vcd330[&#39;VCD&#39;]:
-            for staticAttribute in vcd330[&#39;VCD&#39;][&#39;staticAttributes&#39;]:
-                self.__copy_elements(staticAttribute)
+        if &#39;staticAttributes&#39; in vcd_330_data[&#39;VCD&#39;]:
+            self.__copy_elements(vcd_430, vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;])
 
-    def __copy_elements(self, root, frame_num=None):
+    def __copy_elements(self, vcd_430, root, frame_num=None):
         if &#39;objects&#39; in root:
             for object in root[&#39;objects&#39;]:
-                uid = object[&#39;uid&#39;]
+                uid = str(object[&#39;uid&#39;])  # Let&#39;s convert to string here
                 name = object[&#39;name&#39;]
                 ontologyUID = None
                 if &#39;ontologyUID&#39; in object:
-                    ontologyUID = object[&#39;ontologyUID&#39;]
-                type = object[&#39;type&#39;]
+                    ontologyUID = str(object[&#39;ontologyUID&#39;])  # Let&#39;s convert to string here
+                typeSemantic = object.get(&#39;type&#39;, &#39;&#39;)  # In VCD 4.3.0 type is required, but it VCD 3.3.0 seems to be not
 
-                if not self.vcd.has(core.ElementType.object, uid):
-                    self.vcd.add_object(name, type, frame_num, uid, ontologyUID)
+                if not vcd_430.has(core.ElementType.object, uid):
+                    vcd_430.add_object(name, typeSemantic, frame_num, uid, ontologyUID)
 
-                objectDataContainer = object[&#39;objectDataContainer&#39;]
-                for key, value in objectDataContainer.items():
-                    for object_data in value:
-                        inStream = None
-                        if &#39;inStream&#39; in object_data:
-                            inStream = object_data[&#39;inStream&#39;]
-                        val = object_data[&#39;val&#39;]
-                        currentObjectData = None
+                if &#39;objectDataContainer&#39; in object:
+                    objectDataContainer = object[&#39;objectDataContainer&#39;]
+                    for key, value in objectDataContainer.items():
+                        for object_data in value:
+                            inStream = None
+                            if &#39;inStream&#39; in object_data:
+                                inStream = object_data[&#39;inStream&#39;]
+                            if &#39;val&#39; in object_data:
+                                val = object_data[&#39;val&#39;]
+                            currentObjectData = None
 
-                        # Create main object_data body
-                        if key == &#39;num&#39;:
-                            if len(val) == 1:
-                                # Single value, this is a num
-                                self.vcd.add_object_data(
-                                    uid, types.num(object_data[&#39;name&#39;], val[0], inStream), frame_num
+                            # Create main object_data body
+                            # NOTE: in the following calls, I am using direct access to dictionary for required fields, e.g.
+                            # object_data[&#39;name&#39;], etc.
+                            # For optional fields, I am using get() function, e.g. object_data.get(&#39;mode&#39;) which defaults to
+                            # None
+                            if key == &#39;num&#39;:
+                                if len(val) == 1:
+                                    # Single value, this is a num
+                                    currentObjectData = types.num(object_data[&#39;name&#39;], val[0], inStream)
+                                else:
+                                    # Multiple values, this is a vec
+                                    currentObjectData = types.vec(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;bool&#39;:
+                                currentObjectData = types.boolean(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;text&#39;:
+                                currentObjectData = types.text(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;image&#39;:
+                                currentObjectData = types.image(
+                                    object_data[&#39;name&#39;], val,
+                                    object_data[&#39;mimeType&#39;], object_data[&#39;encoding&#39;],
+                                    inStream
                                 )
-                            else:
-                                # Multiple values, this is a vec
-                                self.vcd.add_object_data(
-                                    uid, types.vec(object_data[&#39;name&#39;], val, inStream), frame_num
+                            elif key == &#39;binary&#39;:
+                                currentObjectData = types.binary(
+                                    object_data[&#39;name&#39;], val,
+                                    object_data[&#39;dataType&#39;], object_data[&#39;encoding&#39;],
+                                    inStream
                                 )
-                        elif key == &#39;bool&#39;:
-                            currentObjectData = types.boolean(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;text&#39;:
-                            currentObjectData = types.text(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;image&#39;:
-                            currentObjectData = types.image(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;binary&#39;:
-                            currentObjectData = types.binary(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;vec&#39;:
-                            currentObjectData = types.vec(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;bbox&#39;:
-                            currentObjectData = types.bbox(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;cuboid&#39;:
-                            currentObjectData = types.cuboid(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;mat&#39;:
-                            currentObjectData = types.mat(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;point2D&#39;:
-                            currentObjectData = types.point2d(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;point3D&#39;:
-                            currentObjectData = types.point3d(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#34;poly2D&#34;:
-                            currentObjectData = types.poly2d(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#34;poly3D&#34;:
-                            currentObjectData = types.poly3d(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;vec&#39;:
+                                currentObjectData = types.vec(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;bbox&#39;:
+                                currentObjectData = types.bbox(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;cuboid&#39;:
+                                currentObjectData = types.cuboid(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;mat&#39;:
+                                currentObjectData = types.mat(
+                                    object_data[&#39;name&#39;], val,
+                                    object_data[&#39;channels&#39;], object_data[&#39;width&#39;], object_data[&#39;height&#39;],
+                                    object_data[&#39;dataType&#39;],
+                                    inStream
+                                )
+                            elif key == &#39;point2D&#39;:
+                                currentObjectData = types.point2d(object_data[&#39;name&#39;], val, object_data.get(&#39;id&#39;), inStream)
+                            elif key == &#39;point3D&#39;:
+                                currentObjectData = types.point3d(object_data[&#39;name&#39;], val, object_data.get(&#39;id&#39;), inStream)
+                            elif key == &#34;poly2D&#34;:
+                                mode_int = object_data[&#39;mode&#39;]
+                                currentObjectData = types.poly2d(
+                                    object_data[&#39;name&#39;], val, types.Poly2DType(mode_int), object_data[&#39;closed&#39;], inStream
+                                )
+                            elif key == &#34;poly3D&#34;:
+                                currentObjectData = types.poly3d(object_data[&#39;name&#39;], val, object_data[&#39;closed&#39;], inStream)
+                            elif key == &#34;mesh&#34;:
+                                currentObjectData = types.mesh(object_data[&#39;name&#39;])
+                                if &#39;point3D&#39; in object_data:
+                                    for p3d_330 in object_data[&#39;point3D&#39;]:
+                                        # Create a types.point3d object and add it to the mesh
+                                        id = p3d_330[&#39;id&#39;]
+                                        name = p3d_330[&#39;name&#39;]
+                                        val = p3d_330[&#39;val&#39;]
 
-                        # Add any attributes
-                        if &#39;attributes&#39; in object_data:
-                            attributes = object_data[&#39;attributes&#39;]
-                            for k, v in attributes.items():
-                                if k == &#34;bool&#34;:
-                                    for od in v:
-                                        currentObjectData.add_attribute(types.boolean(od[&#39;name&#39;], od[&#39;val&#39;]))
-                                elif k == &#34;num&#34;:
-                                    for od in v:
-                                        if len(od[&#39;val&#39;]) == 1:
-                                            currentObjectData.add_attribute(types.num(od[&#39;name&#39;], od[&#39;val&#39;][0]))
+                                        p3d_430 = types.point3d(name, val)
+                                        self.__add_attributes(p3d_330, p3d_430)
+                                        currentObjectData.add_vertex(p3d_430, id)
+
+                                if &#39;lineReference&#39; in object_data:
+                                    for lref_330 in object_data[&#39;lineReference&#39;]:
+                                        # Create a types.line_reference object and add it to the mesh
+                                        id = lref_330[&#39;id&#39;]
+                                        name = lref_330[&#39;name&#39;]
+                                        referenceType = lref_330[&#39;referenceType&#39;]
+                                        assert(referenceType == &#34;point3D&#34;)
+                                        val = lref_330.get(&#39;val&#39;)  # defaults to None, needed for the constructor
+
+                                        lref_430 = types.lineReference(name, val, types.ObjectDataType.point3d)
+                                        self.__add_attributes(lref_330, lref_430)
+                                        currentObjectData.add_edge(lref_430, id)
+
+                                if &#39;areaReference&#39; in object_data:
+                                    for aref_330 in object_data[&#39;areaReference&#39;]:
+                                        # Create a types.area_reference object and add it to the mesh
+                                        id = aref_330[&#39;id&#39;]
+                                        name = aref_330[&#39;name&#39;]
+                                        referenceType = aref_330[&#39;referenceType&#39;]
+                                        assert (referenceType == &#34;point3D&#34; or referenceType == &#34;lineReference&#34;)
+                                        val = aref_330.get(&#39;val&#39;)  # defaults to None, needed for the constructor
+
+                                        if referenceType == &#34;point3D&#34;:
+                                            aref_430 = types.areaReference(name, val, types.ObjectDataType.point3d)
                                         else:
-                                            currentObjectData.add_attribute(types.vec(od[&#39;name&#39;], od[&#39;val&#39;]))
-                                elif k == &#34;text&#34;:
-                                    for od in v:
-                                        currentObjectData.add_attribute(types.text(od[&#39;name&#39;], od[&#39;val&#39;]))
+                                            aref_430 = types.areaReference(name, val, types.ObjectDataType.line_reference)
+                                        self.__add_attributes(aref_330, aref_430)
+                                        currentObjectData.add_area(aref_430, id)
 
-                        # Add the object_data to the object
-                        self.vcd.add_object_data(uid, currentObjectData, frame_num)
-        elif &#39;actions&#39; in root:
-            # TODO: parse actions
-            b = 2
-        elif &#39;events&#39; in root:
-            # TODO: parse events
-            b = 3
-        elif &#39;contexts&#39; in root:
-            # TODO: parse contexts
-            b = 4
-        elif &#39;relations&#39; in root:
-            # TODO: parse relations
-            b = 5</code></pre>
+                            # Add any attributes
+                            self.__add_attributes(object_data, currentObjectData)
+
+                            # Add the object_data to the object
+                            vcd_430.add_object_data(uid, currentObjectData, frame_num)
+
+        if &#39;actions&#39; in root:
+            for action in root[&#39;actions&#39;]:
+                uid = str(action[&#39;uid&#39;])
+                name = action[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in action:
+                    ontologyUID = str(action[&#39;ontologyUID&#39;])
+                typeSemantic = action.get(&#39;type&#39;, &#39;&#39;)  # required in VCD 4.0, not in VCD 3.3.0
+                vcd_430.add_action(name, typeSemantic, frame_num, uid, ontologyUID)
+
+        if &#39;events&#39; in root:
+            for event in root[&#39;events&#39;]:
+                uid = str(event[&#39;uid&#39;])
+                name = event[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in event:
+                    ontologyUID = str(event[&#39;ontologyUID&#39;])
+                typeSemantic = event.get(&#39;type&#39;, &#39;&#39;)
+                vcd_430.add_event(name, typeSemantic, frame_num, uid, ontologyUID)
+
+        if &#39;contexts&#39; in root:
+            for context in root[&#39;contexts&#39;]:
+                uid = str(context[&#39;uid&#39;])
+                name = context[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in context:
+                    ontologyUID = str(context[&#39;ontologyUID&#39;])
+                typeSemantic = context.get(&#39;type&#39;, &#39;&#39;)
+                vcd_430.add_context(name, typeSemantic, frame_num, uid, ontologyUID)
+
+        if &#39;relations&#39; in root:
+            for relation in root[&#39;relations&#39;]:
+                uid = str(relation[&#39;uid&#39;])
+                name = relation[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in relation:
+                    ontologyUID = str(relation[&#39;ontologyUID&#39;])
+                predicate = relation.get(&#39;predicate&#39;, &#39;&#39;)
+                rdf_objects = relation.get(&#39;rdf_objects&#39;, None)
+                rdf_subjects = relation.get(&#39;rdf_subjects&#39;, None)
+
+                vcd_430.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
+                relation = vcd_430.get_element(core.ElementType.relation, uid)
+                if not &#39;rdf_objects&#39; in relation or len(relation[&#39;rdf_objects&#39;]) == 0:  # just add once
+                    for rdf_object in rdf_objects:
+                        element_type = None
+                        rdf_object_type_str = rdf_object[&#39;type&#39;]
+                        if rdf_object_type_str == &#34;Object&#34;:
+                            element_type = core.ElementType.object
+                        elif rdf_object_type_str == &#34;Action&#34;:
+                            element_type = core.ElementType.action
+                        elif rdf_object_type_str == &#34;Event&#34;:
+                            element_type = core.ElementType.event
+                        elif rdf_object_type_str == &#34;Context&#34;:
+                            element_type = core.ElementType.context
+                        else:
+                            warnings.warn(&#34;ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.&#34;)
+
+                        vcd_430.add_rdf(uid, core.RDF.object, str(rdf_object[&#39;uid&#39;]), element_type)
+
+                if not &#39;rdf_subjects&#39; in relation or len(relation[&#39;rdf_subjects&#39;]) == 0:  # just add once
+                    for rdf_subject in rdf_subjects:
+                        element_type = None
+                        rdf_object_type_str = rdf_subject[&#39;type&#39;]
+                        if rdf_object_type_str == &#34;Object&#34;:
+                            element_type = core.ElementType.object
+                        elif rdf_object_type_str == &#34;Action&#34;:
+                            element_type = core.ElementType.action
+                        elif rdf_object_type_str == &#34;Event&#34;:
+                            element_type = core.ElementType.event
+                        elif rdf_object_type_str == &#34;Context&#34;:
+                            element_type = core.ElementType.context
+                        else:
+                            warnings.warn(&#34;ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.&#34;)
+
+                        vcd_430.add_rdf(uid, core.RDF.subject, str(rdf_subject[&#39;uid&#39;]), element_type)
+
+
+    def __add_attributes(self, src330, object_data430):
+        # Add any attributes
+        if &#39;attributes&#39; in src330:
+            attributes = src330[&#39;attributes&#39;]
+            for k, v in attributes.items():
+                if k == &#34;bool&#34;:
+                    for od in v:
+                        object_data430.add_attribute(types.boolean(od[&#39;name&#39;], od[&#39;val&#39;]))
+                elif k == &#34;num&#34;:
+                    for od in v:
+                        if len(od[&#39;val&#39;]) == 1:
+                            object_data430.add_attribute(types.num(od[&#39;name&#39;], od[&#39;val&#39;][0]))
+                        else:
+                            object_data430.add_attribute(types.vec(od[&#39;name&#39;], od[&#39;val&#39;]))
+                elif k == &#34;text&#34;:
+                    for od in v:
+                        object_data430.add_attribute(types.text(od[&#39;name&#39;], od[&#39;val&#39;]))
+
+
+class ConverterVCD420toVCD430:
+    # This class converts from VCD 4.2.0 into VCD 4.3.0
+
+    # Main changes
+    # 1) Metadata in VCD 4.3.0 is mostly inside &#34;metadata&#34;
+    # 2) &#34;streams&#34; are at root and not inside &#34;metadata&#34;
+    # 3) element_data_pointers in VCD 4.3.0 didn&#39;t exist in VCD 4.2.0
+    # 4) UIDs are stored as strings in VCD 4.3.0 (e.g. ontology_uid)
+    # 5) coordinate_systems
+
+    # TODO
+    # 6) Cuboids use quaternions
+
+    # Other changes are implicitly managed by the VCD 4.3.0 API
+
+    def __init__(self, vcd_420_data, vcd_430):
+        if &#39;vcd&#39; not in vcd_420_data:
+            raise Exception(&#34;This is not a valid VCD 4.2.0 file&#34;)
+
+        # While changes 1-2-3 are the only ones implemented, it is easier to just copy everything and then move things
+        vcd_430.data = copy.deepcopy(vcd_420_data)
+
+        # 1) Metadata (annotator and comment were already inside metadata)
+        if &#39;name&#39; in vcd_430.data[&#39;vcd&#39;]:
+            vcd_430.data[&#39;vcd&#39;].setdefault(&#39;metadata&#39;, {})
+            vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;name&#39;] = vcd_430.data[&#39;vcd&#39;][&#39;name&#39;]
+            del vcd_430.data[&#39;vcd&#39;][&#39;name&#39;]
+        if &#39;version&#39; in vcd_430.data[&#39;vcd&#39;]:
+            vcd_430.data[&#39;vcd&#39;].setdefault(&#39;metadata&#39;, {})
+            vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;schema_version&#39;] = &#34;4.3.0&#34;
+            del vcd_430.data[&#39;vcd&#39;][&#39;version&#39;]
+
+        # 2) Streams, no longer under &#34;metadata&#34;
+        if &#39;metadata&#39; in vcd_430.data[&#39;vcd&#39;]:
+            if &#39;streams&#39; in vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_430.data[&#39;vcd&#39;][&#39;streams&#39;] = copy.deepcopy(vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;])
+                del vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;]
+
+        # 3) Data pointers need to be fully computed
+        self.__compute_data_pointers(vcd_430.data)
+
+        # 4) UIDs, when values, as strings
+        for element_type in core.ElementType:
+            if element_type.name + &#39;s&#39; in vcd_430.data[&#39;vcd&#39;]:
+                for uid, element in vcd_430.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
+                    if &#39;ontology_uid&#39; in element:
+                        element[&#39;ontology_uid&#39;] = str(element[&#39;ontology_uid&#39;])
+
+    def __compute_data_pointers(self, vcd_430_data):
+        # WARNING! This function might be extremely slow
+        # It does loop over all frames, and updates data pointers at objects, actions, etc
+        # It is useful to convert from VCD 4.2.0 into VCD 4.3.0 (use converter.ConverterVCD420toVCD430)
+
+        # Looping over frames and creating the necessary data_pointers
+        if &#39;frame_intervals&#39; in vcd_430_data[&#39;vcd&#39;]:
+            fis = vcd_430_data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+            for fi in fis:
+                for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
+                    #frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][str(frame_num)]  # warning: at this point, the key is str
+                    frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]  # warning: at this point, the key is str
+                    for element_type in core.ElementType:
+                        if element_type.name + &#39;s&#39; in frame:  # e.g. &#34;objects&#34;, &#34;actions&#34;...
+                            for uid, element in frame[element_type.name + &#39;s&#39;].items():
+                                if element_type.name + &#39;_data&#39; in element:
+                                    # So this element has element_data in this frame
+                                    # and then we need to update the element_data_pointer at the root
+                                    # we can safely assume it already exists
+
+                                    # First, let&#39;s create a element_data_pointer at the root
+                                    vcd_430_data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid].\
+                                        setdefault(element_type.name + &#39;_data_pointers&#39;, {})
+                                    edp = vcd_430_data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid][element_type.name + &#39;_data_pointers&#39;]
+
+                                    # Let&#39;s loop over the element_data
+                                    for ed_type, ed_array in element[element_type.name + &#39;_data&#39;].items():
+                                        # e.g. ed_type is &#39;bbox&#39;, ed_array is the array of such bboxes content
+                                        for element_data in ed_array:
+                                            name = element_data[&#39;name&#39;]
+                                            edp.setdefault(name, {})  # this element_data may already exist
+                                            edp[name].setdefault(&#39;type&#39;, ed_type)  # e.g. &#39;bbox&#39;
+                                            edp[name].setdefault(&#39;frame_intervals&#39;, [])  # in case it does not exist
+                                            fis_exist = core.FrameIntervals(edp[name][&#39;frame_intervals&#39;])
+                                            fis_exist = fis_exist.union(core.FrameIntervals(frame_num))  # So, let&#39;s fuse with this frame
+                                            edp[name][&#39;frame_intervals&#39;] = fis_exist.get_dict()  # overwrite
+                                            # No need to manage attributes</code></pre>
 </details>
 </section>
 <section>
@@ -203,211 +786,759 @@ class ConverterVCD330(Converter):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="vcd.converter.Converter"><code class="flex name class">
-<span>class <span class="ident">Converter</span></span>
-<span>(</span><span>src_file)</span>
+<dt id="vcd.converter.ConverterVCD330toVCD430"><code class="flex name class">
+<span>class <span class="ident">ConverterVCD330toVCD430</span></span>
+<span>(</span><span>vcd_330_data, vcd_430)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<div class="desc"></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Converter:
-    def __init__(self, src_file):
-        if not os.path.isfile(src_file):
-            raise Exception(&#34;src_file must be a valid file&#34;)
-        self.vcd = {}
-
-    def get(self):
-        return self.vcd</code></pre>
-</details>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="vcd.converter.ConverterVCD330" href="#vcd.converter.ConverterVCD330">ConverterVCD330</a></li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="vcd.converter.Converter.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get(self):
-    return self.vcd</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-<dt id="vcd.converter.ConverterVCD330"><code class="flex name class">
-<span>class <span class="ident">ConverterVCD330</span></span>
-<span>(</span><span>vcd330_file_name)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class ConverterVCD330(Converter):
-    def __init__(self, vcd330_file_name):
-        Converter.__init__(self, vcd330_file_name)
-
-        # Load JSON file
-        vcd330_json = open(vcd330_file_name)
-        vcd330 = json.load(vcd330_json)
-        vcd330_json.close()
-
-        # Explore vcd330_dict to copy content into VCD 400
-        self.vcd = core.VCD()
-
+<pre><code class="python">class ConverterVCD330toVCD430:
+    # This class converts a VCD3.3.0 into VCD4.3.0
+    
+    def __init__(self, vcd_330_data, vcd_430):
         # Main VCD element
-        if &#39;VCD&#39; not in vcd330:
+        if &#39;VCD&#39; not in vcd_330_data:
             raise Exception(&#34;This is not a valid VCD 3.3.0 file.&#34;)
 
         # Metadata and other
-        # NOTE: &#39;scdName&#39; field is lost as VCD 4.0.0 does not support SCD
+        # NOTE: &#39;scdName&#39; field is lost as VCD 4.3.0 does not support SCD
         # NOTE: &#39;frameInterval&#39; from &#39;VCD&#39; is not copied, but computed from frames
-        # NOTE: &#39;guid&#39; in &#39;Object&#39;s is ignored in VCD 4.0.0
-        # NOTE: &#39;mesh&#39; is not supported in VCD 4.0.0
-        # TODO
-        if &#39;annotator&#39; in vcd330[&#39;VCD&#39;]:
-            self.vcd.add_annotator(vcd330[&#39;VCD&#39;][&#39;annotator&#39;])
-        if &#39;name&#39; in vcd330[&#39;VCD&#39;]:
-            self.vcd.add_name(vcd330[&#39;VCD&#39;][&#39;name&#39;])
-        if &#39;MetaData&#39; in vcd330[&#39;VCD&#39;]:
-            metadata = vcd330[&#39;VCD&#39;][&#39;MetaData&#39;]
-            stream = metadata[&#39;stream&#39;]
-            self.vcd.add_stream(
-                stream[&#39;name&#39;], stream[&#39;uri&#39;], stream[&#39;description&#39;], stream[&#39;type&#39;]
-            )
-        if &#39;ontologyManager&#39; in vcd330[&#39;VCD&#39;]:
-            ontologyManager = vcd330[&#39;VCD&#39;][&#39;ontologyManager&#39;]
+        # NOTE: &#39;guid&#39; in &#39;Object&#39;s is ignored in VCD 4.3.0
+        # TODO: Apparently &#39;streamProperties&#34; can exist in VCD3.3.0, although it is not in the schema
+        if &#39;annotator&#39; in vcd_330_data[&#39;VCD&#39;]:
+            vcd_430.add_annotator(vcd_330_data[&#39;VCD&#39;][&#39;annotator&#39;])
+        if &#39;name&#39; in vcd_330_data[&#39;VCD&#39;]:
+            vcd_430.add_name(vcd_330_data[&#39;VCD&#39;][&#39;name&#39;])
+        if &#39;metaData&#39; in vcd_330_data[&#39;VCD&#39;]:
+            metadata = vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;]
+            streams = metadata[&#39;stream&#39;]
+            for stream in streams:
+                stream_type = stream[&#39;type&#39;]
+                if stream_type == &#39;video&#39;:
+                    stream_type = &#39;camera&#39;
+                elif stream_type == &#39;pointcloud&#39; or stream_type == &#39;lidar&#39;:
+                    stream_type = &#39;lidar&#39;
+                vcd_430.add_stream(
+                    stream[&#39;name&#39;], stream[&#39;uri&#39;], stream[&#39;description&#39;], stream_type
+                )
+        if &#39;ontologyManager&#39; in vcd_330_data[&#39;VCD&#39;]:
+            ontologyManager = vcd_330_data[&#39;VCD&#39;][&#39;ontologyManager&#39;]
             for ontology in ontologyManager[&#39;ontology&#39;]:
-                self.vcd.add_ontology(ontology)
-        if &#39;frames&#39; in vcd330[&#39;VCD&#39;]:
+                vcd_430.add_ontology(ontology)
+        if &#39;frames&#39; in vcd_330_data[&#39;VCD&#39;]:
             # This is Frame-wise VCD
-            for frame in vcd330[&#39;VCD&#39;][&#39;frames&#39;]:
+            for frame in vcd_330_data[&#39;VCD&#39;][&#39;frames&#39;]:
                 # A frame has required &#34;frame&#34;, and optional &#34;streamSync&#34;, &#34;frameProperties&#34;, &#34;frame&#34;, &#34;timestamp&#34;
                 # and then &#34;objects&#34;, &#34;actions&#34;, etc.
                 frame_num = frame[&#39;frame&#39;]
                 if &#39;timestamp&#39; in frame:
-                    self.vcd.add_frame_property(frame_num, &#39;timestamp&#39;, frame[&#39;timestamp&#39;])
+                    vcd_430.add_frame_properties(frame_num=frame_num,
+                                                  timestamp=frame[&#39;timestamp&#39;])
                 if &#39;frameProperties&#39; in frame:
+                    frame_properties=dict()
                     for frameProperty in frame[&#39;frameProperties&#39;]:
                         val = frameProperty[&#39;val&#39;]
                         name = frameProperty[&#39;name&#39;]
-                        self.vcd.add_frame_property(frame_num, name, val)
+                        if frameProperty[&#39;name&#39;] == &#39;timestamp&#39;:
+                            vcd_430.add_frame_properties(frame_num, timestamp=val)
+                        else:
+                            frame_properties[name] = val
+                    if frame_properties:
+                        vcd_430.add_frame_properties(frame_num, timestamp=None, properties=frame_properties)
                 if &#39;streamSync&#39; in frame:
                     for streamSyncItem in frame[&#39;streamSync&#39;]:
-                        self.vcd.add_frame_sync(frame_num, streamSyncItem[&#39;name&#39;], streamSyncItem[&#39;frame&#39;])
+                        vcd_430.add_stream_properties(
+                            streamSyncItem[&#39;name&#39;],
+                            stream_sync=types.StreamSync(
+                                    frame_vcd=frame_num,
+                                    frame_stream=streamSyncItem[&#39;frame&#39;]
+                                )
+                        )
 
                 # Now the elements
-                self.__copy_elements(frame, frame_num)
+                self.__copy_elements(vcd_430, frame, frame_num)
 
-        if &#39;staticAttributes&#39; in vcd330[&#39;VCD&#39;]:
-            for staticAttribute in vcd330[&#39;VCD&#39;][&#39;staticAttributes&#39;]:
-                self.__copy_elements(staticAttribute)
+        if &#39;staticAttributes&#39; in vcd_330_data[&#39;VCD&#39;]:
+            self.__copy_elements(vcd_430, vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;])
 
-    def __copy_elements(self, root, frame_num=None):
+    def __copy_elements(self, vcd_430, root, frame_num=None):
         if &#39;objects&#39; in root:
             for object in root[&#39;objects&#39;]:
-                uid = object[&#39;uid&#39;]
+                uid = str(object[&#39;uid&#39;])  # Let&#39;s convert to string here
                 name = object[&#39;name&#39;]
                 ontologyUID = None
                 if &#39;ontologyUID&#39; in object:
-                    ontologyUID = object[&#39;ontologyUID&#39;]
-                type = object[&#39;type&#39;]
+                    ontologyUID = str(object[&#39;ontologyUID&#39;])  # Let&#39;s convert to string here
+                typeSemantic = object.get(&#39;type&#39;, &#39;&#39;)  # In VCD 4.3.0 type is required, but it VCD 3.3.0 seems to be not
 
-                if not self.vcd.has(core.ElementType.object, uid):
-                    self.vcd.add_object(name, type, frame_num, uid, ontologyUID)
+                if not vcd_430.has(core.ElementType.object, uid):
+                    vcd_430.add_object(name, typeSemantic, frame_num, uid, ontologyUID)
 
-                objectDataContainer = object[&#39;objectDataContainer&#39;]
-                for key, value in objectDataContainer.items():
-                    for object_data in value:
-                        inStream = None
-                        if &#39;inStream&#39; in object_data:
-                            inStream = object_data[&#39;inStream&#39;]
-                        val = object_data[&#39;val&#39;]
-                        currentObjectData = None
+                if &#39;objectDataContainer&#39; in object:
+                    objectDataContainer = object[&#39;objectDataContainer&#39;]
+                    for key, value in objectDataContainer.items():
+                        for object_data in value:
+                            inStream = None
+                            if &#39;inStream&#39; in object_data:
+                                inStream = object_data[&#39;inStream&#39;]
+                            if &#39;val&#39; in object_data:
+                                val = object_data[&#39;val&#39;]
+                            currentObjectData = None
 
-                        # Create main object_data body
-                        if key == &#39;num&#39;:
-                            if len(val) == 1:
-                                # Single value, this is a num
-                                self.vcd.add_object_data(
-                                    uid, types.num(object_data[&#39;name&#39;], val[0], inStream), frame_num
+                            # Create main object_data body
+                            # NOTE: in the following calls, I am using direct access to dictionary for required fields, e.g.
+                            # object_data[&#39;name&#39;], etc.
+                            # For optional fields, I am using get() function, e.g. object_data.get(&#39;mode&#39;) which defaults to
+                            # None
+                            if key == &#39;num&#39;:
+                                if len(val) == 1:
+                                    # Single value, this is a num
+                                    currentObjectData = types.num(object_data[&#39;name&#39;], val[0], inStream)
+                                else:
+                                    # Multiple values, this is a vec
+                                    currentObjectData = types.vec(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;bool&#39;:
+                                currentObjectData = types.boolean(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;text&#39;:
+                                currentObjectData = types.text(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;image&#39;:
+                                currentObjectData = types.image(
+                                    object_data[&#39;name&#39;], val,
+                                    object_data[&#39;mimeType&#39;], object_data[&#39;encoding&#39;],
+                                    inStream
                                 )
-                            else:
-                                # Multiple values, this is a vec
-                                self.vcd.add_object_data(
-                                    uid, types.vec(object_data[&#39;name&#39;], val, inStream), frame_num
+                            elif key == &#39;binary&#39;:
+                                currentObjectData = types.binary(
+                                    object_data[&#39;name&#39;], val,
+                                    object_data[&#39;dataType&#39;], object_data[&#39;encoding&#39;],
+                                    inStream
                                 )
-                        elif key == &#39;bool&#39;:
-                            currentObjectData = types.boolean(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;text&#39;:
-                            currentObjectData = types.text(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;image&#39;:
-                            currentObjectData = types.image(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;binary&#39;:
-                            currentObjectData = types.binary(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;vec&#39;:
-                            currentObjectData = types.vec(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;bbox&#39;:
-                            currentObjectData = types.bbox(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;cuboid&#39;:
-                            currentObjectData = types.cuboid(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;mat&#39;:
-                            currentObjectData = types.mat(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;point2D&#39;:
-                            currentObjectData = types.point2d(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#39;point3D&#39;:
-                            currentObjectData = types.point3d(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#34;poly2D&#34;:
-                            currentObjectData = types.poly2d(object_data[&#39;name&#39;], val, inStream)
-                        elif key == &#34;poly3D&#34;:
-                            currentObjectData = types.poly3d(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;vec&#39;:
+                                currentObjectData = types.vec(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;bbox&#39;:
+                                currentObjectData = types.bbox(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;cuboid&#39;:
+                                currentObjectData = types.cuboid(object_data[&#39;name&#39;], val, inStream)
+                            elif key == &#39;mat&#39;:
+                                currentObjectData = types.mat(
+                                    object_data[&#39;name&#39;], val,
+                                    object_data[&#39;channels&#39;], object_data[&#39;width&#39;], object_data[&#39;height&#39;],
+                                    object_data[&#39;dataType&#39;],
+                                    inStream
+                                )
+                            elif key == &#39;point2D&#39;:
+                                currentObjectData = types.point2d(object_data[&#39;name&#39;], val, object_data.get(&#39;id&#39;), inStream)
+                            elif key == &#39;point3D&#39;:
+                                currentObjectData = types.point3d(object_data[&#39;name&#39;], val, object_data.get(&#39;id&#39;), inStream)
+                            elif key == &#34;poly2D&#34;:
+                                mode_int = object_data[&#39;mode&#39;]
+                                currentObjectData = types.poly2d(
+                                    object_data[&#39;name&#39;], val, types.Poly2DType(mode_int), object_data[&#39;closed&#39;], inStream
+                                )
+                            elif key == &#34;poly3D&#34;:
+                                currentObjectData = types.poly3d(object_data[&#39;name&#39;], val, object_data[&#39;closed&#39;], inStream)
+                            elif key == &#34;mesh&#34;:
+                                currentObjectData = types.mesh(object_data[&#39;name&#39;])
+                                if &#39;point3D&#39; in object_data:
+                                    for p3d_330 in object_data[&#39;point3D&#39;]:
+                                        # Create a types.point3d object and add it to the mesh
+                                        id = p3d_330[&#39;id&#39;]
+                                        name = p3d_330[&#39;name&#39;]
+                                        val = p3d_330[&#39;val&#39;]
 
-                        # Add any attributes
-                        if &#39;attributes&#39; in object_data:
-                            attributes = object_data[&#39;attributes&#39;]
-                            for k, v in attributes.items():
-                                if k == &#34;bool&#34;:
-                                    for od in v:
-                                        currentObjectData.add_attribute(types.boolean(od[&#39;name&#39;], od[&#39;val&#39;]))
-                                elif k == &#34;num&#34;:
-                                    for od in v:
-                                        if len(od[&#39;val&#39;]) == 1:
-                                            currentObjectData.add_attribute(types.num(od[&#39;name&#39;], od[&#39;val&#39;][0]))
+                                        p3d_430 = types.point3d(name, val)
+                                        self.__add_attributes(p3d_330, p3d_430)
+                                        currentObjectData.add_vertex(p3d_430, id)
+
+                                if &#39;lineReference&#39; in object_data:
+                                    for lref_330 in object_data[&#39;lineReference&#39;]:
+                                        # Create a types.line_reference object and add it to the mesh
+                                        id = lref_330[&#39;id&#39;]
+                                        name = lref_330[&#39;name&#39;]
+                                        referenceType = lref_330[&#39;referenceType&#39;]
+                                        assert(referenceType == &#34;point3D&#34;)
+                                        val = lref_330.get(&#39;val&#39;)  # defaults to None, needed for the constructor
+
+                                        lref_430 = types.lineReference(name, val, types.ObjectDataType.point3d)
+                                        self.__add_attributes(lref_330, lref_430)
+                                        currentObjectData.add_edge(lref_430, id)
+
+                                if &#39;areaReference&#39; in object_data:
+                                    for aref_330 in object_data[&#39;areaReference&#39;]:
+                                        # Create a types.area_reference object and add it to the mesh
+                                        id = aref_330[&#39;id&#39;]
+                                        name = aref_330[&#39;name&#39;]
+                                        referenceType = aref_330[&#39;referenceType&#39;]
+                                        assert (referenceType == &#34;point3D&#34; or referenceType == &#34;lineReference&#34;)
+                                        val = aref_330.get(&#39;val&#39;)  # defaults to None, needed for the constructor
+
+                                        if referenceType == &#34;point3D&#34;:
+                                            aref_430 = types.areaReference(name, val, types.ObjectDataType.point3d)
                                         else:
-                                            currentObjectData.add_attribute(types.vec(od[&#39;name&#39;], od[&#39;val&#39;]))
-                                elif k == &#34;text&#34;:
-                                    for od in v:
-                                        currentObjectData.add_attribute(types.text(od[&#39;name&#39;], od[&#39;val&#39;]))
+                                            aref_430 = types.areaReference(name, val, types.ObjectDataType.line_reference)
+                                        self.__add_attributes(aref_330, aref_430)
+                                        currentObjectData.add_area(aref_430, id)
 
-                        # Add the object_data to the object
-                        self.vcd.add_object_data(uid, currentObjectData, frame_num)
-        elif &#39;actions&#39; in root:
-            # TODO: parse actions
-            b = 2
-        elif &#39;events&#39; in root:
-            # TODO: parse events
-            b = 3
-        elif &#39;contexts&#39; in root:
-            # TODO: parse contexts
-            b = 4
-        elif &#39;relations&#39; in root:
-            # TODO: parse relations
-            b = 5</code></pre>
+                            # Add any attributes
+                            self.__add_attributes(object_data, currentObjectData)
+
+                            # Add the object_data to the object
+                            vcd_430.add_object_data(uid, currentObjectData, frame_num)
+
+        if &#39;actions&#39; in root:
+            for action in root[&#39;actions&#39;]:
+                uid = str(action[&#39;uid&#39;])
+                name = action[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in action:
+                    ontologyUID = str(action[&#39;ontologyUID&#39;])
+                typeSemantic = action.get(&#39;type&#39;, &#39;&#39;)  # required in VCD 4.0, not in VCD 3.3.0
+                vcd_430.add_action(name, typeSemantic, frame_num, uid, ontologyUID)
+
+        if &#39;events&#39; in root:
+            for event in root[&#39;events&#39;]:
+                uid = str(event[&#39;uid&#39;])
+                name = event[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in event:
+                    ontologyUID = str(event[&#39;ontologyUID&#39;])
+                typeSemantic = event.get(&#39;type&#39;, &#39;&#39;)
+                vcd_430.add_event(name, typeSemantic, frame_num, uid, ontologyUID)
+
+        if &#39;contexts&#39; in root:
+            for context in root[&#39;contexts&#39;]:
+                uid = str(context[&#39;uid&#39;])
+                name = context[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in context:
+                    ontologyUID = str(context[&#39;ontologyUID&#39;])
+                typeSemantic = context.get(&#39;type&#39;, &#39;&#39;)
+                vcd_430.add_context(name, typeSemantic, frame_num, uid, ontologyUID)
+
+        if &#39;relations&#39; in root:
+            for relation in root[&#39;relations&#39;]:
+                uid = str(relation[&#39;uid&#39;])
+                name = relation[&#39;name&#39;]
+                ontologyUID = None
+                if &#39;ontologyUID&#39; in relation:
+                    ontologyUID = str(relation[&#39;ontologyUID&#39;])
+                predicate = relation.get(&#39;predicate&#39;, &#39;&#39;)
+                rdf_objects = relation.get(&#39;rdf_objects&#39;, None)
+                rdf_subjects = relation.get(&#39;rdf_subjects&#39;, None)
+
+                vcd_430.add_relation(name, predicate, frame_value=frame_num, uid=uid, ont_uid=ontologyUID)
+                relation = vcd_430.get_element(core.ElementType.relation, uid)
+                if not &#39;rdf_objects&#39; in relation or len(relation[&#39;rdf_objects&#39;]) == 0:  # just add once
+                    for rdf_object in rdf_objects:
+                        element_type = None
+                        rdf_object_type_str = rdf_object[&#39;type&#39;]
+                        if rdf_object_type_str == &#34;Object&#34;:
+                            element_type = core.ElementType.object
+                        elif rdf_object_type_str == &#34;Action&#34;:
+                            element_type = core.ElementType.action
+                        elif rdf_object_type_str == &#34;Event&#34;:
+                            element_type = core.ElementType.event
+                        elif rdf_object_type_str == &#34;Context&#34;:
+                            element_type = core.ElementType.context
+                        else:
+                            warnings.warn(&#34;ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.&#34;)
+
+                        vcd_430.add_rdf(uid, core.RDF.object, str(rdf_object[&#39;uid&#39;]), element_type)
+
+                if not &#39;rdf_subjects&#39; in relation or len(relation[&#39;rdf_subjects&#39;]) == 0:  # just add once
+                    for rdf_subject in rdf_subjects:
+                        element_type = None
+                        rdf_object_type_str = rdf_subject[&#39;type&#39;]
+                        if rdf_object_type_str == &#34;Object&#34;:
+                            element_type = core.ElementType.object
+                        elif rdf_object_type_str == &#34;Action&#34;:
+                            element_type = core.ElementType.action
+                        elif rdf_object_type_str == &#34;Event&#34;:
+                            element_type = core.ElementType.event
+                        elif rdf_object_type_str == &#34;Context&#34;:
+                            element_type = core.ElementType.context
+                        else:
+                            warnings.warn(&#34;ERROR: Unrecognized Element type. Must be Object, Action, Event or Context.&#34;)
+
+                        vcd_430.add_rdf(uid, core.RDF.subject, str(rdf_subject[&#39;uid&#39;]), element_type)
+
+
+    def __add_attributes(self, src330, object_data430):
+        # Add any attributes
+        if &#39;attributes&#39; in src330:
+            attributes = src330[&#39;attributes&#39;]
+            for k, v in attributes.items():
+                if k == &#34;bool&#34;:
+                    for od in v:
+                        object_data430.add_attribute(types.boolean(od[&#39;name&#39;], od[&#39;val&#39;]))
+                elif k == &#34;num&#34;:
+                    for od in v:
+                        if len(od[&#39;val&#39;]) == 1:
+                            object_data430.add_attribute(types.num(od[&#39;name&#39;], od[&#39;val&#39;][0]))
+                        else:
+                            object_data430.add_attribute(types.vec(od[&#39;name&#39;], od[&#39;val&#39;]))
+                elif k == &#34;text&#34;:
+                    for od in v:
+                        object_data430.add_attribute(types.text(od[&#39;name&#39;], od[&#39;val&#39;]))</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="vcd.converter.Converter" href="#vcd.converter.Converter">Converter</a></li>
-</ul>
+</dd>
+<dt id="vcd.converter.ConverterVCD420toVCD430"><code class="flex name class">
+<span>class <span class="ident">ConverterVCD420toVCD430</span></span>
+<span>(</span><span>vcd_420_data, vcd_430)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConverterVCD420toVCD430:
+    # This class converts from VCD 4.2.0 into VCD 4.3.0
+
+    # Main changes
+    # 1) Metadata in VCD 4.3.0 is mostly inside &#34;metadata&#34;
+    # 2) &#34;streams&#34; are at root and not inside &#34;metadata&#34;
+    # 3) element_data_pointers in VCD 4.3.0 didn&#39;t exist in VCD 4.2.0
+    # 4) UIDs are stored as strings in VCD 4.3.0 (e.g. ontology_uid)
+    # 5) coordinate_systems
+
+    # TODO
+    # 6) Cuboids use quaternions
+
+    # Other changes are implicitly managed by the VCD 4.3.0 API
+
+    def __init__(self, vcd_420_data, vcd_430):
+        if &#39;vcd&#39; not in vcd_420_data:
+            raise Exception(&#34;This is not a valid VCD 4.2.0 file&#34;)
+
+        # While changes 1-2-3 are the only ones implemented, it is easier to just copy everything and then move things
+        vcd_430.data = copy.deepcopy(vcd_420_data)
+
+        # 1) Metadata (annotator and comment were already inside metadata)
+        if &#39;name&#39; in vcd_430.data[&#39;vcd&#39;]:
+            vcd_430.data[&#39;vcd&#39;].setdefault(&#39;metadata&#39;, {})
+            vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;name&#39;] = vcd_430.data[&#39;vcd&#39;][&#39;name&#39;]
+            del vcd_430.data[&#39;vcd&#39;][&#39;name&#39;]
+        if &#39;version&#39; in vcd_430.data[&#39;vcd&#39;]:
+            vcd_430.data[&#39;vcd&#39;].setdefault(&#39;metadata&#39;, {})
+            vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;schema_version&#39;] = &#34;4.3.0&#34;
+            del vcd_430.data[&#39;vcd&#39;][&#39;version&#39;]
+
+        # 2) Streams, no longer under &#34;metadata&#34;
+        if &#39;metadata&#39; in vcd_430.data[&#39;vcd&#39;]:
+            if &#39;streams&#39; in vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_430.data[&#39;vcd&#39;][&#39;streams&#39;] = copy.deepcopy(vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;])
+                del vcd_430.data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;streams&#39;]
+
+        # 3) Data pointers need to be fully computed
+        self.__compute_data_pointers(vcd_430.data)
+
+        # 4) UIDs, when values, as strings
+        for element_type in core.ElementType:
+            if element_type.name + &#39;s&#39; in vcd_430.data[&#39;vcd&#39;]:
+                for uid, element in vcd_430.data[&#39;vcd&#39;][element_type.name + &#39;s&#39;].items():
+                    if &#39;ontology_uid&#39; in element:
+                        element[&#39;ontology_uid&#39;] = str(element[&#39;ontology_uid&#39;])
+
+    def __compute_data_pointers(self, vcd_430_data):
+        # WARNING! This function might be extremely slow
+        # It does loop over all frames, and updates data pointers at objects, actions, etc
+        # It is useful to convert from VCD 4.2.0 into VCD 4.3.0 (use converter.ConverterVCD420toVCD430)
+
+        # Looping over frames and creating the necessary data_pointers
+        if &#39;frame_intervals&#39; in vcd_430_data[&#39;vcd&#39;]:
+            fis = vcd_430_data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+            for fi in fis:
+                for frame_num in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
+                    #frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][str(frame_num)]  # warning: at this point, the key is str
+                    frame = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]  # warning: at this point, the key is str
+                    for element_type in core.ElementType:
+                        if element_type.name + &#39;s&#39; in frame:  # e.g. &#34;objects&#34;, &#34;actions&#34;...
+                            for uid, element in frame[element_type.name + &#39;s&#39;].items():
+                                if element_type.name + &#39;_data&#39; in element:
+                                    # So this element has element_data in this frame
+                                    # and then we need to update the element_data_pointer at the root
+                                    # we can safely assume it already exists
+
+                                    # First, let&#39;s create a element_data_pointer at the root
+                                    vcd_430_data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid].\
+                                        setdefault(element_type.name + &#39;_data_pointers&#39;, {})
+                                    edp = vcd_430_data[&#39;vcd&#39;][element_type.name + &#39;s&#39;][uid][element_type.name + &#39;_data_pointers&#39;]
+
+                                    # Let&#39;s loop over the element_data
+                                    for ed_type, ed_array in element[element_type.name + &#39;_data&#39;].items():
+                                        # e.g. ed_type is &#39;bbox&#39;, ed_array is the array of such bboxes content
+                                        for element_data in ed_array:
+                                            name = element_data[&#39;name&#39;]
+                                            edp.setdefault(name, {})  # this element_data may already exist
+                                            edp[name].setdefault(&#39;type&#39;, ed_type)  # e.g. &#39;bbox&#39;
+                                            edp[name].setdefault(&#39;frame_intervals&#39;, [])  # in case it does not exist
+                                            fis_exist = core.FrameIntervals(edp[name][&#39;frame_intervals&#39;])
+                                            fis_exist = fis_exist.union(core.FrameIntervals(frame_num))  # So, let&#39;s fuse with this frame
+                                            edp[name][&#39;frame_intervals&#39;] = fis_exist.get_dict()  # overwrite</code></pre>
+</details>
+</dd>
+<dt id="vcd.converter.ConverterVCD430toVCD330"><code class="flex name class">
+<span>class <span class="ident">ConverterVCD430toVCD330</span></span>
+<span>(</span><span>vcd_430_data)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ConverterVCD430toVCD330:
+    # This class receives a VCD 4.3.0, and creates a VCD 3.3.0 payload
+    # Creates a Frame-wise VCD 3.3.0 JSON payload
+
+    # NOTE: Some features of VCD 4.3.0 are NOT supported by VCD 3.3.0
+    # Therefore, some content from a VCD 4.3.0 may not be convertible to VCD 3.3.0
+    # e.g. VCD 4.3.0 supports action_data, event_data, context_data,
+    #      also specific intrinsics and extrinsics information
+
+    # NOTE: This class is left here for future work.
+    # the differences between VCD 4.3.0 and VCD 3.3.0 are so large that it is
+    # miss-leading to have a ConverterVCD430toVCD330 class which works only partially
+    # for some use cases.
+
+    def __init__(self, vcd_430_data):       
+
+        # Create VCD 3.3.0 container
+        vcd_330_data = dict()
+        vcd_330_data[&#39;VCD&#39;] = dict()
+
+        # Root and metadata
+        if &#39;metadata&#39; in vcd_430_data[&#39;vcd&#39;]:
+            if &#39;annotator&#39; in vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_330_data[&#39;VCD&#39;][&#39;annotator&#39;] = vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;annotator&#39;]
+            if &#39;name&#39; in vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_330_data[&#39;VCD&#39;][&#39;name&#39;] = vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;name&#39;]
+            if &#39;comment&#39; in vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;]:
+                vcd_330_data[&#39;VCD&#39;][&#39;scdName&#39;] = vcd_430_data[&#39;vcd&#39;][&#39;metadata&#39;][&#39;comment&#39;]
+        
+        if &#39;streams&#39; in vcd_430_data[&#39;vcd&#39;]:
+            vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;] = dict()
+            for stream in vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;].keys():
+                vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;].setdefault(&#39;stream&#39;, [])
+                if &#39;stream_properties&#39; in vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream]:
+                    vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;][&#39;stream&#39;].append(
+                        {&#34;description&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;description&#39;],
+                         &#34;uri&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;uri&#39;],
+                         &#34;name&#34;: stream,
+                         &#34;type&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;type&#39;],
+                         &#34;streamProperties&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;stream_properties&#39;]}
+                    )
+                else:
+                    vcd_330_data[&#39;VCD&#39;][&#39;metaData&#39;][&#39;stream&#39;].append(
+                        {&#34;description&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;description&#39;],
+                         &#34;uri&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;uri&#39;],
+                         &#34;name&#34;: stream,
+                         &#34;type&#34;: vcd_430_data[&#39;vcd&#39;][&#39;streams&#39;][stream][&#39;type&#39;]}
+                    )
+
+        # Frame intervals (only the outer frame interval in VCD 3.3.0)
+        fis = vcd_430_data[&#39;vcd&#39;][&#39;frame_intervals&#39;]
+        frameStart = 0
+        frameEnd = 0
+        for fi in fis:
+            if fi[&#39;frame_start&#39;] &gt; frameStart:
+                frameStart = fi[&#39;frame_start&#39;]
+            if fi[&#39;frame_end&#39;] &gt; frameEnd:
+                frameEnd = fi[&#39;frame_end&#39;]
+
+        vcd_330_data[&#39;VCD&#39;][&#39;frameInterval&#39;] = {
+            &#39;frameStart&#39;: frameStart,
+            &#39;frameEnd&#39;: frameEnd
+        }
+
+        # Ontologies
+        if &#39;ontologies&#39; in vcd_430_data[&#39;vcd&#39;]:
+            vcd_330_data[&#39;VCD&#39;][&#39;OntologyManager&#39;] = {}
+            vcd_330_data[&#39;VCD&#39;][&#39;OntologyManager&#39;][&#39;ontology&#39;] = []
+            for ontology_uid in vcd_430_data[&#39;vcd&#39;][&#39;ontologies&#39;].keys():
+                vcd_330_data[&#39;VCD&#39;][&#39;OntologyManager&#39;][&#39;ontology&#39;].append(
+                    vcd_430_data[&#39;vcd&#39;][&#39;ontologies&#39;][ontology_uid]
+                )
+
+        # StaticAttributes (objects and potentially contexts if no frame interval inside)
+        if &#39;objects&#39; in vcd_430_data[&#39;vcd&#39;]:
+            for object_key in vcd_430_data[&#39;vcd&#39;][&#39;objects&#39;].keys():
+                object = vcd_430_data[&#39;vcd&#39;][&#39;objects&#39;][object_key]
+
+                #hasFrameIntervals = (&#39;frame_intervals&#39; in object)
+                #if hasFrameIntervals:
+                #    if len(object[&#39;frame_intervals&#39;]) == 0:
+                #        hasFrameIntervals = False
+                #if not hasFrameIntervals:
+                if &#34;object_data&#34; in object:
+                    # This is the static part of object
+                    vcd_330_data[&#39;VCD&#39;].setdefault(&#39;staticAttributes&#39;, dict())
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;].setdefault(&#39;objects&#39;, [])
+
+                    obj = {}
+                    obj.update({&#34;name&#34;: object[&#34;name&#34;]})
+                    obj.update({&#34;type&#34;: object[&#34;type&#34;]})
+                    obj.update({&#34;uid&#34;: object_key})
+                    if &#34;ontology_uid&#34; in object:
+                        obj.update({&#34;ontologyUID&#34;: object[&#34;ontology_uid&#34;]})
+
+                    # Copy object_data into ObjectDataContainer
+                    self.__copy_object_data(object, obj)
+
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;][&#39;objects&#39;].append(obj)
+        if &#39;contexts&#39; in vcd_430_data[&#39;vcd&#39;]:
+            for context_key in vcd_430_data[&#39;vcd&#39;][&#39;contexts&#39;].keys():
+                context4 = vcd_430_data[&#39;vcd&#39;][&#39;contexts&#39;][context_key]
+                hasFrameIntervals = (&#39;frame_intervals&#39; in context4)
+                if hasFrameIntervals:
+                    if len(context4[&#39;frame_intervals&#39;]) == 0:
+                        hasFrameIntervals = False
+
+                if not hasFrameIntervals:
+                    # This is the static part of object
+                    vcd_330_data[&#39;VCD&#39;].setdefault(&#39;staticAttributes&#39;, dict())
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;].setdefault(&#39;contexts&#39;, [])
+
+                    obj = {}
+                    obj.update({&#34;name&#34;: context4[&#34;name&#34;]})
+                    obj.update({&#34;type&#34;: context4[&#34;type&#34;]})
+                    obj.update({&#34;uid&#34;: context_key})
+                    if &#34;ontology_uid&#34; in context4:
+                        obj.update({&#34;ontologyUID&#34;: context4[&#34;ontology_uid&#34;]})
+
+                    vcd_330_data[&#39;VCD&#39;][&#39;staticAttributes&#39;][&#39;contexts&#39;].append(obj)
+
+        # Dynamic attributes
+        # Actions, Events, Contexts, Objects, Relations -&gt; create entries at &#39;frames&#39;
+        vcd_330_data[&#39;VCD&#39;].setdefault(&#39;frames&#39;, [])
+
+        for frame_num in vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;].keys():
+            frame4 = vcd_430_data[&#39;vcd&#39;][&#39;frames&#39;][frame_num]
+
+            frame3 = dict()
+            frame3.update({&#39;frame&#39;: frame_num})
+
+            for elements in frame4.keys():
+                if elements == &#39;frame_properties&#39;:
+                    if &#39;timestamp&#39; in frame4[&#39;frame_properties&#39;]:
+                        frame3.update({&#39;timestamp&#39;: frame4[&#39;frame_properties&#39;][&#39;timestamp&#39;]})
+                else: #
+                    frame3.setdefault(elements, [])
+                    elements4 = frame4[elements]
+                    for element4_id in elements4:
+                        # In VCD4, within frame, we only have the uid, data is outside
+                        element4_static = vcd_430_data[&#39;vcd&#39;][elements][element4_id]
+                        obj = {}
+                        obj.update({&#34;name&#34;: element4_static[&#34;name&#34;]})
+                        obj.update({&#34;uid&#34;: element4_id})
+                        obj.update({&#34;type&#34;: element4_static[&#34;type&#34;]})
+                        if &#34;ontology_uid&#34; in element4_static:
+                            obj.update({&#34;ontologyUID&#34;: element4_static[&#34;ontology_uid&#34;]})
+
+                        element4_dynamic = elements4[element4_id]
+                        if elements == &#39;objects&#39;:
+                            # Add ObjectDataContainers
+                            self.__copy_object_data(element4_dynamic, obj)
+
+                        elif elements == &#39;relations&#39;:
+                            obj.update({&#34;predicate&#34;: element4_static[&#34;type&#34;]})
+                            if &#39;rdf_subjects&#39; in element4_static:
+                                obj.update({&#39;rdf_subjects&#39;: element4_static[&#39;rdf_subjects&#39;]})
+                            if &#39;rdf_objects&#39; in element4_static:
+                                obj.update({&#39;rdf_objects&#39;: element4_static[&#39;rdf_objects&#39;]})
+
+
+                        frame3[elements].append(obj)
+                vcd_330_data[&#39;VCD&#39;][&#39;frames&#39;].append(frame3)
+
+            return vcd_330_data
+
+    def __add_attributes(self, src430, dst330):
+        if &#39;attributes&#39; in src430:
+            attrib3_dict = {}
+            attrib3_type = &#34;&#34;
+            for attrib4_key in src430[&#39;attributes&#39;].keys():
+                if attrib4_key == &#34;boolean&#34;:
+                    attrib3_dict.setdefault(&#39;bool&#39;, [])
+                    attrib3_type = &#34;bool&#34;
+                elif attrib4_key == &#34;text&#34;:
+                    attrib3_dict.setdefault(&#39;text&#39;, [])
+                    attrib3_type = &#34;text&#34;
+                elif attrib4_key == &#34;num&#34; or attrib4_key == &#34;vec&#34;:
+                    attrib3_dict.setdefault(&#34;num&#34;, [])
+                    attrib3_type = &#34;num&#34;
+
+                for it4 in src430[&#39;attributes&#39;][attrib4_key]:
+                    it3 = {}
+                    it3.update({&#34;name&#34;: it4[&#39;name&#39;]})
+                    if attrib4_key == &#34;num&#34;:
+                        if &#39;val&#39; in it4:
+                            it3.update({&#34;val&#34;: [it4[&#39;val&#39;]]})
+                    else:
+                        if &#39;val&#39; in it4:
+                            it3.update({&#34;val&#34;: it4[&#39;val&#39;]})
+                    if &#34;stream&#34; in it4:
+                        warnings.warn(&#34;WARNING: VCD4.3.0 allows stream info for &#34;
+                                      &#34;bool, num, text and vec, but VCD3.3.0 does not.&#34;)
+                    attrib3_dict[attrib3_type].append(it3)
+            dst330.update({&#34;attributes&#34;: attrib3_dict})
+
+    def __copy_object_data(self, root, obj):
+        odc = {}
+        if &#39;object_data&#39; not in root:
+            return
+        for object_data_key in root[&#39;object_data&#39;].keys():
+            for object_data_item in root[&#39;object_data&#39;][object_data_key]:
+
+                object_data_current = {}
+                object_data_current.update({&#34;name&#34;: object_data_item[&#39;name&#39;]})
+
+                if object_data_key == &#34;num&#34;:  # special case, because vcd4 treats num as single number, while vcd3 requires array
+                    if &#39;val&#39; in object_data_item:
+                        object_data_current.update({&#34;val&#34;: [object_data_item[&#39;val&#39;]]})
+                else:
+                    if &#39;val&#39; in object_data_item:
+                        object_data_current.update({&#34;val&#34;: object_data_item[&#39;val&#39;]})
+                if &#39;stream&#39; in object_data_item:
+                    object_data_current.update({&#34;inStream&#34;: object_data_item[&#39;stream&#39;]})
+
+                # Add attributes
+                self.__add_attributes(object_data_item, object_data_current)
+
+                if object_data_key == &#34;bbox&#34;:
+                    odc.setdefault(&#39;bbox&#39;, [])
+                    odc[&#39;bbox&#39;].append(object_data_current)
+                elif object_data_key == &#34;num&#34;:
+                    odc.setdefault(&#39;num&#39;, [])
+                    odc[&#39;num&#39;].append(object_data_current)
+                elif object_data_key == &#34;vec&#34;:
+                    odc.setdefault(&#39;num&#39;, [])
+                    odc[&#39;num&#39;].append(object_data_current)
+                elif object_data_key == &#34;boolean&#34;:
+                    odc.setdefault(&#39;bool&#39;, [])
+                    odc[&#39;bool&#39;].append(object_data_current)
+                elif object_data_key == &#34;text&#34;:
+                    odc.setdefault(&#39;text&#39;, [])
+                    odc[&#39;text&#39;].append(object_data_current)
+                elif object_data_key == &#34;cuboid&#34;:
+                    odc.setdefault(&#39;cuboid&#39;, [])
+                    odc[&#39;cuboid&#39;].append(object_data_current)
+                elif object_data_key == &#34;poly2d&#34;:
+                    object_data_current.update({&#34;closed&#34;: object_data_item[&#39;closed&#39;]})
+                    object_data_current.update({&#34;mode&#34;: object_data_item[&#39;mode&#39;]})
+                    odc.setdefault(&#39;poly2D&#39;, [])
+                    odc[&#39;poly2D&#39;].append(object_data_current)
+                elif object_data_key == &#34;poly3d&#34;:
+                    object_data_current.update({&#34;closed&#34;: object_data_item[&#39;closed&#39;]})
+                    odc.setdefault(&#39;poly3D&#39;, [])
+                    odc[&#39;poly3D&#39;].append(object_data_current)
+                elif object_data_key == &#34;point2d&#34;:
+                    object_data_current.update({&#34;id&#34;: object_data_item[&#39;id&#39;]})
+                    odc.setdefault(&#39;point2D&#39;, [])
+                    odc[&#39;point2D&#39;].append(object_data_current)
+                elif object_data_key == &#34;point3d&#34;:
+                    object_data_current.update({&#34;id&#34;: object_data_item[&#39;id&#39;]})
+                    odc.setdefault(&#39;point3D&#39;, [])
+                    odc[&#39;point3D&#39;].append(object_data_current)
+                elif object_data_key == &#34;mat&#34;:
+                    object_data_current.update({&#34;channels&#34;: object_data_item[&#39;channels&#39;]})
+                    object_data_current.update({&#34;width&#34;: object_data_item[&#39;width&#39;]})
+                    object_data_current.update({&#34;height&#34;: object_data_item[&#39;height&#39;]})
+                    object_data_current.update({&#34;dataType&#34;: object_data_item[&#39;data_type&#39;]})
+                    odc.setdefault(&#39;mat&#39;, [])
+                    odc[&#39;mat&#39;].append(object_data_current)
+                elif object_data_key == &#34;image&#34;:
+                    object_data_current.update({&#34;encoding&#34;: object_data_item[&#39;encoding&#39;]})
+                    object_data_current.update({&#34;mimeType&#34;: object_data_item[&#39;mime_type&#39;]})
+                    odc.setdefault(&#39;image&#39;, [])
+                    odc[&#39;image&#39;].append(object_data_current)
+                elif object_data_key == &#34;binary&#34;:
+                    object_data_current.update({&#34;dataType&#34;: object_data_item[&#39;data_type&#39;]})
+                    object_data_current.update({&#34;encoding&#34;: object_data_item[&#39;encoding&#39;]})
+                    odc.setdefault(&#39;binary&#39;, [])
+                    odc[&#39;binary&#39;].append(object_data_current)
+                elif object_data_key == &#34;mesh&#34;:
+                    # Area
+                    object_data_current.setdefault(&#34;areaReference&#34;, list())
+                    for key, val in object_data_item[&#39;area_reference&#39;].items():
+                        ref_type430 = val[&#39;reference_type&#39;]
+                        if ref_type430 == &#34;line_reference&#34;:
+                            refType330 = &#34;lineReference&#34;
+                        elif ref_type430 == &#34;point3d&#34;:
+                            refType330 = &#34;point3D&#34;
+                        else:
+                            refType330 = ref_type430
+                        if &#39;val&#39; in val:
+                            object_data_current[&#34;areaReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                    &#34;val&#34;: val.get(&#39;val&#39;)
+                                }
+                            )
+                        else:
+                            object_data_current[&#34;areaReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                }
+                            )
+                        # Add attributes
+                        self.__add_attributes(val, object_data_current[&#34;areaReference&#34;][-1])
+
+                    # Line
+                    object_data_current.setdefault(&#34;lineReference&#34;, list())
+                    for key, val in object_data_item[&#39;line_reference&#39;].items():
+                        ref_type430 = val[&#39;reference_type&#39;]
+                        if ref_type430 == &#34;point3d&#34;:
+                            refType330 = &#34;point3D&#34;
+                        else:
+                            refType330 = ref_type430
+                        if &#39;val&#39; in val:
+                            object_data_current[&#34;lineReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                    &#34;val&#34;: val.get(&#39;val&#39;)
+                                }
+                            )
+                        else:
+                            object_data_current[&#34;lineReference&#34;].append(
+                                {
+                                    &#34;id&#34;: key,
+                                    &#34;name&#34;: val[&#39;name&#39;],
+                                    &#34;referenceType&#34;: refType330,
+                                }
+                            )
+                        # Add attributes
+                        self.__add_attributes(val, object_data_current[&#34;lineReference&#34;][-1])
+
+                    # point3d
+                    object_data_current.setdefault(&#34;point3D&#34;, list())
+                    for key, val in object_data_item[&#39;point3d&#39;].items():
+                        object_data_current[&#39;point3D&#39;].append(
+                            {
+                                &#34;id&#34;: key,
+                                &#34;name&#34;: val[&#39;name&#39;],
+                                &#34;val&#34;: val.get(&#39;val&#39;)
+                            }
+                        )
+
+                        # Add attributes
+                        self.__add_attributes(val, object_data_current[&#39;point3D&#39;][-1])
+
+                    odc.setdefault(&#39;mesh&#39;, [])
+                    odc[&#39;mesh&#39;].append(object_data_current)
+                obj.update({&#39;objectDataContainer&#39;: odc})</code></pre>
+</details>
 </dd>
 </dl>
 </section>
@@ -426,13 +1557,13 @@ class ConverterVCD330(Converter):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="vcd.converter.Converter" href="#vcd.converter.Converter">Converter</a></code></h4>
-<ul class="">
-<li><code><a title="vcd.converter.Converter.get" href="#vcd.converter.Converter.get">get</a></code></li>
-</ul>
+<h4><code><a title="vcd.converter.ConverterVCD330toVCD430" href="#vcd.converter.ConverterVCD330toVCD430">ConverterVCD330toVCD430</a></code></h4>
 </li>
 <li>
-<h4><code><a title="vcd.converter.ConverterVCD330" href="#vcd.converter.ConverterVCD330">ConverterVCD330</a></code></h4>
+<h4><code><a title="vcd.converter.ConverterVCD420toVCD430" href="#vcd.converter.ConverterVCD420toVCD430">ConverterVCD420toVCD430</a></code></h4>
+</li>
+<li>
+<h4><code><a title="vcd.converter.ConverterVCD430toVCD330" href="#vcd.converter.ConverterVCD430toVCD330">ConverterVCD430toVCD330</a></code></h4>
 </li>
 </ul>
 </li>
@@ -440,9 +1571,7 @@ class ConverterVCD330(Converter):
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.4</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-<script>hljs.initHighlightingOnLoad()</script>
 </body>
 </html>

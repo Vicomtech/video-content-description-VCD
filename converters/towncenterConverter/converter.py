@@ -1,13 +1,26 @@
 """
-VCD (Video Content Description) library v4.2.0
+VCD (Video Content Description) library v4.3.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.2.0.
+VCD is a Python library to create and manage VCD content version 4.3.0.
 VCD is distributed under MIT License. See LICENSE.
+
+"""
+
+"""
+TownCentre dataset
+http://www.robots.ox.ac.uk/ActiveVision/Publications/benfold_reid_cvpr2011/benfold_reid_cvpr2011.html
+
+Copyright Notice
+This material is presented to ensure timely dissemination of scholarly and technical work. 
+Copyright and all rights therein are retained by authors or by other copyright holders. 
+All persons copying this information are expected to adhere to the terms and constraints invoked by 
+each author's copyright. In most cases, these works may not be reposted without the explicit permission 
+of the copyright holder.
 
 """
 
@@ -22,12 +35,12 @@ import vcd.serializer as serializer
 
 
 def convert_town_center_to_VCD4():
-    if not os.path.isfile('./etc/TownCentreXVID_groundTruth.top'):
+    if not os.path.isfile('./etc/townCentreXVID_groundTruth.top'):
         import urllib.request
         url = 'https://www.robots.ox.ac.uk/ActiveVision/Research/Projects/2009bbenfold_headpose/Datasets/TownCentre-groundtruth.top'
-        urllib.request.urlretrieve(url, './etc/TownCentreXVID_groundTruth.top')
+        urllib.request.urlretrieve(url, './etc/townCentreXVID_groundTruth.top')
 
-    orig_file_name = "./etc/TownCentreXVID_groundTruth.top"
+    orig_file_name = "./etc/townCentreXVID_groundTruth.top"
     vcd = core.VCD()
     with open(orig_file_name, newline='') as csvfile:
         my_reader = csv.reader(csvfile, delimiter=',')
@@ -53,27 +66,28 @@ def convert_town_center_to_VCD4():
             bodyWidth = float((int(1000*bodyRight) - int(1000*bodyLeft))/1000)
             bodyHeight = float((int(1000*bodyBottom) - int(1000*bodyTop))/1000)
 
+            #Note: VCD 4.3.0 defines the bounding box using the center of the box, not the upper-left coordinate
             body = types.bbox(name="body",
-                              val=(bodyLeft, bodyTop, bodyWidth, bodyHeight))
-            head = types.bbox("head", (headLeft, headTop, headWidth, headHeight))
+                              val=((bodyLeft + bodyRight)/2, (bodyBottom + bodyTop)/2, bodyWidth, bodyHeight))
+            head = types.bbox("head", ((headLeft + headRight)/2, (headBottom + headTop)/2, headWidth, headHeight))
             if not vcd.has(core.ElementType.object, personNumber):
                 vcd.add_object(name="", semantic_type="Pedestrian",
-                               uid=personNumber)
+                               uid=personNumber, frame_value=frameNumber)
                 if bodyValid:
-                    vcd.add_object_data(personNumber, body, frameNumber)
+                        vcd.add_object_data(personNumber, body, frameNumber)
                 if headValid:
-                    vcd.add_object_data(personNumber, head, frameNumber)
+                        vcd.add_object_data(personNumber, head, frameNumber)
             else:
                 if bodyValid:
                     vcd.add_object_data(personNumber, body, frameNumber)
                 if headValid:
                     vcd.add_object_data(personNumber, head, frameNumber)
 
-    vcd_json_file_name = "./etc/vcd420_towncenter.json"
+    vcd_json_file_name = "./etc/vcd430_towncenter.json"
     vcd.save(vcd_json_file_name, False)
 
-    vcd_proto_file_name = "./etc/vcd420_proto_towncenter.txt"
-    serializer.json2proto_bin(vcd_json_file_name, vcd_proto_file_name)
+    #vcd_proto_file_name = "./etc/vcd430_proto_towncenter.txt"
+    #serializer.json2proto_bin(vcd_json_file_name, vcd_proto_file_name)
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
