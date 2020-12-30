@@ -18,7 +18,7 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 
 ### Python
 
-Using pip (Python >3.6)):
+Using pip (Python >3.8)):
 
 ```
 pip install vcd
@@ -220,3 +220,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Citation
+
+Part of the work carried out to make VCD a reality has been published in Elsevier SoftwareX journal. If you find VCD useful and want to cite it in your publications, please use the following citation (the paper pdf can be accessed [here](https://www.sciencedirect.com/science/article/pii/S2352711020303666)).
+
+M. Nieto, O. Senderos, and O. Otaegui, “Boosting AI applications: Labeling format for complex datasets,” SoftwareX, 2021, p. 100653, vol. 13 (https://doi.org/10.1016/j.softx.2020.100653).
