@@ -1,0 +1,29 @@
+//===================================================================================
+//  VCD CMake configuration file
+//
+//  ** File generated automatically, do not modify **
+//
+//  Usage from an external project:
+//
+//    #include "setup_strings.h"
+//    std::string dir = vcd::SetupStrings::testDataPath;
+//
+// ===================================================================================
+#ifndef SETUPSTRINGS_H
+#define SETUPSTRINGS_H
+
+#include <string>
+namespace vcd
+{
+  template<typename T>
+  struct Strings_
+  {
+ 	static std::string const testDataPath;
+  };
+
+  template<typename T> std::string const Strings_<T>::testDataPath="${PROJECT_SOURCE_DIR}/../tests/etc/";
+
+  typedef Strings_<void> SetupStrings;
+}
+
+#endif // SETUPSTRINGS_H
