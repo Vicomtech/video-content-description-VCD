@@ -9,66 +9,95 @@ namespace vcd
 namespace types
 {
 
-class TypeElement
+enum ObjectDataType {
+    none = 0,
+    bbox = 1,
+    rbbox = 2,
+    num = 3,
+    text = 4,
+    boolean = 5,
+    poly2d = 6,
+    poly3d = 7,
+    cuboid = 8,
+    image = 9,
+    mat = 10,
+    binary = 11,
+    point2d = 12,
+    point3d = 13,
+    vec = 14,
+    line_reference = 15,
+    area_reference = 16,
+    mesh = 17,
+    ODT_size = 18
+};
+
+class ObjectData
 {
 public:
     virtual
-    ~TypeElement();
+    ~ObjectData();
 
-    virtual TypeElement&
+    virtual ObjectData&
     get() = 0;
 
-    virtual nlohmann::json
-    json() = 0;
+    ObjectDataType
+    getType() const { return m_type; }
+
+    std::string
+    getName() const { return m_name; }
+
+    nlohmann::json
+    getData() const { return m_data; }
 
 protected:
+    ObjectDataType m_type;
     std::string m_name;
+    nlohmann::json m_data;
 };
 
-class Bbox : public TypeElement
-{
+class ObjectDataGeometry : public ObjectData {
+public:
+    virtual
+    ~ObjectDataGeometry();
+
+    void
+    add_attribute(const ObjectData &object_data);
+};
+
+
+class Bbox : public ObjectDataGeometry {
 public:
     Bbox(const std::string& name, const std::vector<int>& value);
 
-    TypeElement&
+    ObjectData&
     get() override;
-
-    nlohmann::json
-    json() override;
-
-private:
-    std::vector<int> m_value;
 };
 
-class Vec : public TypeElement
+class Vec : public ObjectData
 {
 public:
     Vec(const std::string& name, const std::vector<float>& value);
 
-    TypeElement&
+    ObjectData&
     get() override;
-
-    nlohmann::json
-    json() override;
-
-
-private:
-    std::vector<float> m_value;
 };
 
-class Num : public TypeElement
+class Num : public ObjectData
 {
 public:
     Num(const std::string& name, const double value);
 
-    TypeElement&
+    ObjectData&
     get() override;
+};
 
-    nlohmann::json
-    json() override;
+class Boolean : public ObjectData
+{
+public:
+    Boolean(const std::string& name, const bool value);
 
-private:
-    double m_value = 0;
+    ObjectData&
+    get() override;
 };
 
 };  // namespace types

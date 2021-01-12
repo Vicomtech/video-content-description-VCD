@@ -25,7 +25,7 @@ SCENARIO("Create some basic content, without time information, and do some basic
             uint32_t uid_marcos = vcd->add_object("marcos", "person");
             REQUIRE(uid_marcos == 0);
 
-            types::Bbox head_bbox = types::Bbox("head", {10, 10, 30, 30});
+            vcd::types::Bbox head_bbox = vcd::types::Bbox("head", {10, 10, 30, 30});
             types::Bbox body_bbox = types::Bbox("body", {0, 0, 60, 120});
             types::Vec speed_vec = types::Vec("speed", {0.0, 0.2});
             types::Num accel_num = types::Num("accel", 0.1);
@@ -33,6 +33,9 @@ SCENARIO("Create some basic content, without time information, and do some basic
             vcd->add_object_data(uid_marcos, body_bbox.get());
             vcd->add_object_data(uid_marcos, speed_vec.get());
             vcd->add_object_data(uid_marcos, accel_num.get());
+
+
+
 
 //            uint32_t uid_peter = vcd.add_object(name="peter", semantic_type="person");
 
@@ -48,7 +51,9 @@ SCENARIO("Create some basic content, without time information, and do some basic
 
         THEN("We can ask VCD")
         {
-
+            // PRELIMINAR TEST OF ATTRIBUTES, PLEASE REMOVE
+            types::Bbox box1 = types::Bbox("head", {0, 0, 10, 10});
+            box1.add_attribute(types::Boolean("visible", true).get());
         }
 	}
 

@@ -76,7 +76,7 @@ VCD_Impl::add_object(const std::string& name,
 
 void
 VCD_Impl::add_object_data(const uint32_t uid,
-                          const types::TypeElement& object_data)
+                          const types::ObjectData& object_data)
 {
 }
 
@@ -109,6 +109,7 @@ UID::UID(std::string val)
     
     
 }
+
 void UID::set(std::string uidStr, int uidInt, bool isUUID)
 {
     this->uidStr = uidStr;
@@ -125,12 +126,14 @@ FrameIntervals::FrameIntervals(int frameValue)
     this->fisDict.push_back({{"frame_start", frameValue}, {"frame_end", frameValue}});
     this->fisNum = {{frameValue, frameValue}};
 }
+
 FrameIntervals::FrameIntervals(const Tuple& frameValue)
 {
     this->fisDict = json::array();
     this->fisDict.push_back({{"frame_start", frameValue[0]}, {"frame_end", frameValue[1]}});
     this->fisNum = {frameValue};
 }
+
 FrameIntervals::FrameIntervals(const ArrayNx2& frameValue)
 {
     this->fisDict = json::array();
@@ -138,6 +141,7 @@ FrameIntervals::FrameIntervals(const ArrayNx2& frameValue)
         this->fisDict.push_back({{"frame_start", it[0]}, {"frame_end", it[1]}});
     this->fisNum = frameValue;
 }
+
 bool FrameIntervals::hasFrame(int frameNum) const
 {
     for(auto fi : this->fisNum)

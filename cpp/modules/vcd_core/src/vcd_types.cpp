@@ -1,64 +1,129 @@
 #include "vcd_types.h"
 
+using json = nlohmann::json;
+
 namespace vcd
 {
 
 namespace types
 {
+
+const std::string ObjectDataTypeNames[] = {
+    "none",
+    "bbox",
+    "rbbox",
+    "num",
+    "text",
+    "boolean",
+    "poly2d",
+    "poly3d",
+    "cuboid",
+    "image",
+    "mat",
+    "binary",
+    "point2d",
+    "point3d",
+    "vec",
+    "line_reference",
+    "area_reference",
+    "mesh"
+};
+
 // Abstract class implementations
-TypeElement::~TypeElement()
+ObjectData::~ObjectData()
 {
+}
+
+ObjectDataGeometry::~ObjectDataGeometry()
+{
+}
+
+void
+ObjectDataGeometry::add_attribute(const ObjectData &object_data) {
+    // Creates 'attributes' if it does not exist
+    if (m_data["attributes"].is_null()) {
+        m_data["attributes"] = nlohmann::json({});
+    }
+
+    const ObjectDataType attrType = object_data.getType();
+    const auto& attrTypeName = ObjectDataTypeNames[attrType];
+    const auto& attrName = object_data.getName();
+    const bool attrNotEmpty = !m_data["attributes"][attrTypeName].is_null();
+    if (attrNotEmpty) {
+        // There are attributes of this type, find inside if an attribute with
+        // the same name appears.
+        auto& attrList = m_data["attributes"][attrTypeName];
+        std::vector<size_t> posList;
+        size_t i = 0;
+        for (const auto& e : attrList) {
+            if (e["name"] == attrName) {
+                posList.push_back(i);
+            }
+            ++i;
+        }
+        if (posList.size() == 0) {
+            // Specific attribute was not found
+            m_data["attributes"][attrTypeName].push_back(object_data.getData());
+        } else {
+            // Ok, exists, so let's substitute
+            const size_t pos = posList[0];
+            m_data["attributes"][attrTypeName][pos] = object_data.getData();
+        }
+    } else {
+        m_data["attributes"][attrTypeName] = {object_data.getData()};  // list
+    }
 }
 
 // Bbox class
-Bbox::Bbox(const std::string& name, const std::vector<int>& value) :
-        m_value(value) {
+Bbox::Bbox(const std::string& name, const std::vector<int>& value) {
         m_name = name;
+        m_data = {{"name", name}, {"value", value}};
+        m_type = bbox;
     };
 
-TypeElement&
+ObjectData&
 Bbox::get()
 {
-    return static_cast<TypeElement&>(*this);
-}
-
-nlohmann::json
-Bbox::json()
-{
+    return static_cast<ObjectData&>(*this);
 }
 
 // Vec class
-Vec::Vec(const std::string& name, const std::vector<float>& value) :
-        m_value(value) {
+Vec::Vec(const std::string& name, const std::vector<float>& value) {
         m_name = name;
+        m_data = {{"name", name}, {"value", value}};
+        m_type = vec;
     };
 
-TypeElement&
+ObjectData&
 Vec::get()
 {
-    return static_cast<TypeElement&>(*this);
-}
-
-nlohmann::json
-Vec::json()
-{
+    return static_cast<ObjectData&>(*this);
 }
 
 // Num class
-Num::Num(const std::string& name, const double value) :
-    m_value(value) {
+Num::Num(const std::string& name, const double value) {
     m_name = name;
+    m_data = {{"name", name}, {"value", value}};
+    m_type = num;
 };
 
-TypeElement&
+ObjectData&
 Num::get()
 {
-    return static_cast<TypeElement&>(*this);
+    return static_cast<ObjectData&>(*this);
 }
 
-nlohmann::json
-Num::json()
+// Boolean class
+Boolean::Boolean(const std::string& name, const bool value) {
+    m_name = name;
+    m_data = {{"name", name}, {"value", value}};
+    m_type = boolean;
+};
+
+ObjectData&
+Boolean::get()
 {
+    return static_cast<ObjectData&>(*this);
 }
 
 };  // namespace types

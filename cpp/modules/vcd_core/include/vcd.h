@@ -30,7 +30,7 @@ class VCD
 
     virtual void
     add_object_data(const uint32_t uid,
-                    const types::TypeElement& object_data) = 0;
+                    const types::ObjectData& object_data) = 0;
 
     // Instance creation factories
     static CORE_LIB std::unique_ptr<VCD>
