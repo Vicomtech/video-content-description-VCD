@@ -2,8 +2,8 @@
   "name": "vcd-ts",
   "version": "4.3.0",
   "description": "Typescript VCD (Video Content Description)",
-  "main": "lib/vcd.js",
-  "types": "lib/vcd.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],

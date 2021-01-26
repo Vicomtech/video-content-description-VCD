@@ -15,9 +15,13 @@ import * as utils from "./vcd.utils"
 import * as types from "./vcd.types"
 import * as schema from "./vcd.schema"
 
-import Ajv from 'ajv'
+import * as Ajv from 'ajv'
 import { v4 as uuidv4 } from 'uuid'
 import { type } from "os"
+
+//const Ajv = require("ajv").default
+const ajv = new Ajv.default()
+
 
 export enum ElementType {
     object = 0,
@@ -210,8 +214,9 @@ export class VCD {
     private data = {}  
     private schema_version = schema.vcd_schema_version
     private schema = schema.vcd_schema     
-    private ajv = new Ajv()
-    private ajv_validate = this.ajv.compile(this.schema)
+    //private ajv = new Ajv()  // here or as a global variate outside
+    //private ajv_validate = this.ajv.compile(this.schema)
+    private ajv_validate = ajv.compile(this.schema)
 	
     private lastUID = {}
     private useUUID = false
