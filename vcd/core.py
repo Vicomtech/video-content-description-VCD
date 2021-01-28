@@ -929,6 +929,7 @@ class VCD:
 
     def add_frame_properties(self, frame_num, timestamp=None, properties=None):
         self.__add_frame(frame_num)  # this function internally checks if the frame already exists
+        self.__update_vcd_frame_intervals(FrameIntervals(frame_num))
         self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
         if timestamp is not None:
             assert (isinstance(timestamp, str))
@@ -1316,7 +1317,8 @@ class VCD:
         return self.get_element(ElementType.relation, uid)
 
     def get_element_uid_by_name(self, element_type, name):
-        assert (self.has_elements(element_type))
+        if not self.has_elements(element_type):
+            return None
         element_type_name = element_type.name
         elements = self.data['vcd'][element_type_name + 's']
         for uid, element in elements.items():
