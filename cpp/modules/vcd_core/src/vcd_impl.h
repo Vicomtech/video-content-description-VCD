@@ -116,7 +116,7 @@ class VCD_Impl : public vcd::VCD {
     save(const std::string& fileName,
          const bool pretty = false) const override;
 
-    uint32_t
+    VCD_UID
     add_object(const std::string& name,
                const std::string& semantic_type) override;
 

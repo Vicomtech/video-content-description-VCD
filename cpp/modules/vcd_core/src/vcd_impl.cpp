@@ -79,7 +79,7 @@ VCD_Impl::save(const std::string& fileName, const bool pretty) const {
     f.close();
 }
 
-uint32_t
+VCD_UID
 VCD_Impl::add_object(const std::string& name,
                      const std::string& semantic_type) {
 //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };

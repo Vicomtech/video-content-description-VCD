@@ -21,6 +21,23 @@
 
 namespace vcd {
 
+class VCD_UID {
+ public:
+    ~VCD_UID();
+
+    virtual bool
+    isUUID() const = 0;
+
+    virtual std::string
+    asStr() const = 0;
+
+    virtual int
+    asInt() const = 0;
+
+    virtual bool
+    isNone() const = 0;
+};
+
 class VCD {
  public:
     virtual
@@ -35,7 +52,7 @@ class VCD {
     virtual void
     save(const std::string& fileName, bool pretty = false) const = 0;
 
-    virtual uint32_t
+    virtual VCD_UID
     add_object(const std::string& name, const std::string& semantic_type) = 0;
 
     virtual void

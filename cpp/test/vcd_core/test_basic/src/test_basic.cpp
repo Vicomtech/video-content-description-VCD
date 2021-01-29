@@ -80,7 +80,7 @@ SCENARIO("Create some basic content, without time information, and do some "
             VCD_ptr vcd = VCD::create();
 
             // 2.- Create the Object
-            uint32_t uid_marcos = vcd->add_object("marcos", "person");
+            VCD_UID uid_marcos = vcd->add_object("marcos", "person");
             CHECK(uid_marcos == 0);
 
             // 3.- Add some data to the object

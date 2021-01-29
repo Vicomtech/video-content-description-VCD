@@ -29,4 +29,7 @@ VCD::create(const bool validation) {
     return VCD::create("", validation);
 }
 
+VCD_UID::~VCD_UID() {
+}
+
 };  // namespace vcd
