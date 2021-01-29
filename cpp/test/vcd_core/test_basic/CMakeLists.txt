@@ -18,7 +18,7 @@ endif(COMMAND cmake_policy)
 #---------------------------------------------------#
 # List source files in a variable so we can use it later more conveniently
 set(SOURCE_FILES
-	src/test_basic.cpp
+    src/test_basic.cpp
 )
 
 link_directories( ${CMAKE_BINARY_DIR}/bin )
@@ -26,8 +26,18 @@ add_executable( ${TEST_NAME} ${SOURCE_FILES})
 
 # Link libraries that are required for building this application
 target_link_libraries( ${TEST_NAME} vcd_core )
+# Include std::experimental::filesystem
+if(LINUX)
+    target_link_libraries(${TEST_NAME} stdc++fs)
+endif()
 
 set_target_properties(${TEST_NAME} PROPERTIES FOLDER "vcd_tests")
+
+# set c++14 as the used c++ standard for this library
+DEFINE_CPP_STANDARD_AS_14(${TEST_NAME})
+
+# Include linter check to source files
+ADD_LINT_CHECK_TO_TARGET(${TEST_NAME} "${SOURCE_FILES}")
 
 IF( BUILD_TESTS )
      message("Adding test: RUN_test_objects at " ${EXECUTABLE_OUTPUT_PATH}/test_basic)

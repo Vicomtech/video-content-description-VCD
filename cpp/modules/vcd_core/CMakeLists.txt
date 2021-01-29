@@ -15,6 +15,13 @@ add_library(${MODULE_NAME} SHARED ${MODULE_SRCS} ${MODULE_HEADERS})
 #target_link_libraries(${MODULE_NAME} asls) # if any dependencies
 set_target_properties( ${MODULE_NAME} PROPERTIES FOLDER "vcd_modules" )
 
+# set c++14 as the used c++ standard for this library
+DEFINE_CPP_STANDARD_AS_14(${MODULE_NAME})
+
+# Include linter check to source files
+SET(SRC_TO_CHECK_LINT ${MODULE_SRCS} ${MODULE_HEADERS})
+ADD_LINT_CHECK_TO_TARGET(${MODULE_NAME} "${SRC_TO_CHECK_LINT}")
+
 # Install library and headers (CMAKE_INSTALL_PREFIX is used prepended to these paths; in Linux, this is /usr/local)
 # In Windows, this is C:\Program Files\<package-name>
 message(MAIN_LIBRARY_NAME : ${MAIN_LIBRARY_NAME})

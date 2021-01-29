@@ -1,72 +1,156 @@
-#define CATCH_CONFIG_MAIN // This definition generates a standard main function in compilation time, so no main function is needed.
-#include "catch.hpp" // This is the testing framework. No other library or dependencies are needed.
+/*
+* VCD (Video Content Description) library v4.3.0
+*
+* Project website: http://vcd.vicomtech.org
+*
+* Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+* (Spain) all rights reserved.
+
+* VCD is a C++ library to create and manage VCD content version 4.3.0.
+* VCD is distributed under MIT License. See LICENSE.
+*
+*/
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
 
 // -- Project -- //
+#include <fstream>
+#if defined(__linux__)
+    #include <experimental/filesystem>
+    namespace fs = std::experimental::filesystem;
+#else
+    #include <filesystem>
+    #ifdef _MSC_VER == 1900
+    namespace fs = std::experimental::filesystem;
+    #else
+    namespace fs = std::filesystem;
+    #endif
+#endif
+
 #include "vcd.h"
 #include "vcd_types.h"
 #include "setup_strings.h"
 
-using namespace std;
-using namespace vcd;
+static char asset_path[] = TEST_ASSET_FOLDER;
 
-SCENARIO("Create some basic content, without time information, and do some basic search")
-{
-	GIVEN("Create and empty VCD")
-	{
-        THEN("Create an object")
-        {
+using vcd::VCD;
+using vcd::VCD_ptr;
+using vcd::types::Bbox;
+using vcd::types::Vec;
+using vcd::types::Num;
+using vcd::types::Boolean;
+
+#include "vcd.h"
+#include "vcd_types.h"
+#include "setup_strings.h"
+
+std::string
+getStreamAsString(const std::istream& in) {
+    std::stringstream out;
+    out << in.rdbuf();
+    return out.str();
+}
+
+std::string
+getFileAsString(const std::string& filePath) {
+    std::ifstream stream;
+    try {
+        // Set to throw on failure
+        stream.exceptions(std::fstream::failbit | std::fstream::badbit);
+        stream.open(filePath);
+    } catch (std::system_error& error) {
+        std::cerr << "Failed to open '" << filePath
+                  << "'\n" << error.code().message() << std::endl;
+        return "Open fail";
+    }
+
+    return getStreamAsString(stream);
+}
+
+SCENARIO("Create some basic content, without time information, and do some "
+         "basic search") {
+    GIVEN("Create and empty VCD") {
+        THEN("Create an object") {
             VCD_ptr vcd = VCD::create();
             REQUIRE(vcd.get() != nullptr);
         }
 
-        THEN("Add some data to the object")
-        {
+        THEN("Add some data to the object") {
+            // 1.- Create a VCD instance
             VCD_ptr vcd = VCD::create();
+
+            // 2.- Create the Object
             uint32_t uid_marcos = vcd->add_object("marcos", "person");
-            REQUIRE(uid_marcos == 0);
+            CHECK(uid_marcos == 0);
 
-            vcd::types::Bbox head_bbox = vcd::types::Bbox("head", {10, 10, 30, 30});
-            types::Bbox body_bbox = types::Bbox("body", {0, 0, 60, 120});
-            types::Vec speed_vec = types::Vec("speed", {0.0, 0.2});
-            types::Num accel_num = types::Num("accel", 0.1);
-            vcd->add_object_data(uid_marcos, head_bbox.get());
-            vcd->add_object_data(uid_marcos, body_bbox.get());
-            vcd->add_object_data(uid_marcos, speed_vec.get());
-            vcd->add_object_data(uid_marcos, accel_num.get());
+            // 3.- Add some data to the object
+            {
+                // Define the internal objects for marcos
+                Bbox head_bbox("head", {10, 10, 30, 30});
+                Bbox body_bbox("body", {0, 0, 60, 120});
+                Vec speed_vec("speed", {0.0, 0.2});
+                Num accel_num("accel", 0.1);
+                vcd->add_object_data(uid_marcos, head_bbox.get());
+                vcd->add_object_data(uid_marcos, body_bbox.get());
+                vcd->add_object_data(uid_marcos, speed_vec.get());
+                vcd->add_object_data(uid_marcos, accel_num.get());
+            }
 
+            uint32_t uid_peter = vcd->add_object("peter", "person");
+            {
+                // Define the internal objects for peter
+                Num age("age", 38.0);
+                Vec eyeL("eyeL", {0, 0, 10, 10});
+                Vec eyeR("eyeR", {0, 0, 10, 10});
+                vcd->add_object_data(uid_peter, age.get());
+                vcd->add_object_data(uid_peter, eyeL);
+                vcd->add_object_data(uid_peter, eyeR);
+            }
+            // 4.- Write into string
+            const std::string vcd_string_pretty = vcd->stringify();
+            const bool indent = false;
+            const std::string vcd_string_nopretty = vcd->stringify(indent);
 
+            // (AVOID RIGHT NOW) 5.- We can ask VCD
 
+            // Get the reference JSON text
+            //  - No pretty version
+            char vcd_np[] = "vcd430_test_create_search_simple_nopretty.json";
+            fs::path vcd_np_path = fs::path(asset_path) / fs::path(vcd_np);
+            REQUIRE(fs::exists(vcd_np_path));
 
-//            uint32_t uid_peter = vcd.add_object(name="peter", semantic_type="person");
+            auto vcd_file_nopretty = getFileAsString(vcd_np_path);
+            REQUIRE(vcd_string_nopretty.compare(vcd_file_nopretty) == 0);
+            //  - Pretty version
+            char vcd_p[] = "vcd430_test_create_search_simple_pretty.json";
+            fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
+            REQUIRE(fs::exists(vcd_p_path));
 
-//            vcd->add_object_data(uid=uid_peter, object_data=types.num("age", 38.0));
-//            vcd->add_object_data(uid=uid_peter, object_data=types.vec("eyeL", {0, 0, 10, 10}));
-//            vcd->add_object_data(uid=uid_peter, object_data=types.vec("eyeR", {0, 0, 10, 10}));
+            auto vcd_file_pretty = getFileAsString(vcd_p_path);
+            REQUIRE(vcd_string_pretty.compare(vcd_file_pretty) == 0);
         }
 
-        THEN("Write into string")
-        {
-
+        THEN("Write into string") {
         }
 
-        THEN("We can ask VCD")
-        {
+        THEN("We can ask VCD") {
             // PRELIMINAR TEST OF ATTRIBUTES, PLEASE REMOVE
-            types::Bbox box1 = types::Bbox("head", {0, 0, 10, 10});
-            box1.add_attribute(types::Boolean("visible", true).get());
+            Bbox box1 = Bbox("head", {0, 0, 10, 10});
+            box1.add_attribute(Boolean("visible", true).get());
         }
-	}
+    }
 
-	/*GIVEN("Read and write some VCD content")
-	{
-		std::string fileName = vcd::SetupStrings::testDataPath + "/vcd430_test_create_search_simple_nopretty.json";
-		VCD vcd(fileName);
+    /*GIVEN("Read and write some VCD content") {
+        std::string fileName = vcd::SetupStrings::testDataPath +
+                            "/vcd430_test_create_search_simple_nopretty.json";
+        VCD vcd(fileName);
 
-		std::string json_string = vcd.stringify(false);
-		std::cout << json_string << std::endl;
+        std::string json_string = vcd.stringify(false);
+        std::cout << json_string << std::endl;
 
-		std::string fileNameOut = vcd::SetupStrings::testDataPath + "vcd430_test_create_search_simple_nopretty_out.json";
-		vcd.save(fileNameOut, false);
-	}
-	*/	
+        std::string fileNameOut = vcd::SetupStrings::testDataPath +
+                           "vcd430_test_create_search_simple_nopretty_out.json";
+        vcd.save(fileNameOut, false);
+    }
+    */
 }

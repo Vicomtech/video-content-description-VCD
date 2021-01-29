@@ -1,14 +1,24 @@
+/*
+* VCD (Video Content Description) library v4.3.0
+*
+* Project website: http://vcd.vicomtech.org
+*
+* Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+* (Spain) all rights reserved.
+
+* VCD is a C++ library to create and manage VCD content version 4.3.0.
+* VCD is distributed under MIT License. See LICENSE.
+*
+*/
 #include "vcd_types.h"
 
 using json = nlohmann::json;
 
-namespace vcd
-{
+namespace vcd {
 
-namespace types
-{
+namespace types {
 
-const std::string ObjectDataTypeNames[] = {
+const char* ObjectDataTypeNames[] = {
     "none",
     "bbox",
     "rbbox",
@@ -30,12 +40,10 @@ const std::string ObjectDataTypeNames[] = {
 };
 
 // Abstract class implementations
-ObjectData::~ObjectData()
-{
+ObjectData::~ObjectData() {
 }
 
-ObjectDataGeometry::~ObjectDataGeometry()
-{
+ObjectDataGeometry::~ObjectDataGeometry() {
 }
 
 void
@@ -79,11 +87,10 @@ Bbox::Bbox(const std::string& name, const std::vector<int>& value) {
         m_name = name;
         m_data = {{"name", name}, {"value", value}};
         m_type = bbox;
-    };
+}
 
 ObjectData&
-Bbox::get()
-{
+Bbox::get() {
     return static_cast<ObjectData&>(*this);
 }
 
@@ -92,11 +99,10 @@ Vec::Vec(const std::string& name, const std::vector<float>& value) {
         m_name = name;
         m_data = {{"name", name}, {"value", value}};
         m_type = vec;
-    };
+}
 
 ObjectData&
-Vec::get()
-{
+Vec::get() {
     return static_cast<ObjectData&>(*this);
 }
 
@@ -105,11 +111,10 @@ Num::Num(const std::string& name, const double value) {
     m_name = name;
     m_data = {{"name", name}, {"value", value}};
     m_type = num;
-};
+}
 
 ObjectData&
-Num::get()
-{
+Num::get() {
     return static_cast<ObjectData&>(*this);
 }
 
@@ -118,11 +123,10 @@ Boolean::Boolean(const std::string& name, const bool value) {
     m_name = name;
     m_data = {{"name", name}, {"value", value}};
     m_type = boolean;
-};
+}
 
 ObjectData&
-Boolean::get()
-{
+Boolean::get() {
     return static_cast<ObjectData&>(*this);
 }
 

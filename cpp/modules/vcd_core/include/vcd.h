@@ -1,3 +1,15 @@
+/*
+* VCD (Video Content Description) library v4.3.0
+*
+* Project website: http://vcd.vicomtech.org
+*
+* Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+* (Spain) all rights reserved.
+
+* VCD is a C++ library to create and manage VCD content version 4.3.0.
+* VCD is distributed under MIT License. See LICENSE.
+*
+*/
 #ifndef _VCD_H_
 #define _VCD_H_
 
@@ -7,11 +19,9 @@
 #include "core_exp.h"
 #include "vcd_types.h"
 
-namespace vcd
-{
+namespace vcd {
 
-class VCD
-{
+class VCD {
  public:
     virtual
     ~VCD();
@@ -43,4 +53,4 @@ using VCD_ptr = std::unique_ptr<VCD>;
 
 };  // namespace vcd
 
-#endif // _VCD_H_
+#endif  // _VCD_H_

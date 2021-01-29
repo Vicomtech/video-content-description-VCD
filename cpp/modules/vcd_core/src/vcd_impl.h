@@ -1,3 +1,15 @@
+/*
+* VCD (Video Content Description) library v4.3.0
+*
+* Project website: http://vcd.vicomtech.org
+*
+* Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+* (Spain) all rights reserved.
+
+* VCD is a C++ library to create and manage VCD content version 4.3.0.
+* VCD is distributed under MIT License. See LICENSE.
+*
+*/
 #ifndef _VCD_Impl_H_
 #define _VCD_Impl_H_
 
@@ -8,23 +20,21 @@
 
 using json = nlohmann::json;
 
-namespace vcd
-{
+namespace vcd {
 
 typedef std::array<int, 2> Tuple;
 typedef std::vector<Tuple> ArrayNx2;
 
-enum ElementType
-{
-    object = 1,
-    action = 2,
-    event = 3,
-    context = 4,
-    relation = 5
+enum ElementType {
+    object = 0,
+    action = 1,
+    event = 2,
+    context = 3,
+    relation = 4,
+    ET_size
 };
 
-enum StreamType
-{
+enum StreamType {
     camera = 1,
     lidar = 2,
     radar = 3,
@@ -32,11 +42,17 @@ enum StreamType
     other = 5
 };
 
-enum RDF
-{
+enum SetMode {
+    union_t = 1,
+    replace_t = 2
+};
+
+enum RDF {
     rdf_subject = 1,
     rdf_object = 2
 };
+
+class CoordSys;
 
 /**
  * FrameIntervals
@@ -45,13 +61,12 @@ enum RDF
  * FrameIntervals fis = FrameIntervals({0, 10}); // works
  * FrameIntervals fis = FrameIntervals({{0, 10}}); // works
  */
-class FrameIntervals
-{
-public:
+class FrameIntervals {
+ public:
     FrameIntervals() {}
-    FrameIntervals(int frameValue);
-    FrameIntervals(const Tuple& frameValue);
-    FrameIntervals(const ArrayNx2& frameValue);
+    explicit FrameIntervals(int frameValue);
+    explicit FrameIntervals(const Tuple& frameValue);
+    explicit FrameIntervals(const ArrayNx2& frameValue);
 
     bool empty() const { return this->fisNum.empty() || this->fisDict.empty(); }
     json get_dict() const { return fisDict; }
@@ -60,17 +75,16 @@ public:
     std::size_t getLength() const { return fisNum.size(); }
     bool hasFrame(int frameNum) const;
 
-private:
+ private:
     json fisDict;
     ArrayNx2 fisNum;
 };
 
-class UID
-{
-public:
+class UID {
+ public:
     UID() { this->set("", -1, false); }
-    UID(int val);
-    UID(std::string val);
+    explicit UID(const int val);
+    explicit UID(const std::string &val);
 
     bool isUUID() const { return is_UUID; }
     std::string asStr() const { return uidStr; }
@@ -78,7 +92,7 @@ public:
 
     bool isNone() const { return (uidInt == -1 && uidStr == ""); }
 
-private:
+ private:
     void set(std::string uidStr, int uidInt, bool isUUID);
 
     bool is_UUID;
@@ -86,10 +100,10 @@ private:
     int uidInt;
 };
 
-class VCD_Impl : public vcd::VCD
-{
-public:
-    VCD_Impl(const std::string& fileName, const bool validation = false);
+class VCD_Impl : public vcd::VCD {
+ public:
+    explicit  VCD_Impl(const std::string& fileName,
+                       const bool validation = false);
     ~VCD_Impl();
 
     void
@@ -110,7 +124,16 @@ public:
     add_object_data(const uint32_t uid,
                     const types::ObjectData& object_data) override;
 
-private:
+ protected:
+    void
+    set_element(const ElementType type, const std::string &name,
+                const std::string &semantic_type,
+                const FrameIntervals &frame_intervals,
+                const UID &uid, const UID &ont_uid,
+                const CoordSys * const coordinate_system = nullptr,
+                const SetMode set_mode = union_t);
+
+ private:
     void reset();
 
     bool m_useUUID;
@@ -118,7 +141,7 @@ private:
 
     FrameIntervals m_fis;
 
-    std::map<ElementType, int> m_lastUIDbyType;
+    std::vector<int> m_lastUIDbyType;
 };
 
 };  // namespace vcd

@@ -1,13 +1,23 @@
+/*
+* VCD (Video Content Description) library v4.3.0
+*
+* Project website: http://vcd.vicomtech.org
+*
+* Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+* (Spain) all rights reserved.
+
+* VCD is a C++ library to create and manage VCD content version 4.3.0.
+* VCD is distributed under MIT License. See LICENSE.
+*
+*/
 #ifndef _VCD_TYPES_H_
 #define _VCD_TYPES_H_
 
 #include <nlohmann/json.hpp>
 
-namespace vcd
-{
+namespace vcd {
 
-namespace types
-{
+namespace types {
 
 enum ObjectDataType {
     none = 0,
@@ -31,9 +41,8 @@ enum ObjectDataType {
     ODT_size = 18
 };
 
-class ObjectData
-{
-public:
+class ObjectData {
+ public:
     virtual
     ~ObjectData();
 
@@ -49,14 +58,14 @@ public:
     nlohmann::json
     getData() const { return m_data; }
 
-protected:
+ protected:
     ObjectDataType m_type;
     std::string m_name;
     nlohmann::json m_data;
 };
 
 class ObjectDataGeometry : public ObjectData {
-public:
+ public:
     virtual
     ~ObjectDataGeometry();
 
@@ -66,34 +75,31 @@ public:
 
 
 class Bbox : public ObjectDataGeometry {
-public:
+ public:
     Bbox(const std::string& name, const std::vector<int>& value);
 
     ObjectData&
     get() override;
 };
 
-class Vec : public ObjectData
-{
-public:
+class Vec : public ObjectData {
+ public:
     Vec(const std::string& name, const std::vector<float>& value);
 
     ObjectData&
     get() override;
 };
 
-class Num : public ObjectData
-{
-public:
+class Num : public ObjectData {
+ public:
     Num(const std::string& name, const double value);
 
     ObjectData&
     get() override;
 };
 
-class Boolean : public ObjectData
-{
-public:
+class Boolean : public ObjectData {
+ public:
     Boolean(const std::string& name, const bool value);
 
     ObjectData&
