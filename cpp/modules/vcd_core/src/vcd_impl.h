@@ -80,24 +80,36 @@ class FrameIntervals {
     ArrayNx2 fisNum;
 };
 
-class UID {
+class UID : public VCD_UID {
  public:
     UID() { this->set("", -1, false); }
     explicit UID(const int val);
     explicit UID(const std::string &val);
 
-    bool isUUID() const { return is_UUID; }
-    std::string asStr() const { return uidStr; }
-    int asInt() const { return uidInt; }
+    bool
+    isUUID() const override { return m_isUUID; }
 
-    bool isNone() const { return (uidInt == -1 && uidStr == ""); }
+    std::string
+    asStr() const override { return m_uidStr; }
+
+    int
+    asInt() const override { return m_uidInt; }
+
+    bool
+    isNone() const override { return (m_uidInt == -1 && m_uidStr == ""); }
+
+    void
+    withInt(const int val);
+
+    void
+    withStr(const std::string &val);
 
  private:
-    void set(std::string uidStr, int uidInt, bool isUUID);
+    void set(const std::string &uidStr, const int uidInt, const bool isUUID);
 
-    bool is_UUID;
-    std::string uidStr;
-    int uidInt;
+    bool m_isUUID;
+    std::string m_uidStr;
+    int m_uidInt;
 };
 
 class VCD_Impl : public vcd::VCD {
@@ -125,7 +137,18 @@ class VCD_Impl : public vcd::VCD {
                     const types::ObjectData& object_data) override;
 
  protected:
+    UID
+    get_uid_to_assign(const ElementType type, const UID &uid);
+
     void
+    set_element_at_root_and_frames(const ElementType type,
+                                   const std::string &name,
+                                   const std::string &semantic_type,
+                                   const FrameIntervals &frame_intervals,
+                                   const UID &uid, const UID &ont_uid,
+                                   const CoordSys * const coord_system);
+
+    UID
     set_element(const ElementType type, const std::string &name,
                 const std::string &semantic_type,
                 const FrameIntervals &frame_intervals,

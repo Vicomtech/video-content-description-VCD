@@ -133,7 +133,39 @@ VCD_Impl::add_object_data(const uint32_t uid,
                           const types::ObjectData& object_data) {
 }
 
+UID
+VCD_Impl::get_uid_to_assign(const ElementType type, const UID &uid) {
+    UID uid_to_assign;
+    if (uid.isNone()) {
+        if (m_useUUID) {
+            uid_to_assign.withStr(uuid_v4_gen());
+        } else {
+            // Let's use integers
+            ++m_lastUIDbyType[type];
+            uid_to_assign.withInt(m_lastUIDbyType[type]);
+        }
+    } else {
+        // uid is not None
+        if (!uid.isUUID()) {
+            // Ok, user provided a number, let's proceed
+            if (uid.asInt() > m_lastUIDbyType[type]) {
+                m_lastUIDbyType[type] = uid.asInt();
+                uid_to_assign.withInt(m_lastUIDbyType[type]);
+            } else {
+                uid_to_assign = uid;
+            }
+        } else {
+            // This is a UUID
+            m_useUUID = true;
+            uid_to_assign = uid;
+        }
+    }
+    return uid_to_assign;
+}
+
 void
+
+UID
 VCD_Impl::set_element(const ElementType type, const std::string &name,
                       const std::string &semantic_type,
                       const FrameIntervals &frame_intervals,
@@ -148,23 +180,33 @@ VCD_Impl::set_element(const ElementType type, const std::string &name,
 
     // 0.- Get uid_to_assign
     // note: private functions use UID type for uids
-    uid_to_assign = get_uid_to_assign(type, uid);
+    UID uid_to_assign = get_uid_to_assign(type, uid);
 
     // 1.- Set the root entries and frames entries
     set_element_at_root_and_frames(type, name, semantic_type, frame_intervals,
                                    uid_to_assign, ont_uid, coordinate_system);
 
-    return uid_to_assign
+    return uid_to_assign;
 }
 
 ///////////////////////////////////////////////
 // UID
 ///////////////////////////////////////////////
 UID::UID(const int val) {
-    this->set(std::to_string(val), val, false);
+
 }
 
 UID::UID(const std::string &val) {
+    withStr(val);
+}
+
+void
+UID::withInt(const int val) {
+    set(std::to_string(val), val, false);
+}
+
+void
+UID::withStr(const std::string &val) {
     const std::regex pattern(
                     "[0-9a-fA-F]{8}-"
                     "[0-9a-fA-F]{4}-"
@@ -190,10 +232,10 @@ UID::UID(const std::string &val) {
     }
 }
 
-void UID::set(std::string uidStr, int uidInt, bool isUUID) {
-    this->uidStr = uidStr;
-    this->uidInt = uidInt;
-    this->is_UUID = isUUID;
+void UID::set(const std::string &uidStr, const int uidInt, const bool isUUID) {
+    m_uidStr = uidStr;
+    m_uidInt = uidInt;
+    m_isUUID = isUUID;
 }
 
 ///////////////////////////////////////////////
