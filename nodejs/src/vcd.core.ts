@@ -939,6 +939,7 @@ export class VCD {
 
     public addFrameProperties(frameNum: number, timestamp = null, additionalProperties = null) {        
         this.addFrame(frameNum);  // this function internally checks if( the frame already exists
+        this.updateVCDFrameIntervals(new FrameIntervals(frameNum))
         this.data['vcd']['frames'][frameNum]['frame_properties'] = this.data['vcd']['frames'][frameNum]['frame_properties'] || {};
 
         if (timestamp != null) {
