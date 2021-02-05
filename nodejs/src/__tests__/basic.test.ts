@@ -9,6 +9,7 @@ import vcd430_test_add_metadata from '../../../tests/etc/vcd430_test_add_metadat
 import vcd430_test_ontology from '../../../tests/etc/vcd430_test_ontology.json'
 import vcd430_test_objects_without_data from '../../../tests/etc/vcd430_test_objects_without_data.json'
 import vcd430_test_nested_object_data from '../../../tests/etc/vcd430_test_nested_object_data.json'
+import vcd430_test_multi_value_attributes from '../../../tests/etc/vcd430_test_multi_value_attributes.json'
 
 test('test_create_search_simple', () => {
     let vcd = new VCD();
@@ -278,4 +279,17 @@ test('test_nested_data_attributes', () => {
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false, false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"bbox":[{"name":"head","val":[0,0,10,10],"attributes":{"boolean":[{"name":"visible","val":true}]}}]}}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":0}],"objects":{"0":{"name":"someName1","type":"#Some","frame_intervals":[{"frame_start":0,"frame_end":0}],"object_data_pointers":{"head":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":0}],"attributes":{"visible":"boolean"}}}}}}}')
     expect(vcd.stringify(false)).toBe(new VCD(vcd430_test_nested_object_data, false).stringify(false))
+});
+
+test('test_multi_value_attributes', () => {
+    let vcd = new VCD()
+
+    let uid = vcd.addObject("car1", "car")
+    vcd.addObjectData(uid, new types.Vec("signals", [0.1, 0.2, 0.3]))
+    vcd.addObjectData(uid, new types.Vec("categories", ["Tourism", "Large", "Old"]))
+
+    vcd.addObjectData(uid, new types.Vec("shape", [0, 0, 100, 100], null, {'locked': true, 'score': 0.8}))
+    vcd.addObjectData(uid, new types.Text("color", "Blue", null, {'locked': false, 'status': "validated"}))
+
+    expect(vcd.stringify(false)).toBe(new VCD(vcd430_test_multi_value_attributes, false).stringify(false))
 });

@@ -650,7 +650,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "rbbox": {
             "type": "object",
@@ -672,7 +672,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "num": {
             "type": "object",
@@ -683,7 +683,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "text": {
             "type": "object",
@@ -694,7 +694,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "boolean": {
             "type": "object",
@@ -705,7 +705,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "cuboid": {
             "type": "object",
@@ -721,7 +721,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "image": {
             "type": "object",
@@ -734,7 +734,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "mime_type", "encoding"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "mat": {
             "type": "object",
@@ -752,7 +752,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "channels", "width", "height", "data_type"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "binary": {
             "type": "object",
@@ -765,7 +765,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "encoding", "data_type"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "vec": {
             "type": "object",
@@ -774,12 +774,17 @@ export const vcd_schema = {
                 "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
-                    "item": {"type": "number"}
+                    "item": {
+                        "oneOf": [
+                            {"type": "number"},
+                            {"type": "string"}
+                        ]
+                    }
                 },
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "point2d": {
             "type": "object",
@@ -796,7 +801,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "point3d": {
             "type": "object",
@@ -813,7 +818,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "poly2d": {
             "type": "object",
@@ -843,7 +848,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "mode", "closed"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "poly3d": {
             "type": "object",
@@ -858,7 +863,7 @@ export const vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "closed"],
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "attributes": {
             "type": "object",
@@ -916,7 +921,7 @@ export const vcd_schema = {
                     },
                     "additionalProperties": false
                 },
-                "additionalProperties": false
+                "additionalProperties": true
             }
         },
         "line_reference": {
@@ -933,7 +938,7 @@ export const vcd_schema = {
                 "reference_type": {"type": "string"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
         "area_reference": {
             "type": "object",
@@ -947,7 +952,7 @@ export const vcd_schema = {
                 "reference_type": {"type": "string"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "additionalProperties": false
+            "additionalProperties": true
         },
 
     },

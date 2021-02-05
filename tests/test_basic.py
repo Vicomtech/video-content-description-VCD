@@ -316,6 +316,31 @@ class TestBasic(unittest.TestCase):
         # print(vcd_stringified)
         self.assertEqual(vcd_read_stringified, vcd_stringified)
 
+    def test_multi_value_attributes(self):
+        # This test shows how to use "Vec" attribute with strings
+        vcd = core.VCD()
+
+        uid = vcd.add_object(name="car1", semantic_type="car")
+        vcd.add_object_data(uid=uid, object_data=types.vec(name="signals", val=[0.1, 0.2, 0.3]))
+        vcd.add_object_data(uid=uid, object_data=types.vec(name="categories", val=["Tourism", "Large", "Old"]))
+
+
+        # Add additionalPropertis at attributes (apart from "name" and "val"), e.g. "quality", "locked", etc
+        # Works for any attribute type (vec, bbox, etc)
+        vcd.add_object_data(uid=uid, object_data=types.vec(name="shape", val=[0, 0, 100, 100], properties={"locked": True, "score": 0.8}))
+        vcd.add_object_data(uid=uid, object_data=types.text(name="color", val="Blue",
+                                                           properties={"locked": False, "status": "validated"}))
+
+        if not os.path.isfile('./etc/vcd430_test_multi_value_attributes.json'):
+            vcd.save('./etc/vcd430_test_multi_value_attributes.json', True)
+
+        vcd_read = core.VCD('./etc/vcd430_test_multi_value_attributes.json', validation=True)
+        vcd_read_stringified = vcd_read.stringify()
+        vcd_stringified = vcd.stringify()
+        #print(vcd_stringified)
+        self.assertEqual(vcd_read_stringified, vcd_stringified)
+
+
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))
     unittest.main()

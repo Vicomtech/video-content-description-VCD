@@ -226,7 +226,7 @@ export enum Poly2DType {
 export class ObjectData{
 	data: object;
 	type: any;
-    constructor( name: string, cs=null) {        
+    constructor( name: string, cs=null, properties=null) {        
         this.data = {};
         this.data['name'] = name;
         if(cs != null){
@@ -235,6 +235,9 @@ export class ObjectData{
 				return;
 			}
             this.data['coordinate_system'] = cs;
+		}
+		if(properties != null){
+			Object.assign(this.data, properties)
 		}
 	}
 	typeName() {
@@ -275,14 +278,14 @@ export class ObjectData{
 }
 
 export class ObjectDataGeometry extends ObjectData {
-    constructor( name: string, stream=null) {
-        super( name, stream);  // Calling parent export class 
+    constructor( name: string, cs=null, properties=null) {
+        super( name, cs, properties);  // Calling parent export class 
 	}
 }
 
 export class Bbox extends ObjectDataGeometry {
-    constructor( name: string, val: Array<number>, stream=null ) {
-        super( name, stream );		
+    constructor( name: string, val: Array<number>, cs=null, properties=null ) {
+        super( name, cs, properties );		
 		if(val.length != 4){
 			console.warn("WARNING: val length not 4");
 			return;
@@ -293,8 +296,8 @@ export class Bbox extends ObjectDataGeometry {
 }
 
 export class Rbbox extends ObjectDataGeometry {
-    constructor( name: string, val: Array<number>, stream=null ) {
-        super( name, stream );		
+    constructor( name: string, val: Array<number>, cs=null, properties=null  ) {
+        super( name, cs, properties );		
 		if(val.length != 5){
 			console.warn("WARNING: val length not 5.");
 			return;
@@ -305,8 +308,8 @@ export class Rbbox extends ObjectDataGeometry {
 }
 
 export class Num extends ObjectData{
-    constructor( name: string, val, stream=null) {
-        super( name, stream);
+    constructor( name: string, val, cs=null, properties=null ) {
+        super( name, cs, properties);
 		if (!isFloat(val) && !Number.isInteger(val)){
 			console.warn("WARNING: val is not float or integer");
 			return;
@@ -317,8 +320,8 @@ export class Num extends ObjectData{
 }
 
 export class Text extends ObjectData{
-    constructor( name: string, val, stream=null){
-        super( name, stream);
+    constructor( name: string, val, cs=null, properties=null ){
+        super( name, cs, properties);
 		if(typeof val != "string" && !(val instanceof String)){
 			console.warn("WARNING: val not string",val);
 			return;
@@ -329,16 +332,16 @@ export class Text extends ObjectData{
 }
 
 export class Boolean extends ObjectData{
-    constructor( name: string, val: boolean, stream=null){
-        super( name, stream);		
+    constructor( name: string, val: boolean, cs=null, properties=null ){
+        super( name, cs, properties);		
         this.data['val'] = val;
         this.type = ObjectDataType.boolean;
 	}
 }
 
 export class Poly2d extends ObjectDataGeometry{
-    constructor( name: string, val: Array<number>, mode: Poly2DType, closed: boolean, hierarchy=null, stream=null){
-        super( name, stream);
+    constructor( name: string, val: Array<number>, mode: Poly2DType, closed: boolean, hierarchy=null, cs=null, properties=null ){
+        super( name, cs, properties);
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
 			return;
@@ -382,8 +385,8 @@ export class Poly2d extends ObjectDataGeometry{
 }
 
 export class Poly3d extends ObjectDataGeometry{
-    constructor( name: string, val, closed, stream=null){
-        super( name, stream );
+    constructor( name: string, val, closed, cs=null, properties=null ){
+        super( name, cs, properties );
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
 			return;
@@ -400,8 +403,8 @@ export class Poly3d extends ObjectDataGeometry{
 
 export class Cuboid extends ObjectDataGeometry {
 	private use_quaternion = false
-    constructor( name: string, val, stream=null ) {
-        super( name, stream);
+    constructor( name: string, val, cs=null, properties=null  ) {
+        super( name, cs, properties);
         if(!Array.isArray(val)){
 			console.warn("WARNING: val not array");
 			return;
@@ -436,8 +439,8 @@ export class Image extends ObjectData{
     compr_params=[int(cv2.IMWRITE_PNG_COMPRESSION), 9]
     result, payload = cv2.imencode('.png', img, compr_params)
     */
-    constructor( name: string, val: string, mimeType: string, encoding: string, stream=null) {
-        super( name, stream);		
+    constructor( name: string, val: string, mimeType: string, encoding: string, cs=null, properties=null ) {
+        super( name, cs, properties);		
         this.data['val'] = val;
         this.data['mime_type'] = mimeType;
         this.data['encoding'] = encoding;
@@ -446,8 +449,8 @@ export class Image extends ObjectData{
 }
 
 export class Mat extends ObjectData{
-    constructor( name: string, val: Array<number>, channels: number, width: number, height: number, dataType: string, stream=null){
-        super( name, stream);        
+    constructor( name: string, val: Array<number>, channels: number, width: number, height: number, dataType: string, cs=null, properties=null ){
+        super( name, cs, properties);        
 		if(val.length != width * height * channels){
 			console.warn("WARNING: val.length != width * height * channels");
 			return;
@@ -462,8 +465,8 @@ export class Mat extends ObjectData{
 }
 
 export class Binary extends ObjectData{
-    constructor( name: string, val: string, dataType: string, encoding: string, stream=null){
-        super( name, stream);		
+    constructor( name: string, val: string, dataType: string, encoding: string, cs=null, properties=null ){
+        super( name, cs, properties);		
         this.data['val'] = val;
         this.data['data_type'] = dataType;
         this.data['encoding'] = encoding;
@@ -472,16 +475,16 @@ export class Binary extends ObjectData{
 }
 
 export class Vec extends ObjectData{
-    constructor( name: string, val: Array<number>, stream=null) {
-        super( name, stream);        
+    constructor( name: string, val: Array<number> | Array<string>, cs=null, properties=null ) {
+        super( name, cs, properties);        
         this.data['val'] = val;
         this.type = ObjectDataType.vec;
 	}
 }
 
 export class Point2d extends ObjectDataGeometry{
-    constructor( name: string, val: Array<number>, id=null, stream=null){
-        super( name, stream);		
+    constructor( name: string, val: Array<number>, id=null, cs=null, properties=null ){
+        super( name, cs, properties);		
         if(val.length != 2){
 			console.warn("WARNING: val length not 2");
 		}
@@ -500,8 +503,8 @@ export class Point2d extends ObjectDataGeometry{
 }
 
 export class Point3d extends ObjectDataGeometry{
-    constructor( name: string, val: Array<number>, id=null,  stream=null) {
-        super( name, stream);		
+    constructor( name: string, val: Array<number>, id=null,  cs=null, properties=null ) {
+        super( name, cs, properties);		
 		if(val.length != 3){
 			console.warn("WARNING: val length not 3");
 			return;
@@ -520,8 +523,8 @@ export class Point3d extends ObjectDataGeometry{
 }
 
 export class GeometricReference extends ObjectDataGeometry{
-    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
-        super( name, stream);		
+    constructor( name: string, val, referenceType: ObjectDataType, cs=null, properties=null ){
+        super( name, cs, properties);		
         this.data['reference_type'] = ObjectDataType[ObjectDataType[referenceType]];  // this trick returns the value of the enum as a string
         if(val != null){
             if(!Array.isArray(val)){
@@ -534,20 +537,20 @@ export class GeometricReference extends ObjectDataGeometry{
 }
 
 export class LineReference extends GeometricReference{
-    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
-        super( name, val, referenceType, stream);
+    constructor( name: string, val, referenceType: ObjectDataType, cs=null, properties=null ){
+        super( name, val, referenceType, cs, properties);
 	}
 }
 
 export class AreaReference extends GeometricReference{
-    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
-        super( name, val, referenceType, stream);
+    constructor( name: string, val, referenceType: ObjectDataType, cs=null, properties=null ){
+        super( name, val, referenceType, cs, properties);
 	}
 }
 
 export class VolumeReference extends GeometricReference{
-    constructor( name: string, val, referenceType: ObjectDataType, stream=null){
-        super( name, val, referenceType, stream);
+    constructor( name: string, val, referenceType: ObjectDataType, cs=null, properties=null ){
+        super( name, val, referenceType, cs, properties);
 	}
 }
 
@@ -556,8 +559,8 @@ export class Mesh extends ObjectDataGeometry{
     eid: number;
     aid: number;
     vid: number;
-    constructor( name: string, stream=null) {
-        super( name, stream);
+    constructor( name: string, cs=null, properties=null ) {
+        super( name, cs, properties);
         this.pid = 0;
         this.eid = 0;
         this.aid = 0;

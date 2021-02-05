@@ -651,7 +651,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "rbbox": {
             "type": "object",
@@ -673,7 +673,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "num": {
             "type": "object",
@@ -684,7 +684,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "text": {
             "type": "object",
@@ -695,7 +695,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "boolean": {
             "type": "object",
@@ -706,7 +706,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "cuboid": {
             "type": "object",
@@ -722,7 +722,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "image": {
             "type": "object",
@@ -735,7 +735,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "mime_type", "encoding"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "mat": {
             "type": "object",
@@ -753,7 +753,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "channels", "width", "height", "data_type"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "binary": {
             "type": "object",
@@ -766,7 +766,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "encoding", "data_type"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "vec": {
             "type": "object",
@@ -775,12 +775,17 @@ vcd_schema = {
                 "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
-                    "item": {"type": "number"}
+                    "item": {
+                        "oneOf": [
+                            {"type": "number"},
+                            {"type": "string"}
+                        ]
+                    }
                 },
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "point2d": {
             "type": "object",
@@ -797,7 +802,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "point3d": {
             "type": "object",
@@ -814,7 +819,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "poly2d": {
             "type": "object",
@@ -844,7 +849,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "mode", "closed"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "poly3d": {
             "type": "object",
@@ -859,7 +864,7 @@ vcd_schema = {
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val", "closed"],
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "attributes": {
             "type": "object",
@@ -917,7 +922,7 @@ vcd_schema = {
                     },
                     "additionalProperties": False
                 },
-                "additionalProperties": False
+                "additionalProperties": True
             }
         },
         "line_reference": {
@@ -934,7 +939,7 @@ vcd_schema = {
                 "reference_type": {"type": "string"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "additionalProperties": False
+            "additionalProperties": True
         },
         "area_reference": {
             "type": "object",
@@ -948,9 +953,8 @@ vcd_schema = {
                 "reference_type": {"type": "string"},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "additionalProperties": False
+            "additionalProperties": True
         },
-
     },
     "required": ["vcd"],
     "additionalProperties": False
