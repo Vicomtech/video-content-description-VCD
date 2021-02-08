@@ -1,0 +1,34 @@
+#===================================================================================
+#  GCL CMake configuration file
+#
+#             ** File generated automatically, do not modify **
+#
+#    This file will define the following variables:
+#      - VCD_FOUND	      : If CMake found this library.
+#      - VCD_INCLUDE_DIRS     : The include directories.
+#      - VCD_LIBRARIES	      : The libraries.
+#===================================================================================
+set( CMAKE_MODULE_PATH @CMAKE_MODULE_PATH@ )
+set( VCD_FOUND )
+
+# ======================================================
+# Include directories to add to the user project:
+# ======================================================
+set( VCD_SOURCE_DIR "@PROJECT_SOURCE_DIR@")
+
+message( VCD_INCLUDE_DIRS : ${VCD_INCLUDE_DIRS} )
+
+
+# ====================================================================
+# Link libraries one line for each library
+# ====================================================================
+OPTION( ADD_VCD_CORE "Add vcd_core to project" @ADD_VCD_CORE@ )
+
+if(ADD_VCD_CORE)
+SET(VCD_LIBRARY_DIR "@PROJECT_BINARY_DIR@/bin")
+SET(VCD_LIBRARIES ${VCD_LIBRARIES} debug vcd_core_d optimized vcd_core)
+#SET(VCD_LIBRARIES  ${VCD_LIBRARIES} debug "@CMAKE_INSTALL_PREFIX@/lib/@MAIN_LIBRARY_NAME@/vcd_core_d.lib" optimized "@CMAKE_INSTALL_PREFIX@/lib/@MAIN_LIBRARY_NAME@/vcd_core.lib")
+set( VCD_INCLUDE_DIRS ${VCD_INCLUDE_DIRS} "@PROJECT_SOURCE_DIR@/modules/vcd_core/include/")
+endif(ADD_VCD_CORE)
+
+LINK_DIRECTORIES(${VCD_LIBRARY_DIR})

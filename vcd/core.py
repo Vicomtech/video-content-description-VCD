@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -265,23 +265,24 @@ class VCD:
                     # This is 4.1-2
                     if read_data['vcd']['version'] == "4.2.0":
                         # This is VCD 4.2.0
-                        warnings.warn("WARNING: Converting VCD 4.2.0 to VCD 4.3.0. A full revision is recommended.")
+                        warnings.warn("WARNING: Converting VCD 4.2.0 to VCD 4.3.1. A full revision is recommended.")
                         # Convert frame entries to int
                         frames = read_data['vcd']['frames']
                         if frames:  # So frames is not empty
                             read_data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
 
                         self.reset()  # to init object
-                        converter.ConverterVCD420toVCD430(read_data, self)  # self is modified internally
+                        converter.ConverterVCD420toVCD431(read_data, self)  # self is modified internally
 
                     elif read_data['vcd']['version'] == "4.1.0":
                         # This is VCD 4.1.0
-                        raise Exception("ERROR: VCD 4.1.0 to VCD 4.3.0 conversion is not implemented.")
+                        raise Exception("ERROR: VCD 4.1.0 to VCD 4.3.1 conversion is not implemented.")
                         pass
                 elif 'metadata' in read_data['vcd']:
                     if 'schema_version' in read_data['vcd']['metadata']:
-                        if read_data['vcd']['metadata']['schema_version'] == "4.3.0":
-                            # This is VCD 4.3.0
+                        if read_data['vcd']['metadata']['schema_version'] == "4.3.0" or \
+                                read_data['vcd']['metadata']['schema_version'] == "4.3.1":
+                            # This is VCD 4.3.0 or VCD 4.3.1
                             self.data = read_data
                             if validation:
                                 if not hasattr(self, 'schema'):
@@ -289,22 +290,22 @@ class VCD:
                                 validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
                                 json_file.close()
 
-                            # In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
+                            # In VCD 4.3.1 uids are strings, because they can be numeric strings, or UUIDs
                             # but frames are still ints, so let's parse like that
                             if 'frames' in self.data['vcd']:
                                 frames = self.data['vcd']['frames']
                                 if frames:  # So frames is not empty
                                     self.data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
                         else:
-                            raise Exception("ERROR: This vcd file does not seem to be 4.3.0 nor 4.2.0")
+                            raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
                     else:
-                        raise Exception("ERROR: This vcd file does not seem to be 4.3.0 nor 4.2.0")
+                        raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
             elif 'VCD' in read_data:
                 # This is 3.x
-                warnings.warn("WARNING: Converting VCD 3.3.0 to VCD 4.3.0. A full revision is recommended.")
-                # Assuming this is VCD 3.3.0, let's load into VCD 4.3.0
+                warnings.warn("WARNING: Converting VCD 3.3.0 to VCD 4.3.1. A full revision is recommended.")
+                # Assuming this is VCD 3.3.0, let's load into VCD 4.3.1
                 self.reset()  # to init object
-                converter.ConverterVCD330toVCD430(read_data, self)  # self is modified internally
+                converter.ConverterVCD330toVCD431(read_data, self)  # self is modified internally
 
             # Close file
             json_file.close()
@@ -748,7 +749,7 @@ class VCD:
     def __compute_data_pointers(self):
         # WARNING! This function might be extremely slow
         # It does loop over all frames, and updates data pointers at objects, actions, etc
-        # It is useful to convert from VCD 4.2.0 into VCD 4.3.0 (use converter.ConverterVCD420toVCD430)
+        # It is useful to convert from VCD 4.2.0 into VCD 4.3.1 (use converter.ConverterVCD420toVCD430)
 
         # Looping over frames and creating the necessary data_pointers
         if 'frame_intervals' in self.data['vcd']:
@@ -929,6 +930,7 @@ class VCD:
 
     def add_frame_properties(self, frame_num, timestamp=None, properties=None):
         self.__add_frame(frame_num)  # this function internally checks if the frame already exists
+        self.__update_vcd_frame_intervals(FrameIntervals(frame_num))
         self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
         if timestamp is not None:
             assert (isinstance(timestamp, str))
@@ -1316,7 +1318,8 @@ class VCD:
         return self.get_element(ElementType.relation, uid)
 
     def get_element_uid_by_name(self, element_type, name):
-        assert (self.has_elements(element_type))
+        if not self.has_elements(element_type):
+            return None
         element_type_name = element_type.name
         elements = self.data['vcd'][element_type_name + 's']
         for uid, element in elements.items():

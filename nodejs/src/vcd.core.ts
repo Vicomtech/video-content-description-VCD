@@ -1,12 +1,12 @@
 /**
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.2.1.
+VCD is a library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -15,9 +15,13 @@ import * as utils from "./vcd.utils"
 import * as types from "./vcd.types"
 import * as schema from "./vcd.schema"
 
-import Ajv from 'ajv'
+import * as Ajv from 'ajv'
 import { v4 as uuidv4 } from 'uuid'
 import { type } from "os"
+
+//const Ajv = require("ajv").default
+const ajv = new Ajv.default()
+
 
 export enum ElementType {
     object = 0,
@@ -193,9 +197,9 @@ export enum SetMode {
 
 
 /**
-* VCD 4.3.0
+* VCD 4.3.1
 *
-* NOTE: This is the Typescript version of VCD 4.3.0 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
+* NOTE: This is the Typescript version of VCD 4.3.1 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
 *
 * This class is the main manager of VCD 4 content.
 * It can be created void, and add content (e.g. Objects) using the API
@@ -210,8 +214,9 @@ export class VCD {
     private data = {}  
     private schema_version = schema.vcd_schema_version
     private schema = schema.vcd_schema     
-    private ajv = new Ajv()
-    private ajv_validate = this.ajv.compile(this.schema)
+    //private ajv = new Ajv()  // here or as a global variate outside
+    //private ajv_validate = this.ajv.compile(this.schema)
+    private ajv_validate = ajv.compile(this.schema)
 	
     private lastUID = {}
     private useUUID = false
@@ -259,7 +264,7 @@ export class VCD {
                     // Copy the VCD content into this.data
                     this.data = vcd_json
 
-                    // In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
+                    // In VCD 4.3.1 uids are strings, because they can be numeric strings, or UUIDs
                     // but frames are still ints. However, it looks that in Typescript, JSON.parse reads as integer
                     //if('frames' in this.data['vcd']){
                     //    let frames = this.data['vcd']['frames']
@@ -279,8 +284,9 @@ export class VCD {
             }         
             else {
                 this.data = vcd_json
-                if(this.data['vcd']['metadata']['schema_version'] != this.schema_version) {
-                    console.error("The loaded VCD does not have key \'version\' set to " + this.schema_version + '. Unexpected behaviour may happen.')
+                if(this.data['vcd']['metadata']['schema_version'] != "4.3.0" &&
+                this.data['vcd']['metadata']['schema_version'] != "4.3.1") {
+                    console.error("The loaded VCD does not have key \'version\' set to 4.3.0 or 4.3.1. Unexpected behaviour may happen.")
                 }
                 this.computeLastUid();                    
             }   
@@ -934,6 +940,7 @@ export class VCD {
 
     public addFrameProperties(frameNum: number, timestamp = null, additionalProperties = null) {        
         this.addFrame(frameNum);  // this function internally checks if( the frame already exists
+        this.updateVCDFrameIntervals(new FrameIntervals(frameNum))
         this.data['vcd']['frames'][frameNum]['frame_properties'] = this.data['vcd']['frames'][frameNum]['frame_properties'] || {};
 
         if (timestamp != null) {
@@ -1372,6 +1379,40 @@ export class VCD {
 
     public getRelation(uid: string | number) {
         return this.getElement(ElementType.relation, uid);
+    }
+
+    public getElementUidByName(elementType: ElementType, name: string) {
+        if(!this.hasElements(elementType))
+            return null
+        let elementTypeName = ElementType[elementType]
+        let elements = this.data['vcd'][elementTypeName + 's']
+        for (const uid in elements) {
+            let element = elements[uid]
+            let name_element = element['name']
+            if(name_element == name)
+                return uid
+        }
+        return null
+    }
+
+    public getObjectUidByName(name: string) {
+        return this.getElementUidByName(ElementType.object, name)
+    }
+
+    public getActionUidByName(name: string) {
+        return this.getElementUidByName(ElementType.action, name)
+    }
+
+    public getContextUidByName(name: string) {
+        return this.getElementUidByName(ElementType.context, name)
+    }
+
+    public getEventUidByName(name: string) {
+        return this.getElementUidByName(ElementType.event, name)
+    }
+
+    public getRelationUidByName(name: string) {
+        return this.getElementUidByName(ElementType.relation, name)
     }
 
     public getFrame(frameNum: number) {

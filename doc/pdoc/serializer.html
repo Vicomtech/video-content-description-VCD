@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
 <title>vcd.serializer API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.3.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.3.1 …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,32 +22,29 @@
 <h1 class="title">Module <code>vcd.serializer</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.3.0</p>
+<p>VCD (Video Content Description) library v4.3.1</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
-<p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
+<p>Copyright (C) 2021, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.3.0.
+<p>VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
 
-
-import sys
-sys.path.insert(0, &#34;..&#34;)
 import vcd.proto as proto
 from google.protobuf.json_format import Parse
 from google.protobuf.json_format import MessageToJson

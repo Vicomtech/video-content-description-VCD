@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -21,6 +21,7 @@ import math
 import numpy as np
 
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
 import vcd.utils as utils
 
@@ -332,13 +333,14 @@ def convert_KITTI_tracking_to_VCD4():
     # Draw/store scenes in VCD
     for count, key in enumerate(kitti_parser.vcds):
         # Store
+        vcd_base_name = "vcd" + schema.vcd_schema_version.replace(".", "")
         vcd_file_name = os.path.join(kitti_tracking_output_vcd_path,
-                                     "vcd430_kitti_tracking_" + str(count).zfill(4) + ".json")
+                                     vcd_base_name + "_kitti_tracking_" + str(count).zfill(4) + ".json")
         print('Storing VCD file...' + vcd_file_name)
         kitti_parser.vcds[key].save(file_name=vcd_file_name)
 
-        if count == 0:  # Save a copy of the first trace to tests for further VCD tests
-            vcd_file_name = os.path.join("../../tests/etc", "vcd430_kitti_tracking_" + str(count).zfill(4) + ".json")
+        if count == 3:  # Save a copy of trace #003 to tests for further VCD tests
+            vcd_file_name = os.path.join("../../tests/etc", vcd_base_name + "_kitti_tracking_" + str(count).zfill(4) + ".json")
             kitti_parser.vcds[key].save(file_name=vcd_file_name)
 
 

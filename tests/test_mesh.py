@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -15,7 +15,10 @@ VCD is distributed under MIT License. See LICENSE.
 import unittest
 import os
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
+
+vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
 
 
 def get_mesh_geometry_as_string(vertexMap, edgeMap, areaMap):
@@ -195,12 +198,12 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(string_mesh, "[[[25,25,0],[26,25,0],[26,26,0],[25,26,0],[27,25,0],[27,26,0]],"
                                       "[[0,1],[1,2],[2,3],[3,0],[1,4],[4,5],[5,2]],[[0,1,2,3],[4,5,6,1]]]")
 
-        if not os.path.isfile('./etc/vcd430_test_mesh.json'):
-            vcd.save('./etc/vcd430_test_mesh.json', True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_mesh.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_mesh.json', True)
 
     def test_create_mesh_with_API_frames(self):
         # Load from previous test
-        vcd = core.VCD('./etc/vcd430_test_mesh.json')
+        vcd = core.VCD('./etc/' + vcd_version_name + '_test_mesh.json')
 
         # Let's assume we know the structure of the mesh
         #
@@ -253,8 +256,8 @@ class TestBasic(unittest.TestCase):
 
 
         # Save it
-        if not os.path.isfile('./etc/vcd430_test_mesh_frame.json'):
-            vcd.save('./etc/vcd430_test_mesh_frame.json', True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_mesh_frame.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_mesh_frame.json', True)
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

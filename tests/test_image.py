@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -20,9 +20,13 @@ from PIL import Image
 import json
 import base64
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
 import vcd.poly2d as poly
 import vcd.utils as utils
+
+vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+
 
 def draw_basic_image(classes_colors):
     img = np.zeros((640, 480, 3), np.uint8)
@@ -54,10 +58,10 @@ class TestBasic(unittest.TestCase):
                      types.Poly2DType.MODE_POLY2D_ABSOLUTE, False)
         vcd.add_object_data(uid_obj1, poly2)
 
-        if not os.path.isfile('./etc/vcd430_test_polygon2D.json'):
-            vcd.save('./etc/vcd430_test_polygon2D.json', True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_polygon2D.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_polygon2D.json', True)
 
-        vcd_read = core.VCD('./etc/vcd430_test_polygon2D.json', validation=True)
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_polygon2D.json', validation=True)
         vcd_read_stringified = vcd_read.stringify()
         vcd_stringified = vcd.stringify()
         # print(vcd_stringified)
@@ -105,8 +109,8 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(diff_val, 0)
 
-        if not os.path.isfile('./etc/vcd430_test_image.json'):
-            vcd.save('./etc/vcd430_test_image.json', True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_image.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_image.json', True)
 
         #cv.imshow('decoded_image', img_dec)
         #cv.waitKey(0)
@@ -147,8 +151,8 @@ class TestBasic(unittest.TestCase):
                                                  hierarchy=hierarchy_list)
                                     )
 
-        if not os.path.isfile('./etc/vcd430_test_contours.json'):
-            vcd.save('./etc/vcd430_test_contours.json', True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_contours.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_contours.json', True)
 
         # 3.- Reconstruct the image from the VCD poly2d and hierarchies (using OpenCV)
         contours_dict = {}  # A dictionary of contours. Each key is one class type, each value, a contours array
