@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -14,8 +14,11 @@ VCD is distributed under MIT License. See LICENSE.
 import unittest
 import os
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
 import vcd.utils as utils
+
+vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
 
 
 class TestBasic(unittest.TestCase):
@@ -63,10 +66,10 @@ class TestBasic(unittest.TestCase):
                 # print("Frame ", frameNum, ", dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
                 # print("Frame ", frameNum, ", full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
 
-        if not os.path.isfile('./etc/vcd430_test_semantics.json'):
-            vcd.save('./etc/vcd430_test_semantics.json', True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_semantics.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_semantics.json', True)
 
-        vcd_read = core.VCD('./etc/vcd430_test_semantics.json', validation=True)
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_semantics.json', validation=True)
         vcd_read_stringified = vcd_read.stringify()
         vcd_stringified = vcd.stringify()
 
@@ -128,22 +131,22 @@ class TestBasic(unittest.TestCase):
         vcd_c.add_action_data(uid=uid_action1, action_data=types.num(name="subject", val=int(uid_pedestrian1)))
         vcd_c.add_action_data(uid=uid_action2, action_data=types.num(name="subject", val=int(uid_car1)))
 
-        if not os.path.isfile('./etc/vcd430_test_actions_a.json'):
-            vcd_a.save('./etc/vcd430_test_actions_a.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_actions_a.json'):
+            vcd_a.save('./etc/' + vcd_version_name + '_test_actions_a.json')
 
-        vcd_read = core.VCD('./etc/vcd430_test_actions_a.json')
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_actions_a.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd_a.stringify(False, False))
 
-        if not os.path.isfile('./etc/vcd430_test_actions_b.json'):
-            vcd_b.save('./etc/vcd430_test_actions_b.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_actions_b.json'):
+            vcd_b.save('./etc/' + vcd_version_name + '_test_actions_b.json')
 
-        vcd_read = core.VCD('./etc/vcd430_test_actions_b.json')
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_actions_b.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd_b.stringify(False, False))
 
-        if not os.path.isfile('./etc/vcd430_test_actions_c.json'):
-            vcd_c.save('./etc/vcd430_test_actions_c.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_actions_c.json'):
+            vcd_c.save('./etc/' + vcd_version_name + '_test_actions_c.json')
 
-        vcd_read = core.VCD('./etc/vcd430_test_actions_c.json')
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_actions_c.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd_c.stringify(False, False))
 
     def test_relations(self):
@@ -166,10 +169,10 @@ class TestBasic(unittest.TestCase):
         for frame in vcd.data['vcd']['frames'].values():
             self.assertEqual(len(frame['relations']), 1)
 
-        if not os.path.isfile('./etc/vcd430_test_relations_1.json'):
-            vcd.save('./etc/vcd430_test_relations_1.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_relations_1.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_relations_1.json')
 
-        vcd_read = core.VCD('./etc/vcd430_test_relations_1.json')
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_relations_1.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         # Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
@@ -190,10 +193,10 @@ class TestBasic(unittest.TestCase):
             if 7 <= frame_key <= 9:
                 self.assertEqual(len(frame_val['relations']), 1)
 
-        if not os.path.isfile('./etc/vcd430_test_relations_2.json'):
-            vcd.save('./etc/vcd430_test_relations_2.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_relations_2.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_relations_2.json')
 
-        vcd_read = core.VCD('./etc/vcd430_test_relations_2.json')
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_relations_2.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         # Case 3: RDF elements have frame interval and relation doesn't (so it is left frame-less)
@@ -215,18 +218,17 @@ class TestBasic(unittest.TestCase):
             if 0 <= frame_key <= 15:
                 self.assertEqual(frame_val.get('relations'), None)
 
-        if not os.path.isfile('./etc/vcd430_test_relations_3.json'):
-            vcd.save('./etc/vcd430_test_relations_3.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_relations_3.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_relations_3.json')
 
-        vcd_read = core.VCD('./etc/vcd430_test_relations_3.json')
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_relations_3.json')
         self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
 
         pass
 
-
     def test_scene_KITTI_Tracking_3(self):
         sequence_number = 3
-        vcd_file_name = "./etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(
+        vcd_file_name = './etc/' + vcd_version_name + '_kitti_tracking_' + str(sequence_number).zfill(
             4) + ".json"
         vcd = core.VCD(vcd_file_name)
 
@@ -312,8 +314,9 @@ class TestBasic(unittest.TestCase):
         vcd.add_relation_action_action(name="", semantic_type="meets", action_uid_1=uid_action_lane_change, action_uid_2=uid_action_drive_straight_4, frame_value=75)
 
         # Store
-        if not os.path.isfile('./etc/vcd430_kitti_tracking_0003_actions.json'):
-            vcd.save('./etc/vcd430_kitti_tracking_0003_actions.json', validate=True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_kitti_tracking_0003_actions.json'):
+            vcd.save('./etc/' + vcd_version_name + '_kitti_tracking_0003_actions.json', validate=True)
+
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

@@ -1,4 +1,4 @@
-![VCD Video Content Description](doc/logo/VCD_logo_2020.png)
+![VCD Video Content Description](https://github.com/Vicomtech/video-content-description-VCD/blob/master/doc/logo/VCD_logo_2020.png?raw=true)
 # Video Content Description (VCD)
 
 VCD is a metadata format designed to enable the description of scene information, particularly efficient for discrete data series, such as image or point-cloud sequences from sensor data.
@@ -6,9 +6,9 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
 
-The syntax(see [vcd_schema_json-v4.3.0.json](./schema/vcd_schema_json-v4.3.0.json)), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see [vcd_schema_json-v4.3.1.json](./schema/vcd_schema_json-v4.3.1.json)), as a JSON Schema file, contains the full description of the VCD structure.
 
-![VCD](doc/logo/image.svg)
+![VCD](https://github.com/Vicomtech/video-content-description-VCD/blob/master/doc/logo/image.svg?raw=true)
 
 ## Details
 
@@ -38,7 +38,7 @@ python setup.py install
 NPM packages can be used
 
 ```
-npm install vcd
+npm install vcd-ts
 ```
 
 ## Usage
@@ -57,8 +57,8 @@ import vcd.types as types
 myVCD = core.VCD()
 
 # Add Objects, Actions, etc.
-uid = myVCD.add_object(name='someName', semantic_type='#Pedestrian')
-myVCD.add_object_data(uid=uid, object_data=types.bbox(name="head", val=[0, 0, 100, 200]))
+uid1 = myVCD.add_object(name='ped1', semantic_type='#Pedestrian')
+myVCD.add_object_data(uid=uid1, object_data=types.bbox(name="head", val=[0, 0, 100, 200]))
 
 ...
 
@@ -70,7 +70,6 @@ The API contains useful functions that ensures the produced content is compliant
 
 ```python
 import vcd.core as core
-import vcd.types as types
 
 # Load a VCD file
 myVCD = core.vcd('./tests/etc/vcd430_test_kitti_tracking_0_actions.json')
@@ -106,7 +105,13 @@ See examples in [nodejs/src/\__tests\__](nodejs/src/__tests__)
 
 VCD is defined as a syntax, and as such, different versions imply differences in the syntax or data structure. In addition, each version has a dedicated library version compatible with it.
 
-Last version is VCD 4.3.0.
+Last version is VCD 4.3.1.
+
+Main changes at VCD 4.3.1 from VCD 4.3.0:
+* Bug fixing (npm package)
+* Multi-value attributes (vec of strings)
+* Additional properties true for all attributes
+* Customizable intrinsics
 
 Main changes at VCD 4.3.0 from VCD 4.2.0 are:
 * Integrated SCL (Scene Configuration Library) into VCD
@@ -159,32 +164,37 @@ VCD has evolved as follows:
     * Pixel-wise loss-less compression modes
     * Comparison routines
 * VCD 4.0 (2019)
-    * Python library
+    * Python API
     * Element and Frame-wise mode simultaneously
     * Multi-sensor and multi-interval
     * Native Python JSON serialization
     * Google's Protocol Buffer serialization
     * Object data 'num' for single numbers, 'vec' for arrays of numbers
-* VCD 4.1-3 (2020)
+* VCD 4.1-3 (2020-2021)
     * Explicit definition of intrinsics, extrinsics and odometry
     * Enhanced timestamping and sync information
     * Enhanced semantics management (RDF triplets)
     * Integrated SCL and complex calibration set-ups
     * Drawing functions
     * Preliminar work on Ontology and Neo4j connection
+    * Multi-value attributes ('vec' of strings)
+    * Typescript API
+    * NPM and Pypi packages
 
 
 ## Related projects
 
 VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART.
 
+If your project also uses VCD, let me know!
+
 ## OpenLABEL
 
 Along with the development of VCD, we are participating in the definition of the incoming labeling standard for the automotive sector: ASAM OpenLABEL.
 
-https://www.asam.net/project-detail/scenario-storage-and-labelling/
+https://www.asam.net/project-detail/asam-openlabel-v100
 
-VCD 4.3.0 is shaped to be compliant with the format defined in OpenLABEL concept paper. As the standard evolves into a standardisation project, VCD will evolve as well to become the first labeling toolset compliant with the standard.
+VCD 4.3.1 is shaped to be compliant with the format defined in OpenLABEL concept paper. As the standard evolves into a standardisation project, VCD will evolve as well to become the first labeling toolset compliant with the standard.
 
 ## Credits
 
@@ -197,11 +207,11 @@ Main developers:
 * Orti Senderos - osenderos@vicomtech.org
 
 Contributors:
-Thanks to Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta, Andoni Mujika and many others in Vicomtech. 
+Thanks to Andoni Mujika, Juan Diego Ortega, Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta and many others in Vicomtech. 
 
 ## License
 
-Copyright (c) 2020 Vicomtech
+Copyright (c) 2021 Vicomtech
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -225,4 +235,4 @@ SOFTWARE.
 
 Part of the work carried out to make VCD a reality has been published in Elsevier SoftwareX journal. If you find VCD useful and want to cite it in your publications, please use the following citation (the paper pdf can be accessed [here](https://www.sciencedirect.com/science/article/pii/S2352711020303666)).
 
-M. Nieto, O. Senderos, and O. Otaegui, “Boosting AI applications: Labeling format for complex datasets,” SoftwareX, 2021, p. 100653, vol. 13 (https://doi.org/10.1016/j.softx.2020.100653).
+M. Nieto, O. Senderos, and O. Otaegui, "Boosting AI applications: Labeling format for complex datasets," SoftwareX, 2021, p. 100653, vol. 13 (https://doi.org/10.1016/j.softx.2020.100653).

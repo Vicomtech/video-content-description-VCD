@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -14,7 +14,10 @@ VCD is distributed under MIT License. See LICENSE.
 import unittest
 import os
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
+
+vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
 
 
 class TestBasic(unittest.TestCase):
@@ -29,15 +32,15 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid=uid1, object_data= types.text(name='type', val='dashed'), frame_value=(5, 10))
         #print(vcd.stringify(False))
         #self.assertEqual(vcd.stringify(False), '{"vcd":{"frames":{"5":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"6":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"7":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"8":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"9":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"10":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":5,"frame_end":10}],"objects":{"0":{"name":"line1","type":"#LaneMarking","frame_intervals":[{"frame_start":5,"frame_end":10}],"object_data_pointers":{"type":{"type":"text","frame_intervals":[{"frame_start":5,"frame_end":10}]}}}}}}')
-        if not os.path.isfile('./etc/vcd430_test_static_dynamic_object_1_1.json'):
-            vcd.save('./etc/vcd430_test_static_dynamic_object_1_1.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_static_dynamic_object_1_1.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_static_dynamic_object_1_1.json')
 
         # 3. - Let's add some static attributes
         vcd.add_object_data(uid=uid1, object_data= types.text(name='color', val='yellow'))
         #print(vcd.stringify(False))
         #self.assertEqual(vcd.stringify(False), '{"vcd":{"frames":{"5":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"6":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"7":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"8":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"9":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}},"10":{"objects":{"0":{"object_data":{"text":[{"name":"type","val":"dashed"}]}}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":5,"frame_end":10}],"objects":{"0":{"name":"line1","type":"#LaneMarking","frame_intervals":[{"frame_start":5,"frame_end":10}],"object_data_pointers":{"type":{"type":"text","frame_intervals":[{"frame_start":5,"frame_end":10}]},"color":{"type":"text","frame_intervals":[]}},"object_data":{"text":[{"name":"color","val":"yellow"}]}}}}}')
-        if not os.path.isfile('./etc/vcd430_test_static_dynamic_object_1_2.json'):
-            vcd.save('./etc/vcd430_test_static_dynamic_object_1_2.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_static_dynamic_object_1_2.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_static_dynamic_object_1_2.json')
 
     def test_static_dynamic_object_2(self):
         # 1.- Create a VCD instance
@@ -53,8 +56,8 @@ class TestBasic(unittest.TestCase):
 
         #print(vcd.stringify(False))
         #self.assertEqual(vcd.stringify(False), '{"vcd":{"frames":{"5":{"objects":{"0":{}}},"6":{"objects":{"0":{}}},"7":{"objects":{"0":{}}},"8":{"objects":{"0":{}}},"9":{"objects":{"0":{}}},"10":{"objects":{"0":{}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":5,"frame_end":10}],"objects":{"0":{"name":"line1","type":"#BottsDots","frame_intervals":[{"frame_start":5,"frame_end":10}],"object_data":{"poly2d":[{"name":"poly","val":[100,100,110,110,120,130,500,560],"mode":"MODE_POLY2D_ABSOLUTE","closed":false,"attributes":{"text":[{"name":"type","val":"single_dot"}]}}]},"object_data_pointers":{"poly":{"type":"poly2d","frame_intervals":[],"attributes":{"type":"text"}}}}}}}')
-        if not os.path.isfile('./etc/vcd430_test_static_dynamic_object_2.json'):
-            vcd.save('./etc/vcd430_test_static_dynamic_object_2.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_static_dynamic_object_2.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_static_dynamic_object_2.json')
 
     def test_element_data_same_name(self):
         vcd = core.VCD()
@@ -68,8 +71,8 @@ class TestBasic(unittest.TestCase):
 
         # The initial 'validated' Boolean, with value true is substituted by false, instead of added
         #self.assertEqual(vcd.stringify(False), '{"vcd":{"frames":{"0":{"actions":{"0":{"action_data":{"boolean":[{"name":"validated","val":false},{"name":"occluded","val":false}],"text":[{"name":"label","val":"manual"}]}}}},"1":{"actions":{"0":{"action_data":{"boolean":[{"name":"validated","val":false},{"name":"occluded","val":false}],"text":[{"name":"label","val":"manual"}]}}}},"2":{"actions":{"0":{"action_data":{"boolean":[{"name":"validated","val":false},{"name":"occluded","val":false}],"text":[{"name":"label","val":"manual"}]}}}},"3":{"actions":{"0":{"action_data":{"boolean":[{"name":"validated","val":false},{"name":"occluded","val":false}],"text":[{"name":"label","val":"manual"}]}}}},"4":{"actions":{"0":{"action_data":{"boolean":[{"name":"validated","val":false},{"name":"occluded","val":false}],"text":[{"name":"label","val":"manual"}]}}}},"5":{"actions":{"0":{"action_data":{"boolean":[{"name":"validated","val":false},{"name":"occluded","val":false}],"text":[{"name":"label","val":"manual"}]}}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":5}],"actions":{"0":{"name":"","type":"#Walking","frame_intervals":[{"frame_start":0,"frame_end":5}],"action_data_pointers":{"validated":{"type":"boolean","frame_intervals":[{"frame_start":0,"frame_end":5}]},"occluded":{"type":"boolean","frame_intervals":[{"frame_start":0,"frame_end":5}]},"label":{"type":"text","frame_intervals":[{"frame_start":0,"frame_end":5}]}}}}}}')
-        if not os.path.isfile('./etc/vcd430_test_element_data_same_name.json'):
-            vcd.save('./etc/vcd430_test_element_data_same_name.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_element_data_same_name.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_element_data_same_name.json')
 
     def test_element_data_nested_same_name(self):
         vcd = core.VCD()
@@ -81,8 +84,8 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid1, body, (0, 5))
 
         #self.assertEqual(vcd.stringify(False), '{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"1":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"2":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"3":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"4":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}},"5":{"objects":{"0":{"object_data":{"bbox":[{"name":"body","val":[0,0,100,150],"attributes":{"boolean":[{"name":"visible","val":false},{"name":"occluded","val":false}]}}]}}}}},"schema_version":"4.3.0","frame_intervals":[{"frame_start":0,"frame_end":5}],"objects":{"0":{"name":"mike","type":"#Pedestrian","frame_intervals":[{"frame_start":0,"frame_end":5}],"object_data_pointers":{"body":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":5}],"attributes":{"visible":"boolean","occluded":"boolean"}}}}}}}')
-        if not os.path.isfile('./etc/vcd430_test_element_data_nested_same_name.json'):
-            vcd.save('./etc/vcd430_test_element_data_nested_same_name.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_element_data_nested_same_name.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_element_data_nested_same_name.json')
 
     def test_action_frame_interval_modification(self):
         vcd = core.VCD()
@@ -163,14 +166,14 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor', frame_num=3), None)
         self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor')['val'], 'Pink')
 
-        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_a_before.json'):
-            vcd_a.save('./etc/vcd430_test_object_change_from_static_to_dynamic_a_before.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_a_before.json'):
+            vcd_a.save('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_a_before.json')
 
         # Let's modify the object so it has a certain frame interval (object_data frame intervals remain void)
         vcd_a.add_object(name="Enara", semantic_type="Child", uid=uid_a, frame_value=[(5, 10)])
 
-        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_a_after.json'):
-            vcd_a.save('./etc/vcd430_test_object_change_from_static_to_dynamic_a_after.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_a_after.json'):
+            vcd_a.save('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_a_after.json')
 
         # Check that the element data is now also defined for this frame interval (and thus removed from the root)
         self.assertEqual(vcd_a.get_object_data(uid=uid_a, data_name='FavouriteColor', frame_num=3), None)
@@ -182,16 +185,16 @@ class TestBasic(unittest.TestCase):
         vcd_b.add_object(name="room1", semantic_type="Room", frame_value=[(0, 10)])
         uid_b = vcd_b.add_object(name="Enara", semantic_type="Child")
         vcd_b.add_object_data(uid=uid_b, object_data=types.text(name="FavouriteColor", val="Pink"))
-        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_b_before.json'):
-            vcd_b.save('./etc/vcd430_test_object_change_from_static_to_dynamic_b_before.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_b_before.json'):
+            vcd_b.save('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_b_before.json')
         # In this case, as the VCD has frames, the object is assumed to exist in all the scene
         # when the user asks for element_data at certain frame, VCD looks for element_data at that frame, and if there
         # is nothing, it then searches at the static part
         self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=3)['val'], 'Pink')
         self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor')['val'], 'Pink')
         vcd_b.add_object(name="Enara", semantic_type="Child", uid=uid_b, frame_value=[(5, 10)])
-        if not os.path.isfile('./etc/vcd430_test_object_change_from_static_to_dynamic_b_after.json'):
-            vcd_b.save('./etc/vcd430_test_object_change_from_static_to_dynamic_b_after.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_b_after.json'):
+            vcd_b.save('./etc/' + vcd_version_name + '_test_object_change_from_static_to_dynamic_b_after.json')
         self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=3), None)
         self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor')['val'], 'Pink')
         self.assertEqual(vcd_b.get_object_data(uid=uid_b, data_name='FavouriteColor', frame_num=8)['val'], 'Pink')
@@ -201,11 +204,11 @@ class TestBasic(unittest.TestCase):
         uid1 = vcd.add_object("Enara", "Child")
         vcd.add_object_data(uid=uid1, object_data=types.text(name="FavouriteColor", val="Pink"))
         vcd.add_object_data(uid=uid1, object_data=types.vec(name="Position", val=(1.0, 5.0)), frame_value=8)
-        if not os.path.isfile('./etc/vcd430_test_object_change_from_dynamic_to_static_before.json'):
-            vcd.save('./etc/vcd430_test_object_change_from_dynamic_to_static_before.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_object_change_from_dynamic_to_static_before.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_object_change_from_dynamic_to_static_before.json')
         vcd.add_object(name="Enara", semantic_type="Child", uid=uid1, set_mode=core.SetMode.replace)
-        if not os.path.isfile('./etc/vcd430_test_object_change_from_dynamic_to_static_after.json'):
-            vcd.save('./etc/vcd430_test_object_change_from_dynamic_to_static_after.json')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_object_change_from_dynamic_to_static_after.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_object_change_from_dynamic_to_static_after.json')
         self.assertEqual(vcd.get_object_data(uid=uid1, data_name='FavouriteColor', frame_num=8), None)
         self.assertEqual(vcd.get_object_data(uid=uid1, data_name='FavouriteColor')['val'], 'Pink')
         self.assertEqual(vcd.get_object_data(uid=uid1, data_name='Position', frame_num=8), None)

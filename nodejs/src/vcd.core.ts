@@ -1380,6 +1380,40 @@ export class VCD {
         return this.getElement(ElementType.relation, uid);
     }
 
+    public getElementUidByName(elementType: ElementType, name: string) {
+        if(!this.hasElements(elementType))
+            return null
+        let elementTypeName = ElementType[elementType]
+        let elements = this.data['vcd'][elementTypeName + 's']
+        for (const uid in elements) {
+            let element = elements[uid]
+            let name_element = element['name']
+            if(name_element == name)
+                return uid
+        }
+        return null
+    }
+
+    public getObjectUidByName(name: string) {
+        return this.getElementUidByName(ElementType.object, name)
+    }
+
+    public getActionUidByName(name: string) {
+        return this.getElementUidByName(ElementType.action, name)
+    }
+
+    public getContextUidByName(name: string) {
+        return this.getElementUidByName(ElementType.context, name)
+    }
+
+    public getEventUidByName(name: string) {
+        return this.getElementUidByName(ElementType.event, name)
+    }
+
+    public getRelationUidByName(name: string) {
+        return this.getElementUidByName(ElementType.relation, name)
+    }
+
     public getFrame(frameNum: number) {
         if (this.data['vcd']['frames']) {
             if(frameNum in this.data['vcd']['frames'])

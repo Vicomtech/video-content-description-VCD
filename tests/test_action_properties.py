@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -14,7 +14,11 @@ VCD is distributed under MIT License. See LICENSE.
 import unittest
 import os
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
+
+
+vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
 
 
 class TestBasic(unittest.TestCase):
@@ -43,9 +47,9 @@ class TestBasic(unittest.TestCase):
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="risk", val=0.7), frame_value=4)
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="weight", val=0.5), frame_value=4)
 
-        if not os.path.isfile('./etc/vcd430_test_actions_with_action_data.json'):
-            vcd.save('./etc/vcd430_test_actions_with_action_data.json', True)
-        vcd_read = core.VCD('./etc/vcd430_test_actions_with_action_data.json', validation=True)
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_actions_with_action_data.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_actions_with_action_data.json', True)
+        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_actions_with_action_data.json', validation=True)
         vcd_read_stringified = vcd_read.stringify()
         vcd_stringified = vcd.stringify()
         # print(vcd_stringified)

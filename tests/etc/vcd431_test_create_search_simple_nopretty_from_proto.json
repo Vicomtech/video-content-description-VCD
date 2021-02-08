@@ -1,0 +1,107 @@
+{
+    "vcd": {
+        "metadata": {
+            "schema_version": "4.3.1"
+        },
+        "objects": {
+            "0": {
+                "name": "marcos",
+                "object_data": {
+                    "bbox": [
+                        {
+                            "name": "head",
+                            "val": [
+                                10.0,
+                                10.0,
+                                30.0,
+                                30.0
+                            ]
+                        },
+                        {
+                            "name": "body",
+                            "val": [
+                                0.0,
+                                0.0,
+                                60.0,
+                                120.0
+                            ]
+                        }
+                    ],
+                    "num": [
+                        {
+                            "name": "accel",
+                            "val": 0.1
+                        }
+                    ],
+                    "vec": [
+                        {
+                            "name": "speed",
+                            "val": [
+                                0.0,
+                                0.2
+                            ]
+                        }
+                    ]
+                },
+                "type": "person",
+                "object_data_pointers": {
+                    "head": {
+                        "type": "bbox"
+                    },
+                    "body": {
+                        "type": "bbox"
+                    },
+                    "speed": {
+                        "type": "vec"
+                    },
+                    "accel": {
+                        "type": "num"
+                    }
+                }
+            },
+            "1": {
+                "name": "peter",
+                "object_data": {
+                    "num": [
+                        {
+                            "name": "age",
+                            "val": 38.0
+                        }
+                    ],
+                    "vec": [
+                        {
+                            "name": "eyeL",
+                            "val": [
+                                0.0,
+                                0.0,
+                                10.0,
+                                10.0
+                            ]
+                        },
+                        {
+                            "name": "eyeR",
+                            "val": [
+                                0.0,
+                                0.0,
+                                10.0,
+                                10.0
+                            ]
+                        }
+                    ]
+                },
+                "type": "person",
+                "object_data_pointers": {
+                    "age": {
+                        "type": "num"
+                    },
+                    "eyeL": {
+                        "type": "vec"
+                    },
+                    "eyeR": {
+                        "type": "vec"
+                    }
+                }
+            }
+        }
+    }
+}

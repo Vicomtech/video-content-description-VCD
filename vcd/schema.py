@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -14,7 +14,7 @@ VCD is distributed under MIT License. See LICENSE.
 ######################################
 # Fully manually writing the schema
 ######################################
-vcd_schema_version = "4.3.0"
+vcd_schema_version = "4.3.1"
 vcd_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
@@ -558,7 +558,7 @@ vcd_schema = {
                             "type": "array",
                             "comment": "This is a 3x4 camera matrix which projects  \
                                        3D homogeneous points (4x1) from Sensor Coordinate \
-                                       System (SCS) into the Image Coordinate Sysmte (ICS),\
+                                       System (SCS) into the Image Coordinate System (ICS),\
                                        plane points (3x1). \
                                        This is the usual K matrix for camera projection, but\
                                        extended from 3x3 to 3x4, to enable its usage to project\
@@ -585,7 +585,8 @@ vcd_schema = {
                                         0.0000000000000000000,
                                         -4.7033609773998064e-02]
                         }
-                    }
+                    },
+                    "additionalProperties": True
                 },
                 "intrinsics_fisheye": {
                     "type": "object",
@@ -603,7 +604,8 @@ vcd_schema = {
                             "maxItems": 4,
                             "items": {"type": "number"}
                         }
-                    }
+                    },
+                    "additionalProperties": True
                 }
             }],
             "sync": {

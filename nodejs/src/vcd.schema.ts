@@ -584,7 +584,8 @@ export const vcd_schema = {
                                         0.0000000000000000000,
                                         -4.7033609773998064e-02]
                         }
-                    }
+                    },
+                    "additionalProperties": true
                 },
                 "intrinsics_fisheye": {
                     "type": "object",
@@ -602,7 +603,8 @@ export const vcd_schema = {
                             "maxItems": 4,
                             "items": {"type": "number"}
                         }
-                    }
+                    },
+                    "additionalProperties": true
                 }
             }],
             "sync": {
