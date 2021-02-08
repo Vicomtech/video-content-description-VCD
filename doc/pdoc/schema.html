@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
 <title>vcd.schema API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.3.0 …" />
+<meta name="description" content="VCD (Video Content Description) library v4.3.1 …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,25 +22,25 @@
 <h1 class="title">Module <code>vcd.schema</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.3.0</p>
+<p>VCD (Video Content Description) library v4.3.1</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
-<p>Copyright (C) 2020, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
+<p>Copyright (C) 2021, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.3.0.
+<p>VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -48,7 +48,7 @@ VCD is distributed under MIT License. See LICENSE.
 ######################################
 # Fully manually writing the schema
 ######################################
-vcd_schema_version = &#34;4.3.0&#34;
+vcd_schema_version = &#34;4.3.1&#34;
 vcd_schema = {
     &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema#&#34;,
     &#34;type&#34;: &#34;object&#34;,
@@ -592,7 +592,7 @@ vcd_schema = {
                             &#34;type&#34;: &#34;array&#34;,
                             &#34;comment&#34;: &#34;This is a 3x4 camera matrix which projects  \
                                        3D homogeneous points (4x1) from Sensor Coordinate \
-                                       System (SCS) into the Image Coordinate Sysmte (ICS),\
+                                       System (SCS) into the Image Coordinate System (ICS),\
                                        plane points (3x1). \
                                        This is the usual K matrix for camera projection, but\
                                        extended from 3x3 to 3x4, to enable its usage to project\
@@ -619,7 +619,8 @@ vcd_schema = {
                                         0.0000000000000000000,
                                         -4.7033609773998064e-02]
                         }
-                    }
+                    },
+                    &#34;additionalProperties&#34;: True
                 },
                 &#34;intrinsics_fisheye&#34;: {
                     &#34;type&#34;: &#34;object&#34;,
@@ -637,7 +638,8 @@ vcd_schema = {
                             &#34;maxItems&#34;: 4,
                             &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
                         }
-                    }
+                    },
+                    &#34;additionalProperties&#34;: True
                 }
             }],
             &#34;sync&#34;: {
@@ -685,7 +687,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;rbbox&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -707,7 +709,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;num&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -718,7 +720,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;text&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -729,7 +731,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;boolean&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -740,7 +742,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;cuboid&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -756,7 +758,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;image&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -769,7 +771,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;mime_type&#34;, &#34;encoding&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;mat&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -787,7 +789,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;channels&#34;, &#34;width&#34;, &#34;height&#34;, &#34;data_type&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;binary&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -800,7 +802,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;encoding&#34;, &#34;data_type&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;vec&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -809,12 +811,17 @@ vcd_schema = {
                 &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;val&#34;: {
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;type&#34;: &#34;number&#34;}
+                    &#34;item&#34;: {
+                        &#34;oneOf&#34;: [
+                            {&#34;type&#34;: &#34;number&#34;},
+                            {&#34;type&#34;: &#34;string&#34;}
+                        ]
+                    }
                 },
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;point2d&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -831,7 +838,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;point3d&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -848,7 +855,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;poly2d&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -878,7 +885,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;mode&#34;, &#34;closed&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;poly3d&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -893,7 +900,7 @@ vcd_schema = {
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;closed&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;attributes&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -951,7 +958,7 @@ vcd_schema = {
                     },
                     &#34;additionalProperties&#34;: False
                 },
-                &#34;additionalProperties&#34;: False
+                &#34;additionalProperties&#34;: True
             }
         },
         &#34;line_reference&#34;: {
@@ -968,7 +975,7 @@ vcd_schema = {
                 &#34;reference_type&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
         &#34;area_reference&#34;: {
             &#34;type&#34;: &#34;object&#34;,
@@ -982,9 +989,8 @@ vcd_schema = {
                 &#34;reference_type&#34;: {&#34;type&#34;: &#34;string&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
         },
-
     },
     &#34;required&#34;: [&#34;vcd&#34;],
     &#34;additionalProperties&#34;: False
