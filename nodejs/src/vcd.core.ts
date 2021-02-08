@@ -1,12 +1,12 @@
 /**
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.2.1.
+VCD is a library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -197,9 +197,9 @@ export enum SetMode {
 
 
 /**
-* VCD 4.3.0
+* VCD 4.3.1
 *
-* NOTE: This is the Typescript version of VCD 4.3.0 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
+* NOTE: This is the Typescript version of VCD 4.3.1 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
 *
 * This class is the main manager of VCD 4 content.
 * It can be created void, and add content (e.g. Objects) using the API
@@ -264,7 +264,7 @@ export class VCD {
                     // Copy the VCD content into this.data
                     this.data = vcd_json
 
-                    // In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
+                    // In VCD 4.3.1 uids are strings, because they can be numeric strings, or UUIDs
                     // but frames are still ints. However, it looks that in Typescript, JSON.parse reads as integer
                     //if('frames' in this.data['vcd']){
                     //    let frames = this.data['vcd']['frames']
@@ -284,8 +284,9 @@ export class VCD {
             }         
             else {
                 this.data = vcd_json
-                if(this.data['vcd']['metadata']['schema_version'] != this.schema_version) {
-                    console.error("The loaded VCD does not have key \'version\' set to " + this.schema_version + '. Unexpected behaviour may happen.')
+                if(this.data['vcd']['metadata']['schema_version'] != "4.3.0" &&
+                this.data['vcd']['metadata']['schema_version'] != "4.3.1") {
+                    console.error("The loaded VCD does not have key \'version\' set to 4.3.0 or 4.3.1. Unexpected behaviour may happen.")
                 }
                 this.computeLastUid();                    
             }   

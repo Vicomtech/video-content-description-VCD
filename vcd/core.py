@@ -290,20 +290,20 @@ class VCD:
                                 validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
                                 json_file.close()
 
-                            # In VCD 4.3.0 uids are strings, because they can be numeric strings, or UUIDs
+                            # In VCD 4.3.1 uids are strings, because they can be numeric strings, or UUIDs
                             # but frames are still ints, so let's parse like that
                             if 'frames' in self.data['vcd']:
                                 frames = self.data['vcd']['frames']
                                 if frames:  # So frames is not empty
                                     self.data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
                         else:
-                            raise Exception("ERROR: This vcd file does not seem to be 4.3.0 nor 4.2.0")
+                            raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
                     else:
-                        raise Exception("ERROR: This vcd file does not seem to be 4.3.0 nor 4.2.0")
+                        raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
             elif 'VCD' in read_data:
                 # This is 3.x
                 warnings.warn("WARNING: Converting VCD 3.3.0 to VCD 4.3.1. A full revision is recommended.")
-                # Assuming this is VCD 3.3.0, let's load into VCD 4.3.0
+                # Assuming this is VCD 3.3.0, let's load into VCD 4.3.1
                 self.reset()  # to init object
                 converter.ConverterVCD330toVCD431(read_data, self)  # self is modified internally
 
@@ -749,7 +749,7 @@ class VCD:
     def __compute_data_pointers(self):
         # WARNING! This function might be extremely slow
         # It does loop over all frames, and updates data pointers at objects, actions, etc
-        # It is useful to convert from VCD 4.2.0 into VCD 4.3.0 (use converter.ConverterVCD420toVCD430)
+        # It is useful to convert from VCD 4.2.0 into VCD 4.3.1 (use converter.ConverterVCD420toVCD430)
 
         # Looping over frames and creating the necessary data_pointers
         if 'frame_intervals' in self.data['vcd']:

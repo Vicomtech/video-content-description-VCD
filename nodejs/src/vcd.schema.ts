@@ -1,12 +1,12 @@
 /*
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v4.3.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.3.0.
+VCD is a library to create and manage VCD content version 4.3.1.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -14,7 +14,7 @@ VCD is distributed under MIT License. See LICENSE.
 /*######################################
 # Fully manually writing the schema
 ######################################*/
-export const vcd_schema_version = "4.3.0"
+export const vcd_schema_version = "4.3.1"
 export const vcd_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
