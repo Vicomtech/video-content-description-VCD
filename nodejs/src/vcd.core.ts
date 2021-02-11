@@ -893,15 +893,28 @@ export class VCD {
         return length.toString();
     }
 
-    public addCoordinateSystem(name: string, csType: types.CoordinateSystemType, parentName: string = "", poseWrtParent: Array<number> = [], uid = null) {
-        // Create entry
+    public addCoordinateSystem(name: string, csType: types.CoordinateSystemType, parentName: string = "", poseWrtParent: Array<number> = [], uid = null, pose: types.Pose = null) {
+        // Argument pose_wrt_parent can be used to quickly add a list containing the 4x4 matrix
+        // However, argument pose can be used to add any type of Pose object (created with types.Pose)
+        // Both arguments co-exist to maintain backwards compatibility with VCD 4.3.1
         this.data['vcd']['coordinate_systems'] = this.data['vcd']['coordinate_systems'] || {}
-        this.data['vcd']['coordinate_systems'][name] = {
-            'type': types.CoordinateSystemType[csType],
-            'parent': parentName,
-            'pose_wrt_parent': poseWrtParent,
-            'children': []
+
+        if(pose != null) {
+            this.data['vcd']['coordinate_systems'][name] = {
+                'type': types.CoordinateSystemType[csType],
+                'parent': parentName,                
+                'children': []
+            }    
+            Object.assign(this.data['vcd']['coordinate_systems'][name], pose.data_additional)
         }
+        else {
+            this.data['vcd']['coordinate_systems'][name] = {
+                'type': types.CoordinateSystemType[csType],
+                'parent': parentName,
+                'pose_wrt_parent': poseWrtParent,
+                'children': []
+            }
+        }        
 
         if(uid != null) {
             Object.assign(this.data['vcd']['coordinate_systems'][name], {'uid': (new UID(uid)).asStr()})

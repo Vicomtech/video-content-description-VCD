@@ -880,14 +880,26 @@ class VCD:
         self.data['vcd']['ontologies'][str(length)] = ontology_name
         return str(length)
 
-    def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=[], uid=None):
+    def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=[], uid=None, pose=None):
+        # Argument pose_wrt_parent can be used to quickly add a list containing the 4x4 matrix
+        # However, argument pose can be used to add any type of Pose object (created with types.Pose)
+        # Both arguments co-exist to maintain backwards compatibility with VCD 4.3.1
         assert(isinstance(cs_type, types.CoordinateSystemType))
+
         # Create entry
         self.data['vcd'].setdefault('coordinate_systems', {})
-        self.data['vcd']['coordinate_systems'][name] = {'type': cs_type.name,
-                                                        'parent': parent_name,
-                                                        'pose_wrt_parent': pose_wrt_parent,
-                                                        'children': []}
+
+        if pose is not None:
+            assert(isinstance(pose, types.Pose))
+            self.data['vcd']['coordinate_systems'][name] = {'type': cs_type.name,
+                                                            'parent': parent_name,
+                                                            'children': []}
+            self.data['vcd']['coordinate_systems'][name].update({"pose_wrt_parent": pose.data_additional})
+        else:
+            self.data['vcd']['coordinate_systems'][name] = {'type': cs_type.name,
+                                                            'parent': parent_name,
+                                                            'pose_wrt_parent': pose_wrt_parent,
+                                                            'children': []}
         if uid is not None:
             assert(isinstance(uid, str))
             self.data['vcd']['coordinate_systems'][name].update({"uid": uid})
@@ -904,7 +916,7 @@ class VCD:
                               "Coordinate systems must be introduced in order")
 
     def add_transform(self, frame_num, transform):
-        assert (isinstance(frame_num, int))
+        assert(isinstance(frame_num, int))
         assert(isinstance(transform, types.Transform))
 
         self.__add_frame(frame_num)  # this function internally checks if the frame already exists

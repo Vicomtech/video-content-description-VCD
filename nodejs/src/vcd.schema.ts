@@ -511,20 +511,25 @@ export const vcd_schema = {
                     "items": {"type": "string"},
                 },
                 "pose_wrt_parent": {
-                    "description": "It is a 4x4 homogeneous matrix, to enable transform from\
-                                    3D Cartersian Systems easily. Note that the pose_children_wrt_parent_4x4 is\
-                                    the transform_parent_to_child_4x4:\
-                                    X_child = pose_child_wrt_parent_4x4 * X_parent\
-                                    X_child = transform_parent_to_child_4x4 * X_parent.\
-                                   NOTE: For camera or other projective systems (3D->2D) this pose is the extrinsic\
-                                   calibration, the projection itself is encoded as the intrinsic information, which\
-                                   is labeled inside the corresponding stream.",
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "example": [1.0, 0.0, 0.0, 10.0,
+                    "oneOf": [
+                        {
+                            "description": "It is a 4x4 homogeneous matrix, to enable transform from 3D Cartersian Systems easily. \
+                                            Note that the pose_children_wrt_parent_4x4 is the transform_parent_to_child_4x4:\
+                                            X_child = pose_child_wrt_parent_4x4 * X_parent\
+                                            X_child = transform_parent_to_child_4x4 * X_parent.\
+                                            NOTE: For camera or other projective systems (3D->2D) this pose is the extrinsic calibration, \
+                                            the projection itself is encoded as the intrinsic information, which is labeled inside the corresponding stream.",
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "example": [1.0, 0.0, 0.0, 10.0,
                                 0.0, 1.0, 0.0, 5.0,
                                 0.0, 0.0, 1.0, 1.0,
-                                0.0, 0.0, 0.0, 1.0]
+                                0.0, 0.0, 0.0, 1.0]},
+                        {
+                            "type": "object",
+                            "description": "A pose can be expressed in several ways, e.g. a rotation and traslation vectors."
+                        }
+                    ]
                 },
                 "uid": {"type": "string"}
             },
@@ -592,11 +597,11 @@ export const vcd_schema = {
                     "properties": {
                         "width_px": {"type": "integer"},
                         "height_px": {"type": "integer"},
-                        "fov_deg": {"type": "number"},
-                        "center_x_px": {"type": "number"},
-                        "center_y_px": {"type": "number"},
-                        "radius_x_px": {"type": "number"},
-                        "radius_y_px": {"type": "number"},
+                        "fov_deg": {"type": ["number", "null"]},
+                        "center_x_px": {"type": ["number", "null"]},
+                        "center_y_px": {"type": ["number", "null"]},
+                        "radius_x_px": {"type": ["number", "null"]},
+                        "radius_y_px": {"type": ["number", "null"]},
                         "lens_coeffs": {
                             "type": "array",
                             "minItems": 4,
@@ -605,6 +610,9 @@ export const vcd_schema = {
                         }
                     },
                     "additionalProperties": true
+                },
+                "intrinsics_custom": {
+                    "type": "object"
                 }
             }],
             "sync": {

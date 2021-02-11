@@ -115,40 +115,47 @@ export class IntrinsicsFisheye extends Intrinsics {
 	}
 }
 
+export class IntrinsicsCustom extends Intrinsics {
+	constructor(additionalItems) {
+		super()
+		this.data['intrinsics_custom'] = {}
+		if(additionalItems != null){			
+			Object.assign(this.data['intrinsics_custom'], additionalItems);
+		}
+	}
+}
+
 export class Transform {
 	data: object
-	constructor(srcName: string, dstName: string, transformSrcToDst4x4: Array<number>, additionalItems: object = null) {
-		var num_coeffs = transformSrcToDst4x4.length;
-		if(num_coeffs != 16){
-			console.warn("WARNING: transformSrcToDst4x4 length not 16");
-			return;
-		}
-		this.data = {};
+	data_additional: object
+	constructor(srcName: string, dstName: string, additionalItems: object = null) {		
+		this.data = {}
+		this.data_additional = {}
 		let name = srcName + 'To' + dstName
-		this.data[name] = {}
+		this.data[name] = {}		
 		this.data[name]['src'] = srcName
 		this.data[name]['dst'] = dstName
-		this.data[name]['transform_src_to_dst_4x4'] = transformSrcToDst4x4
-		
+				
 		if(additionalItems != null){			
 			Object.assign(this.data[name], additionalItems);
+			Object.assign(this.data_additional, additionalItems)
 		}
 	}
 }
 
 export class Pose extends Transform {
-	constructor(subjectName: string, referenceName: string, poseSubjectWrtReference4x4: Array<number>, additionalItems: object = null) {
+	constructor(subjectName: string, referenceName: string, additionalItems: object = null) {
 		// NOTE: the pose of subject_name system wrt to reference_name system is the transform
         // from the reference_name system to the subject_name system
-		super(referenceName, subjectName, poseSubjectWrtReference4x4, additionalItems)
+		super(referenceName, subjectName, additionalItems)
 	}
 }
 
 export class Extrinsics extends Transform {	
-    constructor(subjectName: string, referenceName: string, poseSubjectWrtReference4x4: Array<number>, additionalItems: object = null) {
+    constructor(subjectName: string, referenceName: string, additionalItems: object = null) {
 		// NOTE: the pose of subject_name system wrt to reference_name system is the transform
         // from the reference_name system to the subject_name system
-		super(referenceName, subjectName, poseSubjectWrtReference4x4, additionalItems)
+		super(referenceName, subjectName, additionalItems)
 	}
 }
 

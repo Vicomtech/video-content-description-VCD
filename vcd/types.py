@@ -65,11 +65,11 @@ class IntrinsicsFisheye(Intrinsics):
         self.data['intrinsics_fisheye']['width_px'] = width_px
         self.data['intrinsics_fisheye']['height_px'] = height_px
         assert (isinstance(lens_coeffs_1x4, list))
-        assert (isinstance(center_x, float))
-        assert (isinstance(center_y, float))
-        assert (isinstance(radius_x, float))
-        assert (isinstance(radius_y, float))
-        assert (isinstance(fov_deg, float))
+        assert (isinstance(center_x, (float, type(None))))
+        assert (isinstance(center_y, (float, type(None))))
+        assert (isinstance(radius_x, (float, type(None))))
+        assert (isinstance(radius_y, (float, type(None))))
+        assert (isinstance(fov_deg, (float, type(None))))
 
         self.data['intrinsics_fisheye']['center_x'] = center_x
         self.data['intrinsics_fisheye']['center_y'] = center_y
@@ -84,32 +84,39 @@ class IntrinsicsFisheye(Intrinsics):
             self.data['intrinsics_fisheye'].update(additional_items)
 
 
+class IntrinsicsCustom(Intrinsics):
+    def __init__(self, **additional_items):
+        Intrinsics.__init__(self)
+        self.data['intrinsics_custom'] = dict()
+        if additional_items is not None:
+            self.data['intrinsics_custom'].update(additional_items)
+
+
 class Transform:
-    def __init__(self, src_name, dst_name, transform_src_to_dst_4x4, **additional_items):
-        assert (isinstance(transform_src_to_dst_4x4, list))
-        assert (len(transform_src_to_dst_4x4) == 16)
+    def __init__(self, src_name, dst_name, **additional_items):
         assert (isinstance(src_name, str))
         assert (isinstance(dst_name, str))
         self.data = dict()
         name = src_name + "_to_" + dst_name
         self.data[name] = dict()
+        self.data_additional = dict()  # this is useful to append only the additional_items
         self.data[name]['src'] = src_name
         self.data[name]['dst'] = dst_name
-        self.data[name]['transform_src_to_dst_4x4'] = transform_src_to_dst_4x4
         if additional_items is not None:
             self.data[name].update(additional_items)
+            self.data_additional.update(additional_items)
 
 
 class Pose(Transform):
-    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
+    def __init__(self, subject_name, reference_name, **additional_items):
         # NOTE: the pose of subject_name system wrt to reference_name system is the transform
         # from the reference_name system to the subject_name system
-        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
+        Transform.__init__(self, src_name=reference_name, dst_name=subject_name, **additional_items)
 
 
 class Extrinsics(Transform):
-    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
-        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
+    def __init__(self, subject_name, reference_name, **additional_items):
+        Transform.__init__(self, src_name=reference_name, dst_name=subject_name, **additional_items)
 
 
 class StreamSync:
