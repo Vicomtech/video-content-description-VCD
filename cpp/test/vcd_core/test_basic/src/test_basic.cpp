@@ -40,6 +40,8 @@ using vcd::types::Vec;
 using vcd::types::Num;
 using vcd::types::Boolean;
 
+using std::string;
+
 #include "vcd.h"
 #include "vcd_types.h"
 #include "setup_strings.h"
@@ -80,8 +82,8 @@ SCENARIO("Create some basic content, without time information, and do some "
             VCD_ptr vcd = VCD::create();
 
             // 2.- Create the Object
-            VCD_UID uid_marcos = vcd->add_object("marcos", "person");
-            CHECK(uid_marcos == 0);
+            std::string uid_marcos = vcd->add_object("marcos", "person");
+            CHECK(uid_marcos == "0");
 
             // 3.- Add some data to the object
             {
@@ -96,7 +98,7 @@ SCENARIO("Create some basic content, without time information, and do some "
                 vcd->add_object_data(uid_marcos, accel_num.get());
             }
 
-            uint32_t uid_peter = vcd->add_object("peter", "person");
+            std::string uid_peter = vcd->add_object("peter", "person");
             {
                 // Define the internal objects for peter
                 Num age("age", 38.0);
@@ -113,10 +115,18 @@ SCENARIO("Create some basic content, without time information, and do some "
 
             // (AVOID RIGHT NOW) 5.- We can ask VCD
 
+            // Save the json info into a file for comparisson
+            string out = "vcd430_test_create_search_simple_pretty_OUT.json";
+            fs::path vcd_out_path = fs::path(asset_path) / fs::path(out);
+            std::ofstream o(vcd_out_path);
+            o << vcd_string_pretty << std::endl;
+            o.close();
+
             // Get the reference JSON text
             //  - No pretty version
             char vcd_np[] = "vcd430_test_create_search_simple_nopretty.json";
             fs::path vcd_np_path = fs::path(asset_path) / fs::path(vcd_np);
+//            std::cout << vcd_np_path.c_str() << std::endl;
             REQUIRE(fs::exists(vcd_np_path));
 
             auto vcd_file_nopretty = getFileAsString(vcd_np_path);

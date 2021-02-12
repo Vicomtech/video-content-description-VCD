@@ -34,6 +34,15 @@ enum ElementType {
     ET_size
 };
 
+const std::string
+ElementTypeName[] {
+    "object",
+    "action",
+    "event",
+    "context",
+    "relation"
+};
+
 enum StreamType {
     camera = 1,
     lidar = 2,
@@ -51,8 +60,6 @@ enum RDF {
     rdf_subject = 1,
     rdf_object = 2
 };
-
-class CoordSys;
 
 /**
  * FrameIntervals
@@ -128,15 +135,33 @@ class VCD_Impl : public vcd::VCD {
     save(const std::string& fileName,
          const bool pretty = false) const override;
 
-    VCD_UID
+    std::string
     add_object(const std::string& name,
                const std::string& semantic_type) override;
 
     void
-    add_object_data(const uint32_t uid,
+    add_object_data(const std::string &uid,
                     const types::ObjectData& object_data) override;
 
  protected:
+    json*
+    get_element(const ElementType type, const UID &uid);
+
+    json*
+    get_object(const UID &uid);
+
+    json*
+    get_action(const UID &uid);
+
+    json*
+    get_event(const UID &uid);
+
+    json*
+    get_context(const UID &uid);
+
+    json*
+    get_relation(const UID &uid);
+
     UID
     get_uid_to_assign(const ElementType type, const UID &uid);
 
@@ -144,17 +169,62 @@ class VCD_Impl : public vcd::VCD {
     set_element_at_root_and_frames(const ElementType type,
                                    const std::string &name,
                                    const std::string &semantic_type,
-                                   const FrameIntervals &frame_intervals,
+                                   const FrameIntervals * const frame_intervals,
                                    const UID &uid, const UID &ont_uid,
-                                   const CoordSys * const coord_system);
+                                   const std::string &coord_system);
 
     UID
     set_element(const ElementType type, const std::string &name,
                 const std::string &semantic_type,
-                const FrameIntervals &frame_intervals,
+                const FrameIntervals * const frame_intervals,
                 const UID &uid, const UID &ont_uid,
-                const CoordSys * const coordinate_system = nullptr,
+                const std::string &coordinate_system = nullptr,
                 const SetMode set_mode = union_t);
+
+    void
+    set_element_data(const ElementType type, const UID &uid,
+                     const types::ObjectData &element_data,
+                     const FrameIntervals * const frame_intervals,
+                     const SetMode set_mode = union_t);
+
+    void
+    set_element_data_content(const ElementType type, json &element,
+                             const types::ObjectData &element_data);
+
+    void
+    set_element_data_pointers(const ElementType type, const UID &uid,
+                            const types::ObjectData &element_data,
+                            const FrameIntervals * const f_intervals = nullptr);
+
+    /**
+     * @brief setdefault Simulates the behaviour of setdefault funcion in
+     * python. In python, the setdefault() method returns the value of the
+     * item with the specified key. If the key does not exist, inserts the key,
+     * with the specified value.
+     * @param data The json data structure to manipulate.
+     * @param key The key to evaluate.
+     * @param value The value to store in the case the key does not exists.
+     * @return The reference to the key element.
+     */
+    template <class T>
+    static json&
+    setDefault(json &data, const std::string &key, T &&value);
+
+    bool
+    has(const ElementType type, const UID &uid) const;
+
+    bool
+    hasOntology(const std::string &ont_uid_str) const;
+
+    bool
+    hasCoordSys(const std::string &coord_system) const;
+
+    bool
+    has_element_data(const ElementType type, const UID &uid,
+                     const types::ObjectData &element_data) const;
+
+    static size_t
+    findElementByName(const json &elementList, const std::string &name);
 
  private:
     void reset();

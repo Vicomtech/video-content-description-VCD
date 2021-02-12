@@ -46,17 +46,31 @@ class VCD {
     virtual void
     setUseUUID(const bool val) = 0;
 
+    /**
+     * @brief stringify Returns the information as a string and with a JSON
+     * structure.
+     * @param pretty If true, the return format includes a more readable
+     * presentation, including returns and indentation.
+     * @return The JSON content as a string
+     */
     virtual std::string
     stringify(const bool pretty = true) const = 0;
 
+    /**
+     * @brief save Stores the loaded information in a JSON file in disk.
+     * @param fileName Path and name of the output file.
+     * @param prettyIf true, the return format includes a more readable
+     * presentation, including returns and indentation.
+     */
     virtual void
     save(const std::string& fileName, bool pretty = false) const = 0;
 
-    virtual VCD_UID
+
+    virtual std::string
     add_object(const std::string& name, const std::string& semantic_type) = 0;
 
     virtual void
-    add_object_data(const uint32_t uid,
+    add_object_data(const std::string &uid,
                     const types::ObjectData& object_data) = 0;
 
     // Instance creation factories

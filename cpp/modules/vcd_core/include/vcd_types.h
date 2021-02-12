@@ -41,6 +41,28 @@ enum ObjectDataType {
     ODT_size = 18
 };
 
+const std::string
+ObjectDataTypeName[] {
+    "none",
+    "bbox",
+    "rbbox",
+    "num",
+    "text",
+    "boolean",
+    "poly2d",
+    "poly3d",
+    "cuboid",
+    "image",
+    "mat",
+    "binary",
+    "point2d",
+    "point3d",
+    "vec",
+    "line_reference",
+    "area_reference",
+    "mesh"
+};
+
 class ObjectData {
  public:
     virtual
