@@ -723,10 +723,17 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {
-                    "type": "array",
-                    "minItems": 9,
-                    "maxItems": 10,
-                    "items": {"type": "number"}
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "minItems": 9,
+                            "maxItems": 10,
+                            "items": {"type": "number"}
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 },
                 "attributes": {"$ref": "#/definitions/attributes"}
             },

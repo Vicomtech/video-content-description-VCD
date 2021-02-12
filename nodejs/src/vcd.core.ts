@@ -905,7 +905,7 @@ export class VCD {
                 'parent': parentName,                
                 'children': []
             }    
-            Object.assign(this.data['vcd']['coordinate_systems'][name], pose.data_additional)
+            Object.assign(this.data['vcd']['coordinate_systems'][name], {"pose_wrt_parent": pose.data_additional})
         }
         else {
             this.data['vcd']['coordinate_systems'][name] = {

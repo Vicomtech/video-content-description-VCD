@@ -131,7 +131,7 @@ export class Transform {
 	constructor(srcName: string, dstName: string, additionalItems: object = null) {		
 		this.data = {}
 		this.data_additional = {}
-		let name = srcName + 'To' + dstName
+		let name = srcName + '_to_' + dstName
 		this.data[name] = {}		
 		this.data[name]['src'] = srcName
 		this.data[name]['dst'] = dstName
@@ -412,21 +412,27 @@ export class Cuboid extends ObjectDataGeometry {
 	private use_quaternion = false
     constructor( name: string, val, cs=null, properties=null  ) {
         super( name, cs, properties);
-        if(!Array.isArray(val)){
-			console.warn("WARNING: val not array");
-			return;
-		}				
-		if(val.length == 9) {
-			this.use_quaternion = false
-		}
-		else if(val.length == 10){
-			this.use_quaternion = true
+		if(val != null) {
+			if(!Array.isArray(val)){
+				console.warn("WARNING: val not array");
+				return;
+			}				
+			if(val.length == 9) {
+				this.use_quaternion = false
+			}
+			else if(val.length == 10){
+				this.use_quaternion = true
+			}
+			else {
+				console.error("CUBOID is defined as a 9 or 10-dim vector.")
+				return
+			}
+			this.data['val'] = val;
 		}
 		else {
-			console.error("CUBOID is defined as a 9 or 10-dim vector.")
-			return
+			this.data['val'] = null
 		}
-        this.data['val'] = val;
+        
         this.type = ObjectDataType.cuboid;
 	}
 }
