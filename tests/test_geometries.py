@@ -21,7 +21,7 @@ import vcd.utils as utils
 
 vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
 
-overwrite = True
+overwrite = False
 
 
 def check_vcd(vcd, vcd_file_name, force_write=False):
@@ -171,6 +171,36 @@ class TestBasic(unittest.TestCase):
 
         # Compare with reference
         self.assertTrue(check_vcd(vcd, './etc/' + vcd_version_name + '_test_transforms.json', overwrite))
+
+    def test_cuboids(self):
+        # This test shows how to represent cuboids in various forms
+        vcd = core.VCD()
+
+        # (x, y, z, rx, ry, rz, sx, sy, sz), note (x,y,z) is the center point of the cuboid
+        # the coordinates are expressed wrt to the declared coordinate_system
+        vcd.add_coordinate_system(name="vehicle-iso8855", cs_type=types.CoordinateSystemType.local_cs)
+        uid1 = vcd.add_object(name="car1", semantic_type="car")
+        cuboid1 = types.cuboid(name="box3D",
+                               val=(0.0, 20.0, -0.85,
+                                   0, 0.3, 0,
+                                   1.5, 4.5, 1.7),
+                               coordinate_system="vehicle-iso8855")
+        vcd.add_object_data(uid=uid1, object_data=cuboid1)
+
+        # Nevertheless, VCD is flexible and let's the user to specify custom properties
+        uid2 = vcd.add_object(name="car2", semantic_type="car")
+        cuboid2 = types.cuboid(name="box3D",
+                               val=None,
+                               coordinate_system="vehicle-iso8855",
+                               properties={
+                                   "quaternion": (1.0, 0.0, 0.0, 0.0),
+                                   "traslation": (0.0, 10.0, -0.85),
+                                   "size": (1.5, 4.5, 1.7)}
+                               )
+        vcd.add_object_data(uid=uid2, object_data=cuboid2)
+
+        # Compare with reference
+        self.assertTrue(check_vcd(vcd, './etc/' + vcd_version_name + '_test_cuboids.json', overwrite))
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

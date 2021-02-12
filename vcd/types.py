@@ -298,16 +298,19 @@ class poly3d(ObjectDataGeometry):
 class cuboid(ObjectDataGeometry):
     def __init__(self, name, val, coordinate_system=None, properties=None):
         ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
-        assert (isinstance(val, (tuple, list)))
-        assert (len(val) == 9 or len(val) == 10)
-        if len(val) == 9:
-            self.use_quaternion = False
-        else:
-            self.use_quaternion = True
+        if val is not None:
+            assert (isinstance(val, (tuple, list)))
+            assert (len(val) == 9 or len(val) == 10)
+            if len(val) == 9:
+                self.use_quaternion = False
+            else:
+                self.use_quaternion = True
         if isinstance(val, tuple):
             self.data['val'] = list(val)
         elif isinstance(val, list):
             self.data['val'] = val
+        else:
+            self.data['val'] = None
         self.type = ObjectDataType.cuboid
 
 
