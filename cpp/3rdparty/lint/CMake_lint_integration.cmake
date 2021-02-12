@@ -6,6 +6,7 @@ set(IGNORED_STYLES ${IGNORED_STYLES}-build/include,)
 set(IGNORED_STYLES ${IGNORED_STYLES}-build/header_guard,)
 set(IGNORED_STYLES ${IGNORED_STYLES}-readability/check,)
 set(IGNORED_STYLES ${IGNORED_STYLES}-runtime/printf,)
+set(IGNORED_STYLES ${IGNORED_STYLES}-runtime/references,)
 
 # Add a target that runs cpplint.py
 #
