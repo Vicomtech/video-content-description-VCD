@@ -116,11 +116,17 @@ SCENARIO("Create some basic content, without time information, and do some "
             // (AVOID RIGHT NOW) 5.- We can ask VCD
 
             // Save the json info into a file for comparisson
-            string out = "vcd430_test_create_search_simple_pretty_OUT.json";
-            fs::path vcd_out_path = fs::path(asset_path) / fs::path(out);
-            std::ofstream o(vcd_out_path);
-            o << vcd_string_pretty << std::endl;
-            o.close();
+            string out_p = "vcd430_test_create_search_simple_pretty_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            o_p << vcd_string_pretty << std::endl;
+            o_p.close();
+
+           string out_np = "vcd430_test_create_search_simple_nopretty_OUT.json";
+            fs::path vcd_outnp_path = fs::path(asset_path) / fs::path(out_np);
+            std::ofstream o_np(vcd_outnp_path);
+            o_np << vcd_string_nopretty << std::endl;
+            o_np.close();
 
             // Get the reference JSON text
             //  - No pretty version
@@ -129,15 +135,17 @@ SCENARIO("Create some basic content, without time information, and do some "
 //            std::cout << vcd_np_path.c_str() << std::endl;
             REQUIRE(fs::exists(vcd_np_path));
 
-            auto vcd_file_nopretty = getFileAsString(vcd_np_path);
-            REQUIRE(vcd_string_nopretty.compare(vcd_file_nopretty) == 0);
+            auto vcd_file_nopretty_tst = getFileAsString(vcd_np_path);
+            auto vcd_file_nopretty_out = getFileAsString(vcd_outnp_path);
+            REQUIRE(vcd_file_nopretty_tst.compare(vcd_file_nopretty_out) == 0);
             //  - Pretty version
             char vcd_p[] = "vcd430_test_create_search_simple_pretty.json";
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
 
-            auto vcd_file_pretty = getFileAsString(vcd_p_path);
-            REQUIRE(vcd_string_pretty.compare(vcd_file_pretty) == 0);
+            auto vcd_file_pretty_tst = getFileAsString(vcd_p_path);
+            auto vcd_file_pretty_out = getFileAsString(vcd_outnp_path);
+            REQUIRE(vcd_file_pretty_tst.compare(vcd_file_pretty_out) == 0);
         }
 
         THEN("Write into string") {
