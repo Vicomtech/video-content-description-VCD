@@ -27,9 +27,12 @@
     #endif
 #endif
 
+#include <nlohmann/json.hpp>
+
 #include "vcd.h"
 #include "vcd_types.h"
 #include "setup_strings.h"
+#include "test_utils.h"
 
 static char asset_path[] = TEST_ASSET_FOLDER;
 
@@ -42,9 +45,7 @@ using vcd::types::Boolean;
 
 using std::string;
 
-#include "vcd.h"
-#include "vcd_types.h"
-#include "setup_strings.h"
+using nlohmann::json;
 
 std::string
 getStreamAsString(const std::istream& in) {
@@ -109,6 +110,7 @@ SCENARIO("Create some basic content, without time information, and do some "
                 vcd->add_object_data(uid_peter, eyeR);
             }
             // 4.- Write into string
+            VCD_ptr vcd_tst = VCD::create();
             const std::string vcd_string_pretty = vcd->stringify();
             const bool indent = false;
             const std::string vcd_string_nopretty = vcd->stringify(indent);
@@ -134,18 +136,15 @@ SCENARIO("Create some basic content, without time information, and do some "
             fs::path vcd_np_path = fs::path(asset_path) / fs::path(vcd_np);
 //            std::cout << vcd_np_path.c_str() << std::endl;
             REQUIRE(fs::exists(vcd_np_path));
+            // Compare both json definition
+            REQUIRE(compare_json_files(vcd_outnp_path, vcd_np_path));
 
-            auto vcd_file_nopretty_tst = getFileAsString(vcd_np_path);
-            auto vcd_file_nopretty_out = getFileAsString(vcd_outnp_path);
-            REQUIRE(vcd_file_nopretty_tst.compare(vcd_file_nopretty_out) == 0);
             //  - Pretty version
             char vcd_p[] = "vcd430_test_create_search_simple_pretty.json";
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
-
-            auto vcd_file_pretty_tst = getFileAsString(vcd_p_path);
-            auto vcd_file_pretty_out = getFileAsString(vcd_outnp_path);
-            REQUIRE(vcd_file_pretty_tst.compare(vcd_file_pretty_out) == 0);
+            // Compare both json definition
+            REQUIRE(compare_json_files(vcd_outp_path, vcd_p_path));
         }
 
         THEN("Write into string") {
