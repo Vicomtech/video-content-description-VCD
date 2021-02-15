@@ -117,11 +117,20 @@ VCD_Impl::stringify(const bool pretty) const {
 }
 
 void
-VCD_Impl::save(const std::string& fileName, const bool pretty) const {
+VCD_Impl::save(const std::string& fileName, const bool pretty,
+               const bool validate) const {
     std::string json_string = this->stringify(pretty);
     std::ofstream f(fileName);
     f << json_string;
     f.close();
+}
+
+void
+VCD_Impl::load(const std::string& fileName) {
+    std::ifstream i(fileName);
+    m_data.clear();
+    i >> m_data;
+    i.close();
 }
 
 std::string

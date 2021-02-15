@@ -133,7 +133,10 @@ class VCD_Impl : public vcd::VCD {
 
     void
     save(const std::string& fileName,
-         const bool pretty = false) const override;
+         const bool pretty = false, const bool validate = false) const override;
+
+    void
+    load(const std::string& fileName) override;
 
     std::string
     add_object(const std::string& name,

@@ -61,10 +61,18 @@ class VCD {
      * @param fileName Path and name of the output file.
      * @param prettyIf true, the return format includes a more readable
      * presentation, including returns and indentation.
+     * @param validate ?
      */
     virtual void
-    save(const std::string& fileName, bool pretty = false) const = 0;
+    save(const std::string& fileName, const bool pretty = false,
+         const bool validate = false) const = 0;
 
+    /**
+     * @brief load Loads stored information in a JSON file in disk.
+     * @param fileName Path and name of the output file.
+     */
+    virtual void
+    load(const std::string& fileName) = 0;
 
     virtual std::string
     add_object(const std::string& name, const std::string& semantic_type) = 0;
