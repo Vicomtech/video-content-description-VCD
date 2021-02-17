@@ -236,7 +236,7 @@ export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNu
             }
             else {
                 // So we have arrived here because frame_start and frame_end and frameNum coincides, so let's delete it entirely
-                return []
+                continue
             }
         }
         else if(frameNum < fi['frame_end']) {

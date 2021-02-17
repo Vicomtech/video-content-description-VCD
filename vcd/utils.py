@@ -230,7 +230,7 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
                 continue
             else:
                 # So, we are removing 4 from [(4, 4)], let's return empty
-                return []
+                continue
         elif frame_num < fi['frame_end']:
             # Inside! Need to split
             for f in range(fi['frame_start'], fi['frame_end'] + 1):
