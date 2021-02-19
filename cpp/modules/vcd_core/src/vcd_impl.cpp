@@ -94,10 +94,10 @@ VCD_Impl::reset() {
     m_data["vcd"]["metadata"] = json::object();
     m_data["vcd"]["metadata"]["schema_version"] = "4.3.0";
 
-    m_lastUIDbyType[ElementType::object] = -1;
-    m_lastUIDbyType[ElementType::action] = -1;
-    m_lastUIDbyType[ElementType::event] = -1;
-    m_lastUIDbyType[ElementType::context] = -1;
+    m_lastUIDbyType[ElementType::object]   = -1;
+    m_lastUIDbyType[ElementType::action]   = -1;
+    m_lastUIDbyType[ElementType::event]    = -1;
+    m_lastUIDbyType[ElementType::context]  = -1;
     m_lastUIDbyType[ElementType::relation] = -1;
 
     // this->fis = FrameIntervals(0);  // works
@@ -133,26 +133,115 @@ VCD_Impl::load(const std::string& fileName) {
     i.close();
 }
 
+void
+VCD_Impl::update_vcd_frame_intervals(const size_t frame_index) {
+    // NOTE: This function has an simplified implementation if compared with
+    //       the python version of the library. In this version, a single big
+    //       interval is defined from the first to the final interval value.
+    // This function creates the union of existing VCD with the input
+    // frameIntervals
+    if (!m_data["vcd"].contains("frame_intervals")) {
+        m_data["vcd"]["frame_intervals"] = json::array();
+//        m_data["vcd"]["frame_intervals"].push_back({
+//                        {"frame_start", frame_index},
+//                        {"frame_end", frame_index}
+//                    });
+        appendFrameIntervalToArray(m_data["vcd"]["frame_intervals"],
+                                   frame_index);
+    }
+    const int cur_value = m_data["vcd"]["frame_intervals"][0]["frame_end"];
+    const int max_value = std::max(cur_value, static_cast<int>(frame_index));
+    m_data["vcd"]["frame_intervals"][0]["frame_end"] = max_value;
+}
+
+void
+VCD_Impl::update_element_frame_intervals(json &element,
+                                         const size_t frame_index) {
+    const bool has_fi = element.contains("frame_intervals");
+    const bool is_good_fi = !isFrameIndexNone(frame_index);
+    if (!is_good_fi) return;
+    if (has_fi) {
+        const size_t lst_value = element["frame_intervals"].back()["frame_end"];
+        if (lst_value == (frame_index - 1)) {
+            // If the end value of the last interval is the prevous frame
+            // increment this value in the element, because we are in the same
+            // interval.
+            element["frame_intervals"].back()["frame_end"] = frame_index;
+        } else {
+            // If the current value does not follow the last interval, generate
+            // a new one.
+            appendFrameIntervalToArray(element["frame_intervals"],
+                                       frame_index);
+        }
+    } else {
+        // If the element has not any frame_interval values, include the list
+        element["frame_intervals"] = json::array();
+        appendFrameIntervalToArray(element["frame_intervals"], frame_index);
+    }
+}
+
+json&
+VCD_Impl::add_frame(const size_t frame_num, const bool addMissedFrames) {
+    if (!m_data["vcd"].contains("frames")) {
+        m_data["vcd"]["frames"] = json::object({});
+    }
+    const std::string frm_num_str = std::to_string(frame_num);
+    if (!m_data["vcd"]["frames"].contains(frm_num_str)) {
+        m_data["vcd"]["frames"][frm_num_str] = json::object({});
+
+        if (addMissedFrames) {
+            // Include all the frames between the last defined frame and the
+            // current frame index.
+            json &frame_list = m_data["vcd"]["frames"];
+            size_t cur_frame_num = frame_num - 1;
+            bool frm_found = frame_list.contains(std::to_string(cur_frame_num));
+            while (!frm_found) {
+                const std::string std_key = std::to_string(cur_frame_num);
+                frame_list[std_key] = json::object({});
+                --cur_frame_num;
+                frm_found = frame_list.contains(std::to_string(cur_frame_num));
+            }
+        }
+    }
+    return m_data["vcd"]["frames"][frm_num_str];
+}
+
 std::string
 VCD_Impl::add_object(const std::string& name,
                      const std::string& semantic_type) {
+    const size_t null_frame_index = getNoneFrameIndex();
+    return add_object(name, semantic_type, null_frame_index);
+}
+
+std::string
+VCD_Impl::add_object(const std::string& name,
+                     const std::string& semantic_type,
+                     const size_t frame_index) {
     //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
-    int frame_value = 0;
+//    int frame_value = 0;
     std::string uid = "";
     std::string ont_uid = "";
     std::string coordinate_system;
-    FrameIntervals fi(frame_value);
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::object, name, semantic_type,
-                       &fi, UID(uid), UID(ont_uid),
+                       frame_index, UID(uid), UID(ont_uid),
                        coordinate_system, set_mode).asStr();
 }
 
 void
 VCD_Impl::add_object_data(const std::string &uid,
                           const types::ObjectData& object_data) {
+    const size_t null_frame_index = getNoneFrameIndex();
     return set_element_data(ElementType::object, UID(uid), object_data,
-                            nullptr, SetMode::union_t);
+                            null_frame_index, SetMode::union_t);
+}
+
+void
+VCD_Impl::add_object_data(const std::string &uid,
+                          const types::ObjectData& object_data,
+                          const size_t frame_index) {
+    return set_element_data(ElementType::object, UID(uid), object_data,
+                            frame_index, SetMode::union_t);
 }
 
 UID
@@ -183,6 +272,16 @@ VCD_Impl::get_uid_to_assign(const ElementType type, const UID &uid) {
         }
     }
     return uid_to_assign;
+}
+
+json*
+VCD_Impl::get_frame(const int frame_num) {
+    if (!m_data["vcd"].contains("frames")) {
+        return nullptr;
+    } else {
+        json* frame = &m_data["vcd"]["frames"][std::to_string(frame_num)];
+        return frame;
+    }
 }
 
 json*
@@ -244,43 +343,36 @@ void
 VCD_Impl::set_element_at_root_and_frames(const ElementType type,
                                          const std::string &name,
                                          const std::string &semantic_type,
-                                   const FrameIntervals * const frame_intervals,
+                                         const size_t frame_index,
                                          const UID &uid, const UID &ont_uid,
                                          const std::string &coord_system) {
     // 1.- Copy from existing or create new entry (this copies everything,
     //     including element_data) element_data_pointers and frame intervals.
-    auto uidstr = uid.asStr();
+    const std::string uidstr = uid.asStr();
     // note: public functions use int or str for uids
-//    auto element_existed = self.has(element_type, uidstr)
-    const std::string elemKey = ElementTypeName[type] + "s";
-    VCD_Impl::setDefault(m_data["vcd"], elemKey, json::object());
-    auto& element = VCD_Impl::setDefault(m_data["vcd"][elemKey], uidstr,
-                                         json::object());
-
-//    fis_old = FrameIntervals()
-//    if 'frame_intervals' in element:
-//        fis_old = FrameIntervals(element['frame_intervals'])
+    const bool element_existed = has(type, uid);
+    const bool fi_is_good = isFrameIndexNone(frame_index);
+    const std::string typeKey = ElementTypeName[type] + "s";
+    auto& typeLst = setDefault(m_data["vcd"], typeKey, json::object());
+    auto& element = setDefault(typeLst, uidstr, json::object());
 
     // 2.- Copy from arguments
-    if (!name.empty()) {
-        element["name"] = name;
+    if (!element_existed) {
+        if (!name.empty()) {
+            element["name"] = name;
+        }
+        if (!semantic_type.empty()) {
+            element["type"] = semantic_type;
+        }
+        if (!ont_uid.isNone() && hasOntology(ont_uid.asStr())) {
+            element["ontology_uid"] = ont_uid.asStr();
+        }
     }
-    if (!semantic_type.empty()) {
-        element["type"] = semantic_type;
-    }
-//  if not frame_intervals.empty() or (element_existed and not fis_old.empty()):
-//        # So, either the newFis has something, or the fisOld had something
-//        # (in which case needs to be substituted)
-//        # Under the previous control, no 'frame_intervals' field is added to
-//        # newly created static elements
-//        # -> should 'frame_intervals' be mandatory
-//        element['frame_intervals'] = frame_intervals.get_dict()
-    if (!ont_uid.isNone() && hasOntology(ont_uid.asStr())) {
-        element["ontology_uid"] = ont_uid.asStr();
-    }
+    update_element_frame_intervals(element, frame_index);
 //    if (coord_system != nullptr && hasCoordSys(coord_system)) {
 //        element["coordinate_system"] = *coord_system;
 //    }
+
 
     // 2.bis.- For Relations obligue to have rdf_objects and rdf_subjects
     //         entries (to be compliant with schema)
@@ -293,71 +385,39 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
         }
     }
 
-//    // 3.- Reshape element_data_pointers according to this new frame intervals
-//    if element_type.name + '_data_pointers' in element:
-//        edps = element[element_type.name + '_data_pointers']
-//        for edp_name in edps:
-//            # NOW, we have to UPDATE frame intervals of pointers because we
-//            # have modified the frame_intervals
-//            # of the element itself, adn
-//            # If we compute the intersection frame_intervals, we can copy that
-//            # into element_data_pointers frame intervals
-//            fis_int = FrameIntervals()
-//            if not frame_intervals.empty():
-//                fis_int = frame_intervals.intersection(
-//                            FrameIntervals(edps[edp_name]['frame_intervals']))
-
-//            # Update the pointers
-//            element.setdefault(element_type.name + '_data_pointers', {})
-//            element[element_type.name + '_data_pointers'][edp_name] =
-//                                                            edps[edp_name]
-//            element[element_type.name + '_data_pointers'][edp_name]
-//                                ['frame_intervals'] = fis_int.get_dict()
+    // 3.- Reshape element_data_pointers according to this new frame intervals
+    const std::string dpoint_key = ElementTypeName[type] + "_data_pointers";
+    if (element.contains(dpoint_key) && fi_is_good) {
+        json &edps = element[dpoint_key];
+        for (auto &edp : edps) {
+            // NOW, we have to UPDATE frame intervals of pointers because we
+            // have modified the frame_intervals of the element itself, and
+            // If we compute the intersection frame_intervals, we can copy that
+            // into element_data_pointers frame intervals
+            update_element_frame_intervals(edp, frame_index);
+        }
+    }
 
     // 4.- Now set at frames
-//    if not frame_intervals.empty():
-//        # 2.1.- There is frame_intervals specified
-//        if not element_existed:
-//            # 2.1.a) Just create the new element
-//            self.__add_frames(frame_intervals, element_type, uid)
-//            self.__update_vcd_frame_intervals(frame_intervals)
-//        else:
-//            # 2.1.b) This is a substitution: depending on the new
-//            # frame_intervals, we may need to delete/add frames
-//            # Add
-//            fis_new = frame_intervals
-//            for fi in fis_new.get():
-//                for f in range(fi[0], fi[1] + 1):
-//                    is_inside = fis_old.has_frame(f)
-//                    if not is_inside:
-//                        # New frame is not inside -> let's add this frame
-//                        fi_ = FrameIntervals(f)
-//                        self.__add_frames(fi_, element_type, uid)
-//                        self.__update_vcd_frame_intervals(fi_)
-//            # Remove
-//            if element_existed and fis_old.empty():
-//                # Ok, the element was originally static (thus with fisOld
-//                # empty)
-//                # so potentially there are pointers of the element in all
-//                # frames (in case there are frames)
-//                # Now the element is declared with a specific frame intervals.
-//                # Then we first need to remove all
-//                # element entries (pointers) in all OTHER frames
-//                vcd_frame_intervals = self.get_frame_intervals()
-//                if not vcd_frame_intervals.empty():
-//                    for fi in vcd_frame_intervals.get():
-//                        for f in range(fi[0], fi[1] + 1):
-//                            # Only for those OTHER frames not those just added
-//                            if not fis_new.has_frame(f):
-//                                elements_in_frame =
-//                       self.data['vcd']['frames'][f][element_type.name + 's']
-//                                if uidstr in elements_in_frame:
-//                                    del elements_in_frame[uidstr]
-//                                    if len(elements_in_frame) == 0:
-//       del self.data['vcd']['frames'][f][element_type.name + 's']
-//                               if len(self.data['vcd']['frames'][f]) == 0:
-//                                            self.__rm_frame(f)
-
+    if (fi_is_good) {
+        // 2.1.- There is frame_intervals specified so it is a dynamic element
+        const bool frame_exists = isFrameWithIndex(frame_index);
+        if (!frame_exists) {
+            // 2.1.a) Just create the new element
+            add_frame(frame_index);
+            // And update the main
+            update_vcd_frame_intervals(frame_index);
+        }
+        // 2.1.b) Add new data to existing frame
+        json* frame = get_frame(frame_index);
+        if (frame == nullptr) {
+            // ERROR: the frame does not exist!
+            return;
+        }
+        // Add the referenced empty elements inside the frame info list
+        json& type_element = setDefault(*frame, typeKey, json::object());
+        setDefault(type_element, uid.asStr(), json::object());
+    }
 //            # Next loop for is for the case fis_old wasn't empty, so we
 //    just need to remove old content
 //            for fi in fis_old.get():
@@ -410,7 +470,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
 UID
 VCD_Impl::set_element(const ElementType type, const std::string &name,
                       const std::string &semantic_type,
-                      const FrameIntervals * const frame_intervals,
+                      const size_t frame_index,
                       const UID &uid, const UID &ont_uid,
                       const std::string &coordinate_system,
                       const SetMode set_mode) {
@@ -427,7 +487,7 @@ VCD_Impl::set_element(const ElementType type, const std::string &name,
     UID uid_to_assign = get_uid_to_assign(type, uid);
 
     // 1.- Set the root entries and frames entries
-    set_element_at_root_and_frames(type, name, semantic_type, frame_intervals,
+    set_element_at_root_and_frames(type, name, semantic_type, frame_index,
                                    uid_to_assign, ont_uid, coordinate_system);
 
     return uid_to_assign;
@@ -436,7 +496,7 @@ VCD_Impl::set_element(const ElementType type, const std::string &name,
 void
 VCD_Impl::set_element_data(const ElementType type, const UID &uid,
                            const types::ObjectData &element_data,
-                           const FrameIntervals * const frame_intervals,
+                           const size_t frame_index,
                            const SetMode set_mode) {
     // 0.- Checks
     if (!has(type, uid)) {
@@ -453,6 +513,7 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
         return;
     }
     auto& element = *element_ptr;
+    const bool fi_is_good = isFrameIndexNone(frame_index);
 
     // Read existing data about this element, so we can call __set_element
     const std::string& name = element["name"];
@@ -475,17 +536,25 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
         }
     }
 
-    // set_mode = SetMode.union
-    // This is a static element_data. If it was declared dynamic before,
-    // let's remove it.
-    // self.__set_element(element_type, name, semantic_type, frame_intervals,
-    //                    uid, ont_uid, cs, set_mode)
-    // Add or replace (if already exists) element
-    set_element_data_content(type, element, element_data);
-    // Set the pointers
-    set_element_data_pointers(type, uid, element_data, frame_intervals);
-//    set_element(type, name, semantic_type, frame_intervals,
-//                uid, ont_uid, cs, set_mode);
+    // Store element data values
+    if (!fi_is_good) {
+        // There is not a frame index defined, so this information should be
+        // static. This means that the information is stored in the objects
+        // definition and not in the frame definition.
+        set_element_data_content(type, element, element_data);
+    } else {
+        // As there is a usable frame index defined, we have to include the
+        // values in the specified frame.
+        json *frme_elem = get_frame(frame_index);
+        if (frme_elem == nullptr) {
+            return;
+        }
+        const std::string elem_key = ElementTypeName[type] + "s";
+        json &type_elem_in_fr = (*frme_elem)[elem_key][uid.asStr()];
+        set_element_data_content(type, type_elem_in_fr, element_data);
+    }
+    // And create/update data pointers with empty information
+    set_element_data_pointers(type, element, element_data, frame_index);
 }
 
 size_t
@@ -515,9 +584,9 @@ VCD_Impl::set_element_data_content(const ElementType type,
     const std::string data_key = ElementTypeName[type] + "_data";
     const std::string e_type_key = ObjectDataTypeName[element_data.getType()];
     VCD_Impl::setDefault(element, data_key, json::object());
-    VCD_Impl::setDefault(element[data_key], e_type_key, json::array());
+    auto& list_aux = VCD_Impl::setDefault(element[data_key], e_type_key,
+                                          json::array());
     // Find if element_data already there
-    auto& list_aux = element[data_key][e_type_key];
     const size_t elem_pos = findElementByName(list_aux, element_data.getName());
     const bool has_elem = (elem_pos < list_aux.size());
     if (!has_elem) {
@@ -530,24 +599,24 @@ VCD_Impl::set_element_data_content(const ElementType type,
 }
 
 void
-VCD_Impl::set_element_data_pointers(const ElementType type, const UID &uid,
+VCD_Impl::set_element_data_pointers(const ElementType type, json &element,
                                     const types::ObjectData &element_data,
-                                    const FrameIntervals * const f_intervals) {
+                                    const size_t frame_index) {
     const std::string type_key = ElementTypeName[type] + "s";
     const std::string data_point_key = ElementTypeName[type] + "_data_pointers";
-    const std::string s_uid = uid.asStr();
 
-    auto& element = m_data["vcd"][type_key][s_uid];
-    auto& edp = VCD_Impl::setDefault(element, data_point_key, json::object());
+    auto& dp = VCD_Impl::setDefault(element, data_point_key, json::object());
 
     const std::string data_name = element_data.getName();
-    edp[data_name] = json::object();
-    edp[data_name]["type"] = ObjectDataTypeName[element_data.getType()];
+    auto& edp = VCD_Impl::setDefault(dp, data_name, json::object());
+    edp["type"] = ObjectDataTypeName[element_data.getType()];
 
-    if (f_intervals == nullptr) {
-        edp[data_name]["frame_intervals"] = json::array();
+    const bool fi_is_good = isFrameIndexNone(frame_index);
+    auto& fr_int = VCD_Impl::setDefault(edp, "frame_intervals", json::object());
+    if (fi_is_good) {
+        appendFrameIntervalToArray(fr_int, frame_index);
     } else {
-        edp[data_name]["frame_intervals"] = f_intervals->get_dict();
+        fr_int = json::array();
     }
 
 //    const auto& e_data_data = element_data.getData();
@@ -559,6 +628,7 @@ VCD_Impl::set_element_data_pointers(const ElementType type, const UID &uid,
 //       edp[element_data.data['name']]['attributes'][attr['name']] = attr_type
 //    }
 }
+
 
 bool
 VCD_Impl::has(const ElementType type, const UID &uid) const {
@@ -665,6 +735,26 @@ void UID::set(const std::string &uidStr, const int uidInt, const bool isUUID) {
 ///////////////////////////////////////////////
 // FrameIntervals
 ///////////////////////////////////////////////
+/// \brief FrameIntervals::FrameIntervals
+/// \param frameValue
+std::unique_ptr<FrameIntervals>
+FrameIntervals::create(const FrameValue * const fvs) {
+    std::unique_ptr<FrameIntervals> fi(nullptr);
+
+    if (fvs == nullptr) {
+        return fi;
+    } else {
+        const bool is_interval = (fvs->frameStart >= 0 && fvs->frameEnd >= 0);
+        if (is_interval) {
+            fi.reset(new FrameIntervals(Tuple({fvs->frameStart,
+                                               fvs->frameEnd})));
+        } else if (fvs->frameIndex >= 0) {
+            fi.reset(new FrameIntervals(fvs->frameIndex));
+        }
+    }
+    return fi;
+}
+
 FrameIntervals::FrameIntervals(int frameValue) {
     if (frameValue == -1) {
         this->fisDict = nullptr;
@@ -689,8 +779,23 @@ FrameIntervals::FrameIntervals(const Tuple& frameValue) {
 
 FrameIntervals::FrameIntervals(const ArrayNx2& frameValue) {
     this->fisDict = json::array();
-    for (auto it : frameValue)
-        this->fisDict.push_back({{"frame_start", it[0]}, {"frame_end", it[1]}});
+    for (const auto &it : frameValue) {
+        this->fisDict.push_back({
+                                    {"frame_start", it[0]},
+                                    {"frame_end", it[1]}
+                                });
+    }
+    this->fisNum = frameValue;
+}
+
+FrameIntervals::FrameIntervals(const json& fis_dict) {
+    this->fisDict = fis_dict;
+    ArrayNx2 frameValue;
+    frameValue.reserve(fis_dict.size());
+    for (const auto &val : fis_dict) {
+        frameValue.push_back({val[0], val[1]});
+    }
+
     this->fisNum = frameValue;
 }
 

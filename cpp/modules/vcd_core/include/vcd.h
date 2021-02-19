@@ -38,6 +38,14 @@ class VCD_UID {
     isNone() const = 0;
 };
 
+struct FrameValue {
+FrameValue(const int frameIndex);
+FrameValue(const int frameStart, const int frameEnd);
+int frameIndex = -1;
+int frameStart = -1;
+int frameEnd = -1;
+};
+
 class VCD {
  public:
     virtual
@@ -77,9 +85,18 @@ class VCD {
     virtual std::string
     add_object(const std::string& name, const std::string& semantic_type) = 0;
 
+    virtual std::string
+    add_object(const std::string& name, const std::string& semantic_type,
+               const size_t frame_index) = 0;
+
     virtual void
     add_object_data(const std::string &uid,
                     const types::ObjectData& object_data) = 0;
+
+    virtual void
+    add_object_data(const std::string &uid,
+                    const types::ObjectData& object_data,
+                    const size_t frame_index) = 0;
 
     // Instance creation factories
     static CORE_LIB std::unique_ptr<VCD>

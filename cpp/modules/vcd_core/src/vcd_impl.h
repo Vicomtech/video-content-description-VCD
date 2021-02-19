@@ -74,6 +74,7 @@ class FrameIntervals {
     explicit FrameIntervals(int frameValue);
     explicit FrameIntervals(const Tuple& frameValue);
     explicit FrameIntervals(const ArrayNx2& frameValue);
+    explicit FrameIntervals(const json& frame_dict);
 
     bool empty() const { return this->fisNum.empty() || this->fisDict.empty(); }
     json get_dict() const { return fisDict; }
@@ -81,6 +82,9 @@ class FrameIntervals {
 
     std::size_t getLength() const { return fisNum.size(); }
     bool hasFrame(int frameNum) const;
+
+    static std::unique_ptr<FrameIntervals>
+    create(const FrameValue * const frameValue);
 
  private:
     json fisDict;
@@ -138,15 +142,55 @@ class VCD_Impl : public vcd::VCD {
     void
     load(const std::string& fileName) override;
 
+    void
+    update_vcd_frame_intervals(const size_t frame_index);
+
+    void
+    update_element_frame_intervals(json &element, const size_t frame_index);
+
+    json&
+    add_frame(const size_t frame_index, const bool addMissedFrames = false);
+
     std::string
     add_object(const std::string& name,
                const std::string& semantic_type) override;
+
+    std::string
+    add_object(const std::string& name,
+               const std::string& semantic_type,
+               const size_t frame_index) override;
 
     void
     add_object_data(const std::string &uid,
                     const types::ObjectData& object_data) override;
 
+    void
+    add_object_data(const std::string &uid,
+                    const types::ObjectData& object_data,
+                    const size_t frame_index) override;
+
+    inline size_t
+    getNoneFrameIndex() {
+        return std::numeric_limits<size_t>::max();
+    }
+
+    inline bool
+    isFrameIndexNone(const size_t frame_index) {
+        return (frame_index != std::numeric_limits<size_t>::max());
+    }
+
+    inline void
+    appendFrameIntervalToArray(json element_array, const size_t frame_index) {
+        element_array.emplace_back(json::object({
+                                                   {"frame_start", frame_index},
+                                                   {"frame_end", frame_index}
+                                                }));
+    }
+
  protected:
+    json*
+    get_frame(const int frame_num);
+
     json*
     get_element(const ElementType type, const UID &uid);
 
@@ -172,14 +216,14 @@ class VCD_Impl : public vcd::VCD {
     set_element_at_root_and_frames(const ElementType type,
                                    const std::string &name,
                                    const std::string &semantic_type,
-                                   const FrameIntervals * const frame_intervals,
+                                   const size_t frame_index,
                                    const UID &uid, const UID &ont_uid,
                                    const std::string &coord_system);
 
     UID
     set_element(const ElementType type, const std::string &name,
                 const std::string &semantic_type,
-                const FrameIntervals * const frame_intervals,
+                const size_t frame_index,
                 const UID &uid, const UID &ont_uid,
                 const std::string &coordinate_system = nullptr,
                 const SetMode set_mode = union_t);
@@ -187,7 +231,7 @@ class VCD_Impl : public vcd::VCD {
     void
     set_element_data(const ElementType type, const UID &uid,
                      const types::ObjectData &element_data,
-                     const FrameIntervals * const frame_intervals,
+                     const size_t frame_index,
                      const SetMode set_mode = union_t);
 
     void
@@ -195,10 +239,9 @@ class VCD_Impl : public vcd::VCD {
                              const types::ObjectData &element_data);
 
     void
-    set_element_data_pointers(const ElementType type, const UID &uid,
+    set_element_data_pointers(const ElementType type, json &element,
                             const types::ObjectData &element_data,
-                            const FrameIntervals * const f_intervals = nullptr);
-
+                            const size_t frame_index);
     /**
      * @brief setdefault Simulates the behaviour of setdefault funcion in
      * python. In python, the setdefault() method returns the value of the
@@ -225,6 +268,12 @@ class VCD_Impl : public vcd::VCD {
     bool
     has_element_data(const ElementType type, const UID &uid,
                      const types::ObjectData &element_data) const;
+
+    inline bool
+    isFrameWithIndex(const size_t frame_index) {
+        const std::string frame_index_str = std::to_string(frame_index);
+        return m_data["vcd"]["frames"].contains(frame_index_str);
+    }
 
     static size_t
     findElementByName(const json &elementList, const std::string &name);
