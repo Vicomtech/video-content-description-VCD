@@ -150,6 +150,53 @@ SCENARIO("Create some basic content, without time information, and do some "
         THEN("Write into string") {
         }
 
+        THEN("Add some objects and frames") {
+            // 1.- Create a VCD instance
+            VCD_ptr vcd = VCD::create();
+
+            // 2.- Create some Objects
+            std::string uid_marcos = vcd->add_object("marcos", "person");
+            CHECK(uid_marcos == "0");
+            std::string uid_peter = vcd->add_object("peter", "person");
+            CHECK(uid_peter == "1");
+
+            // 3.- Add some data to the objects
+            //   - Marcos
+            Bbox body_bbox_m0("body", {0, 0, 60, 120});
+            vcd->add_object_data(uid_marcos, body_bbox_m0.get(), 0);
+            Bbox body_bbox_m1("body", {0, 0, 62, 124});
+            vcd->add_object_data(uid_marcos, body_bbox_m1.get(), 1);
+            Bbox body_bbox_m2("body", {0, 0, 70, 128});
+            vcd->add_object_data(uid_marcos, body_bbox_m2.get(), 2);
+            Bbox body_bbox_m5("body", {0, 0, 100, 160});
+            vcd->add_object_data(uid_marcos, body_bbox_m5.get(), 5);
+            //   - Peter
+            Bbox body_bbox_p7("body", {0, 0, 200, 190});
+            vcd->add_object_data(uid_peter, body_bbox_p7.get(), 7);
+            Bbox body_bbox_p8("body", {0, 0, 180, 185});
+            vcd->add_object_data(uid_peter, body_bbox_p8.get(), 8);
+            Bbox body_bbox_p9("body", {0, 0, 160, 179});
+            vcd->add_object_data(uid_peter, body_bbox_p9.get(), 9);
+            Bbox body_bbox_p5("body", {0, 0, 99, 99});
+            vcd->add_object_data(uid_peter, body_bbox_p5.get(), 5);
+
+            // 4.- Save the json info into a file for comparisson
+            string out_p = "vcd430_test_create_frames_simple_pretty_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            const std::string vcd_string_pretty = vcd->stringify();
+            o_p << vcd_string_pretty << std::endl;
+            o_p.close();
+
+            // 5.- Compare with reference json files
+            //  - Pretty version
+            char vcd_p[] = "vcd430_test_create_frames_simple_pretty.json";
+            fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
+            REQUIRE(fs::exists(vcd_p_path));
+            // Compare both json definition
+            REQUIRE(compare_json_files(vcd_outp_path, vcd_p_path));
+        }
+
         THEN("We can ask VCD") {
             // PRELIMINAR TEST OF ATTRIBUTES, PLEASE REMOVE
             Bbox box1 = Bbox("head", {0, 0, 10, 10});
