@@ -552,6 +552,8 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
         const std::string elem_key = ElementTypeName[type] + "s";
         json &type_elem_in_fr = (*frme_elem)[elem_key][uid.asStr()];
         set_element_data_content(type, type_elem_in_fr, element_data);
+        // Also update the frame interval values in the object
+        update_element_frame_intervals(element, frame_index);
     }
     // And create/update data pointers with empty information
     set_element_data_pointers(type, element, element_data, frame_index);
