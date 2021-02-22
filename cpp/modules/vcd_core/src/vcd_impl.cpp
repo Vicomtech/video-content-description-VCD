@@ -611,12 +611,12 @@ VCD_Impl::set_element_data_pointers(const ElementType type, json &element,
     auto& edp = VCD_Impl::setDefault(dp, data_name, json::object());
     edp["type"] = ObjectDataTypeName[element_data.getType()];
 
+    // Update objects frame interval inside the data pointer data
     const bool fi_is_good = !isFrameIndexNone(frame_index);
-    auto& fr_int = VCD_Impl::setDefault(edp, "frame_intervals", json::array());
     if (fi_is_good) {
-        appendFrameIntervalToArray(fr_int, frame_index);
+        update_element_frame_intervals(edp, frame_index);
     } else {
-        fr_int = json::array();
+        VCD_Impl::setDefault(edp, "frame_intervals", json::array());
     }
 
 //    const auto& e_data_data = element_data.getData();
