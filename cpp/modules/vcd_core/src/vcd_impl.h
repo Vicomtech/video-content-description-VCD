@@ -176,7 +176,7 @@ class VCD_Impl : public vcd::VCD {
 
     inline bool
     isFrameIndexNone(const size_t frame_index) {
-        return (frame_index != std::numeric_limits<size_t>::max());
+        return (frame_index == std::numeric_limits<size_t>::max());
     }
 
     inline void

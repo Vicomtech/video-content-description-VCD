@@ -351,7 +351,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
     const std::string uidstr = uid.asStr();
     // note: public functions use int or str for uids
     const bool element_existed = has(type, uid);
-    const bool fi_is_good = isFrameIndexNone(frame_index);
+    const bool fi_is_good = !isFrameIndexNone(frame_index);
     const std::string typeKey = ElementTypeName[type] + "s";
     auto& typeLst = setDefault(m_data["vcd"], typeKey, json::object());
     auto& element = setDefault(typeLst, uidstr, json::object());
@@ -513,7 +513,7 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
         return;
     }
     auto& element = *element_ptr;
-    const bool fi_is_good = isFrameIndexNone(frame_index);
+    const bool fi_is_good = !isFrameIndexNone(frame_index);
 
     // Read existing data about this element, so we can call __set_element
     const std::string& name = element["name"];
@@ -611,7 +611,7 @@ VCD_Impl::set_element_data_pointers(const ElementType type, json &element,
     auto& edp = VCD_Impl::setDefault(dp, data_name, json::object());
     edp["type"] = ObjectDataTypeName[element_data.getType()];
 
-    const bool fi_is_good = isFrameIndexNone(frame_index);
+    const bool fi_is_good = !isFrameIndexNone(frame_index);
     auto& fr_int = VCD_Impl::setDefault(edp, "frame_intervals", json::array());
     if (fi_is_good) {
         appendFrameIntervalToArray(fr_int, frame_index);
