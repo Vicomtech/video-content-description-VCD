@@ -61,36 +61,6 @@ enum RDF {
     rdf_object = 2
 };
 
-/**
- * FrameIntervals
- * Can be initialized with int, Tuple and ArrayNx2
- * FrameIntervals fis = FrameIntervals(0);  // works
- * FrameIntervals fis = FrameIntervals({0, 10}); // works
- * FrameIntervals fis = FrameIntervals({{0, 10}}); // works
- */
-class FrameIntervals {
- public:
-    FrameIntervals() {}
-    explicit FrameIntervals(int frameValue);
-    explicit FrameIntervals(const Tuple& frameValue);
-    explicit FrameIntervals(const ArrayNx2& frameValue);
-    explicit FrameIntervals(const json& frame_dict);
-
-    bool empty() const { return this->fisNum.empty() || this->fisDict.empty(); }
-    json get_dict() const { return fisDict; }
-    ArrayNx2 get() const { return fisNum; }
-
-    std::size_t getLength() const { return fisNum.size(); }
-    bool hasFrame(int frameNum) const;
-
-    static std::unique_ptr<FrameIntervals>
-    create(const FrameValue * const frameValue);
-
- private:
-    json fisDict;
-    ArrayNx2 fisNum;
-};
-
 class UID : public VCD_UID {
  public:
     UID() { this->set("", -1, false); }
@@ -283,8 +253,6 @@ class VCD_Impl : public vcd::VCD {
 
     bool m_useUUID;
     json m_data;
-
-    FrameIntervals m_fis;
 
     std::vector<int> m_lastUIDbyType;
 };
