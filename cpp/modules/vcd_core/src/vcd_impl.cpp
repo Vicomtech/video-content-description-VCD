@@ -23,6 +23,8 @@ using std::string;
 
 using vcd::types::ObjectDataTypeName;
 
+static const bool S_ADD_MISSIED_FRAMES = true;
+
 namespace vcd {
 
 /** @brief Generate a Version 4 UUID according to RFC-4122
@@ -189,17 +191,20 @@ VCD_Impl::add_frame(const size_t frame_num, const bool addMissedFrames) {
     if (!m_data["vcd"]["frames"].contains(frm_num_str)) {
         m_data["vcd"]["frames"][frm_num_str] = json::object({});
 
-        if (addMissedFrames) {
+        bool is_first_frame = (frame_num == 0);
+        if (addMissedFrames && !is_first_frame) {
             // Include all the frames between the last defined frame and the
             // current frame index.
             json &frame_list = m_data["vcd"]["frames"];
             size_t cur_frame_num = frame_num - 1;
             bool frm_found = frame_list.contains(std::to_string(cur_frame_num));
-            while (!frm_found) {
+            is_first_frame = (cur_frame_num <= 0);
+            while (!frm_found && !is_first_frame) {
                 const std::string std_key = std::to_string(cur_frame_num);
                 frame_list[std_key] = json::object({});
                 --cur_frame_num;
                 frm_found = frame_list.contains(std::to_string(cur_frame_num));
+                is_first_frame = (cur_frame_num <= 0);
             }
         }
     }
@@ -279,8 +284,16 @@ VCD_Impl::get_frame(const int frame_num) {
     if (!m_data["vcd"].contains("frames")) {
         return nullptr;
     } else {
-        json* frame = &m_data["vcd"]["frames"][std::to_string(frame_num)];
-        return frame;
+        const json &frames = m_data["vcd"]["frames"];
+        const std::string frame_key = std::to_string(frame_num);
+        // First check if the current frame exists in the list
+        const bool frame_exists = frames.contains(frame_key);
+        if (frame_exists) {
+            // Then get the frame if it exists
+            return &m_data["vcd"]["frames"][std::to_string(frame_num)];
+        } else {
+            return nullptr;
+        }
     }
 }
 
@@ -404,7 +417,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
         const bool frame_exists = isFrameWithIndex(frame_index);
         if (!frame_exists) {
             // 2.1.a) Just create the new element
-            add_frame(frame_index);
+            add_frame(frame_index, S_ADD_MISSIED_FRAMES);
             // And update the main
             update_vcd_frame_intervals(frame_index);
         }
@@ -547,7 +560,7 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
         // values in the specified frame.
         json *frme_elem = get_frame(frame_index);
         if (frme_elem == nullptr) {
-            return;
+            frme_elem = &add_frame(frame_index, S_ADD_MISSIED_FRAMES);
         }
         const std::string elem_key = ElementTypeName[type] + "s";
         json &type_elem_in_fr = (*frme_elem)[elem_key][uid.asStr()];
