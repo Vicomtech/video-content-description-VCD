@@ -254,6 +254,8 @@ class VCD_Impl : public vcd::VCD {
     bool m_useUUID;
     json m_data;
 
+    size_t m_curFrameIndex = 0;
+
     std::vector<int> m_lastUIDbyType;
 };
 

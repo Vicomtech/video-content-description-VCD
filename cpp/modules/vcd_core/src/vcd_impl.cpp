@@ -527,6 +527,16 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
     }
     auto& element = *element_ptr;
     const bool fi_is_good = !isFrameIndexNone(frame_index);
+    // Check if the new frame index is posterior to last frame index
+    if (fi_is_good) {
+        if (frame_index < m_curFrameIndex) {
+            std::cerr << "Warning: Detected an old frame index! "
+                         "Call ignored.\n";
+            return;
+        } else {
+            m_curFrameIndex = frame_index;
+        }
+    }
 
     // Read existing data about this element, so we can call __set_element
     const std::string& name = element["name"];
