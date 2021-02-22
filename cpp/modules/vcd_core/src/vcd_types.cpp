@@ -85,7 +85,7 @@ ObjectDataGeometry::add_attribute(const ObjectData &object_data) {
 // Bbox class
 Bbox::Bbox(const std::string& name, const std::vector<int>& value) {
         m_name = name;
-        m_data = {{"name", name}, {"value", value}};
+        m_data = {{"name", name}, {"val", value}};
         m_type = bbox;
 }
 
@@ -97,7 +97,7 @@ Bbox::get() {
 // Vec class
 Vec::Vec(const std::string& name, const std::vector<float>& value) {
         m_name = name;
-        m_data = {{"name", name}, {"value", value}};
+        m_data = {{"name", name}, {"val", value}};
         m_type = vec;
 }
 
@@ -109,7 +109,7 @@ Vec::get() {
 // Num class
 Num::Num(const std::string& name, const double value) {
     m_name = name;
-    m_data = {{"name", name}, {"value", value}};
+    m_data = {{"name", name}, {"val", value}};
     m_type = num;
 }
 
@@ -121,7 +121,7 @@ Num::get() {
 // Boolean class
 Boolean::Boolean(const std::string& name, const bool value) {
     m_name = name;
-    m_data = {{"name", name}, {"value", value}};
+    m_data = {{"name", name}, {"val", value}};
     m_type = boolean;
 }
 
