@@ -180,7 +180,7 @@ class VCD_Impl : public vcd::VCD {
     }
 
     inline void
-    appendFrameIntervalToArray(json element_array, const size_t frame_index) {
+    appendFrameIntervalToArray(json &element_array, const size_t frame_index) {
         element_array.emplace_back(json::object({
                                                    {"frame_start", frame_index},
                                                    {"frame_end", frame_index}
