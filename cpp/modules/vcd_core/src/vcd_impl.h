@@ -124,18 +124,12 @@ class VCD_Impl : public vcd::VCD {
     // Add object
     std::string
     add_object(const std::string& name,
-               const std::string& semantic_type) override;
+               const obj_args& args) override;
 
     std::string
     add_object(const std::string& name,
-               const std::string& semantic_type,
-               const ont_uid &ontology) override;
-
-    std::string
-    add_object(const std::string& name,
-               const std::string& semantic_type,
                const size_t frame_index,
-               const ont_uid &ontology = "") override;
+               const obj_args& args) override;
 
     // Add object_data
     void

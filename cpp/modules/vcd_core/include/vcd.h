@@ -39,6 +39,13 @@ class VCD_UID {
 };
 
 using ont_uid = std::string;
+using obj_uid = std::string;
+
+struct obj_args {
+    std::string semantic_type;
+    ont_uid ontology_uid;
+    obj_uid uid;
+};
 
 class VCD {
  public:
@@ -77,16 +84,12 @@ class VCD {
     load(const std::string& fileName) = 0;
 
     // Add object
-    virtual std::string
-    add_object(const std::string& name, const std::string& semantic_type) = 0;
+    virtual obj_uid
+    add_object(const std::string& name, const obj_args& args) = 0;
 
-    virtual std::string
-    add_object(const std::string& name, const std::string& semantic_type,
-               const ont_uid &ontology) = 0;
-
-    virtual std::string
-    add_object(const std::string& name, const std::string& semantic_type,
-               const size_t frame_index, const ont_uid &ontology = "") = 0;
+    virtual obj_uid
+    add_object(const std::string& name, const size_t frame_index,
+               const obj_args& args) = 0;
 
     // Add object_data
     virtual void

@@ -83,7 +83,9 @@ SCENARIO("Create some basic content, without time information, and do some "
             VCD_ptr vcd = VCD::create();
 
             // 2.- Create the Object
-            std::string uid_marcos = vcd->add_object("marcos", "person");
+            vcd::obj_args marcos_args;
+            marcos_args.semantic_type = "person";
+            std::string uid_marcos = vcd->add_object("marcos", marcos_args);
             CHECK(uid_marcos == "0");
 
             // 3.- Add some data to the object
@@ -99,7 +101,9 @@ SCENARIO("Create some basic content, without time information, and do some "
                 vcd->add_object_data(uid_marcos, accel_num.get());
             }
 
-            std::string uid_peter = vcd->add_object("peter", "person");
+            vcd::obj_args peter_args;
+            peter_args.semantic_type = "person";
+            std::string uid_peter = vcd->add_object("peter", peter_args);
             {
                 // Define the internal objects for peter
                 Num age("age", 38.0);
@@ -155,9 +159,13 @@ SCENARIO("Create some basic content, without time information, and do some "
             VCD_ptr vcd = VCD::create();
 
             // 2.- Create some Objects
-            std::string uid_marcos = vcd->add_object("marcos", "person");
+            vcd::obj_args marcos_args;
+            marcos_args.semantic_type = "person";
+            std::string uid_marcos = vcd->add_object("marcos", marcos_args);
             CHECK(uid_marcos == "0");
-            std::string uid_peter = vcd->add_object("peter", "person");
+            vcd::obj_args peter_args;
+            peter_args.semantic_type = "person";
+            std::string uid_peter = vcd->add_object("peter", peter_args);
             CHECK(uid_peter == "1");
 
             // 3.- Add some data to the objects
@@ -197,11 +205,11 @@ SCENARIO("Create some basic content, without time information, and do some "
             REQUIRE(compare_json_files(vcd_outp_path, vcd_p_path));
         }
 
-        THEN("We can include attributes") {
-            // PRELIMINAR TEST OF ATTRIBUTES, PLEASE REMOVE
-            Bbox box1 = Bbox("head", {0, 0, 10, 10});
-            box1.add_attribute(Boolean("visible", true).get());
-        }
+//        THEN("We can include attributes") {
+//            // PRELIMINAR TEST OF ATTRIBUTES, PLEASE REMOVE
+//            Bbox box1 = Bbox("head", {0, 0, 10, 10});
+//            box1.add_attribute(Boolean("visible", true).get());
+//        }
 
         THEN("We can include ontologies") {
             // 1.- Create a VCD instance
@@ -219,8 +227,11 @@ SCENARIO("Create some basic content, without time information, and do some "
             REQUIRE(ont_uid_1 != ont_uid_2);
 
             // 3.- Create the Object
-            const std::string uid_marcos = vcd->add_object("marcos", "person",
-                                                           ont_uid_1);
+            vcd::obj_args marcos_args;
+            marcos_args.semantic_type = "person";
+            marcos_args.ontology_uid = ont_uid_1;
+            const std::string uid_marcos = vcd->add_object("marcos",
+                                                           marcos_args);
             CHECK(uid_marcos == "0");
 
             // 4.- Add some data to the object

@@ -213,32 +213,21 @@ VCD_Impl::add_frame(const size_t frame_num, const bool addMissedFrames) {
 
 std::string
 VCD_Impl::add_object(const std::string& name,
-                     const std::string& semantic_type) {
+                     const obj_args& args) {
     const size_t null_frame_index = getNoneFrameIndex();
-    const ont_uid ontology = "";
-    return add_object(name, semantic_type, null_frame_index, ontology);
+    return add_object(name, null_frame_index, args);
 }
 
 std::string
 VCD_Impl::add_object(const std::string& name,
-                     const std::string& semantic_type,
-                     const ont_uid &ontology) {
-    const size_t null_frame_index = getNoneFrameIndex();
-    return add_object(name, semantic_type, null_frame_index, ontology);
-}
-
-std::string
-VCD_Impl::add_object(const std::string& name,
-                     const std::string& semantic_type,
                      const size_t frame_index,
-                     const ont_uid &ontology) {
+                     const obj_args& args) {
     //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
 //    int frame_value = 0;
-    std::string uid = "";
     std::string coordinate_system;
     SetMode set_mode = SetMode::union_t;
-    return set_element(ElementType::object, name, semantic_type,
-                       frame_index, UID(uid), ontology,
+    return set_element(ElementType::object, name, args.semantic_type,
+                       frame_index, UID(args.uid), args.ontology_uid,
                        coordinate_system, set_mode).asStr();
 }
 
