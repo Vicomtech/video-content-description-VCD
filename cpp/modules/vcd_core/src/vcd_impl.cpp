@@ -266,6 +266,12 @@ VCD_Impl::add_ontology(const std::string &ontology) {
     return new_key;
 }
 
+// Getters
+size_t
+VCD_Impl::get_num_objects() {
+    return get_num_elements(ElementType::object);
+}
+
 UID
 VCD_Impl::get_uid_to_assign(const ElementType type, const UID &uid) {
     UID uid_to_assign;
@@ -340,6 +346,16 @@ VCD_Impl::get_element(const ElementType type, const UID &uid) {
                   << ElementTypeName[type]
                      << " with uid: " << uid_str << std::endl;
         return nullptr;
+    }
+}
+
+size_t
+VCD_Impl::get_num_elements(const ElementType type) {
+    const std::string key = ElementTypeName[type] + "s";
+    if (m_data["vcd"].contains(key)) {
+        return m_data["vcd"][key].size();
+    } else {
+        return 0;
     }
 }
 

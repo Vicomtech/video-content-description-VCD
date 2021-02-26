@@ -166,6 +166,10 @@ class VCD_Impl : public vcd::VCD {
     ont_uid
     add_ontology(const std::string &ontology) override;
 
+    // Getters
+    size_t
+    get_num_objects() override;
+
     inline size_t
     getNoneFrameIndex() {
         return std::numeric_limits<size_t>::max();
@@ -193,6 +197,9 @@ class VCD_Impl : public vcd::VCD {
 
     json*
     get_element(const ElementType type, const UID &uid);
+
+    size_t
+    get_num_elements(const ElementType type);
 
     json*
     get_object(const UID &uid);

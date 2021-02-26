@@ -348,6 +348,53 @@ SCENARIO("Create some basic content, without time information, and do some "
         }
     }
 
+    GIVEN("A simulated event set") {
+        THEN("Simulate an online operation during 1000 frames") {
+            // And cut-off every 100 frames into a new VCD
+            std::vector<vcd::VCD_Inner> vcds;
+            vcds.reserve(10);
+            vcd::obj_uid uid = "-1";
+            vcd::VCD *vcd_cur = nullptr;
+            // Define carlota arguments
+            vcd::obj_args carlota_args;
+            carlota_args.semantic_type = "Car";
+            // Simulate
+            for (size_t frame_num = 0; frame_num < 1000; ++frame_num) {
+                int frame_num_i = static_cast<int>(frame_num);
+                if (frame_num % 100 == 0) {
+                    // Create new VCD
+                    vcds.emplace_back();
+                    vcd_cur = &vcds.back();
+                    // Optionally we could here dump into JSON file
+                    if (frame_num == 0) {
+                        // leave VCD to assign uid = 0
+                        uid = vcd_cur->add_object("CARLOTA", carlota_args);
+                        carlota_args.uid = uid;
+                        auto box = Bbox("", {0, frame_num_i, 0, 0});
+                        vcd_cur->add_object_data(uid, box, frame_num);
+                    } else {
+                        // tell VCD to use last_uid
+                        uid = vcd_cur->add_object("CARLOTA", carlota_args);
+                        auto box = Bbox("", {0, frame_num_i, 0, 0});
+                        vcd_cur->add_object_data(uid, box, frame_num);
+                    }
+                } else {
+                    // Continue with current VCD
+                    auto box = Bbox("", {0, frame_num_i, 0, 0});
+                    vcd_cur->add_object_data(uid, box, frame_num);
+                }
+            }
+            json* obj = nullptr;
+            for (auto& vcd_this : vcds) {
+                REQUIRE(vcd_this.get_num_objects() == 1);
+                obj = vcd_this.get_object(uid);
+                REQUIRE(obj != nullptr);
+                REQUIRE((*obj)["name"] == "CARLOTA");
+                REQUIRE((*obj)["type"] == "Car");
+            }
+        }
+    }
+
     /*GIVEN("Read and write some VCD content") {
         std::string fileName = vcd::SetupStrings::testDataPath +
                             "/vcd430_test_create_search_simple_nopretty.json";

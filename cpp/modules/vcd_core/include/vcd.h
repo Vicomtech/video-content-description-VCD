@@ -121,6 +121,10 @@ class VCD {
     virtual ont_uid
     add_ontology(const std::string &ontology) = 0;
 
+    // Getters
+    virtual size_t
+    get_num_objects() = 0;
+
     // Instance creation factories
     static CORE_LIB std::unique_ptr<VCD>
     create(const std::string& fileName, const bool validation = false);
