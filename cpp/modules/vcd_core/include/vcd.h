@@ -40,6 +40,7 @@ class VCD_UID {
 
 using ont_uid = std::string;
 using obj_uid = std::string;
+using meta_props = std::map<std::string, std::string>;
 
 struct obj_args {
     std::string semantic_type;
@@ -82,6 +83,22 @@ class VCD {
      */
     virtual void
     load(const std::string& fileName) = 0;
+
+    // Add metadata and comments
+    virtual void
+    add_annotator(const std::string &annotator) = 0;
+
+    virtual void
+    add_comment(const std::string &comment) = 0;
+
+    virtual void
+    add_file_version(const std::string &file_version) = 0;
+
+    virtual void
+    add_name(const std::string &name) = 0;
+
+    virtual void
+    add_metadata_properties(const vcd::meta_props &properties) = 0;
 
     // Add object
     virtual obj_uid

@@ -13,6 +13,8 @@ if(COMMAND cmake_policy)
      cmake_policy(SET CMP0003 NEW)
 endif(COMMAND cmake_policy)
 
+include_directories(${SRC_PATH}/vcd_core/src)
+
 #---------------------------------------------------#
 #              Project Files                        #
 #---------------------------------------------------#

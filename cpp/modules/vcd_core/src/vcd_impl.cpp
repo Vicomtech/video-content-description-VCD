@@ -180,6 +180,41 @@ VCD_Impl::add_frame(const size_t frame_num, const bool addMissedFrames) {
     return m_data["vcd"]["frames"][frm_num_str];
 }
 
+// Manage metadata
+void
+VCD_Impl::add_annotator(const std::string &annotator) {
+    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    meta["annotator"] = annotator;
+}
+
+void
+VCD_Impl::add_comment(const std::string &comment) {
+    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    meta["comment"] = comment;
+}
+
+void
+VCD_Impl::add_file_version(const std::string &version) {
+    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    meta["file_version"] = version;
+}
+
+void
+VCD_Impl::add_name(const std::string &name) {
+    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    meta["name"] = name;
+}
+
+void
+VCD_Impl::add_metadata_properties(const vcd::meta_props &properties) {
+    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    for (const auto &elem : properties) {
+        const std::string &key = elem.first;
+        const std::string &value = elem.second;
+        meta[key] = value;
+    }
+}
+
 std::string
 VCD_Impl::add_object(const std::string& name,
                      const obj_args& args) {
@@ -259,6 +294,15 @@ VCD_Impl::get_uid_to_assign(const ElementType type, const UID &uid) {
         }
     }
     return uid_to_assign;
+}
+
+json*
+VCD_Impl::get_metadata() {
+    if (!m_data["vcd"].contains("metadata")) {
+        return nullptr;
+    } else {
+        return &m_data["vcd"]["metadata"];
+    }
 }
 
 json*

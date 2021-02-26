@@ -34,6 +34,8 @@
 #include "setup_strings.h"
 #include "test_utils.h"
 
+#include "vcd_impl.h"
+
 static char asset_path[] = TEST_ASSET_FOLDER;
 
 using vcd::VCD;
@@ -46,6 +48,31 @@ using vcd::types::Boolean;
 using std::string;
 
 using nlohmann::json;
+
+// Indirection class to get inner elements of vcd instance
+namespace vcd {
+class VCD_Inner : public vcd::VCD_Impl {
+ public:
+    VCD_Inner() : vcd::VCD_Impl("") {
+    }
+
+    json*
+    get_inner_element(const vcd::ElementType type, const std::string &uid) {
+        return get_element(type, vcd::UID(uid));
+    }
+
+    json*
+    get_object(const std::string &uid) {
+        const vcd::UID uid_inst(uid);
+        return vcd::VCD_Impl::get_object(uid_inst);
+    }
+
+    json*
+    get_metadata() {
+        return vcd::VCD_Impl::get_metadata();
+    }
+};
+}  // namespace vcd
 
 std::string
 getStreamAsString(const std::istream& in) {
@@ -289,6 +316,35 @@ SCENARIO("Create some basic content, without time information, and do some "
                                         json::parse(vcd->stringify(false)),
                                         json::parse(vcd2->stringify(false)));
             REQUIRE(both_equal);
+        }
+    }
+
+    GIVEN("Extra metadata values") {
+        THEN("The metadata can be updated") {
+            // 1.- Create VCD from file
+            vcd::VCD_Inner vcd;
+
+            const std::string annotator = "Algorithm001";
+            const std::string comment =
+                            "Annotations produced automatically - SW v0.1";
+            // This is a versioning for the annotation file itself
+            const std::string file_version = "2.0";
+            // A friendly name
+            const std::string name = "vcd_" + file_version + "-" + annotator;
+            vcd.add_annotator(annotator);
+            vcd.add_comment(comment);
+            vcd.add_file_version(file_version);
+            vcd.add_name(name);
+
+            // Other customized metadata can be added as well
+            vcd::meta_props props = {
+                {"target", "Test track"},
+                {"origin", "synthetic"}};
+            vcd.add_metadata_properties(props);
+
+            json *meta = vcd.get_metadata();
+            REQUIRE((*meta)["annotator"] == annotator);
+            REQUIRE((*meta)["comment"] == comment);
         }
     }
 

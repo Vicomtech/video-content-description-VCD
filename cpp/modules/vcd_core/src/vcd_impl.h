@@ -127,6 +127,22 @@ class VCD_Impl : public vcd::VCD {
     json&
     add_frame(const size_t frame_index, const bool addMissedFrames = false);
 
+    // Manage metadata
+    void
+    add_annotator(const std::string &annotator) override;
+
+    void
+    add_comment(const std::string &comment) override;
+
+    void
+    add_file_version(const std::string &file_version) override;
+
+    void
+    add_name(const std::string &name) override;
+
+    void
+    add_metadata_properties(const vcd::meta_props &properties) override;
+
     // Add object
     std::string
     add_object(const std::string& name,
@@ -169,6 +185,9 @@ class VCD_Impl : public vcd::VCD {
     }
 
  protected:
+    json*
+    get_metadata();
+
     json*
     get_frame(const int frame_num);
 
