@@ -38,13 +38,6 @@ class VCD_UID {
     isNone() const = 0;
 };
 
-struct FrameValue {
-FrameValue(const int frameIndex);
-FrameValue(const int frameStart, const int frameEnd);
-int frameIndex = -1;
-int frameStart = -1;
-int frameEnd = -1;
-};
 
 class VCD {
  public:

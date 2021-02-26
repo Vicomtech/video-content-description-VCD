@@ -32,16 +32,4 @@ VCD::create(const bool validation) {
 VCD_UID::~VCD_UID() {
 }
 
-FrameValue::FrameValue(const int frameIndex_) {
-    frameIndex = frameIndex_;
-    frameStart = -1;
-    frameEnd = -1;
-}
-
-FrameValue::FrameValue(const int frameStart_, const int frameEnd_) {
-    frameIndex = -1;
-    frameStart = frameStart_;
-    frameEnd = frameEnd_;
-}
-
 };  // namespace vcd
