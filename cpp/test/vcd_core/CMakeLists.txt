@@ -23,6 +23,6 @@ add_subdirectory( test_basic )
 # add_subdirectory( test_semantics )
 # add_subdirectory( test_serializer )
 # add_subdirectory( test_stream_frame_properties )
-# add_subdirectory( test_uuid )
+add_subdirectory( test_uuid )
 
 
