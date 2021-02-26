@@ -62,6 +62,12 @@ class VCD_Inner : public vcd::VCD_Impl {
     get_inner_element(const vcd::ElementType type, const std::string &uid) {
         return get_element(type, vcd::UID(uid));
     }
+
+    json*
+    get_object(const std::string &uid) {
+        const vcd::UID uid_inst(uid);
+        return vcd::VCD_Impl::get_object(uid_inst);
+    }
 };
 }  // namespace vcd
 
@@ -184,6 +190,28 @@ SCENARIO("Create some basic content, without time information") {
             const json ref_data = json::parse(ref_json);
             const json test_data = json::parse(vcd_out_pretty);
             REQUIRE(check_json_level(test_data, ref_data));
+        }
+
+        THEN("Use explicit uuid v4 values") {
+            // 1.- Create a VCD instance
+            vcd::VCD_Inner vcd_impl;
+            const std::string uuid1 = vcd::UID::generate_uuid4();
+            // Adding an object and specifying its uid to be a previously
+            // defined UUID, from this call on VCD uses UUID
+            vcd::obj_args marcos_args;
+            marcos_args.semantic_type = "person";
+            marcos_args.uid = uuid1;
+            std::string uid1 = vcd_impl.add_object("marcos", marcos_args);
+            const auto *object = vcd_impl.get_object(uid1);
+            REQUIRE(object != nullptr);
+            REQUIRE((*object)["name"] == "marcos");
+
+            vcd::obj_args orti_args;
+            orti_args.semantic_type = "person";
+            const auto uid2 = vcd_impl.add_object("orti", orti_args);
+
+            const bool match_regex = vcd::UID::check_uuid4(uid2);
+            REQUIRE(match_regex);
         }
     }
 }

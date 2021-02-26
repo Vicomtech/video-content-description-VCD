@@ -85,6 +85,12 @@ class UID : public VCD_UID {
     void
     withStr(const std::string &val);
 
+    static std::string
+    generate_uuid4();
+
+    static bool
+    check_uuid4(const std::string &uuid);
+
  private:
     void set(const std::string &uidStr, const int uidInt, const bool isUUID);
 
