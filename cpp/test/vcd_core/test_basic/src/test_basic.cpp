@@ -197,10 +197,66 @@ SCENARIO("Create some basic content, without time information, and do some "
             REQUIRE(compare_json_files(vcd_outp_path, vcd_p_path));
         }
 
-        THEN("We can ask VCD") {
+        THEN("We can include attributes") {
             // PRELIMINAR TEST OF ATTRIBUTES, PLEASE REMOVE
             Bbox box1 = Bbox("head", {0, 0, 10, 10});
             box1.add_attribute(Boolean("visible", true).get());
+        }
+
+        THEN("We can include ontologies") {
+            // 1.- Create a VCD instance
+            VCD_ptr vcd = VCD::create();
+
+            // 2.- Create some ontologies
+            const vcd::ont_uid ont_uid_1 = vcd->add_ontology(
+                                "http://www.vicomtech.org/viulib/ontology");
+            const vcd::ont_uid ont_uid_2 = vcd->add_ontology(
+                                "http://www.alternativeURL.org/ontology");
+            const vcd::ont_uid ont_uid_1_bis = vcd->add_ontology(
+                                "http://www.vicomtech.org/viulib/ontology");
+
+            REQUIRE(ont_uid_1 == ont_uid_1_bis);
+            REQUIRE(ont_uid_1 != ont_uid_2);
+
+            // 3.- Create the Object
+            const std::string uid_marcos = vcd->add_object("marcos", "person",
+                                                           ont_uid_1);
+            CHECK(uid_marcos == "0");
+
+            // 4.- Add some data to the object
+            // Define the internal objects for marcos
+            Bbox head_bbox("head", {10, 10, 30, 30});
+            Bbox body_bbox("body", {0, 0, 60, 120});
+            Vec speed_vec("speed", {0.0, 0.2});
+            Num accel_num("accel", 0.1);
+            vcd->add_object_data(uid_marcos, head_bbox.get());
+            vcd->add_object_data(uid_marcos, body_bbox.get());
+            vcd->add_object_data(uid_marcos, speed_vec.get());
+            vcd->add_object_data(uid_marcos, accel_num.get());
+
+            // Generate json data
+            const bool pretty = true;
+            const std::string vcd_out_pretty = vcd->stringify(pretty);
+
+            // Save the json info into a file for comparisson
+            string out_p = "vcd430_test_ontology_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            o_p << vcd_out_pretty << std::endl;
+            o_p.close();
+
+            // Read reference JSON file
+            string ref_p = "vcd430_test_ontology.json";
+            fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
+            std::ifstream ref_file_data(vcd_refp_path);
+            json ref_data;
+            ref_file_data >> ref_data;
+            ref_file_data.close();
+
+            // Generate JSON structure for comparison
+            json test_data = json::parse(vcd_out_pretty);
+
+            REQUIRE(check_json_level(test_data, ref_data));
         }
     }
 

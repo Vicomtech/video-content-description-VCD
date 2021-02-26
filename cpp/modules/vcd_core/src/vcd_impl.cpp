@@ -215,21 +215,30 @@ std::string
 VCD_Impl::add_object(const std::string& name,
                      const std::string& semantic_type) {
     const size_t null_frame_index = getNoneFrameIndex();
-    return add_object(name, semantic_type, null_frame_index);
+    const ont_uid ontology = "";
+    return add_object(name, semantic_type, null_frame_index, ontology);
 }
 
 std::string
 VCD_Impl::add_object(const std::string& name,
                      const std::string& semantic_type,
-                     const size_t frame_index) {
+                     const ont_uid &ontology) {
+    const size_t null_frame_index = getNoneFrameIndex();
+    return add_object(name, semantic_type, null_frame_index, ontology);
+}
+
+std::string
+VCD_Impl::add_object(const std::string& name,
+                     const std::string& semantic_type,
+                     const size_t frame_index,
+                     const ont_uid &ontology) {
     //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
 //    int frame_value = 0;
     std::string uid = "";
-    std::string ont_uid = "";
     std::string coordinate_system;
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::object, name, semantic_type,
-                       frame_index, UID(uid), UID(ont_uid),
+                       frame_index, UID(uid), ontology,
                        coordinate_system, set_mode).asStr();
 }
 
@@ -247,6 +256,21 @@ VCD_Impl::add_object_data(const std::string &uid,
                           const size_t frame_index) {
     return set_element_data(ElementType::object, UID(uid), object_data,
                             frame_index, SetMode::union_t);
+}
+
+ont_uid
+VCD_Impl::add_ontology(const std::string &ontology) {
+    json& ontologies = setDefault(m_data["vcd"], "ontologies", json::object());
+    // Check if ontology already exists
+    for (const auto &ont : ontologies.items()) {
+        if (ont.value() == ontology) {
+            std::cout << "WARNING: adding an already existing ontology\n";
+            return ont.key();
+        }
+    }
+    const std::string new_key = std::to_string(ontologies.size());
+    ontologies[new_key] = ontology;
+    return new_key;
 }
 
 UID
@@ -357,7 +381,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
                                          const std::string &name,
                                          const std::string &semantic_type,
                                          const size_t frame_index,
-                                         const UID &uid, const UID &ont_uid,
+                                         const UID &uid, const ont_uid &ont_uid,
                                          const std::string &coord_system) {
     // 1.- Copy from existing or create new entry (this copies everything,
     //     including element_data) element_data_pointers and frame intervals.
@@ -377,8 +401,8 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
         if (!semantic_type.empty()) {
             element["type"] = semantic_type;
         }
-        if (!ont_uid.isNone() && hasOntology(ont_uid.asStr())) {
-            element["ontology_uid"] = ont_uid.asStr();
+        if (!ont_uid.empty()) {
+            element["ontology_uid"] = ont_uid;
         }
     }
     update_element_frame_intervals(element, frame_index);
@@ -484,7 +508,7 @@ UID
 VCD_Impl::set_element(const ElementType type, const std::string &name,
                       const std::string &semantic_type,
                       const size_t frame_index,
-                      const UID &uid, const UID &ont_uid,
+                      const UID &uid, const ont_uid &ont_uid,
                       const std::string &coordinate_system,
                       const SetMode set_mode) {
 //        fis = frame_intervals

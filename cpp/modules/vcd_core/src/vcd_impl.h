@@ -121,6 +121,7 @@ class VCD_Impl : public vcd::VCD {
     json&
     add_frame(const size_t frame_index, const bool addMissedFrames = false);
 
+    // Add object
     std::string
     add_object(const std::string& name,
                const std::string& semantic_type) override;
@@ -128,8 +129,15 @@ class VCD_Impl : public vcd::VCD {
     std::string
     add_object(const std::string& name,
                const std::string& semantic_type,
-               const size_t frame_index) override;
+               const ont_uid &ontology) override;
 
+    std::string
+    add_object(const std::string& name,
+               const std::string& semantic_type,
+               const size_t frame_index,
+               const ont_uid &ontology = "") override;
+
+    // Add object_data
     void
     add_object_data(const std::string &uid,
                     const types::ObjectData& object_data) override;
@@ -138,6 +146,9 @@ class VCD_Impl : public vcd::VCD {
     add_object_data(const std::string &uid,
                     const types::ObjectData& object_data,
                     const size_t frame_index) override;
+
+    ont_uid
+    add_ontology(const std::string &ontology) override;
 
     inline size_t
     getNoneFrameIndex() {
@@ -187,14 +198,14 @@ class VCD_Impl : public vcd::VCD {
                                    const std::string &name,
                                    const std::string &semantic_type,
                                    const size_t frame_index,
-                                   const UID &uid, const UID &ont_uid,
+                                   const UID &uid, const ont_uid &ont_uid,
                                    const std::string &coord_system);
 
     UID
     set_element(const ElementType type, const std::string &name,
                 const std::string &semantic_type,
                 const size_t frame_index,
-                const UID &uid, const UID &ont_uid,
+                const UID &uid, const ont_uid &ont_uid,
                 const std::string &coordinate_system = nullptr,
                 const SetMode set_mode = union_t);
 

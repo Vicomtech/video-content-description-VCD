@@ -38,6 +38,7 @@ class VCD_UID {
     isNone() const = 0;
 };
 
+using ont_uid = std::string;
 
 class VCD {
  public:
@@ -75,13 +76,19 @@ class VCD {
     virtual void
     load(const std::string& fileName) = 0;
 
+    // Add object
     virtual std::string
     add_object(const std::string& name, const std::string& semantic_type) = 0;
 
     virtual std::string
     add_object(const std::string& name, const std::string& semantic_type,
-               const size_t frame_index) = 0;
+               const ont_uid &ontology) = 0;
 
+    virtual std::string
+    add_object(const std::string& name, const std::string& semantic_type,
+               const size_t frame_index, const ont_uid &ontology = "") = 0;
+
+    // Add object_data
     virtual void
     add_object_data(const std::string &uid,
                     const types::ObjectData& object_data) = 0;
@@ -90,6 +97,9 @@ class VCD {
     add_object_data(const std::string &uid,
                     const types::ObjectData& object_data,
                     const size_t frame_index) = 0;
+
+    virtual ont_uid
+    add_ontology(const std::string &ontology) = 0;
 
     // Instance creation factories
     static CORE_LIB std::unique_ptr<VCD>
