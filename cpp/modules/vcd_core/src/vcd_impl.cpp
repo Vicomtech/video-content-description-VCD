@@ -82,16 +82,26 @@ VCD_Impl::save(const std::string& fileName, const bool pretty,
                const bool validate) const {
     std::string json_string = this->stringify(pretty);
     std::ofstream f(fileName);
-    f << json_string;
-    f.close();
+    if (f.is_open()) {
+        f << json_string;
+        f.close();
+    } else {
+        std::cerr << "Error opening file '" << fileName << "'\n";
+        std::cerr << "      Is the path reachablet?\n";
+    }
 }
 
 void
 VCD_Impl::load(const std::string& fileName) {
     std::ifstream i(fileName);
-    m_data.clear();
-    i >> m_data;
-    i.close();
+    if (i.is_open()) {
+        m_data.clear();
+        i >> m_data;
+        i.close();
+    } else {
+        std::cerr << "Error opening file '" << fileName << "'\n";
+        std::cerr << "      Does the file exist?\n";
+    }
 }
 
 void

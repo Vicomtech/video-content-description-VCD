@@ -72,7 +72,7 @@ getFileAsString(const std::string& filePath) {
 
 SCENARIO("Create some basic content, without time information, and do some "
          "basic search") {
-    GIVEN("Create and empty VCD") {
+    GIVEN("A set of object data") {
         THEN("Create an object") {
             VCD_ptr vcd = VCD::create();
             REQUIRE(vcd.get() != nullptr);
@@ -268,6 +268,27 @@ SCENARIO("Create some basic content, without time information, and do some "
             json test_data = json::parse(vcd_out_pretty);
 
             REQUIRE(check_json_level(test_data, ref_data));
+        }
+    }
+
+    GIVEN("A reference json file") {
+        THEN("VCD loads and saves properly") {
+            // 1.- Create VCD from file
+            VCD_ptr vcd = VCD::create();
+            const string ref_file = "vcd430_test_create_search_mid.json";
+            fs::path vcd_r_path = fs::path(asset_path) / fs::path(ref_file);
+            vcd->load(vcd_r_path);
+            const string gen_file = "vcd430_test_create_search_mid_TEST.json";
+            fs::path vcd_g_path = fs::path(asset_path) / fs::path(gen_file);
+            vcd->save(vcd_g_path);
+            // 2.- Re-load generated file
+            VCD_ptr vcd2 = VCD::create();
+            vcd2->load(vcd_g_path);
+            // 3.- Compare
+            const bool both_equal = check_json_level(
+                                        json::parse(vcd->stringify(false)),
+                                        json::parse(vcd2->stringify(false)));
+            REQUIRE(both_equal);
         }
     }
 
