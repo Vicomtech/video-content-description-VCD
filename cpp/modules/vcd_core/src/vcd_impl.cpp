@@ -23,7 +23,7 @@ using std::string;
 
 using vcd::types::ObjectDataTypeName;
 
-static const bool S_ADD_MISSIED_FRAMES = true;
+static const bool S_ADD_MISSIED_FRAMES = false;
 
 namespace vcd {
 
