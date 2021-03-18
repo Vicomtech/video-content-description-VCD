@@ -11,20 +11,22 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+# TODO: change to v4.4.0
+
 ######################################
 # Fully manually writing the schema
 ######################################
-vcd_schema_version = "4.3.1"
-vcd_schema = {
+openlabel_schema_version = "0.1.0"
+openlabel_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
-        "vcd": {"$ref": "#/definitions/vcd"}
+        "openlabel": {"$ref": "#/definitions/openlabel"}
     },
     "definitions": {
-        "vcd": {
+        "openlabel": {
             "type": "object",
-            "description": "This is the root VCD element.",
+            "description": "This is the root OpenLABEL element.",
             "properties": {
                 "frame_intervals": {
                     "type": "array",
@@ -210,7 +212,7 @@ vcd_schema = {
         "metadata": {
             "type": "object",
             "properties": {
-                "schema_version": {"type": "string", "enum": [vcd_schema_version]},
+                "schema_version": {"type": "string", "enum": [openlabel_schema_version]},
                 "file_version": {"type": "string"},
                 "name": {"type": "string"},
                 "annotator": {"type": "string"},
@@ -624,13 +626,13 @@ vcd_schema = {
                                If provided inside a certain frame, it can be used\
                                to specify timestamps in ISO8601 format,\
                                and a frame_stream of this stream.\
-                               E.g. at vcd's frame 34, for stream CAM_LEFT, the sync info\
+                               E.g. at openlabel's frame 34, for stream CAM_LEFT, the sync info\
                                contains timestamp=2020-04-09T04:57:57+00:00,\
                                and frame_stream=36 (which means that this CAM_LEFT is shifted\
-                               2 frame with respect the vcd's master frame indexes.\
+                               2 frame with respect the openlabel's master frame indexes.\
                                If provided at stream level, it can be used to specify\
                                a frame shift, e.g. the shift of that stream wrt to the\
-                               master vcd frame count.\
+                               master openlabel frame count.\
                                E.g. if the shift is constant for all frames, it is more compact\
                                to define the frame_shift=2 at stream level.",
                 "type": "object",
@@ -976,6 +978,7 @@ vcd_schema = {
             "additionalProperties": True
         },
     },
-    "required": ["vcd"],
+    "required": ["openlabel"],
     "additionalProperties": False
 }
+

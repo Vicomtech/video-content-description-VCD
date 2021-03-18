@@ -247,7 +247,8 @@ class VCD:
     ##################################################
     # Constructor
     ##################################################
-    def __init__(self, file_name=None, validation=False):
+    def __init__(self, file_name=None, validation=False, root_name='vcd'):
+        self.root_name = root_name  # changed to 'openlabel' if using OpenLABEL
         self.use_uuid = False
         if file_name is not None:
             json_file = open(file_name)
@@ -274,6 +275,12 @@ class VCD:
                         self.reset()  # to init object
                         converter.ConverterVCD420toVCD431(read_data, self)  # self is modified internally
 
+                        if root_name == 'openlabel':
+                            # Then, the user is using the 'openlabel' keyword, but 'vcd' content was loaded
+                            # Let's substitute the root from 'vcd' to 'openlabel', and update the schema version
+                            self.data[root_name] = self.data.pop('vcd')
+                            self.data[root_name]['metadata']['schema_version'] = schema.openlabel_schema_version
+
                     elif read_data['vcd']['version'] == "4.1.0":
                         # This is VCD 4.1.0
                         raise Exception("ERROR: VCD 4.1.0 to VCD 4.3.1 conversion is not implemented.")
@@ -284,28 +291,66 @@ class VCD:
                                 read_data['vcd']['metadata']['schema_version'] == "4.3.1":
                             # This is VCD 4.3.0 or VCD 4.3.1
                             self.data = read_data
+
+                            # Check if user created the object as OpenLABEL
+                            if root_name == 'openlabel':
+                                # Then, the user is using the 'openlabel' keyword, but 'vcd' content was loaded
+                                # Let's substitute the root from 'vcd' to 'openlabel', and update the schema version
+                                self.data[root_name] = self.data.pop('vcd')
+                                self.data[root_name]['metadata']['schema_version'] = schema.openlabel_schema_version
+
                             if validation:
                                 if not hasattr(self, 'schema'):
-                                    self.schema = schema.vcd_schema
+                                    self.schema = schema.openlabel_schema
+                                    #self.schema = schema.vcd_schema
                                 validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
                                 json_file.close()
 
                             # In VCD 4.3.1 uids are strings, because they can be numeric strings, or UUIDs
                             # but frames are still ints, so let's parse like that
-                            if 'frames' in self.data['vcd']:
-                                frames = self.data['vcd']['frames']
+                            if 'frames' in self.data[root_name]:
+                                frames = self.data[root_name]['frames']
                                 if frames:  # So frames is not empty
-                                    self.data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
+                                    self.data[self.root_name]['frames'] = {int(key): value for key, value in frames.items()}
                         else:
                             raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
                     else:
                         raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
+
+
+
             elif 'VCD' in read_data:
                 # This is 3.x
                 warnings.warn("WARNING: Converting VCD 3.3.0 to VCD 4.3.1. A full revision is recommended.")
                 # Assuming this is VCD 3.3.0, let's load into VCD 4.3.1
                 self.reset()  # to init object
                 converter.ConverterVCD330toVCD431(read_data, self)  # self is modified internally
+                if root_name == 'openlabel':
+                    # Then, the user is using the 'openlabel' keyword, but 'vcd' content was loaded
+                    # Let's substitute the root from 'vcd' to 'openlabel', and update the schema version
+                    self.data[root_name] = self.data.pop('vcd')
+                    self.data[root_name]['metadata']['schema_version'] = schema.openlabel_schema_version
+            elif 'openlabel' in read_data:
+                # This is an OpenLABEL file
+                if 'metadata' in read_data['openlabel']:
+                    if 'schema_version' in read_data['openlabel']['metadata']:
+                        if read_data['openlabel']['metadata']['schema_version'] == '0.1.0':
+                            # This is OpenLABEL 0.1.0
+                            self.data = read_data
+                            if validation:
+                                if not hasattr(self, 'schema'):
+                                    self.schema = schema.openlabel_schema
+                                validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
+                                json_file.close()
+
+                            # In OpenLABEL 0.1.0 uids are strings, because they can be numeric strings, or UUIDs
+                            # but frames are still ints, so let's parse like that
+                            if 'frames' in self.data['openlabel']:
+                                frames = self.data['openlabel']['frames']
+                                if frames:  # So frames is not empty
+                                    self.data['openlabel']['frames'] = {int(key): value for key, value in frames.items()}
+                else:
+                    raise Exception("ERROR: This OpenLABEL file has no version information. Should be under metadata.")
 
             # Close file
             json_file.close()
@@ -321,12 +366,12 @@ class VCD:
 
     def reset(self):
         # Main VCD data
-        self.data = {'vcd': {}}
-        self.data['vcd']['metadata'] = {}
-        self.data['vcd']['metadata']['schema_version'] = schema.vcd_schema_version
+        self.data = {self.root_name: {}}
+        self.data[self.root_name]['metadata'] = {}
+        self.data[self.root_name]['metadata']['schema_version'] = schema.openlabel_schema_version
 
         # Schema information
-        self.schema = schema.vcd_schema
+        self.schema = schema.openlabel_schema
 
         # Additional auxiliary structures
         self.__lastUID = dict()
@@ -373,54 +418,54 @@ class VCD:
     def __set_vcd_frame_intervals(self, frame_intervals):
         assert(isinstance(frame_intervals, FrameIntervals))
         if not frame_intervals.empty():
-            self.data['vcd']['frame_intervals'] = frame_intervals.get_dict()
+            self.data[self.root_name]['frame_intervals'] = frame_intervals.get_dict()
 
     def __update_vcd_frame_intervals(self, frame_intervals):
         # This function creates the union of existing VCD with the input frameIntervals
         assert (isinstance(frame_intervals, FrameIntervals))
         if not frame_intervals.empty():
-            if 'frame_intervals' not in self.data['vcd']:
-                self.data['vcd']['frame_intervals'] = []
-            fis_current = FrameIntervals(self.data['vcd']['frame_intervals'])
+            if 'frame_intervals' not in self.data[self.root_name]:
+                self.data[self.root_name]['frame_intervals'] = []
+            fis_current = FrameIntervals(self.data[self.root_name]['frame_intervals'])
             fis_union = fis_current.union(frame_intervals)
             self.__set_vcd_frame_intervals(fis_union)
 
     def __add_frame(self, frame_num):
-        if 'frames' not in self.data['vcd']:
-            self.data['vcd']['frames'] = {}
-        if frame_num not in self.data['vcd']['frames']:
-            self.data['vcd']['frames'][frame_num] = {}
+        if 'frames' not in self.data[self.root_name]:
+            self.data[self.root_name]['frames'] = {}
+        if frame_num not in self.data[self.root_name]['frames']:
+            self.data[self.root_name]['frames'][frame_num] = {}
 
     def __compute_last_uid(self):
         self.__lastUID = dict()
         # Read all objects and fill lastUID
         self.__lastUID[ElementType.object] = -1
-        if 'objects' in self.data['vcd']:
-            for uid in self.data['vcd']['objects']:
+        if 'objects' in self.data[self.root_name]:
+            for uid in self.data[self.root_name]['objects']:
                 if int(uid) > self.__lastUID[ElementType.object]:
                     self.__lastUID[ElementType.object] = int(uid)
 
         self.__lastUID[ElementType.action] = -1
-        if 'actions' in self.data['vcd']:
-            for uid in self.data['vcd']['actions']:
+        if 'actions' in self.data[self.root_name]:
+            for uid in self.data[self.root_name]['actions']:
                 if int(uid) > self.__lastUID[ElementType.action]:
                     self.__lastUID[ElementType.action] = int(uid)
 
         self.__lastUID[ElementType.event] = -1
-        if 'events' in self.data['vcd']:
-            for uid in self.data['vcd']['events']:
+        if 'events' in self.data[self.root_name]:
+            for uid in self.data[self.root_name]['events']:
                 if int(uid) > self.__lastUID[ElementType.event]:
                     self.__lastUID[ElementType.event] = int(uid)
 
         self.__lastUID[ElementType.context] = -1
-        if 'contexts' in self.data['vcd']:
-            for uid in self.data['vcd']['contexts']:
+        if 'contexts' in self.data[self.root_name]:
+            for uid in self.data[self.root_name]['contexts']:
                 if int(uid) > self.__lastUID[ElementType.context]:
                     self.__lastUID[ElementType.context] = int(uid)
 
         self.__lastUID[ElementType.relation] = -1
-        if 'relations' in self.data['vcd']:
-            for uid in self.data['vcd']['relations']:
+        if 'relations' in self.data[self.root_name]:
+            for uid in self.data[self.root_name]['relations']:
                 if int(uid) > self.__lastUID[ElementType.relation]:  # uid is a string!
                     self.__lastUID[ElementType.relation] = int(uid)
 
@@ -473,9 +518,9 @@ class VCD:
         # element_data_pointers and frame intervals
         uidstr = uid.as_str()
         element_existed = self.has(element_type, uidstr)# note: public functions use int or str for uids
-        self.data['vcd'].setdefault(element_type.name + 's', {})
-        self.data['vcd'][element_type.name + 's'].setdefault(uidstr, {})
-        element = self.data['vcd'][element_type.name + 's'][uidstr]
+        self.data[self.root_name].setdefault(element_type.name + 's', {})
+        self.data[self.root_name][element_type.name + 's'].setdefault(uidstr, {})
+        element = self.data[self.root_name][element_type.name + 's'][uidstr]
 
         fis_old = FrameIntervals()
         if 'frame_intervals' in element:
@@ -550,12 +595,12 @@ class VCD:
                         for fi in vcd_frame_intervals.get():
                             for f in range(fi[0], fi[1] + 1):
                                 if not fis_new.has_frame(f):  # Only for those OTHER frames not those just added
-                                    elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
+                                    elements_in_frame = self.data[self.root_name]['frames'][f][element_type.name + 's']
                                     if uidstr in elements_in_frame:
                                         del elements_in_frame[uidstr]
                                         if len(elements_in_frame) == 0:
-                                            del self.data['vcd']['frames'][f][element_type.name + 's']
-                                            if len(self.data['vcd']['frames'][f]) == 0:
+                                            del self.data[self.root_name]['frames'][f][element_type.name + 's']
+                                            if len(self.data[self.root_name]['frames'][f]) == 0:
                                                 self.__rm_frame(f)
 
                 # Next loop for is for the case fis_old wasn't empty, so we just need to remove old content
@@ -564,11 +609,11 @@ class VCD:
                         is_inside = fis_new.has_frame(f)
                         if not is_inside:
                             # Old frame not inside new ones -> let's remove this frame
-                            elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
+                            elements_in_frame = self.data[self.root_name]['frames'][f][element_type.name + 's']
                             del elements_in_frame[uidstr]
                             if len(elements_in_frame) == 0:
-                                del self.data['vcd']['frames'][f][element_type.name + 's']
-                                if len(self.data['vcd']['frames'][f]) == 0:
+                                del self.data[self.root_name]['frames'][f][element_type.name + 's']
+                                if len(self.data[self.root_name]['frames'][f]) == 0:
                                     self.__rm_frame(f)
         else:
             # 2.2.- The element is declared as static
@@ -587,12 +632,12 @@ class VCD:
                 # Additionally, we need to remove element entries at frames, and frames entirely to clean-up
                 for fi in fis_old.get():
                     for f in range(fi[0], fi[1] + 1):
-                        elements_in_frame = self.data['vcd']['frames'][f][element_type.name + 's']
+                        elements_in_frame = self.data[self.root_name]['frames'][f][element_type.name + 's']
                         del elements_in_frame[uidstr]
                         # Clean-up
                         if len(elements_in_frame) == 0:
-                            del self.data['vcd']['frames'][f][element_type.name + 's']
-                            if len(self.data['vcd']['frames'][f]) == 0:
+                            del self.data[self.root_name]['frames'][f][element_type.name + 's']
+                            if len(self.data[self.root_name]['frames'][f]) == 0:
                                 self.__rm_frame(f)
 
     def __set_element_data(self, element_type, uid, element_data, frame_intervals, set_mode):
@@ -712,8 +757,8 @@ class VCD:
 
     def __set_element_data_pointers(self, element_type, uid, element_data, frame_intervals):
         assert(isinstance(uid, UID))
-        self.data['vcd'][element_type.name + 's'][uid.as_str()].setdefault(element_type.name + '_data_pointers', {})
-        edp = self.data['vcd'][element_type.name + 's'][uid.as_str()][element_type.name + '_data_pointers']
+        self.data[self.root_name][element_type.name + 's'][uid.as_str()].setdefault(element_type.name + '_data_pointers', {})
+        edp = self.data[self.root_name][element_type.name + 's'][uid.as_str()][element_type.name + '_data_pointers']
         edp[element_data.data['name']] = {}
         edp[element_data.data['name']]['type'] = element_data.type.name
         if frame_intervals is None:
@@ -728,22 +773,22 @@ class VCD:
 
     def __rm_frame(self, frame_num):
         # This function deletes a frame entry from frames, and updates VCD accordingly
-        if 'frames' in self.data['vcd']:
-            if frame_num in self.data['vcd']['frames']:
-                del self.data['vcd']['frames'][frame_num]
-            if len(self.data['vcd']['frames']) == 0:
-                del self.data['vcd']['frames']
+        if 'frames' in self.data[self.root_name]:
+            if frame_num in self.data[self.root_name]['frames']:
+                del self.data[self.root_name]['frames'][frame_num]
+            if len(self.data[self.root_name]['frames']) == 0:
+                del self.data[self.root_name]['frames']
 
         # Remove from VCD frame intervals
-        if 'frame_intervals' in self.data['vcd']:
-            fis_dict = self.data['vcd']['frame_intervals']
+        if 'frame_intervals' in self.data[self.root_name]:
+            fis_dict = self.data[self.root_name]['frame_intervals']
             fis_dict_new = utils.rm_frame_from_frame_intervals(fis_dict, frame_num)
 
             # Now substitute
             if len(fis_dict_new) == 0:
-                del self.data['vcd']['frame_intervals']
+                del self.data[self.root_name]['frame_intervals']
             else:
-                self.data['vcd']['frame_intervals'] = fis_dict_new
+                self.data[self.root_name]['frame_intervals'] = fis_dict_new
 
 
     def __compute_data_pointers(self):
@@ -752,8 +797,8 @@ class VCD:
         # It is useful to convert from VCD 4.2.0 into VCD 4.3.1 (use converter.ConverterVCD420toVCD430)
 
         # Looping over frames and creating the necessary data_pointers
-        if 'frame_intervals' in self.data['vcd']:
-            fis = self.data['vcd']['frame_intervals']
+        if 'frame_intervals' in self.data[self.root_name]:
+            fis = self.data[self.root_name]['frame_intervals']
             for fi in fis:
                 for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
                     frame = self.get_frame(frame_num)
@@ -766,9 +811,9 @@ class VCD:
                                     # we can safely assume it already exists
 
                                     # First, let's create a element_data_pointer at the root
-                                    self.data['vcd'][element_type.name + 's'][uid].\
+                                    self.data[self.root_name][element_type.name + 's'][uid].\
                                         setdefault(element_type.name + '_data_pointers', {})
-                                    edp = self.data['vcd'][element_type.name + 's'][uid]
+                                    edp = self.data[self.root_name][element_type.name + 's'][uid]
                                     [element_type.name + '_data_pointers']
 
                                     # Let's loop over the element_data
@@ -788,7 +833,7 @@ class VCD:
         for fi in frame_intervals.get():
             for f in range(fi[0], fi[1] + 1):
                 if self.has_frame(f):
-                    frame = self.data['vcd']['frames'][f]
+                    frame = self.data[self.root_name]['frames'][f]
                     if element_type.name + 's' in frame:
                         if uid.as_str() in frame[element_type.name + 's']:
                             element = frame[element_type.name + 's'][uid.as_str()]
@@ -805,7 +850,7 @@ class VCD:
         for fi in frame_intervals.get():
             for f in range(fi[0], fi[1] + 1):
                 if self.has_frame(f):
-                    frame = self.data['vcd']['frames'][f]
+                    frame = self.data[self.root_name]['frames'][f]
                     if element_type.name + 's' in frame:
                         if uid.as_str() in frame[element_type.name + 's']:
                             element = frame[element_type.name + 's'][uid.as_str()]
@@ -817,7 +862,7 @@ class VCD:
         # Note, element_data_pointers are correctly updated, but there might be some now declared as static
         # corresponding to element_data that was dynamic but now has been removed when the element changed to static
         if self.has(element_type, uid.as_str()):
-            element = self.data['vcd'][element_type.name + 's'][uid.as_str()]
+            element = self.data[self.root_name][element_type.name + 's'][uid.as_str()]
             if element_type.name + '_data_pointers' in element:
                 edps = element[element_type.name + '_data_pointers']
                 edp_names_to_delete = []
@@ -843,41 +888,41 @@ class VCD:
     ##################################################
     def add_file_version(self, version):
         assert (type(version) is str)
-        if 'metadata' not in self.data['vcd']:
-            self.data['vcd']['metadata'] = {}
-        self.data['vcd']['metadata']['file_version'] = version
+        if 'metadata' not in self.data[self.root_name]:
+            self.data[self.root_name]['metadata'] = {}
+        self.data[self.root_name]['metadata']['file_version'] = version
 
     def add_metadata_properties(self, properties):
         assert(isinstance(properties, dict))
-        prop = self.data['vcd']['metadata']
+        prop = self.data[self.root_name]['metadata']
         prop.update(properties)
 
     def add_name(self, name):
         assert(type(name) is str)
-        if 'metadata' not in self.data['vcd']:
-            self.data['vcd']['metadata'] = {}
-        self.data['vcd']['metadata']['name'] = name
+        if 'metadata' not in self.data[self.root_name]:
+            self.data[self.root_name]['metadata'] = {}
+        self.data[self.root_name]['metadata']['name'] = name
 
     def add_annotator(self, annotator):
         assert(type(annotator) is str)
-        if 'metadata' not in self.data['vcd']:
-            self.data['vcd']['metadata'] = {}
-        self.data['vcd']['metadata']['annotator'] = annotator
+        if 'metadata' not in self.data[self.root_name]:
+            self.data[self.root_name]['metadata'] = {}
+        self.data[self.root_name]['metadata']['annotator'] = annotator
 
     def add_comment(self, comment):
         assert(type(comment) is str)
-        if 'metadata' not in self.data['vcd']:
-            self.data['vcd']['metadata'] = {}
-        self.data['vcd']['metadata']['comment'] = comment
+        if 'metadata' not in self.data[self.root_name]:
+            self.data[self.root_name]['metadata'] = {}
+        self.data[self.root_name]['metadata']['comment'] = comment
 
     def add_ontology(self, ontology_name):
-        self.data['vcd'].setdefault('ontologies', dict())
-        for ont_uid in self.data['vcd']['ontologies']:
-            if self.data['vcd']['ontologies'][ont_uid] == ontology_name:
+        self.data[self.root_name].setdefault('ontologies', dict())
+        for ont_uid in self.data[self.root_name]['ontologies']:
+            if self.data[self.root_name]['ontologies'][ont_uid] == ontology_name:
                 warnings.warn('WARNING: adding an already existing ontology')
                 return None
-        length = len(self.data['vcd']['ontologies'])
-        self.data['vcd']['ontologies'][str(length)] = ontology_name
+        length = len(self.data[self.root_name]['ontologies'])
+        self.data[self.root_name]['ontologies'][str(length)] = ontology_name
         return str(length)
 
     def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=[], uid=None, pose=None):
@@ -887,27 +932,27 @@ class VCD:
         assert(isinstance(cs_type, types.CoordinateSystemType))
 
         # Create entry
-        self.data['vcd'].setdefault('coordinate_systems', {})
+        self.data[self.root_name].setdefault('coordinate_systems', {})
 
         if pose is not None:
             assert(isinstance(pose, types.Pose))
-            self.data['vcd']['coordinate_systems'][name] = {'type': cs_type.name,
+            self.data[self.root_name]['coordinate_systems'][name] = {'type': cs_type.name,
                                                             'parent': parent_name,
                                                             'children': []}
-            self.data['vcd']['coordinate_systems'][name].update({"pose_wrt_parent": pose.data_additional})
+            self.data[self.root_name]['coordinate_systems'][name].update({"pose_wrt_parent": pose.data_additional})
         else:
-            self.data['vcd']['coordinate_systems'][name] = {'type': cs_type.name,
+            self.data[self.root_name]['coordinate_systems'][name] = {'type': cs_type.name,
                                                             'parent': parent_name,
                                                             'pose_wrt_parent': pose_wrt_parent,
                                                             'children': []}
         if uid is not None:
             assert(isinstance(uid, str))
-            self.data['vcd']['coordinate_systems'][name].update({"uid": uid})
+            self.data[self.root_name]['coordinate_systems'][name].update({"uid": uid})
 
         # Update parents
         if parent_name != "":
             found = False
-            for n, cs in self.data['vcd']['coordinate_systems'].items():
+            for n, cs in self.data[self.root_name]['coordinate_systems'].items():
                 if n == parent_name:
                     found = True
                     cs['children'].append(name)
@@ -920,37 +965,37 @@ class VCD:
         assert(isinstance(transform, types.Transform))
 
         self.__add_frame(frame_num)  # this function internally checks if the frame already exists
-        self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
-        self.data['vcd']['frames'][frame_num]['frame_properties'].setdefault('transforms', dict())
-        self.data['vcd']['frames'][frame_num]['frame_properties']['transforms'].update(transform.data)
+        self.data[self.root_name]['frames'][frame_num].setdefault('frame_properties', dict())
+        self.data[self.root_name]['frames'][frame_num]['frame_properties'].setdefault('transforms', dict())
+        self.data[self.root_name]['frames'][frame_num]['frame_properties']['transforms'].update(transform.data)
 
     def add_stream(self, stream_name, uri, description, stream_type):
         assert(isinstance(stream_name, str))
         assert(isinstance(uri, str))
         assert(isinstance(description, str))
 
-        self.data['vcd'].setdefault('streams', dict())
-        self.data['vcd']['streams'].setdefault(stream_name, dict())
+        self.data[self.root_name].setdefault('streams', dict())
+        self.data[self.root_name]['streams'].setdefault(stream_name, dict())
         if isinstance(stream_type, StreamType):
-            self.data['vcd']['streams'][stream_name] = {
+            self.data[self.root_name]['streams'][stream_name] = {
                 'description': description, 'uri': uri, 'type': stream_type.name
             }
         elif isinstance(stream_type, str):
-            self.data['vcd']['streams'][stream_name] = {
+            self.data[self.root_name]['streams'][stream_name] = {
                 'description': description, 'uri': uri, 'type': stream_type
             }
 
     def add_frame_properties(self, frame_num, timestamp=None, properties=None):
         self.__add_frame(frame_num)  # this function internally checks if the frame already exists
         self.__update_vcd_frame_intervals(FrameIntervals(frame_num))
-        self.data['vcd']['frames'][frame_num].setdefault('frame_properties', dict())
+        self.data[self.root_name]['frames'][frame_num].setdefault('frame_properties', dict())
         if timestamp is not None:
             assert (isinstance(timestamp, str))
-            self.data['vcd']['frames'][frame_num]['frame_properties']['timestamp'] = timestamp
+            self.data[self.root_name]['frames'][frame_num]['frame_properties']['timestamp'] = timestamp
 
         if properties is not None:
             assert (isinstance(properties, dict))
-            self.data['vcd']['frames'][frame_num]['frame_properties'].update(properties)
+            self.data[self.root_name]['frames'][frame_num]['frame_properties'].update(properties)
 
     def add_stream_properties(self, stream_name, properties=None, intrinsics=None, stream_sync=None):
         has_arguments = False
@@ -978,26 +1023,26 @@ class VCD:
         # 'stream_properties' inside 'metadata'.
 
         # Find if this stream is declared
-        if 'metadata' in self.data['vcd']:
-            if 'streams' in self.data['vcd']:
-                if stream_name in self.data['vcd']['streams']:
+        if 'metadata' in self.data[self.root_name]:
+            if 'streams' in self.data[self.root_name]:
+                if stream_name in self.data[self.root_name]['streams']:
                     if frame_num is None:
                         # This information is static
-                        self.data['vcd']['streams'][stream_name].setdefault('stream_properties', dict())
+                        self.data[self.root_name]['streams'][stream_name].setdefault('stream_properties', dict())
                         if properties is not None:
-                            self.data['vcd']['streams'][stream_name]['stream_properties'].\
+                            self.data[self.root_name]['streams'][stream_name]['stream_properties'].\
                                 update(properties)
                         if intrinsics is not None:
-                            self.data['vcd']['streams'][stream_name]['stream_properties'].\
+                            self.data[self.root_name]['streams'][stream_name]['stream_properties'].\
                                 update(intrinsics.data)
                         if stream_sync is not None:
                             if stream_sync.data:
-                                self.data['vcd']['streams'][stream_name]['stream_properties'].\
+                                self.data[self.root_name]['streams'][stream_name]['stream_properties'].\
                                     update(stream_sync.data)
                     else:
                         # This is information of the stream for a specific frame
                         self.__add_frame(frame_num)  # to add the frame in case it does not exist
-                        frame = self.data['vcd']['frames'][frame_num]
+                        frame = self.data[self.root_name]['frames'][frame_num]
                         frame.setdefault('frame_properties', dict())
                         frame['frame_properties'].setdefault('streams', dict())
                         frame['frame_properties']['streams'].setdefault(stream_name, dict())
@@ -1031,7 +1076,7 @@ class VCD:
     def validate(self, stringified_vcd):
         temp = json.loads(stringified_vcd)
         if not hasattr(self, 'schema'):
-            self.schema = schema.vcd_schema
+            self.schema = schema.openlabel_schema
         validate(instance=temp, schema=self.schema)
 
     def stringify(self, pretty=True, validate=True):
@@ -1045,29 +1090,29 @@ class VCD:
         return stringified_vcd
 
     def stringify_frame(self, frame_num, dynamic_only=True, pretty=False):
-        if frame_num not in self.data['vcd']['frames']:
+        if frame_num not in self.data[self.root_name]['frames']:
             warnings.warn("WARNING: Trying to stringify a non-existing frame.")
             return ''
 
         if dynamic_only:
             if pretty:
-                return json.dumps(self.data['vcd']['frames'][frame_num], indent=4, sort_keys=True)
+                return json.dumps(self.data[self.root_name]['frames'][frame_num], indent=4, sort_keys=True)
             else:
-                return json.dumps(self.data['vcd']['frames'][frame_num])
+                return json.dumps(self.data[self.root_name]['frames'][frame_num])
 
         else:
             # Need to compose dynamic and static information into a new structure
             # Copy the dynamic info first
-            frame_static_dynamic = copy.deepcopy(self.data['vcd']['frames'][frame_num])  # Needs to be a copy!
+            frame_static_dynamic = copy.deepcopy(self.data[self.root_name]['frames'][frame_num])  # Needs to be a copy!
 
             # Now the static info for objects, actions, events, contexts and relations
             # Relations can be frame-less or frame-specific
             for element_type in ElementType:
                 # First, elements explicitly defined for this frame
-                if element_type.name + 's' in self.data['vcd']['frames'][frame_num]:
-                    for uid, content in self.data['vcd']['frames'][frame_num][element_type.name + 's'].items():
+                if element_type.name + 's' in self.data[self.root_name]['frames'][frame_num]:
+                    for uid, content in self.data[self.root_name]['frames'][frame_num][element_type.name + 's'].items():
                         frame_static_dynamic[element_type.name + 's'][uid].update(
-                            self.data['vcd'][element_type.name + 's'][uid]
+                            self.data[self.root_name][element_type.name + 's'][uid]
                         )
                         # Remove frameInterval entry
                         if 'frame_intervals' in frame_static_dynamic[element_type.name + 's'][uid]:
@@ -1075,8 +1120,8 @@ class VCD:
 
                 # But also other elements without frame intervals specified, which are assumed to exist during
                 # the entire sequence, except frame-less Relations which are assumed to not be associated to any frame
-                if element_type.name + 's' in self.data['vcd'] and element_type.name != 'relation':
-                    for uid, element in self.data['vcd'][element_type.name + 's'].items():
+                if element_type.name + 's' in self.data[self.root_name] and element_type.name != 'relation':
+                    for uid, element in self.data[self.root_name][element_type.name + 's'].items():
                         frame_intervals_dict = element.get('frame_intervals')
                         if frame_intervals_dict is None or not frame_intervals_dict:
                             # So the list of frame intervals is empty -> this element lives the entire scene
@@ -1119,7 +1164,7 @@ class VCD:
                      set_mode=SetMode.union):
         if set_mode == SetMode.replace and uid is not None:
             if self.has(ElementType.relation, uid):
-                relation = self.data['vcd']['relations'][UID(uid).as_str()]
+                relation = self.data[self.root_name]['relations'][UID(uid).as_str()]
                 relation['rdf_subjects'] = []
                 relation['rdf_objects'] = []
 
@@ -1138,12 +1183,12 @@ class VCD:
         assert(isinstance(rdf_type, RDF))
         rel_uid = UID(relation_uid)
         el_uid = UID(element_uid)
-        if rel_uid.as_str() not in self.data['vcd']['relations']:
+        if rel_uid.as_str() not in self.data[self.root_name]['relations']:
             warnings.warn("WARNING: trying to add RDF to non-existing Relation.")
             return
         else:
-            relation = self.data['vcd']['relations'][rel_uid.as_str()]
-            if el_uid.as_str() not in self.data['vcd'][element_type.name + 's']:
+            relation = self.data[self.root_name]['relations'][rel_uid.as_str()]
+            if el_uid.as_str() not in self.data[self.root_name][element_type.name + 's']:
                 warnings.warn("WARNING: trying to add RDF using non-existing Element.")
                 return
             else:
@@ -1246,31 +1291,34 @@ class VCD:
     def get_data(self):
         return self.data
 
+    def get_root(self):
+        return self.data[self.root_name]
+
     def has_elements(self, element_type):
         element_type_name = element_type.name
-        return element_type_name + 's' in self.data['vcd']
+        return element_type_name + 's' in self.data[self.root_name]
 
     def has_objects(self):
-        return 'objects' in self.data['vcd']
+        return 'objects' in self.data[self.root_name]
 
     def has_actions(self):
-        return 'actions' in self.data['vcd']
+        return 'actions' in self.data[self.root_name]
 
     def has_contexts(self):
-        return 'contexts' in self.data['vcd']
+        return 'contexts' in self.data[self.root_name]
 
     def has_events(self):
-        return 'events' in self.data['vcd']
+        return 'events' in self.data[self.root_name]
 
     def has_relations(self):
-        return 'relations' in self.data['vcd']
+        return 'relations' in self.data[self.root_name]
 
     def has(self, element_type, uid):
-        if not element_type.name + 's' in self.data['vcd']:
+        if not element_type.name + 's' in self.data[self.root_name]:
             return False
         else:
             uid_str = UID(uid).as_str()
-            if uid_str in self.data['vcd'][element_type.name + 's']:
+            if uid_str in self.data[self.root_name][element_type.name + 's']:
                 return True
             else:
                 return False
@@ -1280,16 +1328,16 @@ class VCD:
             return False
         else:
             uid_str = UID(uid).as_str()
-            if element_type.name + '_data_pointers' not in self.data['vcd'][element_type.name + 's'][uid_str]:
+            if element_type.name + '_data_pointers' not in self.data[self.root_name][element_type.name + 's'][uid_str]:
                 return False
             name = element_data.data['name']
-            return name in self.data['vcd'][element_type.name + 's'][uid_str][element_type.name + '_data_pointers']
+            return name in self.data[self.root_name][element_type.name + 's'][uid_str][element_type.name + '_data_pointers']
 
     def has_frame(self, frame_num):
-        if 'frames' not in self.data['vcd']:
+        if 'frames' not in self.data[self.root_name]:
             return False
         else:
-            if frame_num in self.data['vcd']['frames']:
+            if frame_num in self.data[self.root_name]['frames']:
                 return True
             else:
                 return False
@@ -1300,16 +1348,16 @@ class VCD:
         e.g. all Object's or Context's
         """
         assert(isinstance(element_type, ElementType))
-        return self.data['vcd'].get(element_type.name + 's')
+        return self.data[self.root_name].get(element_type.name + 's')
 
     def get_element(self, element_type, uid):
         assert (isinstance(element_type, ElementType))
-        if self.data['vcd'].get(element_type.name + 's') is None:
+        if self.data[self.root_name].get(element_type.name + 's') is None:
             warnings.warn("WARNING: trying to get a " + element_type.name + " but this VCD has none.")
             return None
         uid_str = UID(uid).as_str()
-        if uid_str in self.data['vcd'][element_type.name + 's']:
-            return self.data['vcd'][element_type.name + 's'][uid_str]
+        if uid_str in self.data[self.root_name][element_type.name + 's']:
+            return self.data[self.root_name][element_type.name + 's'][uid_str]
         else:
             warnings.warn("WARNING: trying to get non-existing " + element_type.name + " with uid: " + uid_str)
             return None
@@ -1333,7 +1381,7 @@ class VCD:
         if not self.has_elements(element_type):
             return None
         element_type_name = element_type.name
-        elements = self.data['vcd'][element_type_name + 's']
+        elements = self.data[self.root_name][element_type_name + 's']
         for uid, element in elements.items():
             name_element = element['name']
             if name_element == name:
@@ -1356,25 +1404,25 @@ class VCD:
         return self.get_element_uid_by_name(ElementType.relation, name)
 
     def get_frame(self, frame_num):
-        if 'frames' not in self.data['vcd']:
+        if 'frames' not in self.data[self.root_name]:
             return None
         else:
-            frame = self.data['vcd']['frames'].get(frame_num)
+            frame = self.data[self.root_name]['frames'].get(frame_num)
             return frame
 
     def get_elements_of_type(self, element_type, semantic_type):
         uids_str = []
-        if not element_type.name + 's' in self.data['vcd']:
+        if not element_type.name + 's' in self.data[self.root_name]:
             return uids_str
-        for uid_str, element in self.data['vcd'][element_type.name + 's'].items():
+        for uid_str, element in self.data[self.root_name][element_type.name + 's'].items():
             if element['type'] == semantic_type:
                 uids_str.append(uid_str)
         return uids_str
 
     def get_elements_with_element_data_name(self, element_type, data_name):
         uids_str = []
-        for uid_str in self.data['vcd'][element_type.name + 's']:
-            element = self.data['vcd'][element_type.name + 's'][uid_str]
+        for uid_str in self.data[self.root_name][element_type.name + 's']:
+            element = self.data[self.root_name][element_type.name + 's'][uid_str]
             if element_type.name + '_data_pointers' in element:
                 for name in element[element_type.name + '_data_pointers']:
                     if name == data_name:
@@ -1396,8 +1444,8 @@ class VCD:
 
     def get_frames_with_element_data_name(self, element_type, uid, data_name):
         uid_str = UID(uid).as_str()
-        if uid_str in self.data['vcd'][element_type.name + 's']:
-            element = self.data['vcd'][element_type.name + 's'][uid_str]
+        if uid_str in self.data[self.root_name][element_type.name + 's']:
+            element = self.data[self.root_name][element_type.name + 's'][uid_str]
             if element_type.name + '_data_pointers' in element:
                 for name in element[element_type.name + '_data_pointers']:
                     if name == data_name:
@@ -1440,7 +1488,7 @@ class VCD:
                         return 0
             else:
                 # Static info
-                element = self.data['vcd'][element_type.name + 's'][uid_str]
+                element = self.data[self.root_name][element_type.name + 's'][uid_str]
                 for prop in element[element_type.name + '_data']:
                     if prop == data_type.name:
                         return len(element[element_type.name + '_data'][prop])
@@ -1483,7 +1531,7 @@ class VCD:
                 # element or element_data at this frame
                 if not element_exists_in_this_frame:
                     return None
-                element = self.data['vcd'][element_type.name + 's'][uid_str]  # the element exists because of prev. ctrl
+                element = self.data[self.root_name][element_type.name + 's'][uid_str]  # the element exists because of prev. ctrl
                 for prop in element[element_type.name + '_data']:
                     val_array = element[element_type.name + '_data'][prop]
                     for val in val_array:
@@ -1491,7 +1539,7 @@ class VCD:
                             return val
         else:
             # The user is asking for static attributes at the root of the element
-            element = self.data['vcd'][element_type.name + 's'][uid_str]  # the element exists because of prev. ctrl
+            element = self.data[self.root_name][element_type.name + 's'][uid_str]  # the element exists because of prev. ctrl
             for prop in element[element_type.name + '_data']:
                 val_array = element[element_type.name + '_data'][prop]
                 for val in val_array:
@@ -1514,9 +1562,9 @@ class VCD:
     def get_element_data_pointer(self, element_type, uid, data_name):
         uid_str = UID(uid).as_str()
         if self.has(element_type, uid):
-            if element_type.name + 's' in self.data['vcd']:
-                if uid_str in self.data['vcd'][element_type.name + 's']:
-                    element = self.data['vcd'][element_type.name + 's'][uid_str]
+            if element_type.name + 's' in self.data[self.root_name]:
+                if uid_str in self.data[self.root_name][element_type.name + 's']:
+                    element = self.data[self.root_name][element_type.name + 's'][uid_str]
                     if element_type.name + '_data_pointers' in element:
                         if data_name in element[element_type.name + '_data_pointers']:
                             return element[element_type.name + '_data_pointers'][data_name]
@@ -1541,7 +1589,7 @@ class VCD:
 
     def get_num_elements(self, element_type):
         if self.has_elements(element_type):
-            return len(self.data['vcd'][element_type.name + 's'])
+            return len(self.data[self.root_name][element_type.name + 's'])
         else:
             return 0
 
@@ -1562,75 +1610,75 @@ class VCD:
 
     def get_elements_uids(self, element_type: ElementType):
         if self.has_elements(element_type):
-            list_of_uids = list(self.data['vcd'][element_type.name + 's'].keys())
+            list_of_uids = list(self.data[self.root_name][element_type.name + 's'].keys())
             return list_of_uids
         else:
             return []
 
     def get_ontology(self, ont_uid):
         ont_uid_str = UID(ont_uid).as_str()
-        if 'ontologies' in self.data['vcd']:
-            if ont_uid_str in self.data['vcd']['ontologies']:
-                return copy.deepcopy(self.data['vcd']['ontologies'][ont_uid_str])
+        if 'ontologies' in self.data[self.root_name]:
+            if ont_uid_str in self.data[self.root_name]['ontologies']:
+                return copy.deepcopy(self.data[self.root_name]['ontologies'][ont_uid_str])
         return None
 
     def get_metadata(self):
-        if 'metadata' in self.data['vcd']:
-            return self.data['vcd']['metadata']
+        if 'metadata' in self.data[self.root_name]:
+            return self.data[self.root_name]['metadata']
         else:
             return dict()
 
     def has_coordinate_system(self, cs):
-        if 'coordinate_systems' in self.data['vcd']:
-            if cs in self.data['vcd']['coordinate_systems']:
+        if 'coordinate_systems' in self.data[self.root_name]:
+            if cs in self.data[self.root_name]['coordinate_systems']:
                 return True
         return False
 
     def get_coordinate_systems(self):
-        if 'coordinate_systems' in self.data['vcd']:
-            return copy.deepcopy(self.data['vcd']['coordinate_systems'])
+        if 'coordinate_systems' in self.data[self.root_name]:
+            return copy.deepcopy(self.data[self.root_name]['coordinate_systems'])
         else:
             return []
 
     def get_coordinate_system(self, coordinate_system):
         if self.has_coordinate_system(coordinate_system):
-            return copy.deepcopy(self.data['vcd']['coordinate_systems'][coordinate_system])
+            return copy.deepcopy(self.data[self.root_name]['coordinate_systems'][coordinate_system])
         else:
             return None
 
     def has_stream(self, stream_name):
-        if 'streams' in self.data['vcd']:
-            if stream_name in self.data['vcd']['streams']:
+        if 'streams' in self.data[self.root_name]:
+            if stream_name in self.data[self.root_name]['streams']:
                 return True
             else:
                 return False
 
     def get_streams(self):
-        if 'streams' in self.data['vcd']:
-            return copy.deepcopy(self.data['vcd']['streams'])
+        if 'streams' in self.data[self.root_name]:
+            return copy.deepcopy(self.data[self.root_name]['streams'])
         else:
             return {}
 
     def get_stream(self, stream_name):
         if self.has_stream(stream_name):
-            return copy.deepcopy(self.data['vcd']['streams'][stream_name])
+            return copy.deepcopy(self.data[self.root_name]['streams'][stream_name])
         else:
             return None
 
     def get_frame_intervals(self):
-        if 'frame_intervals' in self.data['vcd']:
-            return FrameIntervals(self.data['vcd']['frame_intervals'])
+        if 'frame_intervals' in self.data[self.root_name]:
+            return FrameIntervals(self.data[self.root_name]['frame_intervals'])
         else:
             return FrameIntervals()
 
     def get_element_frame_intervals(self, element_type, uid):
         uid_str = UID(uid).as_str()
-        if not element_type.name + 's' in self.data['vcd']:
+        if not element_type.name + 's' in self.data[self.root_name]:
             return FrameIntervals()
         else:
-            if not uid_str in self.data['vcd'][element_type.name + 's']:
+            if not uid_str in self.data[self.root_name][element_type.name + 's']:
                 return FrameIntervals()
-            return FrameIntervals(self.data['vcd'][element_type.name + 's'][uid_str].get('frame_intervals'))
+            return FrameIntervals(self.data[self.root_name][element_type.name + 's'][uid_str].get('frame_intervals'))
 
     def relation_has_frame_intervals(self, relation_uid):
         rel_uid = UID(relation_uid)
@@ -1650,7 +1698,7 @@ class VCD:
     # Remove
     ##################################################
     def rm_element_by_type(self, element_type, semantic_type):
-        elements = self.data['vcd'][element_type.name + 's']
+        elements = self.data[self.root_name][element_type.name + 's']
 
         # Get Element from summary
         uids_to_remove_str = []
@@ -1685,25 +1733,25 @@ class VCD:
             return
 
         # Remove from frames: let's read frame_intervals from summary
-        elements = self.data['vcd'][element_type.name + 's']
+        elements = self.data[self.root_name][element_type.name + 's']
         element = elements[uid_str]
         if 'frame_intervals' in element:
             for i in range(0, len(element['frame_intervals'])):
                 fi = element['frame_intervals'][i]
                 for frame_num in range(fi['frame_start'], fi['frame_end']+1):
-                    elements_in_frame = self.data['vcd']['frames'][frame_num][element_type.name + 's']
+                    elements_in_frame = self.data[self.root_name]['frames'][frame_num][element_type.name + 's']
                     if uid in elements_in_frame:
                         del elements_in_frame[uid_str]
                     if len(elements_in_frame) == 0:  # objects might have end up empty TODO: test this
-                        del self.data['vcd']['frames'][frame_num][element_type.name + 's']
-                        if len(self.data['vcd']['frames'][frame_num]) == 0:  # this frame may have ended up being empty
-                            del self.data['vcd']['frames'][frame_num]
+                        del self.data[self.root_name]['frames'][frame_num][element_type.name + 's']
+                        if len(self.data[self.root_name]['frames'][frame_num]) == 0:  # this frame may have ended up being empty
+                            del self.data[self.root_name]['frames'][frame_num]
                             self.__rm_frame(frame_num)
 
         # Delete this element from summary
         del elements[uid_str]
         if len(elements) == 0:
-            del self.data['vcd'][element_type.name + 's']
+            del self.data[self.root_name][element_type.name + 's']
 
     def rm_object(self, uid):
         self.rm_element(ElementType.object, uid)
@@ -1719,3 +1767,8 @@ class VCD:
 
     def rm_relation(self, uid):
         self.rm_element(ElementType.relation, uid)
+
+
+class OpenLABEL(VCD):
+    def __init__(self, file_name=None, validation=False):
+        VCD.__init__(self, file_name, validation, 'openlabel')
