@@ -29,13 +29,18 @@ check_json_level(const json &data_a, const json &data_b) {
         for (auto& el_a : data_a.items()) {
             // Check if the element exists
             if (!data_b.contains(el_a.key())) {
+                printf("Missed element with key '%s'\n", el_a.key().c_str());
                 return false;
             } else {
                 // If exists, check the value of the element
                 const json& newElem_a = el_a.value();
                 const auto& key = el_a.key();
                 const json& newElem_b = data_b[key];
-                return check_json_level(newElem_a, newElem_b);
+                bool isEqual = check_json_level(newElem_a, newElem_b);
+                if (!isEqual) {
+                    printf("Error in element with key '%s'\n", key.c_str());
+                    return false;
+                }
             }
         }
     } else if (data_a.is_array()) {
@@ -44,8 +49,11 @@ check_json_level(const json &data_a, const json &data_b) {
         size_t n_b = data_b.size();
         if (n_a != n_b) return false;
         for (size_t i = 0; i < n_a; ++i) {
-            const bool res = check_json_level(data_a[i], data_b[i]);
-            if (!res) return false;
+            const bool isEqual = check_json_level(data_a[i], data_b[i]);
+            if (!isEqual) {
+                printf("Error in element with index '%zi'\n", i);
+                return false;
+            }
         }
     } else if (data_a.is_boolean()) {
         if (!data_b.is_boolean()) return false;
