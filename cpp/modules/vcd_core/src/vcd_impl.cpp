@@ -133,7 +133,11 @@ VCD_Impl::update_element_frame_intervals(json &element,
     if (!is_good_fi) return;
     if (has_fi) {
         const size_t lst_value = element["frame_intervals"].back()["frame_end"];
-        if (lst_value == (frame_index - 1)) {
+        if (lst_value == frame_index) {
+            // The new element is being included in a previously
+            // populated frame index. Thus, we can assume that no
+            // changes are needed in the frame interval definition.
+        } else if (lst_value == (frame_index - 1)) {
             // If the end value of the last interval is the prevous frame
             // increment this value in the element, because we are in the same
             // interval.
@@ -563,17 +567,24 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
     }
 
     // 3.- Reshape element_data_pointers according to this new frame intervals
-    const std::string dpoint_key = ElementTypeName[type] + "_data_pointers";
-    if (element.contains(dpoint_key) && fi_is_good) {
-        json &edps = element[dpoint_key];
-        for (auto &edp : edps) {
-            // NOW, we have to UPDATE frame intervals of pointers because we
-            // have modified the frame_intervals of the element itself, and
-            // If we compute the intersection frame_intervals, we can copy that
-            // into element_data_pointers frame intervals
-            update_element_frame_intervals(edp, frame_index);
-        }
-    }
+    // DEV NOTE (goe): This block is commented because it is not clear when
+    //                 the data pointers must be udpated. In the current
+    //                 implementation, the end frame value of all the data
+    //                 elements are updated, but in practice this has not
+    //                 sense.
+    //                 Lets try to clarify first this topic before include this
+    //                 kind of update loops.
+//    const std::string dpoint_key = ElementTypeName[type] + "_data_pointers";
+//    if (element.contains(dpoint_key) && fi_is_good) {
+//        json &edps = element[dpoint_key];
+//        for (auto &edp : edps) {
+//            // NOW, we have to UPDATE frame intervals of pointers because we
+//            // have modified the frame_intervals of the element itself, and
+//            // If we compute the intersection frame_intervals, we can copy
+//            // that into element_data_pointers frame intervals
+//            update_element_frame_intervals(edp, frame_index);
+//        }
+//    }
 
     // 4.- Now set at frames
     if (fi_is_good) {
