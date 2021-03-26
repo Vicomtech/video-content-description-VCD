@@ -40,6 +40,7 @@ class VCD_UID {
 
 using ont_uid = std::string;
 using obj_uid = std::string;
+using act_uid = std::string;
 using meta_props = std::map<std::string, std::string>;
 
 struct element_args {
@@ -116,6 +117,24 @@ class VCD {
     virtual void
     add_object_data(const std::string &uid,
                     const types::ObjectData& object_data,
+                    const size_t frame_index) = 0;
+
+    // Add action
+    virtual act_uid
+    add_action(const std::string& name, const element_args& args) = 0;
+
+    virtual act_uid
+    add_action(const std::string& name, const size_t frame_index,
+               const element_args& args) = 0;
+
+    // Add action_data
+    virtual void
+    add_action_data(const std::string &uid,
+                    const types::ObjectData& action_data) = 0;
+
+    virtual void
+    add_action_data(const std::string &uid,
+                    const types::ObjectData& action_data,
                     const size_t frame_index) = 0;
 
     virtual ont_uid

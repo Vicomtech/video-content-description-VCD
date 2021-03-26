@@ -163,6 +163,26 @@ class VCD_Impl : public vcd::VCD {
                     const types::ObjectData& object_data,
                     const size_t frame_index) override;
 
+    // Add action
+    std::string
+    add_action(const std::string& name,
+               const element_args& args) override;
+
+    std::string
+    add_action(const std::string& name,
+               const size_t frame_index,
+               const element_args& args) override;
+
+    // Add action_data
+    void
+    add_action_data(const std::string &uid,
+                    const types::ObjectData& action_data) override;
+
+    void
+    add_action_data(const std::string &uid,
+                    const types::ObjectData& action_data,
+                    const size_t frame_index) override;
+
     ont_uid
     add_ontology(const std::string &ontology) override;
 

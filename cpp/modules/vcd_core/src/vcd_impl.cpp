@@ -251,6 +251,26 @@ VCD_Impl::add_object_data(const std::string &uid,
                             frame_index, SetMode::union_t);
 }
 
+std::string
+VCD_Impl::add_action(const std::string& name,
+                     const element_args& args) {
+    const size_t null_frame_index = getNoneFrameIndex();
+    return add_action(name, null_frame_index, args);
+}
+
+std::string
+VCD_Impl::add_action(const std::string& name,
+                     const size_t frame_index,
+                     const element_args& args) {
+    //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
+//    int frame_value = 0;
+    std::string coordinate_system;
+    SetMode set_mode = SetMode::union_t;
+    return set_element(ElementType::action, name, args.semantic_type,
+                       frame_index, UID(args.uid), args.ontology_uid,
+                       coordinate_system, set_mode).asStr();
+}
+
 ont_uid
 VCD_Impl::add_ontology(const std::string &ontology) {
     json& ontologies = setDefault(m_data["vcd"], "ontologies", json::object());
