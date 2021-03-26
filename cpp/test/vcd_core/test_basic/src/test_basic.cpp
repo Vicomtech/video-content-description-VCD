@@ -296,6 +296,55 @@ SCENARIO("Create some basic content, without time information, and do some "
 
             REQUIRE(check_json_level(test_data, ref_data));
         }
+
+        THEN("Create objects without data") {
+            VCD_ptr vcd = VCD::create();
+
+            vcd::obj_args pedestrian_args;
+            pedestrian_args.semantic_type = "#Pedestrian";
+            std::string pedestrian_uid = vcd->add_object("", pedestrian_args);
+            pedestrian_args.uid = pedestrian_uid;
+
+            vcd::obj_args car_args;
+            car_args.semantic_type = "#Car";
+            std::string car_uid = vcd->add_object("", car_args);
+            car_args.uid = car_uid;
+
+            // Pedestrian frames (0, 30), Car frames (20, 30)
+            const size_t num_frames = 31;
+            for (size_t i = 0; i < num_frames; ++i) {
+                // Include pedestrian in the entire interval
+                vcd->add_object("", i, pedestrian_args);
+                if (i >= 20) {
+                    // Include car only above the frame #20
+                    vcd->add_object("", i, car_args);
+                }
+            }
+
+            // Generate json data
+            const bool pretty = true;
+            const std::string vcd_out_pretty = vcd->stringify(pretty);
+
+            // Save the json info into a file for comparisson
+            string out_p = "vcd430_test_objects_without_data_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            o_p << vcd_out_pretty << std::endl;
+            o_p.close();
+
+            // Read reference JSON file
+            string ref_p = "vcd430_test_objects_without_data.json";
+            fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
+            std::ifstream ref_file_data(vcd_refp_path);
+            json ref_data;
+            ref_file_data >> ref_data;
+            ref_file_data.close();
+
+            // Generate JSON structure for comparison
+            json test_data = json::parse(vcd_out_pretty);
+
+            REQUIRE(check_json_level(ref_data, test_data));
+        }
     }
 
     GIVEN("A reference json file") {
