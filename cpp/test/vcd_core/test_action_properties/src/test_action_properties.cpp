@@ -70,6 +70,7 @@ SCENARIO("Add a set of actions to a VCD capture") {
             vcd::element_args marcos_args;
             marcos_args.semantic_type = "#Person";
             std::string uid_object1 = vcd->add_object("Marcos", marcos_args);
+            marcos_args.uid = uid_object1;
             Text marcos_txt("Position", "#Researcher");
             vcd->add_object_data(uid_object1, marcos_txt);
 
@@ -77,6 +78,7 @@ SCENARIO("Add a set of actions to a VCD capture") {
             vcd::element_args ctx1_args;
             ctx1_args.semantic_type = "#Sunny";
             std::string uid_context1 = vcd->add_context("", ctx1_args);
+            ctx1_args.uid = uid_context1;
             Text ctx1_txt_cat("category", "#Weather");
             vcd->add_context_data(uid_context1, ctx1_txt_cat);
             Text ctx1_txt_ann("annotation", "Manual");
@@ -89,7 +91,7 @@ SCENARIO("Add a set of actions to a VCD capture") {
             ctx2_args.uid = uid_context2;
 
             const size_t num_frames = 10;
-            for (size_t frame_i = 0; frame_i < num_frames; ++frame_i) {
+            for (size_t frame_i = 0; frame_i <= num_frames; ++frame_i) {
                 // Simulate action detection
                 vcd->add_action("", frame_i, running_args);
                 if (frame_i == 0) {
@@ -117,6 +119,12 @@ SCENARIO("Add a set of actions to a VCD capture") {
                     Num ctx2_num_weight("weight", 0.5);
                     vcd->add_context_data(ctx2_args.uid, ctx2_num_weight,
                                           frame_i);
+                }
+                // This is extra to fit with the output definition
+                vcd->add_object("Marcos", frame_i, marcos_args);
+                vcd->add_context("", frame_i, ctx1_args);
+                if (frame_i <= 5) {
+                    vcd->add_context("", frame_i, ctx2_args);
                 }
             }
 
