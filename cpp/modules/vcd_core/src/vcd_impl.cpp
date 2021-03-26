@@ -413,9 +413,10 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
 
     // 2.- Copy from arguments
     if (!element_existed) {
-        if (!name.empty()) {
-            element["name"] = name;
-        }
+        // Name is a mandatory parameter in element definition call, so
+        // include even when it is empty.
+        element["name"] = name;
+
         if (!semantic_type.empty()) {
             element["type"] = semantic_type;
         }
