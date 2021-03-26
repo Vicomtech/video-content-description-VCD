@@ -104,7 +104,7 @@ SCENARIO("Create some basic content, without time information") {
 //            VCD_ptr vcd = VCD::create();
 
             // We can add elements and get UIDs as strings
-            vcd::obj_args mike_args;
+            vcd::element_args mike_args;
             mike_args.semantic_type = "Person";
             const auto uid0 = vcd_impl.add_object("Mike", mike_args);
             REQUIRE(uid0 == "0");
@@ -112,7 +112,7 @@ SCENARIO("Create some basic content, without time information") {
             // We can also specify which UID we will like our elements to have
             // We can only use strings
             // Response is always string
-            vcd::obj_args susan_args;
+            vcd::element_args susan_args;
             susan_args.semantic_type = "Person";
             susan_args.uid = "2";
             const obj_uid uid2 = vcd_impl.add_object("Susan", susan_args);
@@ -128,7 +128,7 @@ SCENARIO("Create some basic content, without time information") {
             REQUIRE(!ont_uid_0.empty());
 
             // Test ontology uid
-            vcd::obj_args mark_args;
+            vcd::element_args mark_args;
             mark_args.semantic_type = "#Pedestrian";
             mark_args.ontology_uid = ont_uid_0;
             const obj_uid uid3 = vcd_impl.add_object("Mark", mark_args);
@@ -198,7 +198,7 @@ SCENARIO("Create some basic content, without time information") {
             const std::string uuid1 = vcd::UID::generate_uuid4();
             // Adding an object and specifying its uid to be a previously
             // defined UUID, from this call on VCD uses UUID
-            vcd::obj_args marcos_args;
+            vcd::element_args marcos_args;
             marcos_args.semantic_type = "person";
             marcos_args.uid = uuid1;
             std::string uid1 = vcd_impl.add_object("marcos", marcos_args);
@@ -206,7 +206,7 @@ SCENARIO("Create some basic content, without time information") {
             REQUIRE(object != nullptr);
             REQUIRE((*object)["name"] == "marcos");
 
-            vcd::obj_args orti_args;
+            vcd::element_args orti_args;
             orti_args.semantic_type = "person";
             const auto uid2 = vcd_impl.add_object("orti", orti_args);
 

@@ -217,7 +217,7 @@ VCD_Impl::add_metadata_properties(const vcd::meta_props &properties) {
 
 std::string
 VCD_Impl::add_object(const std::string& name,
-                     const obj_args& args) {
+                     const element_args& args) {
     const size_t null_frame_index = getNoneFrameIndex();
     return add_object(name, null_frame_index, args);
 }
@@ -225,7 +225,7 @@ VCD_Impl::add_object(const std::string& name,
 std::string
 VCD_Impl::add_object(const std::string& name,
                      const size_t frame_index,
-                     const obj_args& args) {
+                     const element_args& args) {
     //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
 //    int frame_value = 0;
     std::string coordinate_system;

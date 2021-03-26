@@ -110,7 +110,7 @@ SCENARIO("Create some basic content, without time information, and do some "
             VCD_ptr vcd = VCD::create();
 
             // 2.- Create the Object
-            vcd::obj_args marcos_args;
+            vcd::element_args marcos_args;
             marcos_args.semantic_type = "person";
             std::string uid_marcos = vcd->add_object("marcos", marcos_args);
             CHECK(uid_marcos == "0");
@@ -128,7 +128,7 @@ SCENARIO("Create some basic content, without time information, and do some "
                 vcd->add_object_data(uid_marcos, accel_num.get());
             }
 
-            vcd::obj_args peter_args;
+            vcd::element_args peter_args;
             peter_args.semantic_type = "person";
             std::string uid_peter = vcd->add_object("peter", peter_args);
             {
@@ -155,7 +155,7 @@ SCENARIO("Create some basic content, without time information, and do some "
             o_p << vcd_string_pretty << std::endl;
             o_p.close();
 
-           string out_np = "vcd430_test_create_search_simple_nopretty_OUT.json";
+         string out_np = "vcd430_test_create_search_simple_nopretty_OUT.json";
             fs::path vcd_outnp_path = fs::path(asset_path) / fs::path(out_np);
             std::ofstream o_np(vcd_outnp_path);
             o_np << vcd_string_nopretty << std::endl;
@@ -186,11 +186,11 @@ SCENARIO("Create some basic content, without time information, and do some "
             VCD_ptr vcd = VCD::create();
 
             // 2.- Create some Objects
-            vcd::obj_args marcos_args;
+            vcd::element_args marcos_args;
             marcos_args.semantic_type = "person";
             std::string uid_marcos = vcd->add_object("marcos", marcos_args);
             CHECK(uid_marcos == "0");
-            vcd::obj_args peter_args;
+            vcd::element_args peter_args;
             peter_args.semantic_type = "person";
             std::string uid_peter = vcd->add_object("peter", peter_args);
             CHECK(uid_peter == "1");
@@ -254,7 +254,7 @@ SCENARIO("Create some basic content, without time information, and do some "
             REQUIRE(ont_uid_1 != ont_uid_2);
 
             // 3.- Create the Object
-            vcd::obj_args marcos_args;
+            vcd::element_args marcos_args;
             marcos_args.semantic_type = "person";
             marcos_args.ontology_uid = ont_uid_1;
             const std::string uid_marcos = vcd->add_object("marcos",
@@ -300,12 +300,12 @@ SCENARIO("Create some basic content, without time information, and do some "
         THEN("Create objects without data") {
             VCD_ptr vcd = VCD::create();
 
-            vcd::obj_args pedestrian_args;
+            vcd::element_args pedestrian_args;
             pedestrian_args.semantic_type = "#Pedestrian";
             std::string pedestrian_uid = vcd->add_object("", pedestrian_args);
             pedestrian_args.uid = pedestrian_uid;
 
-            vcd::obj_args car_args;
+            vcd::element_args car_args;
             car_args.semantic_type = "#Car";
             std::string car_uid = vcd->add_object("", car_args);
             car_args.uid = car_uid;
@@ -405,7 +405,7 @@ SCENARIO("Create some basic content, without time information, and do some "
             vcd::obj_uid uid = "-1";
             vcd::VCD *vcd_cur = nullptr;
             // Define carlota arguments
-            vcd::obj_args carlota_args;
+            vcd::element_args carlota_args;
             carlota_args.semantic_type = "Car";
             // Simulate
             for (size_t frame_num = 0; frame_num < 1000; ++frame_num) {

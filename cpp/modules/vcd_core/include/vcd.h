@@ -42,7 +42,7 @@ using ont_uid = std::string;
 using obj_uid = std::string;
 using meta_props = std::map<std::string, std::string>;
 
-struct obj_args {
+struct element_args {
     std::string semantic_type;
     ont_uid ontology_uid;
     obj_uid uid;
@@ -102,11 +102,11 @@ class VCD {
 
     // Add object
     virtual obj_uid
-    add_object(const std::string& name, const obj_args& args) = 0;
+    add_object(const std::string& name, const element_args& args) = 0;
 
     virtual obj_uid
     add_object(const std::string& name, const size_t frame_index,
-               const obj_args& args) = 0;
+               const element_args& args) = 0;
 
     // Add object_data
     virtual void

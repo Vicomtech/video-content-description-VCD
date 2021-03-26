@@ -146,12 +146,12 @@ class VCD_Impl : public vcd::VCD {
     // Add object
     std::string
     add_object(const std::string& name,
-               const obj_args& args) override;
+               const element_args& args) override;
 
     std::string
     add_object(const std::string& name,
                const size_t frame_index,
-               const obj_args& args) override;
+               const element_args& args) override;
 
     // Add object_data
     void
