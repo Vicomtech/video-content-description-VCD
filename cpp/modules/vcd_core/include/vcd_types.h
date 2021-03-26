@@ -128,6 +128,14 @@ class Boolean : public ObjectData {
     get() override;
 };
 
+class Text : public ObjectData {
+ public:
+    Text(const std::string& name, const std::string& text);
+
+    ObjectData&
+    get() override;
+};
+
 };  // namespace types
 
 };  // namespace vcd

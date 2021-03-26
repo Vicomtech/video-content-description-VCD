@@ -130,6 +130,18 @@ Boolean::get() {
     return static_cast<ObjectData&>(*this);
 }
 
+// Text class
+Text::Text(const std::string& name, const std::string& text) {
+    m_name = name;
+    m_data = {{"name", name}, {"val", text}};
+    m_type = ObjectDataType::text;
+}
+
+ObjectData&
+Text::get() {
+    return static_cast<ObjectData&>(*this);
+}
+
 };  // namespace types
 
 };  // namespace vcd
