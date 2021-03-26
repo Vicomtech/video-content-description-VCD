@@ -60,7 +60,13 @@ check_json_level(const json &data_a, const json &data_b) {
         return data_a == data_b;
     } else if (data_a.is_number()) {
         if (!data_b.is_number()) return false;
-        return data_a == data_b;
+        // Check similarity insteada of equality to avoid errors with similar
+        // but not equal float values.
+        const float a = data_a.get<float>();
+        const float b = data_b.get<float>();
+        const float sim = abs(a - b);
+        const float threshold = 0.001;
+        return sim < threshold;
     } else if (data_a.is_null()) {
         return data_b.is_null();
 
