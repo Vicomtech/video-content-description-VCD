@@ -207,6 +207,13 @@ class VCD_Impl : public vcd::VCD {
     ont_uid
     add_ontology(const std::string &ontology) override;
 
+    // Coordinate system
+    coord_uid
+    add_coordinate_system(const std::string& name,
+                      const types::CoordinateSystemType cs_type,
+                      const std::string& parent_name = "",
+                      const std::vector<float>& pose_wrt_parent = {}) override;
+
     // Getters
     size_t
     get_num_objects() override;

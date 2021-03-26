@@ -42,12 +42,14 @@ using ont_uid = std::string;
 using obj_uid = std::string;
 using act_uid = std::string;
 using ctx_uid = std::string;
+using coord_uid = std::string;
 using meta_props = std::map<std::string, std::string>;
 
 struct element_args {
     std::string semantic_type;
     ont_uid ontology_uid;
     obj_uid uid;
+    coord_uid coord_system;
 };
 
 class VCD {
@@ -159,6 +161,13 @@ class VCD {
     // Ontologies
     virtual ont_uid
     add_ontology(const std::string &ontology) = 0;
+
+    // Coordinate system
+    virtual coord_uid
+    add_coordinate_system(const std::string& name,
+                          const types::CoordinateSystemType cs_type,
+                          const std::string& parent_name = "",
+                          const std::vector<float>& pose_wrt_parent = {}) = 0;
 
     // Getters
     virtual size_t

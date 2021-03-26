@@ -228,11 +228,10 @@ VCD_Impl::add_object(const std::string& name,
                      const element_args& args) {
     //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
 //    int frame_value = 0;
-    std::string coordinate_system;
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::object, name, args.semantic_type,
                        frame_index, UID(args.uid), args.ontology_uid,
-                       coordinate_system, set_mode).asStr();
+                       args.coord_system, set_mode).asStr();
 }
 
 void
@@ -264,11 +263,10 @@ VCD_Impl::add_action(const std::string& name,
                      const element_args& args) {
     //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
 //    int frame_value = 0;
-    std::string coordinate_system;
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::action, name, args.semantic_type,
                        frame_index, UID(args.uid), args.ontology_uid,
-                       coordinate_system, set_mode).asStr();
+                       args.coord_system, set_mode).asStr();
 }
 
 void
@@ -300,11 +298,10 @@ VCD_Impl::add_context(const std::string& name,
                       const element_args& args) {
     //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
 //    int frame_value = 0;
-    std::string coordinate_system;
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::context, name, args.semantic_type,
                        frame_index, UID(args.uid), args.ontology_uid,
-                       coordinate_system, set_mode).asStr();
+                       args.coord_system, set_mode).asStr();
 }
 
 void
@@ -336,6 +333,58 @@ VCD_Impl::add_ontology(const std::string &ontology) {
     const std::string new_key = std::to_string(ontologies.size());
     ontologies[new_key] = ontology;
     return new_key;
+}
+
+coord_uid
+VCD_Impl::add_coordinate_system(const std::string& name,
+                                const types::CoordinateSystemType cs_type,
+                                const std::string& parent_name,
+                                const std::vector<float>& pose_wrt_parent) {
+    // Create entry
+    json& coord_sys = setDefault(m_data["vcd"], "coordinate_systems",
+                                 json::object());
+
+    // Check if coordinate system already exists
+    std::string cur_name;
+    for (const auto &sys : coord_sys.items()) {
+        cur_name = sys.key();
+        if (cur_name == name) {
+            std::cerr << "WARNING: adding an already existing ontology\n";
+            return name;
+        }
+    }
+
+    std::vector<float> fixed_pose;
+    if (pose_wrt_parent.size() == 16) {
+        fixed_pose = pose_wrt_parent;
+    }
+    // Define the coordinate system object
+    coord_sys[name.c_str()] = json::object({
+            {"type", types::CoordinateSystemTypeName[cs_type]},
+            {"parent", parent_name.c_str()},
+            {"pose_wrt_parent", fixed_pose},
+            {"children", json::array()}
+    });
+
+    // Update parents
+    if (!parent_name.empty()) {
+        bool found = false;
+        std::string cur_parent_name;
+        for (auto &sys : coord_sys.items()) {
+            cur_parent_name = sys.key();
+            if (cur_parent_name == parent_name) {
+                found = true;
+                sys.value()["children"].emplace_back(name);
+            }
+        }
+        if (!found) {
+            std::cerr << "WARNING: Creating a coordinate system with a "
+                         "non-defined parent coordinate system."
+                         "Coordinate systems must be introduced in order.\n";
+        }
+    }
+
+    return name;
 }
 
 // Getters
@@ -497,9 +546,9 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
         }
     }
     update_element_frame_intervals(element, frame_index);
-//    if (coord_system != nullptr && hasCoordSys(coord_system)) {
-//        element["coordinate_system"] = *coord_system;
-//    }
+    if (!coord_system.empty() && hasCoordSys(coord_system)) {
+        element["coordinate_system"] = coord_system;
+    }
 
 
     // 2.bis.- For Relations obligue to have rdf_objects and rdf_subjects
