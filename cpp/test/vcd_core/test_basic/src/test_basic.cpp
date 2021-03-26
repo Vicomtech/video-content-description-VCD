@@ -168,14 +168,14 @@ SCENARIO("Create some basic content, without time information, and do some "
 //            std::cout << vcd_np_path.c_str() << std::endl;
             REQUIRE(fs::exists(vcd_np_path));
             // Compare both json definition
-            REQUIRE(compare_json_files(vcd_outnp_path, vcd_np_path));
+            CHECK(compare_json_files(vcd_outnp_path, vcd_np_path));
 
             //  - Pretty version
             char vcd_p[] = "vcd430_test_create_search_simple_pretty.json";
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
             // Compare both json definition
-            REQUIRE(compare_json_files(vcd_outp_path, vcd_p_path));
+            CHECK(compare_json_files(vcd_outp_path, vcd_p_path));
         }
 
         THEN("Write into string") {
@@ -441,6 +441,85 @@ SCENARIO("Create some basic content, without time information, and do some "
                 REQUIRE((*obj)["name"] == "CARLOTA");
                 REQUIRE((*obj)["type"] == "Car");
             }
+        }
+    }
+
+    GIVEN("A scene definition") {
+        THEN("Load all the scene elements") {
+            using vcd::types::CoordinateSystemType;
+            VCD_ptr vcd = VCD::create();
+
+            // Generate coordinate system element
+            // The main coordinate system (the parent)
+            const std::string main_coord_sys_name = "MainOdometry";
+            vcd::coord_uid cs1 = vcd->add_coordinate_system(main_coord_sys_name,
+                                               CoordinateSystemType::local_cs,
+                                               "", {});
+            // A child coordinate system with no odometry data
+            const std::string ch_coord_sys_name = "ChildOdometry";
+            vcd::coord_uid cs2 = vcd->add_coordinate_system(ch_coord_sys_name,
+                                               CoordinateSystemType::local_cs,
+                                               cs1, {});
+            // A child coordinate system with odometry data
+            const std::string ch2_coord_sys_name = "ChildOdometry2";
+            vcd::coord_uid cs3 = vcd->add_coordinate_system(ch2_coord_sys_name,
+                                               CoordinateSystemType::local_cs,
+                                               cs1, {1.0, 0.0, 0.0, 0.76,
+                                                     0.0, 1.0, 0.0, 0.0,
+                                                     0.0, 0.0, 1.0, 1.73,
+                                                     0.0, 0.0, 0.0, 1.0});
+            // Repeat the same name to check if it is ignored
+            vcd::coord_uid cs4 = vcd->add_coordinate_system(main_coord_sys_name,
+                                               CoordinateSystemType::local_cs,
+                                               "", {});
+
+            // Define some objects
+            vcd::element_args pedestrian_args;
+            pedestrian_args.semantic_type = "#Pedestrian";
+            pedestrian_args.coord_system = cs3;
+            std::string pedestrian_uid = vcd->add_object("", pedestrian_args);
+            pedestrian_args.uid = pedestrian_uid;
+
+            vcd::element_args car_args;
+            car_args.semantic_type = "#Car";
+            car_args.coord_system = cs1;
+            std::string car_uid = vcd->add_object("", car_args);
+            car_args.uid = car_uid;
+
+            // Pedestrian frames (0, 30), Car frames (20, 30)
+            const size_t num_frames = 31;
+            for (size_t i = 0; i < num_frames; ++i) {
+                // Include pedestrian in the entire interval
+                vcd->add_object("", i, pedestrian_args);
+                if (i >= 20) {
+                    // Include car only above the frame #20
+                    vcd->add_object("", i, car_args);
+                }
+            }
+
+            // Generate json data
+            const bool pretty = true;
+            const std::string vcd_out_pretty = vcd->stringify(pretty);
+
+            // Save the json info into a file for comparisson
+            string out_p = "vcd430_test_general_scene_definition_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            o_p << vcd_out_pretty << std::endl;
+            o_p.close();
+
+            // Read reference JSON file
+            string ref_p = "vcd430_test_general_scene_definition.json";
+            fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
+            std::ifstream ref_file_data(vcd_refp_path);
+            json ref_data;
+            ref_file_data >> ref_data;
+            ref_file_data.close();
+
+            // Generate JSON structure for comparison
+            json test_data = json::parse(vcd_out_pretty);
+
+            REQUIRE(check_json_level(ref_data, test_data));
         }
     }
 
