@@ -41,6 +41,7 @@ class VCD_UID {
 using ont_uid = std::string;
 using obj_uid = std::string;
 using act_uid = std::string;
+using ctx_uid = std::string;
 using meta_props = std::map<std::string, std::string>;
 
 struct element_args {
@@ -137,6 +138,25 @@ class VCD {
                     const types::ObjectData& action_data,
                     const size_t frame_index) = 0;
 
+    // Add context
+    virtual ctx_uid
+    add_context(const std::string& name, const element_args& args) = 0;
+
+    virtual ctx_uid
+    add_context(const std::string& name, const size_t frame_index,
+                const element_args& args) = 0;
+
+    // Add context_data
+    virtual void
+    add_context_data(const std::string &uid,
+                    const types::ObjectData& context_data) = 0;
+
+    virtual void
+    add_context_data(const std::string &uid,
+                    const types::ObjectData& context_data,
+                    const size_t frame_index) = 0;
+
+    // Ontologies
     virtual ont_uid
     add_ontology(const std::string &ontology) = 0;
 

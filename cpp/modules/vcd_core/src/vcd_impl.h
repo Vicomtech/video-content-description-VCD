@@ -183,6 +183,27 @@ class VCD_Impl : public vcd::VCD {
                     const types::ObjectData& action_data,
                     const size_t frame_index) override;
 
+    // Add context
+    std::string
+    add_context(const std::string& name,
+                const element_args& args) override;
+
+    std::string
+    add_context(const std::string& name,
+                const size_t frame_index,
+                const element_args& args) override;
+
+    // Add context_data
+    void
+    add_context_data(const std::string &uid,
+                     const types::ObjectData& context_data) override;
+
+    void
+    add_context_data(const std::string &uid,
+                     const types::ObjectData& context_data,
+                     const size_t frame_index) override;
+
+    // Ontologies
     ont_uid
     add_ontology(const std::string &ontology) override;
 

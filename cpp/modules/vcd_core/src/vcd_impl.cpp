@@ -271,6 +271,58 @@ VCD_Impl::add_action(const std::string& name,
                        coordinate_system, set_mode).asStr();
 }
 
+void
+VCD_Impl::add_action_data(const std::string &uid,
+                          const types::ObjectData& action_data) {
+    const size_t null_frame_index = getNoneFrameIndex();
+    return set_element_data(ElementType::action, UID(uid), action_data,
+                            null_frame_index, SetMode::union_t);
+}
+
+void
+VCD_Impl::add_action_data(const std::string &uid,
+                          const types::ObjectData& action_data,
+                          const size_t frame_index) {
+    return set_element_data(ElementType::action, UID(uid), action_data,
+                            frame_index, SetMode::union_t);
+}
+
+std::string
+VCD_Impl::add_context(const std::string& name,
+                     const element_args& args) {
+    const size_t null_frame_index = getNoneFrameIndex();
+    return add_context(name, null_frame_index, args);
+}
+
+std::string
+VCD_Impl::add_context(const std::string& name,
+                      const size_t frame_index,
+                      const element_args& args) {
+    //    m_data[name] = { {"currency", "USD"}, {"value", 42.99} };
+//    int frame_value = 0;
+    std::string coordinate_system;
+    SetMode set_mode = SetMode::union_t;
+    return set_element(ElementType::context, name, args.semantic_type,
+                       frame_index, UID(args.uid), args.ontology_uid,
+                       coordinate_system, set_mode).asStr();
+}
+
+void
+VCD_Impl::add_context_data(const std::string &uid,
+                          const types::ObjectData& context_data) {
+    const size_t null_frame_index = getNoneFrameIndex();
+    return set_element_data(ElementType::context, UID(uid), context_data,
+                            null_frame_index, SetMode::union_t);
+}
+
+void
+VCD_Impl::add_context_data(const std::string &uid,
+                          const types::ObjectData& context_data,
+                          const size_t frame_index) {
+    return set_element_data(ElementType::action, UID(uid), context_data,
+                            frame_index, SetMode::union_t);
+}
+
 ont_uid
 VCD_Impl::add_ontology(const std::string &ontology) {
     json& ontologies = setDefault(m_data["vcd"], "ontologies", json::object());

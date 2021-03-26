@@ -14,7 +14,7 @@ message("Searching setup_string.h at: " ${CMAKE_BINARY_DIR})
 
 # Add demanded test cases
 add_subdirectory( test_basic )
-# add_subdirectory( test_action_properties )
+add_subdirectory( test_action_properties )
 # add_subdirectory( test_converters )
 # add_subdirectory( test_image )
 # add_subdirectory( test_mesh )
