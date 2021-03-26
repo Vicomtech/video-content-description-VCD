@@ -1,0 +1,47 @@
+#---------------------------------------------------#
+#          CMake Project Configuration              #
+#---------------------------------------------------#
+# CMake will issue a warning if you don't set this
+cmake_minimum_required(VERSION 2.6)
+
+##############################
+set(TEST_NAME test_action_properties)
+PROJECT( ${TEST_NAME} )
+##############################
+
+if(COMMAND cmake_policy)
+     cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
+include_directories(${SRC_PATH}/vcd_core/src)
+
+#---------------------------------------------------#
+#              Project Files                        #
+#---------------------------------------------------#
+# List source files in a variable so we can use it later more conveniently
+set(SOURCE_FILES
+    src/test_action_properties.cpp
+)
+
+link_directories( ${CMAKE_BINARY_DIR}/bin )
+add_executable( ${TEST_NAME} ${SOURCE_FILES})
+
+# Link libraries that are required for building this application
+target_link_libraries( ${TEST_NAME} vcd_core )
+# Include std::experimental::filesystem
+if(LINUX)
+    target_link_libraries(${TEST_NAME} stdc++fs)
+endif()
+
+set_target_properties(${TEST_NAME} PROPERTIES FOLDER "vcd_tests")
+
+# set c++14 as the used c++ standard for this library
+DEFINE_CPP_STANDARD_AS_14(${TEST_NAME})
+
+# Include linter check to source files
+ADD_LINT_CHECK_TO_TARGET(${TEST_NAME} "${SOURCE_FILES}")
+
+IF( BUILD_TESTS )
+     message("Adding test: RUN_test_objects at " ${EXECUTABLE_OUTPUT_PATH}/test_action_properties)
+     add_test( RUN_test_action_properties  ${EXECUTABLE_OUTPUT_PATH}/test_action_properties )
+ENDIF( BUILD_TESTS )
