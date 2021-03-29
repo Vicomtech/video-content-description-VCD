@@ -36,6 +36,10 @@ def check_openlabel(openlabel, openlabel_file_name, force_write=False):
 
 class TestBasic(unittest.TestCase):
     def test_create_openlabel(self):
+        """
+        This test shows how to create a new OpenLABEL object.
+        :return:
+        """
         openlabel = core.OpenLABEL()
         openlabel.add_object(name="object1", semantic_type="car")
         openlabel.add_object(name="object2", semantic_type="pedestrian")
@@ -44,6 +48,10 @@ class TestBasic(unittest.TestCase):
         self.assertTrue(check_openlabel(openlabel, './etc/' + openlabel_version_name + '_' + inspect.currentframe().f_code.co_name + '.json', overwrite))
 
     def test_read_vcd431_file(self):
+        """
+        This test is about reading a VCD431 file and passing it to the OpenLABEL constructor.
+        :return:
+        """
         openlabel = core.OpenLABEL(file_name='./etc/vcd431_test_contours.json')
 
         self.assertTrue(check_openlabel(openlabel,

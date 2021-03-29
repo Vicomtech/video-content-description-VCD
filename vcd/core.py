@@ -316,9 +316,6 @@ class VCD:
                             raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
                     else:
                         raise Exception("ERROR: This vcd file does not seem to be 4.3.0, 4.3.1 nor 4.2.0")
-
-
-
             elif 'VCD' in read_data:
                 # This is 3.x
                 warnings.warn("WARNING: Converting VCD 3.3.0 to VCD 4.3.1. A full revision is recommended.")
@@ -1770,5 +1767,10 @@ class VCD:
 
 
 class OpenLABEL(VCD):
+    """
+    This is the OpenLABEL class, which inherites from VCD class.
+    It includes a simple flag which makes the VCD class to use the root element
+    at the dictionary using the keyword 'openlabel'
+    """
     def __init__(self, file_name=None, validation=False):
         VCD.__init__(self, file_name, validation, 'openlabel')

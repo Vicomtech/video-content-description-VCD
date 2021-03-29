@@ -54,15 +54,15 @@ class SetupViewer:
         self.ax.text(z_axis_end[0], z_axis_end[1], z_axis_end[2], 'Z')
 
     def plot_setup(self, axes=None):
-        for cs_name, cs in self.scene.vcd.data['vcd']['coordinate_systems'].items():
+        for cs_name, cs in self.scene.vcd.get_root()['coordinate_systems'].items():
             T, static = self.scene.get_transform(cs_name, self.coordinate_system)
             L=2.0
             if cs['type'] == 'sensor_cs':
                 L=0.5
             self.__plot_cs(T, cs_name, L)
 
-        if 'objects' in self.scene.vcd.data['vcd']:
-            for object_id, object in self.scene.vcd.data['vcd']['objects'].items():
+        if 'objects' in self.scene.vcd.get_root():
+            for object_id, object in self.scene.vcd.get_root()['objects'].items():
                 if object['name'] == "Ego-car":
                     cuboid = object['object_data']['cuboid'][0]
                     cuboid_cs = object['object_data']['cuboid'][0]['coordinate_system']
@@ -534,7 +534,7 @@ class TopView:
                 # Check if the object has specific info at this frame, or if we need to consult the static object info
                 if len(object_) == 0:
                     # So this is a pointer to a static object
-                    static_object = self.scene.vcd.data['vcd']['objects'][object_id]
+                    static_object = self.scene.vcd.get_root()['objects'][object_id]
                     self.draw_object_data(static_object, object_class,
                                                img, object_id, _frameNum, _drawTrajectory)
                 else:
