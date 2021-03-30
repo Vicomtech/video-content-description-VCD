@@ -83,8 +83,11 @@ check_json_level(const json &data_a, const json &data_b) {
 bool
 check_json_level_both_sides(const json &data_a, const json &data_b) {
     const bool atob = check_json_level(data_a, data_b);
+    if (!atob) {
+        return false;
+    }
     const bool btoa = check_json_level(data_b, data_a);
-    return atob && btoa;
+    return btoa;
 }
 
 bool
