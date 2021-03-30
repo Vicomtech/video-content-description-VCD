@@ -105,9 +105,36 @@ class VCD {
     add_metadata_properties(const vcd::meta_props &properties) = 0;
 
     // Add object
+    /**
+     * @brief add_object Adds a new object to the scene definition.
+     *
+     * This call does not include a specific frame index, so it will not
+     * belong to a specific frame. Instead, if no frame definition was
+     * included yet, this object is interpreted as a general object, and it
+     * is not included in any specific frame. Otherwise, if at least one frame
+     * was defined before calling this function, this object will be included
+     * in all new frames of the capture sequence.
+     * @param name The name of the object
+     * @param args The set of parameters for the object (see element_args)
+     * @return The uuid of the object for its identification
+     */
     virtual obj_uid
     add_object(const std::string& name, const element_args& args) = 0;
 
+    /**
+     * @brief add_object Adds a new object to the scene definition for the
+     * specific frame index.
+     *
+     * This function includes the definition of the object in the structure,
+     * and relates its uuid with the specified frame.
+     * To relate a previously defined element with a new frame, you can add
+     * the objects uuid as part of input parameters (see element_args).
+     * @param name The name of the object
+     * @param frame_index The index of the frame related with the defined
+     * object. This index should be equal or bigger than the last defined frame.
+     * @param args The set of parameters for the object (see element_args)
+     * @return The uuid of the object for its identification
+     */
     virtual obj_uid
     add_object(const std::string& name, const size_t frame_index,
                const element_args& args) = 0;
@@ -123,9 +150,36 @@ class VCD {
                     const size_t frame_index) = 0;
 
     // Add action
+    /**
+     * @brief add_action Adds a new action to the scene definition.
+     *
+     * This call does not include a specific frame index, so it will not
+     * belong to a specific frame. Instead, if no frame definition was
+     * included yet, this action is interpreted as a general action, and it
+     * is not included in any specific frame. Otherwise, if at least one frame
+     * was defined before calling this function, this action will be included
+     * in all new frames of the capture sequence.
+     * @param name The name of the action
+     * @param args The set of parameters for the action (see element_args)
+     * @return The uuid of the action for its identification
+     */
     virtual act_uid
     add_action(const std::string& name, const element_args& args) = 0;
 
+    /**
+     * @brief add_action Adds a new action to the scene definition for the
+     * specific frame index.
+     *
+     * This function includes the definition of the action in the structure,
+     * and relates its uuid with the specified frame.
+     * To relate a previously defined element with a new frame, you can add
+     * the objects uuid as part of input parameters (see element_args).
+     * @param name The name of the action
+     * @param frame_index The index of the frame related with the defined
+     * action. This index should be equal or bigger than the last defined frame.
+     * @param args The set of parameters for the action (see element_args)
+     * @return The uuid of the action for its identification
+     */
     virtual act_uid
     add_action(const std::string& name, const size_t frame_index,
                const element_args& args) = 0;
@@ -141,9 +195,36 @@ class VCD {
                     const size_t frame_index) = 0;
 
     // Add context
+    /**
+     * @brief add_context Adds a new context to the scene definition.
+     *
+     * This call does not include a specific frame index, so it will not
+     * belong to a specific frame. Instead, if no frame definition was
+     * included yet, this context is interpreted as a general context, and it
+     * is not included in any specific frame. Otherwise, if at least one frame
+     * was defined before calling this function, this context will be included
+     * in all new frames of the capture sequence.
+     * @param name The name of the context
+     * @param args The set of parameters for the context (see element_args)
+     * @return The uuid of the context for its identification
+     */
     virtual ctx_uid
     add_context(const std::string& name, const element_args& args) = 0;
 
+    /**
+     * @brief add_context Adds a new context to the scene definition for the
+     * specific frame index.
+     *
+     * This function includes the definition of the context in the structure,
+     * and relates its uuid with the specified frame.
+     * To relate a previously defined element with a new frame, you can add
+     * the objects uuid as part of input parameters (see element_args).
+     * @param name The name of the context
+     * @param frame_index The index of the frame related with the defined
+     * context. This index should be equal or bigger than the last defined frame.
+     * @param args The set of parameters for the context (see element_args)
+     * @return The uuid of the context for its identification
+     */
     virtual ctx_uid
     add_context(const std::string& name, const size_t frame_index,
                 const element_args& args) = 0;
