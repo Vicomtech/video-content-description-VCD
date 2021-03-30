@@ -23,7 +23,13 @@ using std::string;
 
 using vcd::types::ObjectDataTypeName;
 
-static const bool S_ADD_MISSIED_FRAMES = false;
+/**
+ * S_ADD_MISSIED_FRAMES If true, includes all the frames between the currently
+ *   defined index and the last defined index. Thus, if there are elements in
+ * between that are not specifically defined by the user (like holistic or
+ * permanent elements) we can include them to the structure.
+ */
+static const bool S_ADD_MISSIED_FRAMES = true;
 
 namespace vcd {
 
@@ -155,6 +161,22 @@ VCD_Impl::update_element_frame_intervals(json &element,
     }
 }
 
+void
+VCD_Impl::update_element_frame_intervals_no_gap(json &element,
+                                                const size_t frame_index) {
+    const bool has_fi = element.contains("frame_intervals");
+    if (has_fi) {
+        const size_t lst_value = element["frame_intervals"].back()["frame_end"];
+        if (lst_value < frame_index) {
+            element["frame_intervals"].back()["frame_end"] = frame_index;
+        }
+    } else {
+        // If the element has not any frame_interval values, include the list
+        element["frame_intervals"] = json::array();
+        appendFrameIntervalToArray(element["frame_intervals"], frame_index);
+    }
+}
+
 json&
 VCD_Impl::add_frame(const size_t frame_num, const bool addMissedFrames) {
     if (!m_data["vcd"].contains("frames")) {
@@ -162,26 +184,86 @@ VCD_Impl::add_frame(const size_t frame_num, const bool addMissedFrames) {
     }
     const std::string frm_num_str = std::to_string(frame_num);
     if (!m_data["vcd"]["frames"].contains(frm_num_str)) {
-        m_data["vcd"]["frames"][frm_num_str] = json::object({});
-
+        // Fill the frames between the last index and the current index
         bool is_first_frame = (frame_num == 0);
         if (addMissedFrames && !is_first_frame) {
-            // Include all the frames between the last defined frame and the
-            // current frame index.
-            json &frame_list = m_data["vcd"]["frames"];
-            size_t cur_frame_num = frame_num - 1;
-            bool frm_found = frame_list.contains(std::to_string(cur_frame_num));
-            is_first_frame = (cur_frame_num <= 0);
-            while (!frm_found && !is_first_frame) {
-                const std::string std_key = std::to_string(cur_frame_num);
-                frame_list[std_key] = json::object({});
-                --cur_frame_num;
-                frm_found = frame_list.contains(std::to_string(cur_frame_num));
-                is_first_frame = (cur_frame_num <= 0);
-            }
+            add_missed_frames(frame_num);
+        }
+        // Include the current frame
+        m_data["vcd"]["frames"][frm_num_str] = json::object({});
+        // Include holistic elements
+        if (!m_holiElemes.empty()) {
+            includeHoliElems(m_data["vcd"]["frames"][frm_num_str]);
         }
     }
     return m_data["vcd"]["frames"][frm_num_str];
+}
+
+void
+VCD_Impl::includeElemUidToFrame(const ElementType type, const std::string &uid,
+                                json& frame) const {
+    const std::string typeKey = ElementTypeName[type] + "s";
+    json& type_element = setDefault(frame, typeKey, json::object());
+    type_element[uid] = json::object();
+}
+
+void
+VCD_Impl::includeHoliElems(json& frame) {
+//    const ElementType type = ElementType::object;
+    for (size_t type_i = 0; type_i < ElementType::ET_size; ++type_i) {
+        // Include element uids
+        const ElementType type = static_cast<ElementType>(type_i);
+        // Ignore type if no holistic elements for it
+        if (m_holiElemes.uids[type].empty()) {
+            continue;
+        }
+        const std::string typeKey = ElementTypeName[type] + "s";
+        json& type_element = setDefault(frame, typeKey, json::object());
+        for (const auto& uid : m_holiElemes.uids[type]) {
+            setDefault(type_element, uid, json::object());
+        }
+    }
+}
+
+void
+VCD_Impl::updateHoliFrameIntervals(const size_t frame_num) {
+//    const ElementType type = ElementType::object;
+    for (size_t type_i = 0; type_i < ElementType::ET_size; ++type_i) {
+        // Include element uids
+        const ElementType type = static_cast<ElementType>(type_i);
+        const std::string typeKey = ElementTypeName[type] + "s";
+        json& type_element = m_data["vcd"][typeKey];
+        for (const auto& uid : m_holiElemes.uids[type]) {
+            auto& element = type_element[uid];
+            update_element_frame_intervals_no_gap(element, frame_num);
+        }
+    }
+}
+
+void
+VCD_Impl::add_missed_frames(const size_t frame_num) {
+    bool is_first_frame = (frame_num == 0);
+    // Check if there are holistic elements
+    const bool areHoliElems = !m_holiElemes.empty();
+    if (!is_first_frame && areHoliElems) {
+        json &frame_list = m_data["vcd"]["frames"];
+        // Find the previous frame index
+        size_t prev_frame_num = frame_num - 1;
+        bool frm_found = frame_list.contains(std::to_string(prev_frame_num));
+        is_first_frame = (prev_frame_num <= 0);
+        while (!frm_found && !is_first_frame) {
+            --prev_frame_num;
+            frm_found = frame_list.contains(std::to_string(prev_frame_num));
+            is_first_frame = (prev_frame_num <= 0);
+        }
+        // Fill the frames with holistic elements
+        const bool doNotAddMissedFrames = false;   // Avoid infinite recursion
+        for (size_t frm_i = prev_frame_num; frm_i < frame_num; ++frm_i) {
+            add_frame(frm_i, doNotAddMissedFrames);
+        }
+        // Update frame intervals for included objects
+//        updateHoliFrameIntervals(frame_num);
+    }
 }
 
 // Manage metadata
@@ -223,7 +305,17 @@ std::string
 VCD_Impl::add_object(const std::string& name,
                      const element_args& args) {
     const size_t null_frame_index = getNoneFrameIndex();
-    return add_object(name, null_frame_index, args);
+    const std::string uid = add_object(name, null_frame_index, args);
+
+    // Check if the element must be holistic
+    const bool arePrevFrames = m_data["vcd"].contains("frames");
+    if (arePrevFrames) {
+        m_holiElemes.addUid(uid, ElementType::object);
+        json& frame = m_data["vcd"]["frames"][std::to_string(m_curFrameIndex)];
+        includeElemUidToFrame(ElementType::object, uid, frame);
+    }
+
+    return uid;
 }
 
 std::string
@@ -258,7 +350,17 @@ std::string
 VCD_Impl::add_action(const std::string& name,
                      const element_args& args) {
     const size_t null_frame_index = getNoneFrameIndex();
-    return add_action(name, null_frame_index, args);
+    const std::string uid = add_action(name, null_frame_index, args);
+
+    // Check if the element must be holistic
+    const bool arePrevFrames = m_data["vcd"].contains("frames");
+    if (arePrevFrames) {
+        m_holiElemes.addUid(uid, ElementType::action);
+        json& frame = m_data["vcd"]["frames"][std::to_string(m_curFrameIndex)];
+        includeElemUidToFrame(ElementType::action, uid, frame);
+    }
+
+    return uid;
 }
 
 std::string
@@ -293,7 +395,17 @@ std::string
 VCD_Impl::add_context(const std::string& name,
                      const element_args& args) {
     const size_t null_frame_index = getNoneFrameIndex();
-    return add_context(name, null_frame_index, args);
+    const std::string uid = add_context(name, null_frame_index, args);
+
+    // Check if the element must be holistic
+    const bool arePrevFrames = m_data["vcd"].contains("frames");
+    if (arePrevFrames) {
+        m_holiElemes.addUid(uid, ElementType::context);
+        json& frame = m_data["vcd"]["frames"][std::to_string(m_curFrameIndex)];
+        includeElemUidToFrame(ElementType::context, uid, frame);
+    }
+
+    return uid;
 }
 
 std::string
@@ -320,7 +432,7 @@ void
 VCD_Impl::add_context_data(const std::string &uid,
                           const types::ObjectData& context_data,
                           const size_t frame_index) {
-    return set_element_data(ElementType::action, UID(uid), context_data,
+    return set_element_data(ElementType::context, UID(uid), context_data,
                             frame_index, SetMode::union_t);
 }
 

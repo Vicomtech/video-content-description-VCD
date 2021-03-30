@@ -99,6 +99,46 @@ class UID : public VCD_UID {
     int m_uidInt;
 };
 
+/**
+ * @brief The HoliElems class
+ * This class stores all the holistic element uids, to be included in all new
+ * frames. The interface includes a set of constant references to the uid
+ * lists, in order to directly access the data but not to modify the data.
+ * To include new elements, use the proper accesor.
+ */
+class HoliElems {
+ public:
+    HoliElems() :
+    uids(uids_store) {
+        uids_store.resize(ElementType::ET_size);
+    }
+
+    bool
+    empty() {
+        return all_empty;
+    }
+
+    void
+    addUid(const std::string& uid, const ElementType type) {
+        uids_store[type].emplace_back(uid);
+        if (all_empty) {
+            all_empty = false;
+        }
+    }
+
+    const std::vector<std::vector<std::string>> &uids;
+
+ private:
+    std::vector<std::vector<std::string>> uids_store;
+    bool all_empty = true;
+};
+
+
+/**
+ * @brief The VCD_Impl class
+ * This class includes all the functionalities related to the data structure
+ * management.
+ */
 class VCD_Impl : public vcd::VCD {
  public:
     explicit  VCD_Impl(const std::string& fileName,
@@ -121,11 +161,33 @@ class VCD_Impl : public vcd::VCD {
     void
     update_vcd_frame_intervals(const size_t frame_index);
 
+    // This version of the interval update adds only consecutive frame ids
+    //  in blocks. If between the new frame index and the previous are one or
+    // more frames, this function generates a new 'frame_start/frame_end' block.
     void
     update_element_frame_intervals(json &element, const size_t frame_index);
 
+    // This version of the interval update function updates the last frame
+    // index of the element to the new frame index parsed as parameter.
+    void
+    update_element_frame_intervals_no_gap(json &element,
+                                          const size_t frame_index);
+
     json&
     add_frame(const size_t frame_index, const bool addMissedFrames = false);
+
+    void
+    includeElemUidToFrame(const ElementType type, const std::string &uid,
+                          json& frame) const;
+
+    void
+    includeHoliElems(json& frame);
+
+    void
+    updateHoliFrameIntervals(const size_t frame_num);
+
+    void
+    add_missed_frames(const size_t frame_num);
 
     // Manage metadata
     void
@@ -342,6 +404,8 @@ class VCD_Impl : public vcd::VCD {
     size_t m_curFrameIndex = 0;
 
     std::vector<int> m_lastUIDbyType;
+
+    HoliElems m_holiElemes;
 };
 
 };  // namespace vcd
