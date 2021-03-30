@@ -58,15 +58,28 @@ SCENARIO("Add a set of actions to a VCD capture") {
 
             // 2.- Create all the elements
             //  2.1 - Actions
+            // In frames from 0 to 10
             vcd::element_args running_args;
             running_args.semantic_type = "#Running";
             std::string uid_action1 = vcd->add_action("", running_args);
             running_args.uid = uid_action1;
 
+            // In frames from 0 to 5
+            vcd::element_args ctx2_args;
+            ctx2_args.semantic_type = "#Highway";
+            std::string uid_context2 = vcd->add_context("", ctx2_args);
+            ctx2_args.uid = uid_context2;
+
+
+            // Include running in the first frame to force holistic element
+            // definitions.
+            vcd->add_action("", 0, running_args);
+
             // Same can be done with events and event_data, and contexts
             // nd context_data.
             // And can be done as dynamic or static info
             //  2.2 - Objects
+            // Holistic
             vcd::element_args marcos_args;
             marcos_args.semantic_type = "#Person";
             std::string uid_object1 = vcd->add_object("Marcos", marcos_args);
@@ -75,6 +88,7 @@ SCENARIO("Add a set of actions to a VCD capture") {
             vcd->add_object_data(uid_object1, marcos_txt);
 
             //  2.3 - Contexts
+            // Holistic
             vcd::element_args ctx1_args;
             ctx1_args.semantic_type = "#Sunny";
             std::string uid_context1 = vcd->add_context("", ctx1_args);
@@ -83,12 +97,6 @@ SCENARIO("Add a set of actions to a VCD capture") {
             vcd->add_context_data(uid_context1, ctx1_txt_cat);
             Text ctx1_txt_ann("annotation", "Manual");
             vcd->add_context_data(uid_context1, ctx1_txt_ann);
-
-            // In frames from 0 to 5
-            vcd::element_args ctx2_args;
-            ctx2_args.semantic_type = "#Highway";
-            std::string uid_context2 = vcd->add_context("", ctx2_args);
-            ctx2_args.uid = uid_context2;
 
             const size_t num_frames = 10;
             for (size_t frame_i = 0; frame_i <= num_frames; ++frame_i) {
@@ -121,11 +129,11 @@ SCENARIO("Add a set of actions to a VCD capture") {
                                           frame_i);
                 }
                 // This is extra to fit with the output definition
-                vcd->add_object("Marcos", frame_i, marcos_args);
-                vcd->add_context("", frame_i, ctx1_args);
-                if (frame_i <= 5) {
-                    vcd->add_context("", frame_i, ctx2_args);
-                }
+//                vcd->add_object("Marcos", frame_i, marcos_args);
+//                vcd->add_context("", frame_i, ctx1_args);
+//                if (frame_i <= 5) {
+//                    vcd->add_context("", frame_i, ctx2_args);
+//                }
             }
 
             // 3. Compare results
