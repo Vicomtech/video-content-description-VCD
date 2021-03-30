@@ -81,6 +81,13 @@ check_json_level(const json &data_a, const json &data_b) {
 }
 
 bool
+check_json_level_both_sides(const json &data_a, const json &data_b) {
+    const bool atob = check_json_level(data_a, data_b);
+    const bool btoa = check_json_level(data_b, data_a);
+    return atob && btoa;
+}
+
+bool
 compare_json_files(const std::string& file_a, const std::string& file_b) {
     // Read json file A
     std::ifstream file_a_i(file_a);

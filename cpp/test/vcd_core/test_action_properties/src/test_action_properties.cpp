@@ -151,7 +151,7 @@ SCENARIO("Add a set of actions to a VCD capture") {
             // Generate JSON structure for comparison
             json test_data = json::parse(vcd_out_pretty);
 
-            REQUIRE(check_json_level(test_data, ref_data));
+            REQUIRE(check_json_level_both_sides(test_data, ref_data));
 
 
 //    if not os.path.isfile('./etc/vcd430_test_actions_with_action_data.json'):
