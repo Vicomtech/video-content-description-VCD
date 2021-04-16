@@ -5,8 +5,8 @@ project(${MODULE_NAME})
 file(GLOB MODULE_SRCS "src/*.cpp" "src/*.h")
 file(GLOB MODULE_HEADERS "include/*.h" "include/*.hpp")
 
-# Include header files
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+# Include header files for json management
+include_directories(${3RD_PARTY_PATH}/include/)
 
 if (MAKE_LIB_STATIC)
     set(LIB_TYPE STATIC)
