@@ -8,9 +8,15 @@ file(GLOB MODULE_HEADERS "include/*.h" "include/*.hpp")
 # Include header files
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+if (MAKE_LIB_STATIC)
+    set(LIB_TYPE STATIC)
+else()
+    set(LIB_TYPE SHARED)
+endif()
+
 # Create shared library
 set( CMAKE_DEBUG_POSTFIX _d )
-add_library(${MODULE_NAME} SHARED ${MODULE_SRCS} ${MODULE_HEADERS})
+add_library(${MODULE_NAME} ${LIB_TYPE} ${MODULE_SRCS} ${MODULE_HEADERS})
 
 #target_link_libraries(${MODULE_NAME} asls) # if any dependencies
 set_target_properties( ${MODULE_NAME} PROPERTIES FOLDER "vcd_modules" )

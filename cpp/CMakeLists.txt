@@ -31,6 +31,7 @@ option( ADD_VCD_CORE "Add VCD core" ON)
 #option( BUILD_SAMPLES "Build samples" ON)
 option( BUILD_TESTS "Build tests" ON)
 #option( BUILD_PERF "Build performance tests" OFF)
+option( MAKE_LIB_STATIC "Generate the library as static" OFF)
 
 # Add support C++14 definitions in Ubuntu
 IF(UNIX AND NOT APPLE)
