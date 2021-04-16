@@ -327,22 +327,22 @@ VCD_Impl::add_object(const std::string& name,
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::object, name, args.semantic_type,
                        frame_index, UID(args.uid), args.ontology_uid,
-                       args.coord_system, set_mode).asStr();
+                       args.coord_system, set_mode);
 }
 
 void
-VCD_Impl::add_object_data(const std::string &uid,
+VCD_Impl::add_object_data(const std::string &uid_str,
                           const types::ObjectData& object_data) {
     const size_t null_frame_index = getNoneFrameIndex();
-    return set_element_data(ElementType::object, UID(uid), object_data,
+    return set_element_data(ElementType::object, uid_str, object_data,
                             null_frame_index, SetMode::union_t);
 }
 
 void
-VCD_Impl::add_object_data(const std::string &uid,
+VCD_Impl::add_object_data(const std::string &uid_str,
                           const types::ObjectData& object_data,
                           const size_t frame_index) {
-    return set_element_data(ElementType::object, UID(uid), object_data,
+    return set_element_data(ElementType::object, uid_str, object_data,
                             frame_index, SetMode::union_t);
 }
 
@@ -372,22 +372,22 @@ VCD_Impl::add_action(const std::string& name,
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::action, name, args.semantic_type,
                        frame_index, UID(args.uid), args.ontology_uid,
-                       args.coord_system, set_mode).asStr();
+                       args.coord_system, set_mode);
 }
 
 void
-VCD_Impl::add_action_data(const std::string &uid,
+VCD_Impl::add_action_data(const std::string &uid_str,
                           const types::ObjectData& action_data) {
     const size_t null_frame_index = getNoneFrameIndex();
-    return set_element_data(ElementType::action, UID(uid), action_data,
+    return set_element_data(ElementType::action, uid_str, action_data,
                             null_frame_index, SetMode::union_t);
 }
 
 void
-VCD_Impl::add_action_data(const std::string &uid,
+VCD_Impl::add_action_data(const std::string &uid_str,
                           const types::ObjectData& action_data,
                           const size_t frame_index) {
-    return set_element_data(ElementType::action, UID(uid), action_data,
+    return set_element_data(ElementType::action, uid_str, action_data,
                             frame_index, SetMode::union_t);
 }
 
@@ -417,22 +417,22 @@ VCD_Impl::add_context(const std::string& name,
     SetMode set_mode = SetMode::union_t;
     return set_element(ElementType::context, name, args.semantic_type,
                        frame_index, UID(args.uid), args.ontology_uid,
-                       args.coord_system, set_mode).asStr();
+                       args.coord_system, set_mode);
 }
 
 void
-VCD_Impl::add_context_data(const std::string &uid,
-                          const types::ObjectData& context_data) {
+VCD_Impl::add_context_data(const std::string &uid_str,
+                           const types::ObjectData& context_data) {
     const size_t null_frame_index = getNoneFrameIndex();
-    return set_element_data(ElementType::context, UID(uid), context_data,
+    return set_element_data(ElementType::context, uid_str, context_data,
                             null_frame_index, SetMode::union_t);
 }
 
 void
-VCD_Impl::add_context_data(const std::string &uid,
+VCD_Impl::add_context_data(const std::string &uid_str,
                           const types::ObjectData& context_data,
                           const size_t frame_index) {
-    return set_element_data(ElementType::context, UID(uid), context_data,
+    return set_element_data(ElementType::context, uid_str, context_data,
                             frame_index, SetMode::union_t);
 }
 
@@ -567,7 +567,7 @@ VCD_Impl::get_frame(const int frame_num) {
 }
 
 json*
-VCD_Impl::get_element(const ElementType type, const UID &uid) {
+VCD_Impl::get_element(const ElementType type, const std::string &uid_str) {
     const std::string key = ElementTypeName[type] + "s";
     if (!m_data["vcd"].contains(key)) {
         std::cerr << "WARNING: trying to get a "
@@ -575,7 +575,7 @@ VCD_Impl::get_element(const ElementType type, const UID &uid) {
                   << std::endl;
         return nullptr;
     }
-    const std::string uid_str = uid.asStr();
+//    const std::string uid_str = uid.asStr();
     if (m_data["vcd"][key].contains(uid_str)) {
         return &(m_data["vcd"][key][uid_str]);
     } else {
@@ -597,28 +597,28 @@ VCD_Impl::get_num_elements(const ElementType type) {
 }
 
 json*
-VCD_Impl::get_object(const UID &uid) {
-        return get_element(ElementType::object, uid);
+VCD_Impl::get_object(const std::string &uid_str) {
+        return get_element(ElementType::object, uid_str);
 }
 
 json*
-VCD_Impl::get_action(const UID &uid) {
-        return get_element(ElementType::action, uid);
+VCD_Impl::get_action(const std::string &uid_str) {
+        return get_element(ElementType::action, uid_str);
 }
 
 json*
-VCD_Impl::get_event(const UID &uid) {
-        return get_element(ElementType::event, uid);
+VCD_Impl::get_event(const std::string &uid_str) {
+        return get_element(ElementType::event, uid_str);
 }
 
 json*
-VCD_Impl::get_context(const UID &uid) {
-        return get_element(ElementType::context, uid);
+VCD_Impl::get_context(const std::string &uid_str) {
+        return get_element(ElementType::context, uid_str);
 }
 
 json*
-VCD_Impl::get_relation(const UID &uid) {
-        return get_element(ElementType::relation, uid);
+VCD_Impl::get_relation(const std::string &uid_str) {
+        return get_element(ElementType::relation, uid_str);
 }
 
 template <class T>
@@ -636,17 +636,18 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
                                          const std::string &name,
                                          const std::string &semantic_type,
                                          const size_t frame_index,
-                                         const UID &uid, const ont_uid &ont_uid,
+                                         const std::string &uid_str,
+                                         const ont_uid &ont_uid,
                                          const std::string &coord_system) {
     // 1.- Copy from existing or create new entry (this copies everything,
     //     including element_data) element_data_pointers and frame intervals.
-    const std::string uidstr = uid.asStr();
+//    const std::string uidstr = uid.asStr();
     // note: public functions use int or str for uids
-    const bool element_existed = has(type, uid);
+    const bool element_existed = has(type, uid_str);
     const bool fi_is_good = !isFrameIndexNone(frame_index);
     const std::string typeKey = ElementTypeName[type] + "s";
     auto& typeLst = setDefault(m_data["vcd"], typeKey, json::object());
-    auto& element = setDefault(typeLst, uidstr, json::object());
+    auto& element = setDefault(typeLst, uid_str, json::object());
 
     // 2.- Copy from arguments
     if (!element_existed) {
@@ -716,7 +717,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
         }
         // Add the referenced empty elements inside the frame info list
         json& type_element = setDefault(*frame, typeKey, json::object());
-        setDefault(type_element, uid.asStr(), json::object());
+        setDefault(type_element, uid_str, json::object());
     }
 //            # Next loop for is for the case fis_old wasn't empty, so we
 //    just need to remove old content
@@ -767,7 +768,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
 //                        self.__rm_frame(f)
 }
 
-UID
+std::string
 VCD_Impl::set_element(const ElementType type, const std::string &name,
                       const std::string &semantic_type,
                       const size_t frame_index,
@@ -785,27 +786,28 @@ VCD_Impl::set_element(const ElementType type, const std::string &name,
     // 0.- Get uid_to_assign
     // note: private functions use UID type for uids
     UID uid_to_assign = get_uid_to_assign(type, uid);
+    const std::string uid_str = uid_to_assign.asStr();
 
     // 1.- Set the root entries and frames entries
     set_element_at_root_and_frames(type, name, semantic_type, frame_index,
-                                   uid_to_assign, ont_uid, coordinate_system);
+                                   uid_str, ont_uid, coordinate_system);
 
-    return uid_to_assign;
+    return uid_str;
 }
 
 void
-VCD_Impl::set_element_data(const ElementType type, const UID &uid,
+VCD_Impl::set_element_data(const ElementType type, const std::string &uid_str,
                            const types::ObjectData &element_data,
                            const size_t frame_index,
                            const SetMode set_mode) {
     // 0.- Checks
-    if (!has(type, uid)) {
+    if (!has(type, uid_str)) {
         std::cerr << "WARNING: "
                      "Trying to set element_data for a non-existing element."
                   << std::endl;
         return;
     }
-    auto* element_ptr = get_element(type, uid);
+    auto* element_ptr = get_element(type, uid_str);
     if (element_ptr == nullptr) {
         std::cerr << "WARNING: "
                      "Error when trying to get element instance."
@@ -828,11 +830,11 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
     // Read existing data about this element, so we can call __set_element
     const std::string& name = element["name"];
     const std::string& semantic_type = element["type"];
-    UID ont_uid("");
     std::string cs;
-    if (element.contains("ontology_uid")) {
-        ont_uid = UID(element["ontology_uid"].get<std::string>());
-    }
+//    UID ont_uid("");
+//    if (element.contains("ontology_uid")) {
+//        ont_uid = UID(element["ontology_uid"].get<std::string>());
+//    }
     if (element.contains("coordinate_system")) {
         cs = element["coordinate_system"];
     }
@@ -860,7 +862,7 @@ VCD_Impl::set_element_data(const ElementType type, const UID &uid,
             frme_elem = &add_frame(frame_index, S_ADD_MISSIED_FRAMES);
         }
         const std::string elem_key = ElementTypeName[type] + "s";
-        json &type_elem_in_fr = (*frme_elem)[elem_key][uid.asStr()];
+        json &type_elem_in_fr = (*frme_elem)[elem_key][uid_str];
         set_element_data_content(type, type_elem_in_fr, element_data);
         // Also update the frame interval values in the object
         update_element_frame_intervals(element, frame_index);
@@ -943,12 +945,12 @@ VCD_Impl::set_element_data_pointers(const ElementType type, json &element,
 
 
 bool
-VCD_Impl::has(const ElementType type, const UID &uid) const {
+VCD_Impl::has(const ElementType type, const std::string &uid_str) const {
     const std::string key = ElementTypeName[type] + "s";
     if (!m_data["vcd"].contains(key)) {
         return false;
     } else {
-        const std::string uid_str = uid.asStr();
+//        const std::string uid_str = uid.asStr();
         if (m_data["vcd"][key].contains(uid_str)) {
             return true;
         } else {
@@ -978,12 +980,12 @@ VCD_Impl::hasCoordSys(const std::string &coord_system) const {
 }
 
 bool
-VCD_Impl::has_element_data(const ElementType type, const UID &uid,
+VCD_Impl::has_element_data(const ElementType type, const std::string &uid_str,
                            const types::ObjectData &element_data) const {
-    if (!has(type, uid)) {
+    if (!has(type, uid_str)) {
         return false;
     } else {
-        const std::string uid_str = uid.asStr();
+//        const std::string uid_str = uid.asStr();
         const std::string key = ElementTypeName[type] + "s";
         const std::string data_key = ElementTypeName[type] + "_data_pointers";
         if (!m_data["vcd"][key][uid_str].contains(data_key)) {

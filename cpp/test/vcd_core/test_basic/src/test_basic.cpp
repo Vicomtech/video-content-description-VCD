@@ -57,14 +57,13 @@ class VCD_Inner : public vcd::VCD_Impl {
     }
 
     json*
-    get_inner_element(const vcd::ElementType type, const std::string &uid) {
-        return get_element(type, vcd::UID(uid));
+    get_inner_element(const vcd::ElementType type, const std::string &uid_str) {
+        return get_element(type, uid_str);
     }
 
     json*
-    get_object(const std::string &uid) {
-        const vcd::UID uid_inst(uid);
-        return vcd::VCD_Impl::get_object(uid_inst);
+    get_object(const std::string &uid_str) {
+        return vcd::VCD_Impl::get_object(uid_str);
     }
 
     json*

@@ -145,6 +145,16 @@ class VCD_Impl : public vcd::VCD {
                        const bool validation = false);
     ~VCD_Impl();
 
+    // Declare or remove other constructors explicitely
+//    VCD_Impl(const VCD_Impl&) = delete;
+//    VCD_Impl(const VCD_Impl&&) = delete;
+
+//    VCD_Impl&
+//    operator=(VCD_Impl&) = delete;
+
+//    VCD_Impl&
+//    operator=(VCD_Impl&&) = delete;
+
     void
     setUseUUID(const bool val) override { m_useUUID = val; }
 
@@ -217,11 +227,11 @@ class VCD_Impl : public vcd::VCD {
 
     // Add object_data
     void
-    add_object_data(const std::string &uid,
+    add_object_data(const std::string &uid_str,
                     const types::ObjectData& object_data) override;
 
     void
-    add_object_data(const std::string &uid,
+    add_object_data(const std::string &uid_str,
                     const types::ObjectData& object_data,
                     const size_t frame_index) override;
 
@@ -237,11 +247,11 @@ class VCD_Impl : public vcd::VCD {
 
     // Add action_data
     void
-    add_action_data(const std::string &uid,
+    add_action_data(const std::string &uid_str,
                     const types::ObjectData& action_data) override;
 
     void
-    add_action_data(const std::string &uid,
+    add_action_data(const std::string &uid_str,
                     const types::ObjectData& action_data,
                     const size_t frame_index) override;
 
@@ -257,11 +267,11 @@ class VCD_Impl : public vcd::VCD {
 
     // Add context_data
     void
-    add_context_data(const std::string &uid,
+    add_context_data(const std::string &uid_str,
                      const types::ObjectData& context_data) override;
 
     void
-    add_context_data(const std::string &uid,
+    add_context_data(const std::string &uid_str,
                      const types::ObjectData& context_data,
                      const size_t frame_index) override;
 
@@ -306,25 +316,25 @@ class VCD_Impl : public vcd::VCD {
     get_frame(const int frame_num);
 
     json*
-    get_element(const ElementType type, const UID &uid);
+    get_element(const ElementType type, const std::string &uid_str);
 
     size_t
     get_num_elements(const ElementType type);
 
     json*
-    get_object(const UID &uid);
+    get_object(const std::string &uid_str);
 
     json*
-    get_action(const UID &uid);
+    get_action(const std::string &uid_str);
 
     json*
-    get_event(const UID &uid);
+    get_event(const std::string &uid_str);
 
     json*
-    get_context(const UID &uid);
+    get_context(const std::string &uid_str);
 
     json*
-    get_relation(const UID &uid);
+    get_relation(const std::string &uid_str);
 
     UID
     get_uid_to_assign(const ElementType type, const UID &uid);
@@ -334,10 +344,11 @@ class VCD_Impl : public vcd::VCD {
                                    const std::string &name,
                                    const std::string &semantic_type,
                                    const size_t frame_index,
-                                   const UID &uid, const ont_uid &ont_uid,
+                                   const std::string &uid_str,
+                                   const ont_uid &ont_uid,
                                    const std::string &coord_system);
 
-    UID
+    std::string
     set_element(const ElementType type, const std::string &name,
                 const std::string &semantic_type,
                 const size_t frame_index,
@@ -346,7 +357,7 @@ class VCD_Impl : public vcd::VCD {
                 const SetMode set_mode = union_t);
 
     void
-    set_element_data(const ElementType type, const UID &uid,
+    set_element_data(const ElementType type, const std::string &uid_str,
                      const types::ObjectData &element_data,
                      const size_t frame_index,
                      const SetMode set_mode = union_t);
@@ -374,7 +385,7 @@ class VCD_Impl : public vcd::VCD {
     setDefault(json &data, const std::string &key, T &&value);
 
     bool
-    has(const ElementType type, const UID &uid) const;
+    has(const ElementType type, const std::string &uid_str) const;
 
     bool
     hasOntology(const std::string &ont_uid_str) const;
@@ -383,7 +394,7 @@ class VCD_Impl : public vcd::VCD {
     hasCoordSys(const std::string &coord_system) const;
 
     bool
-    has_element_data(const ElementType type, const UID &uid,
+    has_element_data(const ElementType type, const std::string &uid_str,
                      const types::ObjectData &element_data) const;
 
     inline bool
@@ -396,6 +407,7 @@ class VCD_Impl : public vcd::VCD {
     findElementByName(const json &elementList, const std::string &name);
 
  private:
+    // Rest of private functions
     void reset();
 
     bool m_useUUID;
@@ -403,8 +415,10 @@ class VCD_Impl : public vcd::VCD {
 
     size_t m_curFrameIndex = 0;
 
+    // Check the used uid numbers for each type
     std::vector<int> m_lastUIDbyType;
 
+    // Objects to be considered in every frame
     HoliElems m_holiElemes;
 };
 
