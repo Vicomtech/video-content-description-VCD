@@ -10,7 +10,6 @@ include_directories(${TESTING_HEADERS})
 # Add all sources defined above to the program
 include_directories( ${VCD_SOURCE_DIR}/modules/vcd_core/include)
 include_directories ( ${CMAKE_BINARY_DIR})  # to include setup_strings
-message("Searching setup_string.h at: " ${CMAKE_BINARY_DIR})
 
 # Add demanded test cases
 add_subdirectory( test_basic )

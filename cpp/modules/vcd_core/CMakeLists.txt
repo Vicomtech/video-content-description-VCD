@@ -22,9 +22,14 @@ set_target_properties( ${MODULE_NAME} PROPERTIES FOLDER "vcd_modules" )
 # Change the output name from vcd_core to vcd
 # set_target_properties( ${MODULE_NAME} PROPERTIES OUTPUT_NAME "vcd")
 
+## Add a namespace alias.
+# This is useful to abstract over use of the library as installed vs
+#  subdirectory build
+add_library(VCD::${MODULE_NAME} ALIAS ${MODULE_NAME})
+
 target_include_directories(${MODULE_NAME}
     PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
