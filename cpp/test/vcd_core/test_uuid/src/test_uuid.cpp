@@ -31,7 +31,6 @@
 
 #include "vcd.h"
 #include "vcd_types.h"
-#include "setup_strings.h"
 #include "test_utils.h"
 
 #include "vcd_impl.h"

@@ -72,7 +72,7 @@ CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/${MAIN_LIBRARY_NAME}.cmake.release.in" "${
 install(FILES ${PROJECT_BINARY_DIR}/${MAIN_LIBRARY_NAME}Config.release.cmake DESTINATION lib/cmake/${PROJECT_NAME} RENAME "${PROJECT_NAME}Config.cmake")
 
 
-CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/setup_strings.h.in" "${PROJECT_BINARY_DIR}/setup_strings.h" )
+# CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/setup_strings.h.in" "${PROJECT_BINARY_DIR}/setup_strings.h" )
 
 #---------------------------------------------------#
 #               Project Documentation               #
