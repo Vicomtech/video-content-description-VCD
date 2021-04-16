@@ -13,6 +13,7 @@ set(MAIN_PROJECT_BUILD_PATH ${PROJECT_BINARY_DIR})
 set(VCD_MAJOR_VERSION 4)
 set(VCD_MINOR_VERSION 3)  #Schema changes
 set(VCD_VERSION_PATCH 0)  #c++ library changes
+set(VCD_PROJECT_VERSION ${VCD_MAJOR_VERSION}.${VCD_MINOR_VERSION}.${VCD_VERSION_PATCH})
 message(VCD_MAJOR_VERSION: ${VCD_MAJOR_VERSION})
 message(VCD_MINOR_VERSION: ${VCD_MINOR_VERSION})
 message(VCD_VERSION_PATCH: ${VCD_VERSION_PATCH})
@@ -30,7 +31,7 @@ INCLUDE(${CMAKE_SCRIPT_PATH}/CMake_compilation_config.cmake)
 # Options
 option( ADD_VCD_CORE "Add VCD core" ON)
 #option( BUILD_SAMPLES "Build samples" ON)
-option( BUILD_TESTS "Build tests" ON)
+option( BUILD_TESTS "Build tests" OFF)
 #option( BUILD_PERF "Build performance tests" OFF)
 option( MAKE_LIB_STATIC "Generate the library as static" OFF)
 
