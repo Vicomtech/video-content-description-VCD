@@ -19,6 +19,14 @@ set( CMAKE_DEBUG_POSTFIX _d )
 add_library(${MODULE_NAME} ${LIB_TYPE} ${MODULE_SRCS} ${MODULE_HEADERS})
 
 set_target_properties( ${MODULE_NAME} PROPERTIES FOLDER "vcd_modules" )
+# Change the output name from vcd_core to vcd
+# set_target_properties( ${MODULE_NAME} PROPERTIES OUTPUT_NAME "vcd")
+
+target_include_directories(${MODULE_NAME}
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include
+        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 
 # set c++14 as the used c++ standard for this library
 DEFINE_CPP_STANDARD_AS_14(${MODULE_NAME})
@@ -27,10 +35,68 @@ DEFINE_CPP_STANDARD_AS_14(${MODULE_NAME})
 SET(SRC_TO_CHECK_LINT ${MODULE_SRCS} ${MODULE_HEADERS})
 ADD_LINT_CHECK_TO_TARGET(${MODULE_NAME} "${SRC_TO_CHECK_LINT}")
 
-# Install library and headers (CMAKE_INSTALL_PREFIX is used prepended to these paths; in Linux, this is /usr/local)
+#---------------------------------------------------#
+#                Module Installation                #
+#---------------------------------------------------#
+# Install library and headers (CMAKE_INSTALL_PREFIX is used prepended to these
+# paths; in Linux, this is /usr/local)
 # In Windows, this is C:\Program Files\<package-name>
 message(MAIN_LIBRARY_NAME : ${MAIN_LIBRARY_NAME})
 message(PROJECT_NAME : ${PROJECT_NAME})
 message(MODULE_NAME : ${MODULE_NAME})
-install(TARGETS ${MODULE_NAME} DESTINATION lib/${MAIN_LIBRARY_NAME})
-install(FILES ${MODULE_HEADERS} DESTINATION include/${MAIN_LIBRARY_NAME})
+message(3RD_PARTY_PATH : ${3RD_PARTY_PATH})
+#install(TARGETS ${MODULE_NAME} DESTINATION lib/${MAIN_LIBRARY_NAME})
+#install(FILES ${MODULE_HEADERS} DESTINATION include/${MAIN_LIBRARY_NAME})
+
+include(GNUInstallDirs)
+set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/vcd)
+
+install(
+    TARGETS
+      ${MODULE_NAME}
+    EXPORT
+      ${MODULE_NAME}Targets
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(EXPORT ${MODULE_NAME}Targets
+    FILE ${MODULE_NAME}Targets.cmake
+    NAMESPACE VCD::
+    DESTINATION ${INSTALL_CONFIGDIR}
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vcd
+    FILES_MATCHING PATTERN "*.h*"
+)
+
+message(CMAKE_INSTALL_LIBDIR : ${CMAKE_INSTALL_LIBDIR})
+message(INSTALL_CONFIGDIR : ${INSTALL_CONFIGDIR})
+
+#---------------------------------------------------#
+#            Module ConfigVersion file              #
+#---------------------------------------------------#
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfigVersion.cmake
+    VERSION ${VCD_PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/vcdCoreConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfig.cmake
+    INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
+)
+
+## Install all the helper files
+install(
+    FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfig.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfigVersion.cmake
+    DESTINATION ${INSTALL_CONFIGDIR}
+)
+
+message(PROJECT_VERSION : ${VCD_PROJECT_VERSION})

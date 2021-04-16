@@ -64,17 +64,18 @@ endif(BUILD_PERF)
 
 # Configure template
 message(CMAKE_INSTALL_PREFIX : ${CMAKE_INSTALL_PREFIX})
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${MAIN_LIBRARY_NAME}.cmake.in" "${PROJECT_BINARY_DIR}/${MAIN_LIBRARY_NAME}Config.cmake" @ONLY)
+#configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${MAIN_LIBRARY_NAME}.cmake.in" "${PROJECT_BINARY_DIR}/${MAIN_LIBRARY_NAME}Config.cmake" @ONLY)
 
+#---------------------------------------------------#
+#               Project Installation                #
+#---------------------------------------------------#
 # Install <package>Config.cmake, so this library can be found via find_package
 # Prepending:
 # Unix: /usr/local
 # Windows 64b: C:\Program Files\${PROJECT_NAME}
-CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/${MAIN_LIBRARY_NAME}.cmake.release.in" "${PROJECT_BINARY_DIR}/${MAIN_LIBRARY_NAME}Config.release.cmake" @ONLY )
-install(FILES ${PROJECT_BINARY_DIR}/${MAIN_LIBRARY_NAME}Config.release.cmake DESTINATION lib/cmake/${PROJECT_NAME} RENAME "${PROJECT_NAME}Config.cmake")
+# CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/${MAIN_LIBRARY_NAME}.cmake.release.in" "${PROJECT_BINARY_DIR}/${MAIN_LIBRARY_NAME}Config.release.cmake" @ONLY )
+# install(FILES ${PROJECT_BINARY_DIR}/${MAIN_LIBRARY_NAME}Config.release.cmake DESTINATION lib/cmake/${PROJECT_NAME} RENAME "${PROJECT_NAME}Config.cmake")
 
-
-# CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/setup_strings.h.in" "${PROJECT_BINARY_DIR}/setup_strings.h" )
 
 #---------------------------------------------------#
 #               Project Documentation               #
