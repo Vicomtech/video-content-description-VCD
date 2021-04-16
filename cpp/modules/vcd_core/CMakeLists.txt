@@ -80,22 +80,22 @@ message(INSTALL_CONFIGDIR : ${INSTALL_CONFIGDIR})
 #---------------------------------------------------#
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfigVersion.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}ConfigVersion.cmake
     VERSION ${VCD_PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
 configure_package_config_file(
-    ${CMAKE_CURRENT_LIST_DIR}/cmake/vcdCoreConfig.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfig.cmake
+    ${CMAKE_CURRENT_LIST_DIR}/cmake/${MODULE_NAME}Config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}Config.cmake
     INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
 )
 
 ## Install all the helper files
 install(
     FILES
-      ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfig.cmake
-      ${CMAKE_CURRENT_BINARY_DIR}/vcdCoreConfigVersion.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}Config.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}ConfigVersion.cmake
     DESTINATION ${INSTALL_CONFIGDIR}
 )
 
