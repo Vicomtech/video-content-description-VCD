@@ -230,32 +230,37 @@ class VCD_Impl : public vcd::VCD {
     void
     add_bbox_to_object(const obj_uid& uid,
                        const std::string& name,
-                       const std::vector<int>& value) override;
+                       const std::vector<int>& value,
+                       const size_t frame_index = -1) override;
 
     void
     add_vec_to_object(const obj_uid& uid,
                       const std::string& name,
-                      const std::vector<float>& value) override;
+                      const std::vector<float>& value,
+                      const size_t frame_index = -1) override;
 
     void
     add_num_to_object(const obj_uid& uid,
                       const std::string& name,
-                      const double value) override;
+                      const double value,
+                      const size_t frame_index = -1) override;
 
     void
     add_bool_to_object(const obj_uid& uid,
                        const std::string& name,
-                       const bool value) override;
+                       const bool value,
+                       const size_t frame_index = -1) override;
 
     void
     add_text_to_object(const obj_uid& uid,
                        const std::string& name,
-                       const std::string& text) override;
+                       const std::string& text,
+                       const size_t frame_index = -1) override;
 
     // Add object_data
-    void
-    add_object_data(const std::string &uid_str,
-                    const types::ObjectData& object_data);
+//    void
+//    add_object_data(const std::string &uid_str,
+//                    const types::ObjectData& object_data);
 
     void
     add_object_data(const std::string &uid_str,
@@ -276,32 +281,37 @@ class VCD_Impl : public vcd::VCD {
     void
     add_bbox_to_action(const obj_uid& uid,
                        const std::string& name,
-                       const std::vector<int>& value) override;
+                       const std::vector<int>& value,
+                       const size_t frame_index = -1) override;
 
     void
     add_vec_to_action(const obj_uid& uid,
                       const std::string& name,
-                      const std::vector<float>& value) override;
+                      const std::vector<float>& value,
+                      const size_t frame_index = -1) override;
 
     void
     add_num_to_action(const obj_uid& uid,
                       const std::string& name,
-                      const double value) override;
+                      const double value,
+                      const size_t frame_index = -1) override;
 
     void
     add_bool_to_action(const obj_uid& uid,
                        const std::string& name,
-                       const bool value) override;
+                       const bool value,
+                       const size_t frame_index = -1) override;
 
     void
     add_text_to_action(const obj_uid& uid,
                        const std::string& name,
-                       const std::string& text) override;
+                       const std::string& text,
+                       const size_t frame_index = -1) override;
 
     // Add action_data
-    void
-    add_action_data(const std::string &uid_str,
-                    const types::ObjectData& action_data);
+//    void
+//    add_action_data(const std::string &uid_str,
+//                    const types::ObjectData& action_data);
 
     void
     add_action_data(const std::string &uid_str,
@@ -321,33 +331,38 @@ class VCD_Impl : public vcd::VCD {
     // Action data generators
     void
     add_bbox_to_context(const obj_uid& uid,
-                       const std::string& name,
-                       const std::vector<int>& value) override;
+                        const std::string& name,
+                        const std::vector<int>& value,
+                        const size_t frame_index = -1) override;
 
     void
     add_vec_to_context(const obj_uid& uid,
-                      const std::string& name,
-                      const std::vector<float>& value) override;
+                       const std::string& name,
+                       const std::vector<float>& value,
+                       const size_t frame_index = -1) override;
 
     void
     add_num_to_context(const obj_uid& uid,
-                      const std::string& name,
-                      const double value) override;
+                       const std::string& name,
+                       const double value,
+                       const size_t frame_index = -1) override;
 
     void
     add_bool_to_context(const obj_uid& uid,
-                       const std::string& name,
-                       const bool value) override;
+                        const std::string& name,
+                        const bool value,
+                        const size_t frame_index = -1) override;
 
     void
     add_text_to_context(const obj_uid& uid,
-                       const std::string& name,
-                       const std::string& text) override;
+                        const std::string& name,
+                        const std::string& text,
+                        const size_t frame_index = -1) override;
 
     // Add context_data
-    void
-    add_context_data(const std::string &uid_str,
-                     const types::ObjectData& context_data);
+//    void
+//    add_context_data(const std::string &uid_str,
+//                     const types::ObjectData& context_data);
 
     void
     add_context_data(const std::string &uid_str,

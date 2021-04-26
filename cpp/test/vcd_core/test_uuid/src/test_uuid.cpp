@@ -117,8 +117,8 @@ SCENARIO("Create some basic content, without time information") {
             REQUIRE(uid2 == "2");
 
             // The user must use uuids in string format for all public functions
-            vcd_impl.add_object_data(uid2, Boolean("checked", true));
-            vcd_impl.add_object_data("2", Boolean("double-checked", true));
+            vcd_impl.add_bool_to_object(uid2, "checked", true);
+            vcd_impl.add_bool_to_object("2", "double-checked", true);
 
             // Same happens with ontology uids
             const vcd::ont_uid ont_uid_0 = vcd_impl.add_ontology(

@@ -83,8 +83,7 @@ SCENARIO("Add a set of actions to a VCD capture") {
             marcos_args.semantic_type = "#Person";
             std::string uid_object1 = vcd->add_object("Marcos", marcos_args);
             marcos_args.uid = uid_object1;
-            Text marcos_txt("Position", "#Researcher");
-            vcd->add_object_data(uid_object1, marcos_txt);
+            vcd->add_text_to_object(uid_object1, "Position", "#Researcher");
 
             //  2.3 - Contexts
             // Holistic
@@ -92,10 +91,8 @@ SCENARIO("Add a set of actions to a VCD capture") {
             ctx1_args.semantic_type = "#Sunny";
             std::string uid_context1 = vcd->add_context("", ctx1_args);
             ctx1_args.uid = uid_context1;
-            Text ctx1_txt_cat("category", "#Weather");
-            vcd->add_context_data(uid_context1, ctx1_txt_cat);
-            Text ctx1_txt_ann("annotation", "Manual");
-            vcd->add_context_data(uid_context1, ctx1_txt_ann);
+            vcd->add_text_to_context(uid_context1, "category", "#Weather");
+            vcd->add_text_to_context(uid_context1, "annotation", "Manual");
 
             const size_t num_frames = 10;
             for (size_t frame_i = 0; frame_i <= num_frames; ++frame_i) {
@@ -103,16 +100,17 @@ SCENARIO("Add a set of actions to a VCD capture") {
                 vcd->add_action("", frame_i, running_args);
                 if (frame_i == 0) {
                     // Include the action data for the first frame
-                    Num conf_num("confidence", 0.98);
-                    vcd->add_action_data(uid_action1, conf_num.get(), frame_i);
-                    Vec conf_vec("confidence_vec", {0.98, 0.97});
-                    vcd->add_action_data(uid_action1, conf_vec, frame_i);
-                    Text annot_txt("annotation", "Manual");
-                    vcd->add_action_data(uid_action1, annot_txt, frame_i);
+                    vcd->add_num_to_action(uid_action1,
+                                           "confidence", 0.98, frame_i);
+                    vcd->add_vec_to_action(uid_action1,
+                                           "confidence_vec", {0.98, 0.97},
+                                           frame_i);
+                    vcd->add_text_to_action(uid_action1,
+                                            "annotation", "Manual", frame_i);
                 } else if (frame_i == 1) {
                     // Include the action data for the second frame
-                    Boolean validated("validated", true);
-                    vcd->add_action_data(uid_action1, validated, frame_i);
+                    vcd->add_bool_to_action(uid_action1,
+                                            "validated", true, frame_i);
                 }
                 // Simulate context detection
                 if (frame_i <= 5) {
@@ -120,11 +118,9 @@ SCENARIO("Add a set of actions to a VCD capture") {
                 }
                 if (frame_i == 4) {
                     // Frame 4
-                    Num ctx2_num_risk("risk", 0.7);
-                    vcd->add_context_data(ctx2_args.uid, ctx2_num_risk,
+                    vcd->add_num_to_context(ctx2_args.uid, "risk", 0.7,
                                           frame_i);
-                    Num ctx2_num_weight("weight", 0.5);
-                    vcd->add_context_data(ctx2_args.uid, ctx2_num_weight,
+                    vcd->add_num_to_context(ctx2_args.uid, "weight", 0.5,
                                           frame_i);
                 }
                 // This is extra to fit with the output definition

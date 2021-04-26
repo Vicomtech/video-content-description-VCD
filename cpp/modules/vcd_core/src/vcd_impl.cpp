@@ -332,50 +332,55 @@ VCD_Impl::add_object(const std::string& name,
 void
 VCD_Impl::add_bbox_to_object(const obj_uid& uid,
                              const std::string& name,
-                             const std::vector<int>& value) {
+                             const std::vector<int>& value,
+                             const size_t frame_index) {
     const types::Bbox bbox(name, value);
-    add_object_data(uid, bbox);
+    add_object_data(uid, bbox, frame_index);
 }
 
 void
 VCD_Impl::add_vec_to_object(const obj_uid& uid,
                             const std::string& name,
-                            const std::vector<float>& value) {
+                            const std::vector<float>& value,
+                            const size_t frame_index) {
     const types::Vec vec(name, value);
-    add_object_data(uid, vec);
+    add_object_data(uid, vec, frame_index);
 }
 
 void
 VCD_Impl::add_num_to_object(const obj_uid& uid,
                             const std::string& name,
-                            const double value) {
+                            const double value,
+                            const size_t frame_index) {
     const types::Num num(name, value);
-    add_object_data(uid, num);
+    add_object_data(uid, num, frame_index);
 }
 
 void
 VCD_Impl::add_bool_to_object(const obj_uid& uid,
                              const std::string& name,
-                             const bool value) {
+                             const bool value,
+                             const size_t frame_index) {
     const types::Boolean flag(name, value);
-    add_object_data(uid, flag);
+    add_object_data(uid, flag, frame_index);
 }
 
 void
 VCD_Impl::add_text_to_object(const obj_uid& uid,
                              const std::string& name,
-                             const std::string& text) {
+                             const std::string& text,
+                             const size_t frame_index) {
     const types::Text txt(name, text);
-    add_object_data(uid, txt);
+    add_object_data(uid, txt, frame_index);
 }
 
-void
-VCD_Impl::add_object_data(const std::string &uid_str,
-                          const types::ObjectData& object_data) {
-    const size_t null_frame_index = getNoneFrameIndex();
-    return set_element_data(ElementType::object, uid_str, object_data,
-                            null_frame_index, SetMode::union_t);
-}
+// void
+// VCD_Impl::add_object_data(const std::string &uid_str,
+//                          const types::ObjectData& object_data) {
+//    const size_t null_frame_index = getNoneFrameIndex();
+//    return set_element_data(ElementType::object, uid_str, object_data,
+//                            null_frame_index, SetMode::union_t);
+// }
 
 void
 VCD_Impl::add_object_data(const std::string &uid_str,
@@ -418,50 +423,55 @@ VCD_Impl::add_action(const std::string& name,
 void
 VCD_Impl::add_bbox_to_action(const obj_uid& uid,
                              const std::string& name,
-                             const std::vector<int>& value) {
+                             const std::vector<int>& value,
+                             const size_t frame_index) {
     const types::Bbox bbox(name, value);
-    add_action_data(uid, bbox);
+    add_action_data(uid, bbox, frame_index);
 }
 
 void
 VCD_Impl::add_vec_to_action(const obj_uid& uid,
                             const std::string& name,
-                            const std::vector<float>& value) {
+                            const std::vector<float>& value,
+                            const size_t frame_index) {
     const types::Vec vec(name, value);
-    add_action_data(uid, vec);
+    add_action_data(uid, vec, frame_index);
 }
 
 void
 VCD_Impl::add_num_to_action(const obj_uid& uid,
                             const std::string& name,
-                            const double value) {
+                            const double value,
+                            const size_t frame_index) {
     const types::Num num(name, value);
-    add_action_data(uid, num);
+    add_action_data(uid, num, frame_index);
 }
 
 void
 VCD_Impl::add_bool_to_action(const obj_uid& uid,
                              const std::string& name,
-                             const bool value) {
+                             const bool value,
+                             const size_t frame_index) {
     const types::Boolean flag(name, value);
-    add_action_data(uid, flag);
+    add_action_data(uid, flag, frame_index);
 }
 
 void
 VCD_Impl::add_text_to_action(const obj_uid& uid,
                              const std::string& name,
-                             const std::string& text) {
+                             const std::string& text,
+                             const size_t frame_index) {
     const types::Text txt(name, text);
-    add_action_data(uid, txt);
+    add_action_data(uid, txt, frame_index);
 }
 
-void
-VCD_Impl::add_action_data(const std::string &uid_str,
-                          const types::ObjectData& action_data) {
-    const size_t null_frame_index = getNoneFrameIndex();
-    return set_element_data(ElementType::action, uid_str, action_data,
-                            null_frame_index, SetMode::union_t);
-}
+// void
+// VCD_Impl::add_action_data(const std::string &uid_str,
+//                          const types::ObjectData& action_data) {
+//    const size_t null_frame_index = getNoneFrameIndex();
+//    return set_element_data(ElementType::action, uid_str, action_data,
+//                            null_frame_index, SetMode::union_t);
+// }
 
 void
 VCD_Impl::add_action_data(const std::string &uid_str,
@@ -504,50 +514,55 @@ VCD_Impl::add_context(const std::string& name,
 void
 VCD_Impl::add_bbox_to_context(const obj_uid& uid,
                              const std::string& name,
-                             const std::vector<int>& value) {
+                             const std::vector<int>& value,
+                              const size_t frame_index) {
     const types::Bbox bbox(name, value);
-    add_context_data(uid, bbox);
+    add_context_data(uid, bbox, frame_index);
 }
 
 void
 VCD_Impl::add_vec_to_context(const obj_uid& uid,
                             const std::string& name,
-                            const std::vector<float>& value) {
+                            const std::vector<float>& value,
+                             const size_t frame_index) {
     const types::Vec vec(name, value);
-    add_context_data(uid, vec);
+    add_context_data(uid, vec, frame_index);
 }
 
 void
 VCD_Impl::add_num_to_context(const obj_uid& uid,
                             const std::string& name,
-                            const double value) {
+                            const double value,
+                             const size_t frame_index) {
     const types::Num num(name, value);
-    add_context_data(uid, num);
+    add_context_data(uid, num, frame_index);
 }
 
 void
 VCD_Impl::add_bool_to_context(const obj_uid& uid,
                              const std::string& name,
-                             const bool value) {
+                             const bool value,
+                              const size_t frame_index) {
     const types::Boolean flag(name, value);
-    add_context_data(uid, flag);
+    add_context_data(uid, flag, frame_index);
 }
 
 void
 VCD_Impl::add_text_to_context(const obj_uid& uid,
                              const std::string& name,
-                             const std::string& text) {
+                             const std::string& text,
+                              const size_t frame_index) {
     const types::Text txt(name, text);
-    add_context_data(uid, txt);
+    add_context_data(uid, txt, frame_index);
 }
 
-void
-VCD_Impl::add_context_data(const std::string &uid_str,
-                           const types::ObjectData& context_data) {
-    const size_t null_frame_index = getNoneFrameIndex();
-    return set_element_data(ElementType::context, uid_str, context_data,
-                            null_frame_index, SetMode::union_t);
-}
+// void
+// VCD_Impl::add_context_data(const std::string &uid_str,
+//                           const types::ObjectData& context_data) {
+//    const size_t null_frame_index = getNoneFrameIndex();
+//    return set_element_data(ElementType::context, uid_str, context_data,
+//                            null_frame_index, SetMode::union_t);
+// }
 
 void
 VCD_Impl::add_context_data(const std::string &uid_str,

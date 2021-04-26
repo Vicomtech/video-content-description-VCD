@@ -159,16 +159,6 @@ class VCD {
     add_object(const std::string& name, const size_t frame_index,
                const element_args& args) = 0;
 
-    // Add object_data
-//    virtual void
-//    add_object_data(const std::string &uid,
-//                    const types::ObjectData& object_data) = 0;
-
-//    virtual void
-//    add_object_data(const std::string &uid,
-//                    const types::ObjectData& object_data,
-//                    const size_t frame_index) = 0;
-
     // Add action
     /**
      * @brief add_action Adds a new action to the scene definition.
@@ -203,16 +193,6 @@ class VCD {
     virtual act_uid
     add_action(const std::string& name, const size_t frame_index,
                const element_args& args) = 0;
-
-    // Add action_data
-//    virtual void
-//    add_action_data(const std::string &uid,
-//                    const types::ObjectData& action_data) = 0;
-
-//    virtual void
-//    add_action_data(const std::string &uid,
-//                    const types::ObjectData& action_data,
-//                    const size_t frame_index) = 0;
 
     // Add context
     /**
@@ -249,16 +229,6 @@ class VCD {
     add_context(const std::string& name, const size_t frame_index,
                 const element_args& args) = 0;
 
-    // Add context_data
-//    virtual void
-//    add_context_data(const std::string &uid,
-//                    const types::ObjectData& context_data) = 0;
-
-//    virtual void
-//    add_context_data(const std::string &uid,
-//                    const types::ObjectData& context_data,
-//                    const size_t frame_index) = 0;
-
     // Ontologies
     virtual ont_uid
     add_ontology(const std::string &ontology) = 0;
@@ -278,79 +248,94 @@ class VCD {
     virtual void
     add_bbox_to_object(const obj_uid& uid,
                        const std::string& name,
-                       const std::vector<int>& value) = 0;
+                       const std::vector<int>& value,
+                       const size_t frame_index = -1) = 0;
 
     virtual void
     add_vec_to_object(const obj_uid& uid,
                       const std::string& name,
-                      const std::vector<float>& value) = 0;
+                      const std::vector<float>& value,
+                      const size_t frame_index = -1) = 0;
 
     virtual void
     add_num_to_object(const obj_uid& uid,
                       const std::string& name,
-                      const double value) = 0;
+                      const double value,
+                      const size_t frame_index = -1) = 0;
 
     virtual void
     add_bool_to_object(const obj_uid& uid,
                        const std::string& name,
-                       const bool value) = 0;
+                       const bool value,
+                       const size_t frame_index = -1) = 0;
 
     virtual void
     add_text_to_object(const obj_uid& uid,
                        const std::string& name,
-                       const std::string& text) = 0;
+                       const std::string& text,
+                       const size_t frame_index = -1) = 0;
 
     // Action data generators
     virtual void
     add_bbox_to_action(const obj_uid& uid,
                        const std::string& name,
-                       const std::vector<int>& value) = 0;
+                       const std::vector<int>& value,
+                       const size_t frame_index = -1) = 0;
 
     virtual void
     add_vec_to_action(const obj_uid& uid,
                       const std::string& name,
-                      const std::vector<float>& value) = 0;
+                      const std::vector<float>& value,
+                      const size_t frame_index = -1) = 0;
 
     virtual void
     add_num_to_action(const obj_uid& uid,
                       const std::string& name,
-                      const double value) = 0;
+                      const double value,
+                      const size_t frame_index = -1) = 0;
 
     virtual void
     add_bool_to_action(const obj_uid& uid,
                        const std::string& name,
-                       const bool value) = 0;
+                       const bool value,
+                       const size_t frame_index = -1) = 0;
 
     virtual void
     add_text_to_action(const obj_uid& uid,
                        const std::string& name,
-                       const std::string& text) = 0;
+                       const std::string& text,
+                       const size_t frame_index = -1) = 0;
 
     // Context data generators
     virtual void
     add_bbox_to_context(const obj_uid& uid,
-                       const std::string& name,
-                       const std::vector<int>& value) = 0;
+                        const std::string& name,
+                        const std::vector<int>& value,
+                        const size_t frame_index = -1) = 0;
 
     virtual void
     add_vec_to_context(const obj_uid& uid,
-                      const std::string& name,
-                      const std::vector<float>& value) = 0;
+                       const std::string& name,
+                       const std::vector<float>& value,
+                       const size_t frame_index = -1) = 0;
 
     virtual void
     add_num_to_context(const obj_uid& uid,
-                      const std::string& name,
-                      const double value) = 0;
+                       const std::string& name,
+                       const double value,
+                       const size_t frame_index = -1) = 0;
 
     virtual void
     add_bool_to_context(const obj_uid& uid,
-                       const std::string& name,
-                       const bool value) = 0;
+                        const std::string& name,
+                        const bool value,
+                        const size_t frame_index = -1) = 0;
 
     virtual void
     add_text_to_context(const obj_uid& uid,
-                       const std::string& name,
-                       const std::string& text) = 0;
+                        const std::string& name,
+                        const std::string& text,
+                        const size_t frame_index = -1) = 0;
 
     // Instance creation factories
     static CORE_LIB std::unique_ptr<VCD>

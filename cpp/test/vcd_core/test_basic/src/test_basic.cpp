@@ -116,14 +116,10 @@ SCENARIO("Create some basic content, without time information, and do some "
             // 3.- Add some data to the object
             {
                 // Define the internal objects for marcos
-                Bbox head_bbox("head", {10, 10, 30, 30});
-                Bbox body_bbox("body", {0, 0, 60, 120});
-                Vec speed_vec("speed", {0.0, 0.2});
-                Num accel_num("accel", 0.1);
-                vcd->add_object_data(uid_marcos, head_bbox.get());
-                vcd->add_object_data(uid_marcos, body_bbox.get());
-                vcd->add_object_data(uid_marcos, speed_vec.get());
-                vcd->add_object_data(uid_marcos, accel_num.get());
+                vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30});
+                vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 60, 120});
+                vcd->add_vec_to_object(uid_marcos, "speed", {0.0, 0.2});
+                vcd->add_num_to_object(uid_marcos, "accel", 0.1);
             }
 
             vcd::element_args peter_args;
@@ -131,12 +127,9 @@ SCENARIO("Create some basic content, without time information, and do some "
             std::string uid_peter = vcd->add_object("peter", peter_args);
             {
                 // Define the internal objects for peter
-                Num age("age", 38.0);
-                Vec eyeL("eyeL", {0, 0, 10, 10});
-                Vec eyeR("eyeR", {0, 0, 10, 10});
-                vcd->add_object_data(uid_peter, age.get());
-                vcd->add_object_data(uid_peter, eyeL);
-                vcd->add_object_data(uid_peter, eyeR);
+                vcd->add_num_to_object(uid_peter, "age", 38.0);
+                vcd->add_vec_to_object(uid_peter, "eyeL", {0, 0, 10, 10});
+                vcd->add_vec_to_object(uid_peter, "eyeR", {0, 0, 10, 10});
             }
             // 4.- Write into string
             VCD_ptr vcd_tst = VCD::create();
@@ -195,23 +188,15 @@ SCENARIO("Create some basic content, without time information, and do some "
 
             // 3.- Add some data to the objects
             //   - Marcos
-            Bbox body_bbox_m0("body", {0, 0, 60, 120});
-            vcd->add_object_data(uid_marcos, body_bbox_m0.get(), 0);
-            Bbox body_bbox_m1("body", {0, 0, 62, 124});
-            vcd->add_object_data(uid_marcos, body_bbox_m1.get(), 1);
-            Bbox body_bbox_m2("body", {0, 0, 70, 128});
-            vcd->add_object_data(uid_marcos, body_bbox_m2.get(), 2);
-            Bbox body_bbox_m5("body", {0, 0, 100, 160});
-            vcd->add_object_data(uid_marcos, body_bbox_m5.get(), 5);
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 60, 120}, 0);
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 62, 124}, 1);
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 70, 128}, 2);
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 100, 160}, 5);
             //   - Peter
-            Bbox body_bbox_p7("body", {0, 0, 200, 190});
-            vcd->add_object_data(uid_peter, body_bbox_p7.get(), 7);
-            Bbox body_bbox_p8("body", {0, 0, 180, 185});
-            vcd->add_object_data(uid_peter, body_bbox_p8.get(), 8);
-            Bbox body_bbox_p9("body", {0, 0, 160, 179});
-            vcd->add_object_data(uid_peter, body_bbox_p9.get(), 9);
-            Bbox body_bbox_p5("body", {0, 0, 99, 99});
-            vcd->add_object_data(uid_peter, body_bbox_p5.get(), 5);
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 200, 190}, 7);
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 180, 185}, 8);
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 160, 179}, 9);
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 99, 99}, 5);
 
             // 4.- Save the json info into a file for comparisson
             string out_p = "vcd430_test_create_frames_simple_pretty_OUT.json";
@@ -261,14 +246,10 @@ SCENARIO("Create some basic content, without time information, and do some "
 
             // 4.- Add some data to the object
             // Define the internal objects for marcos
-            Bbox head_bbox("head", {10, 10, 30, 30});
-            Bbox body_bbox("body", {0, 0, 60, 120});
-            Vec speed_vec("speed", {0.0, 0.2});
-            Num accel_num("accel", 0.1);
-            vcd->add_object_data(uid_marcos, head_bbox.get());
-            vcd->add_object_data(uid_marcos, body_bbox.get());
-            vcd->add_object_data(uid_marcos, speed_vec.get());
-            vcd->add_object_data(uid_marcos, accel_num.get());
+            vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30});
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 60, 120});
+            vcd->add_vec_to_object(uid_marcos, "speed", {0.0, 0.2});
+            vcd->add_num_to_object(uid_marcos, "accel", 0.1);
 
             // Generate json data
             const bool pretty = true;
@@ -417,18 +398,21 @@ SCENARIO("Create some basic content, without time information, and do some "
                         // leave VCD to assign uid = 0
                         uid = vcd_cur->add_object("CARLOTA", carlota_args);
                         carlota_args.uid = uid;
-                        auto box = Bbox("", {0, frame_num_i, 0, 0});
-                        vcd_cur->add_object_data(uid, box, frame_num);
+                        vcd_cur->add_bbox_to_object(uid, "",
+                                                    {0, frame_num_i, 0, 0},
+                                                    frame_num);
                     } else {
                         // tell VCD to use last_uid
                         uid = vcd_cur->add_object("CARLOTA", carlota_args);
-                        auto box = Bbox("", {0, frame_num_i, 0, 0});
-                        vcd_cur->add_object_data(uid, box, frame_num);
+                        vcd_cur->add_bbox_to_object(uid, "",
+                                                    {0, frame_num_i, 0, 0},
+                                                    frame_num);
                     }
                 } else {
                     // Continue with current VCD
-                    auto box = Bbox("", {0, frame_num_i, 0, 0});
-                    vcd_cur->add_object_data(uid, box, frame_num);
+                    vcd_cur->add_bbox_to_object(uid, "",
+                                                {0, frame_num_i, 0, 0},
+                                                frame_num);
                 }
             }
             json* obj = nullptr;
@@ -444,7 +428,7 @@ SCENARIO("Create some basic content, without time information, and do some "
 
     GIVEN("A scene definition") {
         THEN("Load all the scene elements") {
-            using vcd::types::CoordinateSystemType;
+            using vcd::CoordinateSystemType;
             VCD_ptr vcd = VCD::create();
 
             // Generate coordinate system element
