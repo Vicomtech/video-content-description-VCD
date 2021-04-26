@@ -17,8 +17,6 @@
 #include <openssl/rand.h>
 #include <iostream>
 
-#include "vcd_types.h"
-
 using std::string;
 
 using vcd::types::ObjectDataTypeName;
@@ -330,6 +328,47 @@ VCD_Impl::add_object(const std::string& name,
                        args.coord_system, set_mode);
 }
 
+// Object data generators
+void
+VCD_Impl::add_bbox_to_object(const obj_uid& uid,
+                             const std::string& name,
+                             const std::vector<int>& value) {
+    const types::Bbox bbox(name, value);
+    add_object_data(uid, bbox);
+}
+
+void
+VCD_Impl::add_vec_to_object(const obj_uid& uid,
+                            const std::string& name,
+                            const std::vector<float>& value) {
+    const types::Vec vec(name, value);
+    add_object_data(uid, vec);
+}
+
+void
+VCD_Impl::add_num_to_object(const obj_uid& uid,
+                            const std::string& name,
+                            const double value) {
+    const types::Num num(name, value);
+    add_object_data(uid, num);
+}
+
+void
+VCD_Impl::add_bool_to_object(const obj_uid& uid,
+                             const std::string& name,
+                             const bool value) {
+    const types::Boolean flag(name, value);
+    add_object_data(uid, flag);
+}
+
+void
+VCD_Impl::add_text_to_object(const obj_uid& uid,
+                             const std::string& name,
+                             const std::string& text) {
+    const types::Text txt(name, text);
+    add_object_data(uid, txt);
+}
+
 void
 VCD_Impl::add_object_data(const std::string &uid_str,
                           const types::ObjectData& object_data) {
@@ -373,6 +412,47 @@ VCD_Impl::add_action(const std::string& name,
     return set_element(ElementType::action, name, args.semantic_type,
                        frame_index, UID(args.uid), args.ontology_uid,
                        args.coord_system, set_mode);
+}
+
+// Action data generators
+void
+VCD_Impl::add_bbox_to_action(const obj_uid& uid,
+                             const std::string& name,
+                             const std::vector<int>& value) {
+    const types::Bbox bbox(name, value);
+    add_action_data(uid, bbox);
+}
+
+void
+VCD_Impl::add_vec_to_action(const obj_uid& uid,
+                            const std::string& name,
+                            const std::vector<float>& value) {
+    const types::Vec vec(name, value);
+    add_action_data(uid, vec);
+}
+
+void
+VCD_Impl::add_num_to_action(const obj_uid& uid,
+                            const std::string& name,
+                            const double value) {
+    const types::Num num(name, value);
+    add_action_data(uid, num);
+}
+
+void
+VCD_Impl::add_bool_to_action(const obj_uid& uid,
+                             const std::string& name,
+                             const bool value) {
+    const types::Boolean flag(name, value);
+    add_action_data(uid, flag);
+}
+
+void
+VCD_Impl::add_text_to_action(const obj_uid& uid,
+                             const std::string& name,
+                             const std::string& text) {
+    const types::Text txt(name, text);
+    add_action_data(uid, txt);
 }
 
 void
@@ -420,6 +500,47 @@ VCD_Impl::add_context(const std::string& name,
                        args.coord_system, set_mode);
 }
 
+// Context data generators
+void
+VCD_Impl::add_bbox_to_context(const obj_uid& uid,
+                             const std::string& name,
+                             const std::vector<int>& value) {
+    const types::Bbox bbox(name, value);
+    add_context_data(uid, bbox);
+}
+
+void
+VCD_Impl::add_vec_to_context(const obj_uid& uid,
+                            const std::string& name,
+                            const std::vector<float>& value) {
+    const types::Vec vec(name, value);
+    add_context_data(uid, vec);
+}
+
+void
+VCD_Impl::add_num_to_context(const obj_uid& uid,
+                            const std::string& name,
+                            const double value) {
+    const types::Num num(name, value);
+    add_context_data(uid, num);
+}
+
+void
+VCD_Impl::add_bool_to_context(const obj_uid& uid,
+                             const std::string& name,
+                             const bool value) {
+    const types::Boolean flag(name, value);
+    add_context_data(uid, flag);
+}
+
+void
+VCD_Impl::add_text_to_context(const obj_uid& uid,
+                             const std::string& name,
+                             const std::string& text) {
+    const types::Text txt(name, text);
+    add_context_data(uid, txt);
+}
+
 void
 VCD_Impl::add_context_data(const std::string &uid_str,
                            const types::ObjectData& context_data) {
@@ -453,7 +574,7 @@ VCD_Impl::add_ontology(const std::string &ontology) {
 
 coord_uid
 VCD_Impl::add_coordinate_system(const std::string& name,
-                                const types::CoordinateSystemType cs_type,
+                                const CoordinateSystemType cs_type,
                                 const std::string& parent_name,
                                 const std::vector<float>& pose_wrt_parent) {
     // Create entry
@@ -476,7 +597,7 @@ VCD_Impl::add_coordinate_system(const std::string& name,
     }
     // Define the coordinate system object
     coord_sys[name.c_str()] = json::object({
-            {"type", types::CoordinateSystemTypeName[cs_type]},
+            {"type", CoordinateSystemTypeName[cs_type]},
             {"parent", parent_name.c_str()},
             {"pose_wrt_parent", fixed_pose},
             {"children", json::array()}

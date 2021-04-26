@@ -17,6 +17,7 @@
 #include <string>
 
 #include "vcd.h"
+#include "vcd_types.h"
 
 using json = nlohmann::json;
 
@@ -225,15 +226,41 @@ class VCD_Impl : public vcd::VCD {
                const size_t frame_index,
                const element_args& args) override;
 
+    // Object data generators
+    void
+    add_bbox_to_object(const obj_uid& uid,
+                       const std::string& name,
+                       const std::vector<int>& value) override;
+
+    void
+    add_vec_to_object(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& value) override;
+
+    void
+    add_num_to_object(const obj_uid& uid,
+                      const std::string& name,
+                      const double value) override;
+
+    void
+    add_bool_to_object(const obj_uid& uid,
+                       const std::string& name,
+                       const bool value) override;
+
+    void
+    add_text_to_object(const obj_uid& uid,
+                       const std::string& name,
+                       const std::string& text) override;
+
     // Add object_data
     void
     add_object_data(const std::string &uid_str,
-                    const types::ObjectData& object_data) override;
+                    const types::ObjectData& object_data);
 
     void
     add_object_data(const std::string &uid_str,
                     const types::ObjectData& object_data,
-                    const size_t frame_index) override;
+                    const size_t frame_index);
 
     // Add action
     std::string
@@ -245,15 +272,41 @@ class VCD_Impl : public vcd::VCD {
                const size_t frame_index,
                const element_args& args) override;
 
+    // Action data generators
+    void
+    add_bbox_to_action(const obj_uid& uid,
+                       const std::string& name,
+                       const std::vector<int>& value) override;
+
+    void
+    add_vec_to_action(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& value) override;
+
+    void
+    add_num_to_action(const obj_uid& uid,
+                      const std::string& name,
+                      const double value) override;
+
+    void
+    add_bool_to_action(const obj_uid& uid,
+                       const std::string& name,
+                       const bool value) override;
+
+    void
+    add_text_to_action(const obj_uid& uid,
+                       const std::string& name,
+                       const std::string& text) override;
+
     // Add action_data
     void
     add_action_data(const std::string &uid_str,
-                    const types::ObjectData& action_data) override;
+                    const types::ObjectData& action_data);
 
     void
     add_action_data(const std::string &uid_str,
                     const types::ObjectData& action_data,
-                    const size_t frame_index) override;
+                    const size_t frame_index);
 
     // Add context
     std::string
@@ -265,15 +318,41 @@ class VCD_Impl : public vcd::VCD {
                 const size_t frame_index,
                 const element_args& args) override;
 
+    // Action data generators
+    void
+    add_bbox_to_context(const obj_uid& uid,
+                       const std::string& name,
+                       const std::vector<int>& value) override;
+
+    void
+    add_vec_to_context(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& value) override;
+
+    void
+    add_num_to_context(const obj_uid& uid,
+                      const std::string& name,
+                      const double value) override;
+
+    void
+    add_bool_to_context(const obj_uid& uid,
+                       const std::string& name,
+                       const bool value) override;
+
+    void
+    add_text_to_context(const obj_uid& uid,
+                       const std::string& name,
+                       const std::string& text) override;
+
     // Add context_data
     void
     add_context_data(const std::string &uid_str,
-                     const types::ObjectData& context_data) override;
+                     const types::ObjectData& context_data);
 
     void
     add_context_data(const std::string &uid_str,
                      const types::ObjectData& context_data,
-                     const size_t frame_index) override;
+                     const size_t frame_index);
 
     // Ontologies
     ont_uid
@@ -282,7 +361,7 @@ class VCD_Impl : public vcd::VCD {
     // Coordinate system
     coord_uid
     add_coordinate_system(const std::string& name,
-                      const types::CoordinateSystemType cs_type,
+                      const CoordinateSystemType cs_type,
                       const std::string& parent_name = "",
                       const std::vector<float>& pose_wrt_parent = {}) override;
 

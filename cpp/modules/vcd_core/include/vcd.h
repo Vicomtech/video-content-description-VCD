@@ -15,9 +15,10 @@
 
 #include <string>
 #include <memory>
+#include <map>
+#include <vector>
 
 #include "core_exp.h"
-#include "vcd_types.h"
 
 namespace vcd {
 
@@ -50,6 +51,25 @@ struct element_args {
     ont_uid ontology_uid;
     obj_uid uid;
     coord_uid coord_system;
+};
+
+enum CoordinateSystemType {
+    sensor_cs = 1,  // the coordinate system of a certain sensor
+    local_cs = 2,   // e.g. vehicle-ISO8855 in OpenLABEL, or "base_link" in ROS
+    scene_cs = 3,   // e.g. "odom" in ROS; starting as the first local-ls
+    geo_utm = 4,    // In UTM coordinates
+    geo_wgs84 = 5,  // In WGS84 elliptical Earth coordinates
+    custom = 6      // Any other coordinate system
+};
+
+const std::string
+CoordinateSystemTypeName[] {
+    "sensor_cs",
+    "local_cs",
+    "scene_cs",
+    "geo_utm",
+    "geo_wgs84",
+    "custom"
 };
 
 class VCD {
@@ -140,14 +160,14 @@ class VCD {
                const element_args& args) = 0;
 
     // Add object_data
-    virtual void
-    add_object_data(const std::string &uid,
-                    const types::ObjectData& object_data) = 0;
+//    virtual void
+//    add_object_data(const std::string &uid,
+//                    const types::ObjectData& object_data) = 0;
 
-    virtual void
-    add_object_data(const std::string &uid,
-                    const types::ObjectData& object_data,
-                    const size_t frame_index) = 0;
+//    virtual void
+//    add_object_data(const std::string &uid,
+//                    const types::ObjectData& object_data,
+//                    const size_t frame_index) = 0;
 
     // Add action
     /**
@@ -185,14 +205,14 @@ class VCD {
                const element_args& args) = 0;
 
     // Add action_data
-    virtual void
-    add_action_data(const std::string &uid,
-                    const types::ObjectData& action_data) = 0;
+//    virtual void
+//    add_action_data(const std::string &uid,
+//                    const types::ObjectData& action_data) = 0;
 
-    virtual void
-    add_action_data(const std::string &uid,
-                    const types::ObjectData& action_data,
-                    const size_t frame_index) = 0;
+//    virtual void
+//    add_action_data(const std::string &uid,
+//                    const types::ObjectData& action_data,
+//                    const size_t frame_index) = 0;
 
     // Add context
     /**
@@ -230,14 +250,14 @@ class VCD {
                 const element_args& args) = 0;
 
     // Add context_data
-    virtual void
-    add_context_data(const std::string &uid,
-                    const types::ObjectData& context_data) = 0;
+//    virtual void
+//    add_context_data(const std::string &uid,
+//                    const types::ObjectData& context_data) = 0;
 
-    virtual void
-    add_context_data(const std::string &uid,
-                    const types::ObjectData& context_data,
-                    const size_t frame_index) = 0;
+//    virtual void
+//    add_context_data(const std::string &uid,
+//                    const types::ObjectData& context_data,
+//                    const size_t frame_index) = 0;
 
     // Ontologies
     virtual ont_uid
@@ -246,13 +266,91 @@ class VCD {
     // Coordinate system
     virtual coord_uid
     add_coordinate_system(const std::string& name,
-                          const types::CoordinateSystemType cs_type,
+                          const CoordinateSystemType cs_type,
                           const std::string& parent_name = "",
                           const std::vector<float>& pose_wrt_parent = {}) = 0;
 
     // Getters
     virtual size_t
     get_num_objects() = 0;
+
+    // Object data generators
+    virtual void
+    add_bbox_to_object(const obj_uid& uid,
+                       const std::string& name,
+                       const std::vector<int>& value) = 0;
+
+    virtual void
+    add_vec_to_object(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& value) = 0;
+
+    virtual void
+    add_num_to_object(const obj_uid& uid,
+                      const std::string& name,
+                      const double value) = 0;
+
+    virtual void
+    add_bool_to_object(const obj_uid& uid,
+                       const std::string& name,
+                       const bool value) = 0;
+
+    virtual void
+    add_text_to_object(const obj_uid& uid,
+                       const std::string& name,
+                       const std::string& text) = 0;
+
+    // Action data generators
+    virtual void
+    add_bbox_to_action(const obj_uid& uid,
+                       const std::string& name,
+                       const std::vector<int>& value) = 0;
+
+    virtual void
+    add_vec_to_action(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& value) = 0;
+
+    virtual void
+    add_num_to_action(const obj_uid& uid,
+                      const std::string& name,
+                      const double value) = 0;
+
+    virtual void
+    add_bool_to_action(const obj_uid& uid,
+                       const std::string& name,
+                       const bool value) = 0;
+
+    virtual void
+    add_text_to_action(const obj_uid& uid,
+                       const std::string& name,
+                       const std::string& text) = 0;
+
+    // Context data generators
+    virtual void
+    add_bbox_to_context(const obj_uid& uid,
+                       const std::string& name,
+                       const std::vector<int>& value) = 0;
+
+    virtual void
+    add_vec_to_context(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& value) = 0;
+
+    virtual void
+    add_num_to_context(const obj_uid& uid,
+                      const std::string& name,
+                      const double value) = 0;
+
+    virtual void
+    add_bool_to_context(const obj_uid& uid,
+                       const std::string& name,
+                       const bool value) = 0;
+
+    virtual void
+    add_text_to_context(const obj_uid& uid,
+                       const std::string& name,
+                       const std::string& text) = 0;
 
     // Instance creation factories
     static CORE_LIB std::unique_ptr<VCD>

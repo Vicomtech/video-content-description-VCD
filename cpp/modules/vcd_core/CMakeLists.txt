@@ -14,6 +14,7 @@ else()
     set(LIB_TYPE SHARED)
 endif()
 
+
 # Create shared library
 set( CMAKE_DEBUG_POSTFIX _d )
 add_library(${MODULE_NAME} ${LIB_TYPE} ${MODULE_SRCS} ${MODULE_HEADERS})

@@ -63,25 +63,6 @@ ObjectDataTypeName[] {
     "mesh"
 };
 
-enum CoordinateSystemType {
-    sensor_cs = 1,  // the coordinate system of a certain sensor
-    local_cs = 2,   // e.g. vehicle-ISO8855 in OpenLABEL, or "base_link" in ROS
-    scene_cs = 3,   // e.g. "odom" in ROS; starting as the first local-ls
-    geo_utm = 4,    // In UTM coordinates
-    geo_wgs84 = 5,  // In WGS84 elliptical Earth coordinates
-    custom = 6      // Any other coordinate system
-};
-
-const std::string
-CoordinateSystemTypeName[] {
-    "sensor_cs",
-    "local_cs",
-    "scene_cs",
-    "geo_utm",
-    "geo_wgs84",
-    "custom"
-};
-
 class ObjectData {
  public:
     virtual
