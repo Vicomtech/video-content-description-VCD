@@ -11,12 +11,10 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-# TODO: change to v4.4.0
-
 ######################################
 # Fully manually writing the schema
 ######################################
-openlabel_schema_version = "0.1.0"
+openlabel_schema_version = "0.2.0"
 openlabel_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
@@ -28,18 +26,10 @@ openlabel_schema = {
             "type": "object",
             "description": "This is the root OpenLABEL element.",
             "properties": {
-                "frame_intervals": {
-                    "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
-                },
-                "ontologies": {
-                    "type": "object",
-                    "patternProperties": {
-                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
-                            {"type": "string"},
-                    },
-                    "additionalProperties": False
-                },
+                "metadata": {"$ref": "#/definitions/metadata"},
+                "ontologies": {"$ref": "#/definitions/ontologies"},
+                "resources": {"$ref": "#/definitions/resources"},
+                "tags": {"$ref": "#/definitions/tags"},
                 "frames": {
                     "type": "object",
                     "patternProperties": {
@@ -48,6 +38,10 @@ openlabel_schema = {
                         }
                     },
                     "additionalProperties": False
+                },
+                "frame_intervals": {
+                    "type": "array",
+                    "item": {"$ref": "#/definitions/frame_interval"}
                 },
                 "objects": {
                     "type": "object",
@@ -94,12 +88,57 @@ openlabel_schema = {
                     },
                     "additionalProperties": False
                 },
-                "metadata": {"$ref": "#/definitions/metadata"},
                 "streams": {"$ref": "#/definitions/streams"},
-                "coordinate_systems": {"$ref": "#/definitions/coordinate_systems"}
+                "coordinate_systems": {"$ref": "#/definitions/coordinate_systems"},
             },
             "additionalProperties": False,
             "required": ["metadata"]
+        },
+        "metadata": {
+            "type": "object",
+            "properties": {
+                "schema_version": {"type": "string", "enum": [openlabel_schema_version]},
+                "file_version": {"type": "string"},
+                "name": {"type": "string"},
+                "annotator": {"type": "string"},
+                "comment": {"type": "string"},
+            },
+            "additionalProperties": True,
+            "required": ["schema_version"]
+        },
+        "ontologies": {
+            "type": "object",
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
+                    {"type": "string"},
+            },
+            "additionalProperties": False
+        },
+        "resources": {
+            "type": "object",
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
+                    {"type": "string"},
+            },
+            "additionalProperties": False
+        },
+        "resource_uid": {
+            "type": "object",
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                    "type": "string"
+                }
+            },
+        },
+        "tags": {
+            "type": "object",
+            "properties": {
+                "administrative": {"type": "object"},
+                "odd": {"type": "object"},
+                "behaviour": {"type": "object"},
+                "custom": {"type": "object"}
+            },
+            "additionalProperties": True,
         },
         "frame": {
             "type": "object",
@@ -209,18 +248,6 @@ openlabel_schema = {
             },
             "additionalProperties": False
         },
-        "metadata": {
-            "type": "object",
-            "properties": {
-                "schema_version": {"type": "string", "enum": [openlabel_schema_version]},
-                "file_version": {"type": "string"},
-                "name": {"type": "string"},
-                "annotator": {"type": "string"},
-                "comment": {"type": "string"}
-            },
-            "additionalProperties": True,
-            "required": ["schema_version"]
-        },
         "streams": {
             "patternProperties": {
                 "^": {"$ref": "#/definitions/stream"},
@@ -245,6 +272,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "object_data": {"$ref": "#/definitions/object_data"},
                 "object_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -262,6 +290,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "action_data": {"$ref": "#/definitions/action_data"},
                 "action_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -279,6 +308,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "event_data": {"$ref": "#/definitions/event_data"},
                 "event_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -296,6 +326,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "context_data": {"$ref": "#/definitions/context_data"},
                 "context_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -313,6 +344,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"type": "string"},
                 "rdf_objects": {
                     "type": "array",
                     "item": {"$ref": "#/definitions/rdf_agent"}
@@ -338,7 +370,7 @@ openlabel_schema = {
                 "^": {"$ref": "#/definitions/element_data_pointer"}
             },
             "additionalProperties": False
-        },        
+        },
         "element_data_pointer": {
             "type": "object",
             "properties": {
@@ -356,7 +388,7 @@ openlabel_schema = {
                     "patternProperties": {
                         "^": {
                             "type": "string",
-                            "enum": ["num", "text", "boolean", "vec"]                                                        
+                            "enum": ["num", "text", "boolean", "vec"]
                         }
                     }
                 }
@@ -981,4 +1013,3 @@ openlabel_schema = {
     "required": ["openlabel"],
     "additionalProperties": False
 }
-

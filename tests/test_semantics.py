@@ -18,7 +18,9 @@ import vcd.schema as schema
 import vcd.types as types
 import vcd.utils as utils
 
-vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+vcd_version_name = openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
@@ -162,11 +164,11 @@ class TestBasic(unittest.TestCase):
                                        object_uid_1=uid1, object_uid_2=uid2,
                                        frame_value=(0, 10))
 
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 10)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_end'], 10)
-        for frame in vcd.data['vcd']['frames'].values():
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_end'], 10)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_end'], 10)
+        for frame in vcd.data['openlabel']['frames'].values():
             self.assertEqual(len(frame['relations']), 1)
 
         if not os.path.isfile('./etc/' + vcd_version_name + '_test_relations_1.json'):
@@ -185,11 +187,11 @@ class TestBasic(unittest.TestCase):
                                        object_uid_1=uid1, object_uid_2=uid2,
                                        frame_value=(7, 9))
 
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 15)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_start'], 7)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_end'], 9)
-        for frame_key, frame_val in vcd.data['vcd']['frames'].items():
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_end'], 15)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_start'], 7)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_end'], 9)
+        for frame_key, frame_val in vcd.data['openlabel']['frames'].items():
             if 7 <= frame_key <= 9:
                 self.assertEqual(len(frame_val['relations']), 1)
 
@@ -212,9 +214,9 @@ class TestBasic(unittest.TestCase):
         # The relation does not have frame information
         self.assertEqual('frame_intervals' in vcd.get_relation(uid4), False)
 
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 20)
-        for frame_key, frame_val in vcd.data['vcd']['frames'].items():
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_end'], 20)
+        for frame_key, frame_val in vcd.data['openlabel']['frames'].items():
             if 0 <= frame_key <= 15:
                 self.assertEqual(frame_val.get('relations'), None)
 

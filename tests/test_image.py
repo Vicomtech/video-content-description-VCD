@@ -25,7 +25,9 @@ import vcd.types as types
 import vcd.poly2d as poly
 import vcd.utils as utils
 
-vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+vcd_version_name = openlabel_version_name
 
 
 def draw_basic_image(classes_colors):
@@ -158,7 +160,7 @@ class TestBasic(unittest.TestCase):
         contours_dict = {}  # A dictionary of contours. Each key is one class type, each value, a contours array
         hierarchy_dict = {}
 
-        for object_key, object_val in vcd.data['vcd']['objects'].items():
+        for object_key, object_val in vcd.get_objects().items():
             # Assuming this is static (no frame info)
             contours_dict.setdefault(object_val['type'], [])
             hierarchy_dict.setdefault(object_val['type'], [])
@@ -294,7 +296,7 @@ class TestBasic(unittest.TestCase):
         contours_dict_class = {}  # A dictionary of contours. Each key is one class type, each value, a contours array
         hierarchy_dict_class = {}
 
-        for object_key, object_val in vcd.data['vcd']['objects'].items():
+        for object_key, object_val in vcd.get_objects().items():
             # Assuming this is static (no frame info)
             contours_dict_instance.setdefault(object_val['type'], [])
             contours_dict_class.setdefault(object_val['type'], [])

@@ -17,7 +17,10 @@ import vcd.core as core
 import vcd.schema as schema
 import vcd.types as types
 
-vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+
+#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+vcd_version_name = openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):

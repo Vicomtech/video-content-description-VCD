@@ -333,7 +333,8 @@ def convert_KITTI_tracking_to_VCD4():
     # Draw/store scenes in VCD
     for count, key in enumerate(kitti_parser.vcds):
         # Store
-        vcd_base_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+        openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+        vcd_base_name = openlabel_version_name
         vcd_file_name = os.path.join(kitti_tracking_output_vcd_path,
                                      vcd_base_name + "_kitti_tracking_" + str(count).zfill(4) + ".json")
         print('Storing VCD file...' + vcd_file_name)

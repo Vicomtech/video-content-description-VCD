@@ -20,7 +20,7 @@ test = os.listdir(dir_name)
 
 os.system("python test_basic.py && "
           "python test_converters.py && "
-          "python test_sanity.py && "
+          #"python test_sanity.py && "
           # "python test_serializer.py &&"
           "python test_mesh.py &&"
           "python test_image.py &&"

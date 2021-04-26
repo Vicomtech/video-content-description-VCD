@@ -15,9 +15,15 @@ import unittest
 import os
 import vcd.core as core
 import vcd.types as types
+import vcd.schema as schema
 
 import uuid
 import re
+
+
+#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+vcd_version_name = openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
@@ -56,8 +62,8 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_object(uid4)['ontology_uid'], '0')
 
         # All returned UIDs are strings, and when written into JSON as well
-        #print(vcd.stringify(False))
-        self.assertEqual(vcd.stringify(False), '{"vcd":{"metadata":{"schema_version":"4.3.1"},"objects":{"0":{"name":"Mike","type":"Person"},"1":{"name":"George","type":"Person"},"2":{"name":"Susan","type":"Person","object_data":{"boolean":[{"name":"checked","val":true},{"name":"double-checked","val":true}]},"object_data_pointers":{"checked":{"type":"boolean","frame_intervals":[]},"double-checked":{"type":"boolean","frame_intervals":[]}}},"3":{"name":"Mark","type":"#Pedestrian","ontology_uid":"0"},"4":{"name":"Rose","type":"#Pedestrian","ontology_uid":"0"}},"ontologies":{"0":"http://www.vicomtech.org/viulib/ontology"}}}')
+        if not os.path.isfile('./etc/' + vcd_version_name + '_test_uid_types.json'):
+            vcd.save('./etc/' + vcd_version_name + '_test_uid_types.json')
 
     def test_uuid_usage_explicit_1(self):
         vcd = core.VCD()

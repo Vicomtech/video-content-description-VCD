@@ -1,0 +1,1537 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "additionalProperties": false,
+    "definitions": {
+        "action": {
+            "additionalProperties": false,
+            "properties": {
+                "action_data": {
+                    "$ref": "#/definitions/action_data"
+                },
+                "action_data_pointers": {
+                    "$ref": "#/definitions/element_data_pointers"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "string"
+                },
+                "resource_uid": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "action_data": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "area_reference": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reference_type": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "attributes": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "bbox": {
+            "additionalProperties": true,
+            "description": "A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] is the centre of the bounding box, and                            [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.",
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "binary": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "data_type": {
+                    "type": "string"
+                },
+                "encoding": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "encoding",
+                "data_type"
+            ],
+            "type": "object"
+        },
+        "boolean": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "context": {
+            "additionalProperties": false,
+            "properties": {
+                "context_data": {
+                    "$ref": "#/definitions/context_data"
+                },
+                "context_data_pointers": {
+                    "$ref": "#/definitions/element_data_pointers"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "string"
+                },
+                "resource_uid": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "context_data": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "coordinate_system": {
+            "additionalProperties": false,
+            "description": "A coordinate_system is a 3D reference frame that act as placeholderof annotations.",
+            "properties": {
+                "children": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "parent": {
+                    "type": "string"
+                },
+                "pose_wrt_parent": {
+                    "oneOf": [
+                        {
+                            "description": "It is a 4x4 homogeneous matrix, to enable transform from                                    3D Cartersian Systems easily. Note that the pose_children_wrt_parent_4x4 is                                    the transform_parent_to_child_4x4:                                    X_child = pose_child_wrt_parent_4x4 * X_parent                                    X_child = transform_parent_to_child_4x4 * X_parent.NOTE: For camera or other projective systems (3D->2D) this pose is the extrinsiccalibration, the projection itself is encoded as the intrinsic information, whichis labeled inside the corresponding stream.",
+                            "example": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                10.0,
+                                0.0,
+                                1.0,
+                                0.0,
+                                5.0,
+                                0.0,
+                                0.0,
+                                1.0,
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "items": {
+                                "type": "number"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "description": "A pose can be expressed in several other forms, e.g. with a rotation                                           and translation vector",
+                            "type": "object"
+                        }
+                    ]
+                },
+                "type": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "parent"
+            ]
+        },
+        "coordinate_systems": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^": {
+                    "$ref": "#/definitions/coordinate_system"
+                }
+            },
+            "type": "object"
+        },
+        "cuboid": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "oneOf": [
+                        {
+                            "items": {
+                                "type": "number"
+                            },
+                            "maxItems": 10,
+                            "minItems": 9,
+                            "type": "array"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "element_data_pointer": {
+            "properties": {
+                "attribute_pointers": {
+                    "patternProperties": {
+                        "^": {
+                            "enum": [
+                                "num",
+                                "text",
+                                "boolean",
+                                "vec"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "enum": [
+                        "bbox",
+                        "rbbox",
+                        "num",
+                        "text",
+                        "boolean",
+                        "poly2d",
+                        "poly3d",
+                        "cuboid",
+                        "image",
+                        "mat",
+                        "binary",
+                        "point2d",
+                        "point3d",
+                        "vec",
+                        "line_reference",
+                        "area_reference",
+                        "mesh"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "frame_intervals"
+            ],
+            "type": "object"
+        },
+        "element_data_pointers": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^": {
+                    "$ref": "#/definitions/element_data_pointer"
+                }
+            },
+            "type": "object"
+        },
+        "event": {
+            "additionalProperties": false,
+            "properties": {
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "event_data": {
+                    "$ref": "#/definitions/event_data"
+                },
+                "event_data_pointers": {
+                    "$ref": "#/definitions/element_data_pointers"
+                },
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "string"
+                },
+                "resource_uid": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "event_data": {
+            "additionalProperties": false,
+            "properties": {
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "frame": {
+            "additionalProperties": false,
+            "properties": {
+                "actions": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "action_data": {
+                                    "$ref": "#/definitions/action_data"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "contexts": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "context_data": {
+                                    "$ref": "#/definitions/context_data"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "events": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "event_data": {
+                                    "$ref": "#/definitions/event_data"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "frame_properties": {
+                    "additionalProperties": true,
+                    "description": "These frame_properties include frame-related information,                                   including: stream information, odometry, and timestamping.                                   -Timestamps: the field 'timestamp' can be used to declare a                                   master timestamp for all information within thi frame.                                   -Streams: can host information related to specific streams, such                                   as specific timestamps or instantaneous intrinsics.                                   -Odometry: it contains ego-motion of the entire scene (i.e.                                   the pose of the LCS (Local Coordinate System) wrt to WCS (World                                   Coordinate System).",
+                    "properties": {
+                        "odometry": {
+                            "properties": {
+                                "comment": {
+                                    "type": "string"
+                                },
+                                "pose_lcs_wrt_wcs_4x4": {
+                                    "items": {
+                                        "type": "number"
+                                    },
+                                    "maxItems": 16,
+                                    "minItems": 16,
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "streams": {
+                            "additionalProperties": false,
+                            "patternProperties": {
+                                "^": {
+                                    "$ref": "#/definitions/stream"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "timestamp": {
+                            "type": "string"
+                        }
+                    },
+                    "type": "object"
+                },
+                "objects": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "additionalProperties": false,
+                            "properties": {
+                                "object_data": {
+                                    "$ref": "#/definitions/object_data"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "relations": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {}
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "frame_interval": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_end": {
+                    "type": "integer"
+                },
+                "frame_start": {
+                    "type": "integer"
+                }
+            },
+            "type": "object"
+        },
+        "image": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "encoding": {
+                    "type": "string"
+                },
+                "mime_type": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "mime_type",
+                "encoding"
+            ],
+            "type": "object"
+        },
+        "line_reference": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "reference_type": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2,
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "mat": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "channels": {
+                    "type": "number"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "data_type": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "number"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "item": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                },
+                "width": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "channels",
+                "width",
+                "height",
+                "data_type"
+            ],
+            "type": "object"
+        },
+        "mesh": {
+            "properties": {
+                "additionalProperties": true,
+                "area_reference": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/area_reference"
+                        }
+                    },
+                    "type": "object"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "line_reference": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/line_reference"
+                        }
+                    },
+                    "type": "object"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "point3d": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/point3d"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "metadata": {
+            "additionalProperties": true,
+            "properties": {
+                "annotator": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "file_version": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "schema_version": {
+                    "enum": [
+                        "0.2.0"
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [
+                "schema_version"
+            ],
+            "type": "object"
+        },
+        "num": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "object": {
+            "additionalProperties": false,
+            "properties": {
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "object_data": {
+                    "$ref": "#/definitions/object_data"
+                },
+                "object_data_pointers": {
+                    "$ref": "#/definitions/element_data_pointers"
+                },
+                "ontology_uid": {
+                    "type": "string"
+                },
+                "resource_uid": {
+                    "$ref": "#/definitions/resource_uid"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "object_data": {
+            "additionalProperties": false,
+            "properties": {
+                "area_reference": {
+                    "items": {
+                        "$ref": "#/definitions/area_reference"
+                    },
+                    "type": "array"
+                },
+                "bbox": {
+                    "items": {
+                        "$ref": "#/definitions/bbox"
+                    },
+                    "type": "array"
+                },
+                "binary": {
+                    "items": {
+                        "$ref": "#/definitions/binary"
+                    },
+                    "type": "array"
+                },
+                "boolean": {
+                    "items": {
+                        "$ref": "#/definitions/boolean"
+                    },
+                    "type": "array"
+                },
+                "cuboid": {
+                    "items": {
+                        "$ref": "#/definitions/cuboid"
+                    },
+                    "type": "array"
+                },
+                "image": {
+                    "items": {
+                        "$ref": "#/definitions/image"
+                    },
+                    "type": "array"
+                },
+                "line_reference": {
+                    "items": {
+                        "$ref": "#/definitions/line_reference"
+                    },
+                    "type": "array"
+                },
+                "mat": {
+                    "items": {
+                        "$ref": "#/definitions/mat"
+                    },
+                    "type": "array"
+                },
+                "mesh": {
+                    "items": {
+                        "$ref": "#/definitions/mesh"
+                    },
+                    "type": "array"
+                },
+                "num": {
+                    "items": {
+                        "$ref": "#/definitions/num"
+                    },
+                    "type": "array"
+                },
+                "point2d": {
+                    "items": {
+                        "$ref": "#/definitions/point2d"
+                    },
+                    "type": "array"
+                },
+                "point3d": {
+                    "items": {
+                        "$ref": "#/definitions/point3d"
+                    },
+                    "type": "array"
+                },
+                "poly2d": {
+                    "items": {
+                        "$ref": "#/definitions/poly2d"
+                    },
+                    "type": "array"
+                },
+                "poly3d": {
+                    "items": {
+                        "$ref": "#/definitions/poly3d"
+                    },
+                    "type": "array"
+                },
+                "rbbox": {
+                    "items": {
+                        "$ref": "#/definitions/rbbox"
+                    },
+                    "type": "array"
+                },
+                "text": {
+                    "items": {
+                        "$ref": "#/definitions/text"
+                    },
+                    "type": "array"
+                },
+                "vec": {
+                    "items": {
+                        "$ref": "#/definitions/vec"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "ontologies": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "openlabel": {
+            "additionalProperties": false,
+            "description": "This is the root OpenLABEL element.",
+            "properties": {
+                "actions": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "$ref": "#/definitions/action"
+                        }
+                    },
+                    "type": "object"
+                },
+                "contexts": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "$ref": "#/definitions/context"
+                        }
+                    },
+                    "type": "object"
+                },
+                "coordinate_systems": {
+                    "$ref": "#/definitions/coordinate_systems"
+                },
+                "events": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "$ref": "#/definitions/event"
+                        }
+                    },
+                    "type": "object"
+                },
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "frames": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^[0-9]+$": {
+                            "$ref": "#/definitions/frame"
+                        }
+                    },
+                    "type": "object"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/metadata"
+                },
+                "objects": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "$ref": "#/definitions/object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "ontologies": {
+                    "$ref": "#/definitions/ontologies"
+                },
+                "relations": {
+                    "additionalProperties": false,
+                    "patternProperties": {
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "$ref": "#/definitions/relation"
+                        }
+                    },
+                    "type": "object"
+                },
+                "resources": {
+                    "$ref": "#/definitions/resources"
+                },
+                "streams": {
+                    "$ref": "#/definitions/streams"
+                },
+                "tags": {
+                    "$ref": "#/definitions/tags"
+                }
+            },
+            "required": [
+                "metadata"
+            ],
+            "type": "object"
+        },
+        "point2d": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 2,
+                    "minItems": 2,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "point3d": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 3,
+                    "minItems": 3,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "poly2d": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "closed": {
+                    "type": "boolean"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "hierarchy": {
+                    "items": {
+                        "type": "integer"
+                    },
+                    "maxItems": 4,
+                    "minItems": 4,
+                    "type": "array"
+                },
+                "mode": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "anyOf": [
+                        {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "items": {
+                                "type": "number"
+                            },
+                            "type": "array"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "mode",
+                "closed"
+            ],
+            "type": "object"
+        },
+        "poly3d": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "closed": {
+                    "type": "boolean"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val",
+                "closed"
+            ],
+            "type": "object"
+        },
+        "rbbox": {
+            "additionalProperties": true,
+            "description": "A 2D rotated bounding box is defined as a 5-dimensional vector [x, y, w, h, alpha], where [x, y] is the centre of the bounding box, and [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively. The angle alpha, in radians, represents the rotation of the rotated bounding box, and is defined as a right-handed rotation, i.e. positive from x to y axes, and with the origin of rotation placed at the center of the bounding box (i.e. [x, y]).",
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "items": {
+                        "type": "number"
+                    },
+                    "maxItems": 5,
+                    "minItems": 5,
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "rdf_agent": {
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "relation": {
+            "additionalProperties": false,
+            "properties": {
+                "frame_intervals": {
+                    "item": {
+                        "$ref": "#/definitions/frame_interval"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "ontology_uid": {
+                    "type": "string"
+                },
+                "rdf_objects": {
+                    "item": {
+                        "$ref": "#/definitions/rdf_agent"
+                    },
+                    "type": "array"
+                },
+                "rdf_subjects": {
+                    "item": {
+                        "$ref": "#/definitions/rdf_agent"
+                    },
+                    "type": "array"
+                },
+                "resource_uid": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "type",
+                "rdf_objects",
+                "rdf_subjects"
+            ],
+            "type": "object"
+        },
+        "resource_uid": {
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "resources": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "stream": {
+            "additionalProperties": false,
+            "description": "A stream describes the source of a data sequence, usually a sensor.",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "stream_properties": {
+                    "$ref": "#/definitions/stream_properties"
+                },
+                "type": {
+                    "enum": [
+                        "camera",
+                        "lidar",
+                        "radar",
+                        "gps_imu",
+                        "other"
+                    ],
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "stream_properties": {
+            "additionalProperties": true,
+            "oneOf": [
+                {
+                    "intrinsics_custom": {
+                        "type": "object"
+                    },
+                    "intrinsics_fisheye": {
+                        "additionalProperties": true,
+                        "properties": {
+                            "center_x_px": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "center_y_px": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "fov_deg": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "height_px": {
+                                "type": "integer"
+                            },
+                            "lens_coeffs": {
+                                "items": {
+                                    "type": "number"
+                                },
+                                "maxItems": 4,
+                                "minItems": 4,
+                                "type": "array"
+                            },
+                            "radius_x_px": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "radius_y_px": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "width_px": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "intrinsics_pinhole": {
+                        "additionalProperties": true,
+                        "properties": {
+                            "camera_matrix": {
+                                "comment": "This is a 3x4 camera matrix which projects                                         3D homogeneous points (4x1) from Sensor Coordinate                                        System (SCS) into the Image Coordinate System (ICS),                                       plane points (3x1).                                        This is the usual K matrix for camera projection, but                                       extended from 3x3 to 3x4, to enable its usage to project                                       4x1 homogeneous 3D points defined in the SCS into the ICS.                                       The SCS follows as well the usual convention x-to-right, y-down, z-forward:                                       x_ics = camera_matrix * X_scs",
+                                "example": [
+                                    720.0,
+                                    0.0,
+                                    320.0,
+                                    0.0,
+                                    0.0,
+                                    720.0,
+                                    240.0,
+                                    0.0,
+                                    0.0,
+                                    0.0,
+                                    1.0,
+                                    0.0
+                                ],
+                                "items": {
+                                    "type": "number"
+                                },
+                                "maxItems": 12,
+                                "minItems": 12,
+                                "type": "array"
+                            },
+                            "distortion_coeffs": {
+                                "comment": "This is the array 1xN radial and tangential distortion                                        coefficients. See https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html",
+                                "example": [
+                                    -0.4056964092079624,
+                                    0.19116055332155032,
+                                    0.0,
+                                    0.0,
+                                    -0.047033609773998064
+                                ],
+                                "items": {
+                                    "type": "number"
+                                },
+                                "maxItems": 14,
+                                "minItems": 5,
+                                "type": "array"
+                            },
+                            "height_px": {
+                                "type": "integer"
+                            },
+                            "width_px": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            ],
+            "sync": {
+                "description": "This is the sync information for this Stream.                               If provided inside a certain frame, it can be used                               to specify timestamps in ISO8601 format,                               and a frame_stream of this stream.                               E.g. at openlabel's frame 34, for stream CAM_LEFT, the sync info                               contains timestamp=2020-04-09T04:57:57+00:00,                               and frame_stream=36 (which means that this CAM_LEFT is shifted                               2 frame with respect the openlabel's master frame indexes.                               If provided at stream level, it can be used to specify                               a frame shift, e.g. the shift of that stream wrt to the                               master openlabel frame count.                               E.g. if the shift is constant for all frames, it is more compact                               to define the frame_shift=2 at stream level.",
+                "oneOf": [
+                    {
+                        "properties": {
+                            "frame_stream": {
+                                "type": "integer"
+                            },
+                            "timestamp": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "properties": {
+                            "frame_shift": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "type": "object"
+            },
+            "type": "object"
+        },
+        "streams": {
+            "additionalProperties": false,
+            "patternProperties": {
+                "^": {
+                    "$ref": "#/definitions/stream"
+                }
+            },
+            "type": "object"
+        },
+        "tags": {
+            "additionalProperties": true,
+            "properties": {
+                "administrative": {
+                    "type": "object"
+                },
+                "behaviour": {
+                    "type": "object"
+                },
+                "custom": {
+                    "type": "object"
+                },
+                "odd": {
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "text": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        },
+        "vec": {
+            "additionalProperties": true,
+            "properties": {
+                "attributes": {
+                    "$ref": "#/definitions/attributes"
+                },
+                "coordinate_system": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "val": {
+                    "item": {
+                        "oneOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "name",
+                "val"
+            ],
+            "type": "object"
+        }
+    },
+    "properties": {
+        "openlabel": {
+            "$ref": "#/definitions/openlabel"
+        }
+    },
+    "required": [
+        "openlabel"
+    ],
+    "type": "object"
+}
