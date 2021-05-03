@@ -374,6 +374,28 @@ VCD_Impl::add_text_to_object(const obj_uid& uid,
     add_object_data(uid, txt, frame_index);
 }
 
+void
+VCD_Impl::add_point2d_to_object(const obj_uid& uid,
+                                const std::string& name,
+                                const std::vector<double>& point2d,
+                                const size_t frame_index) {
+    if (point2d.size() == 2) {
+        const types::Point2d p2d(name, point2d[0], point2d[1]);
+        add_object_data(uid, p2d, frame_index);
+    }
+}
+
+void
+VCD_Impl::add_point3d_to_object(const obj_uid& uid,
+                                const std::string& name,
+                                const std::vector<double>& point3d,
+                                const size_t frame_index) {
+    if (point3d.size() == 3) {
+        const types::Point3d p3d(name, point3d[0], point3d[1], point3d[2]);
+        add_object_data(uid, p3d, frame_index);
+    }
+}
+
 // void
 // VCD_Impl::add_object_data(const std::string &uid_str,
 //                          const types::ObjectData& object_data) {

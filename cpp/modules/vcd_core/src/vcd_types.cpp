@@ -142,6 +142,31 @@ Text::get() {
     return static_cast<ObjectData&>(*this);
 }
 
+// Point 2D class
+Point2d::Point2d(const std::string& name, const double x, const double y) {
+    m_name = name;
+    m_data = {{"name", name}, {"val", {x, y}}};
+    m_type = ObjectDataType::point2d;
+}
+
+ObjectData&
+Point2d::get() {
+    return static_cast<ObjectData&>(*this);
+}
+
+// Point 3D class
+Point3d::Point3d(const std::string& name,
+                 const double x, const double y, const double z) {
+    m_name = name;
+    m_data = {{"name", name}, {"val", {x, y, z}}};
+    m_type = ObjectDataType::point3d;
+}
+
+ObjectData&
+Point3d::get() {
+    return static_cast<ObjectData&>(*this);
+}
+
 };  // namespace types
 
 };  // namespace vcd

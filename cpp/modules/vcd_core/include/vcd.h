@@ -275,6 +275,18 @@ class VCD {
                        const std::string& text,
                        const size_t frame_index = -1) = 0;
 
+    virtual void
+    add_point2d_to_object(const obj_uid& uid,
+                          const std::string& name,
+                          const std::vector<double>& point2d,
+                          const size_t frame_index = -1) = 0;
+
+    virtual void
+    add_point3d_to_object(const obj_uid& uid,
+                          const std::string& name,
+                          const std::vector<double>& point3d,
+                          const size_t frame_index = -1) = 0;
+
     // Action data generators
     virtual void
     add_bbox_to_action(const obj_uid& uid,

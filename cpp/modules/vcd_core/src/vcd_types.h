@@ -136,6 +136,23 @@ class Text : public ObjectData {
     get() override;
 };
 
+class Point2d : public ObjectData {
+ public:
+    Point2d(const std::string& name, const double x, const double y);
+
+    ObjectData&
+    get() override;
+};
+
+class Point3d : public ObjectData {
+ public:
+    Point3d(const std::string& name,
+            const double x, const double y, const double z);
+
+    ObjectData&
+    get() override;
+};
+
 };  // namespace types
 
 };  // namespace vcd
