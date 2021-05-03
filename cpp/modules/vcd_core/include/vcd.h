@@ -245,6 +245,21 @@ class VCD {
     get_num_objects() = 0;
 
     // Object data generators
+
+    /**
+     * @brief add_bbox_to_object Includes a bbox object to the object with
+     * the id 'uid'. The bbox content has four parameters described as:
+     *    [
+     *      x_coord_of_the_box_center,
+     *      y_coord_of_the_box_center,
+     *      width_of_the_box,
+     *      heigth_of_the_box
+     *    ]
+     * @param uid The identifier of the target object
+     * @param name The name of the defined bbox
+     * @param value The list of values for the bbox
+     * @param frame_index The frame index of the current frame
+     */
     virtual void
     add_bbox_to_object(const obj_uid& uid,
                        const std::string& name,
@@ -288,6 +303,21 @@ class VCD {
                           const size_t frame_index = -1) = 0;
 
     // Action data generators
+
+    /**
+     * @brief add_bbox_to_object Includes a bbox object to the action with
+     * the id 'uid'. The bbox content has four parameters described as:
+     *    [
+     *      x_coord_of_the_box_center,
+     *      y_coord_of_the_box_center,
+     *      width_of_the_box,
+     *      heigth_of_the_box
+     *    ]
+     * @param uid The identifier of the target action
+     * @param name The name of the defined bbox
+     * @param value The list of values for the bbox
+     * @param frame_index The frame index of the current frame
+     */
     virtual void
     add_bbox_to_action(const obj_uid& uid,
                        const std::string& name,
@@ -319,6 +349,21 @@ class VCD {
                        const size_t frame_index = -1) = 0;
 
     // Context data generators
+
+    /**
+     * @brief add_bbox_to_object Includes a bbox object to the context with
+     * the id 'uid'. The bbox content has four parameters described as:
+     *    [
+     *      x_coord_of_the_box_center,
+     *      y_coord_of_the_box_center,
+     *      width_of_the_box,
+     *      heigth_of_the_box
+     *    ]
+     * @param uid The identifier of the target context
+     * @param name The name of the defined bbox
+     * @param value The list of values for the bbox
+     * @param frame_index The frame index of the current frame
+     */
     virtual void
     add_bbox_to_context(const obj_uid& uid,
                         const std::string& name,
