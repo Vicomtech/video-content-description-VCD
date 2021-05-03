@@ -196,6 +196,8 @@ SCENARIO("Create some basic content, without time information, and do some "
             vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 200, 190}, 7);
             vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 180, 185}, 8);
             vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 160, 179}, 9);
+            //       !Should be ignored, because the frame index is < the
+            //        last frame index.
             vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 99, 99}, 5);
 
             // 4.- Save the json info into a file for comparisson

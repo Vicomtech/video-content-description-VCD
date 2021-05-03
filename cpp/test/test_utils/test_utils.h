@@ -105,7 +105,7 @@ compare_json_files(const std::string& file_a, const std::string& file_b) {
     file_b_i.close();
 
     // Make a loop to compare both json structures
-    return check_json_level(data_a, data_b);
+    return check_json_level_both_sides(data_a, data_b);
 }
 
 #endif  // _TEST_UTILS_H_
