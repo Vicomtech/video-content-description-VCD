@@ -982,6 +982,8 @@ VCD_Impl::set_element_data(const ElementType type, const std::string &uid_str,
             return;
         } else {
             m_curFrameIndex = frame_index;
+            // Update the general frame interval "vcd::frame_interval"
+            update_vcd_frame_intervals(frame_index);
         }
     }
 
