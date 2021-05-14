@@ -17,10 +17,10 @@
         <owl:versionIRI rdf:resource="http://vcd.vicomtech.org/ontology/automotive#AGO"/>
         <owl:imports rdf:resource="http://www.semanticweb.org/iurbieta/ontologies/2021/0/untitled-ontology-37"/>
         <elements:creator>Itziar Urbieta</elements:creator>
-        <elements:description xml:lang="en">This is a global ontology of the main concepts related with the automotive area. The ontology contains the constructs required for annotation and traffic scenario simulation.</elements:description>
+        <elements:description>This is a global ontology of the main concepts related with the automotive area. The ontology contains the constructs required for annotation and traffic scenario simulation.</elements:description>
         <elements:title>Automotive Global Ontology</elements:title>
         <terms:publisher>Vicomtech</terms:publisher>
-        <language xml:lang="en">en</language>
+        <language>en</language>
         <rdfs:label>automotive</rdfs:label>
         <owl:versionInfo>version 1.0.0</owl:versionInfo>
     </owl:Ontology>
