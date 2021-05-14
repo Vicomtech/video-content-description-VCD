@@ -2148,8 +2148,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Action">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-        <rdfs:comment xml:lang="en">Traffic maneuvers performed by any of the possible subjects of the scenario.</rdfs:comment>
-        <rdfs:label xml:lang="en">Action</rdfs:label>
+        <rdfs:comment>Traffic maneuvers performed by any of the possible subjects of the scenario.</rdfs:comment>
+        <rdfs:label>Action</rdfs:label>
     </owl:Class>
     
 
@@ -2159,8 +2159,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Adult">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Pedestrian"/>
         <owl:disjointWith rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Child"/>
-        <rdfs:comment xml:lang="en">A human who is fully grown or developed.</rdfs:comment>
-        <rdfs:label xml:lang="en">Adult</rdfs:label>
+        <rdfs:comment>A human who is fully grown or developed.</rdfs:comment>
+        <rdfs:label>Adult</rdfs:label>
     </owl:Class>
     
 
@@ -2200,8 +2200,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Aircraft">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Vehicle"/>
-        <rdfs:comment xml:lang="en">An aeroplane, helicopter or other machine capable of flight.</rdfs:comment>
-        <rdfs:label xml:lang="en">Aircraft</rdfs:label>
+        <rdfs:comment>An aeroplane, helicopter or other machine capable of flight.</rdfs:comment>
+        <rdfs:label>Aircraft</rdfs:label>
     </owl:Class>
     
 
@@ -2210,8 +2210,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Ambulance">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#EmergencyVehicle"/>
-        <rdfs:comment xml:lang="en">A road vehicle equipped for taking sick or injured people to and from hospital, especially in emergencies.</rdfs:comment>
-        <rdfs:label xml:lang="en">Ambulance</rdfs:label>
+        <rdfs:comment>A road vehicle equipped for taking sick or injured people to and from hospital, especially in emergencies.</rdfs:comment>
+        <rdfs:label>Ambulance</rdfs:label>
     </owl:Class>
     
 
@@ -2258,8 +2258,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Animal">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Dynamic"/>
-        <rdfs:comment xml:lang="en">A living organism that feeds on organic matter, typically having specialized sense organs and nervous system and able to respond rapidly to stimuli.</rdfs:comment>
-        <rdfs:label xml:lang="en">Animal</rdfs:label>
+        <rdfs:comment>A living organism that feeds on organic matter, typically having specialized sense organs and nervous system and able to respond rapidly to stimuli.</rdfs:comment>
+        <rdfs:label>Animal</rdfs:label>
     </owl:Class>
     
 
@@ -2278,8 +2278,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Approaching">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">The action of getting closer to a junction, crosswalk or other object.</rdfs:comment>
-        <rdfs:label xml:lang="en">Approaching</rdfs:label>
+        <rdfs:comment>The action of getting closer to a junction, crosswalk or other object.</rdfs:comment>
+        <rdfs:label>Approaching</rdfs:label>
     </owl:Class>
     
 
@@ -2288,8 +2288,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Arrow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Marking"/>
-        <rdfs:comment xml:lang="en">Direction arrows used on the approach to busy multi-lane junctions to give drivers advance indication of the correct lane.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arrow</rdfs:label>
+        <rdfs:comment>Direction arrows used on the approach to busy multi-lane junctions to give drivers advance indication of the correct lane.</rdfs:comment>
+        <rdfs:label>Arrow</rdfs:label>
     </owl:Class>
     
 
@@ -2298,8 +2298,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArrowLeftTurn">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Arrow"/>
-        <rdfs:comment xml:lang="en">Arrow indicating a left turn.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arrow left turn</rdfs:label>
+        <rdfs:comment>Arrow indicating a left turn.</rdfs:comment>
+        <rdfs:label>Arrow left turn</rdfs:label>
     </owl:Class>
     
 
@@ -2308,8 +2308,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArrowLeftrightTurn">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Arrow"/>
-        <rdfs:comment xml:lang="en">A two headed arrow indicating a left and right turn.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arrow leftright turn</rdfs:label>
+        <rdfs:comment>A two headed arrow indicating a left and right turn.</rdfs:comment>
+        <rdfs:label>Arrow leftright turn</rdfs:label>
     </owl:Class>
     
 
@@ -2318,8 +2318,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArrowRightTurn">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Arrow"/>
-        <rdfs:comment xml:lang="en">Arrow indicating a right turn.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arrow right turn</rdfs:label>
+        <rdfs:comment>Arrow indicating a right turn.</rdfs:comment>
+        <rdfs:label>Arrow right turn</rdfs:label>
     </owl:Class>
     
 
@@ -2328,8 +2328,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArrowThru">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Arrow"/>
-        <rdfs:comment xml:lang="en">Arrow marking pointing straight ahead.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arrow thru</rdfs:label>
+        <rdfs:comment>Arrow marking pointing straight ahead.</rdfs:comment>
+        <rdfs:label>Arrow thru</rdfs:label>
     </owl:Class>
     
 
@@ -2338,8 +2338,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArrowThruleftTurn">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Arrow"/>
-        <rdfs:comment xml:lang="en">A two-headed arrow with one head pointing straight ahead and the other pointing to the left.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arrow thruleft turn</rdfs:label>
+        <rdfs:comment>A two-headed arrow with one head pointing straight ahead and the other pointing to the left.</rdfs:comment>
+        <rdfs:label>Arrow thruleft turn</rdfs:label>
     </owl:Class>
     
 
@@ -2348,8 +2348,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArrowThrurightTurn">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Arrow"/>
-        <rdfs:comment xml:lang="en">A two-headed arrow with one head pointing straight ahead and the other pointing to the right.</rdfs:comment>
-        <rdfs:label xml:lang="en">Arrow thruright turn</rdfs:label>
+        <rdfs:comment>A two-headed arrow with one head pointing straight ahead and the other pointing to the right.</rdfs:comment>
+        <rdfs:label>Arrow thruright turn</rdfs:label>
     </owl:Class>
     
 
@@ -2358,8 +2358,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArrowUturn">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Arrow"/>
-        <rdfs:comment xml:lang="en">U-shaped arrow indicating that a change of direction can be done.</rdfs:comment>
-        <rdfs:label xml:lang="en">U turn arrow</rdfs:label>
+        <rdfs:comment>U-shaped arrow indicating that a change of direction can be done.</rdfs:comment>
+        <rdfs:label>U turn arrow</rdfs:label>
     </owl:Class>
     
 
@@ -2368,6 +2368,7 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ArtificialLighting">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Lighting"/>
+        <rdfs:comment>Refers to the opposed to natural light, this is, any light source that is produced by electrical means.</rdfs:comment>
         <rdfs:label>Artificial lighting</rdfs:label>
     </owl:Class>
     
@@ -2387,8 +2388,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Banner">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Signs"/>
-        <rdfs:comment xml:lang="en">Typically a flag, made of textile or plastic.</rdfs:comment>
-        <rdfs:label xml:lang="en">Banner</rdfs:label>
+        <rdfs:comment>Typically a flag, made of textile or plastic.</rdfs:comment>
+        <rdfs:label>Banner</rdfs:label>
     </owl:Class>
     
 
@@ -2397,8 +2398,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Barrier">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Construction"/>
-        <rdfs:comment xml:lang="en">A fence or other obstacle that prevents movement or access.</rdfs:comment>
-        <rdfs:label xml:lang="en">Barrier</rdfs:label>
+        <rdfs:comment>A fence or other obstacle that prevents movement or access.</rdfs:comment>
+        <rdfs:label>Barrier</rdfs:label>
     </owl:Class>
     
 
@@ -2437,8 +2438,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Bench">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A place to sit down.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bench</rdfs:label>
+        <rdfs:comment>A place to sit down.</rdfs:comment>
+        <rdfs:label>Bench</rdfs:label>
     </owl:Class>
     
 
@@ -2447,8 +2448,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Bendy">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Bus"/>
-        <rdfs:comment xml:lang="en">An articulated vehicle used in public transportation. It is usually a single-decker, and comprises two or more rigid sections linked by a pivoting joint (articulation) enclosed by protectuve bellows inside and outside and a cover plate on the floor.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bendy</rdfs:label>
+        <rdfs:comment>An articulated vehicle used in public transportation. It is usually a single-decker, and comprises two or more rigid sections linked by a pivoting joint (articulation) enclosed by protectuve bellows inside and outside and a cover plate on the floor.</rdfs:comment>
+        <rdfs:label>Bendy</rdfs:label>
     </owl:Class>
     
 
@@ -2457,8 +2458,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Bicycle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Cycle"/>
-        <rdfs:comment xml:lang="en">A vehicle consisting of two wheels held in a frame one behind the other, propelled by pedals and steered with handlebars attached to the front wheel.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bicycle</rdfs:label>
+        <rdfs:comment>A vehicle consisting of two wheels held in a frame one behind the other, propelled by pedals and steered with handlebars attached to the front wheel.</rdfs:comment>
+        <rdfs:label>Bicycle</rdfs:label>
     </owl:Class>
     
 
@@ -2477,8 +2478,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#BikeLane">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Lane"/>
-        <rdfs:comment xml:lang="en">Paved areas intended for bicycle use only. Contains only regions or ground specifically designated for cyclists where pedestrians and cars should not enter.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bike lane</rdfs:label>
+        <rdfs:comment>Paved areas intended for bicycle use only. Contains only regions or ground specifically designated for cyclists where pedestrians and cars should not enter.</rdfs:comment>
+        <rdfs:label>Bike lane</rdfs:label>
     </owl:Class>
     
 
@@ -2487,8 +2488,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#BikeRack">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A construction to place and lock a bike.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bike rack</rdfs:label>
+        <rdfs:comment>A construction to place and lock a bike.</rdfs:comment>
+        <rdfs:label>Bike rack</rdfs:label>
     </owl:Class>
     
 
@@ -2497,8 +2498,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Billboard">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Signs"/>
-        <rdfs:comment xml:lang="en">Advertisements placed in public space and also those mounted on buildings.</rdfs:comment>
-        <rdfs:label xml:lang="en">Billboard</rdfs:label>
+        <rdfs:comment>Advertisements placed in public space and also those mounted on buildings.</rdfs:comment>
+        <rdfs:label>Billboard</rdfs:label>
     </owl:Class>
     
 
@@ -2507,8 +2508,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Bird">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Wildlife"/>
-        <rdfs:comment xml:lang="en">A creature (animal) with feathers and wings, usually able to fly. Includes birds on the ground.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bird</rdfs:label>
+        <rdfs:comment>A creature (animal) with feathers and wings, usually able to fly. Includes birds on the ground.</rdfs:comment>
+        <rdfs:label>Bird</rdfs:label>
     </owl:Class>
     
 
@@ -2527,8 +2528,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#BlurredArea">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Void"/>
-        <rdfs:comment xml:lang="en">An indistinct area.</rdfs:comment>
-        <rdfs:label xml:lang="en">Blurred area</rdfs:label>
+        <rdfs:comment>An indistinct area.</rdfs:comment>
+        <rdfs:label>Blurred area</rdfs:label>
     </owl:Class>
     
 
@@ -2537,8 +2538,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Boat">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WaterVehicle"/>
-        <rdfs:comment xml:lang="en">Vehicle suitable for riding/sailing on water. Propelled by oars, sails or an engine.</rdfs:comment>
-        <rdfs:label xml:lang="en">Boat</rdfs:label>
+        <rdfs:comment>Vehicle suitable for riding/sailing on water. Propelled by oars, sails or an engine.</rdfs:comment>
+        <rdfs:label>Boat</rdfs:label>
     </owl:Class>
     
 
@@ -2557,8 +2558,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Bridge">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Structure"/>
-        <rdfs:comment xml:lang="en">A structure carrying a road, path, railway, etc. across a river, road, or other obstacle.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bridge</rdfs:label>
+        <rdfs:comment>A structure carrying a road, path, railway, etc. across a river, road, or other obstacle.</rdfs:comment>
+        <rdfs:label>Bridge</rdfs:label>
     </owl:Class>
     
 
@@ -2567,7 +2568,7 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#BrokenStop">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:label xml:lang="en">Broken stop</rdfs:label>
+        <rdfs:label>Broken stop</rdfs:label>
     </owl:Class>
     
 
@@ -2576,8 +2577,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Building">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Structure"/>
-        <rdfs:comment xml:lang="en">A structure with a roof and walls, such as a house or factory.</rdfs:comment>
-        <rdfs:label xml:lang="en">Building</rdfs:label>
+        <rdfs:comment>A structure with a roof and walls, such as a house or factory.</rdfs:comment>
+        <rdfs:label>Building</rdfs:label>
     </owl:Class>
     
 
@@ -2586,8 +2587,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Bump">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Marking"/>
-        <rdfs:comment xml:lang="en">A marking indicating speed reduction.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bump</rdfs:label>
+        <rdfs:comment>A marking indicating speed reduction.</rdfs:comment>
+        <rdfs:label>Bump</rdfs:label>
     </owl:Class>
     
 
@@ -2596,8 +2597,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Bus">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#LargeVehicle"/>
-        <rdfs:comment xml:lang="en">A large motor vehicle, having a long body, equipped with seats or benches for passengers, usually operating as part of a scheduled service; omnibus.</rdfs:comment>
-        <rdfs:label xml:lang="en">Bus</rdfs:label>
+        <rdfs:comment>A large motor vehicle, having a long body, equipped with seats or benches for passengers, usually operating as part of a scheduled service; omnibus.</rdfs:comment>
+        <rdfs:label>Bus</rdfs:label>
     </owl:Class>
     
 
@@ -2626,8 +2627,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Car">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#SmallVehicle"/>
-        <rdfs:comment xml:lang="en">A road vehicle with an engine, four wheels, and seats for a small number of people.</rdfs:comment>
-        <rdfs:label xml:lang="en">Car</rdfs:label>
+        <rdfs:comment>A road vehicle with an engine, four wheels, and seats for a small number of people.</rdfs:comment>
+        <rdfs:label>Car</rdfs:label>
     </owl:Class>
     
 
@@ -2636,8 +2637,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#CarMount">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Void"/>
-        <rdfs:comment xml:lang="en">Mount used to hold the camera while capturing.</rdfs:comment>
-        <rdfs:label xml:lang="en">Car mount</rdfs:label>
+        <rdfs:comment>Mount used to hold the camera while capturing.</rdfs:comment>
+        <rdfs:label>Car mount</rdfs:label>
     </owl:Class>
     
 
@@ -2646,8 +2647,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Caravan">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Trailer"/>
-        <rdfs:comment xml:lang="en">A road vehicle equipped for living in, typically towed by a car and used for holidays.</rdfs:comment>
-        <rdfs:label xml:lang="en">Caravan</rdfs:label>
+        <rdfs:comment>A road vehicle equipped for living in, typically towed by a car and used for holidays.</rdfs:comment>
+        <rdfs:label>Caravan</rdfs:label>
     </owl:Class>
     
 
@@ -2686,8 +2687,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#CatchBasin">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">Sewage water draigane, typically with a grid on top or inlet of a curb.</rdfs:comment>
-        <rdfs:label xml:lang="en">Catch basin</rdfs:label>
+        <rdfs:comment>Sewage water draigane, typically with a grid on top or inlet of a curb.</rdfs:comment>
+        <rdfs:label>Catch basin</rdfs:label>
     </owl:Class>
     
 
@@ -2696,8 +2697,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#CctvCamera">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">Surveillance camera mounted in public space.</rdfs:comment>
-        <rdfs:label xml:lang="en">CCTV camera</rdfs:label>
+        <rdfs:comment>Surveillance camera mounted in public space.</rdfs:comment>
+        <rdfs:label>CCTV camera</rdfs:label>
     </owl:Class>
     
 
@@ -2725,8 +2726,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Child">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Pedestrian"/>
-        <rdfs:comment xml:lang="en">A young human being below the age of puberty or below the legal age of majority.</rdfs:comment>
-        <rdfs:label xml:lang="en">Child</rdfs:label>
+        <rdfs:comment>A young human being below the age of puberty or below the legal age of majority.</rdfs:comment>
+        <rdfs:label>Child</rdfs:label>
     </owl:Class>
     
 
@@ -2835,8 +2836,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Construction">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Static"/>
-        <rdfs:comment xml:lang="en">A building or other structure.</rdfs:comment>
-        <rdfs:label xml:lang="en">Construction</rdfs:label>
+        <rdfs:comment>A building or other structure.</rdfs:comment>
+        <rdfs:label>Construction</rdfs:label>
     </owl:Class>
     
 
@@ -2855,8 +2856,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ConstructionVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#DrivableVehicle"/>
-        <rdfs:comment xml:lang="en">Refers to heavy-duty vehicles, specially designed for executing construction tasks.</rdfs:comment>
-        <rdfs:label xml:lang="en">Construction vehicle</rdfs:label>
+        <rdfs:comment>Refers to heavy-duty vehicles, specially designed for executing construction tasks.</rdfs:comment>
+        <rdfs:label>Construction vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -2865,8 +2866,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ConstructionWorker">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Adult"/>
-        <rdfs:comment xml:lang="en">A person (Human) who works in the construction industry.</rdfs:comment>
-        <rdfs:label xml:lang="en">Construction worker</rdfs:label>
+        <rdfs:comment>A person (Human) who works in the construction industry.</rdfs:comment>
+        <rdfs:label>Construction worker</rdfs:label>
     </owl:Class>
     
 
@@ -2875,8 +2876,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Context">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-        <rdfs:comment xml:lang="en">Context is any information that can be used to characterise the sit-uation of an entity. An entity is a person, place, or object that isconsidered relevant in an Scenario.</rdfs:comment>
-        <rdfs:label xml:lang="en">Context</rdfs:label>
+        <rdfs:comment>Context is any information that can be used to characterise the sit-uation of an entity. An entity is a person, place, or object that isconsidered relevant in an Scenario.</rdfs:comment>
+        <rdfs:label>Context</rdfs:label>
     </owl:Class>
     
 
@@ -2895,8 +2896,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Country">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Context"/>
-        <rdfs:comment xml:lang="en">The recognized boundaries of a formal sub-division of a country.</rdfs:comment>
-        <rdfs:label xml:lang="en">Country</rdfs:label>
+        <rdfs:comment>The recognized boundaries of a formal sub-division of a country.</rdfs:comment>
+        <rdfs:label>Country</rdfs:label>
     </owl:Class>
     
 
@@ -2915,8 +2916,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Crossing">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">The action of crossing either a juntion or a crosswalk.</rdfs:comment>
-        <rdfs:label xml:lang="en">Crossing</rdfs:label>
+        <rdfs:comment>The action of crossing either a juntion or a crosswalk.</rdfs:comment>
+        <rdfs:label>Crossing</rdfs:label>
     </owl:Class>
     
 
@@ -2925,8 +2926,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Crosswalk">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Marking"/>
-        <rdfs:comment xml:lang="en">A marked part of a road where pedestrians have right of way to cross; a pedestrian crossing.</rdfs:comment>
-        <rdfs:label xml:lang="en">Crosswalk</rdfs:label>
+        <rdfs:comment>A marked part of a road where pedestrians have right of way to cross; a pedestrian crossing.</rdfs:comment>
+        <rdfs:label>Crosswalk</rdfs:label>
     </owl:Class>
     
 
@@ -2935,8 +2936,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#CrosswalkPlain">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Crosswalk"/>
-        <rdfs:comment xml:lang="en">Region of a road which is meant to cross the street but not marked with a zebra pattern, instead two parallel lines indicate the crosswalk. The road surface is marked as plain crosswalk, the two lines indicating the border are marked as general markings.</rdfs:comment>
-        <rdfs:label xml:lang="en">Crosswalk plain</rdfs:label>
+        <rdfs:comment>Region of a road which is meant to cross the street but not marked with a zebra pattern, instead two parallel lines indicate the crosswalk. The road surface is marked as plain crosswalk, the two lines indicating the border are marked as general markings.</rdfs:comment>
+        <rdfs:label>Crosswalk plain</rdfs:label>
     </owl:Class>
     
 
@@ -2945,8 +2946,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#CrosswalkZebra">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Crosswalk"/>
-        <rdfs:comment xml:lang="en">Crosswalk indicated by a zebra pattern.</rdfs:comment>
-        <rdfs:label xml:lang="en">Crosswalk zebra</rdfs:label>
+        <rdfs:comment>Crosswalk indicated by a zebra pattern.</rdfs:comment>
+        <rdfs:label>Crosswalk zebra</rdfs:label>
     </owl:Class>
     
 
@@ -2955,8 +2956,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#CurbCut">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment xml:lang="en">Lowered curbs or curb cuts which can be driven over.</rdfs:comment>
-        <rdfs:label xml:lang="en">Curb cut</rdfs:label>
+        <rdfs:comment>Lowered curbs or curb cuts which can be driven over.</rdfs:comment>
+        <rdfs:label>Curb cut</rdfs:label>
     </owl:Class>
     
 
@@ -2965,8 +2966,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Curbstone">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A long, narrow stone or concrete block, laid end to end with others to form a kerb.  variant spelling of kerbstone.</rdfs:comment>
-        <rdfs:label xml:lang="en">Curbstone</rdfs:label>
+        <rdfs:comment>A long, narrow stone or concrete block, laid end to end with others to form a kerb.  variant spelling of kerbstone.</rdfs:comment>
+        <rdfs:label>Curbstone</rdfs:label>
     </owl:Class>
     
 
@@ -2976,8 +2977,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Curve">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Junction"/>
-        <rdfs:comment xml:lang="en">Is the edge where a raised sidewalk or road median/central reservation meets a street or other roadway.</rdfs:comment>
-        <rdfs:label xml:lang="en">Curve</rdfs:label>
+        <rdfs:comment>Is the edge where a raised sidewalk or road median/central reservation meets a street or other roadway.</rdfs:comment>
+        <rdfs:label>Curve</rdfs:label>
     </owl:Class>
     
 
@@ -3006,8 +3007,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Cycle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadVehicle"/>
-        <rdfs:comment xml:lang="en">A ridable vehicle, this is, any vehicle that, in order to be controlled, requires the rider to take a sitting position and use not only designated control devices such as handlebars or steering wheels, but also bodyweight as an effective mean of exerting control. Moreover, Ridable vehicles do not offer any (or barely any) structural protection to the rider and passengers. Ridable vehicles most often have 2 wheels, occasionally more.</rdfs:comment>
-        <rdfs:label xml:lang="en">Cycle</rdfs:label>
+        <rdfs:comment>A ridable vehicle, this is, any vehicle that, in order to be controlled, requires the rider to take a sitting position and use not only designated control devices such as handlebars or steering wheels, but also bodyweight as an effective mean of exerting control. Moreover, Ridable vehicles do not offer any (or barely any) structural protection to the rider and passengers. Ridable vehicles most often have 2 wheels, occasionally more.</rdfs:comment>
+        <rdfs:label>Cycle</rdfs:label>
     </owl:Class>
     
 
@@ -3016,8 +3017,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Cyclist">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Rider"/>
-        <rdfs:comment xml:lang="en">A person who rides a bicycle. Dows not include the bicycle or persons moving a bike while walking.</rdfs:comment>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Cyclist</rdfs:label>
+        <rdfs:comment>A person who rides a bicycle. Dows not include the bicycle or persons moving a bike while walking.</rdfs:comment>
+        <rdfs:label>Cyclist</rdfs:label>
     </owl:Class>
     
 
@@ -3046,8 +3047,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Debris">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovableObject"/>
-        <rdfs:comment xml:lang="en">Scattered pieces of rubbish or remains. Loose natural material consisting especially of broken pieces of rock.</rdfs:comment>
-        <rdfs:label xml:lang="en">Debris</rdfs:label>
+        <rdfs:comment>Scattered pieces of rubbish or remains. Loose natural material consisting especially of broken pieces of rock.</rdfs:comment>
+        <rdfs:label>Debris</rdfs:label>
     </owl:Class>
     
 
@@ -3165,8 +3166,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#DoubleBrokenWhite">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:comment xml:lang="en">A double row of thicker short broken lines can be seen on a major road indicating that you need to give way they can also be used at mini-roundabouts.</rdfs:comment>
-        <rdfs:label xml:lang="en">Double broken white</rdfs:label>
+        <rdfs:comment>A double row of thicker short broken lines can be seen on a major road indicating that you need to give way they can also be used at mini-roundabouts.</rdfs:comment>
+        <rdfs:label>Double broken white</rdfs:label>
     </owl:Class>
     
 
@@ -3175,8 +3176,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#DoubleBrokenYellow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#YellowLines"/>
-        <rdfs:comment xml:lang="en">A double row of thicker short broken lines can be seen on a major road indicating that you need to give way they can also be used at mini-roundabouts.</rdfs:comment>
-        <rdfs:label xml:lang="en">Double broken yellow</rdfs:label>
+        <rdfs:comment>A double row of thicker short broken lines can be seen on a major road indicating that you need to give way they can also be used at mini-roundabouts.</rdfs:comment>
+        <rdfs:label>Double broken yellow</rdfs:label>
     </owl:Class>
     
 
@@ -3185,8 +3186,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#DoubleSolidWhite">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:comment xml:lang="en">Two solid lines that indicate a lane barrier between a regular use and a preferential use lane, such as a carpool/HOV. Never change lanes while in these lanes.</rdfs:comment>
-        <rdfs:label xml:lang="en">Double solid white</rdfs:label>
+        <rdfs:comment>Two solid lines that indicate a lane barrier between a regular use and a preferential use lane, such as a carpool/HOV. Never change lanes while in these lanes.</rdfs:comment>
+        <rdfs:label>Double solid white</rdfs:label>
     </owl:Class>
     
 
@@ -3195,8 +3196,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#DoubleSolidYellow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#YellowLines"/>
-        <rdfs:comment xml:lang="en">Two solid lines that indicate a lane barrier between a regular use and a preferential use lane, such as a carpool/HOV. Never change lanes while in these lanes.</rdfs:comment>
-        <rdfs:label xml:lang="en">Double solid yellow</rdfs:label>
+        <rdfs:comment>Two solid lines that indicate a lane barrier between a regular use and a preferential use lane, such as a carpool/HOV. Never change lanes while in these lanes.</rdfs:comment>
+        <rdfs:label>Double solid yellow</rdfs:label>
     </owl:Class>
     
 
@@ -3205,8 +3206,8 @@ longitudinal distance (in the direction of travel of the subject vehicle) betwee
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#DrivableCobblestone">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadSurface"/>
-        <rdfs:comment xml:lang="en">A road with a surface formed by naturally rounded stones.</rdfs:comment>
-        <rdfs:label xml:lang="en">Drivable cobblestone</rdfs:label>
+        <rdfs:comment>A road with a surface formed by naturally rounded stones.</rdfs:comment>
+        <rdfs:label>Drivable cobblestone</rdfs:label>
     </owl:Class>
     
 
@@ -3226,8 +3227,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Driveaway">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Event"/>
-        <rdfs:comment xml:lang="en">The action perforned when a vehicle starts moving.</rdfs:comment>
-        <rdfs:label xml:lang="en">Driveaway</rdfs:label>
+        <rdfs:comment>The action perforned when a vehicle starts moving.</rdfs:comment>
+        <rdfs:label>Driveaway</rdfs:label>
     </owl:Class>
     
 
@@ -3246,8 +3247,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#DrivingStraight">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">The action of driving following the current road path.</rdfs:comment>
-        <rdfs:label xml:lang="en">Driving straight</rdfs:label>
+        <rdfs:comment>The action of driving following the current road path.</rdfs:comment>
+        <rdfs:label>Driving straight</rdfs:label>
     </owl:Class>
     
 
@@ -3286,8 +3287,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Dustbin">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadObstacles"/>
-        <rdfs:comment xml:lang="en">A container for household refuse, especially one kept outside.</rdfs:comment>
-        <rdfs:label xml:lang="en">Dustbin</rdfs:label>
+        <rdfs:comment>A container for household refuse, especially one kept outside.</rdfs:comment>
+        <rdfs:label>Dustbin</rdfs:label>
     </owl:Class>
     
 
@@ -3296,8 +3297,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Dynamic">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Object"/>
-        <rdfs:comment xml:lang="en">Dynamic objects are characterized by the hability to perform an activity, change their state or move.</rdfs:comment>
-        <rdfs:label xml:lang="en">Dynamic</rdfs:label>
+        <rdfs:comment>Dynamic objects are characterized by the hability to perform an activity, change their state or move.</rdfs:comment>
+        <rdfs:label>Dynamic</rdfs:label>
     </owl:Class>
     
 
@@ -3306,8 +3307,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#EgoVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#DrivableVehicle"/>
-        <rdfs:comment xml:lang="en">A vehicle with sensors and other detection systems. The vehicle under test.</rdfs:comment>
-        <rdfs:label xml:lang="en">Ego vehicle</rdfs:label>
+        <rdfs:comment>A vehicle with sensors and other detection systems. The vehicle under test.</rdfs:comment>
     </owl:Class>
     
 
@@ -3316,8 +3316,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ElectronicTraffic">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Void"/>
-        <rdfs:comment xml:lang="en">Traffic enhanced with electronic equipment.</rdfs:comment>
-        <rdfs:label xml:lang="en">Electronic traffic</rdfs:label>
+        <rdfs:comment>Traffic enhanced with electronic equipment.</rdfs:comment>
+        <rdfs:label>Electronic traffic</rdfs:label>
     </owl:Class>
     
 
@@ -3366,9 +3366,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#EmergencyVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#DrivableVehicle"/>
-        <rdfs:comment xml:lang="en">Any vehicle that is designated and authorized to respond to an emergency in a
-         life-threatening situation.</rdfs:comment>
-        <rdfs:label xml:lang="en">Emergency vehicle</rdfs:label>
+        <rdfs:comment>Any vehicle that is designated and authorized to respond to an emergency in a life-threatening situation.</rdfs:comment>
+        <rdfs:label>Emergency vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -3377,8 +3376,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Empty">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Trailer"/>
-        <rdfs:comment>Any trailer structure/chassis which is not carrying any type of load but it is nevertheless
-        towed by another motorized vehicle.</rdfs:comment>
+        <rdfs:comment>Any trailer structure/chassis which is not carrying any type of load but it is nevertheless towed by another motorized vehicle.</rdfs:comment>
         <rdfs:label>Empty</rdfs:label>
     </owl:Class>
     
@@ -3398,8 +3396,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Event">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-        <rdfs:comment xml:lang="en">A thing that happens or takes place in a concrete instant of time and is relevant for the description of the scenario. It usually causes other events  or actions.</rdfs:comment>
-        <rdfs:label xml:lang="en">Event</rdfs:label>
+        <rdfs:comment>A thing that happens or takes place in a concrete instant of time and is relevant for the description of the scenario. It usually causes other events  or actions.</rdfs:comment>
+        <rdfs:label>Event</rdfs:label>
     </owl:Class>
     
 
@@ -3408,8 +3406,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Exceptional">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#LargeVehicle"/>
-        <rdfs:comment>An Exceptional convoy is transportation of a piece of cargo that cannot be loaded on a normal
-        truck since dimensions do not fit the road profile. In such cases the cargo requires a modified custom vehicle to be transported. Exceptional convoys are usually made of a truck tractor cab and a trailer with the exceptional load. This configuration, though, can vary.</rdfs:comment>
+        <rdfs:comment>An Exceptional convoy is transportation of a piece of cargo that cannot be loaded on a normal truck since dimensions do not fit the road profile. In such cases the cargo requires a modified custom vehicle to be transported. Exceptional convoys are usually made of a truck tractor cab and a trailer with the exceptional load. This configuration, though, can vary.</rdfs:comment>
         <rdfs:label>Exceptional transport</rdfs:label>
     </owl:Class>
     
@@ -3458,8 +3455,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#FallingBehind">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">The action of driving slower than its lead vehicle and is also decelerating.</rdfs:comment>
-        <rdfs:label xml:lang="en">Falling behind</rdfs:label>
+        <rdfs:comment>The action of driving slower than its lead vehicle and is also decelerating.</rdfs:comment>
+        <rdfs:label>Falling behind</rdfs:label>
     </owl:Class>
     
 
@@ -3478,8 +3475,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Fence">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
-        <rdfs:comment xml:lang="en">A barrier, railing, or other upright structure, typically of wood or wire, enclosing an area of ground to prevent or control access or escape.</rdfs:comment>
-        <rdfs:label xml:lang="en">Fence</rdfs:label>
+        <rdfs:comment>A barrier, railing, or other upright structure, typically of wood or wire, enclosing an area of ground to prevent or control access or escape.</rdfs:comment>
+        <rdfs:label>Fence</rdfs:label>
     </owl:Class>
     
 
@@ -3488,8 +3485,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#FireHydrant">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">Water outlet typically used by fire-fighters.</rdfs:comment>
-        <rdfs:label xml:lang="en">Fire hydrant</rdfs:label>
+        <rdfs:comment>Water outlet typically used by fire-fighters.</rdfs:comment>
+        <rdfs:label>Fire hydrant</rdfs:label>
     </owl:Class>
     
 
@@ -3556,8 +3553,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Flat">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Construction"/>
-        <rdfs:comment xml:lang="en">Objects or areas without raised areas or indentations.</rdfs:comment>
-        <rdfs:label xml:lang="en">Flat</rdfs:label>
+        <rdfs:comment>Objects or areas without raised areas or indentations.</rdfs:comment>
+        <rdfs:label>Flat</rdfs:label>
     </owl:Class>
     
 
@@ -3597,8 +3594,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Following">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">When the vehicle is driving with the same velocity as the vehicle in front.</rdfs:comment>
-        <rdfs:label xml:lang="en">Following</rdfs:label>
+        <rdfs:comment>When the vehicle is driving with the same velocity as the vehicle in front.</rdfs:comment>
+        <rdfs:label>Following</rdfs:label>
     </owl:Class>
     
 
@@ -3607,8 +3604,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Footwalk">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment xml:lang="en">A surface paved or constructed for walking along often with a handrail (as on a bridge or on a parapet).</rdfs:comment>
-        <rdfs:label xml:lang="en">Footwalk</rdfs:label>
+        <rdfs:comment>A surface paved or constructed for walking along often with a handrail (as on a bridge or on a parapet).</rdfs:comment>
+        <rdfs:label>Footwalk</rdfs:label>
     </owl:Class>
     
 
@@ -3636,8 +3633,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Garage">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
-        <rdfs:comment xml:lang="en">A building for housing a motor vehicle or vehicles.</rdfs:comment>
-        <rdfs:label xml:lang="en">Garage</rdfs:label>
+        <rdfs:comment>A building for housing a motor vehicle or vehicles.</rdfs:comment>
+        <rdfs:label>Garage</rdfs:label>
     </owl:Class>
     
 
@@ -3646,8 +3643,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#GlidingOnWheels">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">Gliding is an energy-efficient driving mode achieved by turning off the internal combustion engine while the vehicle is still moving in order to save fuel.</rdfs:comment>
-        <rdfs:label xml:lang="en">Gliding on wheels</rdfs:label>
+        <rdfs:comment>Gliding is an energy-efficient driving mode achieved by turning off the internal combustion engine while the vehicle is still moving in order to save fuel.</rdfs:comment>
+        <rdfs:label>Gliding on wheels</rdfs:label>
     </owl:Class>
     
 
@@ -3666,8 +3663,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#GroundAnimal">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Wildlife"/>
-        <rdfs:comment xml:lang="en">Animals which move on the ground.</rdfs:comment>
-        <rdfs:label xml:lang="en">Ground animal</rdfs:label>
+        <rdfs:comment>Animals which move on the ground.</rdfs:comment>
+        <rdfs:label>Ground animal</rdfs:label>
     </owl:Class>
     
 
@@ -3676,8 +3673,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#GuardRail">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
-        <rdfs:comment xml:lang="en">A strong fence at the side of a road or in the middle of an expressway, intended to reduce the risk of serious accidents; a crash barrier.</rdfs:comment>
-        <rdfs:label xml:lang="en">Guard rail</rdfs:label>
+        <rdfs:comment>A strong fence at the side of a road or in the middle of an expressway, intended to reduce the risk of serious accidents; a crash barrier.</rdfs:comment>
+        <rdfs:label>Guard rail</rdfs:label>
     </owl:Class>
     
 
@@ -3696,8 +3693,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Hail">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Weather"/>
-        <rdfs:comment xml:lang="en">Pellets of frozen rain which fall in showers from cumulonimbus clouds.</rdfs:comment>
-        <rdfs:label xml:lang="en">Hail</rdfs:label>
+        <rdfs:comment>Pellets of frozen rain which fall in showers from cumulonimbus clouds.</rdfs:comment>
+        <rdfs:label>Hail</rdfs:label>
     </owl:Class>
     
 
@@ -3726,8 +3723,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Halt">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Event"/>
-        <rdfs:comment xml:lang="en">The action of braking till coming to a halt.</rdfs:comment>
-        <rdfs:label xml:lang="en">Halt</rdfs:label>
+        <rdfs:comment>The action of braking till coming to a halt.</rdfs:comment>
+        <rdfs:label>Halt</rdfs:label>
     </owl:Class>
     
 
@@ -3756,8 +3753,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Human">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Dynamic"/>
-        <rdfs:comment xml:lang="en">A bipedal primate mammal (Homo sapiens). A person.</rdfs:comment>
-        <rdfs:label xml:lang="en">Human</rdfs:label>
+        <rdfs:comment>A bipedal primate mammal (Homo sapiens). A person.</rdfs:comment>
+        <rdfs:label>Human</rdfs:label>
     </owl:Class>
     
 
@@ -3827,7 +3824,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#IrrelevantSign">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Signs"/>
         <rdfs:comment>A sign that is not relevant in a traffic scenario, that is, it is not designated to inform the traffic participants.</rdfs:comment>
-        <rdfs:label xml:lang="en">Irrelevant sign</rdfs:label>
+        <rdfs:label>Irrelevant sign</rdfs:label>
     </owl:Class>
     
 
@@ -3856,8 +3853,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Lane">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A division of a road marked off with painted lines and intended to separate single lines of traffic according to speed or direction.</rdfs:comment>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Lane</rdfs:label>
+        <rdfs:comment>A division of a road marked off with painted lines and intended to separate single lines of traffic according to speed or direction.</rdfs:comment>
+        <rdfs:label>Lane</rdfs:label>
     </owl:Class>
     
 
@@ -3906,8 +3903,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#LaneDivider">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A barrier placed between the lanes of a highway to divide the traffic moving in opposite directions.</rdfs:comment>
-        <rdfs:label xml:lang="en">Lane divider</rdfs:label>
+        <rdfs:comment>A barrier placed between the lanes of a highway to divide the traffic moving in opposite directions.</rdfs:comment>
+        <rdfs:label>Lane divider</rdfs:label>
     </owl:Class>
     
 
@@ -3916,8 +3913,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#LaneMarking">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Marking"/>
-        <rdfs:comment xml:lang="en">Markings delimiting the lanes along the road.</rdfs:comment>
-        <rdfs:label xml:lang="en">Lane marking</rdfs:label>
+        <rdfs:comment>Markings delimiting the lanes along the road.</rdfs:comment>
+        <rdfs:label>Lane marking</rdfs:label>
     </owl:Class>
     
 
@@ -3946,8 +3943,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Lighting">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Context"/>
-        <rdfs:comment xml:lang="en">Lighting or illumination is the deliberate use of light to achieve practical or aesthetic effects. Lighting includes the use of both artificial light sources like lamps and light fixtures, as well as natural illumination by capturing daylight.</rdfs:comment>
-        <rdfs:label xml:lang="en">Lighting</rdfs:label>
+        <rdfs:comment>Lighting or illumination is the deliberate use of light to achieve practical or aesthetic effects. Lighting includes the use of both artificial light sources like lamps and light fixtures, as well as natural illumination by capturing daylight.</rdfs:comment>
+        <rdfs:label>Lighting</rdfs:label>
     </owl:Class>
     
 
@@ -3966,8 +3963,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#LossOfControl">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Event"/>
-        <rdfs:comment xml:lang="en">The action of losing the control of the vehicle which usually leads to an incident.</rdfs:comment>
-        <rdfs:label xml:lang="en">Loss of control</rdfs:label>
+        <rdfs:comment>The action of losing the control of the vehicle which usually leads to an incident.</rdfs:comment>
+        <rdfs:label>Loss of control</rdfs:label>
     </owl:Class>
     
 
@@ -3986,8 +3983,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Mailbox">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A box to put mail into.</rdfs:comment>
-        <rdfs:label xml:lang="en">Mailbox</rdfs:label>
+        <rdfs:comment>A box to put mail into.</rdfs:comment>
+        <rdfs:label>Mailbox</rdfs:label>
     </owl:Class>
     
 
@@ -3996,8 +3993,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Manhole">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">Opening in road to access canal system. Has to be big enough to fit a person and includes squared ones.</rdfs:comment>
-        <rdfs:label xml:lang="en">Manhole</rdfs:label>
+        <rdfs:comment>Opening in road to access canal system. Has to be big enough to fit a person and includes squared ones.</rdfs:comment>
+        <rdfs:label>Manhole</rdfs:label>
     </owl:Class>
     
 
@@ -4006,8 +4003,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Marking">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment xml:lang="en">A mark or patten of marks delimiting a concrete area of the road.</rdfs:comment>
-        <rdfs:label xml:lang="en">Marking</rdfs:label>
+        <rdfs:comment>A mark or patten of marks delimiting a concrete area of the road.</rdfs:comment>
+        <rdfs:label>Marking</rdfs:label>
     </owl:Class>
     
 
@@ -4016,8 +4013,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Meteorology">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Context"/>
-        <rdfs:label xml:lang="en">Meteorology</rdfs:label>
-        <rdfs:label xml:lang="en">The climate and weather of a region.</rdfs:label>
+        <rdfs:label>Meteorology</rdfs:label>
+        <rdfs:label>The climate and weather of a region.</rdfs:label>
     </owl:Class>
     
 
@@ -4056,8 +4053,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Misc">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadVehicle"/>
-        <rdfs:comment xml:lang="en">Miscellaneous; Objects of various types or from different sources.</rdfs:comment>
-        <rdfs:label xml:lang="en">Misc</rdfs:label>
+        <rdfs:comment>Miscellaneous; Objects of various types or from different sources.</rdfs:comment>
+        <rdfs:label>Misc</rdfs:label>
     </owl:Class>
     
 
@@ -4066,8 +4063,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Motorcycle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Cycle"/>
-        <rdfs:comment xml:lang="en">A two-wheeled vehicle that is powered by a motor and has no pedals.</rdfs:comment>
-        <rdfs:label xml:lang="en">Motorcycle</rdfs:label>
+        <rdfs:comment>A two-wheeled vehicle that is powered by a motor and has no pedals.</rdfs:comment>
+        <rdfs:label>Motorcycle</rdfs:label>
     </owl:Class>
     
 
@@ -4076,8 +4073,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Motorcyclist">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Rider"/>
-        <rdfs:comment xml:lang="en">A person who rides a motorcycle. Includes passengers.</rdfs:comment>
-        <rdfs:label xml:lang="en">Motorcyclist</rdfs:label>
+        <rdfs:comment>A person who rides a motorcycle. Includes passengers.</rdfs:comment>
+        <rdfs:label>Motorcyclist</rdfs:label>
     </owl:Class>
     
 
@@ -4086,8 +4083,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Mountain">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Nature"/>
-        <rdfs:comment xml:lang="en">Distant elevations of the ground.</rdfs:comment>
-        <rdfs:label xml:lang="en">Mountain</rdfs:label>
+        <rdfs:comment>Distant elevations of the ground.</rdfs:comment>
+        <rdfs:label>Mountain</rdfs:label>
     </owl:Class>
     
 
@@ -4096,8 +4093,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#MovableObject">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Static"/>
-        <rdfs:comment xml:lang="en">An object capable of being moved.</rdfs:comment>
-        <rdfs:label xml:lang="en">Movable object</rdfs:label>
+        <rdfs:comment>An object capable of being moved.</rdfs:comment>
+        <rdfs:label>Movable object</rdfs:label>
     </owl:Class>
     
 
@@ -4107,8 +4104,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Action"/>
         <owl:disjointWith rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">A maneuver performed to change the initial state of the object.</rdfs:comment>
-        <rdfs:label xml:lang="en">Moving maneuver</rdfs:label>
+        <rdfs:comment>A maneuver performed to change the initial state of the object.</rdfs:comment>
+        <rdfs:label>Moving maneuver</rdfs:label>
     </owl:Class>
     
 
@@ -4117,8 +4114,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Nature">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Static"/>
-        <rdfs:comment xml:lang="en">The phenomena of the physical world collectively, including plants, animals, the landscape, and other features and products of the earth, as opposed to humans or human creations.</rdfs:comment>
-        <rdfs:label xml:lang="en">Nature</rdfs:label>
+        <rdfs:comment>The phenomena of the physical world collectively, including plants, animals, the landscape, and other features and products of the earth, as opposed to humans or human creations.</rdfs:comment>
+        <rdfs:label>Nature</rdfs:label>
     </owl:Class>
     
 
@@ -4137,8 +4134,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#NonDrivableStreet">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadSurface"/>
-        <rdfs:comment xml:lang="en">A road where is not allowed to drive any king of vehicle.</rdfs:comment>
-        <rdfs:label xml:lang="en">Non drivable street</rdfs:label>
+        <rdfs:comment>A road where is not allowed to drive any king of vehicle.</rdfs:comment>
+        <rdfs:label>Non drivable street</rdfs:label>
     </owl:Class>
     
 
@@ -4147,8 +4144,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#NormalStreet">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadSurface"/>
-        <rdfs:comment xml:lang="en">Street with no restriction.</rdfs:comment>
-        <rdfs:label xml:lang="en">Normal street</rdfs:label>
+        <rdfs:comment>Street with no restriction.</rdfs:comment>
+        <rdfs:label>Normal street</rdfs:label>
     </owl:Class>
     
 
@@ -4157,8 +4154,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Object">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-        <rdfs:comment xml:lang="en">An object is any material thing that can be seen and touched.</rdfs:comment>
-        <rdfs:label xml:lang="en">Object</rdfs:label>
+        <rdfs:comment>An object is any material thing that can be seen and touched.</rdfs:comment>
+        <rdfs:label>Object</rdfs:label>
     </owl:Class>
     
 
@@ -4177,8 +4174,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#OldMarkingWhite">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:comment xml:lang="en">An old marking that is still visible.</rdfs:comment>
-        <rdfs:label xml:lang="en">Old marking white</rdfs:label>
+        <rdfs:comment>An old marking that is still visible.</rdfs:comment>
+        <rdfs:label>Old marking white</rdfs:label>
     </owl:Class>
     
 
@@ -4187,8 +4184,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#OldMarkingYellow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#YellowLines"/>
-        <rdfs:comment xml:lang="en">An old marking that is still visible.</rdfs:comment>
-        <rdfs:label xml:lang="en">Old marking yellow</rdfs:label>
+        <rdfs:comment>An old marking that is still visible.</rdfs:comment>
+        <rdfs:label>Old marking yellow</rdfs:label>
     </owl:Class>
     
 
@@ -4206,7 +4203,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#OtherBarrier">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
-        <rdfs:label xml:lang="en">Other barrier</rdfs:label>
+        <rdfs:label>Other barrier</rdfs:label>
     </owl:Class>
     
 
@@ -4215,8 +4212,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#OtherRider">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Rider"/>
-        <rdfs:comment xml:lang="en">A person who rides a vehicle other than a motorcycle or a bicycle. For examples, vehicles like ricksaw, wheeled char, scooter, mobility-scooter, etc.</rdfs:comment>
-        <rdfs:label xml:lang="en">Other rider</rdfs:label>
+        <rdfs:comment>A person who rides a vehicle other than a motorcycle or a bicycle. For examples, vehicles like ricksaw, wheeled char, scooter, mobility-scooter, etc.</rdfs:comment>
+        <rdfs:label>Other rider</rdfs:label>
     </owl:Class>
     
 
@@ -4225,8 +4222,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Overpass">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
-        <rdfs:comment xml:lang="en">A crossing of two highways or of a highway and pedestrian path or railroad at different levels where clearance to traffic on the lower level is obtained by elevating the higher level also : the upper level of such a crossing.</rdfs:comment>
-        <rdfs:label xml:lang="en">Overpass</rdfs:label>
+        <rdfs:comment>A crossing of two highways or of a highway and pedestrian path or railroad at different levels where clearance to traffic on the lower level is obtained by elevating the higher level also : the upper level of such a crossing.</rdfs:comment>
+        <rdfs:label>Overpass</rdfs:label>
     </owl:Class>
     
 
@@ -4295,8 +4292,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Parked">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">The action of being stopped an leaving the vehicle temporarily in that spot.</rdfs:comment>
-        <rdfs:label xml:lang="en">Parked</rdfs:label>
+        <rdfs:comment>The action of being stopped an leaving the vehicle temporarily in that spot.</rdfs:comment>
+        <rdfs:label>Parked</rdfs:label>
     </owl:Class>
     
 
@@ -4306,7 +4303,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Parking">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
         <rdfs:comment>The act of bringing (a vehicle that one is driving) to a halt and leave it temporarily, typically in a car park or by the side of the road.</rdfs:comment>
-        <rdfs:label xml:lang="en">Parking</rdfs:label>
+        <rdfs:label>Parking</rdfs:label>
     </owl:Class>
     
 
@@ -4315,8 +4312,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ParkingLot">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment xml:lang="en">A building, or an area under a building, where cars can be parked.</rdfs:comment>
-        <rdfs:label xml:lang="en">Parking lot</rdfs:label>
+        <rdfs:comment>A building, or an area under a building, where cars can be parked.</rdfs:comment>
+        <rdfs:label>Parking lot</rdfs:label>
     </owl:Class>
     
 
@@ -4335,8 +4332,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ParkingSign">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Signs"/>
-        <rdfs:comment xml:lang="en">A sign that gives information about a parking space.</rdfs:comment>
-        <rdfs:label xml:lang="en">Parking sign</rdfs:label>
+        <rdfs:comment>A sign that gives information about a parking space.</rdfs:comment>
+        <rdfs:label>Parking sign</rdfs:label>
     </owl:Class>
     
 
@@ -4375,8 +4372,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Passing">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">When a vehicle is driving past another vehicle in a neighboring lane.</rdfs:comment>
-        <rdfs:label xml:lang="en">Passing</rdfs:label>
+        <rdfs:comment>When a vehicle is driving past another vehicle in a neighboring lane.</rdfs:comment>
+        <rdfs:label>Passing</rdfs:label>
     </owl:Class>
     
 
@@ -4385,8 +4382,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Pedestrian">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Human"/>
-        <rdfs:comment xml:lang="en">Persons moving by their own legs, sitting or in any unusual pose but not meant to drive a vehicle.</rdfs:comment>
-        <rdfs:label xml:lang="en">Pedestrian</rdfs:label>
+        <rdfs:comment>Persons moving by their own legs, sitting or in any unusual pose but not meant to drive a vehicle.</rdfs:comment>
+        <rdfs:label>Pedestrian</rdfs:label>
     </owl:Class>
     
 
@@ -4395,8 +4392,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#PedestrianArea">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment xml:lang="en">Areas solely to be used by pedestrians. E.g. inner city areas, parks, shopping zones, etc.</rdfs:comment>
-        <rdfs:label xml:lang="en">Pedestrian area</rdfs:label>
+        <rdfs:comment>Areas solely to be used by pedestrians. E.g. inner city areas, parks, shopping zones, etc.</rdfs:comment>
+        <rdfs:label>Pedestrian area</rdfs:label>
     </owl:Class>
     
 
@@ -4415,7 +4412,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#PersonalMobilityDevice">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WheeledSlow"/>
-        <rdfs:comment xml:lang="en">Personal mobility Personal mobility devices are small vehicles, motorized or not, that are designed for agile mobility of a single person normally. They are not considered ridable or drivable vehicles due to their low weight ( &lt;15 kg ) and small dimensions and due to the fact that they do not offer any structural protection to the rider, nor have any articulated systems designed to control such vehicles ( steering wheels, pedals etc.). The rider is completely exposed, usually standing on the device.</rdfs:comment>
+        <rdfs:comment>Personal mobility Personal mobility devices are small vehicles, motorized or not, that are designed for agile mobility of a single person normally. They are not considered ridable or drivable vehicles due to their low weight ( &lt;15 kg ) and small dimensions and due to the fact that they do not offer any structural protection to the rider, nor have any articulated systems designed to control such vehicles ( steering wheels, pedals etc.). The rider is completely exposed, usually standing on the device.</rdfs:comment>
         <rdfs:label>Personal Mobility device</rdfs:label>
     </owl:Class>
     
@@ -4435,8 +4432,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#PhoneBooth">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A public call box typically equipped with a payphone.</rdfs:comment>
-        <rdfs:label xml:lang="en">Phone booth</rdfs:label>
+        <rdfs:comment>A public call box typically equipped with a payphone.</rdfs:comment>
+        <rdfs:label>Phone booth</rdfs:label>
     </owl:Class>
     
 
@@ -4465,8 +4462,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Pole">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Support"/>
-        <rdfs:comment xml:lang="en">Thing and elongated, typically vertically oriented poles. Includes poles holding only street lights.</rdfs:comment>
-        <rdfs:label xml:lang="en">Pole</rdfs:label>
+        <rdfs:comment>Thing and elongated, typically vertically oriented poles. Includes poles holding only street lights.</rdfs:comment>
+        <rdfs:label>Pole</rdfs:label>
     </owl:Class>
     
 
@@ -4475,8 +4472,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Polegroup">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Support"/>
-        <rdfs:comment xml:lang="en">A group of poles.</rdfs:comment>
-        <rdfs:label xml:lang="en">Polegroup</rdfs:label>
+        <rdfs:comment>A group of poles.</rdfs:comment>
+        <rdfs:label>Polegroup</rdfs:label>
     </owl:Class>
     
 
@@ -4485,8 +4482,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Police">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#EmergencyVehicle"/>
-        <rdfs:comment xml:lang="en">A police car is a road vehicle used by police officers for transportation during patrols and to enable them to respond to incidents and chases.</rdfs:comment>
-        <rdfs:label xml:lang="en">Police Car</rdfs:label>
+        <rdfs:comment>A police car is a road vehicle used by police officers for transportation during patrols and to enable them to respond to incidents and chases.</rdfs:comment>
+        <rdfs:label>Police car</rdfs:label>
     </owl:Class>
     
 
@@ -4513,8 +4510,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#PoliceOfficer">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#FirstResponder"/>
-        <rdfs:comment xml:lang="en">Police officers belongs to organizations whose primary goal is the prevention and detection of crime. Usually wear a particular uniform that explicits this role. A member of a police force; policeman or policewoman.</rdfs:comment>
-        <rdfs:label xml:lang="en">Police officer</rdfs:label>
+        <rdfs:comment>Police officers belongs to organizations whose primary goal is the prevention and detection of crime. Usually wear a particular uniform that explicits this role. A member of a police force; policeman or policewoman.</rdfs:comment>
+        <rdfs:label>Police officer</rdfs:label>
     </owl:Class>
     
 
@@ -4533,8 +4530,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Pothole">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Water"/>
-        <rdfs:comment xml:lang="en">A depression or hollow in a road caused by wear or subsidence.</rdfs:comment>
-        <rdfs:label xml:lang="en">Pothole</rdfs:label>
+        <rdfs:comment>A depression or hollow in a road caused by wear or subsidence.</rdfs:comment>
+        <rdfs:label>Pothole</rdfs:label>
     </owl:Class>
     
 
@@ -4543,8 +4540,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#PushablePullable">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadVehicle"/>
-        <rdfs:comment xml:lang="en">An object that can be pushed or pulled.</rdfs:comment>
-        <rdfs:label xml:lang="en">Pushable/Pullable</rdfs:label>
+        <rdfs:comment>An object that can be pushed or pulled.</rdfs:comment>
+        <rdfs:label>Pushable/Pullable</rdfs:label>
     </owl:Class>
     
 
@@ -4563,8 +4560,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#RailTrack">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment xml:lang="en">The parallel steel rails on which a train runs.</rdfs:comment>
-        <rdfs:label xml:lang="en">Rail track</rdfs:label>
+        <rdfs:comment>The parallel steel rails on which a train runs.</rdfs:comment>
+        <rdfs:label>Rail track</rdfs:label>
     </owl:Class>
     
 
@@ -4574,7 +4571,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#RailborneVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Vehicle"/>
         <rdfs:comment>A vehicle formed by one or more wagons that moves along a railway.</rdfs:comment>
-        <rdfs:label xml:lang="en">Railborne vehicle</rdfs:label>
+        <rdfs:label>Railborne vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -4594,8 +4591,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#RainDirt">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Rain"/>
-        <rdfs:comment xml:lang="en">Is a variety of rain which contains enough dust for it to be visible. Also known as rain dust.</rdfs:comment>
-        <rdfs:label xml:lang="en">Rain dirt</rdfs:label>
+        <rdfs:comment>Is a variety of rain which contains enough dust for it to be visible. Also known as rain dust.</rdfs:comment>
+        <rdfs:label>Rain dirt</rdfs:label>
     </owl:Class>
     
 
@@ -4634,8 +4631,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#RestrictedArea">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadSurface"/>
-        <rdfs:comment xml:lang="en">An area which unauthorized people are not allowed to enter or and area with a peed limit for vehicles.</rdfs:comment>
-        <rdfs:label xml:lang="en">Restricted area</rdfs:label>
+        <rdfs:comment>An area which unauthorized people are not allowed to enter or and area with a peed limit for vehicles.</rdfs:comment>
+        <rdfs:label>Restricted area</rdfs:label>
     </owl:Class>
     
 
@@ -4644,8 +4641,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Reversing">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">Is the process of driving a vehicle in the reverse direction in order to maneuver.</rdfs:comment>
-        <rdfs:label xml:lang="en">Reversing</rdfs:label>
+        <rdfs:comment>Is the process of driving a vehicle in the reverse direction in order to maneuver.</rdfs:comment>
+        <rdfs:label>Reversing</rdfs:label>
     </owl:Class>
     
 
@@ -4654,8 +4651,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Rider">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Human"/>
-        <rdfs:comment xml:lang="en">A human who is riding any type of vehicle (horse, bicycle, motorcycle, etc.).</rdfs:comment>
-        <rdfs:label xml:lang="en">Rider</rdfs:label>
+        <rdfs:comment>A human who is riding any type of vehicle (horse, bicycle, motorcycle, etc.).</rdfs:comment>
+        <rdfs:label>Rider</rdfs:label>
     </owl:Class>
     
 
@@ -4664,8 +4661,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Rigid">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Bus"/>
-        <rdfs:comment xml:lang="en">Is a vehicle  used in public transportation services with a single, rigid chassis.</rdfs:comment>
-        <rdfs:label xml:lang="en">Rigid</rdfs:label>
+        <rdfs:comment>Is a vehicle  used in public transportation services with a single, rigid chassis.</rdfs:comment>
+        <rdfs:label>Rigid</rdfs:label>
     </owl:Class>
     
 
@@ -4704,8 +4701,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Road">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Flat"/>
-        <rdfs:comment xml:lang="en">A wide way leading from one place to another, especially one with a specially prepared surface which vehicles can use.</rdfs:comment>
-        <rdfs:label xml:lang="en">Road</rdfs:label>
+        <rdfs:comment>A wide way leading from one place to another, especially one with a specially prepared surface which vehicles can use.</rdfs:comment>
+        <rdfs:label>Road</rdfs:label>
     </owl:Class>
     
 
@@ -4714,8 +4711,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#RoadObstacles">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovableObject"/>
-        <rdfs:comment xml:lang="en">A thing that blocks one&amp;#39;s way or prevents or hinders progress.</rdfs:comment>
-        <rdfs:label xml:lang="en">Road obstacles</rdfs:label>
+        <rdfs:comment>A thing that blocks one way or prevents or hinders progress.</rdfs:comment>
+        <rdfs:label>Road obstacles</rdfs:label>
     </owl:Class>
     
 
@@ -4754,8 +4751,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#RoadVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Vehicle"/>
-        <rdfs:comment xml:lang="en">A vehicle designed to legally carry people or cargo on public roads and highways.</rdfs:comment>
-        <rdfs:label xml:lang="en">Road vehicle</rdfs:label>
+        <rdfs:comment>A vehicle designed to legally carry people or cargo on public roads and highways.</rdfs:comment>
+        <rdfs:label>Road vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -4764,8 +4761,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Roadblocks">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#TrafficDevice"/>
-        <rdfs:comment xml:lang="en">An obstruction in a road set up specially by law enforcement officers.</rdfs:comment>
-        <rdfs:label xml:lang="en">Roadblocks</rdfs:label>
+        <rdfs:comment>An obstruction in a road set up specially by law enforcement officers.</rdfs:comment>
+        <rdfs:label>Roadblocks</rdfs:label>
     </owl:Class>
     
 
@@ -4774,8 +4771,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Static"/>
-        <rdfs:comment xml:lang="en">Fixed objects placed beside a road.</rdfs:comment>
-        <rdfs:label xml:lang="en">Roadside object</rdfs:label>
+        <rdfs:comment>Fixed objects placed beside a road.</rdfs:comment>
+        <rdfs:label>Roadside object</rdfs:label>
     </owl:Class>
     
 
@@ -4805,7 +4802,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Rover">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Car"/>
         <rdfs:comment>Rover is a British automotive marque that was used for over a century. The rights to the marque are currently part of Jaguar Land Rover.</rdfs:comment>
-        <rdfs:label xml:lang="en">Rover</rdfs:label>
+        <rdfs:label>Rover</rdfs:label>
     </owl:Class>
     
 
@@ -4814,8 +4811,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Running">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">The action of movement of a runner.</rdfs:comment>
-        <rdfs:label xml:lang="en">Running</rdfs:label>
+        <rdfs:comment>The action of movement of a runner.</rdfs:comment>
+        <rdfs:label>Running</rdfs:label>
     </owl:Class>
     
 
@@ -4825,7 +4822,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SUV">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Car"/>
         <rdfs:comment>An SUV is a powerful vehicle with four-wheel drive that can be driven over rough ground. SUV is an abbreviation for &apos;sport utility vehicle&apos;. SUVs combine elements of road-going passenger cars with features from off-road vehicles, such as raised ground clearance and four-wheel drive.</rdfs:comment>
-        <rdfs:label xml:lang="en">SUV</rdfs:label>
+        <rdfs:label>SUV</rdfs:label>
     </owl:Class>
     
 
@@ -4834,8 +4831,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SafeStop">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Event"/>
-        <rdfs:comment xml:lang="en">The action of deccelerating until stopping safely. For instance, in front of a traffic light or in a traffic jam.</rdfs:comment>
-        <rdfs:label xml:lang="en">Safe stop</rdfs:label>
+        <rdfs:comment>The action of deccelerating until stopping safely. For instance, in front of a traffic light or in a traffic jam.</rdfs:comment>
+        <rdfs:label>Safe stop</rdfs:label>
     </owl:Class>
     
 
@@ -4844,8 +4841,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Sand">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Nature"/>
-        <rdfs:comment xml:lang="en">Includes surfaces consisting of sand or sand heaps, e.g. at construction areas.</rdfs:comment>
-        <rdfs:label xml:lang="en">Sand</rdfs:label>
+        <rdfs:comment>Includes surfaces consisting of sand or sand heaps, e.g. at construction areas.</rdfs:comment>
+        <rdfs:label>Sand</rdfs:label>
     </owl:Class>
     
 
@@ -4913,8 +4910,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#ServiceLane">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Lane"/>
-        <rdfs:comment xml:lang="en">Road shoulders, typically on highways, which offer enough space for a car to drive and stop in emergency cases. Usually on the right side of drivable lanes, but can also be on the left side.</rdfs:comment>
-        <rdfs:label xml:lang="en">Service lane</rdfs:label>
+        <rdfs:comment>Road shoulders, typically on highways, which offer enough space for a car to drive and stop in emergency cases. Usually on the right side of drivable lanes, but can also be on the left side.</rdfs:comment>
+        <rdfs:label>Service lane</rdfs:label>
     </owl:Class>
     
 
@@ -4933,8 +4930,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Sidebars">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
-        <rdfs:comment xml:lang="en">An additional or less important thing.</rdfs:comment>
-        <rdfs:label xml:lang="en">Sidebars</rdfs:label>
+        <rdfs:comment>An additional or less important thing.</rdfs:comment>
+        <rdfs:label>Sidebars</rdfs:label>
     </owl:Class>
     
 
@@ -4943,8 +4940,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Sidewalk">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Lane"/>
-        <rdfs:comment xml:lang="en">Horizontal surface designated for pedestrians or cyclist. Delimited from the road by some obstacles or poles, but not only by marking. Often elevated compared to the road and often located at the side of a road. Also includes walkable parts of traffic islands, but not pedestrian areas.</rdfs:comment>
-        <rdfs:label xml:lang="en">Sidewalk</rdfs:label>
+        <rdfs:comment>Horizontal surface designated for pedestrians or cyclist. Delimited from the road by some obstacles or poles, but not only by marking. Often elevated compared to the road and often located at the side of a road. Also includes walkable parts of traffic islands, but not pedestrian areas.</rdfs:comment>
+        <rdfs:label>Sidewalk</rdfs:label>
     </owl:Class>
     
 
@@ -4953,8 +4950,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Signs">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">An object used to convey information or an instruction.</rdfs:comment>
-        <rdfs:label xml:lang="en">Signs</rdfs:label>
+        <rdfs:comment>An object used to convey information or an instruction.</rdfs:comment>
+        <rdfs:label>Signs</rdfs:label>
     </owl:Class>
     
 
@@ -4973,8 +4970,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Sitting">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">The action of being resting on a seat or other type of support, with the upper part of the body vertical.</rdfs:comment>
-        <rdfs:label xml:lang="en">Sitting</rdfs:label>
+        <rdfs:comment>The action of being resting on a seat or other type of support, with the upper part of the body vertical.</rdfs:comment>
+        <rdfs:label>Sitting</rdfs:label>
     </owl:Class>
     
 
@@ -5003,8 +5000,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Sky">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Nature"/>
-        <rdfs:comment xml:lang="en">Sky including fog or heavy precipitation.</rdfs:comment>
-        <rdfs:label xml:lang="en">Sky</rdfs:label>
+        <rdfs:comment>Sky including fog or heavy precipitation.</rdfs:comment>
+        <rdfs:label>Sky</rdfs:label>
     </owl:Class>
     
 
@@ -5013,8 +5010,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Sleet">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Weather"/>
-        <rdfs:comment xml:lang="en">Rain containing some ice, as when snow melts as it falls.</rdfs:comment>
-        <rdfs:label xml:lang="en">Sleet</rdfs:label>
+        <rdfs:comment>Rain containing some ice, as when snow melts as it falls.</rdfs:comment>
+        <rdfs:label>Sleet</rdfs:label>
     </owl:Class>
     
 
@@ -5023,8 +5020,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SlowDriveArea">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadSurface"/>
-        <rdfs:comment xml:lang="en">A road with speed limitations.</rdfs:comment>
-        <rdfs:label xml:lang="en">Slow drive area</rdfs:label>
+        <rdfs:comment>A road with speed limitations.</rdfs:comment>
+        <rdfs:label>Slow drive area</rdfs:label>
     </owl:Class>
     
 
@@ -5033,8 +5030,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SmallVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#DrivableVehicle"/>
-        <rdfs:comment xml:lang="en">The B-segment is the second smallest of the European segments for passenger cars, which is described as &quot;small cars&quot;.</rdfs:comment>
-        <rdfs:label xml:lang="en">Small vehicle</rdfs:label>
+        <rdfs:comment>The B-segment is the second smallest of the European segments for passenger cars, which is described as &quot;small cars&quot;.</rdfs:comment>
+        <rdfs:label>Small vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -5044,8 +5041,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Snow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Element"/>
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Weather"/>
-        <rdfs:comment xml:lang="en">Snow covered surface.</rdfs:comment>
-        <rdfs:label xml:lang="en">Snow</rdfs:label>
+        <rdfs:comment>Snow covered surface.</rdfs:comment>
+        <rdfs:label>Snow</rdfs:label>
     </owl:Class>
     
 
@@ -5064,8 +5061,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SolidBrokenWhite">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:comment xml:lang="en">A lane marking formed by a solid and a broken line. If the line nearest to you gets broken it means you may cross the lines to overtake if it is safe.</rdfs:comment>
-        <rdfs:label xml:lang="en">Solid broken white</rdfs:label>
+        <rdfs:comment>A lane marking formed by a solid and a broken line. If the line nearest to you gets broken it means you may cross the lines to overtake if it is safe.</rdfs:comment>
+        <rdfs:label>Solid broken white</rdfs:label>
     </owl:Class>
     
 
@@ -5074,8 +5071,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SolidBrokenYellow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#YellowLines"/>
-        <rdfs:comment xml:lang="en">A lane marking formed by a solid and a broken line. If the line nearest to you gets broken it means you may cross the lines to overtake if it is safe.</rdfs:comment>
-        <rdfs:label xml:lang="en">Solid broken yellow</rdfs:label>
+        <rdfs:comment>A lane marking formed by a solid and a broken line. If the line nearest to you gets broken it means you may cross the lines to overtake if it is safe.</rdfs:comment>
+        <rdfs:label>Solid broken yellow</rdfs:label>
     </owl:Class>
     
 
@@ -5084,8 +5081,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SolidChevronWhite">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:comment xml:lang="en">Diagonal stripes used to separate traffic lanes or to protect traffic turning right.</rdfs:comment>
-        <rdfs:label xml:lang="en">Solid chevron white</rdfs:label>
+        <rdfs:comment>Diagonal stripes used to separate traffic lanes or to protect traffic turning right.</rdfs:comment>
+        <rdfs:label>Solid chevron white</rdfs:label>
     </owl:Class>
     
 
@@ -5094,8 +5091,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SolidChevronYellow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#YellowLines"/>
-        <rdfs:comment xml:lang="en">Diagonal stripes used to separate traffic lanes or to protect traffic turning right.</rdfs:comment>
-        <rdfs:label xml:lang="en">Solid chevron yellow</rdfs:label>
+        <rdfs:comment>Diagonal stripes used to separate traffic lanes or to protect traffic turning right.</rdfs:comment>
+        <rdfs:label>Solid chevron yellow</rdfs:label>
     </owl:Class>
     
 
@@ -5104,7 +5101,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SolidParking">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:label xml:lang="en">Solid parking</rdfs:label>
+        <rdfs:label>Solid parking</rdfs:label>
     </owl:Class>
     
 
@@ -5113,8 +5110,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SolidWhite">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#WhiteLines"/>
-        <rdfs:comment xml:lang="en">Solid line dividing two lanes. Changing lanes is not allowed.</rdfs:comment>
-        <rdfs:label xml:lang="en">Solid white</rdfs:label>
+        <rdfs:comment>Solid line dividing two lanes. Changing lanes is not allowed.</rdfs:comment>
+        <rdfs:label>Solid white</rdfs:label>
     </owl:Class>
     
 
@@ -5123,8 +5120,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SolidYellow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#YellowLines"/>
-        <rdfs:comment xml:lang="en">Solid line dividing two lanes. Indicates that changing lanes is not allowed.</rdfs:comment>
-        <rdfs:label xml:lang="en">Solid yellow</rdfs:label>
+        <rdfs:comment>Solid line dividing two lanes. Indicates that changing lanes is not allowed.</rdfs:comment>
+        <rdfs:label>Solid yellow</rdfs:label>
     </owl:Class>
     
 
@@ -5133,8 +5130,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SpeedBumper">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A small raised area built across a road to force people to drive more slowly.</rdfs:comment>
-        <rdfs:label xml:lang="en">Speed bumper</rdfs:label>
+        <rdfs:comment>A small raised area built across a road to force people to drive more slowly.</rdfs:comment>
+        <rdfs:label>Speed bumper</rdfs:label>
     </owl:Class>
     
 
@@ -5183,8 +5180,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Standing">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">The action of being in a vertical state without moving.</rdfs:comment>
-        <rdfs:label xml:lang="en">Standing</rdfs:label>
+        <rdfs:comment>The action of being in a vertical state without moving.</rdfs:comment>
+        <rdfs:label>Standing</rdfs:label>
     </owl:Class>
     
 
@@ -5193,8 +5190,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Standstill">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">A situation or condition in which there is no movement or activity at all.</rdfs:comment>
-        <rdfs:label xml:lang="en">Standstill</rdfs:label>
+        <rdfs:comment>A situation or condition in which there is no movement or activity at all.</rdfs:comment>
+        <rdfs:label>Standstill</rdfs:label>
     </owl:Class>
     
 
@@ -5203,8 +5200,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Static">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Object"/>
-        <rdfs:comment xml:lang="en">Static objects are not able to move or change by themselves.</rdfs:comment>
-        <rdfs:label xml:lang="en">Static</rdfs:label>
+        <rdfs:comment>Static objects are not able to move or change by themselves.</rdfs:comment>
+        <rdfs:label>Static</rdfs:label>
     </owl:Class>
     
 
@@ -5213,8 +5210,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Action"/>
-        <rdfs:comment xml:lang="en">A static maneuver performed with the aim of maintaining the current state or position of the object.</rdfs:comment>
-        <rdfs:label xml:lang="en">Stationary maneuver</rdfs:label>
+        <rdfs:comment>A static maneuver performed with the aim of maintaining the current state or position of the object.</rdfs:comment>
+        <rdfs:label>Stationary maneuver</rdfs:label>
     </owl:Class>
     
 
@@ -5223,8 +5220,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Stopped">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">The action of not moving at all. In the case of a vehicle implies having the engine turned off.</rdfs:comment>
-        <rdfs:label xml:lang="en">Stopped</rdfs:label>
+        <rdfs:comment>The action of not moving at all. In the case of a vehicle implies having the engine turned off.</rdfs:comment>
+        <rdfs:label>Stopped</rdfs:label>
     </owl:Class>
     
 
@@ -5253,8 +5250,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#StreetLight">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">Lights mounted on poles to illuminate the road or public places.</rdfs:comment>
-        <rdfs:label xml:lang="en">Street light</rdfs:label>
+        <rdfs:comment>Lights mounted on poles to illuminate the road or public places.</rdfs:comment>
+        <rdfs:label>Street light</rdfs:label>
     </owl:Class>
     
 
@@ -5293,8 +5290,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Stroller">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#PushablePullable"/>
-        <rdfs:comment xml:lang="en">A chair on wheels, typically folding, in which a baby or young child can be pushed along; a pushchair.</rdfs:comment>
-        <rdfs:label xml:lang="en">Stroller</rdfs:label>
+        <rdfs:comment>A chair on wheels, typically folding, in which a baby or young child can be pushed along; a pushchair.</rdfs:comment>
+        <rdfs:label>Stroller</rdfs:label>
     </owl:Class>
     
 
@@ -5303,8 +5300,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Structure">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Construction"/>
-        <rdfs:comment xml:lang="en">A building or other object constructed from several parts.</rdfs:comment>
-        <rdfs:label xml:lang="en">Structure</rdfs:label>
+        <rdfs:comment>A building or other object constructed from several parts.</rdfs:comment>
+        <rdfs:label>Structure</rdfs:label>
     </owl:Class>
     
 
@@ -5333,6 +5330,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Sunny">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#DirectSunlight"/>
+        <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Weather"/>
         <rdfs:comment>Bright with sunlight.</rdfs:comment>
         <rdfs:label>Sunny</rdfs:label>
     </owl:Class>
@@ -5343,8 +5341,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Support">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadsideObject"/>
-        <rdfs:comment xml:lang="en">A thing that bears the weight of something or keeps ir upright.</rdfs:comment>
-        <rdfs:label xml:lang="en">Support</rdfs:label>
+        <rdfs:comment>A thing that bears the weight of something or keeps ir upright.</rdfs:comment>
+        <rdfs:label>Support</rdfs:label>
     </owl:Class>
     
 
@@ -5373,7 +5371,7 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#SymbolRestricted">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Marking"/>
-        <rdfs:label xml:lang="en">Symbol restricted</rdfs:label>
+        <rdfs:label>Symbol restricted</rdfs:label>
     </owl:Class>
     
 
@@ -5402,8 +5400,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Temperature">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Meteorology"/>
-        <rdfs:comment xml:lang="en">The degree or intensity of heat present in a substance or object, especially as expressed according to a comparative scale and shown by a thermometer or perceived by touch.</rdfs:comment>
-        <rdfs:label xml:lang="en">Temperature</rdfs:label>
+        <rdfs:comment>The degree or intensity of heat present in a substance or object, especially as expressed according to a comparative scale and shown by a thermometer or perceived by touch.</rdfs:comment>
+        <rdfs:label>Temperature</rdfs:label>
     </owl:Class>
     
 
@@ -5412,8 +5410,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Terrain">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Nature"/>
-        <rdfs:comment xml:lang="en">Grass and all other types of horizontal spreading vegetation, includes soil.</rdfs:comment>
-        <rdfs:label xml:lang="en">Terrain</rdfs:label>
+        <rdfs:comment>Grass and all other types of horizontal spreading vegetation, includes soil.</rdfs:comment>
+        <rdfs:label>Terrain</rdfs:label>
     </owl:Class>
     
 
@@ -5502,8 +5500,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Tractor">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#AgriculturalVehicle"/>
-        <rdfs:comment xml:lang="en">A powerful motor vehicle with large rear wheels, used chiefly on farms for hauling equipment and trailers.</rdfs:comment>
-        <rdfs:label xml:lang="en">Tractor</rdfs:label>
+        <rdfs:comment>A powerful motor vehicle with large rear wheels, used chiefly on farms for hauling equipment and trailers.</rdfs:comment>
+        <rdfs:label>Tractor</rdfs:label>
     </owl:Class>
     
 
@@ -5512,8 +5510,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#TrafficCone">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#TrafficDevice"/>
-        <rdfs:comment xml:lang="en">A solid or hollow object which tapers from a circular or roughly circular base to a point.</rdfs:comment>
-        <rdfs:label xml:lang="en">Traffic cone</rdfs:label>
+        <rdfs:comment>A solid or hollow object which tapers from a circular or roughly circular base to a point.</rdfs:comment>
+        <rdfs:label>Traffic cone</rdfs:label>
     </owl:Class>
     
 
@@ -5531,8 +5529,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#TrafficDevice">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadObstacles"/>
-        <rdfs:comment xml:lang="en">All signs, signals, markings or devices placed for the purpose of regulating, warning or guiding traffic.</rdfs:comment>
-        <rdfs:label xml:lang="en">Traffic device</rdfs:label>
+        <rdfs:comment>All signs, signals, markings or devices placed for the purpose of regulating, warning or guiding traffic.</rdfs:comment>
+        <rdfs:label>Traffic device</rdfs:label>
     </owl:Class>
     
 
@@ -5561,8 +5559,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#TrafficLight">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Signs"/>
-        <rdfs:comment xml:lang="en">Traffic lights without poles in different orientations and for all types or traffic participants.</rdfs:comment>
-        <rdfs:label xml:lang="en">Traffic light</rdfs:label>
+        <rdfs:comment>Traffic lights without poles in different orientations and for all types or traffic participants.</rdfs:comment>
+        <rdfs:label>Traffic light</rdfs:label>
     </owl:Class>
     
 
@@ -5571,8 +5569,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#TrafficSign">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Signs"/>
-        <rdfs:comment xml:lang="en">Signs with the purpose of conveying information to drivers/cyclistspedestrians.</rdfs:comment>
-        <rdfs:label xml:lang="en">Traffic sign</rdfs:label>
+        <rdfs:comment>Signs with the purpose of conveying information to drivers/cyclistspedestrians.</rdfs:comment>
+        <rdfs:label>Traffic sign</rdfs:label>
     </owl:Class>
     
 
@@ -5581,8 +5579,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#TrafficSignSupport">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Support"/>
-        <rdfs:comment xml:lang="en">Frame construction holding large signs, where frame can be made of round or square poles. Can be typically found on highways.</rdfs:comment>
-        <rdfs:label xml:lang="en">Traffic sign support</rdfs:label>
+        <rdfs:comment>Frame construction holding large signs, where frame can be made of round or square poles. Can be typically found on highways.</rdfs:comment>
+        <rdfs:label>Traffic sign support</rdfs:label>
     </owl:Class>
     
 
@@ -5601,8 +5599,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#TrafficViolation">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment xml:lang="en">Any action that does not respect the traffic laws.</rdfs:comment>
-        <rdfs:label xml:lang="en">Traffic violation</rdfs:label>
+        <rdfs:comment>Any action that does not respect the traffic laws.</rdfs:comment>
+        <rdfs:label>Traffic violation</rdfs:label>
     </owl:Class>
     
 
@@ -5611,8 +5609,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Trailer">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadVehicle"/>
-        <rdfs:comment xml:lang="en">An unpowered vehicle towed by another. Excluded trailers attached to trucks, which belongs to class truck.</rdfs:comment>
-        <rdfs:label xml:lang="en">Trailer</rdfs:label>
+        <rdfs:comment>An unpowered vehicle towed by another. Excluded trailers attached to trucks, which belongs to class truck.</rdfs:comment>
+        <rdfs:label>Trailer</rdfs:label>
     </owl:Class>
     
 
@@ -5621,8 +5619,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Train">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RailborneVehicle"/>
-        <rdfs:comment xml:lang="en">A series of connected railway carriages or wagons moved by a locomotive or by integral motors.</rdfs:comment>
-        <rdfs:label xml:lang="en">Train</rdfs:label>
+        <rdfs:comment>A series of connected railway carriages or wagons moved by a locomotive or by integral motors.</rdfs:comment>
+        <rdfs:label>Train</rdfs:label>
     </owl:Class>
     
 
@@ -5641,8 +5639,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Trash">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadObstacles"/>
-        <rdfs:comment xml:lang="en">Waste material; refuse.</rdfs:comment>
-        <rdfs:label xml:lang="en">Trash</rdfs:label>
+        <rdfs:comment>Waste material; refuse.</rdfs:comment>
+        <rdfs:label>Trash</rdfs:label>
     </owl:Class>
     
 
@@ -5671,8 +5669,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Tricycle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Cycle"/>
-        <rdfs:comment xml:lang="en">A vehicle similar to a bicycle, but having three wheels, two at the back and one at the front.</rdfs:comment>
-        <rdfs:label xml:lang="en">Tricycle</rdfs:label>
+        <rdfs:comment>A vehicle similar to a bicycle, but having three wheels, two at the back and one at the front.</rdfs:comment>
+        <rdfs:label>Tricycle</rdfs:label>
     </owl:Class>
     
 
@@ -5691,8 +5689,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Truck">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#LargeVehicle"/>
-        <rdfs:comment xml:lang="en">A large, heavy road vehicle used for carrying goods, materials or troops; a lorry.</rdfs:comment>
-        <rdfs:label xml:lang="en">Truck</rdfs:label>
+        <rdfs:comment>A large, heavy road vehicle used for carrying goods, materials or troops; a lorry.</rdfs:comment>
+        <rdfs:label>Truck</rdfs:label>
     </owl:Class>
     
 
@@ -5711,8 +5709,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Tunnel">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Structure"/>
-        <rdfs:comment xml:lang="en">An artificial underground passage, especially one built through a hill or under a building, road, or river.</rdfs:comment>
-        <rdfs:label xml:lang="en">Tunnel</rdfs:label>
+        <rdfs:comment>An artificial underground passage, especially one built through a hill or under a building, road, or river.</rdfs:comment>
+        <rdfs:label>Tunnel</rdfs:label>
     </owl:Class>
     
 
@@ -5780,8 +5778,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#UTurning">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Turning"/>
-        <rdfs:comment xml:lang="en">A U-shaped turn made by a vehicle so as to head in the opposite direction from its original course.</rdfs:comment>
-        <rdfs:label xml:lang="en">uTurning</rdfs:label>
+        <rdfs:comment>A U-shaped turn made by a vehicle so as to head in the opposite direction from its original course.</rdfs:comment>
+        <rdfs:label>uTurning</rdfs:label>
     </owl:Class>
     
 
@@ -5791,8 +5789,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Unclassified">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">An action that does not fit in any of the defined terms.</rdfs:comment>
-        <rdfs:label xml:lang="en">Unclassified</rdfs:label>
+        <rdfs:comment>An action that does not fit in any of the defined terms.</rdfs:comment>
+        <rdfs:label>Unclassified</rdfs:label>
     </owl:Class>
     
 
@@ -5801,8 +5799,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Unlabeled">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Void"/>
-        <rdfs:comment xml:lang="en">An object without a defined class.</rdfs:comment>
-        <rdfs:label xml:lang="en">Unlabeled</rdfs:label>
+        <rdfs:comment>An object without a defined class.</rdfs:comment>
+        <rdfs:label>Unlabeled</rdfs:label>
     </owl:Class>
     
 
@@ -5821,8 +5819,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#UtilityPole">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Support"/>
-        <rdfs:comment xml:lang="en">Utility poles are supposed to carry electrical wires/cables, could be used to mount mobile phone network receivers, and are used in case both, cables and street lights are mounted.</rdfs:comment>
-        <rdfs:label xml:lang="en">Utility pole</rdfs:label>
+        <rdfs:comment>Utility poles are supposed to carry electrical wires/cables, could be used to mount mobile phone network receivers, and are used in case both, cables and street lights are mounted.</rdfs:comment>
+        <rdfs:label>Utility pole</rdfs:label>
     </owl:Class>
     
 
@@ -5831,8 +5829,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#UtilityVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#DrivableVehicle"/>
-        <rdfs:comment xml:lang="en">A truck with low sides designed for carrying small loads.</rdfs:comment>
-        <rdfs:label xml:lang="en">Utility vehicle</rdfs:label>
+        <rdfs:comment>A truck with low sides designed for carrying small loads.</rdfs:comment>
+        <rdfs:label>Utility vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -5851,8 +5849,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Vegetation">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Nature"/>
-        <rdfs:comment xml:lang="en">Trees and other forms of vertical growing vegetation.</rdfs:comment>
-        <rdfs:label xml:lang="en">Vegetation</rdfs:label>
+        <rdfs:comment>Trees and other forms of vertical growing vegetation.</rdfs:comment>
+        <rdfs:label>Vegetation</rdfs:label>
     </owl:Class>
     
 
@@ -5861,8 +5859,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Vehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Dynamic"/>
-        <rdfs:comment xml:lang="en">A Thing used for transporting people or goods.</rdfs:comment>
-        <rdfs:label xml:lang="en">Vehicle</rdfs:label>
+        <rdfs:comment>A Thing used for transporting people or goods.</rdfs:comment>
+        <rdfs:label>Vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -5871,8 +5869,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Void">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Static"/>
-        <rdfs:comment xml:lang="en">Objects that do not fit in the defined categories or too small objects that cannot be recognized.</rdfs:comment>
-        <rdfs:label xml:lang="en">Void</rdfs:label>
+        <rdfs:comment>Objects that do not fit in the defined categories or too small objects that cannot be recognized.</rdfs:comment>
+        <rdfs:label>Void</rdfs:label>
     </owl:Class>
     
 
@@ -5881,8 +5879,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Waiting">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#StationaryManeuver"/>
-        <rdfs:comment xml:lang="en">The action of staying where one is or delaying action until a particular time or event.</rdfs:comment>
-        <rdfs:label xml:lang="en">Waiting</rdfs:label>
+        <rdfs:comment>The action of staying where one is or delaying action until a particular time or event.</rdfs:comment>
+        <rdfs:label>Waiting</rdfs:label>
     </owl:Class>
     
 
@@ -5891,8 +5889,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Walking">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#MovingManeuver"/>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The action of moving at a regular pace by lifting and setting down each foot in turn.</rdfs:comment>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Walking</rdfs:label>
+        <rdfs:comment>The action of moving at a regular pace by lifting and setting down each foot in turn.</rdfs:comment>
+        <rdfs:label>Walking</rdfs:label>
     </owl:Class>
     
 
@@ -5901,8 +5899,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Wall">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Barrier"/>
-        <rdfs:comment xml:lang="en">A continuous vertical brick or stone structure that encloses or divides an area of land.d</rdfs:comment>
-        <rdfs:label xml:lang="en">Wall</rdfs:label>
+        <rdfs:comment>A continuous vertical brick or stone structure that encloses or divides an area of land.d</rdfs:comment>
+        <rdfs:label>Wall</rdfs:label>
     </owl:Class>
     
 
@@ -5911,8 +5909,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Water">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Nature"/>
-        <rdfs:comment xml:lang="en">Ground surfaces covered by water.</rdfs:comment>
-        <rdfs:label xml:lang="en">Water</rdfs:label>
+        <rdfs:comment>Ground surfaces covered by water.</rdfs:comment>
+        <rdfs:label>Water</rdfs:label>
     </owl:Class>
     
 
@@ -5921,8 +5919,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#WaterVehicle">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Vehicle"/>
-        <rdfs:comment xml:lang="en">Vehicles used in water (Watercraft, water vessels or waterborne vessels).</rdfs:comment>
-        <rdfs:label xml:lang="en">Water vehicle</rdfs:label>
+        <rdfs:comment>Vehicles used in water (Watercraft, water vessels or waterborne vessels).</rdfs:comment>
+        <rdfs:label>Water vehicle</rdfs:label>
     </owl:Class>
     
 
@@ -5931,8 +5929,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Weather">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Meteorology"/>
-        <rdfs:comment xml:lang="en">The state of the atmosphere at a particular place and time as regards heat, cloudiness, dryness, sunshine, wind, rain, etc.</rdfs:comment>
-        <rdfs:label xml:lang="en">Weather</rdfs:label>
+        <rdfs:comment>The state of the atmosphere at a particular place and time as regards heat, cloudiness, dryness, sunshine, wind, rain, etc.</rdfs:comment>
+        <rdfs:label>Weather</rdfs:label>
     </owl:Class>
     
 
@@ -5941,8 +5939,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#Wheelchair">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#PersonalMobilityDevice"/>
-        <rdfs:comment xml:lang="en">A chair fitted with wheels for use as a means of transport by a person who is unable to walk as a result of illness, injury, or disability.</rdfs:comment>
-        <rdfs:label xml:lang="en">Wheelchair</rdfs:label>
+        <rdfs:comment>A chair fitted with wheels for use as a means of transport by a person who is unable to walk as a result of illness, injury, or disability.</rdfs:comment>
+        <rdfs:label>Wheelchair</rdfs:label>
     </owl:Class>
     
 
@@ -5951,8 +5949,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#WheeledSlow">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#RoadVehicle"/>
-        <rdfs:comment xml:lang="en">Covers all slow moving wheeled objects like wheelchairs, mobility scooters, scooters, prams or rickshaw. All of which can potentially have riders sitting on them.</rdfs:comment>
-        <rdfs:label xml:lang="en">Wheeled slow</rdfs:label>
+        <rdfs:comment>Covers all slow moving wheeled objects like wheelchairs, mobility scooters, scooters, prams or rickshaw. All of which can potentially have riders sitting on them.</rdfs:comment>
+        <rdfs:label>Wheeled slow</rdfs:label>
     </owl:Class>
     
 
@@ -5960,10 +5958,9 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
     <!-- http://vcd.vicomtech.org/ontology/automotive#WhiteLines -->
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#WhiteLines">
-        <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#Crosswalk"/>
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#LaneMarking"/>
-        <rdfs:comment xml:lang="en">White color lines that delineate the separation of traffic flows in the same direction, or mark the right edge of the pavement.</rdfs:comment>
-        <rdfs:label xml:lang="en">White lines</rdfs:label>
+        <rdfs:comment>White color lines that delineate the separation of traffic flows in the same direction, or mark the right edge of the pavement.</rdfs:comment>
+        <rdfs:label>White lines</rdfs:label>
     </owl:Class>
     
 
@@ -6012,8 +6009,8 @@ in order to be controlled, it usually requires the driver to adopt a sitting pos
 
     <owl:Class rdf:about="http://vcd.vicomtech.org/ontology/automotive#YellowLines">
         <rdfs:subClassOf rdf:resource="http://vcd.vicomtech.org/ontology/automotive#LaneMarking"/>
-        <rdfs:comment xml:lang="en">Yellow markings that delineate the separation of traffic flows in opposing directions, or mark the left edge of the pavement of divided highways and one-way roads.</rdfs:comment>
-        <rdfs:label xml:lang="en">Yellow lines</rdfs:label>
+        <rdfs:comment>Yellow markings that delineate the separation of traffic flows in opposing directions, or mark the left edge of the pavement of divided highways and one-way roads.</rdfs:comment>
+        <rdfs:label>Yellow lines</rdfs:label>
     </owl:Class>
     
 
