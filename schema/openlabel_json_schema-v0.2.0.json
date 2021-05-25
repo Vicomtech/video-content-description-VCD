@@ -4,6 +4,7 @@
     "definitions": {
         "action": {
             "additionalProperties": false,
+            "description": "An action is a type of element intended to describe temporal situations with                            semantic load, such as a certain activity happening in real life, such as                            crossing-zebra-cross, standing-still, playing-guitar. As such, actions are simply                            defined by their type, the frame intervals in which the action happens, and any                            additional action data (e.g. numbers, booleans, text as attributes of the actions)",
             "properties": {
                 "action_data": {
                     "$ref": "#/definitions/action_data"
@@ -41,6 +42,7 @@
         },
         "action_data": {
             "additionalProperties": false,
+            "description": "Additional data to describe attributes of the action.",
             "properties": {
                 "boolean": {
                     "items": {
@@ -95,6 +97,7 @@
         },
         "attributes": {
             "additionalProperties": false,
+            "description": "Attributes is the alias of element data that can be nested inside geometric                            object data.                            E.g. A certain bounding box object_data can have attributes related to its                            score, visibility, etc. These values can be nested inside the bounding box as attributes",
             "properties": {
                 "boolean": {
                     "items": {
@@ -205,6 +208,7 @@
         },
         "context": {
             "additionalProperties": false,
+            "description": "A context is a type of element which defines any non spatial nor temporal annotation.                            Contexts can be used to add richness to the contextual information of a scene, including                             location, weather, application-related information",
             "properties": {
                 "context_data": {
                     "$ref": "#/definitions/context_data"
@@ -242,6 +246,7 @@
         },
         "context_data": {
             "additionalProperties": false,
+            "description": "Additional data to describe attributes of the context.",
             "properties": {
                 "boolean": {
                     "items": {
@@ -272,7 +277,7 @@
         },
         "coordinate_system": {
             "additionalProperties": false,
-            "description": "A coordinate_system is a 3D reference frame that act as placeholderof annotations.",
+            "description": "A coordinate system is a 3D reference frame. Spatial information of objects and their                            can be defined with respect to coordinate systems.",
             "properties": {
                 "children": {
                     "items": {
@@ -286,7 +291,7 @@
                 "pose_wrt_parent": {
                     "oneOf": [
                         {
-                            "description": "It is a 4x4 homogeneous matrix, to enable transform from                                    3D Cartersian Systems easily. Note that the pose_children_wrt_parent_4x4 is                                    the transform_parent_to_child_4x4:                                    X_child = pose_child_wrt_parent_4x4 * X_parent                                    X_child = transform_parent_to_child_4x4 * X_parent.NOTE: For camera or other projective systems (3D->2D) this pose is the extrinsiccalibration, the projection itself is encoded as the intrinsic information, whichis labeled inside the corresponding stream.",
+                            "description": "It is a 4x4 homogeneous matrix, to enable transform from                                    3D Cartersian Systems easily. Note that the pose_child_wrt_parent_4x4 is                                    the transform_child_to_parent_4x4:                                    X_child = (pose_child_wrt_parent_4x4)^-1 * X_parent                                    X_parent = transform_child_to_child_4x4 * X_child.",
                             "example": [
                                 1.0,
                                 0.0,
@@ -309,6 +314,65 @@
                                 "type": "number"
                             },
                             "type": "array"
+                        },
+                        {
+                            "description": "A pose can be defined with a quaternion (x, y, z, w) that encondes the                                            passive rotation of a coordinate system with respect to another,                                            and a translation (x, y, z)",
+                            "properties": {
+                                "quaternion": {
+                                    "items": {
+                                        "type": "number"
+                                    },
+                                    "maxItems": 4,
+                                    "minItems": 4,
+                                    "type": "array"
+                                },
+                                "translation": {
+                                    "items": {
+                                        "type": "number"
+                                    },
+                                    "maxItems": 3,
+                                    "minItems": 3,
+                                    "type": "array"
+                                }
+                            },
+                            "required": [
+                                "quaternion",
+                                "translation"
+                            ],
+                            "type": "object"
+                        },
+                        {
+                            "properties": {
+                                "euler_angles": {
+                                    "properties": {
+                                        "sequence": {
+                                            "type": "string"
+                                        },
+                                        "val": {
+                                            "items": {
+                                                "type": "number"
+                                            },
+                                            "maxItems": 3,
+                                            "minItems": 3,
+                                            "type": "array"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "translation": {
+                                    "items": {
+                                        "type": "number"
+                                    },
+                                    "maxItems": 3,
+                                    "minItems": 3,
+                                    "type": "array"
+                                }
+                            },
+                            "required": [
+                                "euler_angles",
+                                "translation"
+                            ],
+                            "type": "object"
                         },
                         {
                             "description": "A pose can be expressed in several other forms, e.g. with a rotation                                           and translation vector",
@@ -372,6 +436,7 @@
             "type": "object"
         },
         "element_data_pointer": {
+            "description": "This item contains pointers to element_data of elements, indexed by name, and containing                            information about the element_data type (e.g. bounding box, cuboid) and the frame intervals                            in which this element_data exists within an element.                            As a consequence, these pointers can be used to explore the JSON file rapidly",
             "properties": {
                 "attribute_pointers": {
                     "patternProperties": {
@@ -432,6 +497,7 @@
         },
         "event": {
             "additionalProperties": false,
+            "description": "An event is an instantaneous situation that happens without a temporal interval.                             Events complement Actions providing a mechanism to specify triggers or to connect                            actions and objects with causality relations.",
             "properties": {
                 "coordinate_system": {
                     "type": "string"
@@ -469,6 +535,7 @@
         },
         "event_data": {
             "additionalProperties": false,
+            "description": "Additional data to describe attributes of the event.",
             "properties": {
                 "boolean": {
                     "items": {
@@ -499,6 +566,7 @@
         },
         "frame": {
             "additionalProperties": false,
+            "description": "A frame is a container of dynamic information. It is indexed inside the OpenLabel file                            by its frame number. Time information about the frame is enclosed inside its                            \"frame_properties\\.                            A frame contains dynamic information of elements, such as \"objects\" or \"actions\", which                            are indexed by their UUID, so their static information can be found at the element level.",
             "properties": {
                 "actions": {
                     "additionalProperties": false,
@@ -550,20 +618,66 @@
                     "description": "These frame_properties include frame-related information,                                   including: stream information, odometry, and timestamping.                                   -Timestamps: the field 'timestamp' can be used to declare a                                   master timestamp for all information within thi frame.                                   -Streams: can host information related to specific streams, such                                   as specific timestamps or instantaneous intrinsics.                                   -Odometry: it contains ego-motion of the entire scene (i.e.                                   the pose of the LCS (Local Coordinate System) wrt to WCS (World                                   Coordinate System).",
                     "properties": {
                         "odometry": {
-                            "properties": {
-                                "comment": {
-                                    "type": "string"
-                                },
-                                "pose_lcs_wrt_wcs_4x4": {
-                                    "items": {
-                                        "type": "number"
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "comment": {
+                                            "type": "string"
+                                        },
+                                        "pose_lcs_wrt_wcs_4x4": {
+                                            "items": {
+                                                "type": "number"
+                                            },
+                                            "maxItems": 16,
+                                            "minItems": 16,
+                                            "type": "array"
+                                        }
                                     },
-                                    "maxItems": 16,
-                                    "minItems": 16,
-                                    "type": "array"
+                                    "type": "object"
+                                },
+                                {
+                                    "properties": {
+                                        "quaternion": {
+                                            "items": {
+                                                "type": "number"
+                                            },
+                                            "maxItems": 4,
+                                            "minItems": 4,
+                                            "type": "array"
+                                        },
+                                        "translation": {
+                                            "items": {
+                                                "type": "number"
+                                            },
+                                            "maxItems": 3,
+                                            "minItems": 3,
+                                            "type": "array"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "properties": {
+                                        "euler_angles": {
+                                            "properties": {
+                                                "sequence": {
+                                                    "type": "string"
+                                                },
+                                                "val": {
+                                                    "items": {
+                                                        "type": "number"
+                                                    },
+                                                    "maxItems": 4,
+                                                    "minItems": 4,
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
-                            },
-                            "type": "object"
+                            ]
                         },
                         "streams": {
                             "additionalProperties": false,
@@ -607,6 +721,7 @@
         },
         "frame_interval": {
             "additionalProperties": false,
+            "description": "A frame interval defines an starting and ending frame number, as a closed interval.",
             "properties": {
                 "frame_end": {
                     "type": "integer"
@@ -715,6 +830,7 @@
             "type": "object"
         },
         "mesh": {
+            "description": "This is a special type of object data which encondes a point-line-area mesh.                            It is intended to represent 3D meshes, where points, lines and areas composing the mesh                            are interrelated, and can have their own properties",
             "properties": {
                 "additionalProperties": true,
                 "area_reference": {
@@ -755,6 +871,7 @@
         },
         "metadata": {
             "additionalProperties": true,
+            "description": "This item contains information (metadata) about the annotation file itself                            including the schema_version, file_version, annotator, etc.",
             "properties": {
                 "annotator": {
                     "type": "string"
@@ -804,6 +921,7 @@
         },
         "object": {
             "additionalProperties": false,
+            "description": "An object is the main type of annotation element, and is designed to represent                            spatio-temporal entities, such as physical objects in the real world. Objects as                            any other element is identified by a UUID, and defined by its name, type, and other                           properties.                            All elements can have static and dynamic data. Objects are the only type of elements                            that can have geometric data, such as bounding boxes, cuboids, polylines, images, etc.",
             "properties": {
                 "coordinate_system": {
                     "type": "string"
@@ -841,6 +959,7 @@
         },
         "object_data": {
             "additionalProperties": false,
+            "description": "Additional data to describe attributes of the object.",
             "properties": {
                 "area_reference": {
                     "items": {
@@ -949,6 +1068,7 @@
         },
         "ontologies": {
             "additionalProperties": false,
+            "description": "This item contains identifiers of ontologies as key (identifier) value (URL or URI) pairs                            Ontology identifiers can then be used within elements to declare where the element type                            is defined",
             "patternProperties": {
                 "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                     "type": "string"
@@ -1213,6 +1333,7 @@
             "type": "object"
         },
         "rdf_agent": {
+            "description": "This item specifiy whether an RDF entry is a subject or an object in a RDF triple.",
             "properties": {
                 "type": {
                     "type": "string"
@@ -1225,6 +1346,7 @@
         },
         "relation": {
             "additionalProperties": false,
+            "description": "A relation is a type of element which connects two or more other elements, using                            RDF triples to structure the connection, with one or more subjects, a predicate and                            one or more objects ",
             "properties": {
                 "frame_intervals": {
                     "item": {
@@ -1266,6 +1388,7 @@
             "type": "object"
         },
         "resource_uid": {
+            "description": "This is a unique identifier of an element in an external resource.",
             "patternProperties": {
                 "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                     "type": "string"
@@ -1275,6 +1398,7 @@
         },
         "resources": {
             "additionalProperties": false,
+            "description": "This item contains identifiers of external resources (files, URLs) that might be used to                            to link data of this annotation file with existing content.                            E.g. \"resources\": { \"0\": \"../resources/oxdr/opendrive_file.xml\"}                            declares a resource related to an OpenDrive file, with identifier \"0\"",
             "patternProperties": {
                 "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                     "type": "string"
@@ -1452,20 +1576,92 @@
             },
             "type": "object"
         },
-        "tags": {
+        "tag": {
             "additionalProperties": true,
             "properties": {
-                "administrative": {
+                "name": {
+                    "type": "string"
+                },
+                "ont_uid": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "val": {
+                    "$ref": "#/definitions/tag_data"
+                }
+            },
+            "required": [
+                "name",
+                "type"
+            ],
+            "type": "object"
+        },
+        "tag_data": {
+            "oneOf": [
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "boolean": {
+                            "items": {
+                                "$ref": "#/definitions/boolean"
+                            },
+                            "type": "array"
+                        },
+                        "num": {
+                            "items": {
+                                "$ref": "#/definitions/num"
+                            },
+                            "type": "array"
+                        },
+                        "text": {
+                            "items": {
+                                "$ref": "#/definitions/text"
+                            },
+                            "type": "array"
+                        },
+                        "vec": {
+                            "items": {
+                                "$ref": "#/definitions/vec"
+                            },
+                            "type": "array"
+                        }
+                    },
                     "type": "object"
+                },
+                {
+                    "type": "string"
+                }
+            ]
+        },
+        "tags": {
+            "additionalProperties": true,
+            "description": "Tags are a special type of labels which might be attached to any type of content, such as                            images, data containers, folders, etc. In OpenLabel its main purpose is to allow adding                             metadata to scenario descriptions. They are grouped into 4 main categories:                            \"administrative\", \"odd\" (Operational Design Domain), \"behaviour\", and \"custom\".",
+            "properties": {
+                "administrative": {
+                    "items": {
+                        "$ref": "#/definitions/tag"
+                    },
+                    "type": "array"
                 },
                 "behaviour": {
-                    "type": "object"
+                    "items": {
+                        "$ref": "#/definitions/tag"
+                    },
+                    "type": "array"
                 },
                 "custom": {
-                    "type": "object"
+                    "items": {
+                        "$ref": "#/definitions/tag"
+                    },
+                    "type": "array"
                 },
                 "odd": {
-                    "type": "object"
+                    "items": {
+                        "$ref": "#/definitions/tag"
+                    },
+                    "type": "array"
                 }
             },
             "type": "object"

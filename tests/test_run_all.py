@@ -28,5 +28,6 @@ os.system("python test_basic.py && "
           "python test_action_properties.py &&"
           "python test_semantics.py &&"
           "python test_modify.py &&"
-          "python test_geometries.py")
+          "python test_geometries.py &&"
+          "python test_openlabel.py")
 

@@ -27,6 +27,15 @@ import vcd.schema as schema
 import vcd.converter as converter
 
 
+class TagType(Enum):
+    """
+    Tag's first-level categories as defined in the OpenLABEL standard
+    """
+    administrative = 1
+    odd = 2
+    behaviour = 3
+    custom = 4
+
 class ResourceUID:
     """
     This is a class to add additional UIDs to an element, according to its representation
@@ -753,6 +762,18 @@ class VCD:
                 self.__set_element_data_content(element_type, element, element_data)
 
     @staticmethod
+    def __set_tag_data_content(tag, tag_data):
+        tag.setdefault('val', {})
+        tag['val'].setdefault(tag_data.type.name, [])
+        list_aux = tag['val'][tag_data.type.name]
+        pos_list = [idx for idx, val in enumerate(list_aux) if val['name'] == tag_data.data['name']]
+        if len(pos_list) == 0:
+            tag['val'][tag_data.type.name].append(tag_data.data)
+        else:
+            pos = pos_list[0]
+            tag['val'][tag_data.type.name][pos] = tag_data.data
+
+    @staticmethod
     def __set_element_data_content(element_type, element, element_data):
         # Adds the element_data to the corresponding container
         # If an element_data with same name exists, it is substituted
@@ -1309,6 +1330,37 @@ class VCD:
     def add_element_data(self, element_type, uid, element_data, frame_value=None, set_mode=SetMode.union):
         return self.__set_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value),
                                        set_mode)
+
+    def add_tag(self, tag_type, name, type, ont_uid, val, **kwargs):
+        if 'tags' not in self.data[self.root_name]:
+            self.data[self.root_name]['tags'] = {}
+        tags = self.data[self.root_name]['tags']
+        assert(isinstance(tag_type, TagType))
+        tag_type_name = tag_type.name
+        if tag_type_name not in tags:
+            tags[tag_type_name] = []
+
+        # Create tag with mandatory fields
+        tag = {'name': name, "type": type}
+
+        if ont_uid is not None:
+            assert(isinstance(ont_uid, str))
+            tag['ont_uid'] = ont_uid
+
+        # Check if val is str
+        if isinstance(val, str):
+            tag['val'] = val
+        # or tag_data
+        elif val is not None:
+            assert(isinstance(val, types.ObjectData))
+            self.__set_tag_data_content(tag, val)
+
+        # Add any additional custom properties
+        for key, value in kwargs.items():
+            tag[key] = value
+
+        tags[tag_type_name].append(tag)
+
 
     ##################################################
     # Get / Read
