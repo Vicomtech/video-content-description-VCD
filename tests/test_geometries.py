@@ -123,7 +123,10 @@ class TestBasic(unittest.TestCase):
         P_scs_wrt_lcs = utils.create_pose(R_scs_wrt_lcs, C_lcs)
         vcd.add_coordinate_system("CAM_1", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="base",
-                                  pose_wrt_parent=list(P_scs_wrt_lcs.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(P_scs_wrt_lcs.flatten()),
+                                      type=types.TransformDataType.matrix_4x4
+                                  ))
 
         # Create camera 2 and add rotation and translation instead of pose
         vcd.add_stream(stream_name="CAM_2",
@@ -133,11 +136,10 @@ class TestBasic(unittest.TestCase):
 
         vcd.add_coordinate_system("CAM_2", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="base",
-                                  pose=types.Pose(
-                                      reference_name="base",
-                                      subject_name="CAM_2",
-                                      rotation=[pitch_rad, yaw_rad, roll_rad],
-                                      traslation=list(C_lcs.flatten())
+                                  pose_wrt_parent=types.PoseData(
+                                      val=[yaw_rad, pitch_rad, roll_rad] + list(C_lcs.flatten()),
+                                      type=types.TransformDataType.euler_and_trans_6x1,
+                                      sequence="ZYX"
                                   )
                                   )
         # Compare with reference
@@ -156,20 +158,22 @@ class TestBasic(unittest.TestCase):
         vcd.add_transform(frame_num=10, transform=types.Transform(
             src_name="base",
             dst_name="world",
-            transform_src_to_dst_4x4=[1.0, 0.0, 0.0, 0.1,
-                                      0.0, 1.0, 0.0, 0.1,
-                                      0.0, 0.0, 1.0, 0.0,
-                                      0.0, 0.0, 0.0, 1.0]))
+            transform_src_to_dst=types.TransformData(
+                val=[1.0, 0.0, 0.0, 0.1,
+                     0.0, 1.0, 0.0, 0.1,
+                     0.0, 0.0, 1.0, 0.0,
+                     0.0, 0.0, 0.0, 1.0],
+                type=types.TransformDataType.matrix_4x4)))
 
         # Nevertheless, in VCD 4.3.2 it is possible to customize the format of the transform
         vcd.add_transform(frame_num=11, transform=types.Transform(
             src_name="base",
             dst_name="world",
-            rotation=[0.0, 0.0, 0.0],
-            traslation=[1.0, 1.0, 0.0],
+            transform_src_to_dst=types.TransformData(
+                val=[0.0, 0.0, 0.0, 1.0, 1.0, 0.0],
+                type=types.TransformDataType.euler_and_trans_6x1),
             custom_property1=0.9,
-            custom_property2="Some tag"
-        ))
+            custom_property2="Some tag"))
 
         # Compare with reference
         self.assertTrue(check_vcd(vcd, './etc/' + vcd_version_name + '_test_transforms.json', overwrite))

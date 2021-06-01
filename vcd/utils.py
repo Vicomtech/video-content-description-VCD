@@ -13,9 +13,9 @@ VCD is distributed under MIT License. See LICENSE.
 
 import warnings
 import numpy as np
-
+import cv2 as cv
+import base64
 import math
-
 from bisect import bisect_left
 from enum import Enum
 
@@ -588,6 +588,7 @@ def get_distortion_radius(distortion):
     else:
         return None
 
+
 ####################################################
 # Transforms
 ####################################################
@@ -599,6 +600,7 @@ def apply_transform(transform_JxM, data_MxN):
     data_out = transform_JxM.dot(data_MxN)  # output is JxN
     data_out[:, N] /= data_out[J-1, N]
     return data_out
+
 
 def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
     rows, cols = points3d_4xN.shape
@@ -678,6 +680,7 @@ def generate_cuboid_points_ref_4x8(cuboid):
 
     points_cuboid_lcs_4x8 = T_obj_to_ref.dot(points_cuboid_4x8)
     return points_cuboid_lcs_4x8
+
 
 ####################################################
 # Other
@@ -759,3 +762,34 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
                 points2d_3xN[:, i] = np.nan
     return points2d_3xN, idx_valid
 
+
+def rgb_to_hex(rgb):
+    return '%02x%02x%02x' % tuple(rgb)
+
+
+def hex_to_rgb(value):
+    value = value.lstrip('#')
+    lv = len(value)
+    return tuple(int(value[i:i+lv//3], 16) for i in range(0, lv, lv//3))
+
+
+####################################################
+# Images
+####################################################
+def image_to_base64(img):
+    """
+    This function converts an OpenCV image, encodes it as PNG, and
+    converts the payload into a stringified base64 chain in utf-8
+    :param img: OpenCV image
+    :return: base64 utf-8 string
+    """
+    compr_params = [int(cv.IMWRITE_PNG_COMPRESSION), 9]
+    result, payload = cv.imencode('.png', img, compr_params)
+    payload_b64_str = str(base64.b64encode(payload), 'utf-8')
+    return payload_b64_str
+
+
+def base64_to_image(payload_base64_str):
+    payload_read = base64.b64decode(payload_base64_str)
+    img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), 1)
+    return img

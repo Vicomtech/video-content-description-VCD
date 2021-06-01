@@ -236,14 +236,11 @@ openlabel_schema = {
                 },
                 "frame_properties": {
                     "description": "These frame_properties include frame-related information,\
-                                   including: stream information, odometry, and timestamping.\
+                                   including: stream information, and timestamping.\
                                    -Timestamps: the field \'timestamp\' can be used to declare a\
                                    master timestamp for all information within thi frame.\
                                    -Streams: can host information related to specific streams, such\
-                                   as specific timestamps or instantaneous intrinsics.\
-                                   -Odometry: it contains ego-motion of the entire scene (i.e.\
-                                   the pose of the LCS (Local Coordinate System) wrt to WCS (World\
-                                   Coordinate System).",
+                                   as specific timestamps or instantaneous intrinsics.",
                     "type": "object",
                     "properties": {
                         "timestamp": {"type": "string"},
@@ -254,51 +251,12 @@ openlabel_schema = {
                             },
                             "additionalProperties": False
                         },
-                        "odometry": {
-                            "oneOf": [{
-                                "type": "object",
-                                "properties": {
-                                    "comment": {"type": "string"},
-                                    "pose_lcs_wrt_wcs_4x4": {
-                                        "type": "array",
-                                        "minItems": 16,
-                                        "maxItems": 16,
-                                        "items": {"type": "number"}
-                                    },
-                                }
-                            }, {
-                                "type": "object",
-                                "properties": {
-                                    "quaternion": {
-                                        "type": "array",
-                                        "minItems": 4,
-                                        "maxItems": 4,
-                                        "items": {"type": "number"}
-                                    },
-                                    "translation": {
-                                        "type": "array",
-                                        "minItems": 3,
-                                        "maxItems": 3,
-                                        "items": {"type": "number"}
-                                    }
-                                }
-                            }, {
-                                "type": "object",
-                                "properties": {
-                                    "euler_angles": {
-                                        "type": "object",
-                                        "properties": {
-                                            "sequence": {"type": "string"},
-                                            "val": {
-                                                "type": "array",
-                                                "minItems": 4,
-                                                "maxItems": 4,
-                                                "items": {"type": "number"}
-                                            }
-                                        }
-                                    },
-                                }
-                            }]
+                        "transforms": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^": {"$ref": "#/definitions/transform"}
+                            },
+                            "additionalProperties": False
                         }
                     },
                     "additionalProperties": True
@@ -368,7 +326,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "resource_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "action_data": {"$ref": "#/definitions/action_data"},
                 "action_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -389,7 +347,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "resource_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "event_data": {"$ref": "#/definitions/event_data"},
                 "event_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -410,7 +368,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "resource_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "context_data": {"$ref": "#/definitions/context_data"},
                 "context_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -431,7 +389,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
-                "resource_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "rdf_objects": {
                     "type": "array",
                     "item": {"$ref": "#/definitions/rdf_agent"}
@@ -667,9 +625,28 @@ openlabel_schema = {
                     "type": "array",
                     "items": {"type": "string"},
                 },
-                "pose_wrt_parent": {
-                    "oneOf": [
-                        {
+                "pose_wrt_parent": {"$ref": "#/definitions/transform_data"},
+                "uid": {"type": "string"}
+            },
+            "required": ["type", "parent"],
+            "additionalProperties": True
+        },
+        "transform": {
+            "type": "object",
+            "properties": {
+                "src": {"type": "string"},
+                "dst": {"type": "string"},
+                "transform_src_to_dst": {"$ref": "#/definitions/transform_data"}
+            },
+            "required": ["src", "dst", "transform_src_to_dst"],
+            "additionalProperties": True
+        },
+        "transform_data": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "matrix4x4": {
                             "description": "It is a 4x4 homogeneous matrix, to enable transform from\
                                     3D Cartersian Systems easily. Note that the pose_child_wrt_parent_4x4 is\
                                     the transform_child_to_parent_4x4:\
@@ -680,63 +657,55 @@ openlabel_schema = {
                             "example": [1.0, 0.0, 0.0, 10.0,
                                         0.0, 1.0, 0.0, 5.0,
                                         0.0, 0.0, 1.0, 1.0,
-                                        0.0, 0.0, 0.0, 1.0]},
-                        {
-                            "description": "A pose can be defined with a quaternion (x, y, z, w) that encondes the \
-                                           passive rotation of a coordinate system with respect to another, \
-                                           and a translation (x, y, z)",
-                            "type": "object",
-                            "properties": {
-                                "quaternion": {
-                                    "type": "array",
-                                    "items": {"type": "number"},
-                                    "minItems": 4,
-                                    "maxItems": 4
-                                },
-                                "translation": {
-                                    "type": "array",
-                                    "items": {"type": "number"},
-                                    "minItems": 3,
-                                    "maxItems": 3
-                                }
-                            },
-                            "required": ["quaternion", "translation"]
+                                        0.0, 0.0, 0.0, 1.0]
                         },
-                        {
-                            "type": "object",
-                            "properties": {
-                                "euler_angles": {
-                                    "type": "object",
-                                    "properties": {
-                                        "sequence": {"type": "string"},
-                                        "val": {
-                                            "type": "array",
-                                            "items": {"type": "number"},
-                                            "minItems": 3,
-                                            "maxItems": 3
-                                        }
-                                    }
-                                },
-                                "translation": {
-                                    "type": "array",
-                                    "items": {"type": "number"},
-                                    "minItems": 3,
-                                    "maxItems": 3
-                                }
-                            },
-                            "required": ["euler_angles", "translation"]
-                        },
-                        {
-                            "type": "object",
-                            "description": "A pose can be expressed in several other forms, e.g. with a rotation\
-                                           and translation vector"
-                        }
-                    ]
+                    },
+                    "required": ["matrix4x4"],
+                    "additionalProperties": False
                 },
-                "uid": {"type": "string"}
-            },
-            "required": ["type", "parent"],
-            "additionalProperties": False
+                {
+                    "description": "A transform can be defined with a quaternion (x, y, z, w) that encondes the \
+                                   rotation of a coordinate system with respect to another, \
+                                   and a translation (x, y, z)",
+                    "type": "object",
+                    "properties": {
+                        "quaternion": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 4,
+                            "maxItems": 4
+                        },
+                        "translation": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 3,
+                            "maxItems": 3
+                        }
+                    },
+                    "required": ["quaternion", "translation"],
+                    "additionalProperties": False
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "euler_angles": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 3,
+                            "maxItems": 3
+                        },
+                        "translation": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 3,
+                            "maxItems": 3
+                        },
+                        "sequence": {"type": "string"}
+                    },
+                    "required": ["euler_angles", "translation"],
+                    "additionalProperties": False
+                }
+            ]
         },
         "stream": {
             "description": "A stream describes the source of a data sequence, usually a sensor.",

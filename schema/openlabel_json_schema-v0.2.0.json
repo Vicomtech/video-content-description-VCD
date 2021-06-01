@@ -28,7 +28,7 @@
                     "type": "string"
                 },
                 "resource_uid": {
-                    "type": "string"
+                    "$ref": "#/definitions/resource_uid"
                 },
                 "type": {
                     "type": "string"
@@ -232,7 +232,7 @@
                     "type": "string"
                 },
                 "resource_uid": {
-                    "type": "string"
+                    "$ref": "#/definitions/resource_uid"
                 },
                 "type": {
                     "type": "string"
@@ -276,7 +276,7 @@
             "type": "object"
         },
         "coordinate_system": {
-            "additionalProperties": false,
+            "additionalProperties": true,
             "description": "A coordinate system is a 3D reference frame. Spatial information of objects and their                            can be defined with respect to coordinate systems.",
             "properties": {
                 "children": {
@@ -289,96 +289,7 @@
                     "type": "string"
                 },
                 "pose_wrt_parent": {
-                    "oneOf": [
-                        {
-                            "description": "It is a 4x4 homogeneous matrix, to enable transform from                                    3D Cartersian Systems easily. Note that the pose_child_wrt_parent_4x4 is                                    the transform_child_to_parent_4x4:                                    X_child = (pose_child_wrt_parent_4x4)^-1 * X_parent                                    X_parent = transform_child_to_child_4x4 * X_child.",
-                            "example": [
-                                1.0,
-                                0.0,
-                                0.0,
-                                10.0,
-                                0.0,
-                                1.0,
-                                0.0,
-                                5.0,
-                                0.0,
-                                0.0,
-                                1.0,
-                                1.0,
-                                0.0,
-                                0.0,
-                                0.0,
-                                1.0
-                            ],
-                            "items": {
-                                "type": "number"
-                            },
-                            "type": "array"
-                        },
-                        {
-                            "description": "A pose can be defined with a quaternion (x, y, z, w) that encondes the                                            passive rotation of a coordinate system with respect to another,                                            and a translation (x, y, z)",
-                            "properties": {
-                                "quaternion": {
-                                    "items": {
-                                        "type": "number"
-                                    },
-                                    "maxItems": 4,
-                                    "minItems": 4,
-                                    "type": "array"
-                                },
-                                "translation": {
-                                    "items": {
-                                        "type": "number"
-                                    },
-                                    "maxItems": 3,
-                                    "minItems": 3,
-                                    "type": "array"
-                                }
-                            },
-                            "required": [
-                                "quaternion",
-                                "translation"
-                            ],
-                            "type": "object"
-                        },
-                        {
-                            "properties": {
-                                "euler_angles": {
-                                    "properties": {
-                                        "sequence": {
-                                            "type": "string"
-                                        },
-                                        "val": {
-                                            "items": {
-                                                "type": "number"
-                                            },
-                                            "maxItems": 3,
-                                            "minItems": 3,
-                                            "type": "array"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                "translation": {
-                                    "items": {
-                                        "type": "number"
-                                    },
-                                    "maxItems": 3,
-                                    "minItems": 3,
-                                    "type": "array"
-                                }
-                            },
-                            "required": [
-                                "euler_angles",
-                                "translation"
-                            ],
-                            "type": "object"
-                        },
-                        {
-                            "description": "A pose can be expressed in several other forms, e.g. with a rotation                                           and translation vector",
-                            "type": "object"
-                        }
-                    ]
+                    "$ref": "#/definitions/transform_data"
                 },
                 "type": {
                     "type": "string"
@@ -521,7 +432,7 @@
                     "type": "string"
                 },
                 "resource_uid": {
-                    "type": "string"
+                    "$ref": "#/definitions/resource_uid"
                 },
                 "type": {
                     "type": "string"
@@ -615,70 +526,8 @@
                 },
                 "frame_properties": {
                     "additionalProperties": true,
-                    "description": "These frame_properties include frame-related information,                                   including: stream information, odometry, and timestamping.                                   -Timestamps: the field 'timestamp' can be used to declare a                                   master timestamp for all information within thi frame.                                   -Streams: can host information related to specific streams, such                                   as specific timestamps or instantaneous intrinsics.                                   -Odometry: it contains ego-motion of the entire scene (i.e.                                   the pose of the LCS (Local Coordinate System) wrt to WCS (World                                   Coordinate System).",
+                    "description": "These frame_properties include frame-related information,                                   including: stream information, and timestamping.                                   -Timestamps: the field 'timestamp' can be used to declare a                                   master timestamp for all information within thi frame.                                   -Streams: can host information related to specific streams, such                                   as specific timestamps or instantaneous intrinsics.",
                     "properties": {
-                        "odometry": {
-                            "oneOf": [
-                                {
-                                    "properties": {
-                                        "comment": {
-                                            "type": "string"
-                                        },
-                                        "pose_lcs_wrt_wcs_4x4": {
-                                            "items": {
-                                                "type": "number"
-                                            },
-                                            "maxItems": 16,
-                                            "minItems": 16,
-                                            "type": "array"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                {
-                                    "properties": {
-                                        "quaternion": {
-                                            "items": {
-                                                "type": "number"
-                                            },
-                                            "maxItems": 4,
-                                            "minItems": 4,
-                                            "type": "array"
-                                        },
-                                        "translation": {
-                                            "items": {
-                                                "type": "number"
-                                            },
-                                            "maxItems": 3,
-                                            "minItems": 3,
-                                            "type": "array"
-                                        }
-                                    },
-                                    "type": "object"
-                                },
-                                {
-                                    "properties": {
-                                        "euler_angles": {
-                                            "properties": {
-                                                "sequence": {
-                                                    "type": "string"
-                                                },
-                                                "val": {
-                                                    "items": {
-                                                        "type": "number"
-                                                    },
-                                                    "maxItems": 4,
-                                                    "minItems": 4,
-                                                    "type": "array"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            ]
-                        },
                         "streams": {
                             "additionalProperties": false,
                             "patternProperties": {
@@ -690,6 +539,15 @@
                         },
                         "timestamp": {
                             "type": "string"
+                        },
+                        "transforms": {
+                            "additionalProperties": false,
+                            "patternProperties": {
+                                "^": {
+                                    "$ref": "#/definitions/transform"
+                                }
+                            },
+                            "type": "object"
                         }
                     },
                     "type": "object"
@@ -1373,7 +1231,7 @@
                     "type": "array"
                 },
                 "resource_uid": {
-                    "type": "string"
+                    "$ref": "#/definitions/resource_uid"
                 },
                 "type": {
                     "type": "string"
@@ -1687,6 +1545,120 @@
                 "val"
             ],
             "type": "object"
+        },
+        "transform": {
+            "additionalProperties": true,
+            "properties": {
+                "dst": {
+                    "type": "string"
+                },
+                "src": {
+                    "type": "string"
+                },
+                "transform_src_to_dst": {
+                    "$ref": "#/definitions/transform_data"
+                }
+            },
+            "required": [
+                "src",
+                "dst",
+                "transform_src_to_dst"
+            ],
+            "type": "object"
+        },
+        "transform_data": {
+            "oneOf": [
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "matrix4x4": {
+                            "description": "It is a 4x4 homogeneous matrix, to enable transform from                                    3D Cartersian Systems easily. Note that the pose_child_wrt_parent_4x4 is                                    the transform_child_to_parent_4x4:                                    X_child = (pose_child_wrt_parent_4x4)^-1 * X_parent                                    X_parent = transform_child_to_child_4x4 * X_child.",
+                            "example": [
+                                1.0,
+                                0.0,
+                                0.0,
+                                10.0,
+                                0.0,
+                                1.0,
+                                0.0,
+                                5.0,
+                                0.0,
+                                0.0,
+                                1.0,
+                                1.0,
+                                0.0,
+                                0.0,
+                                0.0,
+                                1.0
+                            ],
+                            "items": {
+                                "type": "number"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "matrix4x4"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "additionalProperties": false,
+                    "description": "A transform can be defined with a quaternion (x, y, z, w) that encondes the                                    rotation of a coordinate system with respect to another,                                    and a translation (x, y, z)",
+                    "properties": {
+                        "quaternion": {
+                            "items": {
+                                "type": "number"
+                            },
+                            "maxItems": 4,
+                            "minItems": 4,
+                            "type": "array"
+                        },
+                        "translation": {
+                            "items": {
+                                "type": "number"
+                            },
+                            "maxItems": 3,
+                            "minItems": 3,
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "quaternion",
+                        "translation"
+                    ],
+                    "type": "object"
+                },
+                {
+                    "additionalProperties": false,
+                    "properties": {
+                        "euler_angles": {
+                            "items": {
+                                "type": "number"
+                            },
+                            "maxItems": 3,
+                            "minItems": 3,
+                            "type": "array"
+                        },
+                        "sequence": {
+                            "type": "string"
+                        },
+                        "translation": {
+                            "items": {
+                                "type": "number"
+                            },
+                            "maxItems": 3,
+                            "minItems": 3,
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "euler_angles",
+                        "translation"
+                    ],
+                    "type": "object"
+                }
+            ]
         },
         "vec": {
             "additionalProperties": true,

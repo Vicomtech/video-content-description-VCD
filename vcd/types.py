@@ -92,31 +92,61 @@ class IntrinsicsCustom(Intrinsics):
             self.data['intrinsics_custom'].update(additional_items)
 
 
+class TransformDataType(Enum):
+    matrix_4x4 = 1
+    quat_and_trans_7x1 = 2
+    euler_and_trans_6x1 = 3
+    custom = 4
+
+
+class TransformData:
+    """
+    This class encodes the transform data in the form of 4x4 matrix, quaternion + translation, or
+    Euler angles + translation
+    """
+    def __init__(self, val, type, **additional_items):
+        assert(isinstance(val, list))
+        assert(isinstance(type, TransformDataType))
+
+        self.data = dict()
+        if type == TransformDataType.matrix_4x4:
+            self.data['matrix4x4'] = val
+        elif type == TransformDataType.quat_and_trans_7x1:
+            assert(len(val) == 7)
+            self.data['quaternion'] = val[0:4]
+            self.data['translation'] = val[4:7]
+        elif type == TransformDataType.euler_and_trans_6x1:
+            assert(len(val) == 6)
+            self.data['euler_angles'] = val[0:3]
+            self.data['translation'] = val[3:6]
+
+        if additional_items is not None:
+            self.data.update(additional_items)
+
+
+class PoseData(TransformData):
+    """
+    Equivalente to TransformData, but intended to be used when passive rotation and translation values are provided
+    """
+    def __init__(self, val, type, **additional_items):
+        TransformData.__init__(self, val, type, **additional_items)
+
+
 class Transform:
-    def __init__(self, src_name, dst_name, **additional_items):
+    def __init__(self, src_name, dst_name, transform_src_to_dst, **additional_items):
         assert (isinstance(src_name, str))
         assert (isinstance(dst_name, str))
+        assert (isinstance(transform_src_to_dst, TransformData))
         self.data = dict()
         name = src_name + "_to_" + dst_name
         self.data[name] = dict()
         self.data_additional = dict()  # this is useful to append only the additional_items
         self.data[name]['src'] = src_name
         self.data[name]['dst'] = dst_name
+        self.data[name]['transform_src_to_dst'] = transform_src_to_dst.data
         if additional_items is not None:
             self.data[name].update(additional_items)
             self.data_additional.update(additional_items)
-
-
-class Pose(Transform):
-    def __init__(self, subject_name, reference_name, **additional_items):
-        # NOTE: the pose of subject_name system wrt to reference_name system is the transform
-        # from the reference_name system to the subject_name system
-        Transform.__init__(self, src_name=reference_name, dst_name=subject_name, **additional_items)
-
-
-class Extrinsics(Transform):
-    def __init__(self, subject_name, reference_name, **additional_items):
-        Transform.__init__(self, src_name=reference_name, dst_name=subject_name, **additional_items)
 
 
 class StreamSync:

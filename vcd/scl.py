@@ -525,12 +525,13 @@ class Scene:
 
         # Create camera m
         camera = None
-        if 'streams' in self.vcd.data['vcd']:
-            if camera_name in self.vcd.data['vcd']['streams']:
-                uri = self.vcd.data['vcd']['streams'][camera_name]['uri']
-                description = self.vcd.data['vcd']['streams'][camera_name]['description']
-                if 'stream_properties' in self.vcd.data['vcd']['streams'][camera_name]:
-                    sp = self.vcd.data['vcd']['streams'][camera_name]['stream_properties']
+        data = self.vcd.get_data()
+        if 'streams' in data:
+            if camera_name in data['streams']:
+                uri = data['streams'][camera_name]['uri']
+                description = data['streams'][camera_name]['description']
+                if 'stream_properties' in data['streams'][camera_name]:
+                    sp = data['streams'][camera_name]['stream_properties']
                     if 'intrinsics_pinhole' in sp:
                         camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
                     elif 'intrinsics_fisheye' in sp:
@@ -563,7 +564,8 @@ class Scene:
         # Create graph with the poses defined for each coordinate_system
         # These are poses valid "statically"
         lista = []
-        for cs_name, cs_body in self.vcd.data['vcd']['coordinate_systems'].items():
+        data = self.vcd.get_data()
+        for cs_name, cs_body in data['coordinate_systems'].items():
             for child in cs_body['children']:
                 lista.append((cs_name, child, 1))
                 lista.append((child, cs_name, 1))
@@ -598,6 +600,7 @@ class Scene:
 
         # Let's build the transform using atomic transforms (which exist in VCD)
         t_4x4 = np.identity(4, dtype=float)
+        data = self.vcd.get_data()
         for counter, value in enumerate(chain):
             # e.g. a) result = {("cam_left", "velo_top"), ("velo_top", "vehicle-iso8855")}
             # e.g. b) result = {("vehicle-iso8855", "velo_top"), ("velo_top", "cam_left")}
@@ -614,26 +617,26 @@ class Scene:
             if frameNum is None:
                 # No frame info, let's read from coordinate_system poses
                 # Check if this edge is from child to parent or viceversa
-                if cs_2 == self.vcd.data['vcd']['coordinate_systems'][cs_1]['parent']:
+                if cs_2 == data['coordinate_systems'][cs_1]['parent']:
                     t_4x4 = (
-                        np.array([self.vcd.data['vcd']['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4, 4)).dot(
+                        np.array([data['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4, 4)).dot(
                         t_4x4)
-                elif cs_1 == self.vcd.data['vcd']['coordinate_systems'][cs_2]['parent']:
-                    temp = np.array([self.vcd.data['vcd']['coordinate_systems'][cs_2]['pose_wrt_parent']])
+                elif cs_1 == data['coordinate_systems'][cs_2]['parent']:
+                    temp = np.array([data['coordinate_systems'][cs_2]['pose_wrt_parent']])
                     t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
             else:
                 # So the user has asked for a specific frame, let's look for this frame if a transform exist
                 transform_at_this_frame = False
-                if frameNum in self.vcd.data['vcd']['frames']:
-                    if 'frame_properties' in self.vcd.data['vcd']['frames'][frameNum]:
-                        if 'transforms' in self.vcd.data['vcd']['frames'][frameNum]['frame_properties']:
-                            if t_name in self.vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms']:
-                                transform = self.vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms'][t_name]
+                if frameNum in data['frames']:
+                    if 'frame_properties' in data['frames'][frameNum]:
+                        if 'transforms' in data['frames'][frameNum]['frame_properties']:
+                            if t_name in data['frames'][frameNum]['frame_properties']['transforms']:
+                                transform = data['frames'][frameNum]['frame_properties']['transforms'][t_name]
                                 t_4x4 = (np.array([transform['transform_src_to_dst_4x4']]).reshape(4, 4)).dot(t_4x4)
                                 static = False  # with one non-static step the entire chain can be considered not static
                                 transform_at_this_frame = True
-                            elif t_name_inv in self.vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms']:
-                                transform = self.vcd.data['vcd']['frames'][frameNum]['frame_properties']['transforms'][
+                            elif t_name_inv in data['frames'][frameNum]['frame_properties']['transforms']:
+                                transform = data['frames'][frameNum]['frame_properties']['transforms'][
                                     t_name_inv]
                                 temp = np.array([transform['transform_src_to_dst_4x4']])
                                 t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
@@ -642,12 +645,12 @@ class Scene:
                 if not transform_at_this_frame:
                     # Reached this point means no transforms were defined at the requested frameNum
                     # Check if this edge is from child to parent or viceversa
-                    if cs_2 == self.vcd.data['vcd']['coordinate_systems'][cs_1]['parent']:
-                        t_4x4 = (np.array([self.vcd.data['vcd']['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4,
+                    if cs_2 == data['coordinate_systems'][cs_1]['parent']:
+                        t_4x4 = (np.array([data['coordinate_systems'][cs_1]['pose_wrt_parent']]).reshape(4,
                                                                                                                     4)).dot(
                             t_4x4)
-                    elif cs_1 == self.vcd.data['vcd']['coordinate_systems'][cs_2]['parent']:
-                        temp = np.array([self.vcd.data['vcd']['coordinate_systems'][cs_2]['pose_wrt_parent']])
+                    elif cs_1 == data['coordinate_systems'][cs_2]['parent']:
+                        temp = np.array([data['coordinate_systems'][cs_2]['pose_wrt_parent']])
                         t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
 
         return t_4x4, static

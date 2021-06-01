@@ -971,26 +971,22 @@ class VCD:
         self.data[self.root_name]['resources'][str(length)] = resource_name
         return str(length)
 
-    def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=[], uid=None, pose=None):
+    def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=None, uid=None):
         # Argument pose_wrt_parent can be used to quickly add a list containing the 4x4 matrix
         # However, argument pose can be used to add any type of Pose object (created with types.Pose)
-        # Both arguments co-exist to maintain backwards compatibility with VCD 4.3.1
         assert(isinstance(cs_type, types.CoordinateSystemType))
 
         # Create entry
         self.data[self.root_name].setdefault('coordinate_systems', {})
+        self.data[self.root_name]['coordinate_systems'][name] = {'type': cs_type.name,
+                                                        'parent': parent_name,
+                                                        'children': []}
 
-        if pose is not None:
-            assert(isinstance(pose, types.Pose))
-            self.data[self.root_name]['coordinate_systems'][name] = {'type': cs_type.name,
-                                                            'parent': parent_name,
-                                                            'children': []}
-            self.data[self.root_name]['coordinate_systems'][name].update({"pose_wrt_parent": pose.data_additional})
-        else:
-            self.data[self.root_name]['coordinate_systems'][name] = {'type': cs_type.name,
-                                                            'parent': parent_name,
-                                                            'pose_wrt_parent': pose_wrt_parent,
-                                                            'children': []}
+        # Add Pose data
+        if pose_wrt_parent is not None:
+            assert(isinstance(pose_wrt_parent, types.PoseData))
+            self.data[self.root_name]['coordinate_systems'][name].update({"pose_wrt_parent": pose_wrt_parent.data})
+
         if uid is not None:
             assert(isinstance(uid, str))
             self.data[self.root_name]['coordinate_systems'][name].update({"uid": uid})

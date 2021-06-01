@@ -17,15 +17,19 @@ sys.path.insert(0, "..")
 import screeninfo
 import cv2 as cv
 import numpy as np
-import math
-from vcd import core
-from vcd import draw
-from vcd import scl
+
+import vcd.core as core
+import vcd.draw as draw
+import vcd.scl as scl
+import vcd.schema as schema
+
+openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+vcd_version_name = openlabel_version_name
 
 def draw_towncentre(record_video=False):
     # Get annotations
     # Run ../converters/towncenterConverter/converter.py to generate the json files
-    vcd_file_name = "../converters/towncenterConverter/etc/vcd430_towncenter.json"
+    vcd_file_name = "../converters/towncenterConverter/etc/" + vcd_version_name + "_towncenter.json"
     vcd = core.VCD(vcd_file_name)
     scene = scl.Scene(vcd)
 
