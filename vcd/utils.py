@@ -789,7 +789,7 @@ def image_to_base64(img):
     return payload_b64_str
 
 
-def base64_to_image(payload_base64_str):
+def base64_to_image(payload_base64_str, flag=1):
     payload_read = base64.b64decode(payload_base64_str)
-    img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), 1)
+    img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), flag)
     return img
