@@ -23,13 +23,16 @@ import math
 from vcd import core
 from vcd import draw
 from vcd import scl
+from vcd import schema
 
+openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+vcd_version_name = openlabel_version_name
 
 def draw_kitti_tracking(sequence_number, record_video, draw_images):
     # Get annotations
     # Run ../converters/kittiConverter/converter.py to generate the json files
     #vcd_file_name = "../tests/etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
-    vcd_file_name = "../converters/kittiConverter/etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
+    vcd_file_name = "../converters/kittiConverter/etc/" + vcd_version_name + "_kitti_tracking_" + str(sequence_number).zfill(4) + ".json"
     vcd = core.VCD(vcd_file_name)
     scene = scl.Scene(vcd)  # scl.Scene has functions to project images, transforms, etc.
 
@@ -143,6 +146,6 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
 if __name__ == "__main__":
     print("Running " + os.path.basename(__file__))
 
-    draw_kitti_tracking(sequence_number=5, record_video=True, draw_images=False)
+    draw_kitti_tracking(sequence_number=0, record_video=False, draw_images=True)
 
 
