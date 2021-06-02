@@ -83,23 +83,22 @@ def convert_instances_to_poly(img_name, vcd_poly_mode):
     img_instances_out = converter.vcd_mapillary_instances_to_png(vcd=vcd_ins,
                                                            mapillary_config=mapillary_config)
     end = time.time()
-    print('\tClass reconstructed from VCD in {:.2f} ms'.format((end - start) * 1000))
+    print('\tInstances reconstructed from VCD in {:.2f} ms'.format((end - start) * 1000))
 
-    '''
     # Prepare mosaic & compute differences
-    img_label = cv.imread('labels/' + img_name)
-    difference_class = cv.subtract(img_label, img_class_out)
+    img_instances = cv.imread('instances/' + img_name, cv.IMREAD_ANYDEPTH)
+
     # Check equals
-    difference_class_sum = np.sum(difference_class)
-    print("\tClass differences: " + str(difference_class_sum))
+    difference_instances = cv.subtract(img_instances, img_instances_out)
+    difference_instances_sum = np.sum(difference_instances)
+    print("\tInstances differences: " + str(difference_instances_sum))
 
     if show_images:
-        stack = np.hstack((img_label, img_class_out, difference_class))
-        cv.namedWindow(img_name + vcd_poly_mode.name, cv.WINDOW_NORMAL)
-        cv.resizeWindow(img_name + vcd_poly_mode.name, img_label.shape[0], img_label.shape[1])
-        cv.imshow(img_name + vcd_poly_mode.name, stack)
+        stack = np.hstack((img_instances, img_instances_out, difference_instances))
+        cv.namedWindow(img_name + '_instances', cv.WINDOW_NORMAL)
+        cv.resizeWindow(img_name + '_instances', img_instances.shape[0], img_instances.shape[1])
+        cv.imshow(img_name + '_instances', stack)
         cv.waitKey(0)
-    '''
 
 
 def convert_labels_to_base64(img_name):
@@ -198,8 +197,8 @@ for img_name in os.listdir(path):
 
     # Convert instance images
     # TODO
-    #convert_instances_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_SRF6DCC)
-    convert_instances_to_base64(img_name=img_name)
+    #convert_instances_to_base64(img_name=img_name)
+    convert_instances_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_SRF6DCC)
 
 
 
