@@ -145,27 +145,20 @@ openlabel_schema = {
         "tags": {
             "description": "Tags are a special type of labels which might be attached to any type of content, such as \
                            images, data containers, folders, etc. In OpenLabel its main purpose is to allow adding  \
-                           metadata to scenario descriptions. They are grouped into 4 main categories: \
-                           \"administrative\", \"odd\" (Operational Design Domain), \"behaviour\", and \"custom\".",
+                           metadata to scenario descriptions.",
             "type": "object",
-            "properties": {
-                "administrative": {"type": "array", "items": {"$ref": "#/definitions/tag"}},
-                "odd": {"type": "array", "items": {"$ref": "#/definitions/tag"}},
-                "behaviour": {"type": "array", "items": {"$ref": "#/definitions/tag"}},
-                "custom": {"type": "array", "items": {"$ref": "#/definitions/tag"}}
+            "patternProperties": {
+                "^": {"$ref": "#/definitions/tag"}
             },
-            "additionalProperties": True,
+            "additionalProperties": False
         },
         "tag": {
             "type": "object",
             "properties": {
-                "name": {"type": "string"},
-                "type": {"type": "string"},
                 "val": {"$ref": "#/definitions/tag_data"},
-                "ont_uid": {"type": "string"},
+                "ontology_uid": {"type": "string"},
             },
             "additionalProperties": True,
-            "required": ["name", "type"]
         },
         "frame": {
             "description": "A frame is a container of dynamic information. It is indexed inside the OpenLabel file \

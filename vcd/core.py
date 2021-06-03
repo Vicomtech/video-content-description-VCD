@@ -1327,21 +1327,17 @@ class VCD:
         return self.__set_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value),
                                        set_mode)
 
-    def add_tag(self, tag_type, name, type, ont_uid, val, **kwargs):
+    def add_tag(self, type, ont_uid, val, **kwargs):
         if 'tags' not in self.data[self.root_name]:
             self.data[self.root_name]['tags'] = {}
         tags = self.data[self.root_name]['tags']
-        assert(isinstance(tag_type, TagType))
-        tag_type_name = tag_type.name
-        if tag_type_name not in tags:
-            tags[tag_type_name] = []
 
-        # Create tag with mandatory fields
-        tag = {'name': name, "type": type}
+        # Create tag
+        tag = {}
 
         if ont_uid is not None:
             assert(isinstance(ont_uid, str))
-            tag['ont_uid'] = ont_uid
+            tag['ontology_uid'] = ont_uid
 
         # Check if val is str
         if isinstance(val, str):
@@ -1355,7 +1351,7 @@ class VCD:
         for key, value in kwargs.items():
             tag[key] = value
 
-        tags[tag_type_name].append(tag)
+        tags[type] = tag
 
 
     ##################################################

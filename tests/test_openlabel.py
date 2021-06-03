@@ -83,57 +83,22 @@ class TestBasic(unittest.TestCase):
                                         './etc/' + openlabel_version_name + '_' + inspect.currentframe().f_code.co_name + '.json',
                                         overwrite))
 
-    def test_openlabel_tags_scenario(self):
-        openlabel = core.OpenLABEL()
-        openlabel.add_metadata_properties({"tagged_file": "../resources/xosc/cut-in.xosc"})
-
-        # Adding custom tag to OpenLabel
-        openlabel.add_tag(tag_type=core.TagType.custom,
-                          name='my_test_track',
-                          type='http://companyA/ontology1',
-                          ont_uid=None,
-                          path='http://ASAM.xx.xx/ODD/Driveable_area',
-                          val='...',
-                          metrics='URI',
-                          data_type='URI',
-                          units='URI')
-
-        openlabel.add_tag(tag_type=core.TagType.custom,
-                          name='my_test_track2',
-                          type='http://companyA/ontology2',
-                          ont_uid=None,
-                          path='http://companyA/ontology1',
-                          val='...',
-                          metrics='URI',
-                          data_type='URI',
-                          units='URI')
-
-        self.assertTrue(check_openlabel(openlabel,
-                                        './etc/' + openlabel_version_name + '_' + inspect.currentframe().f_code.co_name + '.json',
-                                        overwrite))
-
     def test_openlabel_tags_complex(self):
         openlabel = core.OpenLABEL()
         openlabel.add_metadata_properties({"tagged_file": "../resources/scenarios/some_scenario_file"})
         openlabel.add_ontology(ontology_name="https://code.asam.net/simulation/standard/openxontology/ontologies/openlabel")
 
-
-        openlabel.add_tag(tag_type=core.TagType.odd,
-                          name="double_roundabout1",
-                          type="double_roundabout",
+        openlabel.add_tag(type="double_roundabout",
                           ont_uid="0",
                           val=types.num(name="number_of_entries", val=2))
 
-        openlabel.add_tag(tag_type=core.TagType.odd,
-                          name="t_intersection1",
-                          type="t_intersection",
+        openlabel.add_tag(type="t_intersection",
                           ont_uid="0",
                           val=types.num(name="number_of_entries", val=3))
 
         self.assertTrue(check_openlabel(openlabel,
                                         './etc/' + openlabel_version_name + '_' + inspect.currentframe().f_code.co_name + '.json',
                                         overwrite))
-
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
