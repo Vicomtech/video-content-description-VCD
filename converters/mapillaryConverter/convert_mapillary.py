@@ -15,7 +15,7 @@ import vcd.utils as utils
 import converter
 
 use_profiler = False
-show_images = True
+show_images = False
 quick_test = True
 root_name = 'openlabel'
 
@@ -92,6 +92,10 @@ def convert_instances_to_poly(img_name, vcd_poly_mode):
     difference_instances = cv.subtract(img_instances, img_instances_out)
     difference_instances_sum = np.sum(difference_instances)
     print("\tInstances differences: " + str(difference_instances_sum))
+
+    height = img_instances.shape[0]
+    width = img_instances.shape[1]
+    temp = np.zeros((height, width), np.uint8)
 
     if show_images:
         stack = np.hstack((img_instances, img_instances_out, difference_instances))
@@ -186,19 +190,20 @@ def convert_instances_to_base64(img_name):
         cv.imshow(img_name + '_b64', stack)
         cv.waitKey(0)
 
+
 for img_name in os.listdir(path):
     # Class LABELS
     print(img_name)
 
     # Convert class images
-    #convert_labels_to_base64(img_name=img_name)
-    #convert_labels_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_SRF6DCC)
-    #convert_labels_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_ABSOLUTE)
+    convert_labels_to_base64(img_name=img_name)
+    convert_labels_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_SRF6DCC)
+    convert_labels_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_ABSOLUTE)
 
     # Convert instance images
-    # TODO
-    #convert_instances_to_base64(img_name=img_name)
+    convert_instances_to_base64(img_name=img_name)
     convert_instances_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_SRF6DCC)
+    convert_instances_to_poly(img_name=img_name, vcd_poly_mode=types.Poly2DType.MODE_POLY2D_ABSOLUTE)
 
 
 
