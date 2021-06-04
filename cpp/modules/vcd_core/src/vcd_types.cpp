@@ -167,6 +167,26 @@ Point3d::get() {
     return static_cast<ObjectData&>(*this);
 }
 
+// Mat class
+Mat::Mat(const std::string& name, const std::vector<float>& val,
+         const size_t channels, const size_t width, const size_t height,
+         const std::string &date_type) {
+    m_name = name;
+    m_data = {{"name", name},
+              {"val", val},
+              {"channels", channels},
+              {"width", width},
+              {"height", height},
+              {"data_type", date_type}
+             };
+    m_type = ObjectDataType::mat;
+}
+
+ObjectData&
+Mat::get() {
+    return static_cast<ObjectData&>(*this);
+}
+
 };  // namespace types
 
 };  // namespace vcd

@@ -302,6 +302,15 @@ class VCD {
                           const std::vector<double>& point3d,
                           const size_t frame_index = -1) = 0;
 
+    virtual void
+    add_mat_to_object(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& val,
+                      const size_t channels,
+                      const size_t width,
+                      const size_t height,
+                      const size_t frame_index = -1) = 0;
+
     // Action data generators
 
     /**

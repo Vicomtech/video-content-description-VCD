@@ -396,6 +396,24 @@ VCD_Impl::add_point3d_to_object(const obj_uid& uid,
     }
 }
 
+void
+VCD_Impl::add_mat_to_object(const obj_uid& uid,
+                            const std::string& name,
+                            const std::vector<float>& val,
+                            const size_t channels,
+                            const size_t width,
+                            const size_t height,
+                            const size_t frame_index) {
+    const size_t exp_size = channels * width * height;
+    if (val.size() == exp_size) {
+        const types::Mat mat(name, val, channels, width, height, "float");
+        add_object_data(uid, mat, frame_index);
+    } else {
+        std::cerr << "Error: Matrix with name '"
+                  << name << "' has not expected size\n";
+    }
+}
+
 // void
 // VCD_Impl::add_object_data(const std::string &uid_str,
 //                          const types::ObjectData& object_data) {

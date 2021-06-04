@@ -153,6 +153,16 @@ class Point3d : public ObjectData {
     get() override;
 };
 
+class Mat : public ObjectData {
+ public:
+    Mat(const std::string& name, const std::vector<float>& val,
+        const size_t channels, const size_t width, const size_t height,
+        const std::string &date_type);
+
+    ObjectData&
+    get() override;
+};
+
 };  // namespace types
 
 };  // namespace vcd

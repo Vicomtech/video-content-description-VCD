@@ -269,6 +269,15 @@ class VCD_Impl : public vcd::VCD {
                           const std::vector<double>& point3d,
                           const size_t frame_index = -1) override;
 
+    void
+    add_mat_to_object(const obj_uid& uid,
+                      const std::string& name,
+                      const std::vector<float>& val,
+                      const size_t channels,
+                      const size_t width,
+                      const size_t height,
+                      const size_t frame_index = -1) override;
+
     // Add object_data
 //    void
 //    add_object_data(const std::string &uid_str,

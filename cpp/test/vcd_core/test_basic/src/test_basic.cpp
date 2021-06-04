@@ -507,6 +507,62 @@ SCENARIO("Create some basic content, without time information, and do some "
         }
     }
 
+    GIVEN("A set of matrix elements") {
+        THEN("Save matrix data in the structure") {
+            using vcd::CoordinateSystemType;
+            VCD_ptr vcd = VCD::create();
+
+            // reate the Object
+            vcd::element_args marcos_args;
+            marcos_args.semantic_type = "person";
+            std::string uid_marcos = vcd->add_object("marcos", marcos_args);
+            CHECK(uid_marcos == "0");
+
+            // Add some matrix data to the object
+            size_t channels = 1;
+            size_t width = 3;
+            size_t height = 3;
+            vcd->add_mat_to_object(uid_marcos, "3x3",
+                                   {1, 2, 3, 4, 5, 6, 7, 8, 9},
+                                   channels, width, height);
+
+
+            channels = 3;
+            width = 3;
+            height = 3;
+            vcd->add_mat_to_object(uid_marcos, "3x3x3",
+                                   {1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                    1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                    1, 2, 3, 4, 5, 6, 7, 8, 9},
+                                   channels, width, height);
+
+
+            // Generate json data
+            const bool pretty = true;
+            const std::string vcd_out_pretty = vcd->stringify(pretty);
+
+            // Save the json info into a file for comparisson
+            string out_p = "vcd430_test_matrix_definition_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            o_p << vcd_out_pretty << std::endl;
+            o_p.close();
+
+            // Read reference JSON file
+            string ref_p = "vcd430_test_matrix_definition.json";
+            fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
+            std::ifstream ref_file_data(vcd_refp_path);
+            json ref_data;
+            ref_file_data >> ref_data;
+            ref_file_data.close();
+
+            // Generate JSON structure for comparison
+            json test_data = json::parse(vcd_out_pretty);
+
+            REQUIRE(check_json_level(ref_data, test_data));
+        }
+    }
+
     /*GIVEN("Read and write some VCD content") {
         std::string fileName = vcd::SetupStrings::testDataPath +
                             "/vcd430_test_create_search_simple_nopretty.json";
