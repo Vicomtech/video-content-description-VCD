@@ -270,6 +270,14 @@ class VCD_Impl : public vcd::VCD {
                           const size_t frame_index = -1) override;
 
     void
+    add_poly2d_to_object(const obj_uid& uid,
+                         const std::string& name,
+                         const std::vector<std::vector<int>> &poly,
+                         const Poly2DTypes mode,
+                         const bool closed,
+                         const size_t frame_index = -1) override;
+
+    void
     add_mat_to_object(const obj_uid& uid,
                       const std::string& name,
                       const std::vector<float>& val,

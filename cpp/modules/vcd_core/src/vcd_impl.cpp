@@ -397,6 +397,19 @@ VCD_Impl::add_point3d_to_object(const obj_uid& uid,
 }
 
 void
+VCD_Impl::add_poly2d_to_object(const obj_uid& uid,
+                               const std::string& name,
+                               const std::vector<std::vector<int>> &poly,
+                               const Poly2DTypes mode,
+                               const bool closed,
+                               const size_t frame_index) {
+    if (!poly.empty()) {
+        const types::Poly2d pl2d(name, poly, mode, closed);
+        add_object_data(uid, pl2d, frame_index);
+    }
+}
+
+void
 VCD_Impl::add_mat_to_object(const obj_uid& uid,
                             const std::string& name,
                             const std::vector<float>& val,

@@ -72,6 +72,16 @@ CoordinateSystemTypeName[] {
     "custom"
 };
 
+enum Poly2DTypes {
+    MODE_POLY2D_ABSOLUTE = 0,
+    // MODE_POLY2D_BBOX = 1,
+    // MODE_POLY2D_BBOX_DIST = 2,
+    // MODE_POLY2D_F8DCC = 3,
+    // MODE_POLY2D_RF8DCC = 4,
+    MODE_POLY2D_SRF6DCC = 5,
+    // MODE_POLY2D_RS6FCC = 6
+};
+
 class VCD {
  public:
     virtual
@@ -301,6 +311,14 @@ class VCD {
                           const std::string& name,
                           const std::vector<double>& point3d,
                           const size_t frame_index = -1) = 0;
+
+    virtual void
+    add_poly2d_to_object(const obj_uid& uid,
+                         const std::string& name,
+                         const std::vector<std::vector<int>> &poly,
+                         const Poly2DTypes mode,
+                         const bool closed,
+                         const size_t frame_index = -1) = 0;
 
     virtual void
     add_mat_to_object(const obj_uid& uid,

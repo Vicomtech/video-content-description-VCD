@@ -565,6 +565,65 @@ SCENARIO("Create some basic content, without time information, and do some "
         }
     }
 
+    GIVEN("A 2d poly-line") {
+        THEN("Save data in the structure") {
+            using vcd::CoordinateSystemType;
+            VCD_ptr vcd = VCD::create();
+
+            // reate the Object
+            vcd::element_args marcos_args;
+            marcos_args.semantic_type = "person";
+            std::string uid_marcos = vcd->add_object("marcos", marcos_args);
+            CHECK(uid_marcos == "0");
+
+            // Add some matrix data to the object
+            std::vector<std::vector<int>> polyLine1 = {
+                {0, 0},
+                {1, 0},
+                {1, 1},
+                {0, 1}
+            };
+            vcd::Poly2DTypes mode1 = vcd::Poly2DTypes::MODE_POLY2D_ABSOLUTE;
+            bool closed1 = true;
+            vcd->add_poly2d_to_object(uid_marcos, "square", polyLine1, mode1,
+                                      closed1);
+
+            std::vector<std::vector<int>> polyLine2 = {
+                {0, 0},
+                {2, 0},
+                {1, 2}
+            };
+            vcd::Poly2DTypes mode2 = vcd::Poly2DTypes::MODE_POLY2D_ABSOLUTE;
+            bool closed2 = true;
+            vcd->add_poly2d_to_object(uid_marcos, "triangle", polyLine2, mode2,
+                                      closed2);
+
+            // Generate json data
+            const bool pretty = true;
+            const std::string vcd_out_pretty = vcd->stringify(pretty);
+
+            // Save the json info into a file for comparisson
+            string out_p = "vcd430_test_poly2d_definition_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            o_p << vcd_out_pretty << std::endl;
+            o_p.close();
+
+            // Read reference JSON file
+            string ref_p = "vcd430_test_poly2d_definition.json";
+            fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
+            std::ifstream ref_file_data(vcd_refp_path);
+            json ref_data;
+            ref_file_data >> ref_data;
+            ref_file_data.close();
+
+            // Generate JSON structure for comparison
+            json test_data = json::parse(vcd_out_pretty);
+
+            REQUIRE(check_json_level(ref_data, test_data));
+        }
+    }
+
     GIVEN("A set of matrix elements") {
         THEN("Save matrix data in the structure") {
             using vcd::CoordinateSystemType;

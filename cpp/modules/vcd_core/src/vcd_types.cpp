@@ -12,6 +12,9 @@
 */
 #include "vcd_types.h"
 
+#include "vcd.h"
+#include "vcd_poly2d.h"
+
 using json = nlohmann::json;
 
 namespace vcd {
@@ -164,6 +167,41 @@ Point3d::Point3d(const std::string& name,
 
 ObjectData&
 Point3d::get() {
+    return static_cast<ObjectData&>(*this);
+}
+
+// Poly 2D class
+Poly2d::Poly2d(const std::string& name,
+               const std::vector<std::vector<int>> &val,
+               const Poly2DTypes mode,
+               const bool closed) {
+//    if (mode == Poly2DTypes::MODE_POLY2D_SRF6DCC) {
+//        srf6, xinit, yinit = poly.computeSRF6DCC(val)
+//        encoded_poly, rest = poly.chainCodeBase64Encoder(srf6, 3)
+//        self.data['val'] = [str(xinit), str(yinit), str(rest), encoded_poly]
+//    }
+//    elif mode == Poly2DType.MODE_POLY2D_RS6FCC:
+//        rs6, low, high, xinit, yinit = poly.computeRS6FCC(val)
+//        encoded_poly, rest = poly.chainCodeBase64Encoder(rs6, 3)
+//        self.data['val'] = [str(xinit), str(yinit), str(low), str(high),
+//                            str(rest), encoded_poly]
+//    else {
+//        self.data['val'] = list(val)
+//    }
+
+    m_name = name;
+    m_data = {
+        {"name", name},
+        {"val", val},
+        {"mode", Poly2DTypeName[mode]},
+        {"closed", closed}
+    };
+
+    m_type = ObjectDataType::poly2d;
+}
+
+ObjectData&
+Poly2d::get() {
     return static_cast<ObjectData&>(*this);
 }
 

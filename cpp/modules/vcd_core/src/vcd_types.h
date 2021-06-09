@@ -15,6 +15,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include "vcd.h"
+
 namespace vcd {
 
 namespace types {
@@ -152,6 +154,18 @@ class Point3d : public ObjectData {
     ObjectData&
     get() override;
 };
+
+class Poly2d : public ObjectData {
+ public:
+    Poly2d(const std::string& name,
+           const std::vector<std::vector<int>> &val,
+           const Poly2DTypes mode,
+           const bool closed);
+
+    ObjectData&
+    get() override;
+};
+
 
 class Mat : public ObjectData {
  public:
