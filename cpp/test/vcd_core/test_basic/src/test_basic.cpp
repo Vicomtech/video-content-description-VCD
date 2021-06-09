@@ -217,6 +217,64 @@ SCENARIO("Create some basic content, without time information, and do some "
             REQUIRE(compare_json_files(vcd_outp_path, vcd_p_path));
         }
 
+        THEN("Activate UUID generator and add some objects and frames") {
+            // 1.- Create a VCD instance
+            VCD_ptr vcd = VCD::create();
+
+            // Configure vcd to use complete uuid values
+            vcd->setUseUUID(true);
+
+            // 2.- Create some Objects
+            vcd::element_args marcos_args;
+            marcos_args.semantic_type = "person";
+            std::string uid_marcos = vcd->add_object("marcos", marcos_args);
+            CHECK(uid_marcos.size() == 36);
+            vcd::element_args peter_args;
+            peter_args.semantic_type = "person";
+            std::string uid_peter = vcd->add_object("peter", peter_args);
+            CHECK(uid_peter.size() == 36);
+
+            CHECK(uid_peter != uid_marcos);
+
+            // 3.- Add some data to the objects
+            //   - Marcos
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 60, 120}, 0);
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 62, 124}, 1);
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 70, 128}, 2);
+            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 100, 160}, 5);
+            //   - Peter
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 200, 190}, 7);
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 180, 185}, 8);
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 160, 179}, 9);
+            //       !Should be ignored, because the frame index is < the
+            //        last frame index.
+            vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 99, 99}, 5);
+
+            // 4.- Save the json info into a file for comparisson
+            string out_p = "vcd430_test_create_frames_uuid_pretty_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            std::ofstream o_p(vcd_outp_path);
+            const std::string json_string = vcd->stringify();
+            o_p << json_string << std::endl;
+            o_p.close();
+
+            // 5.- Check if the uuid values are stored in the file
+            const std::string json_string_ugly = vcd->stringify(false);
+            json data = json::parse(json_string_ugly);
+
+            REQUIRE(data.contains("vcd"));
+            REQUIRE(data["vcd"].contains("objects"));
+
+            // Check the size of uuid values
+            size_t cont = 0;
+            for (auto& el : data["vcd"]["objects"].items()) {
+                CHECK(el.key().size() == 36);
+                ++cont;
+            }
+
+            REQUIRE(cont == 2);
+        }
+
 //        THEN("We can include attributes") {
 //            // PRELIMINAR TEST OF ATTRIBUTES, PLEASE REMOVE
 //            Bbox box1 = Bbox("head", {0, 0, 10, 10});
