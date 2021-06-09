@@ -1,15 +1,15 @@
 ![VCD Video Content Description](../doc/logo/VCD_logo_2020.png)
 # Video Content Description (VCD) for C++
 
-This version of VCD library is a C++ implementation of a subset of features in the original VCD implementation focused on constrained data adquisition environments like embeded circuits or onboard systems.
+This version of the VCD library is a C++ implementation of a subset of features in the original VCD implementation focused on constrained data acquisition environments like embedded circuits or onboard systems.
 
 The compilation structure is based on CMake.
 
 ## Install
 
-To build and install the VCD-C++ library, first generate the project using CMake commands, and then build it with the selected compilation system. In this document we expose the steps to build and install the library on linux machines (tested on Ubuntu 18.04).
+To build and install the VCD-C++ library, first, generate the project using CMake commands, and then build it with the selected compilation system. In this document, we expose the steps to build and install the library on Linux machines (tested on Ubuntu 18.04).
 
-First, open a terminal, and clone the repository content to your machine on a desired folder:
+First, open a terminal, and clone the repository content to your machine on the desired folder:
 
 ```
 $ git clone git@github.com:Vicomtech/video-content-description-VCD.git
@@ -35,7 +35,7 @@ $ cmake ..
 $ make -j8
 ```
 
-At this point, you should have all the binaries generated in the folder structure inside _build_. To install the library in your system, just call install option of make command:
+At this point, you should have all the binaries generated in the folder structure inside _build_. To install the library in your system, just call the install option of the make command:
 
 ```
 $ sudo make install
@@ -43,7 +43,7 @@ $ sudo make install
 
 ## Install in a specific folder
 
-In some cases, you could not have root permissions to install the library in the main system folders, and you could need to install in an arbitrary folder. For those cases, you can define the desired target folder in the CMake generation call, and have all the final binary and configuration elements in that target folder.
+In some cases, you could not have root permissions to install the library in the main system folders, and you could need to install it in an arbitrary folder. For those cases, you can define the desired target folder in the CMake generation call and have all the final binary and configuration elements in that target folder.
 
 To define a specific installation folder, go to the build folder, and specify the target location to CMake like this:
 
@@ -62,11 +62,11 @@ Note that in this case, the _sudo_ invocation is not needed.
 
 ## How to include in your CMake project
 
-There are two options to include VCD-C++ in your CMake project. You can include the installed binaries as dependency or include the vcd source code as part of your project.
+There are two options to include VCD-C++ in your CMake project. You can include the installed binaries as dependency or include the VCD source code as part of your project.
 
 ### Include VCD as dependency
 
-Once you have the library installed, you can include those binaries using _find_package_ function of CMake in the CMakeLists.txt file of your project:
+Once you have the library installed, you can include those binaries using the _find_package_ function of CMake in the CMakeLists.txt file of your project:
 
 ```
 [...]
@@ -77,7 +77,7 @@ FIND_PACKAGE( vcd_core REQUIRED )
 [...]
 ```
 
-Once you have the final binary defined (i.e. ADD_EXECUTABLE or ADD_LIBRARY call), you have to include the vcd binaries for linking:
+Once you have the final binary defined (i.e. ADD_EXECUTABLE or ADD_LIBRARY call), you have to include the VCD binaries for linking:
 
 ```
 [...]
@@ -95,7 +95,7 @@ target_link_libraries(${PROJECT_NAME} VCD::vcd_core)
 
 Then, you can build your project.
 
-In the case that the files are not in the finding paths of CMake, the project could not be able to find the VCD installation directoy. In that case, CMake will suggest to define the VCD configuration path ('vcd_core_DIR' parameter) to fix this error.
+In the case that the files are not in the finding paths of CMake, the project could not be able to find the VCD installation directory. In that case, CMake will suggest defining the VCD configuration path ('vcd_core_DIR' parameter) to fix this error.
 
 You can define this parameter in the CMake call to generate YOUR project, just like this:
 
@@ -120,9 +120,9 @@ add_subdirectory(<Abs path to the vcd source directory>
 [...]
 ```
 
-In this call you have to define manually the path to vcd source code. The other two parameters define the path in the binary folder where VCD-C++ library will be stored (_${CMAKE_BINARY_DIR}/vcd/_) and to exclude the vcd source to be loaded in the IDE (_EXCLUDE_FROM_ALL_), in the case of using one.
+In this call, you have to define manually the path to VCD source code. The other two parameters define the path in the binary folder where the VCD library will be stored (_${CMAKE_BINARY_DIR}/vcd/_) and exclude the VCD source to be loaded in the IDE (_EXCLUDE_FROM_ALL_), in the case of using one.
 
-Once you have the source code included, and after define the project binary (i.e. ADD_EXECUTABLE or ADD_LIBRARY call), you have to include the vcd module for linking:
+Once you have the source code included, and after define the project binary (i.e. ADD_EXECUTABLE or ADD_LIBRARY call), you have to include the VCD module for linking:
 
 ```
 [...]
