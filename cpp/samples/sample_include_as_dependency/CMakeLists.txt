@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
 # Set project name
-PROJECT( sample_include_in_external_proj )
+PROJECT( sample_include_as_dependency )
 
 # Find core dependencies
 FIND_PACKAGE( vcd_core REQUIRED )
