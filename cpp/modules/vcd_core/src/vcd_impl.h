@@ -157,7 +157,7 @@ class VCD_Impl : public vcd::VCD {
 //    operator=(VCD_Impl&&) = delete;
 
     void
-    setUseUUID(const bool val) override { m_useUUID = val; }
+    setUseUUID(const bool val) override;
 
     std::string
     stringify(const bool pretty = true) const override;

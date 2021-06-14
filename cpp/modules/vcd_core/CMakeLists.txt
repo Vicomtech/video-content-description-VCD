@@ -5,6 +5,9 @@ project(${MODULE_NAME})
 file(GLOB MODULE_SRCS "src/*.cpp" "src/*.h")
 file(GLOB MODULE_HEADERS "include/*.h" "include/*.hpp")
 
+# Options
+option( ENABLE_GUID "Activate guid functionalities" ON )
+
 # Include header files for json management
 include_directories(${3RD_PARTY_PATH}/include/)
 
@@ -13,6 +16,24 @@ if (MAKE_LIB_STATIC)
 else()
     set(LIB_TYPE SHARED)
 endif()
+
+# Generate dependencies
+if (ENABLE_GUID)
+    add_definitions(-DENABLE_GUID)
+    # Configure crossguid project
+    set(XG_TESTS OFF)
+    add_subdirectory(${3RD_PARTY_PATH}/crossguid ${CMAKE_BINARY_DIR}/crossguid)
+    include_directories(${3RD_PARTY_PATH}/crossguid)
+    # Set the building configuration depending on the platform
+    if (UNIX)
+        set(CROSSGUID_LIBS libxg.a uuid)
+    else()
+        set(CROSSGUID_LIBS ${CROSSGUID_PATH}/build/Release/crossguid.lib)
+        set(CROSSGUID_LIBS_DEBUG ${CROSSGUID_PATH}/build/Debug/crossguid-dgb.lib)
+    endif()
+else()
+    remove_definitions(-DENABLE_GUID)
+endif(ENABLE_GUID)
 
 
 # Create shared library
@@ -33,6 +54,16 @@ target_include_directories(${MODULE_NAME}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
+
+if (ENABLE_GUID)
+    if(UNIX)
+#        add_dependencies(${MODULE_NAME} crossguid)
+        target_link_libraries( ${MODULE_NAME} ${CROSSGUID_LIBS})
+    else()
+        target_link_libraries( ${MODULE_NAME} optimized ${CROSSGUID_LIBS})
+        target_link_libraries( ${MODULE_NAME} debug ${CROSSGUID_LIBS_DEBUG})
+    endif()
+endif()
 
 # set c++14 as the used c++ standard for this library
 DEFINE_CPP_STANDARD_AS_14(${MODULE_NAME})

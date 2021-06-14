@@ -2,7 +2,7 @@
 #          CMake Project Configuration              #
 #---------------------------------------------------#
 # CMake will issue a warning if you don't set this
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 
 ##############################
 set(TEST_NAME test_action_properties)
