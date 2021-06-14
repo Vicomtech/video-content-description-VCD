@@ -11,24 +11,22 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-import unittest
+import inspect
 import os
+import unittest
+
 import vcd.core as core
-import vcd.schema as schema
 import vcd.types as types
 
-
-#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
-openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
-vcd_version_name = openlabel_version_name
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
-
     # Create some basic content, without time information, and do some basic search
     def test_create_search_simple(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 2.- Create the Object
         uid_marcos = vcd.add_object(name='marcos', semantic_type="person")
@@ -46,10 +44,6 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid=uid_peter, object_data=types.vec(name='eyeL', val=(0, 0, 10, 10)))
         vcd.add_object_data(uid=uid_peter, object_data=types.vec(name='eyeR', val=(0, 0, 10, 10)))
 
-        # 4.- Write into string
-        vcd_string_pretty = vcd.stringify()
-        vcd_string_nopretty = vcd.stringify(False)
-
         # 5.- We can ask VCD
         marcos_ref = vcd.get_element(element_type=core.ElementType.object, uid=uid_marcos)
         # print('Found Object: uid = ', uid_marcos, ', name = ', marcosRef['name'])
@@ -61,29 +55,14 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(uid_peter, "1", "Should be 1")
         self.assertEqual(peter_ref['name'], 'peter', "Should be peter")
 
-        # print('VCD string no pretty:\n', vcd_string_nopretty)
-        # print('VCD string pretty:\n', vcd_string_pretty)
-
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_create_search_simple_nopretty.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_create_search_simple_nopretty.json')
-
-        vcd_file_nopretty = open('./etc/' + vcd_version_name + '_test_create_search_simple_nopretty.json', "r")
-        vcd_string_nopretty_read = vcd_file_nopretty.read()
-        self.assertEqual(vcd_string_nopretty_read, vcd_string_nopretty, "VCD no-pretty not equal to read file")
-        vcd_file_nopretty.close()
-
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_create_search_simple_pretty.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_create_search_simple_pretty.json', True)
-
-        vcd_file_pretty = open('./etc/' + vcd_version_name + '_test_create_search_simple_pretty.json', "r")
-        vcd_string_pretty_read = vcd_file_pretty.read()
-        self.assertEqual(vcd_string_pretty, vcd_string_pretty_read, "VCD pretty not equal to read file")
-        vcd_file_pretty.close()
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     # Create some basic content, and show some basic search capabilities
     def test_create_search_mid(self):
         # 1.- Create VCD
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 2.- Create some content
         uid_marcos = vcd.add_object(name='marcos', semantic_type='#Adult')
@@ -140,19 +119,14 @@ class TestBasic(unittest.TestCase):
                     elif uid == "2":
                         self.assertEqual(my_age['val'], 9 + 0.01*(frame_num - 10), "Should increase 0.01 per frame for katixa for frameNum >= 11")
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_create_search_mid.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_create_search_mid.json')
-
-        test_create_search_mid_read = open('./etc/' + vcd_version_name + '_test_create_search_mid.json', 'r')
-        stringified_vcd = vcd.stringify(False)
-        read_vcd = test_create_search_mid_read.read()
-        self.assertEqual(read_vcd, stringified_vcd, "Should be equal")
-        test_create_search_mid_read.close()
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     # Create and remove some content
     def test_remove_simple(self):
         # 1.- Create VCD
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 2.- Create some objects
         car1_uid = vcd.add_object(name='BMW', semantic_type='#Car')
@@ -180,8 +154,9 @@ class TestBasic(unittest.TestCase):
         # print("Frame 5, dynamic only message: ", vcd.stringify_frame(5, dynamic_only=True))
         # print("Frame 5, full message: ", vcd.stringify_frame(5, dynamic_only=False))
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_remove_simple.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_remove_simple.json')
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
         self.assertEqual(vcd.get_num_objects(), 4, "Should be 4")
 
@@ -199,17 +174,8 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(vcd.get_frame_intervals().empty(), True)
 
-    # Load
-    def test_load(self):
-        # 1.- Create VCD from file
-        vcd = core.VCD('./etc/' + vcd_version_name + '_test_create_search_mid.json', validation=True)
-        vcd.save('./etc/' + vcd_version_name + '_test_create_search_mid_saved.json')
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_create_search_mid_saved.json', validation=True)
-
-        self.assertEqual(vcd_read.stringify(), vcd.stringify())
-
     def test_metadata(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
         annotator = "Algorithm001"
         comment = "Annotations produced automatically - SW v0.1"
         file_version = "2.0"  # This is a versioning for the annotation file itself
@@ -227,12 +193,13 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_metadata()['annotator'], annotator)
         self.assertEqual(vcd.get_metadata()['comment'], comment)
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_add_metadata.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_add_metadata.json')
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     # Ontology links
     def test_ontology_list(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         ont_uid_1 = vcd.add_ontology("http://www.vicomtech.org/viulib/ontology")
         ont_uid_2 = vcd.add_ontology("http://www.alternativeURL.org/ontology")
@@ -250,11 +217,9 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_ontology(ont_uid_1), "http://www.vicomtech.org/viulib/ontology")
         self.assertEqual(vcd.get_ontology(ont_uid_2), "http://www.alternativeURL.org/ontology")
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_ontology.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_ontology.json', True)
-
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_ontology.json', validation=True)
-        self.assertEqual(vcd_read.stringify(), vcd.stringify())
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_online_operation(self):
         # Simulate an online operation during 1000 frames
@@ -284,21 +249,17 @@ class TestBasic(unittest.TestCase):
             self.assertEqual(vcd_this.get_object(uid)['type'], 'Car')
 
     def test_objects_without_data(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         pedestrian_uid = vcd.add_object(name='', semantic_type='#Pedestrian', frame_value=(0, 30))
         car_uid = vcd.add_object(name='', semantic_type='#Car', frame_value=(20, 30))
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_objects_without_data.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_objects_without_data.json', True)
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_objects_without_data.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_nested_object_data_attributes(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         uid_obj1 = vcd.add_object('someName1', '#Some')
 
@@ -313,18 +274,13 @@ class TestBasic(unittest.TestCase):
 
         vcd.add_object_data(uid_obj1, box1, 0)
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_nested_object_data.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_nested_object_data.json', True)
-
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_nested_object_data.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_multi_value_attributes(self):
         # This test shows how to use "Vec" attribute with strings
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         uid = vcd.add_object(name="car1", semantic_type="car")
         vcd.add_object_data(uid=uid, object_data=types.vec(name="signals", val=[0.1, 0.2, 0.3]))
@@ -337,14 +293,9 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid=uid, object_data=types.text(name="color", val="Blue",
                                                            properties={"locked": False, "status": "validated"}))
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_multi_value_attributes.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_multi_value_attributes.json', True)
-
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_multi_value_attributes.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        #print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

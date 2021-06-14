@@ -11,6 +11,7 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+import inspect
 import unittest
 import os
 import numpy as np
@@ -19,19 +20,8 @@ import vcd.schema as schema
 import vcd.types as types
 import vcd.utils as utils
 
-#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
-openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
-vcd_version_name = openlabel_version_name
-
-overwrite = False
-
-
-def check_vcd(vcd, vcd_file_name, force_write=False):
-    if not os.path.isfile(vcd_file_name) or force_write:
-        vcd.save(vcd_file_name)
-
-    vcd_read = core.VCD(vcd_file_name, validation=True)
-    return vcd_read.stringify() == vcd.stringify()
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
@@ -94,8 +84,9 @@ class TestBasic(unittest.TestCase):
                                   )
                                   )
 
-        # Compare with reference
-        self.assertTrue(check_vcd(vcd, './etc/' + vcd_version_name + '_test_intrinsics.json', overwrite))
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_poses(self):
         # This test aims to show how to create and add extrinsic information of streams
@@ -142,8 +133,9 @@ class TestBasic(unittest.TestCase):
                                       sequence="ZYX"
                                   )
                                   )
-        # Compare with reference
-        self.assertTrue(check_vcd(vcd, './etc/' + vcd_version_name + '_test_poses.json', overwrite))
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_transforms(self):
         # Transforms are the same as Poses, but applied for a given frame
@@ -175,8 +167,9 @@ class TestBasic(unittest.TestCase):
             custom_property1=0.9,
             custom_property2="Some tag"))
 
-        # Compare with reference
-        self.assertTrue(check_vcd(vcd, './etc/' + vcd_version_name + '_test_transforms.json', overwrite))
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_cuboids(self):
         # This test shows how to represent cuboids in various forms
@@ -205,8 +198,9 @@ class TestBasic(unittest.TestCase):
                                )
         vcd.add_object_data(uid=uid2, object_data=cuboid2)
 
-        # Compare with reference
-        self.assertTrue(check_vcd(vcd, './etc/' + vcd_version_name + '_test_cuboids.json', overwrite))
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

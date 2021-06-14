@@ -57,13 +57,14 @@ class ResourceUID:
 
 class ElementType(Enum):
     """
-    Elements of VCD (Object, Action, Event, Context, Relation)
+    Elements of VCD (Object, Action, Event, Context, Relation, Tag)
     """
     object = 1
     action = 2
     event = 3
     context = 4
     relation = 5
+    tag = 6
 
 
 class StreamType(Enum):
@@ -345,7 +346,7 @@ class VCD:
                 if 'metadata' in read_data['openlabel']:
                     if 'schema_version' in read_data['openlabel']['metadata']:
                         schema_version = read_data['openlabel']['metadata']['schema_version']
-                        if schema_version == '0.1.0' or schema_version == '0.2.0':
+                        if schema_version == '0.1.0' or schema_version == '0.2.0' or schema_version == "0.3.0":
                             # This is OpenLABEL 0.1.0
                             self.data = read_data
                             if validation:
@@ -354,7 +355,7 @@ class VCD:
                                 validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
                                 json_file.close()
 
-                            # In OpenLABEL 0.1.0 and 0.2.0 uids are strings, because they can be numeric strings, or UUIDs
+                            # In OpenLABEL 0.1-3.0 uids are strings, because they can be numeric strings, or UUIDs
                             # but frames are still ints, so let's parse like that
                             if 'frames' in self.data['openlabel']:
                                 frames = self.data['openlabel']['frames']
@@ -362,7 +363,7 @@ class VCD:
                                     self.data['openlabel']['frames'] = {int(key): value for key, value in frames.items()}
                         else:
                             Exception(
-                                "ERROR: This OpenLABEL file has version different than 0.1.0 and 0.2.0. This API is incompatible.")
+                                "ERROR: This OpenLABEL file has version different than 0.1-3.0. This API is incompatible.")
                 else:
                     raise Exception("ERROR: This OpenLABEL file has no version information. Should be under metadata.")
 
@@ -394,6 +395,7 @@ class VCD:
         self.__lastUID[ElementType.event] = -1
         self.__lastUID[ElementType.context] = -1
         self.__lastUID[ElementType.relation] = -1
+        self.__lastUID[ElementType.tag] = -1
 
     def convert_to_vcd330(self):
         return converter.ConverterVCD430toVCD330(self.data)
@@ -503,7 +505,7 @@ class VCD:
 
     def __set_element(
             self, element_type, name, semantic_type, frame_intervals, uid, ont_uid,
-            coordinate_system, set_mode, res_uid
+            coordinate_system, set_mode, res_uid, **kwargs
     ):
         assert (isinstance(uid, UID))
         assert (isinstance(ont_uid, UID))
@@ -524,6 +526,12 @@ class VCD:
         # 1.- Set the root entries and frames entries
         self.__set_element_at_root_and_frames(element_type, name, semantic_type, fis,
                                               uid_to_assign, ont_uid, coordinate_system, res_uid)
+
+        # 2.- Kwargs
+        # Add any additional custom properties
+        element = self.data[self.root_name][element_type.name + 's'][uid_to_assign.as_str()]
+        for key, value in kwargs.items():
+            element[key] = value
 
         return uid_to_assign
 
@@ -672,7 +680,7 @@ class VCD:
         element = self.get_element(element_type, uid.as_str())
 
         # Read existing data about this element, so we can call __set_element
-        name = element['name']
+        name = element.get('name')
         semantic_type = element['type']
         ont_uid = UID(None)
         cs = None
@@ -792,6 +800,10 @@ class VCD:
             element[element_type.name + '_data'][element_data.type.name][pos] = element_data.data
 
     def __set_element_data_pointers(self, element_type, uid, element_data, frame_intervals):
+        # For Tags, let's ignore element_data_pointers
+        if element_type == ElementType.tag:
+            return
+
         assert(isinstance(uid, UID))
         self.data[self.root_name][element_type.name + 's'][uid.as_str()].setdefault(element_type.name + '_data_pointers', {})
         edp = self.data[self.root_name][element_type.name + 's'][uid.as_str()][element_type.name + '_data_pointers']
@@ -951,14 +963,23 @@ class VCD:
             self.data[self.root_name]['metadata'] = {}
         self.data[self.root_name]['metadata']['comment'] = comment
 
-    def add_ontology(self, ontology_name):
+    def add_ontology(self, ontology_name, subset_include=None, subset_exclude=None, **kwargs):
         self.data[self.root_name].setdefault('ontologies', dict())
         for ont_uid in self.data[self.root_name]['ontologies']:
             if self.data[self.root_name]['ontologies'][ont_uid] == ontology_name:
                 warnings.warn('WARNING: adding an already existing ontology')
                 return None
         length = len(self.data[self.root_name]['ontologies'])
-        self.data[self.root_name]['ontologies'][str(length)] = ontology_name
+        if subset_include is None and subset_exclude is None and len(kwargs)==0:
+            self.data[self.root_name]['ontologies'][str(length)] = ontology_name
+        else:
+            self.data[self.root_name]['ontologies'][str(length)] = {"uri": ontology_name}
+            if subset_include is not None:
+                self.data[self.root_name]['ontologies'][str(length)]["subset_include"] = subset_include
+            if subset_exclude is not None:
+                self.data[self.root_name]['ontologies'][str(length)]["subset_exclude"] = subset_exclude
+            for key, value in kwargs.items():
+                self.data[self.root_name]['ontologies'][str(length)][key] = value
         return str(length)
 
     def add_resource(self, resource_name):
@@ -1183,27 +1204,27 @@ class VCD:
                 return json.dumps(frame_static_dynamic)
 
     def add_object(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
-                   set_mode=SetMode.union, res_uid=None):
+                   set_mode=SetMode.union, res_uid=None, **kwargs):
         return self.__set_element(ElementType.object, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid, **kwargs).as_str()
 
     def add_action(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
-                   set_mode=SetMode.union, res_uid=None):
+                   set_mode=SetMode.union, res_uid=None, **kwargs):
         return self.__set_element(ElementType.action, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid, **kwargs).as_str()
 
     def add_event(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
-                  set_mode=SetMode.union, res_uid=None):
+                  set_mode=SetMode.union, res_uid=None, **kwargs):
         return self.__set_element(ElementType.event, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid, **kwargs).as_str()
 
     def add_context(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
-                    set_mode=SetMode.union, res_uid=None):
+                    set_mode=SetMode.union, res_uid=None, **kwargs):
         return self.__set_element(ElementType.context, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid, **kwargs).as_str()
 
     def add_relation(self, name, semantic_type='', frame_value=None, uid=None, ont_uid=None,
-                     set_mode=SetMode.union, res_uid=None):
+                     set_mode=SetMode.union, res_uid=None, **kwargs):
         if set_mode == SetMode.replace and uid is not None:
             if self.has(ElementType.relation, uid):
                 relation = self.data[self.root_name]['relations'][UID(uid).as_str()]
@@ -1212,13 +1233,17 @@ class VCD:
 
         relation_uid = self.__set_element(
             ElementType.relation, name, semantic_type, frame_intervals=FrameIntervals(frame_value),
-            uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None, res_uid=res_uid)
+            uid=UID(uid), ont_uid=UID(ont_uid), set_mode=set_mode, coordinate_system=None, res_uid=res_uid, **kwargs)
         return relation_uid.as_str()
 
+    def add_tag(self, semantic_type='', uid=None, ont_uid=None, res_uid=None, **kwargs):
+        return self.__set_element(ElementType.tag, None, semantic_type, FrameIntervals(None),
+                                  UID(uid), UID(ont_uid), None, SetMode.union, res_uid, **kwargs).as_str()
+
     def add_element(self, element_type, name, semantic_type='', frame_value=None, uid=None, ont_uid=None, coordinate_system=None,
-                    set_mode=SetMode.union, res_uid=None):
+                    set_mode=SetMode.union, res_uid=None, **kwargs):
         return self.__set_element(element_type, name, semantic_type, FrameIntervals(frame_value),
-                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid).as_str()
+                                  UID(uid), UID(ont_uid), coordinate_system, set_mode, res_uid, **kwargs).as_str()
 
     def add_rdf(self, relation_uid, rdf_type, element_uid, element_type):
         assert(isinstance(element_type, ElementType))
@@ -1246,10 +1271,10 @@ class VCD:
                     )
 
     def add_relation_object_action(self, name, semantic_type, object_uid, action_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None, **kwargs):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid)
+                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid, **kwargs)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1258,10 +1283,10 @@ class VCD:
         return relation_uid
 
     def add_relation_action_action(self, name, semantic_type, action_uid_1, action_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None, **kwargs):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid)
+                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid, **kwargs)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid_1, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1270,10 +1295,10 @@ class VCD:
         return relation_uid
 
     def add_relation_object_object(self, name, semantic_type, object_uid_1, object_uid_2, relation_uid=None,
-                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None, **kwargs):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid)
+                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid, **kwargs)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=object_uid_1, element_type=ElementType.object)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1282,10 +1307,10 @@ class VCD:
         return relation_uid
 
     def add_relation_action_object(self, name, semantic_type, action_uid, object_uid, relation_uid=None,
-                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None):
+                                   ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None, **kwargs):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid)
+                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid, **kwargs)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
                      element_uid=action_uid, element_type=ElementType.action)
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.object,
@@ -1294,10 +1319,10 @@ class VCD:
         return relation_uid
 
     def add_relation_subject_object(self, name, semantic_type, subject_type, subject_uid, object_type, object_uid,
-                                    relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None):
+                                    relation_uid=None, ont_uid=None, frame_value=None, set_mode=SetMode.union, res_uid=None, **kwargs):
         # Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
         relation_uid = self.add_relation(name, semantic_type, uid=relation_uid, ont_uid=ont_uid,
-                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid)
+                                         frame_value=frame_value, set_mode=set_mode, res_uid=res_uid, **kwargs)
         assert(isinstance(subject_type, ElementType))
         assert(isinstance(object_type, ElementType))
         self.add_rdf(relation_uid=relation_uid, rdf_type=RDF.subject,
@@ -1322,37 +1347,14 @@ class VCD:
     def add_context_data(self, uid, context_data, frame_value=None, set_mode=SetMode.union):
         return self.__set_element_data(ElementType.context, UID(uid), context_data, FrameIntervals(frame_value),
                                        set_mode)
+
+    def add_tag_data(self, uid, tag_data, frame_value=None, set_mode=SetMode.union):
+        return self.__set_element_data(ElementType.tag, UID(uid), tag_data, FrameIntervals(frame_value),
+                                       set_mode)
     
     def add_element_data(self, element_type, uid, element_data, frame_value=None, set_mode=SetMode.union):
         return self.__set_element_data(element_type, UID(uid), element_data, FrameIntervals(frame_value),
                                        set_mode)
-
-    def add_tag(self, type, ont_uid, val, **kwargs):
-        if 'tags' not in self.data[self.root_name]:
-            self.data[self.root_name]['tags'] = {}
-        tags = self.data[self.root_name]['tags']
-
-        # Create tag
-        tag = {}
-
-        if ont_uid is not None:
-            assert(isinstance(ont_uid, str))
-            tag['ontology_uid'] = ont_uid
-
-        # Check if val is str
-        if isinstance(val, str):
-            tag['val'] = val
-        # or tag_data
-        elif val is not None:
-            assert(isinstance(val, types.ObjectData))
-            self.__set_tag_data_content(tag, val)
-
-        # Add any additional custom properties
-        for key, value in kwargs.items():
-            tag[key] = value
-
-        tags[type] = tag
-
 
     ##################################################
     # Get / Read

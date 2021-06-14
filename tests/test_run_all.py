@@ -30,12 +30,13 @@ subprocess.check_call(["python.exe", "test_modify.py"])
 subprocess.check_call(["python.exe", "test_geometries.py"])
 subprocess.check_call(["python.exe", "test_openlabel.py"])
 subprocess.check_call(["python.exe", "test_uuid.py"])
+subprocess.check_call(["python.exe", "test_bbox.py"])
 
 '''
 os.system("python test_basic.py && "
           "python test_converters.py && "
           #"python test_sanity.py && "
-          # "python test_serializer.py &&"
+          #"python test_serializer.py &&"
           "python test_mesh.py &&"
           "python test_image.py &&"
           "python test_stream_frame_properties.py &&"

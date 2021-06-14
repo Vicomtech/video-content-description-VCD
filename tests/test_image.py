@@ -11,23 +11,20 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
+import inspect
 import unittest
-import os
+
 import cv2 as cv
 import numpy as np
-from PIL import Image
-import json
+
 import base64
 import vcd.core as core
-import vcd.schema as schema
+
 import vcd.types as types
 import vcd.poly2d as poly
-import vcd.utils as utils
 
-#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
-openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
-vcd_version_name = openlabel_version_name
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 show_images = False
 
@@ -45,10 +42,10 @@ def draw_basic_image(classes_colors):
 
     return img
 
-class TestBasic(unittest.TestCase):
 
+class TestBasic(unittest.TestCase):
     def test_polygon2D(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         uid_obj1 = vcd.add_object('someName1', '#Some')
 
@@ -65,18 +62,13 @@ class TestBasic(unittest.TestCase):
                      types.Poly2DType.MODE_POLY2D_ABSOLUTE, False)
         vcd.add_object_data(uid_obj1, poly2)
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_polygon2D.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_polygon2D.json', True)
-
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_polygon2D.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_create_image_png(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 2.- Create image
         colors = [(125, 32, 64), (98, 12, 65), (12, 200, 190)]
@@ -116,15 +108,16 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(diff_val, 0)
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_image.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_image.json', True)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
         #cv.imshow('decoded_image', img_dec)
         #cv.waitKey(0)
 
     def test_contours(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 1.- Create (color) image
         colors = [(125, 32, 64), (98, 12, 65), (12, 200, 190)]
@@ -158,8 +151,9 @@ class TestBasic(unittest.TestCase):
                                                  hierarchy=hierarchy_list)
                                     )
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_contours.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_contours.json', True)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
         # 3.- Reconstruct the image from the VCD poly2d and hierarchies (using OpenCV)
         contours_dict = {}  # A dictionary of contours. Each key is one class type, each value, a contours array

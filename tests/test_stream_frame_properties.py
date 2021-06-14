@@ -11,16 +11,15 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+import inspect
 from datetime import datetime
 import unittest
 import os
 import vcd.core as core
-import vcd.schema as schema
 import vcd.types as types
 
-#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
-openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
-vcd_version_name = openlabel_version_name
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
@@ -28,8 +27,7 @@ class TestBasic(unittest.TestCase):
     def test_create_streams_simple(self):
         # This example shows how to introduce Stream (Intrinsics, Extrinsics), Sync and Odometry information
         # Fully detailed examples will be introduced for specific datasets such as KITTI tracking and nuScenes
-
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # FIRST: define all the involved coordinate systems
         vcd.add_coordinate_system("odom", cs_type=types.CoordinateSystemType.scene_cs)
@@ -189,11 +187,9 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_coordinate_system('vehicle-iso8855')['parent'], 'odom')
         self.assertEqual(vcd.get_coordinate_system('Non-existing-Coordinate'), None)
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_stream_frame_properties.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_stream_frame_properties.json', True)
-
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_stream_frame_properties.json', validation=True)
-        self.assertEqual(vcd_read.stringify(), vcd.stringify())
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

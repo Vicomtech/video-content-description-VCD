@@ -11,6 +11,7 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+import inspect
 import unittest
 import os
 import vcd.core as core
@@ -20,18 +21,15 @@ import vcd.schema as schema
 import uuid
 import re
 
-
-#vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
-openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
-vcd_version_name = openlabel_version_name
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
-
     # Create some basic content, without time information, and do some basic search
     def test_uid_types(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # We can add elements and get UIDs as strings
         uid0 = vcd.add_object("Mike", "Person")
@@ -61,12 +59,12 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_object(uid3)['ontology_uid'], '0')
         self.assertEqual(vcd.get_object(uid4)['ontology_uid'], '0')
 
-        # All returned UIDs are strings, and when written into JSON as well
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_uid_types.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_uid_types.json')
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_uuid_usage_explicit_1(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
         uuid1 = str(uuid.uuid4())
         # Adding an object and specifying its uid to be a previously defined UUID, from this call on VCD uses UUID
         uid1 = vcd.add_object(name='marcos', semantic_type='person', uid=uuid1)
@@ -77,10 +75,8 @@ class TestBasic(unittest.TestCase):
         matches = bool(re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", uid2))
         self.assertEqual(matches, True)
 
-        #print(vcd.stringify(False))
-
     def test_uuid_usage_explicit_2(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # We can ask VCD to use UUIDs
         vcd.set_use_uuid(True)
@@ -94,9 +90,6 @@ class TestBasic(unittest.TestCase):
         uid2 = vcd.add_object('orti', 'person')
         matches = bool(re.match(r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", uid2))
         self.assertEqual(matches, True)
-
-        #print(vcd.stringify(False))
-
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
