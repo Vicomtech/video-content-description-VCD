@@ -26,11 +26,15 @@ set(SOURCE_FILES
 link_directories( ${CMAKE_BINARY_DIR}/bin )
 add_executable( ${TEST_NAME} ${SOURCE_FILES})
 
-# Link libraries that are required for building this application
-target_link_libraries( ${TEST_NAME} vcd_core )
-# Include std::experimental::filesystem
 if(LINUX)
+	# Include std::experimental::filesystem
     target_link_libraries(${TEST_NAME} stdc++fs)
+
+	# Link libraries that are required for building this application
+	target_link_libraries( ${TEST_NAME} vcd_core )
+else()
+	# Link libraries that are required for building this application
+	target_link_libraries( ${TEST_NAME} VCD::vcd_core )
 endif()
 
 set_target_properties(${TEST_NAME} PROPERTIES FOLDER "vcd_tests")

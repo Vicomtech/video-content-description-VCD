@@ -14,7 +14,6 @@
 #include <regex>
 #include "vcd_impl.h"
 
-#include <openssl/rand.h>
 #include <iostream>
 
 #ifdef ENABLE_GUID

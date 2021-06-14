@@ -15,6 +15,7 @@
 #ifdef __include_poly2d__
 
 #include <cmath>
+#include <algorithm>
 
 Poly2DDefinition
 computeSRF6DCC(const std::vector<int> &coords) {
@@ -59,8 +60,8 @@ computeSRF6DCC(const std::vector<int> &coords) {
     std::vector<int> temp;
     const size_t n = coords.size();
     for (size_t i = 2; i < n; i += 2) {
-        x = round(coords[i]);
-        y = round(coords[i + 1]);
+        x = static_cast<int>(round(coords[i]));
+        y = static_cast<int>(round(coords[i + 1]));
         xi = x - xinit;
         yi = y - yinit;
         temp.clear();
