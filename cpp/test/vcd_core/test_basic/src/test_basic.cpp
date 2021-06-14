@@ -118,7 +118,7 @@ SCENARIO("Create some basic content, without time information, and do some "
                 // Define the internal objects for marcos
                 vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30});
                 vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 60, 120});
-                vcd->add_vec_to_object(uid_marcos, "speed", {0.0, 0.2});
+                vcd->add_vec_to_object(uid_marcos, "speed", {0.0f, 0.2f});
                 vcd->add_num_to_object(uid_marcos, "accel", 0.1);
             }
 
@@ -159,14 +159,16 @@ SCENARIO("Create some basic content, without time information, and do some "
 //            std::cout << vcd_np_path.c_str() << std::endl;
             REQUIRE(fs::exists(vcd_np_path));
             // Compare both json definition
-            CHECK(compare_json_files(vcd_outnp_path, vcd_np_path));
+            CHECK(compare_json_files(vcd_outnp_path.string(), 
+									 vcd_np_path.string()));
 
             //  - Pretty version
             char vcd_p[] = "vcd430_test_create_search_simple_pretty.json";
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
             // Compare both json definition
-            CHECK(compare_json_files(vcd_outp_path, vcd_p_path));
+            CHECK(compare_json_files(vcd_outp_path.string(), 
+									 vcd_p_path.string()));
         }
 
         THEN("Write into string") {
@@ -214,7 +216,8 @@ SCENARIO("Create some basic content, without time information, and do some "
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
             // Compare both json definition
-            REQUIRE(compare_json_files(vcd_outp_path, vcd_p_path));
+            REQUIRE(compare_json_files(vcd_outp_path.string(), 
+									   vcd_p_path.string()));
         }
 
         THEN("Activate UUID generator and add some objects and frames") {
@@ -308,7 +311,7 @@ SCENARIO("Create some basic content, without time information, and do some "
             // Define the internal objects for marcos
             vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30});
             vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 60, 120});
-            vcd->add_vec_to_object(uid_marcos, "speed", {0.0, 0.2});
+            vcd->add_vec_to_object(uid_marcos, "speed", {0.0f, 0.2f});
             vcd->add_num_to_object(uid_marcos, "accel", 0.1);
 
             // Generate json data
@@ -392,13 +395,13 @@ SCENARIO("Create some basic content, without time information, and do some "
             VCD_ptr vcd = VCD::create();
             const string ref_file = "vcd430_test_create_search_mid.json";
             fs::path vcd_r_path = fs::path(asset_path) / fs::path(ref_file);
-            vcd->load(vcd_r_path);
+            vcd->load(vcd_r_path.string());
             const string gen_file = "vcd430_test_create_search_mid_TEST.json";
             fs::path vcd_g_path = fs::path(asset_path) / fs::path(gen_file);
-            vcd->save(vcd_g_path);
+            vcd->save(vcd_g_path.string());
             // 2.- Re-load generated file
             VCD_ptr vcd2 = VCD::create();
-            vcd2->load(vcd_g_path);
+            vcd2->load(vcd_g_path.string());
             // 3.- Compare
             const bool both_equal = check_json_level(
                                         json::parse(vcd->stringify(false)),
@@ -506,10 +509,10 @@ SCENARIO("Create some basic content, without time information, and do some "
             const std::string ch2_coord_sys_name = "ChildOdometry2";
             vcd::coord_uid cs3 = vcd->add_coordinate_system(ch2_coord_sys_name,
                                                CoordinateSystemType::local_cs,
-                                               cs1, {1.0, 0.0, 0.0, 0.76,
-                                                     0.0, 1.0, 0.0, 0.0,
-                                                     0.0, 0.0, 1.0, 1.73,
-                                                     0.0, 0.0, 0.0, 1.0});
+                                               cs1, {1.0f, 0.0f, 0.0f, 0.76f,
+                                                     0.0f, 1.0f, 0.0f, 0.0f,
+                                                     0.0f, 0.0f, 1.0f, 1.73f,
+                                                     0.0f, 0.0f, 0.0f, 1.0f});
             // Repeat the same name to check if it is ignored
             vcd::coord_uid cs4 = vcd->add_coordinate_system(main_coord_sys_name,
                                                CoordinateSystemType::local_cs,
