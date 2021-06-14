@@ -96,7 +96,7 @@ getFileAsString(const std::string& filePath) {
 
 SCENARIO("Create some basic content, without time information") {
     GIVEN("A VCD structure") {
-        THEN("Test different uid types") {
+        THEN("Test number based uid") {
             // 1.- Create a VCD instance
             vcd::VCD_Inner vcd_impl;
 //            VCD_ptr vcd = VCD::create();
@@ -190,7 +190,51 @@ SCENARIO("Create some basic content, without time information") {
             REQUIRE(check_json_level(test_data, ref_data));
         }
 
-        THEN("Use explicit uuid v4 values") {
+        THEN("Test guid based uid") {
+            // 1.- Create a VCD instance
+            vcd::VCD_Inner vcd_impl;
+//            VCD_ptr vcd = VCD::create();
+            vcd_impl.setUseUUID(true);
+
+            // We can add elements and get UIDs as strings
+            vcd::element_args mike_args;
+            mike_args.semantic_type = "Person";
+            const auto uid0 = vcd_impl.add_object("Mike", mike_args);
+            CHECK(uid0 != "0");
+            REQUIRE(uid0.size() == 36);
+
+            // We can also specify which UID we will like our elements to have
+            // We can only use strings
+            // Response is always string
+            vcd::element_args susan_args;
+            susan_args.semantic_type = "Person";
+            const std::string uuid2 = vcd::UID::generate_uuid4();
+            REQUIRE(uuid2.size() == 36);
+            susan_args.uid = uuid2;
+            const obj_uid uid2 = vcd_impl.add_object("Susan", susan_args);
+            CHECK(uid2 == uuid2);
+            REQUIRE(uid2.size() == 36);
+
+            // The user must use uuids in string format for all public functions
+            vcd_impl.add_bool_to_object(uid2, "checked", true);
+            vcd_impl.add_bool_to_object("2", "double-checked", true);
+
+            // Same happens with ontology uids
+            const vcd::ont_uid ont_uid_0 = vcd_impl.add_ontology(
+                                    "http://www.vicomtech.org/viulib/ontology");
+            REQUIRE(!ont_uid_0.empty());
+
+            // Test ontology uid
+            vcd::element_args mark_args;
+            mark_args.semantic_type = "#Pedestrian";
+            mark_args.ontology_uid = ont_uid_0;
+            const obj_uid uid3 = vcd_impl.add_object("Mark", mark_args);
+            const json* data = vcd_impl.get_inner_element(vcd::object, uid3);
+            REQUIRE(data != nullptr);
+            REQUIRE((*data)["ontology_uid"] == "0");
+        }
+
+        THEN("Use explicit uuid v4 values as input") {
             // 1.- Create a VCD instance
             vcd::VCD_Inner vcd_impl;
             const std::string uuid1 = vcd::UID::generate_uuid4();
