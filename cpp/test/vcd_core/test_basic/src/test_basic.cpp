@@ -159,16 +159,16 @@ SCENARIO("Create some basic content, without time information, and do some "
 //            std::cout << vcd_np_path.c_str() << std::endl;
             REQUIRE(fs::exists(vcd_np_path));
             // Compare both json definition
-            CHECK(compare_json_files(vcd_outnp_path.string(), 
-									 vcd_np_path.string()));
+            CHECK(compare_json_files(vcd_outnp_path.string(),
+                                     vcd_np_path.string()));
 
             //  - Pretty version
             char vcd_p[] = "vcd430_test_create_search_simple_pretty.json";
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
             // Compare both json definition
-            CHECK(compare_json_files(vcd_outp_path.string(), 
-									 vcd_p_path.string()));
+            CHECK(compare_json_files(vcd_outp_path.string(),
+                                     vcd_p_path.string()));
         }
 
         THEN("Write into string") {
@@ -216,8 +216,8 @@ SCENARIO("Create some basic content, without time information, and do some "
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
             // Compare both json definition
-            REQUIRE(compare_json_files(vcd_outp_path.string(), 
-									   vcd_p_path.string()));
+            REQUIRE(compare_json_files(vcd_outp_path.string(),
+                                       vcd_p_path.string()));
         }
 
         THEN("Activate UUID generator and add some objects and frames") {
