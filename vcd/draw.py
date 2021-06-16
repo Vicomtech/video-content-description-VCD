@@ -28,7 +28,7 @@ class SetupViewer:
         assert (isinstance(scene, scl.Scene))
         self.scene = scene
         self.fig = plt.figure(figsize=(8, 8))
-        self.ax = self.fig.gca(projection='3d')
+        self.ax = self.fig.add_subplot(projection='3d')
         self.coordinate_system = coordinate_system
         assert(self.scene.vcd.has_coordinate_system(coordinate_system))
 
