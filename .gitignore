@@ -5,3 +5,4 @@ vcd.egg-info
 dist/
 nodejs/lib/
 build/
+jupyter/tutorial/.ipynb_checkpoints
