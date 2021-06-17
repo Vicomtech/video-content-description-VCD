@@ -877,6 +877,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {"type": "number"},
+                "type": {"type": "string", "enum": ["value", "min", "max"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
@@ -888,6 +889,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
+                "type": {"type": "string", "enum": ["value"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
@@ -899,6 +901,7 @@ openlabel_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {"type": "boolean"},
+                "type": {"type": "string", "enum": ["value"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],
@@ -985,6 +988,7 @@ openlabel_schema = {
                         ]
                     }
                 },
+                "type": {"type": "string", "enum": ["values", "range"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
             "required": ["name", "val"],

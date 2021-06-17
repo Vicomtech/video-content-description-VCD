@@ -28,7 +28,8 @@ subprocess.check_call(["python.exe", "test_action_properties.py"])
 subprocess.check_call(["python.exe", "test_semantics.py"])
 subprocess.check_call(["python.exe", "test_modify.py"])
 subprocess.check_call(["python.exe", "test_geometries.py"])
-subprocess.check_call(["python.exe", "test_openlabel.py"])
+subprocess.check_call(["python.exe", "test_openlabel_labeling.py"])
+subprocess.check_call(["python.exe", "test_openlabel_tagging.py"])
 subprocess.check_call(["python.exe", "test_uuid.py"])
 subprocess.check_call(["python.exe", "test_bbox.py"])
 
@@ -44,5 +45,5 @@ os.system("python test_basic.py && "
           "python test_semantics.py &&"
           "python test_modify.py &&"
           "python test_geometries.py &&"
-          "python test_openlabel.py")
+          "python test_openlabel_labeling.py")
 '''

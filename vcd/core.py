@@ -775,6 +775,7 @@ class VCD:
         # If an element_data with same name exists, it is substituted
         element.setdefault(element_type.name + '_data', {})
         element[element_type.name + '_data'].setdefault(element_data.type.name, [])
+
         # Find if element_data already there
         list_aux = element[element_type.name + '_data'][element_data.type.name]
         pos_list = [idx for idx, val in enumerate(list_aux) if val['name'] == element_data.data['name']]

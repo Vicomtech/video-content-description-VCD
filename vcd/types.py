@@ -202,8 +202,8 @@ class Poly2DType(Enum):
 
 
 class ObjectData:
-    def __init__(self, name, coordinate_system=None, properties=None):
-        assert(isinstance(name, str))
+    def __init__(self, name, coordinate_system=None, properties=None, type=None):
+        assert (isinstance(name, str))
         self.data = dict()
         self.data['name'] = name
         if coordinate_system is not None:
@@ -212,6 +212,9 @@ class ObjectData:
         if properties is not None:
             assert (isinstance(properties, dict))
             self.data.update(properties)
+        if type is not None:
+            assert (isinstance(type, str))
+            self.data['type'] = type
 
     def add_attribute(self, object_data):
         assert(isinstance(object_data, ObjectData))
@@ -263,24 +266,24 @@ class rbbox(ObjectDataGeometry):
 
 
 class num(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert isinstance(val, (int, float))
         self.data['val'] = val
         self.type = ObjectDataType.num
 
 
 class text(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert(isinstance(val, str))
         self.data['val'] = val
         self.type = ObjectDataType.text
 
 
 class boolean(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert(isinstance(val, bool))
         self.data['val'] = val
         self.type = ObjectDataType.boolean
@@ -403,8 +406,8 @@ class binary(ObjectData):
 
 
 class vec(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert (isinstance(val, (tuple, list)))
         if isinstance(val, tuple):
             self.data['val'] = val
