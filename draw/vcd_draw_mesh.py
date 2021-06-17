@@ -48,6 +48,6 @@ def draw_mesh(vcd):
 if __name__ == "__main__":
     print("Running " + os.path.basename(__file__))
 
-    vcd = core.VCD("../tests/etc/openlabel020_test_mesh.json")
+    vcd = core.VCD("../tests/etc/" + openlabel_version_name + "_test_create_mesh.json")
 
     draw_mesh(vcd)

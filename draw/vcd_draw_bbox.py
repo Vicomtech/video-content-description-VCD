@@ -71,7 +71,7 @@ def draw_bboxes(vcd_file_name, image_file_name, save_image):
 if __name__ == "__main__":
     vcd_file_name = "../tests/etc/" + openlabel_version_name + "_test_bbox_simple.json"
     image_file_name = "./etc/sample_bbox.png"
-    draw_bboxes(vcd_file_name=vcd_file_name, image_file_name=image_file_name, save_image=True)
+    draw_bboxes(vcd_file_name=vcd_file_name, image_file_name=image_file_name, save_image=False)
 
     vcd_file_name = "../tests/etc/" + openlabel_version_name + "_test_bbox_simple_attributes.json"
     image_file_name = "./etc/sample_bbox.png"
