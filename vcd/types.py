@@ -11,6 +11,7 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+
 from builtins import bool
 from enum import Enum
 import vcd.poly2d as poly
