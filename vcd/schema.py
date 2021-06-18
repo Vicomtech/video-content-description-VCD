@@ -880,7 +880,7 @@ openlabel_schema = {
                 "type": {"type": "string", "enum": ["value", "min", "max"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": True
         },
         "text": {
@@ -892,7 +892,7 @@ openlabel_schema = {
                 "type": {"type": "string", "enum": ["value"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": True
         },
         "boolean": {
@@ -904,7 +904,7 @@ openlabel_schema = {
                 "type": {"type": "string", "enum": ["value"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": True
         },
         "cuboid": {
@@ -991,7 +991,7 @@ openlabel_schema = {
                 "type": {"type": "string", "enum": ["values", "range"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": True
         },
         "point2d": {

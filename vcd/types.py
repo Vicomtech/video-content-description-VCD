@@ -205,9 +205,10 @@ class Poly2DType(Enum):
 
 class ObjectData:
     def __init__(self, name, coordinate_system=None, properties=None, type=None):
-        assert (isinstance(name, str))
         self.data = dict()
-        self.data['name'] = name
+        if name is not None:
+            assert (isinstance(name, str))
+            self.data['name'] = name
         if coordinate_system is not None:
             assert (isinstance(coordinate_system, str))
             self.data['coordinate_system'] = coordinate_system
