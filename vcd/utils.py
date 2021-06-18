@@ -249,6 +249,46 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
 ####################################################
 # ROTATION AND ODOMETRY UTILS
 ####################################################
+class QuaternionOrder(Enum):
+    XYZW = 1
+    WXYZ = 2
+
+
+def q2R(q, seq=QuaternionOrder.XYZW):
+    # Example call: R = q2R(np.array([x, y, z, w]).reshape(4,1))
+    assert(q.shape == (4,1))
+    if seq == QuaternionOrder.XYZW:
+        # Like in Scipy (e.g. https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.from_quat.html)
+        x = q[0, 0]
+        y = q[1, 0]
+        z = q[2, 0]
+        w = q[3, 0]
+    elif seq == QuaternionOrder.WXYZ:
+        w = q[0, 0]
+        x = q[1, 0]
+        y = q[2, 0]
+        z = q[3, 0]
+
+    return q2R(x, y, z, w)
+
+
+def q2R(x, y, z, w):
+    # https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion
+    x2 = x * x
+    y2 = y * y
+    z2 = z * z
+    xy = x * y
+    xz = x * z
+    yz = y * z
+    xw = x * w
+    yw = y * w
+    zw = z * w
+
+    R1 = np.array([[1 - 2 * y2 - 2 * z2, 2 * xy - 2 * zw, 2 * xz + 2 * yw],
+                   [2 * xy + 2 * zw, 1 - 2 * x2 - 2 * z2, 2 * yz - 2 * xw],
+                   [2 * xz - 2 * yw, 2 * yz + 2 * xw, 1 - 2 * x2 - 2 * y2]])
+    return R1
+
 def create_pose(R, C):
     # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
     if C.shape[0] == 3:
