@@ -11,14 +11,15 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+import inspect
 from datetime import datetime
 import unittest
 import os
 import vcd.core as core
-import vcd.schema as schema
 import vcd.types as types
 
-vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
@@ -26,17 +27,20 @@ class TestBasic(unittest.TestCase):
     def test_create_streams_simple(self):
         # This example shows how to introduce Stream (Intrinsics, Extrinsics), Sync and Odometry information
         # Fully detailed examples will be introduced for specific datasets such as KITTI tracking and nuScenes
-
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # FIRST: define all the involved coordinate systems
         vcd.add_coordinate_system("odom", cs_type=types.CoordinateSystemType.scene_cs)
         vcd.add_coordinate_system("vehicle-iso8855", cs_type=types.CoordinateSystemType.local_cs,
                                   parent_name="odom",
-                                  pose_wrt_parent=[1.0, 0.0, 0.0, 0.0,
-                                                    0.0, 1.0, 0.0, 0.0,
-                                                    0.0, 0.0, 1.0, 0.0,
-                                                    0.0, 0.0, 0.0, 1.0])
+                                  pose_wrt_parent=types.PoseData(
+                                      val=[1.0, 0.0, 0.0, 0.0,
+                                           0.0, 1.0, 0.0, 0.0,
+                                           0.0, 0.0, 1.0, 0.0,
+                                           0.0, 0.0, 0.0, 1.0],
+                                      type=types.TransformDataType.matrix_4x4)
+
+        )
 
         # SECOND: Add the streams
         vcd.add_stream(stream_name='Camera1',
@@ -72,10 +76,13 @@ class TestBasic(unittest.TestCase):
                                   )
         vcd.add_coordinate_system("Camera1", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="vehicle-iso8855",
-                                  pose_wrt_parent=[1.0, 0.0, 0.0, 0.0,
-                                                    0.0, 1.0, 0.0, 0.0,
-                                                    0.0, 0.0, 1.0, 0.0,
-                                                    0.0, 0.0, 0.0, 1.0])
+                                  pose_wrt_parent=types.PoseData(
+                                      val=[1.0, 0.0, 0.0, 0.0,
+                                           0.0, 1.0, 0.0, 0.0,
+                                           0.0, 0.0, 1.0, 0.0,
+                                           0.0, 0.0, 0.0, 1.0],
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
 
         # Sync info can be added as a shift between the master vcd frame count and each of the sensors
         # e.g. Camera2 may have started 3 frames after Camera1, therefore, to label Elements for Camera2, we can use
@@ -95,10 +102,13 @@ class TestBasic(unittest.TestCase):
                                   )
         vcd.add_coordinate_system("Camera2", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="vehicle-iso8855",
-                                  pose_wrt_parent=[1.0, 0.0, 0.0, 0.0,
-                                                   0.0, 1.0, 0.0, 0.0,
-                                                   0.0, 0.0, 1.0, 0.0,
-                                                   0.0, 0.0, 0.0, 1.0])
+                                  pose_wrt_parent=types.PoseData(
+                                      val=[1.0, 0.0, 0.0, 0.0,
+                                           0.0, 1.0, 0.0, 0.0,
+                                           0.0, 0.0, 1.0, 0.0,
+                                           0.0, 0.0, 0.0, 1.0],
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
 
         # Let's suppose we want to add a master timestamp coming from a GPS or LIDAR sensor
         # Let's create here some dummy timestamps
@@ -129,12 +139,17 @@ class TestBasic(unittest.TestCase):
                                           distortion_coeffs_1xN=None
                                       )
                                       )
-            vcd.add_transform(frame_num, transform=types.Transform(src_name="vehicle-iso8855",
-                                                                   dst_name="Camera1",
-                                                                   transform_src_to_dst_4x4=[1.0, 0.0, 0.0, 0.1,
-                                                                    0.0, 1.0, 0.0, 0.1,
-                                                                    0.0, 0.0, 1.0, 0.0,
-                                                                    0.0, 0.0, 0.0, 1.0]))
+            vcd.add_transform(frame_num=frame_num,
+                              transform=types.Transform(src_name="vehicle-iso8855",
+                                                        dst_name="Camera1",
+                                                        transform_src_to_dst=types.TransformData(
+                                                            val=[1.0, 0.0, 0.0, 0.1,
+                                                                 0.0, 1.0, 0.0, 0.1,
+                                                                 0.0, 0.0, 1.0, 0.0,
+                                                                 0.0, 0.0, 0.0, 1.0],
+                                                            type=types.TransformDataType.matrix_4x4)
+                                                        )
+                              )
 
         # Odometry information is also included as frame_properties
         # Odometry must be provided as pose_lcs_wrt_wcs (i.e. Local Coordinate System wrt World Coordinate System)
@@ -143,10 +158,12 @@ class TestBasic(unittest.TestCase):
         vcd.add_transform(frame_num=6, transform=types.Transform(
             src_name="odom",
             dst_name="vehicle-iso8855",
-            transform_src_to_dst_4x4=[1.0, 0.0, 0.0, 20.0,
-                                  0.0, 1.0, 0.0, 20.0,
-                                  0.0, 0.0, 1.0, 0.0,
-                                  0.0, 0.0, 0.0, 1.0],
+            transform_src_to_dst=types.TransformData(
+                val=[1.0, 0.0, 0.0, 20.0,
+                     0.0, 1.0, 0.0, 20.0,
+                     0.0, 0.0, 1.0, 0.0,
+                     0.0, 0.0, 0.0, 1.0],
+                type=types.TransformDataType.matrix_4x4),
             raw_gps_data=[49.011212804408, 8.4228850417969, 112.83492279053, 0.022447,1e-05,
                                                    -1.2219096732051, -3.3256321640686, 1.1384311814592, 3.5147680214713,
                                                    0.037625160413037, -0.03878884255623, -0.29437452763793,
@@ -170,11 +187,9 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_coordinate_system('vehicle-iso8855')['parent'], 'odom')
         self.assertEqual(vcd.get_coordinate_system('Non-existing-Coordinate'), None)
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_stream_frame_properties.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_stream_frame_properties.json', True)
-
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_stream_frame_properties.json', validation=True)
-        self.assertEqual(vcd_read.stringify(), vcd.stringify())
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

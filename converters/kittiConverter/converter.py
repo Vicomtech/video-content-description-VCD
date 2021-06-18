@@ -135,8 +135,10 @@ class KITTI_Tracking_reader():
             vcd.add_transform(int(frames_1xN[0, i]), transform=types.Transform(
                 src_name="vehicle-iso8855",
                 dst_name="odom",
-                transform_src_to_dst_4x4=list(odometry_4x4xN[:, :, i].flatten())
-            ))
+                transform_src_to_dst=types.TransformData(
+                    val=list(odometry_4x4xN[:, :, i].flatten()),
+                    type=types.TransformDataType.matrix_4x4))
+            )
 
         #########################################
         # CREATE SENSORS coordinate system: LASER
@@ -150,7 +152,10 @@ class KITTI_Tracking_reader():
                        stream_type=core.StreamType.lidar)
         vcd.add_coordinate_system("VELO_TOP", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="vehicle-iso8855",
-                                  pose_wrt_parent=list(pose_velo_wrt_vehicle_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_velo_wrt_vehicle_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
         #########################################
         # CREATE SENSORS coordinate system: GPS/IMU
         #########################################
@@ -163,7 +168,10 @@ class KITTI_Tracking_reader():
                        stream_type=core.StreamType.other)
         vcd.add_coordinate_system("IMU", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="vehicle-iso8855",
-                                  pose_wrt_parent=list(pose_imu_wrt_vehicle_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_imu_wrt_vehicle_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
 
         #########################################
         # CREATE SENSORS coordinate system: CAM
@@ -204,7 +212,10 @@ class KITTI_Tracking_reader():
                                   )
         vcd.add_coordinate_system("CAM_LEFT", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="VELO_TOP",
-                                  pose_wrt_parent=list(pose_camleft_wrt_velo_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_camleft_wrt_velo_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
 
         # Virtually, cam_left and cam_right are defined as the same coordinate systems, so their scs are the same
         # But their projection matrices (3x4) include a right-most non-zero column which shifts 3d points when projected
@@ -230,7 +241,11 @@ class KITTI_Tracking_reader():
                                   )
         vcd.add_coordinate_system("CAM_RIGHT", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="VELO_TOP",
-                                  pose_wrt_parent=list(pose_camleft_wrt_velo_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_camleft_wrt_velo_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
+
 
         #########################################
         # LABELS
@@ -333,7 +348,8 @@ def convert_KITTI_tracking_to_VCD4():
     # Draw/store scenes in VCD
     for count, key in enumerate(kitti_parser.vcds):
         # Store
-        vcd_base_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+        openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+        vcd_base_name = openlabel_version_name
         vcd_file_name = os.path.join(kitti_tracking_output_vcd_path,
                                      vcd_base_name + "_kitti_tracking_" + str(count).zfill(4) + ".json")
         print('Storing VCD file...' + vcd_file_name)

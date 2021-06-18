@@ -11,6 +11,8 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+
+
 from builtins import bool
 from enum import Enum
 import vcd.poly2d as poly
@@ -92,31 +94,61 @@ class IntrinsicsCustom(Intrinsics):
             self.data['intrinsics_custom'].update(additional_items)
 
 
+class TransformDataType(Enum):
+    matrix_4x4 = 1
+    quat_and_trans_7x1 = 2
+    euler_and_trans_6x1 = 3
+    custom = 4
+
+
+class TransformData:
+    """
+    This class encodes the transform data in the form of 4x4 matrix, quaternion + translation, or
+    Euler angles + translation
+    """
+    def __init__(self, val, type, **additional_items):
+        assert(isinstance(val, list))
+        assert(isinstance(type, TransformDataType))
+
+        self.data = dict()
+        if type == TransformDataType.matrix_4x4:
+            self.data['matrix4x4'] = val
+        elif type == TransformDataType.quat_and_trans_7x1:
+            assert(len(val) == 7)
+            self.data['quaternion'] = val[0:4]
+            self.data['translation'] = val[4:7]
+        elif type == TransformDataType.euler_and_trans_6x1:
+            assert(len(val) == 6)
+            self.data['euler_angles'] = val[0:3]
+            self.data['translation'] = val[3:6]
+
+        if additional_items is not None:
+            self.data.update(additional_items)
+
+
+class PoseData(TransformData):
+    """
+    Equivalente to TransformData, but intended to be used when passive rotation and translation values are provided
+    """
+    def __init__(self, val, type, **additional_items):
+        TransformData.__init__(self, val, type, **additional_items)
+
+
 class Transform:
-    def __init__(self, src_name, dst_name, **additional_items):
+    def __init__(self, src_name, dst_name, transform_src_to_dst, **additional_items):
         assert (isinstance(src_name, str))
         assert (isinstance(dst_name, str))
+        assert (isinstance(transform_src_to_dst, TransformData))
         self.data = dict()
         name = src_name + "_to_" + dst_name
         self.data[name] = dict()
         self.data_additional = dict()  # this is useful to append only the additional_items
         self.data[name]['src'] = src_name
         self.data[name]['dst'] = dst_name
+        self.data[name]['transform_src_to_dst'] = transform_src_to_dst.data
         if additional_items is not None:
             self.data[name].update(additional_items)
             self.data_additional.update(additional_items)
-
-
-class Pose(Transform):
-    def __init__(self, subject_name, reference_name, **additional_items):
-        # NOTE: the pose of subject_name system wrt to reference_name system is the transform
-        # from the reference_name system to the subject_name system
-        Transform.__init__(self, src_name=reference_name, dst_name=subject_name, **additional_items)
-
-
-class Extrinsics(Transform):
-    def __init__(self, subject_name, reference_name, **additional_items):
-        Transform.__init__(self, src_name=reference_name, dst_name=subject_name, **additional_items)
 
 
 class StreamSync:
@@ -172,16 +204,20 @@ class Poly2DType(Enum):
 
 
 class ObjectData:
-    def __init__(self, name, coordinate_system=None, properties=None):
-        assert(isinstance(name, str))
+    def __init__(self, name, coordinate_system=None, properties=None, type=None):
         self.data = dict()
-        self.data['name'] = name
+        if name is not None:
+            assert (isinstance(name, str))
+            self.data['name'] = name
         if coordinate_system is not None:
             assert (isinstance(coordinate_system, str))
             self.data['coordinate_system'] = coordinate_system
         if properties is not None:
             assert (isinstance(properties, dict))
             self.data.update(properties)
+        if type is not None:
+            assert (isinstance(type, str))
+            self.data['type'] = type
 
     def add_attribute(self, object_data):
         assert(isinstance(object_data, ObjectData))
@@ -233,24 +269,24 @@ class rbbox(ObjectDataGeometry):
 
 
 class num(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert isinstance(val, (int, float))
         self.data['val'] = val
         self.type = ObjectDataType.num
 
 
 class text(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert(isinstance(val, str))
         self.data['val'] = val
         self.type = ObjectDataType.text
 
 
 class boolean(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert(isinstance(val, bool))
         self.data['val'] = val
         self.type = ObjectDataType.boolean
@@ -373,8 +409,8 @@ class binary(ObjectData):
 
 
 class vec(ObjectData):
-    def __init__(self, name, val, coordinate_system=None, properties=None):
-        ObjectData.__init__(self, name, coordinate_system, properties)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert (isinstance(val, (tuple, list)))
         if isinstance(val, tuple):
             self.data['val'] = val
