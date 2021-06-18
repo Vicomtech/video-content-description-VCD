@@ -196,12 +196,17 @@
                 "name": {
                     "type": "string"
                 },
+                "type": {
+                    "enum": [
+                        "value"
+                    ],
+                    "type": "string"
+                },
                 "val": {
                     "type": "boolean"
                 }
             },
             "required": [
-                "name",
                 "val"
             ],
             "type": "object"
@@ -767,12 +772,19 @@
                 "name": {
                     "type": "string"
                 },
+                "type": {
+                    "enum": [
+                        "value",
+                        "min",
+                        "max"
+                    ],
+                    "type": "string"
+                },
                 "val": {
                     "type": "number"
                 }
             },
             "required": [
-                "name",
                 "val"
             ],
             "type": "object"
@@ -1539,12 +1551,17 @@
                 "name": {
                     "type": "string"
                 },
+                "type": {
+                    "enum": [
+                        "value"
+                    ],
+                    "type": "string"
+                },
                 "val": {
                     "type": "string"
                 }
             },
             "required": [
-                "name",
                 "val"
             ],
             "type": "object"
@@ -1675,6 +1692,13 @@
                 "name": {
                     "type": "string"
                 },
+                "type": {
+                    "enum": [
+                        "values",
+                        "range"
+                    ],
+                    "type": "string"
+                },
                 "val": {
                     "items": {
                         "oneOf": [
@@ -1690,7 +1714,6 @@
                 }
             },
             "required": [
-                "name",
                 "val"
             ],
             "type": "object"
