@@ -33,7 +33,7 @@ from vcd.types import areaReference
 
     SCL is based on common conventions. In some cases, SCL allows using different conventions, but eventually
     it enforces using specific conventions, such as "right-hand" coordinate systems, homogeneous coordinates, 
-    left-multiplication of matrices, alias (vs alibi) rotation matrices, etc.
+    right-multiplication of matrices, alias (vs alibi) rotation matrices, etc.
 
     NUMPY ARRAYS
     -----------------------------
@@ -54,7 +54,7 @@ from vcd.types import areaReference
     Each sensor has a "static pose" defined against the Local Coordinate System (LCS). In the case of
     vehicle set-ups, this LCS is a point at the ego-vehicle located at
     the middle of the rear axle, projected to the ground, being X-to-front, Y-to-left, Z-up
-    as defined in the ISO8855. There are some other coordinates systems considered in SCL:
+    as defined in the ISO8855. There are some other usual acronyms used in the code:
 
         - LCS : Local Coordinate System (e.g. the vehicle coordinate system at the rear axis, as in ISO8855)
         - SCS : Sensor Coordinate System (e.g. the camera coordinate system, or the lidar coordinate system)        
@@ -70,7 +70,7 @@ from vcd.types import areaReference
         - K : Camera calibration matrix 3x4
         - d : Distortion coefficients 1x5 (or 1x9, or 1x14)
 
-    All Poses are defined right-handed. A Pose encodes the rotation and position of a coordinate system
+    All Poses are defined right-handed. A Pose encodes the passive rotation and position of a coordinate system
     wrt to a reference system
 
     Usually, P_scs_wrt_lcs = [[R_3x3, C_3x1], [0, 0, 0, 1]]
@@ -79,19 +79,22 @@ from vcd.types import areaReference
     transformation matrix is built as the inverse of the pose  
     https://en.wikipedia.org/wiki/Active_and_passive_transformation         
 
-    Cameras coordinate systems are defined with X-to-right, Y-to-bottom, and Z-to-front.
+    Cameras coordinate systems are defined with X-to-right, Y-to-bottom, and Z-to-front, following usual OpenCV
+    convention.
     This is the common practice in computer vision, so that image coordinates are defined 
     x-to-right, y-to-bottom.
 
     Changes in coordinate systems are carried out using right-to-left matrix multiplication:
-    e.g. X_scs = T_lcs_to_scs * X_lcs (e.g. X_lcs is 4x1, Transform_lcs_to_scs is 4x4, X_scs is 4x1)
-         X_scs = T_lcs_to_scs * X_lcs
+    e.g. X_scs = T_lcs_to_scs @ X_lcs (e.g. X_lcs is 4x1, Transform_lcs_to_scs is 4x4, X_scs is 4x1)
+         X_scs = T_lcs_to_scs @ X_lcs
+         NOTE: @ operator in Python is matrix multiplication
 
     In addition, transformations can be understood as inverse Poses.
     e.g. if T_lcs_to_scs converts a point from LCS to SCS, then 
-            T_lcs_to_scs = np.linalg.inv(P_scs_wrt_lcs)            
+            T_lcs_to_scs = np.linalg.inv(P_scs_wrt_lcs)  # or using utils.inv(P_scs_wrt_lcs)      
+                  
 
-    Note that to build a Pose and Transform by knowing the rotation R and position C of a coordinate system 
+    Note that to build a Pose and Transform by knowing the passive rotation R and position C of a coordinate system 
     wrt to another, it is possible to do:
     (pseudo-code)
     P = (R C; 0 0 0 1)
