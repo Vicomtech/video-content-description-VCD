@@ -543,7 +543,14 @@
                             "type": "object"
                         },
                         "timestamp": {
-                            "type": "string"
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "number"
+                                }
+                            ]
                         },
                         "transforms": {
                             "additionalProperties": false,
@@ -1456,7 +1463,14 @@
                                 "type": "integer"
                             },
                             "timestamp": {
-                                "type": "string"
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "number"
+                                    }
+                                ]
                             }
                         }
                     },

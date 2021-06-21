@@ -259,7 +259,7 @@ openlabel_schema = {
                                    "as specific timestamps or instantaneous intrinsics.",
                     "type": "object",
                     "properties": {
-                        "timestamp": {"type": "string"},
+                        "timestamp": {"anyOf": [{"type": "string"}, {"type": "number"}]},
                         "streams": {
                             "type": "object",
                             "patternProperties": {
@@ -818,7 +818,7 @@ openlabel_schema = {
                 "type": "object",
                 "oneOf": [{
                     "properties": {
-                        "timestamp": {"type": "string"},
+                        "timestamp": {"anyOf": [{"type": "string"}, {"type": "number"}]},
                         "frame_stream": {"type": "integer"},
                     },
                 }, {

@@ -1045,7 +1045,7 @@ class VCD:
         self.__update_vcd_frame_intervals(FrameIntervals(frame_num))
         self.data['openlabel']['frames'][frame_num].setdefault('frame_properties', dict())
         if timestamp is not None:
-            assert (isinstance(timestamp, str))
+            assert (isinstance(timestamp, (str, float)))
             self.data['openlabel']['frames'][frame_num]['frame_properties']['timestamp'] = timestamp
 
         if properties is not None:
