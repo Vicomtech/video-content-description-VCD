@@ -260,3 +260,114 @@ export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNu
     return fiDictNew
 }
 
+export function createPose(R,C){
+    // Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
+    var temp;
+    if(C[0] == 3){
+        //let temp = np.hstack((R, C))
+        temp = R.map((v,i)=> v.concat(C[i]))
+        
+    }else if(C[0] == 4){
+        //let C = C[0:3, :]
+        //let temp = np.hstack((R, C))
+        temp = R.map((v,i)=> v.concat(C[i]))
+    }
+    let b= [0, 0, 0, 1]
+    let P = temp.map(function(el, i) {
+        return el.concat(b[i]);
+     });
+    //let P = np.vstack((temp, np.array([0, 0, 0, 1])))  //P is 4x4
+    return P
+    
+    
+}
+
+export enum EulerSeq {
+     // https://en.wikipedia.org/wiki/Euler_angles
+     ZXZ = 1,
+     XYX = 2,
+     YZY = 3,
+     ZYZ = 4,
+     XZX = 5,
+     YXY = 6,
+ 
+     XYZ = 7,
+     YZX = 8,
+     ZXY = 9,
+     XZY = 10,
+     ZYX = 11, // yaw, pitch, roll (in that order)
+     YXZ = 12,
+}
+
+export function Rx(angle_rad){
+    return [[1, 0, 0],
+            [0, Math.cos(angle_rad), -Math.sin(angle_rad)],
+            [0, Math.sin(angle_rad), Math.cos(angle_rad)]
+    ]
+
+}
+export function Ry(angle_rad){
+    return [[Math.cos(angle_rad), 0, Math.sin(angle_rad)],
+             [0, 1, 0],
+            [-Math.sin(angle_rad), 0, Math.cos(angle_rad)]
+    ]
+}
+export function Rz(angle_rad){
+    return [[Math.cos(angle_rad), -Math.sin(angle_rad), 0],
+            [Math.sin(angle_rad), Math.cos(angle_rad), 0],
+            [0, 0, 1]
+            ]
+}
+
+
+
+export function euler2R(a, seq=EulerSeq.ZYX){
+    // Proper or improper Euler angles to R
+    // Assuming right-hand rotation and radians
+
+    //EIG
+    //assert(isinstance(a, list))
+    //assert(len(a) == 3)
+    //assert(isinstance(seq, EulerSeq))
+
+    // The user introduces 3 angles a=(a[0], a[1], a[2]), and a meaning, e.g. "ZYX"
+    // So we can build the Rx, Ry, Rz according to the specified code
+
+    // e.g. a=(0.1, 0.3, 0.2), seq='ZYX', then R0=Rx(0.1), R1=Ry(0.3), R2=Rz(0.2)
+    // The application of the rotations in this function is
+    // R = R0*R1*R2, which must be read from right-to-left
+    // So first R2 is applied, then R1, then R0
+    // If the default 'zyx' sequence is selected, the user is providing a=(rz, ry, rx), and it is applied R=RZ*RY*RX
+
+    // e.g. a=(0.1, 0.4, 0.2), seq='xzz')
+    // R = Rx(0.1)*Rz(0.4)*Rz(0.2)
+
+ 
+
+   if (EulerSeq[seq].charAt(0) == "X"){
+        let R_0 = Rx(a[0])
+    }else if(EulerSeq[seq].charAt(0) == "Y"){
+        let R_0 = Ry(a[0])
+    }else{
+        let R_0 = Rz(a[0])
+    }
+        
+    if (EulerSeq[seq].charAt(1) == "X"){
+        let R_1 = Rx(a[1])
+    }else if(EulerSeq[seq].charAt(1) == "Y"){
+        let R_1 = Ry(a[1])
+    }else{
+        let R_1 = Rz(a[1])
+    }
+
+    if (EulerSeq[seq].charAt(2) == "X"){
+        let R_2 = Rx(a[2])
+    }else if(EulerSeq[seq].charAt(2) == "Y"){
+        let R_2 = Ry(a[2])
+    }else{
+        let R_2 = Rz(a[2])
+    }
+
+
+}
+

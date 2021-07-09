@@ -125,6 +125,45 @@ export class IntrinsicsCustom extends Intrinsics {
 	}
 }
 
+export enum TransformDataType{
+	matrix_4x4 = 1,
+    quat_and_trans_7x1 = 2,
+    euler_and_trans_6x1 = 3,
+    custom = 4
+}
+
+export class TransformData {
+
+	/*
+    This class encodes the transform data in the form of 4x4 matrix, quaternion + translation, or
+    Euler angles + translation
+    */
+	data: object
+	constructor(val, type,additionalItems: object = null){
+		this.data = {}
+		if(type == TransformDataType.matrix_4x4){
+			this.data['matrix4x4'] = val
+		}else if(type == TransformDataType.quat_and_trans_7x1){
+			this.data['quaternion'] = val.slice(0,4);  //val[0:4]
+            this.data['translation'] = val.slice(4,7); //val[4:7]
+		}else if (type == TransformDataType.euler_and_trans_6x1){
+			this.data['euler_angles'] =  val.slice(0,3);  //val[0:3]
+            this.data['translation'] =   val.slice(3,6);  //val[3:6]
+		}
+
+		if (additionalItems!=null){
+			Object.assign(this.data, additionalItems)
+		}
+	}
+}
+export class PoseData extends TransformData{
+	/** 
+    Equivalente to TransformData, but intended to be used when passive rotation and translation values are provided
+    */
+   constructor(val, type,additionalItems: object = null ){
+	   super(val,type,additionalItems)
+   }
+}
 export class Transform {
 	data: object
 	data_additional: object
