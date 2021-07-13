@@ -951,7 +951,7 @@ export class VCD {
         //Add Pose data
         if(poseWrtParent!=null){
             //TODO: CHECK IF poseWrtParent IS PoseData()
-            Object.assign(this.data['openlabel']['coordinate_systems'][name]= {'pose_wrt_parent': poseWrtParent.data})
+            Object.assign(this.data['openlabel']['coordinate_systems'][name],{'pose_wrt_parent': poseWrtParent.data})
      
         }
 
@@ -973,6 +973,8 @@ export class VCD {
                 console.warn("WARNING: creating a coordinate system with a non-defined parent coordinate system. Add them in order.")
         }
     }
+
+    
 
     public addTransform(frameNum: number, transform: types.Transform) {
         this.addFrame(frameNum)

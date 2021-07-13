@@ -1,7 +1,8 @@
 import { VCD } from '../vcd.core'
 import * as types from '../vcd.types'
 
-test('test_polygon2D', () => {
+//TESTED IN image.test.ts
+/*test('test_polygon2D', () => {
     let vcd = new VCD()
 
     let uid_obj1 = vcd.addObject('someName1', '#Some')
@@ -23,4 +24,4 @@ test('test_polygon2D', () => {
 
     //console.log(vcd.stringify(false))
     expect(vcd.stringify(false)).toBe('{"vcd":{"metadata":{"schema_version":"4.3.1"},"objects":{"0":{"name":"someName1","type":"#Some","object_data":{"poly2d":[{"name":"poly1","val":["5","5","1","mBIIOIII"],"mode":"MODE_POLY2D_SRF6DCC","closed":false},{"name":"poly2","val":[5,5,10,5,11,6,11,8,9,10,5,10,3,8,3,6,4,5],"mode":"MODE_POLY2D_ABSOLUTE","closed":false}]},"object_data_pointers":{"poly1":{"type":"poly2d","frame_intervals":[]},"poly2":{"type":"poly2d","frame_intervals":[]}}}}}}')
-});
+});*/

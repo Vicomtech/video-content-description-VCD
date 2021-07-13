@@ -167,14 +167,15 @@ export class PoseData extends TransformData{
 export class Transform {
 	data: object
 	data_additional: object
-	constructor(srcName: string, dstName: string, additionalItems: object = null) {		
+	constructor(srcName: string, dstName: string , transform_src_to_dst, additionalItems: object = null) {		
 		this.data = {}
 		this.data_additional = {}
 		let name = srcName + '_to_' + dstName
 		this.data[name] = {}		
 		this.data[name]['src'] = srcName
 		this.data[name]['dst'] = dstName
-				
+		this.data[name]['transform_src_to_dst'] = transform_src_to_dst.data
+       
 		if(additionalItems != null){			
 			Object.assign(this.data[name], additionalItems);
 			Object.assign(this.data_additional, additionalItems)

@@ -1,6 +1,8 @@
-import { VCD } from '../vcd.core'
+import { VCD, OpenLABEL } from '../vcd.core'
 import * as types from '../vcd.types'
 import { openlabel_schema } from '../vcd.schema';
+import openlabel030_test_polygon2D from '../../../tests/etc/openlabel030_test_polygon2D.json'
+
 
 //TODO: CHECK base64 encode
 /*test('test_base64', () => {
@@ -26,3 +28,27 @@ import { openlabel_schema } from '../vcd.schema';
 });*/
 
 
+test('test_polygon2D', () => {
+    let vcd = new OpenLABEL()
+
+    let uid_obj1 = vcd.addObject('someName1', '#Some')
+
+    // Add a polygon with SRF6DCC encoding (list of strings)
+    let poly1 = new types.Poly2d('poly1', [5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5], types.Poly2DType.MODE_POLY2D_SRF6DCC, false)
+    expect(poly1.data['name']).toBe('poly1')
+    expect(poly1.data['mode']).toBe(types.Poly2DType[types.Poly2DType.MODE_POLY2D_SRF6DCC])
+    expect(poly1.data['closed']).toBe(false)    
+    expect(poly1.data['val']).toStrictEqual(['5', '5', '1', 'mBIIOIII'])
+    vcd.addObjectData(uid_obj1, poly1)
+
+    let poly2 = new types.Poly2d('poly2', [5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5], types.Poly2DType.MODE_POLY2D_ABSOLUTE, false)
+    vcd.addObjectData(uid_obj1, poly2)
+    expect(poly2.data['name']).toBe('poly2')
+    expect(poly2.data['mode']).toBe(types.Poly2DType[types.Poly2DType.MODE_POLY2D_ABSOLUTE])
+    expect(poly2.data['closed']).toBe(false)  
+    expect(poly2.data['val']).toStrictEqual([5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5])  
+
+    //console.log(vcd.stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_polygon2D, false).stringify(false))
+
+});

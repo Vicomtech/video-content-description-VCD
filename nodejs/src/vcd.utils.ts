@@ -263,20 +263,17 @@ export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNu
 export function createPose(R,C){
     // Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
     var temp;
-    if(C[0] == 3){
-        //let temp = np.hstack((R, C))
+    if(C.length == 3){
         temp = R.map((v,i)=> v.concat(C[i]))
         
-    }else if(C[0] == 4){
-        //let C = C[0:3, :]
-        //let temp = np.hstack((R, C))
+    }else if(C.length == 4){
+        C.pop()
         temp = R.map((v,i)=> v.concat(C[i]))
     }
     let b= [0, 0, 0, 1]
-    let P = temp.map(function(el, i) {
-        return el.concat(b[i]);
-     });
-    //let P = np.vstack((temp, np.array([0, 0, 0, 1])))  //P is 4x4
+    temp.push([0,0,0,1])
+    let P=temp
+
     return P
     
     
@@ -342,32 +339,67 @@ export function euler2R(a, seq=EulerSeq.ZYX){
     // e.g. a=(0.1, 0.4, 0.2), seq='xzz')
     // R = Rx(0.1)*Rz(0.4)*Rz(0.2)
 
- 
+     let R_0;
+     let R_1;
+     let R_2;
 
    if (EulerSeq[seq].charAt(0) == "X"){
-        let R_0 = Rx(a[0])
+         R_0 = Rx(a[0])
     }else if(EulerSeq[seq].charAt(0) == "Y"){
-        let R_0 = Ry(a[0])
+         R_0 = Ry(a[0])
     }else{
-        let R_0 = Rz(a[0])
+         R_0 = Rz(a[0])
     }
         
     if (EulerSeq[seq].charAt(1) == "X"){
-        let R_1 = Rx(a[1])
+         R_1 = Rx(a[1])
     }else if(EulerSeq[seq].charAt(1) == "Y"){
-        let R_1 = Ry(a[1])
+         R_1 = Ry(a[1])
     }else{
-        let R_1 = Rz(a[1])
+         R_1 = Rz(a[1])
     }
 
     if (EulerSeq[seq].charAt(2) == "X"){
-        let R_2 = Rx(a[2])
+         R_2 = Rx(a[2])
     }else if(EulerSeq[seq].charAt(2) == "Y"){
-        let R_2 = Ry(a[2])
+         R_2 = Ry(a[2])
     }else{
-        let R_2 = Rz(a[2])
+         R_2 = Rz(a[2])
     }
 
+    // Using here reverse composition, as this Rotation matrix is built to describe
+    // a pose matrix, which encodes the rotation and position of a coordinate system
+    // with respect to another.
+    // To transform points from origin to destination coordinate systems, the R^T is used
+    // which then swaps the order of the sequence to the expected order.
+    // NOTE: this formula cannot be applied if the rotation matrix is used to rotate points (active-alibi
+    // rotation), instead of rotating coordinate systems (passive-alias rotation)
+    
+   
+    let R=matrixDot(R_0, matrixDot(R_1,R_2))
+    
+
+    return R
 
 }
 
+export function flatten(array)
+{
+    if(array.length == 0)
+        return array;
+    else if(Array.isArray(array[0]))
+        return flatten(array[0]).concat(flatten(array.slice(1)));
+    else
+        return [array[0]].concat(flatten(array.slice(1)));
+}
+
+
+function matrixDot (A, B) {
+    var result = new Array(A.length).fill(0).map(row => new Array(B[0].length).fill(0));
+
+    return result.map((row, i) => {
+        return row.map((val, j) => {
+            return A[i].reduce((sum, elm, k) => sum + (elm*B[k][j]) ,0)
+        })
+    })
+}

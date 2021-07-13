@@ -66,7 +66,7 @@ test('test_poses', () => {
         types.CoordinateSystemType.sensor_cs, 
         "base", 
         (new types.PoseData(
-            P_scs_wrt_lcs.reduce((accumulator, value) => accumulator.concat(value), []),
+            utils.flatten(P_scs_wrt_lcs),
             types.TransformDataType.matrix_4x4)
         )
     )
@@ -76,15 +76,15 @@ test('test_poses', () => {
         types.CoordinateSystemType.sensor_cs, 
         "base", 
         (new types.PoseData(
-            [yaw_rad, pitch_rad, roll_rad, C_lcs.reduce((accumulator, value) => accumulator.concat(value), [])],
+           [yaw_rad, pitch_rad, roll_rad].concat(utils.flatten(C_lcs)),
             types.TransformDataType.euler_and_trans_6x1,
             {"sequence":"ZYX"}
         )))
 
-    //expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_poses, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_poses, false).stringify(false))
 });
 
-/*test('test_transforms', () => {
+test('test_transforms', () => {
     // Transforms are the same as Poses, but applied for a given frame
     let vcd = new OpenLABEL()
 
@@ -109,15 +109,16 @@ test('test_poses', () => {
         new types.TransformData(
             [0.0, 0.0, 0.0, 1.0, 1.0, 0.0],
             types.TransformDataType.euler_and_trans_6x1),
-        {"custom_property1":"0.9",
-         "custom_property2":"Some tag"})
+            {"custom_property1":0.9,
+            "custom_property2":"Some tag"},
+        )
             
     )
     
     
     expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_transforms, false).stringify(false))
 
-});*/
+});
 
 test('test_cuboids', () => {
     // This test shows how to represent cuboids in various forms
