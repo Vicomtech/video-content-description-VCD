@@ -280,7 +280,7 @@ class VCD:
         self.use_uuid = False
         if file_name is not None:
             # Load from file
-            json_file = open(file_name)
+            json_file = open(file_name, encoding='utf-8')
             read_data = json.load(json_file)  # Open without converting strings to integers
             
             # Check VERSION and call converters if needed
@@ -1124,7 +1124,7 @@ class VCD:
 
     def save(self, file_name, pretty=False, validate=False):
         string = self.stringify(pretty, validate)
-        file = open(file_name, 'w')
+        file = open(file_name, 'w', encoding='utf8')
         file.write(string)
         file.close()
 
@@ -1136,10 +1136,10 @@ class VCD:
 
     def stringify(self, pretty=True, validate=True):
         if pretty:
-            stringified_vcd = json.dumps(self.data, indent=4, sort_keys=False)
+            stringified_vcd = json.dumps(self.data, indent=4, sort_keys=False, ensure_ascii=False)
 
         else:
-            stringified_vcd = json.dumps(self.data, separators=(',', ':'), sort_keys=False)
+            stringified_vcd = json.dumps(self.data, separators=(',', ':'), sort_keys=False, ensure_ascii=False)
         if validate:
             self.validate(stringified_vcd)
         return stringified_vcd

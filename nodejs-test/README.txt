@@ -7,6 +7,14 @@ So this project is not packaged itself as an NPM package, but rather it is assum
 npm install -g typescript
 tsc --version
 
+3.- Prepare the VCD package. First, install npm dependencies
+cd ../nodejs
+npm install  # this will read package.json and install 
+# You can test see which dependencies are installed
+npm list --prod
+# And also which devDependencies are installed
+npm list --dev
+
 3.- Compile the VCD package if not done already:
 cd ../nodejs
 npm run build
