@@ -322,10 +322,6 @@ export function euler2R(a, seq=EulerSeq.ZYX){
     // Proper or improper Euler angles to R
     // Assuming right-hand rotation and radians
 
-    //EIG
-    //assert(isinstance(a, list))
-    //assert(len(a) == 3)
-    //assert(isinstance(seq, EulerSeq))
 
     // The user introduces 3 angles a=(a[0], a[1], a[2]), and a meaning, e.g. "ZYX"
     // So we can build the Rx, Ry, Rz according to the specified code

@@ -578,7 +578,7 @@ export class Point3d extends ObjectDataGeometry{
 export class GeometricReference extends ObjectDataGeometry{
     constructor( name: string, val, referenceType: ObjectDataType, cs=null, properties=null ){
         super( name, cs, properties);		
-        this.data['reference_type'] = ObjectDataType[ObjectDataType[referenceType]];  // this trick returns the value of the enum as a string
+        this.data['reference_type'] = ObjectDataType[referenceType];  // this trick returns the value of the enum as a string
         if(val != null){
             if(!Array.isArray(val)){
 				console.warn("WARNING: val not array");
@@ -731,7 +731,8 @@ export class Mesh extends ObjectDataGeometry{
         result += "]]";
 
         // Clean-out commas
-        result = result.replace(",]", "]")
+		let re = /\,]/gi;
+        result = result.replace(re, "]")
 
         return result;
 	}
