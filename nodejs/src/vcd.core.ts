@@ -51,7 +51,8 @@ export enum ElementType {
     action = 1,
     event = 2,
     context = 3,
-    relation = 4
+    relation = 4,
+    tag=5
 }
 
 export enum StreamType {    
@@ -265,6 +266,7 @@ export class VCD {
         this.lastUID[ElementType.event] = -1;
         this.lastUID[ElementType.context] = -1;
         this.lastUID[ElementType.relation] = -1;
+        this.lastUID[ElementType.tag] = -1;
     }
 
 	private init(vcd_json = null, validation = false) {
@@ -758,6 +760,11 @@ export class VCD {
     }
 
     private setElementDataPointers(elementType: ElementType, uid: UID, elementData: types.ObjectData, frameIntervals: FrameIntervals) {
+        //For Tags, let's ignore element_data_pointers
+        if (elementType == ElementType.tag){
+            return
+        }
+
         let elementTypeName = ElementType[elementType]
         this.data['openlabel'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers'] = this.data['openlabel'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers'] || {}
         let edp = this.data['openlabel'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers']
@@ -911,7 +918,7 @@ export class VCD {
         this.data['openlabel']['metadata']['comment'] = comment;
     }
 
-    public addOntology(ontologyName: string): string {
+    public addOntology(ontologyName: string, subsetInclude=null, subsetExclude=null): string {
         this.data['openlabel']['ontologies'] = this.data['openlabel']['ontologies'] || {};
         for (const ont_uid in this.data['openlabel']['ontologies']) {
             if (this.data['openlabel']['ontologies'][ont_uid] == ontologyName) {
@@ -920,7 +927,24 @@ export class VCD {
             }
         }
         var length = Object.keys(this.data['openlabel']['ontologies']).length;
-        this.data['openlabel']['ontologies'][length.toString()] = ontologyName;
+        if (subsetInclude == null && subsetExclude == null ){
+            this.data['openlabel']['ontologies'][length.toString()] = ontologyName
+        }
+        else{
+            this.data['openlabel']['ontologies'][length.toString()] = {"uri": ontologyName}
+            if (subsetInclude != null){
+                this.data['openlabel']['ontologies'][length.toString()]["subset_include"] = subsetInclude
+            }
+            if (subsetExclude != null){
+                this.data['openlabel']['ontologies'][length.toString()]["subset_exclude"] = subsetExclude
+            }
+
+            //EIG kwargs.item()
+            //for key, value in kwargs.items():
+            //this.data['openlabel']['ontologies'][length.toString()][key] = value
+       
+        }
+       
         return length.toString();
     }
 
@@ -1013,7 +1037,7 @@ export class VCD {
         this.data['openlabel']['frames'][frameNum]['frame_properties'] = this.data['openlabel']['frames'][frameNum]['frame_properties'] || {};
 
         if (timestamp != null) {
-            if(timestamp instanceof String) {
+            if(timestamp instanceof String || timestamp === String) {
                 this.data['openlabel']['frames'][frameNum]['frame_properties']['timestamp'] = timestamp
             }
         }
@@ -1212,6 +1236,12 @@ export class VCD {
         return relation_uid.asStr()
     }
 
+    public addTag( semanticType: string, uid = null, ontUid=null, resUid=null){
+        return this.setElement(ElementType.tag, null, semanticType,new  FrameIntervals(null),
+                                  new UID(uid), new UID(ontUid), null, SetMode.union, resUid).asStr()
+
+    }
+
     public addElement(elementType: ElementType, name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, setMode: SetMode = SetMode.union, resUid=null) {
         return this.setElement(elementType, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), null, setMode,resUid).asStr()                
     }
@@ -1293,6 +1323,11 @@ export class VCD {
 
     public addContextData(uid: string | number, contextData: types.ObjectData, frameValue = null, setMode: SetMode = SetMode.union) {
         return this.setElementData(ElementType.context, new UID(uid), contextData, new FrameIntervals(frameValue), setMode)        
+    }
+
+    public addTagData(uid: string | number, tagData: types.ObjectData, frameValue = null, setMode: SetMode = SetMode.union){
+        return this.setElementData(ElementType.tag, new UID(uid), tagData, new FrameIntervals(frameValue), setMode)        
+
     }
 
     public addEventData(uid: string | number, eventData: types.ObjectData, frameValue = null, setMode: SetMode = SetMode.union) {
@@ -1776,7 +1811,8 @@ export class VCD {
 
     public getCoordinateSystem(cs: string) {
         if(this.hasCoordinateSystem(cs)) {
-            return this.data['openlabel']['streams'][cs]
+            //return this.data['openlabel']['streams'][cs]
+            return this.data['openlabel']['coordinate_systems'][cs]
         }
         else return null
     }

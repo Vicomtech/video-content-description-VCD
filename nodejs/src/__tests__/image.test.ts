@@ -1,8 +1,22 @@
 import { VCD, OpenLABEL } from '../vcd.core'
 import * as types from '../vcd.types'
 import { openlabel_schema } from '../vcd.schema';
-import openlabel030_test_polygon2D from '../../../tests/etc/openlabel030_test_polygon2D.json'
 
+
+import openlabel030_test_polygon2D from '../../../tests/etc/openlabel030_test_polygon2D.json'
+import openlabel030_test_create_image_png from '../../../tests/etc/openlabel030_test_create_image_png.json'
+import openlabel030_test_contours from '../../../tests/etc/openlabel030_test_contours.json'
+
+/*function drawBasicImage(classes_colors){
+    img = np.zeros((640, 480, 3), np.uint8)
+
+    cv.rectangle(img, (50, 50, 150, 150), classes_colors['class1'], -1)
+    cv.circle(img, (110, 110), 50, classes_colors['class2'], -1)
+    cv.rectangle(img, (60, 60, 10, 10), (0,0,0), -1)
+    cv.line(img, (500, 20), (33, 450), classes_colors['class3'], 10)
+
+    return img
+}*/
 
 //TODO: CHECK base64 encode
 /*test('test_base64', () => {
@@ -27,11 +41,11 @@ import openlabel030_test_polygon2D from '../../../tests/etc/openlabel030_test_po
     let payload_read = btoa(payload_b64_read)    
 });*/
 
-
+/*
 test('test_polygon2D', () => {
     let vcd = new OpenLABEL()
 
-    let uid_obj1 = vcd.addObject('someName1', '#Some')
+    let uid_obj1 = vcd.addObject('someName1', '//Some')
 
     // Add a polygon with SRF6DCC encoding (list of strings)
     let poly1 = new types.Poly2d('poly1', [5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5], types.Poly2DType.MODE_POLY2D_SRF6DCC, false)
@@ -52,3 +66,59 @@ test('test_polygon2D', () => {
     expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_polygon2D, false).stringify(false))
 
 });
+
+test('test_create_image_png', () => {
+    
+
+    // 1.- Create a VCD instance
+    let vcd = new OpenLABEL()
+
+    // 2.- Create image
+    //let colors = [[125, 32, 64], [98, 12, 65], [12, 200, 190]]
+    //let classes = ["class1", "class2", "class3"]
+    //let classes_colors = dict(zip(classes, colors))
+    let classes_colors = "{'class1': (125, 32, 64), 'class2': (98, 12, 65), 'class3': (12, 200, 190)}"
+    let img = drawBasicImage(classes_colors)
+
+
+    // 3.- Encode
+    let  compr_params = [int(cv.IMWRITE_PNG_COMPRESSION), 9]
+    result, payload = cv.imencode('.png', img, compr_params)
+
+    expect(result).toBe(true)
+
+    // 4.- Convert to base64
+    let payload_b64_bytes = base64.b64encode(payload)  // starts with b' (NOT SERIALIZABLE!)
+    let payload_b64_str = str(base64.b64encode(payload), 'utf-8')  // starts with s'
+
+    // 5.- Insert into VCD
+    let vcd_image = new types.Image('labels', payload_b64_str, 'image/png', 'base64')
+    let uid = vcd.addObject('', '')
+    vcd.addObjectData(uid, vcd_image)
+
+    // 6.- Get and decode
+    let od = vcd.getObjectData(uid, 'labels')
+    let mime_type = od['mime_type']
+    let encoding = od['encoding']
+    let payload_b64_read = od['val']
+    let payload_read = base64.b64decode(payload_b64_read)
+    expect(mime_type).toBe('image/png')
+    expect(encoding).toBe('base64')
+    let img_dec = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), 1)
+
+    // Check equals
+    let diff_val = np.sum(cv.absdiff(img, img_dec))
+
+    expect(diff_val).toBe(0)
+
+
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_create_image_png, false).stringify(false))
+
+});
+
+test('test_contours', () => {
+    let vcd = new OpenLABEL()
+
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_contours, false).stringify(false))
+
+});*/

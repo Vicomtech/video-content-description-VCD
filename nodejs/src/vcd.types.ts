@@ -273,9 +273,11 @@ export enum Poly2DType {
 export class ObjectData{
 	data: object;
 	type: any;
-    constructor( name: string, cs=null, properties=null) {        
+    constructor( name: string, cs=null, properties=null, type=null) {        
         this.data = {};
-        this.data['name'] = name;
+		if(name != null){
+        	this.data['name'] = name;
+		}
         if(cs != null){
 			if(typeof cs != "string" && !(cs instanceof String)){
 				console.warn("WARNING: coordinate_system not string", cs);
@@ -285,6 +287,9 @@ export class ObjectData{
 		}
 		if(properties != null){
 			Object.assign(this.data, properties)
+		}
+		if(type!=null){
+			this.data['type']=type;
 		}
 	}
 	typeName() {
@@ -355,8 +360,8 @@ export class Rbbox extends ObjectDataGeometry {
 }
 
 export class Num extends ObjectData{
-    constructor( name: string, val, cs=null, properties=null ) {
-        super( name, cs, properties);
+    constructor( name: string, val, cs=null, properties=null, type=null ) {
+        super( name, cs, properties,type);
 		if (!isFloat(val) && !Number.isInteger(val)){
 			console.warn("WARNING: val is not float or integer");
 			return;
@@ -367,8 +372,8 @@ export class Num extends ObjectData{
 }
 
 export class Text extends ObjectData{
-    constructor( name: string, val, cs=null, properties=null ){
-        super( name, cs, properties);
+    constructor( name: string, val, cs=null, properties=null, type=null  ){
+        super( name, cs, properties,type);
 		if(typeof val != "string" && !(val instanceof String)){
 			console.warn("WARNING: val not string",val);
 			return;
@@ -379,8 +384,8 @@ export class Text extends ObjectData{
 }
 
 export class Boolean extends ObjectData{
-    constructor( name: string, val: boolean, cs=null, properties=null ){
-        super( name, cs, properties);		
+    constructor( name: string, val: boolean, cs=null, properties=null , type=null ){
+        super( name, cs, properties,type);		
         this.data['val'] = val;
         this.type = ObjectDataType.boolean;
 	}
@@ -528,8 +533,8 @@ export class Binary extends ObjectData{
 }
 
 export class Vec extends ObjectData{
-    constructor( name: string, val: Array<number> | Array<string>, cs=null, properties=null ) {
-        super( name, cs, properties);        
+    constructor( name: string, val: Array<number> | Array<string>, cs=null, properties=null, type=null ) {
+        super( name, cs, properties,type);        
         this.data['val'] = val;
         this.type = ObjectDataType.vec;
 	}
