@@ -747,8 +747,14 @@ export class VCD {
         element[elementTypeName + '_data'][elementData.typeName()] = element[elementTypeName + '_data'][elementData.typeName()] || []  // e.g. "bbox"
 
         // Find if element_data already there, if so, replace, otherwise, append
-        const pos = element[elementTypeName + '_data'][elementData.typeName()].findIndex(item => item.name === elementData.data['name'])
-        let found = (pos == -1)?(false):(true)
+        let found;
+        let pos;
+        if (elementData.data['name'] !=null){
+            pos = element[elementTypeName + '_data'][elementData.typeName()].findIndex(item => item.name === elementData.data['name'])
+            found = (pos == -1)?(false):(true)
+        }else{
+            found= false;
+        }
         if(!found) {
             // Not found: then, just push this new element Data
             element[elementTypeName + '_data'][elementData.typeName()].push(elementData.data);
@@ -918,7 +924,7 @@ export class VCD {
         this.data['openlabel']['metadata']['comment'] = comment;
     }
 
-    public addOntology(ontologyName: string, subsetInclude=null, subsetExclude=null): string {
+    public addOntology(ontologyName: string, subsetInclude=null, subsetExclude=null, additionalProperties=null): string {
         this.data['openlabel']['ontologies'] = this.data['openlabel']['ontologies'] || {};
         for (const ont_uid in this.data['openlabel']['ontologies']) {
             if (this.data['openlabel']['ontologies'][ont_uid] == ontologyName) {
@@ -927,7 +933,7 @@ export class VCD {
             }
         }
         var length = Object.keys(this.data['openlabel']['ontologies']).length;
-        if (subsetInclude == null && subsetExclude == null ){
+        if (subsetInclude == null && subsetExclude == null && additionalProperties ==null){
             this.data['openlabel']['ontologies'][length.toString()] = ontologyName
         }
         else{
@@ -938,7 +944,12 @@ export class VCD {
             if (subsetExclude != null){
                 this.data['openlabel']['ontologies'][length.toString()]["subset_exclude"] = subsetExclude
             }
-
+            if (additionalProperties != null) {
+                if(additionalProperties instanceof Object) {
+                    Object.assign(this.data['openlabel']['ontologies'][length.toString()], additionalProperties)
+                }
+            }   
+          
             //EIG kwargs.item()
             //for key, value in kwargs.items():
             //this.data['openlabel']['ontologies'][length.toString()][key] = value

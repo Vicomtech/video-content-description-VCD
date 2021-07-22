@@ -24,21 +24,6 @@ test('test_create_openlabel', () => {
 
 });
 
-/*test('test_read_vcd431_file', () => {
-    
-    
-    //This test is about reading a VCD431 file and passing it to the OpenLABEL constructor.
-    //:return:
-    
-
-    //EIG vcd version**
-    let openlabel = new OpenLABEL(vcd431_test_contours,false);
-
-    expect(openlabel.stringify(false)).toBe(new VCD(openlabel030_test_read_vcd431_file, false).stringify(false))
-
-    
-});*/
-
 
 test('test_openlabel_bounding_box_points', () => {
     let openlabel = new OpenLABEL();
