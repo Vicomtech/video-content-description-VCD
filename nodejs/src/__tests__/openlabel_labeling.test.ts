@@ -3,7 +3,6 @@ import { VCD,OpenLABEL, ElementType, RDF, ResourceUID } from '../vcd.core'
 import * as types from '../vcd.types'
 
 import openlabel030_test_create_openlabel from '../../../tests/etc/openlabel030_test_create_openlabel.json'
-import openlabel030_test_read_vcd431_file from '../../../tests/etc/openlabel030_test_read_vcd431_file.json'
 import openlabel030_test_openlabel_bounding_box_points from '../../../tests/etc/openlabel030_test_openlabel_bounding_box_points.json'
 import openlabel030_test_openlabel_external_data_resourc from '../../../tests/etc/openlabel030_test_openlabel_external_data_resource.json'
 import vcd431_test_contours from '../../../tests/etc/vcd431_test_contours.json'
@@ -40,14 +39,14 @@ test('test_openlabel_bounding_box_points', () => {
 
 });
 
-/*test('test_openlabel_external_data_resource', () => {
+test('test_openlabel_external_data_resource', () => {
     let openlabel = new OpenLABEL();
-    //EIG --> resource path
-    let res_uid = openlabel.addResource("../resources/xodr/multi_intersections.xodr")
+
+    let res_uid = openlabel.addResource('../resources/xodr/multi_intersections.xodr')
     openlabel.addObject("road1", "road",null,null,null,null,null, new ResourceUID(res_uid, 217))
     openlabel.addObject("lane1", "lane",null,null,null,null,null, new ResourceUID(res_uid, 3))
 
-    //expect(openlabel.stringify(false)).toBe(openlabel030_test_openlabel_external_data_resourc)
+    expect(openlabel.stringify(false)).toBe(new VCD(openlabel030_test_openlabel_external_data_resourc, false).stringify(false))
 
-});*/
+});
 

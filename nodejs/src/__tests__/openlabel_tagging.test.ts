@@ -48,7 +48,6 @@ test('test_openlabel_tags_complex_2', () => {
     let uid_0 = openlabel.addTag("motorway",null, ont_uid_0)
     let uid_1 = openlabel.addTag("number-of-lanes",null, ont_uid_0)
     openlabel.addTagData(uid_1, new types.Vec(null, [2, 3],null,null, "values"))
-    // EIG --> only 1 tagData
     let uid_2 = openlabel.addTag("lane-widths",null, ont_uid_0)
     openlabel.addTagData(uid_2, new types.Vec(null, [3.4, 3.7],null,null, "range"))
     openlabel.addTagData(uid_2, new types.Vec(null, [3.9, 4.1],null,null, "range"))

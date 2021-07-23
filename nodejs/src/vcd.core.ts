@@ -490,7 +490,7 @@ export class VCD {
         //let resourceUid = resUid.resource_uid
         let resourceUid = resUid.resourceUid
             if(!resourceUid.isNone() && this.getResource(resourceUid.asStr()))
-                element['resource_uid'] = resUid.as_dict()
+                element['resource_uid'] = resUid.asDict()
         }
         if(coordinateSystem != null && this.hasCoordinateSystem(coordinateSystem)) element['coordinate_system'] = coordinateSystem
 
@@ -950,10 +950,7 @@ export class VCD {
                 }
             }   
           
-            //EIG kwargs.item()
-            //for key, value in kwargs.items():
-            //this.data['openlabel']['ontologies'][length.toString()][key] = value
-       
+           
         }
        
         return length.toString();
@@ -1790,7 +1787,7 @@ export class VCD {
         let res_uid_str = new UID(resUid).asStr()
         if (this.data['openlabel']['resources']){
             if(this.data['openlabel']['resources'][res_uid_str]){
-                return this.data['openlabel']['ontologies'][res_uid_str];
+                return this.data['openlabel']['resources'][res_uid_str];
             }
         }
         
