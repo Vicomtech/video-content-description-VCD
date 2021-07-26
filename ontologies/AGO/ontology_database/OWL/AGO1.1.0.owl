@@ -14,14 +14,14 @@
      xmlns:dcterms="http://unknown.prefix/dcterms#"
      xmlns:elements="http://purl.org/dc/elements/1.1#">
     <owl:Ontology rdf:about="http://vcd.vicomtech.org/ontology/automotive#">
-        <owl:versionIRI rdf:resource="http://vcd.vicomtech.org/ontology/automotive/1.0.0#"/>
+        <owl:versionIRI rdf:resource="http://vcd.vicomtech.org/ontology/automotive/1.1.0#"/>
         <elements:creator>Itziar Urbieta</elements:creator>
         <elements:description xml:lang="en">This is a global ontology of the main concepts related with the automotive area. The ontology contains the constructs required for annotation and traffic scenario simulation.</elements:description>
         <elements:title>Automotive Global Ontology</elements:title>
         <terms:publisher>Vicomtech</terms:publisher>
         <language xml:lang="en">en</language>
         <rdfs:label>automotive</rdfs:label>
-        <owl:versionInfo>version 1.0.0</owl:versionInfo>
+        <owl:versionInfo>version 1.1.0</owl:versionInfo>
     </owl:Ontology>
     
 
