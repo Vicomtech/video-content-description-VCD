@@ -61,17 +61,9 @@ def consecutive(fi_a, fi_b):
 
 def is_inside_frame_intervals(frame_num, frame_intervals):
     for fi in frame_intervals:
-        if is_inside_frame_interval(frame_num, fi):
+        if fi[0] <= frame_num <= fi[1]:        
             return True
     return False
-
-
-def is_inside_frame_interval(frame_num, frame_interval):
-    return frame_interval[0] <= frame_num <= frame_interval[1]
-
-
-def is_inside(frame_num, frame_interval):
-    return frame_interval['frame_start'] <= frame_num <= frame_interval['frame_end']
 
 
 def get_outer_frame_interval(frame_intervals):
@@ -179,7 +171,6 @@ def fuse_frame_interval_dict(frame_interval, frame_intervals):
 
     return frame_intervals_to_return
 
-
 def fuse_frame_intervals(frame_intervals):
     # This functions receives a list of frame_intervals and returns another one with
     # non-overlapping intervals
@@ -195,6 +186,14 @@ def fuse_frame_intervals(frame_intervals):
 
     if num_fis == 1:
         return frame_intervals
+    
+    if num_fis == 2:
+        fi1 = frame_intervals[0]
+        fi2 = frame_intervals[1]
+        if fi1["frame_end"]<=fi2["frame_start"]:
+            # Typical case fi1 is before fi2 and fi2 is just one frame next
+            if fi1["frame_end"] == fi2["frame_start"] - 1:            
+                return [{"frame_start": fi1["frame_start"], "frame_end": fi2["frame_end"]}]
 
     # Read first element
     frame_intervals_fused = [frame_intervals[0]]

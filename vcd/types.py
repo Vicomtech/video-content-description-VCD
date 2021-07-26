@@ -58,8 +58,7 @@ class IntrinsicsPinhole(Intrinsics):
 
 
 class IntrinsicsFisheye(Intrinsics):
-    def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
-                 radius_x, radius_y, **additional_items):
+    def __init__(self, width_px, height_px, lens_coeffs_1x4, center_x, center_y, aspect_ratio, **additional_items):
         Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
@@ -69,15 +68,11 @@ class IntrinsicsFisheye(Intrinsics):
         assert (isinstance(lens_coeffs_1x4, list))
         assert (isinstance(center_x, (float, type(None))))
         assert (isinstance(center_y, (float, type(None))))
-        assert (isinstance(radius_x, (float, type(None))))
-        assert (isinstance(radius_y, (float, type(None))))
-        assert (isinstance(fov_deg, (float, type(None))))
+        assert (isinstance(aspect_ratio, (float, type(None))))        
 
         self.data['intrinsics_fisheye']['center_x'] = center_x
         self.data['intrinsics_fisheye']['center_y'] = center_y
-        self.data['intrinsics_fisheye']['radius_x'] = radius_x
-        self.data['intrinsics_fisheye']['radius_y'] = radius_y
-        self.data['intrinsics_fisheye']['fov_deg'] = fov_deg
+        self.data['intrinsics_fisheye']['aspect_ratio'] = aspect_ratio        
 
         assert (len(lens_coeffs_1x4) == 4)
         self.data['intrinsics_fisheye']['lens_coeffs_1x4'] = lens_coeffs_1x4

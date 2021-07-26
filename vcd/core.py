@@ -90,7 +90,7 @@ class FrameIntervals:
     """
     FrameIntervals class aims to simplify management of frame intervals
     """
-    def __init__(self, frame_value=None):
+    def __init__(self, frame_value=None, fuse=False):
         self.fis_dict = []
         self.fis_num = []
 
@@ -104,17 +104,20 @@ class FrameIntervals:
                 if all(isinstance(x, tuple) for x in frame_value):
                     # Then, frame_value is an array of tuples
                     self.fis_dict = utils.as_frame_intervals_array_dict(frame_value)
-                    self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
+                    if fuse:
+                        self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
                     self.fis_num = utils.as_frame_intervals_array_tuples(self.fis_dict)
                 elif all(isinstance(x, list) for x in frame_value):
                     # This is possibly a list of list, e.g. [[0, 10], [12, 15]], instead of the above case list of tupl
                     self.fis_dict = utils.as_frame_intervals_array_dict(frame_value)
-                    self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
+                    if fuse:
+                        self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
                     self.fis_num = utils.as_frame_intervals_array_tuples(self.fis_dict)
                 elif all(isinstance(x, dict) for x in frame_value):
                     # User provided a list of dict
                     self.fis_dict = frame_value
-                    self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
+                    if fuse:
+                        self.fis_dict = utils.fuse_frame_intervals(self.fis_dict)
                     self.fis_num = utils.as_frame_intervals_array_tuples(self.fis_dict)
             elif isinstance(frame_value, tuple):
                 # Then, frame_value is a tuple (one single frame interval)
@@ -128,10 +131,8 @@ class FrameIntervals:
                 warnings.warn("ERROR: Unsupported FrameInterval format.")
 
     def empty(self):
-        if len(self.fis_dict) == 0 or len(self.fis_num) == 0:
-            return True
-        else:
-            return False
+        #if len(self.fis_dict) == 0 or len(self.fis_num) == 0:
+        return not self.fis_num
 
     def get_dict(self):
         return self.fis_dict
@@ -150,8 +151,15 @@ class FrameIntervals:
         self.fis_num = utils.as_frame_intervals_array_tuples(self.fis_dict)
 
     def union(self, frame_intervals):
-        fis_union = utils.fuse_frame_intervals(frame_intervals.get_dict() + self.fis_dict)
-        return FrameIntervals(fis_union)
+        # Several quick cases
+        if not self.fis_dict:
+            return frame_intervals
+        elif frame_intervals.get() == self.get():
+            return frame_intervals       
+        else:
+            # Generic case
+            fis_union = utils.fuse_frame_intervals(self.fis_dict + frame_intervals.get_dict())            
+            return FrameIntervals(fis_union)
 
     def intersection(self, frame_intervals):
         fis_int = utils.intersection_between_frame_interval_arrays(self.fis_num, frame_intervals.get())
@@ -984,7 +992,7 @@ class VCD:
         self.data['openlabel']['resources'][str(length)] = resource_name
         return str(length)
 
-    def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=None, uid=None):
+    def add_coordinate_system(self, name, cs_type, parent_name="", pose_wrt_parent=None):
         # Argument pose_wrt_parent can be used to quickly add a list containing the 4x4 matrix
         # However, argument pose can be used to add any type of Pose object (created with types.Pose)
         assert(isinstance(cs_type, types.CoordinateSystemType))
@@ -998,11 +1006,7 @@ class VCD:
         # Add Pose data
         if pose_wrt_parent is not None:
             assert(isinstance(pose_wrt_parent, types.PoseData))
-            self.data['openlabel']['coordinate_systems'][name].update({"pose_wrt_parent": pose_wrt_parent.data})
-
-        if uid is not None:
-            assert(isinstance(uid, str))
-            self.data['openlabel']['coordinate_systems'][name].update({"uid": uid})
+            self.data['openlabel']['coordinate_systems'][name].update({"pose_wrt_parent": pose_wrt_parent.data})        
 
         # Update parents
         if parent_name != "":
@@ -1481,12 +1485,8 @@ class VCD:
     def get_relation_uid_by_name(self, name):
         return self.get_element_uid_by_name(ElementType.relation, name)
 
-    def get_frame(self, frame_num):
-        if 'frames' not in self.data['openlabel']:
-            return None
-        else:
-            frame = self.data['openlabel']['frames'].get(frame_num)
-            return frame
+    def get_frame(self, frame_num):       
+        return self.data['openlabel']['frames'].get(frame_num)            
 
     def get_elements_of_type(self, element_type, semantic_type):
         uids_str = []
