@@ -84,9 +84,7 @@ def simple_setup_4_cams_fisheye():
                                   lens_coeffs_1x4=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  fov_deg=0.0,
-                                  radius_x=0.0,
-                                  radius_y=0.0
+                                  aspect_ratio=1.0                                  
                               )
                               )
     vcd.add_coordinate_system("CAM_FRONT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -128,9 +126,7 @@ def simple_setup_4_cams_fisheye():
                                   lens_coeffs_1x4=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  fov_deg=0.0,
-                                  radius_x=0.0,
-                                  radius_y=0.0
+                                  aspect_ratio=1.0
                               )
                               )
     vcd.add_coordinate_system("CAM_REAR", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -172,9 +168,7 @@ def simple_setup_4_cams_fisheye():
                                   lens_coeffs_1x4=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  fov_deg=0.0,
-                                  radius_x=0.0,
-                                  radius_y=0.0
+                                  aspect_ratio=1.0
                               )
                               )
     vcd.add_coordinate_system("CAM_LEFT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -216,9 +210,7 @@ def simple_setup_4_cams_fisheye():
                                   lens_coeffs_1x4=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  fov_deg=0.0,
-                                  radius_x=0.0,
-                                  radius_y=0.0
+                                  aspect_ratio=1.0
                               )
                               )
     vcd.add_coordinate_system("CAM_RIGHT", cs_type=types.CoordinateSystemType.sensor_cs,
