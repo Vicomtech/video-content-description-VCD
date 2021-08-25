@@ -1280,9 +1280,9 @@ openlabel_schema = {
                         "^[0-9]+$": {"$ref": "#/definitions/area_reference"}
                     },
                     "additionalProperties": False
-                },
-                "additionalProperties": True
-            }
+                }                
+            },
+            "additionalProperties": True
         },
         "line_reference": {
             "description": "A line reference is a JSON object which defines a 3D line segment by means of defining the indexes of its two extreme points.",
