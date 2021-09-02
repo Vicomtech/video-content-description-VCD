@@ -16,7 +16,7 @@ VCD is distributed under MIT License. See LICENSE.
 ######################################
 from builtins import type
 
-openlabel_schema_version = "0.3.0"
+openlabel_schema_version = "1.0.0"
 openlabel_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",

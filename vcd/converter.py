@@ -19,63 +19,63 @@ import vcd.schema as schema
 import vcd.types as types
 
 
-class ConverterVCD420toOpenLabel030:
-    # This class converts from VCD 4.2.0 into OpenLABEL 0.3.0
+class ConverterVCD420toOpenLabel100:
+    # This class converts from VCD 4.2.0 into OpenLABEL 1.0.0
 
     # Main changes
-    # 1) Metadata in OpenLABEL 0.3.0 is mostly inside "metadata"
+    # 1) Metadata in OpenLABEL 1.0.0 is mostly inside "metadata"
     # 2) "streams" are at root and not inside "metadata"
-    # 3) element_data_pointers in OpenLABEL 0.3.0 didn't exist in VCD 4.2.0
-    # 4) UIDs are stored as strings in OpenLABEL 0.3.0 (e.g. ontology_uid)
+    # 3) element_data_pointers in OpenLABEL 1.0.0 didn't exist in VCD 4.2.0
+    # 4) UIDs are stored as strings in OpenLABEL 1.0.0 (e.g. ontology_uid)
     # 5) coordinate_systems
 
     # Other changes are implicitly managed by the VCD API
 
-    def __init__(self, vcd_420_data, openlabel_030):
+    def __init__(self, vcd_420_data, openlabel_100):
         if 'vcd' not in vcd_420_data:
             raise Exception("This is not a valid VCD 4.2.0 file")
 
         # While changes 1-2-3 are the only ones implemented, it is easier to just copy everything and then move things
-        openlabel_030.data = copy.deepcopy(vcd_420_data)
-        openlabel_030.data['openlabel'] = openlabel_030.data.pop('vcd')
+        openlabel_100.data = copy.deepcopy(vcd_420_data)
+        openlabel_100.data['openlabel'] = openlabel_100.data.pop('vcd')
 
         # 1) Metadata (annotator and comment were already inside metadata)
-        if 'name' in openlabel_030.data['openlabel']:
-            openlabel_030.data['openlabel'].setdefault('metadata', {})
-            openlabel_030.data['openlabel']['metadata']['name'] = openlabel_030.data['openlabel']['name']
-            del openlabel_030.data['openlabel']['name']
-        if 'version' in openlabel_030.data['openlabel']:
-            openlabel_030.data['openlabel'].setdefault('metadata', {})
-            openlabel_030.data['openlabel']['metadata']['schema_version'] = schema.openlabel_schema_version
-            del openlabel_030.data['openlabel']['version']
+        if 'name' in openlabel_100.data['openlabel']:
+            openlabel_100.data['openlabel'].setdefault('metadata', {})
+            openlabel_100.data['openlabel']['metadata']['name'] = openlabel_100.data['openlabel']['name']
+            del openlabel_100.data['openlabel']['name']
+        if 'version' in openlabel_100.data['openlabel']:
+            openlabel_100.data['openlabel'].setdefault('metadata', {})
+            openlabel_100.data['openlabel']['metadata']['schema_version'] = schema.openlabel_schema_version
+            del openlabel_100.data['openlabel']['version']
 
         # 2) Streams, no longer under "metadata"
-        if 'metadata' in openlabel_030.data['openlabel']:
-            if 'streams' in openlabel_030.data['openlabel']['metadata']:
-                openlabel_030.data['openlabel']['streams'] = copy.deepcopy(openlabel_030.data['openlabel']['metadata']['streams'])
-                del openlabel_030.data['openlabel']['metadata']['streams']
+        if 'metadata' in openlabel_100.data['openlabel']:
+            if 'streams' in openlabel_100.data['openlabel']['metadata']:
+                openlabel_100.data['openlabel']['streams'] = copy.deepcopy(openlabel_100.data['openlabel']['metadata']['streams'])
+                del openlabel_100.data['openlabel']['metadata']['streams']
 
         # 3) Data pointers need to be fully computed
-        self.__compute_data_pointers(openlabel_030.data)
+        self.__compute_data_pointers(openlabel_100.data)
 
         # 4) UIDs, when values, as strings
         for element_type in core.ElementType:
-            if element_type.name + 's' in openlabel_030.data['openlabel']:
-                for uid, element in openlabel_030.data['openlabel'][element_type.name + 's'].items():
+            if element_type.name + 's' in openlabel_100.data['openlabel']:
+                for uid, element in openlabel_100.data['openlabel'][element_type.name + 's'].items():
                     if 'ontology_uid' in element:
                         element['ontology_uid'] = str(element['ontology_uid'])
 
-    def __compute_data_pointers(self, openlabel_030_data):
+    def __compute_data_pointers(self, openlabel_100_data):
         # WARNING! This function might be extremely slow
         # It does loop over all frames, and updates data pointers at objects, actions, etc
-        # It is useful to convert from VCD 4.2.0 into OpenLABEL 0.2.0 (use converter.ConverterVCD420toOpenLABEL020)
+        # It is useful to convert from VCD 4.2.0 into OpenLABEL 1.0.0 (use converter.ConverterVCD420toOpenLABEL100)
 
         # Looping over frames and creating the necessary data_pointers
-        if 'frame_intervals' in openlabel_030_data['openlabel']:
-            fis = openlabel_030_data['openlabel']['frame_intervals']
+        if 'frame_intervals' in openlabel_100_data['openlabel']:
+            fis = openlabel_100_data['openlabel']['frame_intervals']
             for fi in fis:
                 for frame_num in range(fi['frame_start'], fi['frame_end'] + 1):
-                    frame = openlabel_030_data['openlabel']['frames'][frame_num]  # warning: at this point, the key is str
+                    frame = openlabel_100_data['openlabel']['frames'][frame_num]  # warning: at this point, the key is str
                     for element_type in core.ElementType:
                         if element_type.name + 's' in frame:  # e.g. "objects", "actions"...
                             for uid, element in frame[element_type.name + 's'].items():
@@ -85,9 +85,9 @@ class ConverterVCD420toOpenLabel030:
                                     # we can safely assume it already exists
 
                                     # First, let's create a element_data_pointer at the root
-                                    openlabel_030_data['openlabel'][element_type.name + 's'][uid].\
+                                    openlabel_100_data['openlabel'][element_type.name + 's'][uid].\
                                         setdefault(element_type.name + '_data_pointers', {})
-                                    edp = openlabel_030_data['openlabel'][element_type.name + 's'][uid][element_type.name + '_data_pointers']
+                                    edp = openlabel_100_data['openlabel'][element_type.name + 's'][uid][element_type.name + '_data_pointers']
 
                                     # Let's loop over the element_data
                                     for ed_type, ed_array in element[element_type.name + '_data'].items():

@@ -298,18 +298,18 @@ class VCD:
                     # This is 4.1-2
                     if read_data['vcd']['version'] == "4.2.0":
                         # This is VCD 4.2.0
-                        warnings.warn("WARNING: Converting VCD 4.2.0 to OpenLABEL 0.3.0. A full revision is recommended.")
+                        warnings.warn("WARNING: Converting VCD 4.2.0 to OpenLABEL 1.0.0. A full revision is recommended.")
                         # Convert frame entries to int
                         frames = read_data['vcd']['frames']
                         if frames:  # So frames is not empty
                             read_data['vcd']['frames'] = {int(key): value for key, value in frames.items()}
 
                         self.reset()  # to init object
-                        converter.ConverterVCD420toOpenLabel030(read_data, self)  # self is modified internally
+                        converter.ConverterVCD420toOpenLabel100(read_data, self)  # self is modified internally
 
                     elif read_data['vcd']['version'] == "4.1.0":
                         # This is VCD 4.1.0
-                        raise Exception("ERROR: VCD 4.1.0 to OpenLABEL 0.2.0 conversion is not implemented.")
+                        raise Exception("ERROR: VCD 4.1.0 to OpenLABEL 1.0.0 conversion is not implemented.")
                         pass
                 elif 'metadata' in read_data['vcd']:
                     if 'schema_version' in read_data['vcd']['metadata']:
@@ -343,8 +343,8 @@ class VCD:
             elif 'openlabel' in read_data:
                 # This is an OpenLABEL file 
                 schema_version = read_data['openlabel']['metadata']['schema_version']
-                if schema_version == "0.3.0":
-                    # This is OpenLABEL 0.3.0
+                if schema_version == "0.3.0" or schema_version == "1.0.0":
+                    # This is OpenLABEL 0.3.0 or 1.0.0 (are equivalent)
                     self.data = read_data
                     if validation:
                         if not hasattr(self, 'schema'):
@@ -352,7 +352,7 @@ class VCD:
                         validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
                         json_file.close()
 
-                    # In OpenLABEL 0.3.0 uids are strings, because they can be numeric strings, or UUIDs
+                    # In OpenLABEL 0.3.0-1.0.0 uids are strings, because they can be numeric strings, or UUIDs
                     # but frames are still indexed by ints, so let's parse frame numbers as integers
                     if 'frames' in self.data['openlabel']:
                         frames = self.data['openlabel']['frames']
@@ -360,7 +360,7 @@ class VCD:
                             self.data['openlabel']['frames'] = {int(key): value for key, value in frames.items()}
                 else:
                     Exception(
-                        "ERROR: This OpenLABEL file has version different than 0.3.0. This API is incompatible.")                
+                        "ERROR: This OpenLABEL file has version different than 0.3.0 or 1.0.0. This API is incompatible.")                
 
             # Close file
             json_file.close()
