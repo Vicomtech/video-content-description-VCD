@@ -873,60 +873,6 @@ class VCD:
                                             edp[name]['frame_intervals'] = fis_exist.get_dict()  # overwrite
                                             # No need to manage attributes
 
-    def rm_element_data_from_frames_by_name(self, element_type, uid, element_data_name, frame_intervals):
-        for fi in frame_intervals.get():
-            for f in range(fi[0], fi[1] + 1):
-                if self.has_frame(f):
-                    frame = self.data['openlabel']['frames'][f]
-                    if element_type.name + 's' in frame:
-                        if uid.as_str() in frame[element_type.name + 's']:
-                            element = frame[element_type.name + 's'][uid.as_str()]
-                            if element_type.name + '_data' in element:
-                                # Delete only the element_data with the specified name
-                                for prop in element[element_type.name + '_data']:
-                                    val_array = element[element_type.name + '_data'][prop]
-                                    for i in range(0, len(val_array)):
-                                        val = val_array[i]
-                                        if val['name'] == element_data_name:
-                                            del element[element_type.name + '_data'][prop][i]
-
-    def rm_element_data_from_frames(self, element_type, uid, frame_intervals):
-        for fi in frame_intervals.get():
-            for f in range(fi[0], fi[1] + 1):
-                if self.has_frame(f):
-                    frame = self.data['openlabel']['frames'][f]
-                    if element_type.name + 's' in frame:
-                        if uid.as_str() in frame[element_type.name + 's']:
-                            element = frame[element_type.name + 's'][uid.as_str()]
-                            if element_type.name + '_data' in element:
-                                # Delete all its former dyamic element_data entries at old fis
-                                del element[element_type.name + '_data']
-
-        # Clean-up data pointers of object_data that no longer exist!
-        # Note, element_data_pointers are correctly updated, but there might be some now declared as static
-        # corresponding to element_data that was dynamic but now has been removed when the element changed to static
-        if self.has(element_type, uid.as_str()):
-            element = self.data['openlabel'][element_type.name + 's'][uid.as_str()]
-            if element_type.name + '_data_pointers' in element:
-                edps = element[element_type.name + '_data_pointers']
-                edp_names_to_delete = []
-                for edp_name in edps:
-                    fis_ed = FrameIntervals(edps[edp_name]['frame_intervals'])
-                    if fis_ed.empty():
-                        # Check if element_data exists
-                        ed_type = edps[edp_name]['type']
-                        found = False
-                        if element_type.name + '_data' in element:
-                            if ed_type in element[element_type.name + '_data']:
-                                for ed in element[element_type.name + '_data'][ed_type]:
-                                    if ed['name'] == edp_name:
-                                        found = True
-                                        break
-                        if not found:
-                            edp_names_to_delete.append(edp_name)
-                for edp_name in edp_names_to_delete:
-                    del element[element_type.name + '_data_pointers'][edp_name]
-
     ##################################################
     # Public API: add, update
     ##################################################
@@ -1848,6 +1794,114 @@ class VCD:
 
     def rm_relation(self, uid):
         self.rm_element(ElementType.relation, uid)
+
+    def rm_element_data_from_frames_by_name(self, element_type, uid, element_data_name, frame_intervals):
+        # Convert to inner UID and FrameIntervals classes
+        if not isinstance(uid, UID):
+            uid = UID(uid)
+        if not isinstance(frame_intervals, FrameIntervals):
+            frame_intervals = FrameIntervals(frame_intervals)
+        
+        # Quick checks        
+        if self.has(element_type, uid.as_str()):
+            edp = self.get_element_data_pointer(element_type, uid.as_str(), element_data_name)
+            fis_ed = FrameIntervals(edp['frame_intervals'])
+
+            fis_to_remove = fis_ed.intersection(frame_intervals)
+            remove_all = False
+            if fis_to_remove.equals(fis_ed):
+                remove_all = True
+
+            # Loop over frames that we know the element data is present at
+            temp = fis_ed
+            for fi in fis_to_remove.get():
+                for f in range(fi[0], fi[1] + 1):
+                    frame = self.data['openlabel']['frames'][f]
+                    element = frame[element_type.name + 's'][uid.as_str()]
+                    # Delete only the element_data with the specified name
+                    for prop in element[element_type.name + '_data']:
+                        val_array = element[element_type.name + '_data'][prop]
+                        idx_to_remove = None
+                        for i in range(0, len(val_array)):
+                            val = val_array[i]
+                            if val['name'] == element_data_name:
+                                #del element[element_type.name + '_data'][prop][i]
+                                idx_to_remove = i                                
+                                #break  # because we should only delete the one that matches the name
+                        del element[element_type.name + '_data'][prop][idx_to_remove]
+                    # Clean-up edp frame by frame
+                    if not remove_all:
+                        temp = FrameIntervals(utils.rm_frame_from_frame_intervals(temp.get_dict(), f))
+
+            element = self.get_element(element_type, uid.as_str())
+            if remove_all:
+                # Just delete the entire element_data_pointer                
+                del element[element_type.name + '_data_pointers'][element_data_name]
+            else:
+                # Update frame intervals for this edp
+                fis_ed_new = temp
+                element[element_type.name + '_data_pointers'][element_data_name]['frame_intervals'] = fis_ed_new.get_dict()
+        
+        '''
+        # Loop over frames to remove data
+        for fi in frame_intervals.get():
+            for f in range(fi[0], fi[1] + 1):
+                if self.has_frame(f):
+                    frame = self.data['openlabel']['frames'][f]
+                    if element_type.name + 's' in frame:
+                        if uid.as_str() in frame[element_type.name + 's']:
+                            element = frame[element_type.name + 's'][uid.as_str()]
+                            if element_type.name + '_data' in element:
+                                # Delete only the element_data with the specified name
+                                for prop in element[element_type.name + '_data']:
+                                    val_array = element[element_type.name + '_data'][prop]
+                                    for i in range(0, len(val_array)):
+                                        val = val_array[i]
+                                        if val['name'] == element_data_name:
+                                            del element[element_type.name + '_data'][prop][i]
+                                            break  # because we should only delete the one that matches the name                                
+        '''
+
+    def rm_element_data_from_frames(self, element_type, uid, frame_intervals):
+        if not isinstance(uid, UID):
+            uid = UID(uid)
+        if not isinstance(frame_intervals, FrameIntervals):
+            frame_intervals = FrameIntervals(frame_intervals)
+        for fi in frame_intervals.get():
+            for f in range(fi[0], fi[1] + 1):
+                if self.has_frame(f):
+                    frame = self.data['openlabel']['frames'][f]
+                    if element_type.name + 's' in frame:
+                        if uid.as_str() in frame[element_type.name + 's']:
+                            element = frame[element_type.name + 's'][uid.as_str()]
+                            if element_type.name + '_data' in element:
+                                # Delete all its former dyamic element_data entries at old fis
+                                del element[element_type.name + '_data']
+
+        # Clean-up data pointers of object_data that no longer exist!
+        # Note, element_data_pointers are correctly updated, but there might be some now declared as static
+        # corresponding to element_data that was dynamic but now has been removed when the element changed to static
+        if self.has(element_type, uid.as_str()):
+            element = self.data['openlabel'][element_type.name + 's'][uid.as_str()]
+            if element_type.name + '_data_pointers' in element:
+                edps = element[element_type.name + '_data_pointers']
+                edp_names_to_delete = []
+                for edp_name in edps:
+                    fis_ed = FrameIntervals(edps[edp_name]['frame_intervals'])
+                    if fis_ed.empty():
+                        # Check if element_data exists
+                        ed_type = edps[edp_name]['type']
+                        found = False
+                        if element_type.name + '_data' in element:
+                            if ed_type in element[element_type.name + '_data']:
+                                for ed in element[element_type.name + '_data'][ed_type]:
+                                    if ed['name'] == edp_name:
+                                        found = True
+                                        break
+                        if not found:
+                            edp_names_to_delete.append(edp_name)
+                for edp_name in edp_names_to_delete:
+                    del element[element_type.name + '_data_pointers'][edp_name]
 
 
 class OpenLABEL(VCD):

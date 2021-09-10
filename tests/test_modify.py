@@ -12,6 +12,7 @@ VCD is distributed under MIT License. See LICENSE.
 """
 
 import inspect
+from re import S
 import unittest
 import os
 import vcd.core as core
@@ -255,6 +256,31 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(vcd.get_relation(uid_relation2)['rdf_objects'][0]['uid'], uid_car1)
         self.assertEqual(vcd.get_relation(uid_relation2)['rdf_objects'][0]['type'], 'object')
         self.assertEqual(len(vcd.get_relation(uid_relation2)['rdf_objects']), 1)
+
+    def test_rm_element_data(self):
+        vcd = core.OpenLABEL()
+
+        # Add an object
+        uid1 = vcd.add_object(name="someName")
+
+        # Add two bounding boxes
+        bbox1 = types.bbox(name="box_left", val=[0, 10, 40, 50])
+        bbox2 = types.bbox(name="box_right", val=[20, 20, 25, 25])
+        vcd.add_object_data(uid=uid1, object_data=bbox1, frame_value=(0, 30))
+        vcd.add_object_data(uid=uid1, object_data=bbox2, frame_value=(10, 35))
+
+        # The object is therefore defined from 0 to 35
+        fis = vcd.get_element_frame_intervals(core.ElementType.object, uid1).get_dict()
+        self.assertDictEqual(fis[0], {'frame_start': 0, 'frame_end': 35})
+
+        # Now remove some frames
+        vcd.rm_element_data_from_frames_by_name(core.ElementType.object, uid1, "box_left", (5, 15))
+        fis = vcd.get_element_data_frame_intervals(core.ElementType.object, uid1, "box_left").get_dict()
+        self.assertDictEqual(fis[0], {'frame_start': 0, 'frame_end': 4})
+        self.assertDictEqual(fis[1], {'frame_start': 16, 'frame_end': 30})
+
+
+
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
