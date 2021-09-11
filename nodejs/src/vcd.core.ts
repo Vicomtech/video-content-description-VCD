@@ -811,90 +811,7 @@ export class VCD {
             if(this.data['openlabel']['frame_intervals'].length == 0)
                 delete this.data['openlabel']['frame_intervals']
         }        
-    }    
-
-    private rmElementDataFromFramesByName(elementType: ElementType, uid: UID, elementDataName: string, frameIntervals: FrameIntervals) {
-        let elementTypeName = ElementType[elementType];
-        for(let fi of frameIntervals.get()) {
-            for(let f=fi[0]; f<=fi[1]; f++) {
-                if(this.hasFrame(f)) {
-                    let frame = this.data['openlabel']['frames'][f]
-                    if(elementTypeName + 's' in frame) {
-                        if(uid.asStr() in frame[elementTypeName + 's']) {
-                            let element = frame[elementTypeName + 's'][uid.asStr()]
-                            if(elementTypeName + '_data' in element) {
-                                // delete only the element_data with the specified name
-                                for (const prop in element[elementTypeName + '_data']) {
-                                    var valArray = element[elementTypeName + '_data'][prop];
-                                    for (var i = 0; i < valArray.length; i++) {
-                                        var val = valArray[i];
-                                        if (val['name'] == elementDataName) {
-                                            delete element[elementTypeName + '_data'][prop][i]
-                                        }
-                                    }
-                                }
-                            }                     
-                        }
-                    }
-                }   
-            }
-        }
-    }
-
-    private rmElementDataFromFrames(elementType: ElementType, uid: UID, frameIntervals: FrameIntervals) {        
-        let elementTypeName = ElementType[elementType];
-        for(let fi of frameIntervals.get()) {
-            for(let f=fi[0]; f<=fi[1]; f++) {
-                if(this.hasFrame(f)) {
-                    let frame = this.data['openlabel']['frames'][f]
-                    if(elementTypeName + 's' in frame) {
-                        if(uid.asStr() in frame[elementTypeName + 's']) {
-                            let element = frame[elementTypeName + 's'][uid.asStr()]
-                            if(elementTypeName + '_data' in element) {
-                                // delete all its former dynamic element_data entries at old fis
-                                delete element[elementTypeName + '_data']  
-                            }                     
-                        }
-                    }
-                }   
-            }
-        }
-
-        // Clean-up data pointers of object_data that no longer exist!
-        // Note, element_data_pointers are correctly updated, but there might be some now declared as static
-        // corresponding to element_data that was dynamic but now has been removed when the element changed to static
-        if(this.has(elementType, uid.asStr())) {
-            let element = this.data['openlabel'][elementTypeName + 's'][uid.asStr()]
-            if(elementTypeName + '_data_pointers' in element) {
-                let edps = element[elementTypeName + '_data_pointers']
-                let edp_names_to_delete = []
-                for(let edp_name in edps) {
-                    let fis_ed = new FrameIntervals(edps[edp_name]['frame_intervals'])
-                    if(fis_ed.empty()) {
-                        // CHeck if element_Data exists
-                        let ed_type = edps[edp_name]['type']
-                        let found = false
-                        if(elementTypeName + '_data' in element) {
-                            if(ed_type in element[elementTypeName + '_data']) {
-                                for(let ed in element[elementTypeName + '_data'][ed_type]) {
-                                    if(ed['name'] == edp_name) {
-                                        found = true
-                                        break
-                                    }
-                                }
-                            }
-                        }
-                        if(!found) {
-                            edp_names_to_delete.push(edp_name)
-                        }
-                    }
-                }
-                for(let edp_name of edp_names_to_delete) {
-                    delete element[elementTypeName + '_data_pointers'][edp_name]
-                }
-            }
-        }
-    }
+    }        
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Public API: add, update
@@ -1988,7 +1905,110 @@ export class VCD {
         this.rmElement(ElementType.relation, uid);
     }
 
-    
+    public rmElementDataFromFramesByName(elementType: ElementType, uid: UID, elementDataName: string, frameIntervals: FrameIntervals) {
+        // Quick checks
+        if(this.has(elementType, uid.asStr())) {
+            let edp = this.getElementDataPointer(elementType, uid.asStr(), elementDataName);
+            let fis_ed = new FrameIntervals(edp['frame_intervals'])
+
+            let fis_to_remove = fis_ed.intersection(frameIntervals)
+            let remove_all = false
+            if(fis_to_remove.equals(fis_ed))
+                remove_all = true
+
+            // Loop over frames that we know the element data is present at
+            let temp = fis_ed
+            let elementTypeName = ElementType[elementType];
+            for(let fi of fis_to_remove.get()) {
+                for(let f=fi[0]; f<=fi[1]; f++) {
+                    let frame = this.data['openlabel']['frames'][f]
+                    let element = frame[elementTypeName + 's'][uid.asStr()]
+                    
+                    // Delete only the elementData with the specified name
+                    for (const prop in element[elementTypeName + '_data']) {
+                        var valArray = element[elementTypeName + '_data'][prop];
+                        let idx_to_remove = null
+                        for (var i = 0; i < valArray.length; i++) {
+                            var val = valArray[i];
+                            if (val['name'] == elementDataName) {
+                                idx_to_remove = i
+                                //delete element[elementTypeName + '_data'][prop][i]
+                            }
+                        }
+                        delete element[elementTypeName + '_data'][prop][idx_to_remove]
+                    }
+                    // Clean-up edp frame by frame
+                    if(!remove_all)
+                        temp = new FrameIntervals(utils.rmFrameFromFrameIntervals(temp.getDict(), f))
+                }           
+            }
+            let element = this.getElement(elementType, uid.asStr())
+            if (remove_all) {
+                // Just delete the entire element data pointer
+                delete element[elementTypeName + '_data_pointers'][elementDataName]
+            }
+            else {
+                // Update frame intervals for this edp
+                let fis_ed_new = temp
+                element[elementTypeName + '_data_pointers'][elementDataName]['frame_intervals'] = fis_ed_new.getDict()
+            }
+        }       
+    }
+
+    public rmElementDataFromFrames(elementType: ElementType, uid: UID, frameIntervals: FrameIntervals) {        
+        let elementTypeName = ElementType[elementType];
+        for(let fi of frameIntervals.get()) {
+            for(let f=fi[0]; f<=fi[1]; f++) {
+                if(this.hasFrame(f)) {
+                    let frame = this.data['openlabel']['frames'][f]
+                    if(elementTypeName + 's' in frame) {
+                        if(uid.asStr() in frame[elementTypeName + 's']) {
+                            let element = frame[elementTypeName + 's'][uid.asStr()]
+                            if(elementTypeName + '_data' in element) {
+                                // delete all its former dynamic element_data entries at old fis
+                                delete element[elementTypeName + '_data']  
+                            }                     
+                        }
+                    }
+                }   
+            }
+        }
+
+        // Clean-up data pointers of object_data that no longer exist!
+        // Note, element_data_pointers are correctly updated, but there might be some now declared as static
+        // corresponding to element_data that was dynamic but now has been removed when the element changed to static
+        if(this.has(elementType, uid.asStr())) {
+            let element = this.data['openlabel'][elementTypeName + 's'][uid.asStr()]
+            if(elementTypeName + '_data_pointers' in element) {
+                let edps = element[elementTypeName + '_data_pointers']
+                let edp_names_to_delete = []
+                for(let edp_name in edps) {
+                    let fis_ed = new FrameIntervals(edps[edp_name]['frame_intervals'])
+                    if(fis_ed.empty()) {
+                        // CHeck if element_Data exists
+                        let ed_type = edps[edp_name]['type']
+                        let found = false
+                        if(elementTypeName + '_data' in element) {
+                            if(ed_type in element[elementTypeName + '_data']) {
+                                for(let ed in element[elementTypeName + '_data'][ed_type]) {
+                                    if(ed['name'] == edp_name) {
+                                        found = true
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        if(!found) {
+                            edp_names_to_delete.push(edp_name)
+                        }
+                    }
+                }
+                for(let edp_name of edp_names_to_delete) {
+                    delete element[elementTypeName + '_data_pointers'][edp_name]
+                }
+            }
+        }
+    }    
 }
 
 export class OpenLABEL extends VCD{

@@ -1,4 +1,4 @@
-import { VCD, ElementType, SetMode } from '../vcd.core'
+import { VCD, ElementType, SetMode, OpenLABEL } from '../vcd.core'
 import * as types from '../vcd.types'
 import openlabel030_test_static_dynamic_object_1_1 from '../../../tests/etc/openlabel030_test_static_dynamic_object_1_1.json'
 import openlabel030_test_static_dynamic_object_1_2 from '../../../tests/etc/openlabel030_test_static_dynamic_object_1_2.json'
@@ -231,3 +231,30 @@ test('test_modify_relations', () => {
     expect(vcd.getRelation(uidRelation2)['rdf_objects'][0]['type']).toBe('object')
     expect(vcd.getRelation(uidRelation2)['rdf_objects'].length).toBe(1)
 });
+
+test('test_rm_element_data', () => {
+    let vcd = new OpenLABEL();
+
+    // Add an object
+    let uid1 = vcd.addObject("someName", "");
+
+    // Add two bounding boxes
+    let bbox1 = new types.Bbox("box_left", [0, 10, 40, 50]);
+    let bbox2 = new types.Bbox("box_right", [20, 20, 25, 25]);
+    vcd.addObjectData(uid1, bbox1, [0, 30])
+    vcd.addObjectData(uid1, bbox2, [10, 35])
+
+    // The object is therefore defined from 0 to 35
+    let fis = vcd.getElementFrameIntervals(ElementType.object, uid1).getDict()
+    expect(fis).toStrictEqual([{"frame_start": 0, "frame_end": 35}])
+
+    // Now remove some frames
+    vcd.rmElementDataFromFramesByName(ElementType.object, uid1, "box_left", [5, 15])
+    let fis = vcd.getElementDataFrameIntervals(ElementType.object, uid1, "box_left").getDict()
+    expect(fis).toStrictEqual([{"frame_start": 0, "frame_end": 4}, {"frame_start": 16, "frame_end": 30}])
+
+    // The element stays the same
+    let fis = vcd.getElementFrameIntervals(ElementType.object, uid1).getDict()
+    expect(fis).toStrictEqual([{"frame_start": 0, "frame_end": 35}])
+
+));
