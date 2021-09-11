@@ -34,18 +34,18 @@ class Neo4jScenarioDB:
             prop_type = type(properties[prop])
             with session:
                 if prop_type == str:
-                    session.run(""" MATCH (node:cypher_labels) 
+                    session.run(""" MATCH (node""" + cypher_labels + """) 
                                     WHERE node."""+node_identifier+"""='""" + identifier_value + """'
                                     SET node.""" + prop + """= '""" + properties[prop] + """' """)
                 elif prop_type == list:
                     property_value = json.dumps(properties[prop])
-                    session.run(""" MATCH (node:cypher_labels) 
+                    session.run(""" MATCH (node""" + cypher_labels + """) 
                                     WHERE node."""+node_identifier+"""='""" + identifier_value + """'
                                     SET node.""" + prop + """= '""" + property_value + """' """)
 
                 elif prop_type == dict:
                     property_value = json.dumps(properties[prop])
-                    session.run(""" MATCH (node:cypher_labels) 
+                    session.run(""" MATCH (node""" + cypher_labels + """) 
                                     WHERE node."""+node_identifier+"""='""" + identifier_value + """'
                                     SET node.""" + prop + """= '""" + property_value + """' """)
 
