@@ -270,14 +270,19 @@ class TestBasic(unittest.TestCase):
         vcd.add_object_data(uid=uid1, object_data=bbox2, frame_value=(10, 35))
 
         # The object is therefore defined from 0 to 35
-        fis = vcd.get_element_frame_intervals(core.ElementType.object, uid1).get_dict()
-        self.assertDictEqual(fis[0], {'frame_start': 0, 'frame_end': 35})
+        fis_object = vcd.get_element_frame_intervals(core.ElementType.object, uid1).get_dict()
+        self.assertDictEqual(fis_object[0], {'frame_start': 0, 'frame_end': 35})
 
-        # Now remove some frames
+        # Now remove some frames from box_left and check new frame_intervals, object is kept unaffected
         vcd.rm_element_data_from_frames_by_name(core.ElementType.object, uid1, "box_left", (5, 15))
-        fis = vcd.get_element_data_frame_intervals(core.ElementType.object, uid1, "box_left").get_dict()
-        self.assertDictEqual(fis[0], {'frame_start': 0, 'frame_end': 4})
-        self.assertDictEqual(fis[1], {'frame_start': 16, 'frame_end': 30})
+        fis_od = vcd.get_element_data_frame_intervals(core.ElementType.object, uid1, "box_left").get_dict()
+        self.assertDictEqual(fis_od[0], {'frame_start': 0, 'frame_end': 4})
+        self.assertDictEqual(fis_od[1], {'frame_start': 16, 'frame_end': 30})
+        fis_object = vcd.get_element_frame_intervals(core.ElementType.object, uid1).get_dict()
+        self.assertDictEqual(fis_object[0], {'frame_start': 0, 'frame_end': 35})
+
+
+
 
 
 
