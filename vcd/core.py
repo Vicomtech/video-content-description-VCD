@@ -1841,26 +1841,6 @@ class VCD:
                 # Update frame intervals for this edp
                 fis_ed_new = temp
                 element[element_type.name + '_data_pointers'][element_data_name]['frame_intervals'] = fis_ed_new.get_dict()
-        
-        '''
-        # Loop over frames to remove data
-        for fi in frame_intervals.get():
-            for f in range(fi[0], fi[1] + 1):
-                if self.has_frame(f):
-                    frame = self.data['openlabel']['frames'][f]
-                    if element_type.name + 's' in frame:
-                        if uid.as_str() in frame[element_type.name + 's']:
-                            element = frame[element_type.name + 's'][uid.as_str()]
-                            if element_type.name + '_data' in element:
-                                # Delete only the element_data with the specified name
-                                for prop in element[element_type.name + '_data']:
-                                    val_array = element[element_type.name + '_data'][prop]
-                                    for i in range(0, len(val_array)):
-                                        val = val_array[i]
-                                        if val['name'] == element_data_name:
-                                            del element[element_type.name + '_data'][prop][i]
-                                            break  # because we should only delete the one that matches the name                                
-        '''
 
     def rm_element_data_from_frames(self, element_type, uid, frame_intervals):
         if not isinstance(uid, UID):

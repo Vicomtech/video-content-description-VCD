@@ -16,7 +16,7 @@ import copy
 import os
 import sys
 sys.path.insert(0, "..")
-import screeninfo
+#import screeninfo
 import cv2 as cv
 import numpy as np
 import math
@@ -36,21 +36,29 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
     vcd = core.VCD(vcd_file_name)
     scene = scl.Scene(vcd)  # scl.Scene has functions to project images, transforms, etc.
 
-    drawerCamera = draw.Image(scene, "CAM_LEFT")
+    drawerCameraLeft = draw.Image(scene, "CAM_LEFT")
+    drawerCameraRight = draw.Image(scene, "CAM_RIGHT")
+    
     frameInfoDrawer = draw.FrameInfoDrawer(vcd)
 
     # Get the size of the screen
-    screen = screeninfo.get_monitors()[0]
+    #screen = screeninfo.get_monitors()[0]    
 
     # Get video
-    video_file_name = "../../../../data/kitti/tracking/video/" + str(sequence_number).zfill(4) + ".mp4"
-    video_cap = cv.VideoCapture(video_file_name)
-    video_width = int(video_cap.get(cv.CAP_PROP_FRAME_WIDTH))
-    video_height = int(video_cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+    video_file_name_left = "../../../../data/kitti/tracking/video/left/" + str(sequence_number).zfill(4) + ".mp4"
+    video_file_name_right = "../../../../data/kitti/tracking/video/right/" + str(sequence_number).zfill(4) + ".mp4"
+    video_cap_left = cv.VideoCapture(video_file_name_left)
+    video_cap_right = cv.VideoCapture(video_file_name_right)
+    video_width = int(video_cap_left.get(cv.CAP_PROP_FRAME_WIDTH))
+    video_height = int(video_cap_left.get(cv.CAP_PROP_FRAME_HEIGHT))
 
     cv.namedWindow('KITTI Tracking', cv.WINDOW_NORMAL)
-    cv.moveWindow('KITTI Tracking', screen.x + screen.width // 8, screen.y + screen.height // 8)
-    cv.resizeWindow('KITTI Tracking', (int(3 * screen.width / 4), int(3 * screen.height / 4)))
+    screen_width = 1920
+    screen_height = 1080
+    cv.moveWindow('KITTI Tracking', screen_width // 8, screen_height // 8)
+    cv.resizeWindow('KITTI Tracking', (int(3 * screen_width / 4), int(3 * screen_height / 4)))
+    #cv.moveWindow('KITTI Tracking', screen.x + screen.width // 8, screen.y + screen.height // 8)
+    #cv.resizeWindow('KITTI Tracking', (int(3 * screen.width / 4), int(3 * screen.height / 4)))
 
     # Prepare color map
     colorMap = {'Car': (0, 0, 255), 'Van': (255, 0, 0), 'Truck': (127, 127, 0),
@@ -98,38 +106,42 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
     # Video record
     if record_video:
         video_writer = cv.VideoWriter("kitti_tracking_vcd_" + str(sequence_number).zfill(4) + '.mp4',
-                                      cv.VideoWriter_fourcc(*'mp4v'), 30.0, (video_width + 400, video_height*5))
+                                      cv.VideoWriter_fourcc(*'mp4v'), 30.0, (video_width + 400, video_height*6))
 
     # Loop over video
     f = 0
     while(True):
         # Capture frame
-        ret, img = video_cap.read()
-        if ret is not True:
+        ret_left, img_left = video_cap_left.read()
+        ret_right, img_right = video_cap_right.read()
+        if (ret_left or ret_right) is not True:
             cv.waitKey(0)
             break
 
         # Top View
         if draw_images:
-            drawerTopView1.add_images({'CAM_LEFT': img}, f)
+            drawerTopView1.add_images({'CAM_LEFT': img_left}, f)
         topView1 = drawerTopView1.draw(frameNum=f)
         if draw_images:
-            drawerTopView2.add_images({'CAM_LEFT': img}, f)
+            drawerTopView2.add_images({'CAM_LEFT': img_left}, f)
         topView2 = drawerTopView2.draw(frameNum=f)
 
         # Camera
-        img_out = copy.deepcopy(img)
-        drawerCamera.draw(img_out, f, _params=imageParams)
+        img_out_left = copy.deepcopy(img_left)
+        img_out_right = copy.deepcopy(img_right)
+        drawerCameraLeft.draw(img_out_left, f, _params=imageParams)
+        drawerCameraRight.draw(img_out_right, f, _params=imageParams)
 
         # VCD text viewer
-        textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height*5, _params=imageParams)
+        textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height*6, _params=imageParams)
 
         # Stack
-        stack1 = np.vstack((img_out, topView1))
+        stack1 = np.vstack((img_out_left, img_out_right))
+        stack1 = np.vstack((stack1, topView1))
         stack1 = np.vstack((stack1, topView2))
         mosaic = np.hstack((stack1, textImg))
         cv.imshow('KITTI Tracking', mosaic)
-        cv.waitKey(1)
+        cv.waitKey(0)
 
         if record_video:
             video_writer.write(mosaic)
@@ -137,7 +149,8 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
         # Update frame num
         f += 1
 
-    video_cap.release()
+    video_cap_left.release()
+    video_cap_right.release()
     if record_video:
         video_writer.release()
     cv.destroyAllWindows()

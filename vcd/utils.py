@@ -655,19 +655,24 @@ def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
 
 def transform_cuboid(cuboid, T_ref_to_dst):
     # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
-    assert(isinstance(cuboid, list))
-    if len(cuboid) == 10:
-        raise Exception("Quaternion transforms not supported yet.")
+    if isinstance(cuboid, tuple):
+        cuboid = list(cuboid)
 
-    assert(len(cuboid) == 9)
-    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
+    assert(isinstance(cuboid, list))
 
     # 1) Obtain pose from cuboid info
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
-    P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
-    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
+    if len(cuboid) == 10:
+        #raise Exception("Quaternion transforms not supported yet.")
+        x, y, z, qx, qy, qz, qw, sx, sy, sz = cuboid        
+        P_obj_wrt_ref = create_pose(R=q2R(qx, qy, qz, qw), C=np.array([[x, y, z]]).T)  # np.array
+    else:
+        assert(len(cuboid) == 9)               
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+        P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
+    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array    
 
-    # 2) Concatenate transforms
+    # 2) Concatenate transforms    
+    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
     T_obj_to_dst = T_ref_to_dst.dot(T_obj_to_ref)    # np.array
 
     # 3) Obtain new rotation and translation
@@ -702,13 +707,15 @@ def generate_cuboid_points_object_4x8(sx, sy, sz):
 def generate_cuboid_points_ref_4x8(cuboid):
     # Cuboid is (x, y, z, rx, ry, rz, sx, sy, sz)
     # This function converts to 8 4x1 points
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+    if len(cuboid) == 9:
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid        
+        R_obj_wrt_ref = euler2R([rz, ry, rx])
+    elif len(cuboid) == 10:
+        x, y, z, rx, ry, rz, rw, sx, sy, sz = cuboid
+        R_obj_wrt_ref = q2R(rx, ry, rz, rw)
 
     # Create base structure using sizes
     points_cuboid_4x8 = generate_cuboid_points_object_4x8(sx, sy, sz)
-
-    # Create rotation
-    R_obj_wrt_ref = euler2R([rz, ry, rx])
 
     # Create location
     C_ref = np.array([[x, y, z]]).T
@@ -719,6 +726,32 @@ def generate_cuboid_points_ref_4x8(cuboid):
 
     points_cuboid_lcs_4x8 = T_obj_to_ref.dot(points_cuboid_4x8)
     return points_cuboid_lcs_4x8
+
+
+def get_transform_as_matrix4x4(transform_data):
+    # This function receives a VCD 4.3.1 (OpenLABEL 1.0) pose item, which may specify a transform as a matrix4x4, but also as a quaternion+traslation
+    # or as a Euler rotation + traslation
+    # NOTE: transform_data is usually the pose_wrt_parent VCD entry
+    if 'matrix4x4' in transform_data:
+        return np.array(transform_data['matrix4x4']).reshape(4, 4)
+    elif 'quaternion' in transform_data:
+        # From quaternion and translation to matrix4x4
+        quaternion = transform_data['quaternion']
+        translation = transform_data['translation']
+        rotation = q2R(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
+        return create_pose(rotation, np.array(translation).reshape(3, 1))
+    elif 'euler_angles' in transform_data:
+        # From Euler and translation to matrix4x4
+        euler_angles = transform_data['euler_angles']
+        translation = transform_data['translation']
+        eulerSeq = EulerSeq.ZYX
+        if 'sequence' in transform_data:
+            sequence = transform_data['sequence']
+            eulerSeq = EulerSeq[sequence]
+        rotation = euler2R(euler_angles, eulerSeq)
+        return create_pose(rotation, np.array(translation).reshape(3, 1))        
+    else:
+        warnings.warn("WARNING: Trying to use get_transform_as_matrix4x4 on a non-valid VCD item.")
 
 
 ####################################################
@@ -751,7 +784,7 @@ def bounding_rect(points2d_3xN):
     y_min = np.min(y)
     y_max = np.max(y)
 
-    return np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))
+    return (np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))).tolist()
 
 
 def generate_grid(x_params, y_params, z_params):
