@@ -159,6 +159,6 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
 if __name__ == "__main__":
     print("Running " + os.path.basename(__file__))
 
-    draw_kitti_tracking(sequence_number=0, record_video=False, draw_images=True)
+    draw_kitti_tracking(sequence_number=0, record_video=False, draw_images=False)
 
 

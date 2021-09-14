@@ -777,6 +777,7 @@ def is_inside_image(width, height, x, y):
 
 
 def bounding_rect(points2d_3xN):
+    # This function returns (x, y, w, h) being (x, y) the CENTER of the box, and (w, h) its sides
     x = points2d_3xN[0, :]
     y = points2d_3xN[1, :]
     x_min = np.min(x)
@@ -784,7 +785,9 @@ def bounding_rect(points2d_3xN):
     y_min = np.min(y)
     y_max = np.max(y)
 
-    return (np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))).tolist()
+    return (np.int0(np.array([(x_min + x_max)/2, (y_min + y_max)/2, x_max - x_min, y_max - y_min]))).tolist()
+
+    #return (np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))).tolist()
 
 
 def generate_grid(x_params, y_params, z_params):

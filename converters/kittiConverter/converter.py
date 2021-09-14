@@ -255,6 +255,7 @@ class KITTI_Tracking_reader():
         #########################################
         # LABELS
         #########################################
+        cam_right = scene.get_camera("CAM_RIGHT")
         for row in object_reader:
             frameNum = int(row[0])
             #trackID = int(row[1]) + 1  # VCD can't handle negative ids
@@ -332,8 +333,7 @@ class KITTI_Tracking_reader():
             # NOTE 3: Can't project DontCare objects as the 3D cuboids are absurd
             #cuboid_vals_right = scene.transform_cuboid(cuboid_vals, "CAM_LEFT", "CAM_RIGHT", frameNum)
             if trackID != -1:  # Don'tCare objects 
-                points3d_4x8 = utils.generate_cuboid_points_ref_4x8(cuboid_vals)
-                cam_right = scene.get_camera("CAM_RIGHT")
+                points3d_4x8 = utils.generate_cuboid_points_ref_4x8(cuboid_vals)                
                 points2d_4x8, idx_valid = cam_right.project_points3d(points3d_4x8)
                 points2d_4x8_valid = points2d_4x8[:, idx_valid]
                 bbox_right_vals = utils.bounding_rect(points2d_4x8_valid)

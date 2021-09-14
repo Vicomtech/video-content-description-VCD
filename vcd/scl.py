@@ -1033,16 +1033,20 @@ class CameraPinhole(Camera):
         # 1.- Select only those z > 0 (in front of the camera)
         idx_in_front = points3d_4xN[2, :] > 1e-8
         idx_valid = idx_in_front
-
-        # 2.- Distort rays3d if distorted
         rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
-        rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x', y', 1), convenient for dist.
-        rays3d_3xN = np.full([3, N], np.nan)
-        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt
+
+        # 2.- Distort rays3d if distorted        
+        rays3d_3xN = np.full([3, N], np.nan) # init with NaN       
+        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt  # copy filtered points
 
         if self.is_distorted():
+            # Cameras with distortion: need to first apply distortion model
             if not self.is_fisheye:
+                # Pinhole distortion
                 if self.r_limit is not None:
+                    #rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x', y', 1), convenient for dist.     (this is done inside distort_rays)   
+                    
+                    # Some cameras have a valid radius limit: extreme points are wierdly distorted, it is better to keep them as NaN
                     for i in range(0, N):
                         if idx_valid[i]:  # ignore those already filtered
                             xp = rays3d_3xN[0, i] / rays3d_3xN[2, i]  # this is x'=x/z as in opencv docs
@@ -1059,16 +1063,28 @@ class CameraPinhole(Camera):
                 rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt) # no nan should go into it
 
                 # Add nans
-                rays3d_3xN = np.full([3, N], np.nan)
+                #rays3d_3xN = np.full([3, N], np.nan)
                 rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
 
         # 3.- Project using calibration matrix
         if apply_distortion:
-            points2d_3xN = self.K_3x3.dot(rays3d_3xN)
+            #points2d_3xN = self.K_3x3 @ rays3d_3xN    
+
+            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+            points2d_3xN = self.K_3x4 @ rays3d_4xN
+            points2d_3xN /= points2d_3xN[2,:]
+
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
         else:
-            points2d_3xN = self.K_und_3x3.dot(rays3d_3xN)
+            #points2d_3xN = self.K_und_3x3 @ rays3d_3xN
+            
+            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+            points2d_3xN = self.K_und_3x4 @ rays3d_4xN
+            points2d_3xN /= points2d_3xN[2,:]
+
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_undist, idx_valid)
 
