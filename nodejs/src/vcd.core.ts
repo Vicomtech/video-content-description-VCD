@@ -18,6 +18,7 @@ import * as schema from "./vcd.schema"
 import * as Ajv from 'ajv'
 import { v4 as uuidv4 } from 'uuid'
 import { type } from "os"
+import { assert } from "console"
 
 //const Ajv = require("ajv").default 
 const ajv = new Ajv.default()
@@ -609,7 +610,7 @@ export class VCD {
             // But, if the element existed previously, and it was dynamic, there is already information inside frames. If there is elementData at frames, they are removed
             if(!fisOld.empty()) {
                 // Let's check the elementData at those frames
-                this.rmElementDataFromFrames(elementType, uid, fisOld)                
+                this.rmElementDataFromFrames(elementType, uid.asStr(), fisOld.get())                
 
                 // Additionally, we need to remove element entries at frames, and frames entirely to clean-up
                 for(let fi of fisOld.get()) {
@@ -675,7 +676,7 @@ export class VCD {
                 if(this.hasElementData(elementType, uid.asStr(), elementData)) {
                     let fisOld = this.getElementDataFrameIntervals(elementType, uid.asStr(), elementData.data['name'])
                     if(!fisOld.empty())
-                        this.rmElementDataFromFramesByName(elementType, uid, elementData.data['name'], fisOld)
+                        this.rmElementDataFromFramesByName(elementType, uid.asStr(), elementData.data['name'], fisOld.get())
                 }
                 this.setElementDataContent(elementType, element, elementData)
             }
@@ -1905,13 +1906,15 @@ export class VCD {
         this.rmElement(ElementType.relation, uid);
     }
 
-    public rmElementDataFromFramesByName(elementType: ElementType, uid: UID, elementDataName: string, frameIntervals: FrameIntervals) {
+    public rmElementDataFromFramesByName(elementType: ElementType, uid: string | number, elementDataName: string, frameIntervals = null) {        
+        let uid_ = new UID(uid)
+        let frameIntervals_ = new FrameIntervals(frameIntervals)
         // Quick checks
-        if(this.has(elementType, uid.asStr())) {
-            let edp = this.getElementDataPointer(elementType, uid.asStr(), elementDataName);
+        if(this.has(elementType, uid_.asStr())) {
+            let edp = this.getElementDataPointer(elementType, uid_.asStr(), elementDataName);
             let fis_ed = new FrameIntervals(edp['frame_intervals'])
 
-            let fis_to_remove = fis_ed.intersection(frameIntervals)
+            let fis_to_remove = fis_ed.intersection(frameIntervals_)
             let remove_all = false
             if(fis_to_remove.equals(fis_ed))
                 remove_all = true
@@ -1922,7 +1925,7 @@ export class VCD {
             for(let fi of fis_to_remove.get()) {
                 for(let f=fi[0]; f<=fi[1]; f++) {
                     let frame = this.data['openlabel']['frames'][f]
-                    let element = frame[elementTypeName + 's'][uid.asStr()]
+                    let element = frame[elementTypeName + 's'][uid_.asStr()]
                     
                     // Delete only the elementData with the specified name
                     for (const prop in element[elementTypeName + '_data']) {
@@ -1935,14 +1938,19 @@ export class VCD {
                                 //delete element[elementTypeName + '_data'][prop][i]
                             }
                         }
-                        delete element[elementTypeName + '_data'][prop][idx_to_remove]
+                        //delete element[elementTypeName + '_data'][prop][idx_to_remove]
+                        element[elementTypeName + '_data'][prop].splice(idx_to_remove, 1)  // because we want to extract the element and not left it null
+                        if (element[elementTypeName + '_data'][prop].length == 0)
+                            delete element[elementTypeName + '_data'][prop]  // e.g. 'bbox': [] is empty so let's delete it
+                            if (Object.keys(element[elementTypeName + '_data']).length == 0)
+                                delete element[elementTypeName + '_data'] // e.g. 'object_data' : {} is empty so let's delete it
                     }
                     // Clean-up edp frame by frame
                     if(!remove_all)
                         temp = new FrameIntervals(utils.rmFrameFromFrameIntervals(temp.getDict(), f))
                 }           
             }
-            let element = this.getElement(elementType, uid.asStr())
+            let element = this.getElement(elementType, uid_.asStr())
             if (remove_all) {
                 // Just delete the entire element data pointer
                 delete element[elementTypeName + '_data_pointers'][elementDataName]
@@ -1955,15 +1963,17 @@ export class VCD {
         }       
     }
 
-    public rmElementDataFromFrames(elementType: ElementType, uid: UID, frameIntervals: FrameIntervals) {        
+    public rmElementDataFromFrames(elementType: ElementType, uid: string | number, frameIntervals = null) {        
+        let uid_ = new UID(uid)
+        let frameIntervals_ = new FrameIntervals(frameIntervals)
         let elementTypeName = ElementType[elementType];
-        for(let fi of frameIntervals.get()) {
+        for(let fi of frameIntervals_.get()) {
             for(let f=fi[0]; f<=fi[1]; f++) {
                 if(this.hasFrame(f)) {
                     let frame = this.data['openlabel']['frames'][f]
                     if(elementTypeName + 's' in frame) {
-                        if(uid.asStr() in frame[elementTypeName + 's']) {
-                            let element = frame[elementTypeName + 's'][uid.asStr()]
+                        if(uid_.asStr() in frame[elementTypeName + 's']) {
+                            let element = frame[elementTypeName + 's'][uid_.asStr()]
                             if(elementTypeName + '_data' in element) {
                                 // delete all its former dynamic element_data entries at old fis
                                 delete element[elementTypeName + '_data']  
@@ -1977,8 +1987,8 @@ export class VCD {
         // Clean-up data pointers of object_data that no longer exist!
         // Note, element_data_pointers are correctly updated, but there might be some now declared as static
         // corresponding to element_data that was dynamic but now has been removed when the element changed to static
-        if(this.has(elementType, uid.asStr())) {
-            let element = this.data['openlabel'][elementTypeName + 's'][uid.asStr()]
+        if(this.has(elementType, uid_.asStr())) {
+            let element = this.data['openlabel'][elementTypeName + 's'][uid_.asStr()]
             if(elementTypeName + '_data_pointers' in element) {
                 let edps = element[elementTypeName + '_data_pointers']
                 let edp_names_to_delete = []

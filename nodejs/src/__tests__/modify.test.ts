@@ -248,14 +248,23 @@ test('test_rm_element_data', () => {
     let fis = vcd.getElementFrameIntervals(ElementType.object, uid1).getDict()
     expect(fis).toStrictEqual([{"frame_start": 0, "frame_end": 35}])
 
-    // Now remove some frames
-    let uid1_ = new UID(uid1)
-    vcd.rmElementDataFromFramesByName(ElementType.object, uid1_, "box_left", new FrameIntervals([5, 15]))
+    // Now remove some frames    
+    vcd.rmElementDataFromFramesByName(ElementType.object, uid1, "box_left", [5, 15])
     fis = vcd.getElementDataFrameIntervals(ElementType.object, uid1, "box_left").getDict()
     expect(fis).toStrictEqual([{"frame_start": 0, "frame_end": 4}, {"frame_start": 16, "frame_end": 30}])
 
     // The element stays the same
     fis = vcd.getElementFrameIntervals(ElementType.object, uid1).getDict()
     //expect(fis).toStrictEqual([{"frame_start": 0, "frame_end": 35}])
+
+    // Inside the removed frames, there should not be an element data entry
+    let frame_6 = vcd.getFrame(6)
+    expect(frame_6['objects'][uid1]).toStrictEqual({})
+
+    let frame_12 = vcd.getFrame(12)
+    expect(frame_12['objects'][uid1]['object_data']['bbox'].length).toBe(1)
+   
+    console.log(vcd.stringify(false))
+    
 
 });
