@@ -24,9 +24,9 @@ from test_config import openlabel_version_name
 class TestBasic(unittest.TestCase):
 
     ###########################################################
-    ### From VCD4.2 to OpenLABEL 0.2.0
+    ### From VCD4.2 to OpenLABEL 1.0.0
     ###########################################################
-    def test_VCD420_to_OpenLABEL020_dmd(self):
+    def test_VCD420_to_OpenLABEL100_dmd(self):
         vcd420_file_name = "./etc/vcd420_1_attm_03-08_ann.json"
         vcd = core.OpenLABEL(vcd420_file_name)
 

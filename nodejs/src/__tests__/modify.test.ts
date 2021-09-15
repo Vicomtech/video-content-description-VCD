@@ -264,7 +264,7 @@ test('test_rm_element_data', () => {
     let frame_12 = vcd.getFrame(12)
     expect(frame_12['objects'][uid1]['object_data']['bbox'].length).toBe(1)
    
-    console.log(vcd.stringify(false))
+    
     
 
 });
