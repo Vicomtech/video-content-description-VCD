@@ -18,17 +18,42 @@ import * as schema from "./vcd.schema"
 import * as Ajv from 'ajv'
 import { v4 as uuidv4 } from 'uuid'
 import { type } from "os"
+import { assert } from "console"
 
-//const Ajv = require("ajv").default
+//const Ajv = require("ajv").default 
 const ajv = new Ajv.default()
 
+export class ResourceUID{
+    /*
+    This is a class to add additional UIDs to an element, according to its representation
+    in another resource.
+    E.g. A Lane or Road object labeled in VCD can correspond to a Lane or Road element in an
+    OpenDrive file.
+    Then the OpenDrive file path is added with
+    res_opendrive_uidopenlabel.add_resource("../resources/xodr/multi_intersections.xodr")
+    And any object added can add the elment UID at the resource using this ResourceUID class
+    openlabel.add_object("road1", "road", res_uid=ResourceUID(res_opendrive_uid, 217))
+    */
+   private resourceUid;
+   private idAtResource;
+   constructor(resourceUid, idAtResource){
+       this.resourceUid= new UID(resourceUid) // this is the UID of the resource file
+       this.idAtResource=new UID(idAtResource)  // this is the UID of the element in the resource
+   }
+
+   asDict(){
+        return {[this.resourceUid.asStr()]: this.idAtResource.asStr()}
+   }
+
+}
 
 export enum ElementType {
     object = 0,
     action = 1,
     event = 2,
     context = 3,
-    relation = 4
+    relation = 4,
+    tag=5
 }
 
 export enum StreamType {    
@@ -212,8 +237,8 @@ export enum SetMode {
 */
 export class VCD {
     private data = {}  
-    private schema_version = schema.vcd_schema_version
-    private schema = schema.vcd_schema     
+    private schema_version = schema.openlabel_schema_version
+    private schema = schema.openlabel_schema     
     //private ajv = new Ajv()  // here or as a global variate outside
     //private ajv_validate = this.ajv.compile(this.schema)
     private ajv_validate = ajv.compile(this.schema)
@@ -231,9 +256,9 @@ export class VCD {
 
     private reset() {
         // Main VCD data
-        this.data = { 'vcd': {} };
-        this.data['vcd']['metadata'] = {};                
-        this.data['vcd']['metadata']['schema_version'] = this.schema_version;
+        this.data = { 'openlabel': {} };
+        this.data['openlabel']['metadata'] = {};                
+        this.data['openlabel']['metadata']['schema_version'] = this.schema_version;
         
         // Additional auxiliary structures
         this.lastUID = {};
@@ -242,6 +267,7 @@ export class VCD {
         this.lastUID[ElementType.event] = -1;
         this.lastUID[ElementType.context] = -1;
         this.lastUID[ElementType.relation] = -1;
+        this.lastUID[ElementType.tag] = -1;
     }
 
 	private init(vcd_json = null, validation = false) {
@@ -266,16 +292,16 @@ export class VCD {
 
                     // In VCD 4.3.1 uids are strings, because they can be numeric strings, or UUIDs
                     // but frames are still ints. However, it looks that in Typescript, JSON.parse reads as integer
-                    //if('frames' in this.data['vcd']){
-                    //    let frames = this.data['vcd']['frames']
+                    //if('frames' in this.data['openlabel']){
+                    //    let frames = this.data['openlabel']['frames']
                     //    if(Object.keys(frames).length > 0){                                                        
                             //let new_frames = Object.assign({}, ...Object.entries(frames).map(([k, v]) => ({[Number(k)]: v}))); // no funciona devuelve string                            
                     //        let new_frames = Object.assign({}, ...Object.keys(frames).map(k => ({[Number(k)]: frames[k]}))); 
-                    //        this.data['vcd']['frames'] = new_frames
+                    //        this.data['openlabel']['frames'] = new_frames
                     //    }
                     //}
 
-                    if(this.data['vcd']['metadata']['schema_version'] != this.schema_version) {
+                    if(this.data['openlabel']['metadata']['schema_version'] != this.schema_version) {
                         console.error("The loaded VCD does not have key \'version\' set to " + this.schema_version + '. Unexpected behaviour may happen.')
                     }
 
@@ -284,9 +310,8 @@ export class VCD {
             }         
             else {
                 this.data = vcd_json
-                if(this.data['vcd']['metadata']['schema_version'] != "4.3.0" &&
-                this.data['vcd']['metadata']['schema_version'] != "4.3.1") {
-                    console.error("The loaded VCD does not have key \'version\' set to 4.3.0 or 4.3.1. Unexpected behaviour may happen.")
+                if(this.data['openlabel']['metadata']['schema_version'] != "0.3.0") {
+                    console.error("The loaded openlabel does not have key \'version\' set to 0.3.0. Unexpected behaviour may happen.")
                 }
                 this.computeLastUid();                    
             }   
@@ -330,30 +355,30 @@ export class VCD {
 
     private setVCDFrameIntervals(frameIntervals: FrameIntervals) {
         if(!frameIntervals.empty())
-            this.data['vcd']['frame_intervals'] = frameIntervals.getDict()
+            this.data['openlabel']['frame_intervals'] = frameIntervals.getDict()
     }
 
     private updateVCDFrameIntervals(frameIntervals: FrameIntervals) {
         // This function creates the union of existing VCD with the input frameIntervals
         if(!frameIntervals.empty()) {
-            this.data['vcd']['frame_intervals'] = this.data['vcd']['frame_intervals'] || []
-            let fisCurrent = new FrameIntervals(this.data['vcd']['frame_intervals'])
+            this.data['openlabel']['frame_intervals'] = this.data['openlabel']['frame_intervals'] || []
+            let fisCurrent = new FrameIntervals(this.data['openlabel']['frame_intervals'])
             let fisUnion = fisCurrent.union(frameIntervals)
             this.setVCDFrameIntervals(fisUnion)
         }        
     }  
 
     private addFrame(frameNum: number) {
-        this.data['vcd']['frames'] = this.data['vcd']['frames'] || {}
-        this.data['vcd']['frames'][frameNum] = this.data['vcd']['frames'][frameNum] || {}        
+        this.data['openlabel']['frames'] = this.data['openlabel']['frames'] || {}
+        this.data['openlabel']['frames'][frameNum] = this.data['openlabel']['frames'][frameNum] || {}        
     }
 
     private computeLastUid() {
         this.lastUID = {};
         // Read all objects and fill lastUID
         this.lastUID[ElementType.object] = -1;
-        if ('objects' in this.data['vcd']) {
-            for (const uid of Object.keys(this.data['vcd']['objects'])) {
+        if ('objects' in this.data['openlabel']) {
+            for (const uid of Object.keys(this.data['openlabel']['objects'])) {
                 if (parseInt(uid) > this.lastUID[ElementType.object]) {
                     this.lastUID[ElementType.object] = parseInt(uid);
                 }
@@ -361,8 +386,8 @@ export class VCD {
         }
 
         this.lastUID[ElementType.action] = -1;
-        if ('actions' in this.data['vcd']) {
-            for (const uid of Object.keys(this.data['vcd']['actions'])) {
+        if ('actions' in this.data['openlabel']) {
+            for (const uid of Object.keys(this.data['openlabel']['actions'])) {
                 if (parseInt(uid) > this.lastUID[ElementType.action]) {
                     this.lastUID[ElementType.action] = parseInt(uid);
                 }
@@ -370,8 +395,8 @@ export class VCD {
         }
 
         this.lastUID[ElementType.event] = -1;
-        if ('events' in this.data['vcd']) {
-            for (const uid of Object.keys(this.data['vcd']['events'])) {
+        if ('events' in this.data['openlabel']) {
+            for (const uid of Object.keys(this.data['openlabel']['events'])) {
                 if (parseInt(uid) > this.lastUID[ElementType.event]) {
                     this.lastUID[ElementType.event] = parseInt(uid);
                 }
@@ -379,8 +404,8 @@ export class VCD {
         }
 
         this.lastUID[ElementType.context] = -1;
-        if ('contexts' in this.data['vcd']) {
-            for (const uid of Object.keys(this.data['vcd']['contexts'])) {
+        if ('contexts' in this.data['openlabel']) {
+            for (const uid of Object.keys(this.data['openlabel']['contexts'])) {
                 if (parseInt(uid) > this.lastUID[ElementType.context]) {
                     this.lastUID[ElementType.context] = parseInt(uid);
                 }
@@ -388,8 +413,8 @@ export class VCD {
         }
 
         this.lastUID[ElementType.relation] = -1;
-        if ('relations' in this.data['vcd']) {
-            for (const uid of Object.keys(this.data['vcd']['relations'])) {
+        if ('relations' in this.data['openlabel']) {
+            for (const uid of Object.keys(this.data['openlabel']['relations'])) {
                 if (parseInt(uid) > this.lastUID[ElementType.relation]) {
                     this.lastUID[ElementType.relation] = parseInt(uid);
                 }
@@ -417,7 +442,7 @@ export class VCD {
         }
     }
 
-    private setElement(elementType: ElementType, name: string, semanticType: string, frameIntervals: FrameIntervals, uid: UID, ontUid: UID, coordinateSystem: string, setMode: SetMode) {
+    private setElement(elementType: ElementType, name: string, semanticType: string, frameIntervals: FrameIntervals, uid: UID, ontUid: UID, coordinateSystem: string, setMode: SetMode, resUid) {
         let fis = frameIntervals
         if(setMode == SetMode.union) {
             // Union means fusion, we are calling this function to "add" content, not to remove any
@@ -429,19 +454,19 @@ export class VCD {
         let uidToAssign = this.getUidToAssign(elementType, uid) // NOTE: private functions use UID type for uids
 
         // 1.- Set the root and frames entries
-        this.setElementAtRootAndFrames(elementType, name, semanticType, fis, uidToAssign, ontUid, coordinateSystem)
+        this.setElementAtRootAndFrames(elementType, name, semanticType, fis, uidToAssign, ontUid, coordinateSystem,resUid)
 
         return uidToAssign
     }
 
-    private setElementAtRootAndFrames(elementType: ElementType, name: string, semanticType: string, frameIntervals: FrameIntervals, uid: UID, ontUid: UID, coordinateSystem: string) {
+    private setElementAtRootAndFrames(elementType: ElementType, name: string, semanticType: string, frameIntervals: FrameIntervals, uid: UID, ontUid: UID, coordinateSystem: string, resUid) {
         // 1.- Copy from existing or create new entry (this copies everything, including element_data)
         let elementExisted = this.has(elementType, uid.asStr())
         let elementTypeName = ElementType[elementType];
         let uidstr = uid.asStr()
-        this.data['vcd'][elementTypeName + 's'] = this.data['vcd'][elementTypeName + 's'] || {}  // creates an entry for this elementype if not existing already, e.g. "objects"
-        this.data['vcd'][elementTypeName + 's'][uidstr] = this.data['vcd'][elementTypeName + 's'][uidstr] || {} // creates an entry for this element if not existing already
-        let element = this.data['vcd'][elementTypeName + 's'][uidstr]  // read the element at the root (might be empty if created in this call)
+        this.data['openlabel'][elementTypeName + 's'] = this.data['openlabel'][elementTypeName + 's'] || {}  // creates an entry for this elementype if not existing already, e.g. "objects"
+        this.data['openlabel'][elementTypeName + 's'][uidstr] = this.data['openlabel'][elementTypeName + 's'][uidstr] || {} // creates an entry for this element if not existing already
+        let element = this.data['openlabel'][elementTypeName + 's'][uidstr]  // read the element at the root (might be empty if created in this call)
 
         //let fisOld = new FrameIntervals()
         let fisOld = new FrameIntervals()
@@ -461,8 +486,13 @@ export class VCD {
         if(!frameIntervals.empty() || (elementExisted && !fisOld.empty()))
             element['frame_intervals'] = frameIntervals.getDict()  // so, either the newFis has something, or the fisOld had something (in which case needs to be substituted)
         // Under the previous control, no 'frame_intervals' field is added to newly created static elements -> should 'frame_intervals' be mandatory?
-        
         if(!ontUid.isNone() && this.getOntology(ontUid.asStr())) element['ontology_uid'] = ontUid.asStr()
+        if(resUid != null) {
+        //let resourceUid = resUid.resource_uid
+        let resourceUid = resUid.resourceUid
+            if(!resourceUid.isNone() && this.getResource(resourceUid.asStr()))
+                element['resource_uid'] = resUid.asDict()
+        }
         if(coordinateSystem != null && this.hasCoordinateSystem(coordinateSystem)) element['coordinate_system'] = coordinateSystem
 
         // 2.bis.- Add mandatory rdf_subjects and rdf_objects to Relation
@@ -526,14 +556,14 @@ export class VCD {
                         for(let fi of vcdFrameIntervals.get()) {
                             for(let f=fi[0]; f<=fi[1]; f++) {
                                 if(!fisNew.hasFrame(f)) {  // Only for those OTHER frames not those just added
-                                    let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
+                                    let elementsInFrame = this.data['openlabel']['frames'][f][elementTypeName + 's']
                                     if(uidstr in elementsInFrame) {
                                         delete elementsInFrame[uidstr] // removes this element entry in this frame
 
                                         if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
-                                            delete this.data['vcd']['frames'][f][elementTypeName + 's']
+                                            delete this.data['openlabel']['frames'][f][elementTypeName + 's']
                     
-                                            if(Object.keys(this.data['vcd']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
+                                            if(Object.keys(this.data['openlabel']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
                                                 // So VCD now has no info in this frame, let's remove it from VCD frame interval
                                                 this.rmFrame(f) // removes the frame and updates VCD frame interval accordingly
                                             }
@@ -550,12 +580,12 @@ export class VCD {
                         let isInside = fisNew.hasFrame(f)
                         if(!isInside) {
                             // Old frame not inside new ones -> let's remove this frame
-                            let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
+                            let elementsInFrame = this.data['openlabel']['frames'][f][elementTypeName + 's']
                             delete elementsInFrame[uidstr] // removes this element entry in this frame
                             if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
-                                delete this.data['vcd']['frames'][f][elementTypeName + 's']
+                                delete this.data['openlabel']['frames'][f][elementTypeName + 's']
         
-                                if(Object.keys(this.data['vcd']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
+                                if(Object.keys(this.data['openlabel']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
                                     // So VCD now has no info in this frame, let's remove it from VCD frame interval
                                     this.rmFrame(f) // removes the frame and updates VCD frame interval accordingly
                                 }
@@ -580,17 +610,17 @@ export class VCD {
             // But, if the element existed previously, and it was dynamic, there is already information inside frames. If there is elementData at frames, they are removed
             if(!fisOld.empty()) {
                 // Let's check the elementData at those frames
-                this.rmElementDataFromFrames(elementType, uid, fisOld)                
+                this.rmElementDataFromFrames(elementType, uid.asStr(), fisOld.get())                
 
                 // Additionally, we need to remove element entries at frames, and frames entirely to clean-up
                 for(let fi of fisOld.get()) {
                     for(let f=fi[0]; f<=fi[1]; f++) {
-                        let elementsInFrame = this.data['vcd']['frames'][f][elementTypeName + 's']
+                        let elementsInFrame = this.data['openlabel']['frames'][f][elementTypeName + 's']
                         delete elementsInFrame[uidstr]
                         // Clean-up
                         if (Object.keys(elementsInFrame).length == 0) {  // elements might have end up empty
-                            delete this.data['vcd']['frames'][f][elementTypeName + 's']    
-                            if(Object.keys(this.data['vcd']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
+                            delete this.data['openlabel']['frames'][f][elementTypeName + 's']    
+                            if(Object.keys(this.data['openlabel']['frames'][f]).length == 0) { // this frame may have ended up being empty                                
                                 // So VCD now has no info in this frame, let's remove it from VCD frame interval
                                 this.rmFrame(f) // removes the frame and updates VCD frame interval accordingly
                             }
@@ -613,8 +643,12 @@ export class VCD {
         let name = element['name']
         let semanticType = element['type']
         let ontUid = new UID(null)
+        let resUid = new ResourceUID(null,null)
         let cs = null
         if('ontology_uid' in element) ontUid = new UID(element['ontology_uid'])
+        if('resource_uid' in element){
+            resUid = new ResourceUID(element['resource_uid'].keys()[0],element['resource_uid'].values()[0])
+        }
         if('coordinate_system' in element) cs = element['coordinate_system']
         if('coordinate_system' in elementData.data) {
             if(!this.hasCoordinateSystem(elementData.data['coordinate_system'])) {
@@ -633,7 +667,7 @@ export class VCD {
                 let fisExisting = new FrameIntervals(element['frame_intervals'])
                 let fisNew = frameIntervals
                 let fisUnion = fisExisting.union(fisNew)
-                this.setElement(elementType, name, semanticType, fisUnion, uid, ontUid, cs, setMode)
+                this.setElement(elementType, name, semanticType, fisUnion, uid, ontUid, cs, setMode,resUid)
                 this.setElementDataContentAtFrames(elementType, uid, elementData, frameIntervals)
             }
             else {
@@ -642,7 +676,7 @@ export class VCD {
                 if(this.hasElementData(elementType, uid.asStr(), elementData)) {
                     let fisOld = this.getElementDataFrameIntervals(elementType, uid.asStr(), elementData.data['name'])
                     if(!fisOld.empty())
-                        this.rmElementDataFromFramesByName(elementType, uid, elementData.data['name'], fisOld)
+                        this.rmElementDataFromFramesByName(elementType, uid.asStr(), elementData.data['name'], fisOld.get())
                 }
                 this.setElementDataContent(elementType, element, elementData)
             }
@@ -654,7 +688,7 @@ export class VCD {
             // First, extend also the container Element just in case the frame_interval of this element_data is beyond
             // the currently existing frame_intervals of the Element
             // internally computes the union
-            this.setElement(elementType, name, semanticType, frameIntervals, uid, ontUid, cs, setMode)
+            this.setElement(elementType, name, semanticType, frameIntervals, uid, ontUid, cs, setMode,resUid)
 
             if(!frameIntervals.empty()) {
                 let fisExisting = new FrameIntervals()
@@ -714,8 +748,14 @@ export class VCD {
         element[elementTypeName + '_data'][elementData.typeName()] = element[elementTypeName + '_data'][elementData.typeName()] || []  // e.g. "bbox"
 
         // Find if element_data already there, if so, replace, otherwise, append
-        const pos = element[elementTypeName + '_data'][elementData.typeName()].findIndex(item => item.name === elementData.data['name'])
-        let found = (pos == -1)?(false):(true)
+        let found;
+        let pos;
+        if (elementData.data['name'] !=null){
+            pos = element[elementTypeName + '_data'][elementData.typeName()].findIndex(item => item.name === elementData.data['name'])
+            found = (pos == -1)?(false):(true)
+        }else{
+            found= false;
+        }
         if(!found) {
             // Not found: then, just push this new element Data
             element[elementTypeName + '_data'][elementData.typeName()].push(elementData.data);
@@ -727,9 +767,14 @@ export class VCD {
     }
 
     private setElementDataPointers(elementType: ElementType, uid: UID, elementData: types.ObjectData, frameIntervals: FrameIntervals) {
+        //For Tags, let's ignore element_data_pointers
+        if (elementType == ElementType.tag){
+            return
+        }
+
         let elementTypeName = ElementType[elementType]
-        this.data['vcd'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers'] = this.data['vcd'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers'] || {}
-        let edp = this.data['vcd'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers']
+        this.data['openlabel'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers'] = this.data['openlabel'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers'] || {}
+        let edp = this.data['openlabel'][elementTypeName + 's'][uid.asStr()][elementTypeName + '_data_pointers']
         edp[elementData.data['name']] = {}
         edp[elementData.data['name']]['type'] = elementData.typeName()
         if(frameIntervals == null) {
@@ -750,181 +795,125 @@ export class VCD {
 
     private rmFrame(frameNum: number) {
         // This function deletes a frame entry from frames, and updates VCD accordingly        
-        if('frames' in this.data['vcd']){
-            if(frameNum in this.data['vcd']['frames']){
-                delete this.data['vcd']['frames'][frameNum]
+        if('frames' in this.data['openlabel']){
+            if(frameNum in this.data['openlabel']['frames']){
+                delete this.data['openlabel']['frames'][frameNum]
             }
-            if(this.data['vcd']['frames'].length == 0)
-                delete this.data['vcd']['frames']
+            if(this.data['openlabel']['frames'].length == 0)
+                delete this.data['openlabel']['frames']
         }        
         // Remove from VCD frame intervals
-        if('frame_intervals' in this.data['vcd']) {
-            var fisDict = this.data['vcd']['frame_intervals'];        
+        if('frame_intervals' in this.data['openlabel']) {
+            var fisDict = this.data['openlabel']['frame_intervals'];        
             var fisDictNew = utils.rmFrameFromFrameIntervals(fisDict, frameNum)                
 
             // Now substitute                
-            this.data['vcd']['frame_intervals'] = fisDictNew;
-            if(this.data['vcd']['frame_intervals'].length == 0)
-                delete this.data['vcd']['frame_intervals']
+            this.data['openlabel']['frame_intervals'] = fisDictNew;
+            if(this.data['openlabel']['frame_intervals'].length == 0)
+                delete this.data['openlabel']['frame_intervals']
         }        
-    }    
-
-    private rmElementDataFromFramesByName(elementType: ElementType, uid: UID, elementDataName: string, frameIntervals: FrameIntervals) {
-        let elementTypeName = ElementType[elementType];
-        for(let fi of frameIntervals.get()) {
-            for(let f=fi[0]; f<=fi[1]; f++) {
-                if(this.hasFrame(f)) {
-                    let frame = this.data['vcd']['frames'][f]
-                    if(elementTypeName + 's' in frame) {
-                        if(uid.asStr() in frame[elementTypeName + 's']) {
-                            let element = frame[elementTypeName + 's'][uid.asStr()]
-                            if(elementTypeName + '_data' in element) {
-                                // delete only the element_data with the specified name
-                                for (const prop in element[elementTypeName + '_data']) {
-                                    var valArray = element[elementTypeName + '_data'][prop];
-                                    for (var i = 0; i < valArray.length; i++) {
-                                        var val = valArray[i];
-                                        if (val['name'] == elementDataName) {
-                                            delete element[elementTypeName + '_data'][prop][i]
-                                        }
-                                    }
-                                }
-                            }                     
-                        }
-                    }
-                }   
-            }
-        }
-    }
-
-    private rmElementDataFromFrames(elementType: ElementType, uid: UID, frameIntervals: FrameIntervals) {        
-        let elementTypeName = ElementType[elementType];
-        for(let fi of frameIntervals.get()) {
-            for(let f=fi[0]; f<=fi[1]; f++) {
-                if(this.hasFrame(f)) {
-                    let frame = this.data['vcd']['frames'][f]
-                    if(elementTypeName + 's' in frame) {
-                        if(uid.asStr() in frame[elementTypeName + 's']) {
-                            let element = frame[elementTypeName + 's'][uid.asStr()]
-                            if(elementTypeName + '_data' in element) {
-                                // delete all its former dynamic element_data entries at old fis
-                                delete element[elementTypeName + '_data']  
-                            }                     
-                        }
-                    }
-                }   
-            }
-        }
-
-        // Clean-up data pointers of object_data that no longer exist!
-        // Note, element_data_pointers are correctly updated, but there might be some now declared as static
-        // corresponding to element_data that was dynamic but now has been removed when the element changed to static
-        if(this.has(elementType, uid.asStr())) {
-            let element = this.data['vcd'][elementTypeName + 's'][uid.asStr()]
-            if(elementTypeName + '_data_pointers' in element) {
-                let edps = element[elementTypeName + '_data_pointers']
-                let edp_names_to_delete = []
-                for(let edp_name in edps) {
-                    let fis_ed = new FrameIntervals(edps[edp_name]['frame_intervals'])
-                    if(fis_ed.empty()) {
-                        // CHeck if element_Data exists
-                        let ed_type = edps[edp_name]['type']
-                        let found = false
-                        if(elementTypeName + '_data' in element) {
-                            if(ed_type in element[elementTypeName + '_data']) {
-                                for(let ed in element[elementTypeName + '_data'][ed_type]) {
-                                    if(ed['name'] == edp_name) {
-                                        found = true
-                                        break
-                                    }
-                                }
-                            }
-                        }
-                        if(!found) {
-                            edp_names_to_delete.push(edp_name)
-                        }
-                    }
-                }
-                for(let edp_name of edp_names_to_delete) {
-                    delete element[elementTypeName + '_data_pointers'][edp_name]
-                }
-            }
-        }
-    }
+    }        
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     // Public API: add, update
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     public addFileVersion(version: string) {
-        this.data['vcd']['metadata'] = this.data['vcd']['metadata'] || {}
-        this.data['vcd']['metadata']['file_version'] = version
+        this.data['openlabel']['metadata'] = this.data['openlabel']['metadata'] || {}
+        this.data['openlabel']['metadata']['file_version'] = version
     }
 
     public addMetadataProperties(properties: object) {        
-        this.data['vcd']['metadata'] = this.data['vcd']['metadata'] || {}        
-        Object.assign(this.data['vcd']['metadata'], properties);        
+        this.data['openlabel']['metadata'] = this.data['openlabel']['metadata'] || {}        
+        Object.assign(this.data['openlabel']['metadata'], properties);        
     }
 
     public addName(name: string) {      
-        this.data['vcd']['metadata'] = this.data['vcd']['metadata'] || {}  
-        this.data['vcd']['metadata']['name'] = name;
+        this.data['openlabel']['metadata'] = this.data['openlabel']['metadata'] || {}  
+        this.data['openlabel']['metadata']['name'] = name;
     }
 
     public addAnnotator(annotator: string) {        
-        this.data['vcd']['metadata'] = this.data['vcd']['metadata'] || {}
-        this.data['vcd']['metadata']['annotator'] = annotator;
+        this.data['openlabel']['metadata'] = this.data['openlabel']['metadata'] || {}
+        this.data['openlabel']['metadata']['annotator'] = annotator;
     }
 
     public addComment(comment: string) {        
-        this.data['vcd']['metadata'] = this.data['vcd']['metadata'] || {}
-        this.data['vcd']['metadata']['comment'] = comment;
+        this.data['openlabel']['metadata'] = this.data['openlabel']['metadata'] || {}
+        this.data['openlabel']['metadata']['comment'] = comment;
     }
 
-    public addOntology(ontologyName: string): string {
-        this.data['vcd']['ontologies'] = this.data['vcd']['ontologies'] || {};
-        for (const ont_uid in this.data['vcd']['ontologies']) {
-            if (this.data['vcd']['ontologies'][ont_uid] == ontologyName) {
+    public addOntology(ontologyName: string, subsetInclude=null, subsetExclude=null, additionalProperties=null): string {
+        this.data['openlabel']['ontologies'] = this.data['openlabel']['ontologies'] || {};
+        for (const ont_uid in this.data['openlabel']['ontologies']) {
+            if (this.data['openlabel']['ontologies'][ont_uid] == ontologyName) {
                 console.warn('WARNING: adding an already existing ontology');
                 return null;
             }
         }
-        var length = Object.keys(this.data['vcd']['ontologies']).length;
-        this.data['vcd']['ontologies'][length.toString()] = ontologyName;
+        var length = Object.keys(this.data['openlabel']['ontologies']).length;
+        if (subsetInclude == null && subsetExclude == null && additionalProperties ==null){
+            this.data['openlabel']['ontologies'][length.toString()] = ontologyName
+        }
+        else{
+            this.data['openlabel']['ontologies'][length.toString()] = {"uri": ontologyName}
+            if (subsetInclude != null){
+                this.data['openlabel']['ontologies'][length.toString()]["subset_include"] = subsetInclude
+            }
+            if (subsetExclude != null){
+                this.data['openlabel']['ontologies'][length.toString()]["subset_exclude"] = subsetExclude
+            }
+            if (additionalProperties != null) {
+                if(additionalProperties instanceof Object) {
+                    Object.assign(this.data['openlabel']['ontologies'][length.toString()], additionalProperties)
+                }
+            }   
+          
+           
+        }
+       
         return length.toString();
     }
 
-    public addCoordinateSystem(name: string, csType: types.CoordinateSystemType, parentName: string = "", poseWrtParent: Array<number> = [], uid = null, pose: types.Pose = null) {
+    public addResource(resourceName){
+        this.data['openlabel']['resources'] = this.data['openlabel']['resources'] || {};
+        for (const ont_uid in this.data['openlabel']['resources']) {
+            if (this.data['openlabel']['resources'][ont_uid] == resourceName) {
+                console.warn('WARNING: adding an already existing resource');
+                return null;
+            }
+        }
+        var length = Object.keys(this.data['openlabel']['resources']).length;
+        this.data['openlabel']['resources'][length.toString()] = resourceName;
+        return length.toString();
+
+    }
+
+    public addCoordinateSystem(name: string, csType: types.CoordinateSystemType, parentName: string = "", poseWrtParent=null, uid = null) {
         // Argument pose_wrt_parent can be used to quickly add a list containing the 4x4 matrix
         // However, argument pose can be used to add any type of Pose object (created with types.Pose)
         // Both arguments co-exist to maintain backwards compatibility with VCD 4.3.1
-        this.data['vcd']['coordinate_systems'] = this.data['vcd']['coordinate_systems'] || {}
-
-        if(pose != null) {
-            this.data['vcd']['coordinate_systems'][name] = {
-                'type': types.CoordinateSystemType[csType],
-                'parent': parentName,                
-                'children': []
-            }    
-            Object.assign(this.data['vcd']['coordinate_systems'][name], {"pose_wrt_parent": pose.data_additional})
+        
+        // Create entry
+        this.data['openlabel']['coordinate_systems'] = this.data['openlabel']['coordinate_systems'] || {}
+        this.data['openlabel']['coordinate_systems'][name] = {'type': types.CoordinateSystemType[csType],
+                                                              'parent': parentName,
+                                                              'children': []}
+        //Add Pose data
+        if(poseWrtParent!=null){
+            //TODO: CHECK IF poseWrtParent IS PoseData()
+            Object.assign(this.data['openlabel']['coordinate_systems'][name],{'pose_wrt_parent': poseWrtParent.data})
+     
         }
-        else {
-            this.data['vcd']['coordinate_systems'][name] = {
-                'type': types.CoordinateSystemType[csType],
-                'parent': parentName,
-                'pose_wrt_parent': poseWrtParent,
-                'children': []
-            }
-        }        
 
         if(uid != null) {
-            Object.assign(this.data['vcd']['coordinate_systems'][name], {'uid': (new UID(uid)).asStr()})
+            Object.assign(this.data['openlabel']['coordinate_systems'][name], {'uid': (new UID(uid)).asStr()})
         }
 
         // Update parents
         if(parentName != "") {
             let found = false
-            for(let n in this.data['vcd']['coordinate_systems']) {
-                let cs = this.data['vcd']['coordinate_systems'][n]
+            for(let n in this.data['openlabel']['coordinate_systems']) {
+                let cs = this.data['openlabel']['coordinate_systems'][n]
                 if(n == parentName) {
                     found = true
                     cs['children'].push(name)
@@ -935,36 +924,53 @@ export class VCD {
         }
     }
 
+    
+
     public addTransform(frameNum: number, transform: types.Transform) {
         this.addFrame(frameNum)
-        this.data['vcd']['frames'][frameNum]['frame_properties'] = this.data['vcd']['frames'][frameNum]['frame_properties'] || {}
-        this.data['vcd']['frames'][frameNum]['frame_properties']['transforms'] = this.data['vcd']['frames'][frameNum]['frame_properties']['transforms'] || {}
-        Object.assign(this.data['vcd']['frames'][frameNum]['frame_properties']['transforms'], transform.data)
+        this.data['openlabel']['frames'][frameNum]['frame_properties'] = this.data['openlabel']['frames'][frameNum]['frame_properties'] || {}
+        this.data['openlabel']['frames'][frameNum]['frame_properties']['transforms'] = this.data['openlabel']['frames'][frameNum]['frame_properties']['transforms'] || {}
+        Object.assign(this.data['openlabel']['frames'][frameNum]['frame_properties']['transforms'], transform.data)
     }
 
-    public addStream(streamName: string, uri: string, description: string, sensorType: StreamType) {               
-        this.data['vcd']['streams'] = this.data['vcd']['streams'] || {};
-        this.data['vcd']['streams'][streamName] = this.data['vcd']['streams'][streamName] || {};
+    public addStream(streamName: string, uri: string, description: string, streamType: StreamType) {               
+        this.data['openlabel']['streams'] = this.data['openlabel']['streams'] || {};
+        this.data['openlabel']['streams'][streamName] = this.data['openlabel']['streams'][streamName] || {};
         
-        this.data['vcd']['streams'][streamName] = {
-            'description': description, 'uri': uri, 'type': StreamType[sensorType]
-        }        
+
+        //typeof "uid0" === "string"
+        /*this.data['openlabel']['streams'][streamName] = {
+            'description': description, 'uri': uri, 'type': StreamType[streamType]
+        }*/ 
+        
+        
+        if(StreamType[streamType]!=null){
+            this.data['openlabel']['streams'][streamName] = {
+                'description': description, 'uri': uri, 'type': StreamType[streamType]
+            }
+
+        }else if(typeof streamType === 'string'){
+            this.data['openlabel']['streams'][streamName] = {
+                'description': description, 'uri': uri, 'type': streamType
+            }
+        }
+        
     }
 
     public addFrameProperties(frameNum: number, timestamp = null, additionalProperties = null) {        
         this.addFrame(frameNum);  // this function internally checks if( the frame already exists
         this.updateVCDFrameIntervals(new FrameIntervals(frameNum))
-        this.data['vcd']['frames'][frameNum]['frame_properties'] = this.data['vcd']['frames'][frameNum]['frame_properties'] || {};
+        this.data['openlabel']['frames'][frameNum]['frame_properties'] = this.data['openlabel']['frames'][frameNum]['frame_properties'] || {};
 
         if (timestamp != null) {
-            if(timestamp instanceof String) {
-                this.data['vcd']['frames'][frameNum]['frame_properties']['timestamp'] = timestamp
+            if(timestamp instanceof String || timestamp === String) {
+                this.data['openlabel']['frames'][frameNum]['frame_properties']['timestamp'] = timestamp
             }
         }
 
         if (additionalProperties != null) {
             if(additionalProperties instanceof Object) {
-                Object.assign(this.data['vcd']['frames'][frameNum]['frame_properties'], additionalProperties)
+                Object.assign(this.data['openlabel']['frames'][frameNum]['frame_properties'], additionalProperties)
             }
         }     
     }
@@ -990,27 +996,27 @@ export class VCD {
         // 'stream_properties' inside 'metadata'.
 
         // Find if( this stream is declared
-        if ('metadata' in this.data['vcd']) {
-            if ('streams' in this.data['vcd']) {
-                if (streamName in this.data['vcd']['streams']) {
+        if ('metadata' in this.data['openlabel']) {
+            if ('streams' in this.data['openlabel']) {
+                if (streamName in this.data['openlabel']['streams']) {
                     if (frameNum == null) {
                         // This information is static
-                        this.data['vcd']['streams'][streamName]['stream_properties'] = this.data['vcd']['streams'][streamName]['stream_properties'] || {};
+                        this.data['openlabel']['streams'][streamName]['stream_properties'] = this.data['openlabel']['streams'][streamName]['stream_properties'] || {};
                         
                         if (properties != null) {
-                            Object.assign(this.data['vcd']['streams'][streamName]['stream_properties'], properties)
+                            Object.assign(this.data['openlabel']['streams'][streamName]['stream_properties'], properties)
                         }
                         if (intrinsics != null) {
-                            Object.assign(this.data['vcd']['streams'][streamName]['stream_properties'], intrinsics.data)
+                            Object.assign(this.data['openlabel']['streams'][streamName]['stream_properties'], intrinsics.data)
                         }
                         if (streamSync != null) {
-                            Object.assign(this.data['vcd']['streams'][streamName]['stream_properties'], streamSync.data)
+                            Object.assign(this.data['openlabel']['streams'][streamName]['stream_properties'], streamSync.data)
                         }
                     }
                     else {
                         // This is information of the stream for( a specific frame
                         this.addFrame(frameNum); // to add the frame in case it does not exist
-                        var frame = this.data['vcd']['frames'][frameNum];
+                        var frame = this.data['openlabel']['frames'][frameNum];
                         frame['frame_properties'] = frame['frame_properties'] || {};
                         frame['frame_properties']['streams'] = frame['frame_properties']['streams'] || {};
                         frame['frame_properties']['streams'][streamName] = frame['frame_properties']['streams'][streamName] || {};
@@ -1064,32 +1070,32 @@ export class VCD {
     }
 
     public stringifyFrame(frameNum: number, dynamicOnly = true, pretty = false) {
-        if(!(frameNum in this.data['vcd']['frames'])) {
+        if(!(frameNum in this.data['openlabel']['frames'])) {
             console.warn("WARNING: Trying to stringify a non-existing frame")
             return ''
         }
 
         if(dynamicOnly) {
             if(pretty) { 
-                return JSON.stringify(this.data['vcd']['frames'][frameNum], null, '    ')
+                return JSON.stringify(this.data['openlabel']['frames'][frameNum], null, '    ')
             }
             else {
-                return JSON.stringify(this.data['vcd']['frames'][frameNum])
+                return JSON.stringify(this.data['openlabel']['frames'][frameNum])
             }
         }
         else {
             // Need to compose dynamic and static information into a new structure
             // Copy the dynamic info first
             let frame_static_dynamic: object
-            Object.assign(frame_static_dynamic, this.data['vcd']['frames'][frameNum])
+            Object.assign(frame_static_dynamic, this.data['openlabel']['frames'][frameNum])
 
             // Now the static info for objects, actions, events, contexts and relations
             for(let elementType in ElementType) {
                 let elementTypeName = ElementType[elementType]
                 // First, elements explicitly defined for this frame
-                if(elementTypeName + 's' in this.data['vcd']['frames'][frameNum]) {
-                    for (var [uid, content] of Object.entries(this.data['vcd']['frames'][frameNum][elementTypeName + 's'])) {
-                        Object.assign(frame_static_dynamic[elementTypeName + 's'][uid], this.data['vcd'][elementTypeName + 's'][uid])
+                if(elementTypeName + 's' in this.data['openlabel']['frames'][frameNum]) {
+                    for (var [uid, content] of Object.entries(this.data['openlabel']['frames'][frameNum][elementTypeName + 's'])) {
+                        Object.assign(frame_static_dynamic[elementTypeName + 's'][uid], this.data['openlabel'][elementTypeName + 's'][uid])
                         // Remove frameInterval entry
                         if('frame_intervals' in frame_static_dynamic[elementTypeName + 's'][uid]) {
                             delete frame_static_dynamic[elementTypeName + 's'][uid]['frame_intervals']
@@ -1098,8 +1104,8 @@ export class VCD {
                 }
 
                 // But also other elements without frame intervals specified, which are assumed to exist during the entire sequence
-                if(elementTypeName + 's' in this.data['vcd'] && elementTypeName != 'relation') {
-                    for( var [uid, element] of Object.entries(this.data['vcd'][elementTypeName + 's'])) {
+                if(elementTypeName + 's' in this.data['openlabel'] && elementTypeName != 'relation') {
+                    for( var [uid, element] of Object.entries(this.data['openlabel'][elementTypeName + 's'])) {
                         let frame_intervals_dict = element['frame_intervals']
                         if(Object.keys(frame_intervals_dict).length == 0) {
                             // So the list of frame intervals is empty -> this element lives the entire scene
@@ -1126,64 +1132,70 @@ export class VCD {
         }
     } 
 
-    public addObject(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union) {
-        return this.setElement(ElementType.object, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode).asStr()
+    public addObject(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union, resUid=null) {
+        return this.setElement(ElementType.object, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode,resUid).asStr()
     }
 
-    public addAction(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union) {
-        return this.setElement(ElementType.action, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode).asStr()
+    public addAction(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union, resUid=null) {
+        return this.setElement(ElementType.action, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode,resUid).asStr()
     }
 
-    public addEvent(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union) {
-        return this.setElement(ElementType.event, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode).asStr()
+    public addEvent(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union, resUid=null) {
+        return this.setElement(ElementType.event, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode,resUid).asStr()
     }
 
-    public addContext(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union) {
-        return this.setElement(ElementType.context, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode).asStr()
+    public addContext(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, cs = null, setMode: SetMode = SetMode.union, resUid=null) {
+        return this.setElement(ElementType.context, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), cs, setMode,resUid).asStr()
     }
 
-    public addRelation(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, setMode: SetMode = SetMode.union) {
+    public addRelation(name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, setMode: SetMode = SetMode.union, resUid=null) {
         if(setMode == SetMode.replace && uid != null)
         {            
             if(this.has(ElementType.relation, uid))
             {
-                let relation = this.data['vcd']['relations'][(new UID(uid)).asStr()]
+                let relation = this.data['openlabel']['relations'][(new UID(uid)).asStr()]
                 relation['rdf_subjects'] = []
                 relation['rdf_objects'] = []
             }            
         }
-        let relation_uid = this.setElement(ElementType.relation, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), null, setMode)        
+        let relation_uid = this.setElement(ElementType.relation, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), null, setMode,resUid)        
         return relation_uid.asStr()
     }
 
-    public addElement(elementType: ElementType, name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, setMode: SetMode = SetMode.union) {
-        return this.setElement(elementType, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), null, setMode).asStr()                
+    public addTag( semanticType: string, uid = null, ontUid=null, resUid=null){
+        return this.setElement(ElementType.tag, null, semanticType,new  FrameIntervals(null),
+                                  new UID(uid), new UID(ontUid), null, SetMode.union, resUid).asStr()
+
+    }
+
+    public addElement(elementType: ElementType, name: string, semanticType: string, frameValue = null, uid = null, ontUid = null, setMode: SetMode = SetMode.union, resUid=null) {
+        return this.setElement(elementType, name, semanticType, new FrameIntervals(frameValue), new UID(uid), new UID(ontUid), null, setMode,resUid).asStr()                
     }
 
     public addRdf(relationUid: string | number, rdfType: RDF, elementUid: string | number, elementType: ElementType) {
         let elementTypeName = ElementType[elementType]
         let rel_uid = new UID(relationUid)
         let el_uid = new UID(elementUid)
-        if (!(rel_uid.asStr() in this.data['vcd']['relations'])) {
+        if (!(rel_uid.asStr() in this.data['openlabel']['relations'])) {
             console.warn("WARNING: trying to add RDF to non-existing Relation.")
             return
         }
         else {
-            let relation = this.data['vcd']['relations'][rel_uid.asStr()]
-            if (!(el_uid.asStr() in this.data['vcd'][elementTypeName + 's'])) {
+            let relation = this.data['openlabel']['relations'][rel_uid.asStr()]
+            if (!(el_uid.asStr() in this.data['openlabel'][elementTypeName + 's'])) {
                 console.warn("WARNING: trying to add RDF using non-existing Element.")
                 return
             }
             else {
                 if (rdfType == RDF.subject) {
-                    this.data['vcd']['relations'][rel_uid.asStr()]['rdf_subjects'] = this.data['vcd']['relations'][rel_uid.asStr()]['rdf_subjects'] || [];
-                    this.data['vcd']['relations'][rel_uid.asStr()]['rdf_subjects'].push(
+                    this.data['openlabel']['relations'][rel_uid.asStr()]['rdf_subjects'] = this.data['openlabel']['relations'][rel_uid.asStr()]['rdf_subjects'] || [];
+                    this.data['openlabel']['relations'][rel_uid.asStr()]['rdf_subjects'].push(
                         { 'uid': el_uid.asStr(), 'type': elementTypeName }
                     )
                 }
                 else {
-                    this.data['vcd']['relations'][rel_uid.asStr()]['rdf_objects'] = this.data['vcd']['relations'][rel_uid.asStr()]['rdf_objects'] || [];
-                    this.data['vcd']['relations'][rel_uid.asStr()]['rdf_objects'].push(
+                    this.data['openlabel']['relations'][rel_uid.asStr()]['rdf_objects'] = this.data['openlabel']['relations'][rel_uid.asStr()]['rdf_objects'] || [];
+                    this.data['openlabel']['relations'][rel_uid.asStr()]['rdf_objects'].push(
                         { 'uid': el_uid.asStr(), 'type': elementTypeName }
                     )
                 }                             
@@ -1191,37 +1203,37 @@ export class VCD {
         }
     }
 
-    public addRelationObjectAction(name: string, semanticType: string, objectUid: string | number, actionUid: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
+    public addRelationObjectAction(name: string, semanticType: string, objectUid: string | number, actionUid: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union,resUid=null) {
         // Note: no need to wrap uids as UID, since all calls are public functions, and no access to dict is done.
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode,resUid)
         this.addRdf(relationUid, RDF.subject, objectUid, ElementType.object)
         this.addRdf(relationUid, RDF.object, actionUid, ElementType.action)
         return relationUid
     }
 
-    public addRelationActionAction(name: string, semanticType: string, actionUid1: string | number, actionUid2: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
+    public addRelationActionAction(name: string, semanticType: string, actionUid1: string | number, actionUid2: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union,resUid=null) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode,resUid)
         this.addRdf(relationUid, RDF.subject, actionUid1, ElementType.action)
         this.addRdf(relationUid, RDF.object, actionUid2, ElementType.action)
         return relationUid
     }
 
-    public addRelationObjectObject(name: string, semanticType: string, objectUid1: string | number, objectUid2: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
+    public addRelationObjectObject(name: string, semanticType: string, objectUid1: string | number, objectUid2: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union,resUid=null) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode,resUid)
         this.addRdf(relationUid, RDF.subject, objectUid1, ElementType.object)
         this.addRdf(relationUid, RDF.object, objectUid2, ElementType.object)
         return relationUid
     }
 
-    public addRelationActionObject(name: string, semanticType: string, actionUid: string | number, objectUid: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union) {
-        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
+    public addRelationActionObject(name: string, semanticType: string, actionUid: string | number, objectUid: string | number, relationUid = null, ontUid = null, frameValue=null, setMode: SetMode = SetMode.union,resUid=null) {
+        relationUid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode,resUid)
         this.addRdf(relationUid, RDF.subject, actionUid, ElementType.action)
         this.addRdf(relationUid, RDF.object, objectUid, ElementType.object)
         return relationUid
     }
 
-    public addRelationSubjectObject(name: string, semanticType: string, subjectType: ElementType, subjectUid: string | number, objectType: ElementType, objectUid: string | number, relationUid: null, ontUid: null, frameValue = null, setMode: SetMode = SetMode.union) {
-        let uid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode)
+    public addRelationSubjectObject(name: string, semanticType: string, subjectType: ElementType, subjectUid: string | number, objectType: ElementType, objectUid: string | number, relationUid= null, ontUid= null, frameValue = null, setMode: SetMode = SetMode.union, resUid=null) {
+        let uid = this.addRelation(name, semanticType, frameValue, relationUid, ontUid, setMode,resUid)
         this.addRdf(uid, RDF.subject, subjectUid, subjectType)
         this.addRdf(uid, RDF.object, objectUid, objectType)
         return uid
@@ -1237,6 +1249,11 @@ export class VCD {
 
     public addContextData(uid: string | number, contextData: types.ObjectData, frameValue = null, setMode: SetMode = SetMode.union) {
         return this.setElementData(ElementType.context, new UID(uid), contextData, new FrameIntervals(frameValue), setMode)        
+    }
+
+    public addTagData(uid: string | number, tagData: types.ObjectData, frameValue = null, setMode: SetMode = SetMode.union){
+        return this.setElementData(ElementType.tag, new UID(uid), tagData, new FrameIntervals(frameValue), setMode)        
+
     }
 
     public addEventData(uid: string | number, eventData: types.ObjectData, frameValue = null, setMode: SetMode = SetMode.union) {
@@ -1256,36 +1273,36 @@ export class VCD {
 
     public hasElements(elementType: ElementType ) {
         let elementTypeName = ElementType[elementType]
-        return (elementTypeName + 's' in this.data['vcd'])
+        return (elementTypeName + 's' in this.data['openlabel'])
     }
     
     public hasObjects(): boolean{
-        return 'objects' in this.data['vcd']
+        return 'objects' in this.data['openlabel']
     }
 
     public hasActions(): boolean {
-        return 'actions' in this.data['vcd']
+        return 'actions' in this.data['openlabel']
     }
 
     public hasEvents(): boolean {
-        return 'events' in this.data['vcd']
+        return 'events' in this.data['openlabel']
     }
 
     public hasContexts(): boolean {
-        return 'contexts' in this.data['vcd']
+        return 'contexts' in this.data['openlabel']
     }
 
     public hasRelations(): boolean {
-        return 'relations' in this.data['vcd']
+        return 'relations' in this.data['openlabel']
     }
     
     public has(elementType: ElementType, uid: string | number): boolean {
         let elementTypeName = ElementType[elementType]
-        if (!this.data['vcd'][elementTypeName + 's']) {
+        if (!this.data['openlabel'][elementTypeName + 's']) {
             return false;
         }
         else {
-            if (this.data['vcd'][elementTypeName + 's'][(new UID(uid)).asStr()]) {
+            if (this.data['openlabel'][elementTypeName + 's'][(new UID(uid)).asStr()]) {
                 return true;
             }
             else {
@@ -1298,19 +1315,19 @@ export class VCD {
         if(!this.has(elementType, uid)) return false
         else {
             let uid_str = new UID(uid).asStr()
-            if(!(ElementType[elementType] + '_data_pointers' in this.data['vcd'][ElementType[elementType] + 's'][uid_str])) 
+            if(!(ElementType[elementType] + '_data_pointers' in this.data['openlabel'][ElementType[elementType] + 's'][uid_str])) 
                 return false
             let name = elementData.data['name']
-            return name in this.data['vcd'][ElementType[elementType] + 's'][uid_str][ElementType[elementType] + '_data_pointers']
+            return name in this.data['openlabel'][ElementType[elementType] + 's'][uid_str][ElementType[elementType] + '_data_pointers']
         }
     }
 
     public hasFrame(frameNum: number) {
-        if (!this.data['vcd']['frames']) {
+        if (!this.data['openlabel']['frames']) {
             return false
         }
         else {
-            if(frameNum in this.data['vcd']['frames'])
+            if(frameNum in this.data['openlabel']['frames'])
                 return true
             else
                 return false
@@ -1323,7 +1340,7 @@ export class VCD {
         //e.g. all Object's or Context's
         //
         let elementTypeName = ElementType[elementType]
-        return this.data['vcd'][elementTypeName + 's'];
+        return this.data['openlabel'][elementTypeName + 's'];
     }
 
     public getAll2(elementType1: ElementType, elementType2: ElementType) {
@@ -1335,8 +1352,8 @@ export class VCD {
         let elementTypeName2 = ElementType[elementType2]
 
         var aux = {};
-        aux[elementTypeName1 + 's'] = this.data['vcd'][elementTypeName1 + 's'];
-        aux[elementTypeName2 + 's'] = this.data['vcd'][elementTypeName2 + 's'];
+        aux[elementTypeName1 + 's'] = this.data['openlabel'][elementTypeName1 + 's'];
+        aux[elementTypeName2 + 's'] = this.data['openlabel'][elementTypeName2 + 's'];
 
         return aux;
     }
@@ -1351,9 +1368,9 @@ export class VCD {
         let elementTypeName3 = ElementType[ElementType[elementType3]]
 
         var aux = {};
-        aux[elementTypeName1 + 's'] = this.data['vcd'][elementTypeName1 + 's'];
-        aux[elementTypeName2 + 's'] = this.data['vcd'][elementTypeName2 + 's'];
-        aux[elementTypeName3 + 's'] = this.data['vcd'][elementTypeName3 + 's'];
+        aux[elementTypeName1 + 's'] = this.data['openlabel'][elementTypeName1 + 's'];
+        aux[elementTypeName2 + 's'] = this.data['openlabel'][elementTypeName2 + 's'];
+        aux[elementTypeName3 + 's'] = this.data['openlabel'][elementTypeName3 + 's'];
 
         return aux;
     }
@@ -1361,12 +1378,12 @@ export class VCD {
     public getElement(elementType: ElementType, uid: string | number) {        
         let elementTypeName = ElementType[elementType]
         let uid_str = (new UID(uid)).asStr()
-        if (this.data['vcd'][elementTypeName + 's'] == null) {
+        if (this.data['openlabel'][elementTypeName + 's'] == null) {
             console.warn("WARNING: trying to get a " + elementTypeName + " but this VCD has none.")
             return null
         }
-        if (this.data['vcd'][elementTypeName + 's'][uid_str]) {
-            return this.data['vcd'][elementTypeName + 's'][uid_str]
+        if (this.data['openlabel'][elementTypeName + 's'][uid_str]) {
+            return this.data['openlabel'][elementTypeName + 's'][uid_str]
         }
         else {
             console.warn("WARNING: trying to get non-existing " + elementTypeName + " with uid: " + uid_str)
@@ -1398,7 +1415,7 @@ export class VCD {
         if(!this.hasElements(elementType))
             return null
         let elementTypeName = ElementType[elementType]
-        let elements = this.data['vcd'][elementTypeName + 's']
+        let elements = this.data['openlabel'][elementTypeName + 's']
         for (const uid in elements) {
             let element = elements[uid]
             let name_element = element['name']
@@ -1429,9 +1446,9 @@ export class VCD {
     }
 
     public getFrame(frameNum: number) {
-        if (this.data['vcd']['frames']) {
-            if(frameNum in this.data['vcd']['frames'])
-                return this.data['vcd']['frames'][frameNum];
+        if (this.data['openlabel']['frames']) {
+            if(frameNum in this.data['openlabel']['frames'])
+                return this.data['openlabel']['frames'][frameNum];
         }
         return null
     }
@@ -1440,8 +1457,8 @@ export class VCD {
         let elementTypeName = ElementType[elementType]
  
         var uids = [];
-        for (const uid in this.data['vcd'][elementTypeName + 's']) {
-            var element = this.data['vcd'][elementTypeName + 's'][uid];
+        for (const uid in this.data['openlabel'][elementTypeName + 's']) {
+            var element = this.data['openlabel'][elementTypeName + 's'][uid];
             if (element['type'] == type) {
                 uids.push(uid);
             }
@@ -1452,8 +1469,8 @@ export class VCD {
     public getElementsWithElementDataName(elementType: ElementType, dataName: string) {
         let uids = []
         let elementTypeName = ElementType[elementType]
-        for(const uid in this.data['vcd'][elementTypeName + 's']){
-            let element = this.data['vcd'][elementTypeName + 's'][uid]
+        for(const uid in this.data['openlabel'][elementTypeName + 's']){
+            let element = this.data['openlabel'][elementTypeName + 's'][uid]
             if(elementTypeName + '_data_pointers' in element) {
                 for(let name in element[elementTypeName + '_data_pointers']) {
                     if(name == dataName) {
@@ -1482,8 +1499,8 @@ export class VCD {
     public getFramesWithElementDataName(elementType: ElementType, uid: string | number, dataName: string) {        
         let elementTypeName = ElementType[elementType]
         let uid_str = new UID(uid).asStr()
-        if(uid_str in this.data['vcd'][elementTypeName + 's']) {
-            let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+        if(uid_str in this.data['openlabel'][elementTypeName + 's']) {
+            let element = this.data['openlabel'][elementTypeName + 's'][uid_str]
             if(elementTypeName + '_data_pointers' in element) {
                 for(let name in element[elementTypeName + '_data_pointers']) {
                     if(name == dataName) {
@@ -1554,7 +1571,7 @@ export class VCD {
                 // Let's check whether the elementData is static at the root AND the Element is defined for this frame            
                 if(!elementExistInThisFrame)
                     return null                
-                let element = this.data['vcd'][elementTypeName + 's'][uid_str]  // the element exists because of previous controls
+                let element = this.data['openlabel'][elementTypeName + 's'][uid_str]  // the element exists because of previous controls
                 if(elementTypeName + '_data' in element) {
                     for (const prop in element[elementTypeName + '_data']) {
                         var valArray = element[elementTypeName + '_data'][prop];
@@ -1570,7 +1587,7 @@ export class VCD {
         }
         else {
             // The user is asking for static attributes at the root of the element            
-            let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+            let element = this.data['openlabel'][elementTypeName + 's'][uid_str]
             if(elementTypeName + '_data' in element) {
                 for (const prop in element[elementTypeName + '_data']) {
                     var valArray = element[elementTypeName + '_data'][prop];
@@ -1603,9 +1620,9 @@ export class VCD {
         let uid_str = new UID(uid).asStr()
         if( this.has(elementType, uid)){
             let elementTypeName = ElementType[elementType]
-            if(elementTypeName + 's' in this.data['vcd']) {
-                if(uid_str in this.data['vcd'][elementTypeName + 's']) {
-                    let element = this.data['vcd'][elementTypeName + 's'][uid_str]
+            if(elementTypeName + 's' in this.data['openlabel']) {
+                if(uid_str in this.data['openlabel'][elementTypeName + 's']) {
+                    let element = this.data['openlabel'][elementTypeName + 's'][uid_str]
                     if(elementTypeName + '_data_pointers' in element) {
                         if(dataName in element[elementTypeName + '_data_pointers']) {
                             return element[elementTypeName + '_data_pointers'][dataName]
@@ -1638,8 +1655,8 @@ export class VCD {
 
     public getNumElements(elementType: ElementType) {
         let elementTypeName = ElementType[elementType]
-        if(elementTypeName + 's' in this.data['vcd'])
-            return Object.keys(this.data['vcd'][elementTypeName + 's']).length        
+        if(elementTypeName + 's' in this.data['openlabel'])
+            return Object.keys(this.data['openlabel'][elementTypeName + 's']).length        
         else
             return 0
     }
@@ -1666,8 +1683,8 @@ export class VCD {
 
     public getElementsUids(elementType: ElementType): string[] {
         let elementTypeName = ElementType[elementType]
-        if(elementTypeName + 's' in this.data['vcd']) {
-            return Object.keys(this.data['vcd'][elementTypeName + 's'])
+        if(elementTypeName + 's' in this.data['openlabel']) {
+            return Object.keys(this.data['openlabel'][elementTypeName + 's'])
         }
         else {
             return []
@@ -1676,17 +1693,28 @@ export class VCD {
 
     public getOntology(ontUid: string | number) {
         let ond_uid_str = new UID(ontUid).asStr()
-        if (this.data['vcd']['ontologies']) {
-            if (this.data['vcd']['ontologies'][ond_uid_str]) {
-                return this.data['vcd']['ontologies'][ond_uid_str];
+        if (this.data['openlabel']['ontologies']) {
+            if (this.data['openlabel']['ontologies'][ond_uid_str]) {
+                return this.data['openlabel']['ontologies'][ond_uid_str];
             }
         }
         return null;
     }
 
+    public getResource(resUid) {
+        let res_uid_str = new UID(resUid).asStr()
+        if (this.data['openlabel']['resources']){
+            if(this.data['openlabel']['resources'][res_uid_str]){
+                return this.data['openlabel']['resources'][res_uid_str];
+            }
+        }
+        
+        return null;
+    }    
+
     public getMetadata() {
-        if (this.data['vcd']['metadata']) {
-            return this.data['vcd']['metadata'];
+        if (this.data['openlabel']['metadata']) {
+            return this.data['openlabel']['metadata'];
         }
         else {
             return {};
@@ -1694,29 +1722,30 @@ export class VCD {
     }
 
     public hasCoordinateSystem(cs: string): boolean {
-        if('coordinate_systems' in this.data['vcd']) {
-            if(cs in this.data['vcd']['coordinate_systems']) return true            
+        if('coordinate_systems' in this.data['openlabel']) {
+            if(cs in this.data['openlabel']['coordinate_systems']) return true            
         }
         return false
     }
 
     public getCoordinateSystems(): Array<object> {
-        if('coordinate_systems' in this.data['vcd']) {
-            return this.data['vcd']['coordinate_systems']
+        if('coordinate_systems' in this.data['openlabel']) {
+            return this.data['openlabel']['coordinate_systems']
         }
         else return []
     }
 
     public getCoordinateSystem(cs: string) {
         if(this.hasCoordinateSystem(cs)) {
-            return this.data['vcd']['streams'][cs]
+            //return this.data['openlabel']['streams'][cs]
+            return this.data['openlabel']['coordinate_systems'][cs]
         }
         else return null
     }
 
     public hasStream(streamName: string): boolean {        
-        if('streams' in this.data['vcd']) {                        
-            if (streamName in this.data['vcd']['streams']) {
+        if('streams' in this.data['openlabel']) {                        
+            if (streamName in this.data['openlabel']['streams']) {
                 return true
             }             
             else {
@@ -1726,34 +1755,34 @@ export class VCD {
     }
 
     public getStreams(): Array<object> {
-        if('streams' in this.data['vcd']) {
-            return this.data['vcd']['streams']
+        if('streams' in this.data['openlabel']) {
+            return this.data['openlabel']['streams']
         }
         else return []
     }
 
     public getStream(streamName: string) {
         if(this.hasStream(streamName)) {
-            return this.data['vcd']['streams'][streamName]
+            return this.data['openlabel']['streams'][streamName]
         }
         else return null
     }
 
     public getFrameIntervals(): FrameIntervals {
-        if('frame_intervals' in this.data['vcd']) return new FrameIntervals(this.data['vcd']['frame_intervals'])
+        if('frame_intervals' in this.data['openlabel']) return new FrameIntervals(this.data['openlabel']['frame_intervals'])
         else return new FrameIntervals()        
     }
 
     public getElementFrameIntervals(elementType: ElementType, uid: string | number) {
         let elementTypeName = ElementType[elementType]
         let uid_str = new UID(uid).asStr()
-        if (!(elementTypeName + 's' in this.data['vcd'])) {            
+        if (!(elementTypeName + 's' in this.data['openlabel'])) {            
             return new FrameIntervals()
         }
         else {
-            if(!(uid_str in this.data['vcd'][elementTypeName + 's']))
+            if(!(uid_str in this.data['openlabel'][elementTypeName + 's']))
                 return new FrameIntervals()
-            return new FrameIntervals(this.data['vcd'][elementTypeName + 's'][uid_str]['frame_intervals'])
+            return new FrameIntervals(this.data['openlabel'][elementTypeName + 's'][uid_str]['frame_intervals'])
         }        
     }
     
@@ -1781,7 +1810,7 @@ export class VCD {
     public rmElementByType(elementType: ElementType, semanticType: string) {
         // This function removes all Elements of input semanticType
         let elementTypeName = ElementType[elementType]
-        var elements = this.data['vcd'][elementTypeName + 's'];
+        var elements = this.data['openlabel'][elementTypeName + 's'];
 
         let uidsToRemove = []
         for (let uid in elements) {
@@ -1828,21 +1857,21 @@ export class VCD {
         if(!this.has(elementType, uid)) return
 
         // Remove from Frames: let's read frameIntervals from summary
-        var elements = this.data['vcd'][elementTypeName + 's'];
+        var elements = this.data['openlabel'][elementTypeName + 's'];
         let element = elements[uid_str];
         if('frame_intervals' in element) {
             for (var i = 0; i < element['frame_intervals'].length; i++) {
                 var fi = element['frame_intervals'][i];
                 for (var frameNum = fi['frame_start']; frameNum < fi['frame_end'] + 1; frameNum++) {
-                    var elementsInFrame = this.data['vcd']['frames'][frameNum][elementTypeName + 's'];
+                    var elementsInFrame = this.data['openlabel']['frames'][frameNum][elementTypeName + 's'];
                     if (uid in elementsInFrame) {
                         delete elementsInFrame[uid_str];
                     }
                     if (Object.keys(elementsInFrame).length == 0) {  // objects might have end up empty TODO: test this
-                        delete this.data['vcd']['frames'][frameNum][elementTypeName + 's']
+                        delete this.data['openlabel']['frames'][frameNum][elementTypeName + 's']
 
-                        if(Object.keys(this.data['vcd']['frames'][frameNum]).length == 0) { // this frame may have ended up being empty
-                            delete this.data['vcd']['frames'][frameNum]
+                        if(Object.keys(this.data['openlabel']['frames'][frameNum]).length == 0) { // this frame may have ended up being empty
+                            delete this.data['openlabel']['frames'][frameNum]
                             this.rmFrame(frameNum)
                         }
                     }
@@ -1853,7 +1882,7 @@ export class VCD {
         // Delete this element from summary
         delete elements[uid_str];
         if(elements.length==0) {
-            delete this.data['vcd'][elementTypeName + 's']
+            delete this.data['openlabel'][elementTypeName + 's']
         }
     }
 
@@ -1876,4 +1905,132 @@ export class VCD {
     public rmRelation(uid: string | number) {
         this.rmElement(ElementType.relation, uid);
     }
+
+    public rmElementDataFromFramesByName(elementType: ElementType, uid: string | number, elementDataName: string, frameIntervals = null) {        
+        let uid_ = new UID(uid)
+        let frameIntervals_ = new FrameIntervals(frameIntervals)
+        // Quick checks
+        if(this.has(elementType, uid_.asStr())) {
+            let edp = this.getElementDataPointer(elementType, uid_.asStr(), elementDataName);
+            let fis_ed = new FrameIntervals(edp['frame_intervals'])
+
+            let fis_to_remove = fis_ed.intersection(frameIntervals_)
+            let remove_all = false
+            if(fis_to_remove.equals(fis_ed))
+                remove_all = true
+
+            // Loop over frames that we know the element data is present at
+            let temp = fis_ed
+            let elementTypeName = ElementType[elementType];
+            for(let fi of fis_to_remove.get()) {
+                for(let f=fi[0]; f<=fi[1]; f++) {
+                    let frame = this.data['openlabel']['frames'][f]
+                    let element = frame[elementTypeName + 's'][uid_.asStr()]
+                    
+                    // Delete only the elementData with the specified name
+                    for (const prop in element[elementTypeName + '_data']) {
+                        var valArray = element[elementTypeName + '_data'][prop];
+                        let idx_to_remove = null
+                        for (var i = 0; i < valArray.length; i++) {
+                            var val = valArray[i];
+                            if (val['name'] == elementDataName) {
+                                idx_to_remove = i
+                                //delete element[elementTypeName + '_data'][prop][i]
+                            }
+                        }
+                        //delete element[elementTypeName + '_data'][prop][idx_to_remove]
+                        element[elementTypeName + '_data'][prop].splice(idx_to_remove, 1)  // because we want to extract the element and not left it null
+                        if (element[elementTypeName + '_data'][prop].length == 0)
+                            delete element[elementTypeName + '_data'][prop]  // e.g. 'bbox': [] is empty so let's delete it
+                            if (Object.keys(element[elementTypeName + '_data']).length == 0)
+                                delete element[elementTypeName + '_data'] // e.g. 'object_data' : {} is empty so let's delete it
+                    }
+                    // Clean-up edp frame by frame
+                    if(!remove_all)
+                        temp = new FrameIntervals(utils.rmFrameFromFrameIntervals(temp.getDict(), f))
+                }           
+            }
+            let element = this.getElement(elementType, uid_.asStr())
+            if (remove_all) {
+                // Just delete the entire element data pointer
+                delete element[elementTypeName + '_data_pointers'][elementDataName]
+            }
+            else {
+                // Update frame intervals for this edp
+                let fis_ed_new = temp
+                element[elementTypeName + '_data_pointers'][elementDataName]['frame_intervals'] = fis_ed_new.getDict()
+            }
+        }       
+    }
+
+    public rmElementDataFromFrames(elementType: ElementType, uid: string | number, frameIntervals = null) {        
+        let uid_ = new UID(uid)
+        let frameIntervals_ = new FrameIntervals(frameIntervals)
+        let elementTypeName = ElementType[elementType];
+        for(let fi of frameIntervals_.get()) {
+            for(let f=fi[0]; f<=fi[1]; f++) {
+                if(this.hasFrame(f)) {
+                    let frame = this.data['openlabel']['frames'][f]
+                    if(elementTypeName + 's' in frame) {
+                        if(uid_.asStr() in frame[elementTypeName + 's']) {
+                            let element = frame[elementTypeName + 's'][uid_.asStr()]
+                            if(elementTypeName + '_data' in element) {
+                                // delete all its former dynamic element_data entries at old fis
+                                delete element[elementTypeName + '_data']  
+                            }                     
+                        }
+                    }
+                }   
+            }
+        }
+
+        // Clean-up data pointers of object_data that no longer exist!
+        // Note, element_data_pointers are correctly updated, but there might be some now declared as static
+        // corresponding to element_data that was dynamic but now has been removed when the element changed to static
+        if(this.has(elementType, uid_.asStr())) {
+            let element = this.data['openlabel'][elementTypeName + 's'][uid_.asStr()]
+            if(elementTypeName + '_data_pointers' in element) {
+                let edps = element[elementTypeName + '_data_pointers']
+                let edp_names_to_delete = []
+                for(let edp_name in edps) {
+                    let fis_ed = new FrameIntervals(edps[edp_name]['frame_intervals'])
+                    if(fis_ed.empty()) {
+                        // CHeck if element_Data exists
+                        let ed_type = edps[edp_name]['type']
+                        let found = false
+                        if(elementTypeName + '_data' in element) {
+                            if(ed_type in element[elementTypeName + '_data']) {
+                                for(let ed in element[elementTypeName + '_data'][ed_type]) {
+                                    if(ed['name'] == edp_name) {
+                                        found = true
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        if(!found) {
+                            edp_names_to_delete.push(edp_name)
+                        }
+                    }
+                }
+                for(let edp_name of edp_names_to_delete) {
+                    delete element[elementTypeName + '_data_pointers'][edp_name]
+                }
+            }
+        }
+    }    
+}
+
+export class OpenLABEL extends VCD{
+    
+    //This is the OpenLABEL class, which inherites from VCD class.
+
+    /*def __init__(self, file_name=None, validation=False):
+        VCD.__init__(self, file_name, validation)*/
+
+    constructor(vcd_json = null, validation = false) {
+        super(vcd_json, validation);	
+    }
+        
+
 }

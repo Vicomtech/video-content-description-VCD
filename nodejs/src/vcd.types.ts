@@ -125,17 +125,57 @@ export class IntrinsicsCustom extends Intrinsics {
 	}
 }
 
+export enum TransformDataType{
+	matrix_4x4 = 1,
+    quat_and_trans_7x1 = 2,
+    euler_and_trans_6x1 = 3,
+    custom = 4
+}
+
+export class TransformData {
+
+	/*
+    This class encodes the transform data in the form of 4x4 matrix, quaternion + translation, or
+    Euler angles + translation
+    */
+	data: object
+	constructor(val, type,additionalItems: object = null){
+		this.data = {}
+		if(type == TransformDataType.matrix_4x4){
+			this.data['matrix4x4'] = val
+		}else if(type == TransformDataType.quat_and_trans_7x1){
+			this.data['quaternion'] = val.slice(0,4);  //val[0:4]
+            this.data['translation'] = val.slice(4,7); //val[4:7]
+		}else if (type == TransformDataType.euler_and_trans_6x1){
+			this.data['euler_angles'] =  val.slice(0,3);  //val[0:3]
+            this.data['translation'] =   val.slice(3,6);  //val[3:6]
+		}
+
+		if (additionalItems!=null){
+			Object.assign(this.data, additionalItems)
+		}
+	}
+}
+export class PoseData extends TransformData{
+	/** 
+    Equivalente to TransformData, but intended to be used when passive rotation and translation values are provided
+    */
+   constructor(val, type,additionalItems: object = null ){
+	   super(val,type,additionalItems)
+   }
+}
 export class Transform {
 	data: object
 	data_additional: object
-	constructor(srcName: string, dstName: string, additionalItems: object = null) {		
+	constructor(srcName: string, dstName: string , transform_src_to_dst, additionalItems: object = null) {		
 		this.data = {}
 		this.data_additional = {}
 		let name = srcName + '_to_' + dstName
 		this.data[name] = {}		
 		this.data[name]['src'] = srcName
 		this.data[name]['dst'] = dstName
-				
+		this.data[name]['transform_src_to_dst'] = transform_src_to_dst.data
+       
 		if(additionalItems != null){			
 			Object.assign(this.data[name], additionalItems);
 			Object.assign(this.data_additional, additionalItems)
@@ -233,9 +273,11 @@ export enum Poly2DType {
 export class ObjectData{
 	data: object;
 	type: any;
-    constructor( name: string, cs=null, properties=null) {        
+    constructor( name: string, cs=null, properties=null, type=null) {        
         this.data = {};
-        this.data['name'] = name;
+		if(name != null){
+        	this.data['name'] = name;
+		}
         if(cs != null){
 			if(typeof cs != "string" && !(cs instanceof String)){
 				console.warn("WARNING: coordinate_system not string", cs);
@@ -245,6 +287,9 @@ export class ObjectData{
 		}
 		if(properties != null){
 			Object.assign(this.data, properties)
+		}
+		if(type!=null){
+			this.data['type']=type;
 		}
 	}
 	typeName() {
@@ -315,8 +360,8 @@ export class Rbbox extends ObjectDataGeometry {
 }
 
 export class Num extends ObjectData{
-    constructor( name: string, val, cs=null, properties=null ) {
-        super( name, cs, properties);
+    constructor( name: string, val, cs=null, properties=null, type=null ) {
+        super( name, cs, properties,type);
 		if (!isFloat(val) && !Number.isInteger(val)){
 			console.warn("WARNING: val is not float or integer");
 			return;
@@ -327,8 +372,8 @@ export class Num extends ObjectData{
 }
 
 export class Text extends ObjectData{
-    constructor( name: string, val, cs=null, properties=null ){
-        super( name, cs, properties);
+    constructor( name: string, val, cs=null, properties=null, type=null  ){
+        super( name, cs, properties,type);
 		if(typeof val != "string" && !(val instanceof String)){
 			console.warn("WARNING: val not string",val);
 			return;
@@ -339,8 +384,8 @@ export class Text extends ObjectData{
 }
 
 export class Boolean extends ObjectData{
-    constructor( name: string, val: boolean, cs=null, properties=null ){
-        super( name, cs, properties);		
+    constructor( name: string, val: boolean, cs=null, properties=null , type=null ){
+        super( name, cs, properties,type);		
         this.data['val'] = val;
         this.type = ObjectDataType.boolean;
 	}
@@ -488,8 +533,8 @@ export class Binary extends ObjectData{
 }
 
 export class Vec extends ObjectData{
-    constructor( name: string, val: Array<number> | Array<string>, cs=null, properties=null ) {
-        super( name, cs, properties);        
+    constructor( name: string, val: Array<number> | Array<string>, cs=null, properties=null, type=null ) {
+        super( name, cs, properties,type);        
         this.data['val'] = val;
         this.type = ObjectDataType.vec;
 	}
@@ -538,7 +583,7 @@ export class Point3d extends ObjectDataGeometry{
 export class GeometricReference extends ObjectDataGeometry{
     constructor( name: string, val, referenceType: ObjectDataType, cs=null, properties=null ){
         super( name, cs, properties);		
-        this.data['reference_type'] = ObjectDataType[ObjectDataType[referenceType]];  // this trick returns the value of the enum as a string
+        this.data['reference_type'] = ObjectDataType[referenceType];  // this trick returns the value of the enum as a string
         if(val != null){
             if(!Array.isArray(val)){
 				console.warn("WARNING: val not array");
@@ -691,7 +736,8 @@ export class Mesh extends ObjectDataGeometry{
         result += "]]";
 
         // Clean-out commas
-        result = result.replace(",]", "]")
+		let re = /\,]/gi;
+        result = result.replace(re, "]")
 
         return result;
 	}
