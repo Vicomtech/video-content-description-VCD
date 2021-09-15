@@ -1819,7 +1819,7 @@ class VCD:
                     frame = self.data['openlabel']['frames'][f]
                     element = frame[element_type.name + 's'][uid.as_str()]
                     # Delete only the element_data with the specified name
-                    for prop in element[element_type.name + '_data']:
+                    for prop in list(element[element_type.name + '_data']): # using list() here to make a copy of the keys, because there is a delete inside the loop
                         val_array = element[element_type.name + '_data'][prop]
                         idx_to_remove = None
                         for i in range(0, len(val_array)):
@@ -1829,6 +1829,11 @@ class VCD:
                                 idx_to_remove = i                                
                                 #break  # because we should only delete the one that matches the name
                         del element[element_type.name + '_data'][prop][idx_to_remove]
+                        if len(element[element_type.name + '_data'][prop]) == 0:
+                            del element[element_type.name + '_data'][prop] # e.g. 'bbox': [] is empty, let's remove it
+                            if not element[element_type.name + '_data']:
+                                del element[element_type.name + '_data']  # e.g. 'object_data': {}
+
                     # Clean-up edp frame by frame
                     if not remove_all:
                         temp = FrameIntervals(utils.rm_frame_from_frame_intervals(temp.get_dict(), f))

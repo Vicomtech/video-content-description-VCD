@@ -281,11 +281,11 @@ class TestBasic(unittest.TestCase):
         fis_object = vcd.get_element_frame_intervals(core.ElementType.object, uid1).get_dict()
         self.assertDictEqual(fis_object[0], {'frame_start': 0, 'frame_end': 35})
 
-
-
-
-
-
+        # Inside the removed frames, there should not be an element data entry
+        frame_6 = vcd.get_frame(6)
+        self.assertDictEqual(frame_6['objects'][uid1], {})
+        frame_12 = vcd.get_frame(12)
+        self.assertEqual(len(frame_12['objects'][uid1]['object_data']['bbox']), 1)
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
