@@ -322,31 +322,35 @@ class TopView:
     def draw_info(self, topView, frameNum=None):
         h = topView.shape[0]
         w = topView.shape[1]
+        w_margin = 250
+        h_margin = 140
+        h_step = 20
+        font_size = 0.8
         cv.putText(topView, "Img. Size(px): " + str(w) + " x " + str(h),
-                   (w - 250, h - 140),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+                   (w - w_margin, h - h_margin),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
         if frameNum is None:
             frameNum = -1
         cv.putText(topView, "Frame: " + str(frameNum),
-                   (w - 250, h - 120),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+                   (w - w_margin, h - h_margin + h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
         cv.putText(topView, "CS: " + str(self.coordinate_system),
-                   (w - 250, h - 100),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+                   (w - w_margin, h - h_margin + 2*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
 
         cv.putText(topView, "RangeX (m): (" + str(self.params.rangeX[0]) + ", " + str(self.params.rangeX[1]) + ")",
-                   (w - 250, h - 80),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
-        cv.putText(topView, "RangeY (m): (" + str(self.params.rangeX[0]) + ", " + str(self.params.rangeX[1]) + ")",
-                   (w - 250, h - 60),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+                   (w - w_margin, h - h_margin + 3*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        cv.putText(topView, "RangeY (m): (" + str(self.params.rangeY[0]) + ", " + str(self.params.rangeY[1]) + ")",
+                   (w - w_margin, h - h_margin + 4*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
 
         cv.putText(topView, "OffsetX (px): (" + str(self.params.offsetX) + ", " + str(self.params.offsetX) + ")",
-                   (w - 250, h - 40),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+                   (w - w_margin, h - h_margin + 5*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
         cv.putText(topView, "OffsetY (px): (" + str(self.params.offsetY) + ", " + str(self.params.offsetY) + ")",
-                   (w - 250, h - 20),
-                   cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), 1, cv.LINE_AA)
+                   (w - w_margin, h - h_margin + 6*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
 
     def draw_topview_base(self):
         #self.topView.fill(self.params.backgroundColor)
@@ -396,9 +400,8 @@ class TopView:
 
     def draw_cuboid_topview(self, _img, _cuboid, _class, _color, _thick, _ID=""):
         assert(isinstance(_cuboid, list))
-        assert(len(_cuboid) == 9)  # (X, Y, Z, RX, RY, RZ, SX, SY, SZ)
-        # TODO cuboids with quaternions
-
+        assert(len(_cuboid) == 9 or len(_cuboid) == 10)  # (X, Y, Z, RX, RY, RZ, SX, SY, SZ)
+        
         points_4x8 = utils.generate_cuboid_points_ref_4x8(_cuboid)
         # Project into topview
         points_4x8[2, :] = 0
@@ -962,7 +965,10 @@ class Image:
                         if object_data_key == "bbox":
                             bbox = object_data_item['val']
                             bbox_name = object_data_item['name']
-
+                            if 'coordinate_system' in object_data_item:  # Check if this bbox corresponds to this camera
+                                if object_data_item['coordinate_system'] != self.camera_coordinate_system:
+                                    continue
+                                
                             if len(object['object_data'][object_data_key]) == 1:
                                 # Only one bbox, let's write the class name
                                 text = object_id + " " + object_class

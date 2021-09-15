@@ -19,7 +19,8 @@ setuptools.setup(
     install_requires=[
         'jsonschema>=3.2',
         'protobuf',
-		'numpy>=1.19.0,<1.19.4'
+		'numpy>=1.19.0,<1.19.4',
+        'opencv-python'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -27,5 +28,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
 		"Topic :: Scientific/Engineering :: Artificial Intelligence"
     ],
-    python_requires='>=3.8',
+    python_requires='>=3.6',
 )

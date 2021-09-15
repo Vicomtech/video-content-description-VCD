@@ -17,6 +17,7 @@ import json
 import sys
 sys.path.insert(0, "..")
 
+
 import vcd.schema as schema
 
 ######################################

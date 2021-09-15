@@ -41,6 +41,45 @@ NPM packages can be used
 npm install vcd-ts
 ```
 
+#### Development notes:
+
+1 Node.js needs to be installed (https://nodejs.org/en/download/)
+
+2 Install required dependencies using package.json file
+```
+cd nodejs
+npm install 
+```
+3 See which dependencies and devDependencies are installed
+```
+npm list --prod
+npm list --dev
+```
+
+#### Testing the VCD package locally using the nodejs-test project
+
+1 Compile the VCD package if not done already
+```
+cd ../nodejs
+npm run build
+```
+
+2 Load local NPM package (note the VCD package is under folder 'nodejs'). Make sure you have compiled the VCD package before:
+```
+cd ../nodejs-test
+npm install --save-dev ..\nodejs
+```
+
+3 Compile (creates a vcd-tester.js)
+```
+npm run build 
+```
+
+4 Run script calling Node.js
+```
+node vcd-tester.js
+```
+
 ## Usage
 
 ### Python

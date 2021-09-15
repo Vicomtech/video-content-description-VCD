@@ -14,7 +14,9 @@ VCD is distributed under MIT License. See LICENSE.
 import inspect
 import os
 import unittest
-
+#import sys
+#sys.path.insert(0, "..") 
+print(os.getcwd())
 import vcd.core as core
 import vcd.types as types
 
@@ -297,6 +299,14 @@ class TestBasic(unittest.TestCase):
         self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
                                         inspect.currentframe().f_code.co_name + '.json'))
 
+    def test_utf(self):
+        vcd = core.OpenLABEL()
+
+        uid = vcd.add_object(name="", semantic_type="")
+        vcd.add_object_data(uid=uid, object_data=types.text(name="info", val="Ñúes"))
+
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

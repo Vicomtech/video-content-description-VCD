@@ -77,9 +77,7 @@ class TestBasic(unittest.TestCase):
                                       lens_coeffs_1x4=[333.437012, 0.307729989, 2.4235599, 11.0495005],
                                       center_x=0.0,
                                       center_y=0.0,
-                                      fov_deg=None,
-                                      radius_x=0.0,
-                                      radius_y=0.0,
+                                      aspect_ratio=1.0,
                                       custom_property1=0.0
                                   )
                                   )

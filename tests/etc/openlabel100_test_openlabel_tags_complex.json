@@ -1,0 +1,1 @@
+{"openlabel":{"metadata":{"schema_version":"1.0.0","tagged_file":"../resources/scenarios/some_scenario_file"},"ontologies":{"0":"https://code.asam.net/simulation/standard/openxontology/ontologies/openlabel"},"tags":{"0":{"type":"double_roundabout","ontology_uid":"0","tag_data":{"num":[{"val":2}]}},"1":{"type":"t_intersection","ontology_uid":"0","tag_data":{"num":[{"val":3}]}}}}}
