@@ -4,7 +4,7 @@ import * as types from '../vcd.types'
 
 
 
-import openlabel030_test_create_streams_simple from '../../../tests/etc/openlabel030_test_create_streams_simple.json'
+import openlabel100_test_create_streams_simple from '../../../tests/etc/openlabel100_test_create_streams_simple.json'
 
 
 
@@ -210,7 +210,7 @@ test('test_create_streams_simple', () => {
     expect(vcd.getCoordinateSystem('Non-existing-Coordinate')).toBe(null)
 
  
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_create_streams_simple, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_create_streams_simple, false).stringify(false))
 
 
 

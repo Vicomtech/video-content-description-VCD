@@ -310,8 +310,8 @@ export class VCD {
             }         
             else {
                 this.data = vcd_json
-                if(this.data['openlabel']['metadata']['schema_version'] != "0.3.0") {
-                    console.error("The loaded openlabel does not have key \'version\' set to 0.3.0. Unexpected behaviour may happen.")
+                if(this.data['openlabel']['metadata']['schema_version'] != "1.0.0") {
+                    console.error("The loaded openlabel does not have key \'version\' set to 1.0.0. Unexpected behaviour may happen.")
                 }
                 this.computeLastUid();                    
             }   

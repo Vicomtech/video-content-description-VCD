@@ -1,14 +1,14 @@
 import { VCD, ElementType, RDF, OpenLABEL } from '../vcd.core'
 import * as types from '../vcd.types'
-import openlabel030_test_actions_a from '../../../tests/etc/openlabel030_test_actions_a.json'
-import openlabel030_test_actions_b from '../../../tests/etc/openlabel030_test_actions_b.json'
-import openlabel030_test_actions_c from '../../../tests/etc/openlabel030_test_actions_c.json'
-import openlabel030_test_relations_1 from '../../../tests/etc/openlabel030_test_relations_1.json'
-import openlabel030_test_relations_2 from '../../../tests/etc/openlabel030_test_relations_2.json'
-import openlabel030_test_relations_3 from '../../../tests/etc/openlabel030_test_relations_3.json'
-import openlabel030_test_semantics from '../../../tests/etc/openlabel030_test_semantics.json'
-import openlabel030_kitti_tracking_0003 from '../../../tests/etc/openlabel030_kitti_tracking_0003.json'
-import openlabel030_test_scene_KITTI_Tracking_3 from '../../../tests/etc/openlabel030_test_scene_KITTI_Tracking_3.json'
+import openlabel100_test_actions_a from '../../../tests/etc/openlabel100_test_actions_a.json'
+import openlabel100_test_actions_b from '../../../tests/etc/openlabel100_test_actions_b.json'
+import openlabel100_test_actions_c from '../../../tests/etc/openlabel100_test_actions_c.json'
+import openlabel100_test_relations_1 from '../../../tests/etc/openlabel100_test_relations_1.json'
+import openlabel100_test_relations_2 from '../../../tests/etc/openlabel100_test_relations_2.json'
+import openlabel100_test_relations_3 from '../../../tests/etc/openlabel100_test_relations_3.json'
+import openlabel100_test_semantics from '../../../tests/etc/openlabel100_test_semantics.json'
+import openlabel100_kitti_tracking_0003 from '../../../tests/etc/openlabel100_kitti_tracking_0003.json'
+import openlabel100_test_scene_KITTI_Tracking_3 from '../../../tests/etc/openlabel100_test_scene_KITTI_Tracking_3.json'
 
 import { testEncodingDecoding } from '../vcd.poly2d'
 
@@ -52,8 +52,8 @@ test('test_semantics', () => {
     }
 
     //console.log(vcd.stringify(false))
-    let expected=new VCD(openlabel030_test_semantics, false).stringify(false)
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_semantics, false).stringify(false))
+    let expected=new VCD(openlabel100_test_semantics, false).stringify(false)
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_semantics, false).stringify(false))
 });
 
 test('test_actions', () => {
@@ -100,13 +100,13 @@ test('test_actions', () => {
 
     //console.log(vcd_a.stringify(false))
     //expect(vcd_a.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.1","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0","object_data":{"text":[{"name":"action","val":"Walking"}]},"object_data_pointers":{"action":{"type":"text","frame_intervals":[]}}},"1":{"name":"","type":"Car","ontology_uid":"0","object_data":{"text":[{"name":"action","val":"Parked"}]},"object_data_pointers":{"action":{"type":"text","frame_intervals":[]}}}}}}')
-    expect(vcd_a.stringify(false)).toBe(new VCD(openlabel030_test_actions_a, false).stringify(false))
+    expect(vcd_a.stringify(false)).toBe(new VCD(openlabel100_test_actions_a, false).stringify(false))
     //console.log(vcd_b.stringify(false))
     //expect(vcd_b.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.1","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0"},"1":{"name":"","type":"Car","ontology_uid":"0"}},"actions":{"0":{"name":"","type":"Walking","ontology_uid":"0"},"1":{"name":"","type":"Parked","ontology_uid":"0"}},"relations":{"0":{"name":"","type":"performsAction","ontology_uid":"0","rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"0","type":"action"}]},"1":{"name":"","type":"performsAction","ontology_uid":"0","rdf_subjects":[{"uid":"1","type":"object"}],"rdf_objects":[{"uid":"1","type":"action"}]}}}}')
-    expect(vcd_b.stringify(false)).toBe(new VCD(openlabel030_test_actions_b, false).stringify(false))
+    expect(vcd_b.stringify(false)).toBe(new VCD(openlabel100_test_actions_b, false).stringify(false))
     //console.log(vcd_c.stringify(false))
     //expect(vcd_c.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.1","frame_intervals":[],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive"},"objects":{"0":{"name":"","type":"Pedestrian","ontology_uid":"0"},"1":{"name":"","type":"Car","ontology_uid":"0"}},"actions":{"0":{"name":"","type":"Walking","ontology_uid":"0","action_data":{"num":[{"name":"subject","val":0}]},"action_data_pointers":{"subject":{"type":"num","frame_intervals":[]}}},"1":{"name":"","type":"Parked","ontology_uid":"0","action_data":{"num":[{"name":"subject","val":1}]},"action_data_pointers":{"subject":{"type":"num","frame_intervals":[]}}}}}}')
-    expect(vcd_c.stringify(false)).toBe(new VCD(openlabel030_test_actions_c, false).stringify(false))
+    expect(vcd_c.stringify(false)).toBe(new VCD(openlabel100_test_actions_c, false).stringify(false))
 });
 
 test('test_relations', () => {
@@ -133,7 +133,7 @@ test('test_relations', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"relations":{"0":{}}},"1":{"relations":{"0":{}}},"2":{"relations":{"0":{}}},"3":{"relations":{"0":{}}},"4":{"relations":{"0":{}}},"5":{"relations":{"0":{}}},"6":{"relations":{"0":{}}},"7":{"relations":{"0":{}}},"8":{"relations":{"0":{}}},"9":{"relations":{"0":{}}},"10":{"relations":{"0":{}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":0,"frame_end":10}],"objects":{"0":{"name":"","type":"Car"},"1":{"name":"","type":"Pedestrian"}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":0,"frame_end":10}],"rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_relations_1, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_relations_1, false).stringify(false))
 
     // Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
     vcd = new VCD()
@@ -159,7 +159,7 @@ test('test_relations', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"8":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"9":{"objects":{"0":{},"1":{}},"relations":{"0":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":0,"frame_end":15}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]}},"relations":{"0":{"name":"","type":"isNear","frame_intervals":[{"frame_start":7,"frame_end":9}],"rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_relations_2, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_relations_2, false).stringify(false))
 
     // Case 3: RDF elements have frame interval and relation doesn't (so it is left frame-less)
     vcd = new VCD()
@@ -185,14 +185,14 @@ test('test_relations', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{},"1":{}}},"6":{"objects":{"0":{},"1":{}}},"7":{"objects":{"0":{},"1":{}}},"8":{"objects":{"0":{},"1":{}}},"9":{"objects":{"0":{},"1":{}}},"10":{"objects":{"0":{},"1":{}}},"11":{"objects":{"1":{}}},"12":{"objects":{"1":{}}},"13":{"objects":{"1":{}}},"14":{"objects":{"1":{}}},"15":{"objects":{"1":{},"2":{}}},"16":{"objects":{"2":{}}},"17":{"objects":{"2":{}}},"18":{"objects":{"2":{}}},"19":{"objects":{"2":{}}},"20":{"objects":{"2":{}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":0,"frame_end":20}],"objects":{"0":{"name":"","type":"Car","frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"","type":"Pedestrian","frame_intervals":[{"frame_start":5,"frame_end":15}]},"2":{"name":"","type":"Other","frame_intervals":[{"frame_start":15,"frame_end":20}]}},"relations":{"0":{"name":"","type":"isNear","rdf_subjects":[{"uid":"0","type":"object"}],"rdf_objects":[{"uid":"1","type":"object"}]}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_relations_3, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_relations_3, false).stringify(false))
    
 });
 
 test('test_scene_KITTI_Tracking_3', () => {
     let sequence_number = 3
     //vcd_file_name = './etc/' + openlabel_version_name + '_kitti_tracking_' + str(sequence_number).zfill(4) + ".json"
-    let vcd = new OpenLABEL(openlabel030_kitti_tracking_0003)
+    let vcd = new OpenLABEL(openlabel100_kitti_tracking_0003)
 
     let frame_num_last = vcd.getFrameIntervals().getOuter()['frame_end']
 
@@ -262,9 +262,9 @@ test('test_scene_KITTI_Tracking_3', () => {
     
     vcd.addRelationActionAction("", "meets",uid_action_lane_change,uid_action_drive_straight_4,null,null,75)
 
-    let expected=new VCD(openlabel030_test_scene_KITTI_Tracking_3, false).stringify(false)
+    let expected=new VCD(openlabel100_test_scene_KITTI_Tracking_3, false).stringify(false)
     //Check equal to reference JSON
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_scene_KITTI_Tracking_3, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_scene_KITTI_Tracking_3, false).stringify(false))
 
 
 

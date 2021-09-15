@@ -2,8 +2,8 @@ import fs from 'fs'
 import { VCD,OpenLABEL, ElementType, RDF, ResourceUID } from '../vcd.core'
 import * as types from '../vcd.types'
 
-import openlabel030_test_openlabel_tags_complex from '../../../tests/etc/openlabel030_test_openlabel_tags_complex.json'
-import openlabel030_test_openlabel_tags_complex_2 from '../../../tests/etc/openlabel030_test_openlabel_tags_complex_2.json'
+import openlabel100_test_openlabel_tags_complex from '../../../tests/etc/openlabel100_test_openlabel_tags_complex.json'
+import openlabel100_test_openlabel_tags_complex_2 from '../../../tests/etc/openlabel100_test_openlabel_tags_complex_2.json'
 
 
 test('test_openlabel_tags_complex', () => {
@@ -24,7 +24,7 @@ test('test_openlabel_tags_complex', () => {
     let uid_1 = openlabel.addTag("t_intersection", null, "0")
     openlabel.addTagData(uid_1, new types.Num(null, 3))
 
-    expect(openlabel.stringify(false)).toBe(new VCD(openlabel030_test_openlabel_tags_complex, false).stringify(false))
+    expect(openlabel.stringify(false)).toBe(new VCD(openlabel100_test_openlabel_tags_complex, false).stringify(false))
 
 
 });
@@ -73,7 +73,7 @@ test('test_openlabel_tags_complex_2', () => {
     openlabel.addTagData(uid_11, new types.Vec(null, [123456],null,null, "values"))
 
 
-    expect(openlabel.stringify(false)).toBe(new VCD(openlabel030_test_openlabel_tags_complex_2, false).stringify(false))
+    expect(openlabel.stringify(false)).toBe(new VCD(openlabel100_test_openlabel_tags_complex_2, false).stringify(false))
 
     
 });

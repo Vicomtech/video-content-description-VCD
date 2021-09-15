@@ -342,8 +342,8 @@ class VCD:
             elif 'openlabel' in read_data:
                 # This is an OpenLABEL file 
                 schema_version = read_data['openlabel']['metadata']['schema_version']
-                if schema_version == "0.3.0" or schema_version == "1.0.0":
-                    # This is OpenLABEL 0.3.0 or 1.0.0 (are equivalent)
+                if schema_version == "1.0.0":
+                    # This is OpenLABEL 1.0.0 (are equivalent)
                     self.data = read_data
                     if validation:
                         if not hasattr(self, 'schema'):
@@ -351,7 +351,7 @@ class VCD:
                         validate(instance=self.data, schema=self.schema)  # Raises errors if not validated
                         json_file.close()
 
-                    # In OpenLABEL 0.3.0-1.0.0 uids are strings, because they can be numeric strings, or UUIDs
+                    # In OpenLABEL 1.0.0 uids are strings, because they can be numeric strings, or UUIDs
                     # but frames are still indexed by ints, so let's parse frame numbers as integers
                     if 'frames' in self.data['openlabel']:
                         frames = self.data['openlabel']['frames']
@@ -359,7 +359,7 @@ class VCD:
                             self.data['openlabel']['frames'] = {int(key): value for key, value in frames.items()}
                 else:
                     Exception(
-                        "ERROR: This OpenLABEL file has version different than 0.3.0 or 1.0.0. This API is incompatible.")                
+                        "ERROR: This OpenLABEL file has version different than 1.0.0. This API is incompatible.")                
 
             # Close file
             json_file.close()

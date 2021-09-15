@@ -4,8 +4,8 @@ import * as types from '../vcd.types'
 
 
 
-import openlabel030_test_create_mesh from '../../../tests/etc/openlabel030_test_create_mesh.json'
-import openlabel030_test_create_mesh_with_API_frames from '../../../tests/etc/openlabel030_test_create_mesh_with_API_frames.json'
+import openlabel100_test_create_mesh from '../../../tests/etc/openlabel100_test_create_mesh.json'
+import openlabel100_test_create_mesh_with_API_frames from '../../../tests/etc/openlabel100_test_create_mesh_with_API_frames.json'
 
 
 function getMeshGeometryAsString(vertexMap, edgeMap, areaMap){
@@ -218,7 +218,7 @@ test('test_create_mesh', () => {
    expect(string_mesh).toBe("[[[25,25,0],[26,25,0],[26,26,0],[25,26,0],[27,25,0],[27,26,0]],"+
                              "[[0,1],[1,2],[2,3],[3,0],[1,4],[4,5],[5,2]],[[0,1,2,3],[4,5,6,1]]]")
 
-   expect(openlab.stringify(false)).toBe(new VCD(openlabel030_test_create_mesh, false).stringify(false))
+   expect(openlab.stringify(false)).toBe(new VCD(openlabel100_test_create_mesh, false).stringify(false))
 
 });
 
@@ -226,7 +226,7 @@ test('test_create_mesh_with_API_frames', () => {
 
     
     // Load from previous test
-    let openlab= new OpenLABEL(openlabel030_test_create_mesh, false)
+    let openlab= new OpenLABEL(openlabel100_test_create_mesh, false)
 
     // Let's assume we know the structure of the mesh
     //
@@ -281,7 +281,7 @@ test('test_create_mesh_with_API_frames', () => {
     }
     
 
-    expect(openlab.stringify(false)).toBe(new VCD(openlabel030_test_create_mesh_with_API_frames, false).stringify(false))
+    expect(openlab.stringify(false)).toBe(new VCD(openlabel100_test_create_mesh_with_API_frames, false).stringify(false))
 
 });
 

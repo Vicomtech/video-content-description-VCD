@@ -1,10 +1,10 @@
 import { VCD, ElementType, SetMode, StreamType, OpenLABEL } from '../vcd.core'
 import * as types from '../vcd.types'
 import * as utils from '../vcd.utils'
-import openlabel030_test_intrinsics from '../../../tests/etc/openlabel030_test_intrinsics.json'
-import openlabel030_test_poses from '../../../tests/etc/openlabel030_test_poses.json'
-import openlabel030_test_transforms from '../../../tests/etc/openlabel030_test_transforms.json'
-import openlabel030_test_cuboids from '../../../tests/etc/openlabel030_test_cuboids.json'
+import openlabel100_test_intrinsics from '../../../tests/etc/openlabel100_test_intrinsics.json'
+import openlabel100_test_poses from '../../../tests/etc/openlabel100_test_poses.json'
+import openlabel100_test_transforms from '../../../tests/etc/openlabel100_test_transforms.json'
+import openlabel100_test_cuboids from '../../../tests/etc/openlabel100_test_cuboids.json'
 
 
 test('test_intrinsics', () => {
@@ -37,7 +37,7 @@ test('test_intrinsics', () => {
         {"custom_property1":0.0}
     ))
     
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_intrinsics, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_intrinsics, false).stringify(false))
 });
 
 test('test_poses', () => {
@@ -81,7 +81,7 @@ test('test_poses', () => {
             {"sequence":"ZYX"}
         )))
 
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_poses, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_poses, false).stringify(false))
 });
 
 test('test_transforms', () => {
@@ -116,7 +116,7 @@ test('test_transforms', () => {
     )
     
     
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_transforms, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_transforms, false).stringify(false))
 
 });
 
@@ -144,6 +144,6 @@ test('test_cuboids', () => {
     )
     vcd.addObjectData(uid2, cuboid2)
 
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_cuboids, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_cuboids, false).stringify(false))
 
 });

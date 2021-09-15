@@ -3,9 +3,9 @@ import * as types from '../vcd.types'
 import { openlabel_schema } from '../vcd.schema';
 
 
-import openlabel030_test_polygon2D from '../../../tests/etc/openlabel030_test_polygon2D.json'
-import openlabel030_test_create_image_png from '../../../tests/etc/openlabel030_test_create_image_png.json'
-import openlabel030_test_contours from '../../../tests/etc/openlabel030_test_contours.json'
+import openlabel100_test_polygon2D from '../../../tests/etc/openlabel100_test_polygon2D.json'
+import openlabel100_test_create_image_png from '../../../tests/etc/openlabel100_test_create_image_png.json'
+import openlabel100_test_contours from '../../../tests/etc/openlabel100_test_contours.json'
 
 /*function drawBasicImage(classes_colors){
     img = np.zeros((640, 480, 3), np.uint8)
@@ -63,7 +63,7 @@ test('test_polygon2D', () => {
     expect(poly2.data['val']).toStrictEqual([5, 5, 10, 5, 11, 6, 11, 8, 9, 10, 5, 10, 3, 8, 3, 6, 4, 5])  
 
     //console.log(vcd.stringify(false))
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_polygon2D, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_polygon2D, false).stringify(false))
 
 });
 
@@ -112,13 +112,13 @@ test('test_create_image_png', () => {
     expect(diff_val).toBe(0)
 
 
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_create_image_png, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_create_image_png, false).stringify(false))
 
 });
 
 test('test_contours', () => {
     let vcd = new OpenLABEL()
 
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_contours, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_contours, false).stringify(false))
 
 });*/

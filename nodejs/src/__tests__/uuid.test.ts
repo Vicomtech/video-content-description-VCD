@@ -2,7 +2,7 @@ import { VCD, ElementType, OpenLABEL, RDF } from '../vcd.core'
 import * as types from '../vcd.types'
 import { v4 as uuidv4 } from 'uuid'
 
-import openlabel030_test_uid_types from '../../../tests/etc/openlabel030_test_uid_types.json'
+import openlabel100_test_uid_types from '../../../tests/etc/openlabel100_test_uid_types.json'
 
 
 test('test_uid_types', () => {
@@ -41,7 +41,7 @@ test('test_uid_types', () => {
 
 
     //Check equal to reference JSON
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_uid_types, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_uid_types, false).stringify(false))
 })
 
 test('test_uuid_usage_explicit_1', () => {

@@ -14,7 +14,7 @@ VCD is distributed under MIT License. See LICENSE.
 /*######################################
 # Fully manually writing the schema
 ######################################*/
-export const openlabel_schema_version = "0.3.0"
+export const openlabel_schema_version = "1.0.0"
 export const openlabel_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",

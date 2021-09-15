@@ -4,9 +4,9 @@ import * as types from '../vcd.types'
 
 
 
-import openlabel030_test_bbox_simple from '../../../tests/etc/openlabel030_test_bbox_simple.json'
-import openlabel030_test_bbox_simple_attributes from '../../../tests/etc/openlabel030_test_bbox_simple_attributes.json'
-import openlabel030_test_bbox_simple_extreme_points from '../../../tests/etc/openlabel030_test_bbox_simple_extreme_points.json'
+import openlabel100_test_bbox_simple from '../../../tests/etc/openlabel100_test_bbox_simple.json'
+import openlabel100_test_bbox_simple_attributes from '../../../tests/etc/openlabel100_test_bbox_simple_attributes.json'
+import openlabel100_test_bbox_simple_extreme_points from '../../../tests/etc/openlabel100_test_bbox_simple_extreme_points.json'
 
 test('test_bbox_simple', () => {
 
@@ -32,7 +32,7 @@ test('test_bbox_simple', () => {
 
     
    
-    expect(openlab.stringify(false)).toBe(new VCD(openlabel030_test_bbox_simple, false).stringify(false))
+    expect(openlab.stringify(false)).toBe(new VCD(openlabel100_test_bbox_simple, false).stringify(false))
 
 
 });
@@ -103,7 +103,7 @@ test('test_bbox_simple_attributes', () => {
     openlab.addObjectData(semaphore2, green)
 
 
-    expect(openlab.stringify(false)).toBe(new VCD(openlabel030_test_bbox_simple_attributes, false).stringify(false))
+    expect(openlab.stringify(false)).toBe(new VCD(openlabel100_test_bbox_simple_attributes, false).stringify(false))
 
 });
 
@@ -137,7 +137,7 @@ test('test_bbox_simple_extreme_points', () => {
         new types.Bbox("shape", [291 + 524 / 2, 358 + 55 / 2, 524, 55]))
 
    
-    expect(openlab.stringify(false)).toBe(new VCD(openlabel030_test_bbox_simple_extreme_points, false).stringify(false))
+    expect(openlab.stringify(false)).toBe(new VCD(openlabel100_test_bbox_simple_extreme_points, false).stringify(false))
 
 });
 

@@ -4,14 +4,14 @@ import * as types from '../vcd.types'
 
 
 
-import openlabel030_test_create_search_simple from '../../../tests/etc/openlabel030_test_create_search_simple.json'
-import openlabel030_test_create_search_mid from '../../../tests/etc/openlabel030_test_create_search_mid.json'
-import openlabel030_test_remove_simple from '../../../tests/etc/openlabel030_test_remove_simple.json'
-import openlabel030_test_metadata from '../../../tests/etc/openlabel030_test_metadata.json'
-import openlabel030_test_ontology_list from '../../../tests/etc/openlabel030_test_ontology_list.json'
-import openlabel030_test_objects_without_data from '../../../tests/etc/openlabel030_test_objects_without_data.json'
-import openlabel030_test_nested_object_data_attributes from '../../../tests/etc/openlabel030_test_nested_object_data_attributes.json'
-import openlabel030_test_multi_value_attributes from '../../../tests/etc/openlabel030_test_multi_value_attributes.json'
+import openlabel100_test_create_search_simple from '../../../tests/etc/openlabel100_test_create_search_simple.json'
+import openlabel100_test_create_search_mid from '../../../tests/etc/openlabel100_test_create_search_mid.json'
+import openlabel100_test_remove_simple from '../../../tests/etc/openlabel100_test_remove_simple.json'
+import openlabel100_test_metadata from '../../../tests/etc/openlabel100_test_metadata.json'
+import openlabel100_test_ontology_list from '../../../tests/etc/openlabel100_test_ontology_list.json'
+import openlabel100_test_objects_without_data from '../../../tests/etc/openlabel100_test_objects_without_data.json'
+import openlabel100_test_nested_object_data_attributes from '../../../tests/etc/openlabel100_test_nested_object_data_attributes.json'
+import openlabel100_test_multi_value_attributes from '../../../tests/etc/openlabel100_test_multi_value_attributes.json'
 
 test('test_create_search_simple', () => {
     //let vcd = new VCD();
@@ -39,7 +39,7 @@ test('test_create_search_simple', () => {
 
     //console.log(vcd_string_nopretty)
     //expect(vcd_string_nopretty).toBe('{"vcd":{"frames":{},"schema_version":"4.3.1","frame_intervals":[],"objects":{"0":{"name":"marcos","type":"","object_data":{"bbox":[{"name":"head","val":[10,10,30,30]},{"name":"body","val":[0,0,60,120]}],"vec":[{"name":"speed","val":[0,0.2]}],"num":[{"name":"accel","val":0.1}]},"object_data_pointers":{"head":{"type":"bbox","frame_intervals":[]},"body":{"type":"bbox","frame_intervals":[]},"speed":{"type":"vec","frame_intervals":[]},"accel":{"type":"num","frame_intervals":[]}}},"1":{"name":"peter","type":"","object_data":{"num":[{"name":"age","val":38}],"vec":[{"name":"eyeL","val":[0,0,10,10]},{"name":"eyeR","val":[0,0,10,10]}]},"object_data_pointers":{"age":{"type":"num","frame_intervals":[]},"eyeL":{"type":"vec","frame_intervals":[]},"eyeR":{"type":"vec","frame_intervals":[]}}}}}}')    
-    expect(vcd_string_nopretty).toBe(new VCD(openlabel030_test_create_search_simple, false).stringify(false))
+    expect(vcd_string_nopretty).toBe(new VCD(openlabel100_test_create_search_simple, false).stringify(false))
 
     let marcos_ref = vcd.getObject(uid_marcos)
     let peter_ref = vcd.getObject(uid_peter)
@@ -80,7 +80,7 @@ test('test_create_search_mid', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"1":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"2":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"3":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"4":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}}}},"5":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"6":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"7":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"8":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"9":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"10":{"objects":{"0":{"object_data":{"vec":[{"name":"pos","val":[0,1,8]}]}},"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"11":{"objects":{"1":{"object_data":{"vec":[{"name":"pos","val":[0,2,6]}]}},"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}},"12":{"objects":{"2":{"object_data":{"vec":[{"name":"pos","val":[0,5,1]}]}}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":0,"frame_end":12}],"objects":{"0":{"name":"marcos","type":"#Adult","object_data":{"num":[{"name":"age","val":38},{"name":"height","val":1.75}]},"object_data_pointers":{"age":{"type":"num","frame_intervals":[]},"height":{"type":"num","frame_intervals":[]},"pos":{"type":"vec","frame_intervals":[{"frame_start":0,"frame_end":10}]}},"frame_intervals":[{"frame_start":0,"frame_end":10}]},"1":{"name":"peter","type":"#Adult","frame_intervals":[{"frame_start":0,"frame_end":11}],"object_data_pointers":{"pos":{"type":"vec","frame_intervals":[{"frame_start":0,"frame_end":11}]},"age":{"type":"num","frame_intervals":[]}},"object_data":{"num":[{"name":"age","val":40}]}},"2":{"name":"katixa","type":"#Child","frame_intervals":[{"frame_start":5,"frame_end":12}],"object_data_pointers":{"pos":{"type":"vec","frame_intervals":[{"frame_start":5,"frame_end":12}]},"age":{"type":"num","frame_intervals":[]}},"object_data":{"num":[{"name":"age","val":10}]}}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_create_search_mid, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_create_search_mid, false).stringify(false))
     
     let uids_child = vcd.getElementsOfType(ElementType.object, '#Child')
     for (let uid of uids_child) {        
@@ -158,7 +158,7 @@ test('test_remove_simple', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"bbox":[{"name":"face","val":[0,0,100,100]},{"name":"mouth","val":[0,0,10,10]},{"name":"hand","val":[0,0,30,30]},{"name":"eyeL","val":[0,0,10,10]},{"name":"eyeR","val":[0,0,10,10]}],"num":[{"name":"age","val":35}]}},"3":{"object_data":{"boolean":[{"name":"visible","val":true}]}}}},"1":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"bbox":[{"name":"face","val":[0,0,100,100]},{"name":"mouth","val":[0,0,10,10]},{"name":"hand","val":[0,0,30,30]},{"name":"eyeL","val":[0,0,10,10]},{"name":"eyeR","val":[0,0,10,10]}],"num":[{"name":"age","val":35}]}},"3":{"object_data":{"boolean":[{"name":"visible","val":true}]}}}},"2":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"bbox":[{"name":"face","val":[0,0,100,100]},{"name":"mouth","val":[0,0,10,10]},{"name":"hand","val":[0,0,30,30]},{"name":"eyeL","val":[0,0,10,10]},{"name":"eyeR","val":[0,0,10,10]}],"num":[{"name":"age","val":35}]}},"3":{"object_data":{"boolean":[{"name":"visible","val":true}]}}}},"3":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"bbox":[{"name":"face","val":[0,0,100,100]},{"name":"mouth","val":[0,0,10,10]},{"name":"hand","val":[0,0,30,30]},{"name":"eyeL","val":[0,0,10,10]},{"name":"eyeR","val":[0,0,10,10]}],"num":[{"name":"age","val":35}]}},"3":{"object_data":{"boolean":[{"name":"visible","val":true}]}}}},"4":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"bbox":[{"name":"face","val":[0,0,100,100]},{"name":"mouth","val":[0,0,10,10]},{"name":"hand","val":[0,0,30,30]},{"name":"eyeL","val":[0,0,10,10]},{"name":"eyeR","val":[0,0,10,10]}],"num":[{"name":"age","val":35}]}},"3":{"object_data":{"boolean":[{"name":"visible","val":true}]}}}},"5":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"bbox":[{"name":"face","val":[0,0,100,100]},{"name":"mouth","val":[0,0,10,10]},{"name":"hand","val":[0,0,30,30]},{"name":"eyeL","val":[0,0,10,10]},{"name":"eyeR","val":[0,0,10,10]}],"num":[{"name":"age","val":35}]}}}},"6":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}],"text":[{"name":"color","val":"red"}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"num":[{"name":"age","val":35}]}}}},"7":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}],"text":[{"name":"color","val":"red"}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"num":[{"name":"age","val":35}]}}}},"8":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}],"text":[{"name":"color","val":"red"}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"num":[{"name":"age","val":35}]}}}},"9":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}],"text":[{"name":"color","val":"red"}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"num":[{"name":"age","val":35}]}}}},"10":{"objects":{"0":{"object_data":{"bbox":[{"name":"position","val":[100,100,200,400]}],"text":[{"name":"color","val":"red"}]}},"1":{"object_data":{"bbox":[{"name":"position","val":[300,1000,200,400]}]}},"2":{"object_data":{"num":[{"name":"age","val":35}]}}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":0,"frame_end":10}],"objects":{"0":{"name":"BMW","type":"#Car","frame_intervals":[{"frame_start":0,"frame_end":10}],"object_data_pointers":{"position":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":10}]},"color":{"type":"text","frame_intervals":[{"frame_start":6,"frame_end":10}]}}},"1":{"name":"Seat","type":"#Car","frame_intervals":[{"frame_start":0,"frame_end":10}],"object_data_pointers":{"position":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":10}]}}},"2":{"name":"John","type":"#Pedestrian","frame_intervals":[{"frame_start":0,"frame_end":10}],"object_data_pointers":{"face":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":5}]},"mouth":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":5}]},"hand":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":5}]},"eyeL":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":5}]},"eyeR":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":5}]},"age":{"type":"num","frame_intervals":[{"frame_start":0,"frame_end":10}]}}},"3":{"name":"","type":"#StopSign","frame_intervals":[{"frame_start":0,"frame_end":4}],"object_data_pointers":{"visible":{"type":"boolean","frame_intervals":[{"frame_start":0,"frame_end":4}]}}}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_remove_simple, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_remove_simple, false).stringify(false))
     expect(vcd.getNumObjects()).toBe(4)
 
     // 4.- Delete some content
@@ -194,7 +194,7 @@ test('test_metadata', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{},"schema_version":"4.3.1","frame_intervals":[],"metadata":{"annotator":"Algorithm01","comment":"Annotations produced automatically"},"file_version":"0.1.0"}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_metadata, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_metadata, false).stringify(false))
     // See more examples about Streams in stream_frame_properties.test.ts
 });
 
@@ -219,7 +219,7 @@ test('test_ontology_list', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"2":{"objects":{"1":{"object_data":{"bbox":[{"name":"head","val":[10,10,30,30]}]}}}},"3":{"objects":{"1":{"object_data":{"bbox":[{"name":"head","val":[10,10,30,30]}]}}}},"4":{"objects":{"1":{"object_data":{"bbox":[{"name":"head","val":[10,10,30,30]}]}}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":2,"frame_end":4}],"ontologies":{"0":"http://vcd.vicomtech.org/ontology/automotive","1":"http://www.anotherURL.org/ontology"},"objects":{"0":{"name":"CARLOTA","type":"#Car","ontology_uid":"0","object_data":{"text":[{"name":"brand","val":"Toyota"},{"name":"model","val":"Prius"}]},"object_data_pointers":{"brand":{"type":"text","frame_intervals":[]},"model":{"type":"text","frame_intervals":[]}}},"1":{"name":"Marcos","type":"#Person","ontology_uid":"1","frame_intervals":[{"frame_start":2,"frame_end":4}],"object_data_pointers":{"head":{"type":"bbox","frame_intervals":[{"frame_start":2,"frame_end":4}]}}}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_ontology_list, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_ontology_list, false).stringify(false))
 });
 
 test('test_online_operation', () => {
@@ -263,7 +263,7 @@ test('test_objects_without_data', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{}}},"1":{"objects":{"0":{}}},"2":{"objects":{"0":{}}},"3":{"objects":{"0":{}}},"4":{"objects":{"0":{}}},"5":{"objects":{"0":{}}},"6":{"objects":{"0":{}}},"7":{"objects":{"0":{}}},"8":{"objects":{"0":{}}},"9":{"objects":{"0":{}}},"10":{"objects":{"0":{}}},"11":{"objects":{"0":{}}},"12":{"objects":{"0":{}}},"13":{"objects":{"0":{}}},"14":{"objects":{"0":{}}},"15":{"objects":{"0":{}}},"16":{"objects":{"0":{}}},"17":{"objects":{"0":{}}},"18":{"objects":{"0":{}}},"19":{"objects":{"0":{}}},"20":{"objects":{"0":{},"1":{}}},"21":{"objects":{"0":{},"1":{}}},"22":{"objects":{"0":{},"1":{}}},"23":{"objects":{"0":{},"1":{}}},"24":{"objects":{"0":{},"1":{}}},"25":{"objects":{"0":{},"1":{}}},"26":{"objects":{"0":{},"1":{}}},"27":{"objects":{"0":{},"1":{}}},"28":{"objects":{"0":{},"1":{}}},"29":{"objects":{"0":{},"1":{}}},"30":{"objects":{"0":{},"1":{}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":0,"frame_end":30}],"objects":{"0":{"name":"","type":"#Pedestrian","frame_intervals":[{"frame_start":0,"frame_end":30}]},"1":{"name":"","type":"#Car","frame_intervals":[{"frame_start":20,"frame_end":30}]}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_objects_without_data, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_objects_without_data, false).stringify(false))
 });
 
 test('test_nested_data_attributes', () => {
@@ -282,7 +282,7 @@ test('test_nested_data_attributes', () => {
 
     //console.log(vcd.stringify(false))
     //expect(vcd.stringify(false, false)).toBe('{"vcd":{"frames":{"0":{"objects":{"0":{"object_data":{"bbox":[{"name":"head","val":[0,0,10,10],"attributes":{"boolean":[{"name":"visible","val":true}]}}]}}}}},"schema_version":"4.3.1","frame_intervals":[{"frame_start":0,"frame_end":0}],"objects":{"0":{"name":"someName1","type":"#Some","frame_intervals":[{"frame_start":0,"frame_end":0}],"object_data_pointers":{"head":{"type":"bbox","frame_intervals":[{"frame_start":0,"frame_end":0}],"attributes":{"visible":"boolean"}}}}}}}')
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_nested_object_data_attributes, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_nested_object_data_attributes, false).stringify(false))
 });
 
 test('test_multi_value_attributes', () => {
@@ -295,5 +295,5 @@ test('test_multi_value_attributes', () => {
     vcd.addObjectData(uid, new types.Vec("shape", [0, 0, 100, 100], null, {'locked': true, 'score': 0.8}))
     vcd.addObjectData(uid, new types.Text("color", "Blue", null, {'locked': false, 'status': "validated"}))
 
-    expect(vcd.stringify(false)).toBe(new VCD(openlabel030_test_multi_value_attributes, false).stringify(false))
+    expect(vcd.stringify(false)).toBe(new VCD(openlabel100_test_multi_value_attributes, false).stringify(false))
 });
