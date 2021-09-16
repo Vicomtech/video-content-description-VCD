@@ -53,6 +53,19 @@ class SetupViewer:
         self.ax.text(y_axis_end[0], y_axis_end[1], y_axis_end[2], 'Y')
         self.ax.text(z_axis_end[0], z_axis_end[1], z_axis_end[2], 'Z')
 
+    def plot_cuboid(self, cuboid_cs, cuboid_vals, color):
+        t, static = self.scene.get_transform(cuboid_cs, self.coordinate_system)
+        cuboid_vals_transformed = utils.transform_cuboid(cuboid_vals, t)
+
+        p = utils.generate_cuboid_points_ref_4x8(cuboid_vals_transformed)
+
+        pairs = (
+        [0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [1, 5], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7], [7, 4])
+        for pair in pairs:
+            self.ax.plot([p[0, pair[0]], p[0, pair[1]]],
+                            [p[1, pair[0]], p[1, pair[1]]],
+                            [p[2, pair[0]], p[2, pair[1]]], c=color)
+
     def plot_setup(self, axes=None):
         for cs_name, cs in self.scene.vcd.get_root()['coordinate_systems'].items():
             T, static = self.scene.get_transform(cs_name, self.coordinate_system)
@@ -65,20 +78,14 @@ class SetupViewer:
             for object_id, object in self.scene.vcd.get_root()['objects'].items():
                 if object['name'] == "Ego-car":
                     cuboid = object['object_data']['cuboid'][0]
-                    cuboid_cs = object['object_data']['cuboid'][0]['coordinate_system']
-                    cuboid_vals = object['object_data']['cuboid'][0]['val']
-
-                    t, static = self.scene.get_transform(cuboid_cs, self.coordinate_system)
-                    cuboid_vals_transformed = utils.transform_cuboid(cuboid_vals, t)
-
-                    p = utils.generate_cuboid_points_ref_4x8(cuboid_vals_transformed)
-
-                    pairs = (
-                    [0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [1, 5], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7], [7, 4])
-                    for pair in pairs:
-                        self.ax.plot([p[0, pair[0]], p[0, pair[1]]],
-                                     [p[1, pair[0]], p[1, pair[1]]],
-                                     [p[2, pair[0]], p[2, pair[1]]], c='k')
+                    cuboid_cs = cuboid['coordinate_system']
+                    cuboid_vals = cuboid['val']
+                    self.plot_cuboid(cuboid_cs, cuboid_vals, 'k')                    
+                
+                else:
+                    if 'cuboid' in object['object_data']:
+                        for cuboid in object['object_data']['cuboid']:
+                            self.plot_cuboid(cuboid['coordinate_system'], cuboid['val'], 'k')
 
         if axes is None:
             self.ax.set_xlim(-1.25, 4.25)
