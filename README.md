@@ -4,7 +4,7 @@
 VCD is a metadata format designed to enable the description of scene information, particularly efficient for discrete data series, such as image or point-cloud sequences from sensor data.
 Originally, VCD focused on video content data, but has been extended to provide structures to describe, potentially, any type of information of a scene.
 
-VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
+VCD is defined as a structure of data, and as such, can be represented as a JSON Schema.
 
 The syntax(see [openlabel_schema_json-v1.0.0.json](https://github.com/Vicomtech/video-content-description-VCD/blob/master/schema/openlabel_schema_json-v1.0.0.json)), as a JSON Schema file, contains the full description of the VCD structure. This schema follows the ASAM OpenLABEL standard.
 
