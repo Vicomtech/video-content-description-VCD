@@ -201,6 +201,7 @@ VCD has evolved as follows:
     * VCD as toolkit to produce OpenLABEL compliant labels
     * Addition of C++ lite version
     * General improvements and consistency (Python, Typescript)
+    * Removed support for protobuf serialization
 
 
 ## Related projects
