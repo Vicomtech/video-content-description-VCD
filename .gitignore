@@ -1,7 +1,11 @@
 # Recursively ignore 
 __pycache__/
 .idea
+.vscode
 vcd.egg-info
 dist/
-nodejs/lib/
+lib/
+node_modules/
 build/
+package-lock.json
+jupyter/tutorial/.ipynb_checkpoints

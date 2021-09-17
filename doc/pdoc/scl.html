@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>vcd.scl API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.3.1 …" />
+<meta name="description" content="VCD (Video Content Description) library v5.0.0 …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,25 +22,25 @@
 <h1 class="title">Module <code>vcd.scl</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.3.1</p>
+<p>VCD (Video Content Description) library v5.0.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2021, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.3.1.
+<p>VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.3.1
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.1.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -56,7 +56,6 @@ from numpy import float64
 import vcd.utils as utils
 import math
 
-#TODO: Review SCL principles according to VCD 4.3.0 coordiante systems and transforms
 from vcd.types import areaReference
 
 &#39;&#39;&#39; ######################################################    
@@ -67,7 +66,7 @@ from vcd.types import areaReference
 
     SCL is based on common conventions. In some cases, SCL allows using different conventions, but eventually
     it enforces using specific conventions, such as &#34;right-hand&#34; coordinate systems, homogeneous coordinates, 
-    left-multiplication of matrices, alias (vs alibi) rotation matrices, etc.
+    right-multiplication of matrices, alias (vs alibi) rotation matrices, etc.
 
     NUMPY ARRAYS
     -----------------------------
@@ -82,19 +81,28 @@ from vcd.types import areaReference
          all poses are expressed as 4x4 matrices
          rotation matrices are 3x3
          If not specified otherwise, all one-dimensional vectors are column vectors
+    NOTE: Since OpenLABEL 1.0.0, quaternion + translation is also added as an option to express poses.
+    Internally, SCL converts this form into 4x4 matrices
 
     POSES AND COORDINATE SYSTEMS
     -----------------------------
-    Each sensor has a &#34;static pose&#34; defined against the Local Coordinate System (LCS). In the case of
-    vehicle set-ups, this LCS is a point at the ego-vehicle located at
-    the middle of the rear axle, projected to the ground, being X-to-front, Y-to-left, Z-up
-    as defined in the ISO8855. There are some other coordinates systems considered in SCL:
+    Each coordinate system may have a pose with respect to a parent coordinate system.
+    Examples of this are sensors which are installed in vehicles. The Sensor Coordinate System (SCS) then has a pose
+    with respect to the Local Coordinate System (LCS) of the vehicle.
+    In SCL this LCS is a point at the ego-vehicle located at the middle of the rear axle, projected to the ground,
+    being X-to-front, Y-to-left, Z-up as defined in the ISO8855. 
+    
+    There are some other usual acronyms used in the code:
 
         - LCS : Local Coordinate System (e.g. the vehicle coordinate system at the rear axis, as in ISO8855)
         - SCS : Sensor Coordinate System (e.g. the camera coordinate system, or the lidar coordinate system)        
         - WCS : World Coordinate System (a static coordinate system for the entire scene, typically equal to the first LCS)
         - GCS : Geographic Coordinate System (UTM Universal Transverse Mercator)
         - ICS : Image coordinate system (this is the 2D image plane)
+
+    NOTE: Nevertheless, in VCD and SCL, an entirely customizable graph of dependecies can be built, declaring coordinate systems
+    and parent-child relations. See vcd.core functions add_coordinate_system() where static poses can be defined, and add_transform()
+    which is a function to add frame-specific poses between coordinate systems.
 
     For readability, let&#39;s use the following letter conventions:        
         - P : Pose 4x4
@@ -104,34 +112,38 @@ from vcd.types import areaReference
         - K : Camera calibration matrix 3x4
         - d : Distortion coefficients 1x5 (or 1x9, or 1x14)
 
-    All Poses are defined right-handed. A Pose encodes the rotation and position of a coordinate system
-    wrt to a reference system
+    All Poses are defined right-handed. A Pose encodes the passive rotation and position of a coordinate system
+    wrt (with respect to) a reference system
 
-    Usually, P_scs_wrt_lcs = [[R_3x3, C_3x1], [0, 0, 0, 1]]
+    Usually, P_scs_wrt_lcs = [[R_3x3, C_3x1], [0, 0, 0, 1]], where R_3x3 is a 3x3 rotation matrix, and C_3x1 is the 
+    position of the SCS expressed in the LCS.
 
     To actually convert a point from the reference system (e.g. LCS) into another system (e.g. SCS), the 
     transformation matrix is built as the inverse of the pose  
     https://en.wikipedia.org/wiki/Active_and_passive_transformation         
 
-    Cameras coordinate systems are defined with X-to-right, Y-to-bottom, and Z-to-front.
+    Cameras coordinate systems are defined with X-to-right, Y-to-bottom, and Z-to-front, following usual OpenCV
+    camera model convention.
     This is the common practice in computer vision, so that image coordinates are defined 
     x-to-right, y-to-bottom.
 
-    Changes in coordinate systems are carried out using right-to-left matrix multiplication:
-    e.g. X_scs = T_lcs_to_scs * X_lcs (e.g. X_lcs is 4x1, Transform_lcs_to_scs is 4x4, X_scs is 4x1)
-         X_scs = T_lcs_to_scs * X_lcs
+    Transforming a 3D point expressed in a given coordinate system into another coordinate system is
+    carried out using right-to-left matrix multiplication:
+    e.g. X_scs = T_lcs_to_scs @ X_lcs (e.g. X_lcs is 4x1, Transform_lcs_to_scs is 4x4, X_scs is 4x1)
+         X_scs = T_lcs_to_scs @ X_lcs
+    NOTE: @ operator in Python (&gt;3.5) is matrix multiplication, equivalent to Numpy&#39;s dot operator
 
     In addition, transformations can be understood as inverse Poses.
     e.g. if T_lcs_to_scs converts a point from LCS to SCS, then 
-            T_lcs_to_scs = np.linalg.inv(P_scs_wrt_lcs)            
-
-    Note that to build a Pose and Transform by knowing the rotation R and position C of a coordinate system 
+            T_lcs_to_scs = np.linalg.inv(P_scs_wrt_lcs)  # or using utils.inv(P_scs_wrt_lcs)      
+                  
+    Note that to build a Pose and Transform by knowing the passive rotation R and position C of a coordinate system 
     wrt to another, it is possible to do:
     (pseudo-code)
-    P = (R C; 0 0 0 1)
+    P_scs_wrt_lcs = (R_scs_wrt_lcs C_scs_wrt_lcs; 0 0 0 1)
     or
-    T = (R^T -R^TC; 0 0 0 1)
-    Note P = T^-1 and T=P^-1     
+    T_lcs_to_scs = (transpose(R_scs_wrt_lcs) transpose(-R_scs_wrt_lcs)C_scs_wrt_lcs; 0 0 0 1)
+    Note P = T^-1 and T = P^-1
 
     Since conversion from one system to another is useful, the following equations hold true:
     P_scs_wrt_lcs = (T_lcs_to_scs)^-1
@@ -146,16 +158,19 @@ from vcd.types import areaReference
     As each sensor has its own capturing timestamp, not necessarily coincident with the timestamp of
     an odometry entry, odometry information may be provided associated to a specific sensor frame (this way, 
     it is possible to locate globally sensing information from that sensor). 
-    The library provides tools to interpolate odometry and associate odometry entries to specific timestamps. 
+    The library provides tools to interpolate vodometry and associate odometry entries to specific timestamps. 
 
     The SCL library is defined in a way it is possible to add odometry values from multiple set-ups
-    e.g. V2V, a second vehicle sends location information about itself and its sensors, along with detections 
+    e.g. V2V, a second vehicle sends location information about itself and its sensors, along with detections.
+
+    Odometry is treated just like a normal frame-specific transform. Therefore, all previous discussion applies.
+    See vcd&#39;s add_transform() function at core.py
 
 
     GEO-COORDINATES
     -----------------------------
-    TODO
-
+    Just like any other coordinate system, geo-coordinates can be specified in VCD and then are supported in SCL.
+    
 &#39;&#39;&#39;
 
 # From https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
@@ -559,12 +574,13 @@ class Scene:
 
         # Create camera m
         camera = None
-        if &#39;streams&#39; in self.vcd.data[&#39;vcd&#39;]:
-            if camera_name in self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;]:
-                uri = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;uri&#39;]
-                description = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;description&#39;]
-                if &#39;stream_properties&#39; in self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name]:
-                    sp = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;stream_properties&#39;]
+        root = self.vcd.get_root()
+        if &#39;streams&#39; in root:
+            if camera_name in root[&#39;streams&#39;]:
+                uri = root[&#39;streams&#39;][camera_name][&#39;uri&#39;]
+                description = root[&#39;streams&#39;][camera_name][&#39;description&#39;]
+                if &#39;stream_properties&#39; in root[&#39;streams&#39;][camera_name]:
+                    sp = root[&#39;streams&#39;][camera_name][&#39;stream_properties&#39;]
                     if &#39;intrinsics_pinhole&#39; in sp:
                         camera = CameraPinhole(sp[&#39;intrinsics_pinhole&#39;], camera_name, description, uri, compute_remaps)
                     elif &#39;intrinsics_fisheye&#39; in sp:
@@ -597,7 +613,8 @@ class Scene:
         # Create graph with the poses defined for each coordinate_system
         # These are poses valid &#34;statically&#34;
         lista = []
-        for cs_name, cs_body in self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;].items():
+        root = self.vcd.get_root()
+        for cs_name, cs_body in root[&#39;coordinate_systems&#39;].items():
             for child in cs_body[&#39;children&#39;]:
                 lista.append((cs_name, child, 1))
                 lista.append((child, cs_name, 1))
@@ -632,6 +649,7 @@ class Scene:
 
         # Let&#39;s build the transform using atomic transforms (which exist in VCD)
         t_4x4 = np.identity(4, dtype=float)
+        root = self.vcd.get_root()
         for counter, value in enumerate(chain):
             # e.g. a) result = {(&#34;cam_left&#34;, &#34;velo_top&#34;), (&#34;velo_top&#34;, &#34;vehicle-iso8855&#34;)}
             # e.g. b) result = {(&#34;vehicle-iso8855&#34;, &#34;velo_top&#34;), (&#34;velo_top&#34;, &#34;cam_left&#34;)}
@@ -648,41 +666,51 @@ class Scene:
             if frameNum is None:
                 # No frame info, let&#39;s read from coordinate_system poses
                 # Check if this edge is from child to parent or viceversa
-                if cs_2 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
-                    t_4x4 = (
-                        np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]]).reshape(4, 4)).dot(
-                        t_4x4)
-                elif cs_1 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
-                    temp = np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;]])
-                    t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                if cs_2 == root[&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
+                    #t_4x4 = (
+                    #    np.array([root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).dot(
+                    #    t_4x4)
+                    t_4x4 = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]) @ t_4x4
+                elif cs_1 == root[&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
+                    #temp = np.array([root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]])
+                    #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                    temp = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;])
+                    t_4x4 = utils.inv(temp) @ t_4x4
+                    
             else:
                 # So the user has asked for a specific frame, let&#39;s look for this frame if a transform exist
                 transform_at_this_frame = False
-                if frameNum in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;]:
-                    if &#39;frame_properties&#39; in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum]:
-                        if &#39;transforms&#39; in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;]:
-                            if t_name in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
-                                transform = self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][t_name]
-                                t_4x4 = (np.array([transform[&#39;transform_src_to_dst_4x4&#39;]]).reshape(4, 4)).dot(t_4x4)
+                if frameNum in root[&#39;frames&#39;]:
+                    if &#39;frame_properties&#39; in root[&#39;frames&#39;][frameNum]:
+                        if &#39;transforms&#39; in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;]:
+                            if t_name in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
+                                transform = root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][t_name]
+                                #assert(&#39;matrix4x4&#39; in transform[&#39;transform_src_to_dst&#39;])
+                                #t_4x4 = (np.array([transform[&#39;transform_src_to_dst&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).dot(t_4x4)
+                                t_4x4 = (utils.get_transform_as_matrix4x4(transform[&#39;transform_src_to_dst&#39;])).dot(t_4x4)
                                 static = False  # with one non-static step the entire chain can be considered not static
                                 transform_at_this_frame = True
-                            elif t_name_inv in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
-                                transform = self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][
+                            elif t_name_inv in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
+                                transform = root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][
                                     t_name_inv]
-                                temp = np.array([transform[&#39;transform_src_to_dst_4x4&#39;]])
-                                t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                                #temp = np.array([transform[&#39;transform_src_to_dst&#39;][&#39;matrix4x4&#39;]])
+                                #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                                temp = utils.get_transform_as_matrix4x4(transform[&#39;transform_src_to_dst&#39;])
+                                t_4x4 = utils.inv(temp) @ t_4x4
                                 static = False
                                 transform_at_this_frame = True
                 if not transform_at_this_frame:
                     # Reached this point means no transforms were defined at the requested frameNum
                     # Check if this edge is from child to parent or viceversa
-                    if cs_2 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
-                        t_4x4 = (np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]]).reshape(4,
-                                                                                                                    4)).dot(
-                            t_4x4)
-                    elif cs_1 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
-                        temp = np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;]])
-                        t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                    if cs_2 == root[&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
+                        #t_4x4 = (np.array([root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).\
+                        #    dot(t_4x4)
+                        t_4x4 = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]) @ t_4x4
+                    elif cs_1 == root[&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
+                        #temp = np.array([root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]])
+                        #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                        temp = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;])
+                        t_4x4 = utils.inv(temp) @ t_4x4
 
         return t_4x4, static
 
@@ -1038,16 +1066,20 @@ class CameraPinhole(Camera):
         # 1.- Select only those z &gt; 0 (in front of the camera)
         idx_in_front = points3d_4xN[2, :] &gt; 1e-8
         idx_valid = idx_in_front
-
-        # 2.- Distort rays3d if distorted
         rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
-        rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x&#39;, y&#39;, 1), convenient for dist.
-        rays3d_3xN = np.full([3, N], np.nan)
-        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt
+
+        # 2.- Distort rays3d if distorted        
+        rays3d_3xN = np.full([3, N], np.nan) # init with NaN       
+        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt  # copy filtered points
 
         if self.is_distorted():
+            # Cameras with distortion: need to first apply distortion model
             if not self.is_fisheye:
+                # Pinhole distortion
                 if self.r_limit is not None:
+                    #rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x&#39;, y&#39;, 1), convenient for dist.     (this is done inside distort_rays)   
+                    
+                    # Some cameras have a valid radius limit: extreme points are wierdly distorted, it is better to keep them as NaN
                     for i in range(0, N):
                         if idx_valid[i]:  # ignore those already filtered
                             xp = rays3d_3xN[0, i] / rays3d_3xN[2, i]  # this is x&#39;=x/z as in opencv docs
@@ -1064,16 +1096,28 @@ class CameraPinhole(Camera):
                 rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt) # no nan should go into it
 
                 # Add nans
-                rays3d_3xN = np.full([3, N], np.nan)
+                #rays3d_3xN = np.full([3, N], np.nan)
                 rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
 
         # 3.- Project using calibration matrix
         if apply_distortion:
-            points2d_3xN = self.K_3x3.dot(rays3d_3xN)
+            #points2d_3xN = self.K_3x3 @ rays3d_3xN    
+
+            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+            points2d_3xN = self.K_3x4 @ rays3d_4xN
+            points2d_3xN /= points2d_3xN[2,:]
+
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
         else:
-            points2d_3xN = self.K_und_3x3.dot(rays3d_3xN)
+            #points2d_3xN = self.K_und_3x3 @ rays3d_3xN
+            
+            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+            points2d_3xN = self.K_und_3x4 @ rays3d_4xN
+            points2d_3xN /= points2d_3xN[2,:]
+
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_undist, idx_valid)
 
@@ -2627,16 +2671,20 @@ Otherwise (5 or more), it is assumed to be traditional "radial" distortion, as i
         # 1.- Select only those z &gt; 0 (in front of the camera)
         idx_in_front = points3d_4xN[2, :] &gt; 1e-8
         idx_valid = idx_in_front
-
-        # 2.- Distort rays3d if distorted
         rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
-        rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x&#39;, y&#39;, 1), convenient for dist.
-        rays3d_3xN = np.full([3, N], np.nan)
-        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt
+
+        # 2.- Distort rays3d if distorted        
+        rays3d_3xN = np.full([3, N], np.nan) # init with NaN       
+        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt  # copy filtered points
 
         if self.is_distorted():
+            # Cameras with distortion: need to first apply distortion model
             if not self.is_fisheye:
+                # Pinhole distortion
                 if self.r_limit is not None:
+                    #rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x&#39;, y&#39;, 1), convenient for dist.     (this is done inside distort_rays)   
+                    
+                    # Some cameras have a valid radius limit: extreme points are wierdly distorted, it is better to keep them as NaN
                     for i in range(0, N):
                         if idx_valid[i]:  # ignore those already filtered
                             xp = rays3d_3xN[0, i] / rays3d_3xN[2, i]  # this is x&#39;=x/z as in opencv docs
@@ -2653,16 +2701,28 @@ Otherwise (5 or more), it is assumed to be traditional "radial" distortion, as i
                 rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt) # no nan should go into it
 
                 # Add nans
-                rays3d_3xN = np.full([3, N], np.nan)
+                #rays3d_3xN = np.full([3, N], np.nan)
                 rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
 
         # 3.- Project using calibration matrix
         if apply_distortion:
-            points2d_3xN = self.K_3x3.dot(rays3d_3xN)
+            #points2d_3xN = self.K_3x3 @ rays3d_3xN    
+
+            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+            points2d_3xN = self.K_3x4 @ rays3d_4xN
+            points2d_3xN /= points2d_3xN[2,:]
+
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
         else:
-            points2d_3xN = self.K_und_3x3.dot(rays3d_3xN)
+            #points2d_3xN = self.K_und_3x3 @ rays3d_3xN
+            
+            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+            points2d_3xN = self.K_und_3x4 @ rays3d_4xN
+            points2d_3xN /= points2d_3xN[2,:]
+
             if remove_outside:
                 points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_undist, idx_valid)
 
@@ -2883,16 +2943,20 @@ If distorted, the rays3D are distorted into distorted rays3D.</p>
     # 1.- Select only those z &gt; 0 (in front of the camera)
     idx_in_front = points3d_4xN[2, :] &gt; 1e-8
     idx_valid = idx_in_front
-
-    # 2.- Distort rays3d if distorted
     rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
-    rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x&#39;, y&#39;, 1), convenient for dist.
-    rays3d_3xN = np.full([3, N], np.nan)
-    rays3d_3xN[:, idx_valid] = rays3d_3xN_filt
+
+    # 2.- Distort rays3d if distorted        
+    rays3d_3xN = np.full([3, N], np.nan) # init with NaN       
+    rays3d_3xN[:, idx_valid] = rays3d_3xN_filt  # copy filtered points
 
     if self.is_distorted():
+        # Cameras with distortion: need to first apply distortion model
         if not self.is_fisheye:
+            # Pinhole distortion
             if self.r_limit is not None:
+                #rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x&#39;, y&#39;, 1), convenient for dist.     (this is done inside distort_rays)   
+                
+                # Some cameras have a valid radius limit: extreme points are wierdly distorted, it is better to keep them as NaN
                 for i in range(0, N):
                     if idx_valid[i]:  # ignore those already filtered
                         xp = rays3d_3xN[0, i] / rays3d_3xN[2, i]  # this is x&#39;=x/z as in opencv docs
@@ -2909,16 +2973,28 @@ If distorted, the rays3D are distorted into distorted rays3D.</p>
             rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt) # no nan should go into it
 
             # Add nans
-            rays3d_3xN = np.full([3, N], np.nan)
+            #rays3d_3xN = np.full([3, N], np.nan)
             rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
 
     # 3.- Project using calibration matrix
     if apply_distortion:
-        points2d_3xN = self.K_3x3.dot(rays3d_3xN)
+        #points2d_3xN = self.K_3x3 @ rays3d_3xN    
+
+        #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+        rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+        points2d_3xN = self.K_3x4 @ rays3d_4xN
+        points2d_3xN /= points2d_3xN[2,:]
+
         if remove_outside:
             points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
     else:
-        points2d_3xN = self.K_und_3x3.dot(rays3d_3xN)
+        #points2d_3xN = self.K_und_3x3 @ rays3d_3xN
+        
+        #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
+        rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+        points2d_3xN = self.K_und_3x4 @ rays3d_4xN
+        points2d_3xN /= points2d_3xN[2,:]
+
         if remove_outside:
             points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_undist, idx_valid)
 
@@ -3665,12 +3741,13 @@ def vertices(self):
 
         # Create camera m
         camera = None
-        if &#39;streams&#39; in self.vcd.data[&#39;vcd&#39;]:
-            if camera_name in self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;]:
-                uri = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;uri&#39;]
-                description = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;description&#39;]
-                if &#39;stream_properties&#39; in self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name]:
-                    sp = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;stream_properties&#39;]
+        root = self.vcd.get_root()
+        if &#39;streams&#39; in root:
+            if camera_name in root[&#39;streams&#39;]:
+                uri = root[&#39;streams&#39;][camera_name][&#39;uri&#39;]
+                description = root[&#39;streams&#39;][camera_name][&#39;description&#39;]
+                if &#39;stream_properties&#39; in root[&#39;streams&#39;][camera_name]:
+                    sp = root[&#39;streams&#39;][camera_name][&#39;stream_properties&#39;]
                     if &#39;intrinsics_pinhole&#39; in sp:
                         camera = CameraPinhole(sp[&#39;intrinsics_pinhole&#39;], camera_name, description, uri, compute_remaps)
                     elif &#39;intrinsics_fisheye&#39; in sp:
@@ -3703,7 +3780,8 @@ def vertices(self):
         # Create graph with the poses defined for each coordinate_system
         # These are poses valid &#34;statically&#34;
         lista = []
-        for cs_name, cs_body in self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;].items():
+        root = self.vcd.get_root()
+        for cs_name, cs_body in root[&#39;coordinate_systems&#39;].items():
             for child in cs_body[&#39;children&#39;]:
                 lista.append((cs_name, child, 1))
                 lista.append((child, cs_name, 1))
@@ -3738,6 +3816,7 @@ def vertices(self):
 
         # Let&#39;s build the transform using atomic transforms (which exist in VCD)
         t_4x4 = np.identity(4, dtype=float)
+        root = self.vcd.get_root()
         for counter, value in enumerate(chain):
             # e.g. a) result = {(&#34;cam_left&#34;, &#34;velo_top&#34;), (&#34;velo_top&#34;, &#34;vehicle-iso8855&#34;)}
             # e.g. b) result = {(&#34;vehicle-iso8855&#34;, &#34;velo_top&#34;), (&#34;velo_top&#34;, &#34;cam_left&#34;)}
@@ -3754,41 +3833,51 @@ def vertices(self):
             if frameNum is None:
                 # No frame info, let&#39;s read from coordinate_system poses
                 # Check if this edge is from child to parent or viceversa
-                if cs_2 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
-                    t_4x4 = (
-                        np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]]).reshape(4, 4)).dot(
-                        t_4x4)
-                elif cs_1 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
-                    temp = np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;]])
-                    t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                if cs_2 == root[&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
+                    #t_4x4 = (
+                    #    np.array([root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).dot(
+                    #    t_4x4)
+                    t_4x4 = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]) @ t_4x4
+                elif cs_1 == root[&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
+                    #temp = np.array([root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]])
+                    #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                    temp = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;])
+                    t_4x4 = utils.inv(temp) @ t_4x4
+                    
             else:
                 # So the user has asked for a specific frame, let&#39;s look for this frame if a transform exist
                 transform_at_this_frame = False
-                if frameNum in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;]:
-                    if &#39;frame_properties&#39; in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum]:
-                        if &#39;transforms&#39; in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;]:
-                            if t_name in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
-                                transform = self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][t_name]
-                                t_4x4 = (np.array([transform[&#39;transform_src_to_dst_4x4&#39;]]).reshape(4, 4)).dot(t_4x4)
+                if frameNum in root[&#39;frames&#39;]:
+                    if &#39;frame_properties&#39; in root[&#39;frames&#39;][frameNum]:
+                        if &#39;transforms&#39; in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;]:
+                            if t_name in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
+                                transform = root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][t_name]
+                                #assert(&#39;matrix4x4&#39; in transform[&#39;transform_src_to_dst&#39;])
+                                #t_4x4 = (np.array([transform[&#39;transform_src_to_dst&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).dot(t_4x4)
+                                t_4x4 = (utils.get_transform_as_matrix4x4(transform[&#39;transform_src_to_dst&#39;])).dot(t_4x4)
                                 static = False  # with one non-static step the entire chain can be considered not static
                                 transform_at_this_frame = True
-                            elif t_name_inv in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
-                                transform = self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][
+                            elif t_name_inv in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
+                                transform = root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][
                                     t_name_inv]
-                                temp = np.array([transform[&#39;transform_src_to_dst_4x4&#39;]])
-                                t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                                #temp = np.array([transform[&#39;transform_src_to_dst&#39;][&#39;matrix4x4&#39;]])
+                                #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                                temp = utils.get_transform_as_matrix4x4(transform[&#39;transform_src_to_dst&#39;])
+                                t_4x4 = utils.inv(temp) @ t_4x4
                                 static = False
                                 transform_at_this_frame = True
                 if not transform_at_this_frame:
                     # Reached this point means no transforms were defined at the requested frameNum
                     # Check if this edge is from child to parent or viceversa
-                    if cs_2 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
-                        t_4x4 = (np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]]).reshape(4,
-                                                                                                                    4)).dot(
-                            t_4x4)
-                    elif cs_1 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
-                        temp = np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;]])
-                        t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                    if cs_2 == root[&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
+                        #t_4x4 = (np.array([root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).\
+                        #    dot(t_4x4)
+                        t_4x4 = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]) @ t_4x4
+                    elif cs_1 == root[&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
+                        #temp = np.array([root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]])
+                        #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                        temp = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;])
+                        t_4x4 = utils.inv(temp) @ t_4x4
 
         return t_4x4, static
 
@@ -4214,12 +4303,13 @@ are carried out only once).</p>
 
     # Create camera m
     camera = None
-    if &#39;streams&#39; in self.vcd.data[&#39;vcd&#39;]:
-        if camera_name in self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;]:
-            uri = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;uri&#39;]
-            description = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;description&#39;]
-            if &#39;stream_properties&#39; in self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name]:
-                sp = self.vcd.data[&#39;vcd&#39;][&#39;streams&#39;][camera_name][&#39;stream_properties&#39;]
+    root = self.vcd.get_root()
+    if &#39;streams&#39; in root:
+        if camera_name in root[&#39;streams&#39;]:
+            uri = root[&#39;streams&#39;][camera_name][&#39;uri&#39;]
+            description = root[&#39;streams&#39;][camera_name][&#39;description&#39;]
+            if &#39;stream_properties&#39; in root[&#39;streams&#39;][camera_name]:
+                sp = root[&#39;streams&#39;][camera_name][&#39;stream_properties&#39;]
                 if &#39;intrinsics_pinhole&#39; in sp:
                     camera = CameraPinhole(sp[&#39;intrinsics_pinhole&#39;], camera_name, description, uri, compute_remaps)
                 elif &#39;intrinsics_fisheye&#39; in sp:
@@ -4293,6 +4383,7 @@ static transforms are returned.
 
     # Let&#39;s build the transform using atomic transforms (which exist in VCD)
     t_4x4 = np.identity(4, dtype=float)
+    root = self.vcd.get_root()
     for counter, value in enumerate(chain):
         # e.g. a) result = {(&#34;cam_left&#34;, &#34;velo_top&#34;), (&#34;velo_top&#34;, &#34;vehicle-iso8855&#34;)}
         # e.g. b) result = {(&#34;vehicle-iso8855&#34;, &#34;velo_top&#34;), (&#34;velo_top&#34;, &#34;cam_left&#34;)}
@@ -4309,41 +4400,51 @@ static transforms are returned.
         if frameNum is None:
             # No frame info, let&#39;s read from coordinate_system poses
             # Check if this edge is from child to parent or viceversa
-            if cs_2 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
-                t_4x4 = (
-                    np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]]).reshape(4, 4)).dot(
-                    t_4x4)
-            elif cs_1 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
-                temp = np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;]])
-                t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+            if cs_2 == root[&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
+                #t_4x4 = (
+                #    np.array([root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).dot(
+                #    t_4x4)
+                t_4x4 = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]) @ t_4x4
+            elif cs_1 == root[&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
+                #temp = np.array([root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]])
+                #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                temp = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;])
+                t_4x4 = utils.inv(temp) @ t_4x4
+                
         else:
             # So the user has asked for a specific frame, let&#39;s look for this frame if a transform exist
             transform_at_this_frame = False
-            if frameNum in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;]:
-                if &#39;frame_properties&#39; in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum]:
-                    if &#39;transforms&#39; in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;]:
-                        if t_name in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
-                            transform = self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][t_name]
-                            t_4x4 = (np.array([transform[&#39;transform_src_to_dst_4x4&#39;]]).reshape(4, 4)).dot(t_4x4)
+            if frameNum in root[&#39;frames&#39;]:
+                if &#39;frame_properties&#39; in root[&#39;frames&#39;][frameNum]:
+                    if &#39;transforms&#39; in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;]:
+                        if t_name in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
+                            transform = root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][t_name]
+                            #assert(&#39;matrix4x4&#39; in transform[&#39;transform_src_to_dst&#39;])
+                            #t_4x4 = (np.array([transform[&#39;transform_src_to_dst&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).dot(t_4x4)
+                            t_4x4 = (utils.get_transform_as_matrix4x4(transform[&#39;transform_src_to_dst&#39;])).dot(t_4x4)
                             static = False  # with one non-static step the entire chain can be considered not static
                             transform_at_this_frame = True
-                        elif t_name_inv in self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
-                            transform = self.vcd.data[&#39;vcd&#39;][&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][
+                        elif t_name_inv in root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;]:
+                            transform = root[&#39;frames&#39;][frameNum][&#39;frame_properties&#39;][&#39;transforms&#39;][
                                 t_name_inv]
-                            temp = np.array([transform[&#39;transform_src_to_dst_4x4&#39;]])
-                            t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                            #temp = np.array([transform[&#39;transform_src_to_dst&#39;][&#39;matrix4x4&#39;]])
+                            #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                            temp = utils.get_transform_as_matrix4x4(transform[&#39;transform_src_to_dst&#39;])
+                            t_4x4 = utils.inv(temp) @ t_4x4
                             static = False
                             transform_at_this_frame = True
             if not transform_at_this_frame:
                 # Reached this point means no transforms were defined at the requested frameNum
                 # Check if this edge is from child to parent or viceversa
-                if cs_2 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
-                    t_4x4 = (np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]]).reshape(4,
-                                                                                                                4)).dot(
-                        t_4x4)
-                elif cs_1 == self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
-                    temp = np.array([self.vcd.data[&#39;vcd&#39;][&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;]])
-                    t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                if cs_2 == root[&#39;coordinate_systems&#39;][cs_1][&#39;parent&#39;]:
+                    #t_4x4 = (np.array([root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]]).reshape(4, 4)).\
+                    #    dot(t_4x4)
+                    t_4x4 = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_1][&#39;pose_wrt_parent&#39;]) @ t_4x4
+                elif cs_1 == root[&#39;coordinate_systems&#39;][cs_2][&#39;parent&#39;]:
+                    #temp = np.array([root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;][&#39;matrix4x4&#39;]])
+                    #t_4x4 = utils.inv(temp.reshape(4, 4)).dot(t_4x4)
+                    temp = utils.get_transform_as_matrix4x4(root[&#39;coordinate_systems&#39;][cs_2][&#39;pose_wrt_parent&#39;])
+                    t_4x4 = utils.inv(temp) @ t_4x4
 
     return t_4x4, static</code></pre>
 </details>
@@ -4646,7 +4747,7 @@ and array of boolean declaring points valid or not</p></div>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

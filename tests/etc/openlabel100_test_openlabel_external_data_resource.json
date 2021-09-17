@@ -1,0 +1,1 @@
+{"openlabel":{"metadata":{"schema_version":"1.0.0"},"resources":{"0":"../resources/xodr/multi_intersections.xodr"},"objects":{"0":{"name":"road1","type":"road","resource_uid":{"0":"217"}},"1":{"name":"lane1","type":"lane","resource_uid":{"0":"3"}}}}}

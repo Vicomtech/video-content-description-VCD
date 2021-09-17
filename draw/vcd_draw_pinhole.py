@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.1
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.1.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -88,7 +88,12 @@ def simple_setup_4_cams_pinhole():
                               )
     vcd.add_coordinate_system("CAM_FRONT", cs_type=types.CoordinateSystemType.sensor_cs,
                               parent_name="vehicle-iso8855",
-                              pose_wrt_parent=list(P_scs_wrt_lcs.flatten()))
+                              pose_wrt_parent=types.PoseData(
+                                  val=list(P_scs_wrt_lcs.flatten()),
+                                  type=types.TransformDataType.matrix_4x4)
+                              )
+
+                              #list(P_scs_wrt_lcs.flatten()))
 
     ################################
     # CAM_REAR
@@ -129,7 +134,10 @@ def simple_setup_4_cams_pinhole():
                               )
     vcd.add_coordinate_system("CAM_REAR", cs_type=types.CoordinateSystemType.sensor_cs,
                               parent_name="vehicle-iso8855",
-                              pose_wrt_parent=list(P_scs_wrt_lcs.flatten()))
+                              pose_wrt_parent=types.PoseData(
+                                  val=list(P_scs_wrt_lcs.flatten()),
+                                  type=types.TransformDataType.matrix_4x4)
+                              )
 
     ################################
     # CAM_LEFT
@@ -170,7 +178,10 @@ def simple_setup_4_cams_pinhole():
                               )
     vcd.add_coordinate_system("CAM_LEFT", cs_type=types.CoordinateSystemType.sensor_cs,
                               parent_name="vehicle-iso8855",
-                              pose_wrt_parent=list(P_scs_wrt_lcs.flatten()))
+                              pose_wrt_parent=types.PoseData(
+                                  val=list(P_scs_wrt_lcs.flatten()),
+                                  type=types.TransformDataType.matrix_4x4)
+                              )
 
     ################################
     # CAM_RIGHT
@@ -211,7 +222,10 @@ def simple_setup_4_cams_pinhole():
                               )
     vcd.add_coordinate_system("CAM_RIGHT", cs_type=types.CoordinateSystemType.sensor_cs,
                               parent_name="vehicle-iso8855",
-                              pose_wrt_parent=list(P_scs_wrt_lcs.flatten()))
+                              pose_wrt_parent=types.PoseData(
+                                  val=list(P_scs_wrt_lcs.flatten()),
+                                  type=types.TransformDataType.matrix_4x4)
+                              )
 
     return vcd
 

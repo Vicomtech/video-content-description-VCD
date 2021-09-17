@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>vcd.schema API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.3.1 …" />
+<meta name="description" content="VCD (Video Content Description) library v5.0.0 …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,25 +22,25 @@
 <h1 class="title">Module <code>vcd.schema</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.3.1</p>
+<p>VCD (Video Content Description) library v5.0.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2021, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.3.1.
+<p>VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.3.1
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.1.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
@@ -48,31 +48,35 @@ VCD is distributed under MIT License. See LICENSE.
 ######################################
 # Fully manually writing the schema
 ######################################
-vcd_schema_version = &#34;4.3.1&#34;
-vcd_schema = {
+from builtins import type
+
+openlabel_schema_version = &#34;1.0.0&#34;
+openlabel_schema = {
     &#34;$schema&#34;: &#34;http://json-schema.org/draft-07/schema#&#34;,
     &#34;type&#34;: &#34;object&#34;,
     &#34;properties&#34;: {
-        &#34;vcd&#34;: {&#34;$ref&#34;: &#34;#/definitions/vcd&#34;}
+        &#34;openlabel&#34;: {&#34;$ref&#34;: &#34;#/definitions/openlabel&#34;}
     },
     &#34;definitions&#34;: {
-        &#34;vcd&#34;: {
+        &#34;openlabel&#34;: {
             &#34;type&#34;: &#34;object&#34;,
-            &#34;description&#34;: &#34;This is the root VCD element.&#34;,
+            &#34;description&#34;: &#34;The OpenLABEL root JSON object, which contains all other JSON objects.&#34;,
             &#34;properties&#34;: {
-                &#34;frame_intervals&#34;: {
-                    &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
-                },
-                &#34;ontologies&#34;: {
+                &#34;metadata&#34;: {&#34;$ref&#34;: &#34;#/definitions/metadata&#34;},
+                &#34;ontologies&#34;: {&#34;$ref&#34;: &#34;#/definitions/ontologies&#34;},
+                &#34;resources&#34;: {&#34;$ref&#34;: &#34;#/definitions/resources&#34;},
+                &#34;tags&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object of tags. Tag keys are strings containing numerical UIDs or 32 bytes UUIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
-                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;:
-                            {&#34;type&#34;: &#34;string&#34;},
+                        &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                            &#34;$ref&#34;: &#34;#/definitions/tag&#34;
+                        }
                     },
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;frames&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object of frames that contain the dynamic (time-wise) annotations. Keys are strings containing numerical frame identifiers (denoted as master frame numbers).&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^[0-9]+$&#34;: {
@@ -81,7 +85,13 @@ vcd_schema = {
                     },
                     &#34;additionalProperties&#34;: False
                 },
+                &#34;frame_intervals&#34;: {
+                    &#34;description&#34;: &#34;This is an array of frame intervals.&#34;,
+                    &#34;type&#34;: &#34;array&#34;,
+                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                },
                 &#34;objects&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object of OpenLABEL objects. Object keys are strings containing numerical UIDs or 32 bytes UUIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -91,6 +101,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;actions&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object of OpenLABEL actions. Action keys are strings containing numerical UIDs or 32 bytes UUIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -100,6 +111,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;events&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object of OpenLABEL events. Event keys are strings containing numerical UIDs or 32 bytes UUIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -109,6 +121,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;contexts&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object of OpenLABEL contexts. Context keys are strings containing numerical UIDs or 32 bytes UUIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -118,6 +131,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;relations&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object of OpenLABEL relations. Relation keys are strings containing numerical UIDs or 32 bytes UUIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -126,17 +140,113 @@ vcd_schema = {
                     },
                     &#34;additionalProperties&#34;: False
                 },
-                &#34;metadata&#34;: {&#34;$ref&#34;: &#34;#/definitions/metadata&#34;},
                 &#34;streams&#34;: {&#34;$ref&#34;: &#34;#/definitions/streams&#34;},
-                &#34;coordinate_systems&#34;: {&#34;$ref&#34;: &#34;#/definitions/coordinate_systems&#34;}
+                &#34;coordinate_systems&#34;: {&#34;$ref&#34;: &#34;#/definitions/coordinate_systems&#34;},
             },
             &#34;additionalProperties&#34;: False,
             &#34;required&#34;: [&#34;metadata&#34;]
         },
+        &#34;metadata&#34;: {
+            &#34;description&#34;: &#34;This JSON object contains information (metadata) about the annotation file itself including the schema_version, file_version, annotator, etc.&#34;,
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;schema_version&#34;: {
+                        &#34;description&#34;: &#34;Version number of the OpenLABEL schema this annotation JSON object follows.&#34;,
+                        &#34;type&#34;: &#34;string&#34;, 
+                        &#34;enum&#34;: [openlabel_schema_version]
+                    },
+                &#34;file_version&#34;: {
+                    &#34;description&#34;: &#34;Version number of the OpenLABEL annotation content.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;name&#34;: {
+                    &#34;description&#34;: &#34;Name of the OpenLABEL annotation content.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;annotator&#34;: {
+                    &#34;description&#34;: &#34;Name or description of the annotator that created the annotations.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;comment&#34;: {
+                    &#34;description&#34;: &#34;Additional information or description about the annotation content.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+            },
+            &#34;additionalProperties&#34;: True,
+            &#34;required&#34;: [&#34;schema_version&#34;]
+        },
+        &#34;ontologies&#34;: {
+            &#34;description&#34;: &#34;This is the JSON object of OpenLABEL ontologies. Ontology keys are strings containing numerical UIDs or 32 bytes UUIDs. Ontology values can be any of: strings (e.g. encoding a URI), or JSON objects containing a URI string, and optional lists of included and excluded terms.&#34;,
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;patternProperties&#34;: {
+                &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;:
+                    {
+                        &#34;oneOf&#34;: [{
+                            &#34;type&#34;: &#34;string&#34;
+                        }, {
+                            &#34;type&#34;: &#34;object&#34;,
+                            &#34;properties&#34;: {
+                                &#34;uri&#34;: {&#34;type&#34;: &#34;string&#34;},
+                                &#34;subset_included&#34;: {
+                                    &#34;type&#34;: &#34;array&#34;,
+                                    &#34;items&#34;: {&#34;type&#34;: &#34;string&#34;}
+                                },
+                                &#34;subset_excluded&#34;: {
+                                    &#34;type&#34;: &#34;array&#34;,
+                                    &#34;items&#34;: {&#34;type&#34;: &#34;string&#34;}
+                                }
+                            },
+                            &#34;additionalProperties&#34;: True,
+                            &#34;required&#34;: [&#34;uri&#34;]
+                        }]
+                    },
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;resources&#34;: {
+            &#34;description&#34;: &#34;This is the JSON object of OpenLABEL resources. Resource keys are strings containing numerical UIDs or 32 bytes UUIDs. Resource values are strings that describe an external resource (e.g. file name, URLs) that might be used to link data of this OpenLABEL annotation content with external existing content.&#34;,
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;patternProperties&#34;: {
+                &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;:
+                    {&#34;type&#34;: &#34;string&#34;},
+            },
+            &#34;additionalProperties&#34;: False
+        },
+        &#34;resource_uid&#34;: {
+            &#34;description&#34;: &#34;This is a JSON object that contains links to external resources. Resource_uid keys are strings containing numerical UIDs or 32 bytes UUIDs. Resource_uid values are strings describing the identifier of the element in the external resource.&#34;,
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;patternProperties&#34;: {
+                &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
+                    &#34;type&#34;: &#34;string&#34;
+                }
+            },
+        },
+        &#34;tag&#34;: {
+            &#34;description&#34;: &#34;A tag is a special type of label that can be attached to any type of content, &#34;
+                           &#34;such as images, data containers, folders, etc. In OpenLABEL its main purpose is to &#34;
+                           &#34;allow adding metadata to scenario descriptions.&#34;,
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;type&#34;: {
+                        &#34;description&#34;: &#34;The type of a tag defines the class the tag corresponds to.&#34;,
+                        &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;tag_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/tag_data&#34;},
+                &#34;ontology_uid&#34;: {
+                        &#34;description&#34;: &#34;This is the UID of the ontology where the type of this tag is defined.&#34;,
+                        &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;resource_uid&#34;: {&#34;$ref&#34;: &#34;#/definitions/resource_uid&#34;},
+            },
+            &#34;additionalProperties&#34;: True,
+            &#34;required&#34;: [&#34;type&#34;]
+        },
         &#34;frame&#34;: {
+            &#34;description&#34;: &#34;A frame is a container of dynamic (time-wise) information.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;objects&#34;: {
+                    &#34;description&#34;: &#34;This is a JSON object that contains dynamic information of OpenLABEL objects. Object keys are strings containing numerical UIDs or 32 bytes UUIDs. Object values may contain an \&#34;object_data\&#34; JSON object.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -150,6 +260,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;events&#34;: {
+                    &#34;description&#34;: &#34;This is a JSON object that contains dynamic information of OpenLABEL events. Event keys are strings containing numerical UIDs or 32 bytes UUIDs. Event values may contain an \&#34;event_data\&#34; JSON object.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -163,6 +274,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;actions&#34;: {
+                    &#34;description&#34;: &#34;This is a JSON object that contains dynamic information of OpenLABEL actions. Action keys are strings containing numerical UIDs or 32 bytes UUIDs. Action values may contain an \&#34;action_data\&#34; JSON object.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -176,6 +288,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;contexts&#34;: {
+                    &#34;description&#34;: &#34;This is a JSON object that contains dynamic information of OpenLABEL contexts. Context keys are strings containing numerical UIDs or 32 bytes UUIDs. Context values may contain an \&#34;context_data\&#34; JSON object.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {
@@ -189,6 +302,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;relations&#34;: {
+                    &#34;description&#34;: &#34;This is a JSON object that contains dynamic information of OpenLABEL relations. Relation keys are strings containing numerical UIDs or 32 bytes UUIDs. Relation values are empty. The presence of a key-value relation pair indicates the specified relation exists in this frame.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$&#34;: {}
@@ -196,36 +310,28 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;frame_properties&#34;: {
-                    &#34;description&#34;: &#34;These frame_properties include frame-related information,\
-                                   including: stream information, odometry, and timestamping.\
-                                   -Timestamps: the field \&#39;timestamp\&#39; can be used to declare a\
-                                   master timestamp for all information within thi frame.\
-                                   -Streams: can host information related to specific streams, such\
-                                   as specific timestamps or instantaneous intrinsics.\
-                                   -Odometry: it contains ego-motion of the entire scene (i.e.\
-                                   the pose of the LCS (Local Coordinate System) wrt to WCS (World\
-                                   Coordinate System).&#34;,
+                    &#34;description&#34;: &#34;This is a JSON object which contains information about this frame.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;properties&#34;: {
-                        &#34;timestamp&#34;: {&#34;type&#34;: &#34;string&#34;},
+                        &#34;timestamp&#34;: {
+                            &#34;description&#34;: &#34;The timestamp indicates a time instant as a string or numerical value to describe this frame.&#34;,
+                            &#34;anyOf&#34;: [{&#34;type&#34;: &#34;string&#34;}, {&#34;type&#34;: &#34;number&#34;}]
+                            },
                         &#34;streams&#34;: {
+                            &#34;description&#34;: &#34;Streams is a JSON object which contains OpenLABEL streams, with specific information for this frame. Stream keys can be any string (e.g. friendly stream name).&#34;,
                             &#34;type&#34;: &#34;object&#34;,
                             &#34;patternProperties&#34;: {
                                 &#34;^&#34;: {&#34;$ref&#34;: &#34;#/definitions/stream&#34;}
                             },
                             &#34;additionalProperties&#34;: False
                         },
-                        &#34;odometry&#34;: {
+                        &#34;transforms&#34;: {
+                            &#34;description&#34;: &#34;Transforms is a JSON object which contains OpenLABEL transforms specific for this frame. Transform keys can be any string (e.g. friendly name of a transform).&#34;,
                             &#34;type&#34;: &#34;object&#34;,
-                            &#34;properties&#34;: {
-                                &#34;comment&#34;: {&#34;type&#34;: &#34;string&#34;},
-                                &#34;pose_lcs_wrt_wcs_4x4&#34;: {
-                                    &#34;type&#34;: &#34;array&#34;,
-                                    &#34;minItems&#34;: 16,
-                                    &#34;maxItems&#34;: 16,
-                                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
-                                },
-                            }
+                            &#34;patternProperties&#34;: {
+                                &#34;^&#34;: {&#34;$ref&#34;: &#34;#/definitions/transform&#34;}
+                            },
+                            &#34;additionalProperties&#34;: False
                         }
                     },
                     &#34;additionalProperties&#34;: True
@@ -234,26 +340,22 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;frame_interval&#34;: {
+            &#34;description&#34;: &#34;A frame interval defines an starting and ending frame number, as a closed interval (i.e. the interval includes the limit frame numbers).&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;frame_start&#34;: {&#34;type&#34;: &#34;integer&#34;},
-                &#34;frame_end&#34;: {&#34;type&#34;: &#34;integer&#34;}
+                &#34;frame_start&#34;: {
+                    &#34;description&#34;: &#34;Initial frame number of the interval.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;
+                    },
+                &#34;frame_end&#34;: {
+                    &#34;description&#34;: &#34;Ending frame number of the interval.&#34;,
+                    &#34;type&#34;: &#34;integer&#34;
+                    }
             },
             &#34;additionalProperties&#34;: False
         },
-        &#34;metadata&#34;: {
-            &#34;type&#34;: &#34;object&#34;,
-            &#34;properties&#34;: {
-                &#34;schema_version&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;enum&#34;: [vcd_schema_version]},
-                &#34;file_version&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;annotator&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;comment&#34;: {&#34;type&#34;: &#34;string&#34;}
-            },
-            &#34;additionalProperties&#34;: True,
-            &#34;required&#34;: [&#34;schema_version&#34;]
-        },
         &#34;streams&#34;: {
+            &#34;description&#34;: &#34;This is a JSON object which contains OpenLABEL streams. Stream keys can be any string (e.g. friendly stream name).&#34;,
             &#34;patternProperties&#34;: {
                 &#34;^&#34;: {&#34;$ref&#34;: &#34;#/definitions/stream&#34;},
                 },
@@ -261,6 +363,7 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;coordinate_systems&#34;: {
+            &#34;description&#34;: &#34;This is a JSON object which contains OpenLABEL coordinate systems. Coordinate system keys can be any string (e.g. friendly coordinate system name).&#34;,
             &#34;patternProperties&#34;: {
                         &#34;^&#34;: {&#34;$ref&#34;: &#34;#/definitions/coordinate_system&#34;}
                     },
@@ -268,16 +371,34 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;object&#34;: {
+            &#34;description&#34;: &#34;An object is the main type of annotation element, and is designed to represent &#34;
+                           &#34;spatio-temporal entities, such as physical objects in the real world. Objects must have a name and type.&#34;                           
+                           &#34;Objects can have static and dynamic data. Objects are the only type of elements &#34;
+                           &#34;that can have geometric data, such as bounding boxes, cuboids, polylines, images, etc.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;frame_intervals&#34;: {
+                    &#34;description&#34;: &#34;The array of frame intervals where this object exists or is defined.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
                 },
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {
+                    &#34;description&#34;: &#34;Name of the object (it is a friendly name, not used for indexing).&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;type&#34;: {
+                    &#34;description&#34;: &#34;The type of an object defines the class the object corresponds to.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;ontology_uid&#34;: {
+                    &#34;description&#34;: &#34;This is the UID of the ontology where the type of this object is defined.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;resource_uid&#34;: {&#34;$ref&#34;: &#34;#/definitions/resource_uid&#34;},
+                &#34;coordinate_system&#34;: {
+                    &#34;description&#34;: &#34;This is the string key of the coordinate system this object is referenced with respect to.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
                 &#34;object_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/object_data&#34;},
                 &#34;object_data_pointers&#34;: {&#34;$ref&#34;: &#34;#/definitions/element_data_pointers&#34;}
             },
@@ -285,16 +406,22 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;action&#34;: {
+            &#34;description&#34;: &#34;An action is a type of element intended to describe temporal situations with &#34;
+                           &#34;semantic load, as a certain activity happening in real life, such as &#34;
+                           &#34;crossing-zebra-cross, standing-still, playing-guitar, etc. As such, actions are simply &#34;
+                           &#34;defined by their type, the frame intervals in which the action happens, and any &#34;
+                           &#34;additional action data (e.g. numbers, booleans, text as attributes of the actions)&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;frame_intervals&#34;: {
+                    &#34;description&#34;: &#34;The array of frame intervals where this action exists or is defined.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
                 },
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the action (it is a friendly name, not used for indexing).&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;The type of an action defines the class the action corresponds to.&#34;},
+                &#34;ontology_uid&#34;: {&#34;description&#34;: &#34;This is the UID of the ontology where the type of this action is defined.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;resource_uid&#34;: {&#34;$ref&#34;: &#34;#/definitions/resource_uid&#34;},                
                 &#34;action_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/action_data&#34;},
                 &#34;action_data_pointers&#34;: {&#34;$ref&#34;: &#34;#/definitions/element_data_pointers&#34;}
             },
@@ -302,16 +429,20 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;event&#34;: {
+            &#34;description&#34;: &#34;An event is an instantaneous situation that happens without a temporal interval. &#34;
+                           &#34;Events complement Actions providing a mechanism to specify triggers or to connect &#34;
+                           &#34;actions and objects with causality relations.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;frame_intervals&#34;: {
+                    &#34;description&#34;: &#34;The array of frame intervals where this event exists or is defined. Note that events are thought to be instantaneous, therefore usually they will be defined for a single frame interval where the starting and ending frames are the same.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
                 },
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;description&#34;: &#34;Name of the event (it is a friendly name, not used for indexing).&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;description&#34;: &#34;The type of an event defines the class the event corresponds to.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;description&#34;: &#34;This is the UID of the ontology where the type of this event is defined.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;resource_uid&#34;: {&#34;$ref&#34;: &#34;#/definitions/resource_uid&#34;},                
                 &#34;event_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/event_data&#34;},
                 &#34;event_data_pointers&#34;: {&#34;$ref&#34;: &#34;#/definitions/element_data_pointers&#34;}
             },
@@ -319,16 +450,20 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;context&#34;: {
+            &#34;description&#34;: &#34;A context is a type of element which defines any non spatial nor temporal annotation. &#34;
+                           &#34;Contexts can be used to add richness to the contextual information of a scene, including &#34;
+                           &#34;location, weather, application-related information&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;frame_intervals&#34;: {
+                    &#34;description&#34;: &#34;The array of frame intervals where this context exists or is defined.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
                 },
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;description&#34;: &#34;Name of the context (it is a friendly name, not used for indexing).&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;description&#34;: &#34;The type of a context defines the class the context corresponds to.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;description&#34;: &#34;This is the UID of the ontology where the type of this context is defined.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;resource_uid&#34;: {&#34;$ref&#34;: &#34;#/definitions/resource_uid&#34;},                
                 &#34;context_data&#34;: {&#34;$ref&#34;: &#34;#/definitions/context_data&#34;},
                 &#34;context_data_pointers&#34;: {&#34;$ref&#34;: &#34;#/definitions/element_data_pointers&#34;}
             },
@@ -336,81 +471,141 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;relation&#34;: {
+            &#34;description&#34;: &#34;A relation is a type of element which connects two or more other elements (e.g. objects, actions, contexts or events), using &#34;
+                           &#34;RDF triples to structure the connection, with one or more subjects, a predicate and &#34;
+                           &#34;one or more semantic objects &#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;frame_intervals&#34;: {
+                    &#34;description&#34;: &#34;The array of frame intervals where this relation exists or is defined.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
                 },
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;ontology_uid&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;description&#34;: &#34;Name of the relation (it is a friendly name, not used for indexing).&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {&#34;description&#34;: &#34;The type of a relation defines the class the predicated of the relation corresponds to.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;ontology_uid&#34;: {&#34;description&#34;: &#34;This is the UID of the ontology where the type of this relation is defined.&#34;, &#34;type&#34;: &#34;string&#34;},
+                &#34;resource_uid&#34;: {&#34;$ref&#34;: &#34;#/definitions/resource_uid&#34;},
                 &#34;rdf_objects&#34;: {
+                    &#34;description&#34;: &#34;This is the list of RDF semantic objects of this relation.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/rdf_agent&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/rdf_agent&#34;}
                 },
                 &#34;rdf_subjects&#34;: {
+                    &#34;description&#34;: &#34;This is the list of RDF semantic subjects of this relation.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/rdf_agent&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/rdf_agent&#34;}
                 },
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;type&#34;, &#34;rdf_objects&#34;, &#34;rdf_subjects&#34;],
             &#34;additionalProperties&#34;: False
         },
         &#34;rdf_agent&#34;: {
+            &#34;description&#34;: &#34;An RDF agent is either an RDF semantic object or subject.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;uid&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {
+                    &#34;description&#34;: &#34;The OpenLABEL type of element.&#34;,
+                    &#34;type&#34;: &#34;string&#34;,
+                    &#34;enum&#34;: [&#34;object&#34;, &#34;action&#34;, &#34;event&#34;, &#34;context&#34;]
+                    },
+                &#34;uid&#34;: {
+                    &#34;description&#34;: &#34;The element UID this RDF agent refers to.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
             }
         },
         &#34;element_data_pointers&#34;: {
+            &#34;description&#34;: &#34;This is a JSON object which contains OpenLABEL element data pointers. Element data pointer keys shall be the \&#34;name\&#34; of the element data this pointer points to.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;patternProperties&#34;: {
                 &#34;^&#34;: {&#34;$ref&#34;: &#34;#/definitions/element_data_pointer&#34;}
             },
             &#34;additionalProperties&#34;: False
-        },        
+        },
         &#34;element_data_pointer&#34;: {
+            &#34;description&#34;: &#34;This item contains pointers to element data of elements, indexed by \&#34;name\&#34;, and containing &#34;
+                           &#34;information about the element data type (e.g. bounding box, cuboid) and the frame intervals&#34;
+                           &#34;in which this element_data exists within an element. &#34;
+                           &#34;As a consequence, these pointers can be used to explore element data dynamic information within the JSON content.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;frame_intervals&#34;: {
+                    &#34;description&#34;: &#34;List of frame intervals of the element data pointed by this pointer&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
+                    &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/frame_interval&#34;}
                 },
                 &#34;type&#34;: {
+                    &#34;description&#34;: &#34;Type of the element data pointed by this pointer.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                     &#34;enum&#34;: [&#34;bbox&#34;, &#34;rbbox&#34;, &#34;num&#34;, &#34;text&#34;, &#34;boolean&#34;, &#34;poly2d&#34;, &#34;poly3d&#34;, &#34;cuboid&#34;, &#34;image&#34;, &#34;mat&#34;,
                              &#34;binary&#34;, &#34;point2d&#34;, &#34;point3d&#34;, &#34;vec&#34;, &#34;line_reference&#34;, &#34;area_reference&#34;, &#34;mesh&#34;]
                 },
                 &#34;attribute_pointers&#34;: {
+                    &#34;description&#34;: &#34;This is a JSON object which contains pointers to the attributes of the element data pointed by this pointer. The attribute pointers keys shall be the \&#34;name\&#34; of the attribute of the element data this pointer points to.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^&#34;: {
+                            &#34;description&#34;: &#34;The attribute pointer values are strings which define the type of the attribute.&#34;,
                             &#34;type&#34;: &#34;string&#34;,
-                            &#34;enum&#34;: [&#34;num&#34;, &#34;text&#34;, &#34;boolean&#34;, &#34;vec&#34;]                                                        
+                            &#34;enum&#34;: [&#34;num&#34;, &#34;text&#34;, &#34;boolean&#34;, &#34;vec&#34;]
                         }
                     }
                 }
             },
             &#34;required&#34;: [&#34;frame_intervals&#34;]
         },
+        &#34;tag_data&#34;: {
+            &#34;description&#34;: &#34;Tag data can be a JSON object or a string which contains additional information about this tag.&#34;,
+            &#34;oneOf&#34;: [{
+                &#34;type&#34;: &#34;object&#34;,
+                &#34;properties&#34;: {
+                    &#34;num&#34;: {
+                        &#34;description&#34;: &#34;List of \&#34;num\&#34; that describe this tag.&#34;,
+                        &#34;type&#34;: &#34;array&#34;,
+                        &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
+                    },
+                    &#34;vec&#34;: {
+                        &#34;description&#34;: &#34;List of \&#34;vec\&#34; that describe this tag.&#34;,
+                        &#34;type&#34;: &#34;array&#34;,
+                        &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
+                    },
+                    &#34;text&#34;: {
+                        &#34;description&#34;: &#34;List of \&#34;text\&#34; that describe this tag.&#34;,
+                        &#34;type&#34;: &#34;array&#34;,
+                        &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
+                    },
+                    &#34;boolean&#34;: {
+                        &#34;description&#34;: &#34;List of \&#34;boolean\&#34; that describe this tag.&#34;,
+                        &#34;type&#34;: &#34;array&#34;,
+                        &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
+                    }
+                },
+                &#34;additionalProperties&#34;: False
+            }, {
+                &#34;type&#34;: &#34;string&#34;
+            }]
+        },
         &#34;action_data&#34;: {
+            &#34;description&#34;: &#34;Additional data to describe attributes of the action.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;num&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;num\&#34; that describe this action.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
                 },
                 &#34;vec&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;vec\&#34; that describe this action.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
                 },
                 &#34;text&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;text\&#34; that describe this action.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
                 },
                 &#34;boolean&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;boolean\&#34; that describe this action.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
                 }
@@ -418,21 +613,26 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;event_data&#34;: {
+            &#34;description&#34;: &#34;Additional data to describe attributes of the event.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;num&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;num\&#34; that describe this event.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
                 },
                 &#34;vec&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;vec\&#34; that describe this event.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
                 },
                 &#34;text&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;text\&#34; that describe this event.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
                 },
                 &#34;boolean&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;boolean\&#34; that describe this event.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
                 }
@@ -440,21 +640,26 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;context_data&#34;: {
+            &#34;description&#34;: &#34;Additional data to describe attributes of the context.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;num&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;num\&#34; that describe this context.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
                 },
                 &#34;vec&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;vec\&#34; that describe this context.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
                 },
                 &#34;text&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;text\&#34; that describe this context.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
                 },
                 &#34;boolean&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;boolean\&#34; that describe this context.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
                 }
@@ -462,73 +667,91 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;object_data&#34;: {
+            &#34;description&#34;: &#34;Additional data to describe attributes of the object.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
                 &#34;bbox&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;bbox\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/bbox&#34;}
                 },
                 &#34;rbbox&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;rbbox\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/rbbox&#34;}
                 },
                 &#34;num&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;num\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/num&#34;}
                 },
                 &#34;vec&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;vec\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/vec&#34;}
                 },
                 &#34;text&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;text\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/text&#34;}
                 },
                 &#34;boolean&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;boolean\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/boolean&#34;}
                 },
                 &#34;poly2d&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;poly2d\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/poly2d&#34;}
                 },
                 &#34;poly3d&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;poly3d\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/poly3d&#34;}
                 },
                 &#34;cuboid&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;cuboid\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/cuboid&#34;}
                 },
                 &#34;image&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;image\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/image&#34;}
                 },
                 &#34;mat&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;mat\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/mat&#34;}
                 },
                 &#34;binary&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;binary\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/binary&#34;}
                 },
                 &#34;point2d&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;point2d\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/point2d&#34;}
                 },
                 &#34;point3d&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;point3d\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/point3d&#34;}
                 },
                 &#34;mesh&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;mesh\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/mesh&#34;}
                 },
                 &#34;line_reference&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;line_reference\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/line_reference&#34;}
                 },
                 &#34;area_reference&#34;: {
+                    &#34;description&#34;: &#34;List of \&#34;area_reference\&#34; that describe this object.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;$ref&#34;: &#34;#/definitions/area_reference&#34;}
                 }
@@ -536,103 +759,181 @@ vcd_schema = {
             &#34;additionalProperties&#34;: False
         },
         &#34;coordinate_system&#34;: {
-            &#34;description&#34;: &#34;A coordinate_system is a 3D reference frame that act as placeholder&#34;
-                           &#34;of annotations.&#34;,
+            &#34;description&#34;: &#34;A coordinate system is a 3D reference frame. Spatial information of objects and their properties&#34;
+                           &#34;can be defined with respect to coordinate systems.&#34;,
             &#34;properties&#34;: {
-                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;parent&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;type&#34;: {
+                    &#34;description&#34;: &#34;This is a string that describes the type of the coordinate system (e.g. \&#34;local\&#34;, \&#34;geo\&#34;).&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;parent&#34;: {
+                    &#34;description&#34;: &#34;This is the string UID of the parent coordinate system this coordinate system is refered to.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
                 &#34;children&#34;: {
+                    &#34;description&#34;: &#34;List of children of this coordinate system.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;items&#34;: {&#34;type&#34;: &#34;string&#34;},
+                    &#34;items&#34;: {
+                        &#34;description&#34;: &#34;This is the string UID of this child coordinate system.&#34;,
+                        &#34;type&#34;: &#34;string&#34;
+                        },
                 },
-                &#34;pose_wrt_parent&#34;: {
-                    &#34;description&#34;: &#34;It is a 4x4 homogeneous matrix, to enable transform from\
-                                    3D Cartersian Systems easily. Note that the pose_children_wrt_parent_4x4 is\
-                                    the transform_parent_to_child_4x4:\
-                                    X_child = pose_child_wrt_parent_4x4 * X_parent\
-                                    X_child = transform_parent_to_child_4x4 * X_parent.&#34;
-                                   &#34;NOTE: For camera or other projective systems (3D-&gt;2D) this pose is the extrinsic&#34;
-                                   &#34;calibration, the projection itself is encoded as the intrinsic information, which&#34;
-                                   &#34;is labeled inside the corresponding stream.&#34;,
-                    &#34;type&#34;: &#34;array&#34;,
-                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
-                    &#34;example&#34;: [1.0, 0.0, 0.0, 10.0,
-                                0.0, 1.0, 0.0, 5.0,
-                                0.0, 0.0, 1.0, 1.0,
-                                0.0, 0.0, 0.0, 1.0]
-                },
-                &#34;uid&#34;: {&#34;type&#34;: &#34;string&#34;}
+                &#34;pose_wrt_parent&#34;: {&#34;$ref&#34;: &#34;#/definitions/transform_data&#34;},                
             },
             &#34;required&#34;: [&#34;type&#34;, &#34;parent&#34;],
-            &#34;additionalProperties&#34;: False
+            &#34;additionalProperties&#34;: True
+        },
+        &#34;transform&#34;: {
+            &#34;description&#34;: &#34;This is a JSON object with information about this transform.&#34;,
+            &#34;type&#34;: &#34;object&#34;,
+            &#34;properties&#34;: {
+                &#34;src&#34;: {
+                    &#34;description&#34;: &#34;The string UID (name) of the source coordinate system of geometrical data this transform converts.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;dst&#34;: {
+                    &#34;description&#34;: &#34;The string UID (name) of the destination coordinate system for geometric data converted with this transform.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;transform_src_to_dst&#34;: {&#34;$ref&#34;: &#34;#/definitions/transform_data&#34;}
+            },
+            &#34;required&#34;: [&#34;src&#34;, &#34;dst&#34;, &#34;transform_src_to_dst&#34;],
+            &#34;additionalProperties&#34;: True
+        },
+        &#34;transform_data&#34;: {
+            &#34;description&#34;: &#34;JSON object containing the transform data.&#34;,
+            &#34;oneOf&#34;: [
+                {                    
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;matrix4x4&#34;: {
+                            &#34;description&#34;: &#34;Flattened list of 16 entries encoding a 4x4 homogeneous matrix, to enable transform 3D column homogeneous vectors 4x1 using right-multiplication of matrices: X_dst = matrix_4x4 * X_src.&#34;,
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},                            
+                        },
+                    },
+                    &#34;required&#34;: [&#34;matrix4x4&#34;],
+                    &#34;additionalProperties&#34;: False
+                },
+                {
+                    &#34;description&#34;: &#34;A transform can be defined with a quaternion to encodes the &#34;
+                                   &#34;rotation of a coordinate system with respect to another, &#34;
+                                   &#34;and a translation.&#34;,
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;quaternion&#34;: {
+                            &#34;description&#34;: &#34;List of 4 values encoding a quaternion (x, y, z, w).&#34;,
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                            &#34;minItems&#34;: 4,
+                            &#34;maxItems&#34;: 4
+                        },
+                        &#34;translation&#34;: {
+                            &#34;description&#34;: &#34;List of 3 values encoding the translation vector (x, y, z)&#34;,
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                            &#34;minItems&#34;: 3,
+                            &#34;maxItems&#34;: 3
+                        }
+                    },
+                    &#34;required&#34;: [&#34;quaternion&#34;, &#34;translation&#34;],
+                    &#34;additionalProperties&#34;: False
+                },
+                {
+                    &#34;description&#34;: &#34;A transform can be defined with a sequence of Euler angles to encode the rotation of a coordinate system with respect to another and a translation.&#34;,
+                    &#34;type&#34;: &#34;object&#34;,
+                    &#34;properties&#34;: {
+                        &#34;euler_angles&#34;: {
+                            &#34;description&#34;: &#34;List of 3 values encoding Euler angle values.&#34;,
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                            &#34;minItems&#34;: 3,
+                            &#34;maxItems&#34;: 3
+                        },
+                        &#34;translation&#34;: {
+                            &#34;description&#34;: &#34;List of 3 values encoding the translation vector (x, y, z)&#34;,
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
+                            &#34;minItems&#34;: 3,
+                            &#34;maxItems&#34;: 3
+                        },
+                        &#34;sequence&#34;: {
+                            &#34;description&#34;: &#34;The sequence as a string of 3 characters defining the axis of the Euler angles and their order of application, e.g. \&#34;ZYX\&#34;. Default assumption is \&#34;ZYX\&#34;.&#34;,
+                            &#34;type&#34;: &#34;string&#34;
+                            }
+                    },
+                    &#34;required&#34;: [&#34;euler_angles&#34;, &#34;translation&#34;],
+                    &#34;additionalProperties&#34;: False
+                }
+            ]
         },
         &#34;stream&#34;: {
-            &#34;type&#34;: &#34;object&#34;,
             &#34;description&#34;: &#34;A stream describes the source of a data sequence, usually a sensor.&#34;,
+            &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;description&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;description&#34;: {
+                    &#34;description&#34;: &#34;Description of the stream.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
                 &#34;stream_properties&#34;: {&#34;$ref&#34;: &#34;#/definitions/stream_properties&#34;},
                 &#34;type&#34;: {
+                    &#34;description&#34;: &#34;A string encoding the type of the stream.&#34;,
                     &#34;type&#34;: &#34;string&#34;,
                     &#34;enum&#34;: [&#34;camera&#34;, &#34;lidar&#34;, &#34;radar&#34;, &#34;gps_imu&#34;, &#34;other&#34;]
                 },
-                &#34;uri&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;uri&#34;: {
+                    &#34;description&#34;: &#34;A string encoding the URI (e.g. a URL) or file name (e.g. a video file name) the stream corresponds to.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
             },
             &#39;additionalProperties&#39;: False
         },
         &#34;stream_properties&#34;: {
+            &#34;description&#34;: &#34;Additional properties of the stream.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;oneOf&#34;: [{
                 &#34;intrinsics_pinhole&#34;: {
+                    &#34;description&#34;: &#34;This JSON object defines an instance of the intrinsic parameters of a pinhole camera.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;properties&#34;: {
                         &#34;width_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
                         &#34;height_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
                         &#34;camera_matrix&#34;: {
                             &#34;type&#34;: &#34;array&#34;,
-                            &#34;comment&#34;: &#34;This is a 3x4 camera matrix which projects  \
-                                       3D homogeneous points (4x1) from Sensor Coordinate \
-                                       System (SCS) into the Image Coordinate System (ICS),\
-                                       plane points (3x1). \
-                                       This is the usual K matrix for camera projection, but\
-                                       extended from 3x3 to 3x4, to enable its usage to project\
-                                       4x1 homogeneous 3D points defined in the SCS into the ICS.\
-                                       The SCS follows as well the usual convention x-to-right, y-down, z-forward:\
-                                       x_ics = camera_matrix * X_scs&#34;,
+                            &#34;description&#34;: &#34;This is a 3x4 camera matrix which projects  &#34;
+                                       &#34;3D homogeneous points (4x1) from a camera coordinate &#34;
+                                       &#34;system (ccs) into the image plane (3x1)&#34;                                       
+                                       &#34;This is the usual K matrix for camera projection (as in OpenCV), but&#34;
+                                       &#34;extended from 3x3 to 3x4, to enable its direct utilisation to project&#34;
+                                       &#34;4x1 homogeneous 3D points.&#34;
+                                       &#34;The matrix is defined to follows the camera model: x-to-right, y-down, z-forward so,&#34;
+                                       &#34;x_img = camera_matrix * X_ccs&#34;,
                             &#34;minItems&#34;: 12,
                             &#34;maxItems&#34;: 12,
-                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
-                            &#34;example&#34;: [720.0, 0.0, 320.0, 0.0,
-                                        0.0, 720.0, 240.0, 0.0,
-                                        0.0, 0.0, 1.0, 0.0]
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}                            
                         },
                         &#34;distortion_coeffs&#34;: {
                             &#34;type&#34;: &#34;array&#34;,
-                            &#34;comment&#34;: &#34;This is the array 1xN radial and tangential distortion \
-                                       coefficients. See https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html&#34;,
+                            &#34;description&#34;: &#34;This is the array 1xN radial and tangential distortion &#34;
+                                       &#34;coefficients. See https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html&#34;,
                             &#34;minItems&#34;: 5,
                             &#34;maxItems&#34;: 14,
-                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
-                            &#34;example&#34;: [-4.0569640920796241e-01,
-                                        1.9116055332155032e-01,
-                                        0.0000000000000000000,
-                                        0.0000000000000000000,
-                                        -4.7033609773998064e-02]
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
                         }
                     },
                     &#34;additionalProperties&#34;: True
                 },
                 &#34;intrinsics_fisheye&#34;: {
+                    &#34;description&#34;: &#34;This JSON object defines an instance of the intrinsic parameters of a fisheye camera.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;properties&#34;: {
                         &#34;width_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
-                        &#34;height_px&#34;: {&#34;type&#34;: &#34;integer&#34;},
-                        &#34;fov_deg&#34;: {&#34;type&#34;: &#34;number&#34;},
-                        &#34;center_x_px&#34;: {&#34;type&#34;: &#34;number&#34;},
-                        &#34;center_y_px&#34;: {&#34;type&#34;: &#34;number&#34;},
-                        &#34;radius_x_px&#34;: {&#34;type&#34;: &#34;number&#34;},
-                        &#34;radius_y_px&#34;: {&#34;type&#34;: &#34;number&#34;},
+                        &#34;height_px&#34;: {&#34;type&#34;: &#34;integer&#34;},                        
+                        &#34;center_x_px&#34;: {&#34;type&#34;: [&#34;number&#34;, &#34;null&#34;]},
+                        &#34;center_y_px&#34;: {&#34;type&#34;: [&#34;number&#34;, &#34;null&#34;]},
+                        &#34;aspect_ratio&#34;: {&#34;type&#34;: [&#34;number&#34;, &#34;null&#34;]},                        
                         &#34;lens_coeffs&#34;: {
+                            &#34;description&#34;: &#34;This is the list of 4 values for the lens coefficients.&#34;,
                             &#34;type&#34;: &#34;array&#34;,
                             &#34;minItems&#34;: 4,
                             &#34;maxItems&#34;: 4,
@@ -640,31 +941,34 @@ vcd_schema = {
                         }
                     },
                     &#34;additionalProperties&#34;: True
+                },
+                &#34;intrinsics_custom&#34;: {
+                    &#34;description&#34;: &#34;This is a JSON object completely customizable for other types of camera models.&#34;,
+                    &#34;type&#34;: &#34;object&#34;
                 }
             }],
             &#34;sync&#34;: {
-                &#34;description&#34;: &#34;This is the sync information for this Stream.\
-                               If provided inside a certain frame, it can be used\
-                               to specify timestamps in ISO8601 format,\
-                               and a frame_stream of this stream.\
-                               E.g. at vcd&#39;s frame 34, for stream CAM_LEFT, the sync info\
-                               contains timestamp=2020-04-09T04:57:57+00:00,\
-                               and frame_stream=36 (which means that this CAM_LEFT is shifted\
-                               2 frame with respect the vcd&#39;s master frame indexes.\
-                               If provided at stream level, it can be used to specify\
-                               a frame shift, e.g. the shift of that stream wrt to the\
-                               master vcd frame count.\
-                               E.g. if the shift is constant for all frames, it is more compact\
-                               to define the frame_shift=2 at stream level.&#34;,
+                &#34;description&#34;: &#34;This is the sync information for this stream.&#34;,
                 &#34;type&#34;: &#34;object&#34;,
                 &#34;oneOf&#34;: [{
                     &#34;properties&#34;: {
-                        &#34;timestamp&#34;: {&#34;type&#34;: &#34;string&#34;},
-                        &#34;frame_stream&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                        &#34;timestamp&#34;: {
+                            &#34;description&#34;: &#34;The timestamp indicates a time instant as a string or numerical value to describe this frame.&#34;,
+                            &#34;anyOf&#34;: [
+                                {&#34;type&#34;: &#34;string&#34;}, 
+                                {&#34;type&#34;: &#34;number&#34;}]
+                            },
+                        &#34;frame_stream&#34;: {
+                            &#34;description&#34;: &#34;This is the internal frame number inside the strem this OpenLABEL frame corresponds to.&#34;,
+                            &#34;type&#34;: &#34;integer&#34;
+                            },
                     },
                 }, {
                     &#34;properties&#34;: {
-                        &#34;frame_shift&#34;: {&#34;type&#34;: &#34;integer&#34;}
+                        &#34;frame_shift&#34;: {
+                            &#34;description&#34;: &#34;Fixed shift or difference between the OpenLABEL master frame count and this stream&#39;s internal frame count.&#34;,
+                            &#34;type&#34;: &#34;integer&#34;
+                            }
                     }
                 }
                 ]
@@ -673,11 +977,15 @@ vcd_schema = {
         },
         &#34;bbox&#34;: {
             &#34;type&#34;: &#34;object&#34;,
-            &#34;description&#34;: &#34;A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] is the centre of the bounding box, and\
-                            [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.&#34;,
+            &#34;description&#34;: &#34;A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] &#34;
+                           &#34;is the centre of the bounding box, and [w, h] represent the width (horizontal, &#34;
+                           &#34;x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {
+                    &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;,
+                    &#34;type&#34;: &#34;string&#34;
+                    },
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
                 &#34;val&#34;: {
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;minItems&#34;: 4,
@@ -698,8 +1006,8 @@ vcd_schema = {
                            &#34;defined as a right-handed rotation, i.e. positive from x to y axes, and with the origin &#34;
                            &#34;of rotation placed at the center of the bounding box (i.e. [x, y]).&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
                 &#34;val&#34;: {
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;minItems&#34;: 5,
@@ -712,48 +1020,69 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
         &#34;num&#34;: {
+            &#34;description&#34;: &#34;A number.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;val&#34;: {&#34;type&#34;: &#34;number&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;The numerical value of the number.&#34;,},
+                &#34;type&#34;: {
+                    &#34;description&#34;: &#34;This attribute specifies whether the number shall be considered as a value, a minimum or a maximum in its context.&#34;,
+                    &#34;type&#34;: &#34;string&#34;, &#34;enum&#34;: [&#34;value&#34;, &#34;min&#34;, &#34;max&#34;]
+                    },
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
-            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;required&#34;: [&#34;val&#34;],
             &#34;additionalProperties&#34;: True
         },
         &#34;text&#34;: {
+            &#34;description&#34;: &#34;A text.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},              
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;The characters of the text.&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;enum&#34;: [&#34;value&#34;], &#34;description&#34;: &#34;This attribute specifies how the text shall be considered. In this schema only possible option is as a value.&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
-            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;required&#34;: [&#34;val&#34;],
             &#34;additionalProperties&#34;: True
         },
         &#34;boolean&#34;: {
+            &#34;description&#34;: &#34;A boolean.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;val&#34;: {&#34;type&#34;: &#34;boolean&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;boolean&#34;, &#34;description&#34;: &#34;The boolean value.&#34;},
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;enum&#34;: [&#34;value&#34;], &#34;description&#34;: &#34;This attribute specifies how the boolean shall be considered. In this schema only possible option is as a value.&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
-            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;required&#34;: [&#34;val&#34;],
             &#34;additionalProperties&#34;: True
         },
         &#34;cuboid&#34;: {
+            &#34;description&#34;: &#34;A cuboid or 3D bounding box. It is defined by the position of its center, the rotation in 3D, and its dimensions.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
                 &#34;val&#34;: {
-                    &#34;type&#34;: &#34;array&#34;,
-                    &#34;minItems&#34;: 9,
-                    &#34;maxItems&#34;: 10,
-                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                    &#34;oneOf&#34;: [
+                        {
+                            &#34;description&#34;: &#34;List of values encoding the position, rotation and dimensions. Two options are supported, using 9 or 10 values. If 9 values are used, &#34;
+                                           &#34;the format is (x, y, z, rx, ry, rz, sx, sy, sz), where (x, y, z) encodes the position, (rx, ry, rz) encodes the Euler angles that &#34; 
+                                           &#34;encode the rotation, and (sx, sy, sz) are the dimensions of the cuboid in its object coordinate system. If 10 values are used, then &#34;
+                                           &#34;the format is (x, y, z, qx, qy, qz, qw, sx, sy, sz) with the only difference of the rotation values which are the 4 values of a quaternion.&#34;,
+                            &#34;type&#34;: &#34;array&#34;,
+                            &#34;minItems&#34;: 9,
+                            &#34;maxItems&#34;: 10,
+                            &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
+                        },
+                        {
+                            &#34;type&#34;: &#34;null&#34;
+                        }
+                    ]
                 },
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
@@ -761,75 +1090,83 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
         &#34;image&#34;: {
+            &#34;description&#34;: &#34;An image.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;mime_type&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;encoding&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;A string with the encoded bytes of this image.&#34;},
+                &#34;mime_type&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string that declares the MIME (Multipurpose internat Mail Extensions) of the image, e.g. \&#34;image/gif\&#34;.&#34;},
+                &#34;encoding&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string that declares the encoding type of the bytes for this image, e.g. \&#34;base64\&#34;.&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;mime_type&#34;, &#34;encoding&#34;],
             &#34;additionalProperties&#34;: True
         },
         &#34;mat&#34;: {
+            &#34;description&#34;: &#34;A matrix.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
                 &#34;val&#34;: {
+                    &#34;description&#34;: &#34;Flattened list of values of the matrix.&#34;,
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {&#34;type&#34;: &#34;number&#34;}
+                    &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;}
                 },
-                &#34;channels&#34;: {&#34;type&#34;: &#34;number&#34;},
-                &#34;width&#34;: {&#34;type&#34;: &#34;number&#34;},
-                &#34;height&#34;: {&#34;type&#34;: &#34;number&#34;},
-                &#34;data_type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;channels&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;Number of channels of the matrix.&#34;},
+                &#34;width&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;Width of the matrix (number of columns).&#34;},
+                &#34;height&#34;: {&#34;type&#34;: &#34;number&#34;, &#34;description&#34;: &#34;Height of the matrix (number of rows).&#34;},
+                &#34;data_type&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string that declares the type of the numerical values of the matrix, e.g. \&#34;float\&#34;.&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;channels&#34;, &#34;width&#34;, &#34;height&#34;, &#34;data_type&#34;],
             &#34;additionalProperties&#34;: True
         },
         &#34;binary&#34;: {
+            &#34;description&#34;: &#34;A binary payload.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;encoding&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;data_type&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;val&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;A string with the encoded bytes of this binary payload.&#34;},
+                &#34;encoding&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string that declares the encoding type of the bytes for this binary payload, e.g. \&#34;base64\&#34;.&#34;},
+                &#34;data_type&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string that declares the type of the values of the binary object.&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
             &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;, &#34;encoding&#34;, &#34;data_type&#34;],
             &#34;additionalProperties&#34;: True
         },
         &#34;vec&#34;: {
+            &#34;description&#34;: &#34;A vector (list) of numbers or strings.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
                 &#34;val&#34;: {
                     &#34;type&#34;: &#34;array&#34;,
-                    &#34;item&#34;: {
+                    &#34;items&#34;: {
                         &#34;oneOf&#34;: [
                             {&#34;type&#34;: &#34;number&#34;},
                             {&#34;type&#34;: &#34;string&#34;}
                         ]
                     }
                 },
+                &#34;type&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;enum&#34;: [&#34;values&#34;, &#34;range&#34;], &#34;description&#34;: &#34;This attribute specifies whether the vector shall be considered as a descriptor of individual values, or as a definition of a range.&#34;},
                 &#34;attributes&#34;: {&#34;$ref&#34;: &#34;#/definitions/attributes&#34;}
             },
-            &#34;required&#34;: [&#34;name&#34;, &#34;val&#34;],
+            &#34;required&#34;: [&#34;val&#34;],
             &#34;additionalProperties&#34;: True
         },
         &#34;point2d&#34;: {
+            &#34;description&#34;: &#34;A 2D point.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;id&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;id&#34;: {&#34;type&#34;: &#34;integer&#34;, &#34;description&#34;: &#34;This is an integer identifier of the point in the context of a set of points.&#34;},
                 &#34;val&#34;: {
+                    &#34;description&#34;: &#34;List of two coordinates to define the point, e.g. (x, y).&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;minItems&#34;: 2,
                     &#34;maxItems&#34;: 2,
@@ -841,12 +1178,14 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
         &#34;point3d&#34;: {
+            &#34;description&#34;: &#34;A 3D point.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;id&#34;: {&#34;type&#34;: &#34;integer&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;id&#34;: {&#34;type&#34;: &#34;integer&#34;, &#34;description&#34;: &#34;This is an integer identifier of the point in the context of a set of points.&#34;},
                 &#34;val&#34;: {
+                    &#34;description&#34;: &#34;List of three coordinates to define the point, e.g. (x, y, z).&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;minItems&#34;: 3,
                     &#34;maxItems&#34;: 3,
@@ -858,13 +1197,19 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
         &#34;poly2d&#34;: {
+            &#34;description&#34;: &#34;A 2D polyline defined as a sequence of 2D points.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;mode&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;closed&#34;: {&#34;type&#34;: &#34;boolean&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
+                &#34;mode&#34;: {
+                    &#34;type&#34;: &#34;string&#34;, 
+                    &#34;description&#34;: &#34;Mode of the polyline list of values: \&#34;MODE_POLY2D_ABSOLUTE\&#34; determines that the poly2d list contains the sequence of (x, y) values of all points of the polyline. &#34;
+                                    &#34;\&#34;MODE_POLY2D_RELATIVE\&#34; specifies that only the first point of the sequence is defined with its (x, y) values, while all the rest are defined relative to it. \&#34;MODE_POLY2D_SRF6DCC\&#34; specifies that SRF6DCC chain code method is used. \&#34;MODE_POLY2D_RS6FCC\&#34; specifies that the RS6FCC method is used.&#34;
+                    },
+                &#34;closed&#34;: {&#34;type&#34;: &#34;boolean&#34;, &#34;description&#34;: &#34;A boolean that defines whether the polyline is closed or not. In case it is closed, it is assumed that the last point of the sequence is connected with the first one.&#34;},
                 &#34;val&#34;: {
+                    &#34;description&#34;: &#34;List of numerical values of the polyline, according to its mode.&#34;,
                     &#34;anyOf&#34;: [
                         {
                             &#34;type&#34;: &#34;array&#34;,
@@ -877,6 +1222,7 @@ vcd_schema = {
                     ]
                 },
                 &#34;hierarchy&#34;: {
+                    &#34;description&#34;: &#34;Hierarchy of the 2D polyline in the context of a set of 2D polylines. See https://docs.opencv.org/4.5.2/d9/d8b/tutorial_py_contours_hierarchy.html&#34;,
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;type&#34;: &#34;integer&#34;},
                     &#34;minItems&#34;: 4,
@@ -888,10 +1234,11 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
         &#34;poly3d&#34;: {
+            &#34;description&#34;: &#34;A 3D polyline defined as a sequence of 3D points.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
                 &#34;closed&#34;: {&#34;type&#34;: &#34;boolean&#34;},
                 &#34;val&#34;: {
                     &#34;type&#34;: &#34;array&#34;,
@@ -903,6 +1250,10 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
         &#34;attributes&#34;: {
+            &#34;description&#34;: &#34;Attributes is the alias of element data that can be nested inside geometric &#34;
+                           &#34;object data. &#34;
+                           &#34;E.g. A certain bounding box can have attributes related to its &#34;
+                           &#34;score, visibility, etc. These values can be nested inside the bounding box as attributes&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;additionalProperties&#34;: False,
             &#34;properties&#34;: {
@@ -933,11 +1284,15 @@ vcd_schema = {
             }
         },
         &#34;mesh&#34;: {
+            &#34;description&#34;: &#34;A mesh encodes a point-line-area structure. &#34;
+                           &#34;It is intended to represent flat 3D meshes, such as several connected parking lots, where points, lines and areas composing the mesh &#34;
+                           &#34;are interrelated, and can have their own properties.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
+                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;Name of the coordinate system this object data is expressed with respect to.&#34;},
                 &#34;point3d&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object for the 3D points defined for this mesh. Point3d keys are strings containing numerical UIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^[0-9]+$&#34;: {&#34;$ref&#34;: &#34;#/definitions/point3d&#34;}
@@ -945,6 +1300,7 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;line_reference&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object for the 3D lines defined for this mesh. Line reference keys are strings containing numerical UIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^[0-9]+$&#34;: {&#34;$ref&#34;: &#34;#/definitions/line_reference&#34;}
@@ -952,20 +1308,21 @@ vcd_schema = {
                     &#34;additionalProperties&#34;: False
                 },
                 &#34;area_reference&#34;: {
+                    &#34;description&#34;: &#34;This is the JSON object for the areas defined for this mesh. Area keys are strings containing numerical UIDs.&#34;,
                     &#34;type&#34;: &#34;object&#34;,
                     &#34;patternProperties&#34;: {
                         &#34;^[0-9]+$&#34;: {&#34;$ref&#34;: &#34;#/definitions/area_reference&#34;}
                     },
                     &#34;additionalProperties&#34;: False
-                },
-                &#34;additionalProperties&#34;: True
-            }
+                }                
+            },
+            &#34;additionalProperties&#34;: True
         },
         &#34;line_reference&#34;: {
+            &#34;description&#34;: &#34;A line reference is a JSON object which defines a 3D line segment by means of defining the indexes of its two extreme points.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
                 &#34;val&#34;: {
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
@@ -978,10 +1335,10 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
         &#34;area_reference&#34;: {
+            &#34;description&#34;: &#34;An area reference is a JSON object which defines the area of a set of 3D line segments by means of defining the indexes of all lines which outline the area. Note that coplanar 3D lines are assumed.&#34;,
             &#34;type&#34;: &#34;object&#34;,
             &#34;properties&#34;: {
-                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;},
-                &#34;coordinate_system&#34;: {&#34;type&#34;: &#34;string&#34;},
+                &#34;name&#34;: {&#34;type&#34;: &#34;string&#34;, &#34;description&#34;: &#34;This is a string encoding the name of this object data. It is used as index inside the corresponding object data pointers.&#34;},
                 &#34;val&#34;: {
                     &#34;type&#34;: &#34;array&#34;,
                     &#34;items&#34;: {&#34;type&#34;: &#34;number&#34;},
@@ -992,7 +1349,7 @@ vcd_schema = {
             &#34;additionalProperties&#34;: True
         },
     },
-    &#34;required&#34;: [&#34;vcd&#34;],
+    &#34;required&#34;: [&#34;openlabel&#34;],
     &#34;additionalProperties&#34;: False
 }</code></pre>
 </details>
@@ -1021,7 +1378,7 @@ vcd_schema = {
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

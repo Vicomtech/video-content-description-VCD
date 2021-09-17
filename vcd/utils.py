@@ -1,21 +1,21 @@
 """
-VCD (Video Content Description) library v4.3.1
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.1.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
 
 import warnings
 import numpy as np
-
+import cv2 as cv
+import base64
 import math
-
 from bisect import bisect_left
 from enum import Enum
 
@@ -61,17 +61,9 @@ def consecutive(fi_a, fi_b):
 
 def is_inside_frame_intervals(frame_num, frame_intervals):
     for fi in frame_intervals:
-        if is_inside_frame_interval(frame_num, fi):
+        if fi[0] <= frame_num <= fi[1]:        
             return True
     return False
-
-
-def is_inside_frame_interval(frame_num, frame_interval):
-    return frame_interval[0] <= frame_num <= frame_interval[1]
-
-
-def is_inside(frame_num, frame_interval):
-    return frame_interval['frame_start'] <= frame_num <= frame_interval['frame_end']
 
 
 def get_outer_frame_interval(frame_intervals):
@@ -179,7 +171,6 @@ def fuse_frame_interval_dict(frame_interval, frame_intervals):
 
     return frame_intervals_to_return
 
-
 def fuse_frame_intervals(frame_intervals):
     # This functions receives a list of frame_intervals and returns another one with
     # non-overlapping intervals
@@ -195,6 +186,14 @@ def fuse_frame_intervals(frame_intervals):
 
     if num_fis == 1:
         return frame_intervals
+    
+    if num_fis == 2:
+        fi1 = frame_intervals[0]
+        fi2 = frame_intervals[1]
+        if fi1["frame_end"]<=fi2["frame_start"]:
+            # Typical case fi1 is before fi2 and fi2 is just one frame next
+            if fi1["frame_end"] == fi2["frame_start"] - 1:            
+                return [{"frame_start": fi1["frame_start"], "frame_end": fi2["frame_end"]}]
 
     # Read first element
     frame_intervals_fused = [frame_intervals[0]]
@@ -230,7 +229,7 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
                 continue
             else:
                 # So, we are removing 4 from [(4, 4)], let's return empty
-                return []
+                continue
         elif frame_num < fi['frame_end']:
             # Inside! Need to split
             for f in range(fi['frame_start'], fi['frame_end'] + 1):
@@ -656,19 +655,24 @@ def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
 
 def transform_cuboid(cuboid, T_ref_to_dst):
     # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
-    assert(isinstance(cuboid, list))
-    if len(cuboid) == 10:
-        raise Exception("Quaternion transforms not supported yet.")
+    if isinstance(cuboid, tuple):
+        cuboid = list(cuboid)
 
-    assert(len(cuboid) == 9)
-    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
+    assert(isinstance(cuboid, list))
 
     # 1) Obtain pose from cuboid info
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
-    P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
-    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
+    if len(cuboid) == 10:
+        #raise Exception("Quaternion transforms not supported yet.")
+        x, y, z, qx, qy, qz, qw, sx, sy, sz = cuboid        
+        P_obj_wrt_ref = create_pose(R=q2R(qx, qy, qz, qw), C=np.array([[x, y, z]]).T)  # np.array
+    else:
+        assert(len(cuboid) == 9)               
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+        P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
+    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array    
 
-    # 2) Concatenate transforms
+    # 2) Concatenate transforms    
+    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
     T_obj_to_dst = T_ref_to_dst.dot(T_obj_to_ref)    # np.array
 
     # 3) Obtain new rotation and translation
@@ -703,13 +707,15 @@ def generate_cuboid_points_object_4x8(sx, sy, sz):
 def generate_cuboid_points_ref_4x8(cuboid):
     # Cuboid is (x, y, z, rx, ry, rz, sx, sy, sz)
     # This function converts to 8 4x1 points
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+    if len(cuboid) == 9:
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid        
+        R_obj_wrt_ref = euler2R([rz, ry, rx])
+    elif len(cuboid) == 10:
+        x, y, z, rx, ry, rz, rw, sx, sy, sz = cuboid
+        R_obj_wrt_ref = q2R(rx, ry, rz, rw)
 
     # Create base structure using sizes
     points_cuboid_4x8 = generate_cuboid_points_object_4x8(sx, sy, sz)
-
-    # Create rotation
-    R_obj_wrt_ref = euler2R([rz, ry, rx])
 
     # Create location
     C_ref = np.array([[x, y, z]]).T
@@ -720,6 +726,32 @@ def generate_cuboid_points_ref_4x8(cuboid):
 
     points_cuboid_lcs_4x8 = T_obj_to_ref.dot(points_cuboid_4x8)
     return points_cuboid_lcs_4x8
+
+
+def get_transform_as_matrix4x4(transform_data):
+    # This function receives a VCD 4.3.1 (OpenLABEL 1.0) pose item, which may specify a transform as a matrix4x4, but also as a quaternion+traslation
+    # or as a Euler rotation + traslation
+    # NOTE: transform_data is usually the pose_wrt_parent VCD entry
+    if 'matrix4x4' in transform_data:
+        return np.array(transform_data['matrix4x4']).reshape(4, 4)
+    elif 'quaternion' in transform_data:
+        # From quaternion and translation to matrix4x4
+        quaternion = transform_data['quaternion']
+        translation = transform_data['translation']
+        rotation = q2R(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
+        return create_pose(rotation, np.array(translation).reshape(3, 1))
+    elif 'euler_angles' in transform_data:
+        # From Euler and translation to matrix4x4
+        euler_angles = transform_data['euler_angles']
+        translation = transform_data['translation']
+        eulerSeq = EulerSeq.ZYX
+        if 'sequence' in transform_data:
+            sequence = transform_data['sequence']
+            eulerSeq = EulerSeq[sequence]
+        rotation = euler2R(euler_angles, eulerSeq)
+        return create_pose(rotation, np.array(translation).reshape(3, 1))        
+    else:
+        warnings.warn("WARNING: Trying to use get_transform_as_matrix4x4 on a non-valid VCD item.")
 
 
 ####################################################
@@ -745,6 +777,7 @@ def is_inside_image(width, height, x, y):
 
 
 def bounding_rect(points2d_3xN):
+    # This function returns (x, y, w, h) being (x, y) the CENTER of the box, and (w, h) its sides
     x = points2d_3xN[0, :]
     y = points2d_3xN[1, :]
     x_min = np.min(x)
@@ -752,7 +785,9 @@ def bounding_rect(points2d_3xN):
     y_min = np.min(y)
     y_max = np.max(y)
 
-    return np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))
+    return (np.int0(np.array([(x_min + x_max)/2, (y_min + y_max)/2, x_max - x_min, y_max - y_min]))).tolist()
+
+    #return (np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))).tolist()
 
 
 def generate_grid(x_params, y_params, z_params):
@@ -802,3 +837,34 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
                 points2d_3xN[:, i] = np.nan
     return points2d_3xN, idx_valid
 
+
+def rgb_to_hex(rgb):
+    return '%02x%02x%02x' % tuple(rgb)
+
+
+def hex_to_rgb(value):
+    value = value.lstrip('#')
+    lv = len(value)
+    return tuple(int(value[i:i+lv//3], 16) for i in range(0, lv, lv//3))
+
+
+####################################################
+# Images
+####################################################
+def image_to_base64(img):
+    """
+    This function converts an OpenCV image, encodes it as PNG, and
+    converts the payload into a stringified base64 chain in utf-8
+    :param img: OpenCV image
+    :return: base64 utf-8 string
+    """
+    compr_params = [int(cv.IMWRITE_PNG_COMPRESSION), 9]
+    result, payload = cv.imencode('.png', img, compr_params)
+    payload_b64_str = str(base64.b64encode(payload), 'utf-8')
+    return payload_b64_str
+
+
+def base64_to_image(payload_base64_str, flag=1):
+    payload_read = base64.b64decode(payload_base64_str)
+    img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), flag)
+    return img

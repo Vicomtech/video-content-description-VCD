@@ -1,12 +1,12 @@
 /*
-VCD (Video Content Description) library v4.3.1
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.3.1.
+VCD is a library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -14,27 +14,30 @@ VCD is distributed under MIT License. See LICENSE.
 /*######################################
 # Fully manually writing the schema
 ######################################*/
-export const vcd_schema_version = "4.3.1"
-export const vcd_schema = {
+export const openlabel_schema_version = "1.0.0"
+export const openlabel_schema = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "type": "object",
     "properties": {
-        "vcd": {"$ref": "#/definitions/vcd"}
+        "openlabel": {"$ref": "#/definitions/openlabel"}
     },
     "definitions": {
-        "vcd": {
+        "openlabel": {
             "type": "object",
-            "description": "This is the root VCD element.",
+            "description": "This is the root OpenLABEL element.",
             "properties": {
-                "frame_intervals": {
-                    "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
-                },
-                "ontologies": {
+                "metadata": {"$ref": "#/definitions/metadata"},
+                "ontologies": {"$ref": "#/definitions/ontologies"},
+                "resources": {"$ref": "#/definitions/resources"},
+                "tags": {
+                    "description": "Tags are a special type of labels which might be attached to any type of content, \
+                                   such as images, data containers, folders, etc. In OpenLabel its main purpose is to \
+                                   allow adding metadata to scenario descriptions.",
                     "type": "object",
                     "patternProperties": {
-                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
-                            {"type": "string"},
+                        "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                            "$ref": "#/definitions/tag"
+                        }
                     },
                     "additionalProperties": false
                 },
@@ -46,6 +49,10 @@ export const vcd_schema = {
                         }
                     },
                     "additionalProperties": false
+                },
+                "frame_intervals": {
+                    "type": "array",
+                    "item": {"$ref": "#/definitions/frame_interval"}
                 },
                 "objects": {
                     "type": "object",
@@ -92,14 +99,94 @@ export const vcd_schema = {
                     },
                     "additionalProperties": false
                 },
-                "metadata": {"$ref": "#/definitions/metadata"},
                 "streams": {"$ref": "#/definitions/streams"},
-                "coordinate_systems": {"$ref": "#/definitions/coordinate_systems"}
+                "coordinate_systems": {"$ref": "#/definitions/coordinate_systems"},
             },
             "additionalProperties": false,
             "required": ["metadata"]
         },
+        "metadata": {
+            "description": "This item contains information (metadata) about the annotation file itself including the \
+                           schema_version, file_version, annotator, etc.",
+            "type": "object",
+            "properties": {
+                "schema_version": {"type": "string", "enum": [openlabel_schema_version]},
+                "file_version": {"type": "string"},
+                "name": {"type": "string"},
+                "annotator": {"type": "string"},
+                "comment": {"type": "string"},
+            },
+            "additionalProperties": true,
+            "required": ["schema_version"]
+        },
+        "ontologies": {
+            "description": "This item contains identifiers of ontologies as key (identifier) value (URL or URI) pairs. \
+                           Ontology identifiers can then be used within elements to declare where the element type is \
+                           defined",
+            "type": "object",
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
+                    {
+                        "oneOf": [{
+                            "type": "string"
+                        }, {
+                            "type": "object",
+                            "properties": {
+                                "uri": {"type": "string"},
+                                "subset_included": {
+                                    "type": "array",
+                                    "items": {"type": "string"}
+                                },
+                                "subset_excluded": {
+                                    "type": "array",
+                                    "items": {"type": "string"}
+                                }
+                            },
+                            "additionalProperties": true,
+                            "required": ["uri"]
+                        }]
+                    },
+            },
+            "additionalProperties": false
+        },
+        "resources": {
+            "description": "This item contains identifiers of external resources (files, URLs) that might be used to \
+                           link data of this annotation file with existing content. \
+                           E.g. \"resources\": { \"0\": \"../resources/oxdr/opendrive_file.xml\"} declares a resource \
+                           related to an OpenDrive file, with identifier \"0\" ",
+            "type": "object",
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$":
+                    {"type": "string"},
+            },
+            "additionalProperties": false
+        },
+        "resource_uid": {
+            "description": "This is a unique identifier of an element in an external resource.",
+            "type": "object",
+            "patternProperties": {
+                "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
+                    "type": "string"
+                }
+            },
+        },
+        "tag": {
+            "type": "object",
+            "properties": {
+                "type": {"type": "string"},
+                "tag_data": {"$ref": "#/definitions/tag_data"},
+                "ontology_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
+            },
+            "additionalProperties": true,
+            "required": ["type"]
+        },
         "frame": {
+            "description": "A frame is a container of dynamic information. It is indexed inside the OpenLabel file \
+                           by its frame number. Time information about the frame is enclosed inside its\
+                           \"frame_properties\". A frame contains dynamic information of elements, \
+                           such as \"objects\" or \"actions\", which are indexed by their UUID, so their static \
+                           information can be found at the element level.",
             "type": "object",
             "properties": {
                 "objects": {
@@ -163,14 +250,11 @@ export const vcd_schema = {
                 },
                 "frame_properties": {
                     "description": "These frame_properties include frame-related information,\
-                                   including: stream information, odometry, and timestamping.\
+                                   including: stream information, and timestamping.\
                                    -Timestamps: the field \'timestamp\' can be used to declare a\
                                    master timestamp for all information within thi frame.\
-                                   -Streams: can host information related to specific streams, such\
-                                   as specific timestamps or instantaneous intrinsics.\
-                                   -Odometry: it contains ego-motion of the entire scene (i.e.\
-                                   the pose of the LCS (Local Coordinate System) wrt to WCS (World\
-                                   Coordinate System).",
+                                   -Streams: can host information related to specific streams, such \
+                                   as specific timestamps or instantaneous intrinsics.",
                     "type": "object",
                     "properties": {
                         "timestamp": {"type": "string"},
@@ -181,17 +265,12 @@ export const vcd_schema = {
                             },
                             "additionalProperties": false
                         },
-                        "odometry": {
+                        "transforms": {
                             "type": "object",
-                            "properties": {
-                                "comment": {"type": "string"},
-                                "pose_lcs_wrt_wcs_4x4": {
-                                    "type": "array",
-                                    "minItems": 16,
-                                    "maxItems": 16,
-                                    "items": {"type": "number"}
-                                },
-                            }
+                            "patternProperties": {
+                                "^": {"$ref": "#/definitions/transform"}
+                            },
+                            "additionalProperties": false
                         }
                     },
                     "additionalProperties": true
@@ -200,24 +279,13 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "frame_interval": {
+            "description": "A frame interval defines an starting and ending frame number, as a closed interval.",
             "type": "object",
             "properties": {
                 "frame_start": {"type": "integer"},
                 "frame_end": {"type": "integer"}
             },
             "additionalProperties": false
-        },
-        "metadata": {
-            "type": "object",
-            "properties": {
-                "schema_version": {"type": "string", "enum": [vcd_schema_version]},
-                "file_version": {"type": "string"},
-                "name": {"type": "string"},
-                "annotator": {"type": "string"},
-                "comment": {"type": "string"}
-            },
-            "additionalProperties": true,
-            "required": ["schema_version"]
         },
         "streams": {
             "patternProperties": {
@@ -234,15 +302,22 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "object": {
+            "description": "An object is the main type of annotation element, and is designed to represent \
+                           spatio-temporal entities, such as physical objects in the real world. Objects as \
+                           any other element is identified by a UUID, and defined by its name, type, and other\
+                           properties. \
+                           All elements can have static and dynamic data. Objects are the only type of elements \
+                           that can have geometric data, such as bounding boxes, cuboids, polylines, images, etc.",
             "type": "object",
             "properties": {
                 "frame_intervals": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
+                    "items": {"$ref": "#/definitions/frame_interval"}
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "object_data": {"$ref": "#/definitions/object_data"},
                 "object_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -251,15 +326,21 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "action": {
+            "description": "An action is a type of element intended to describe temporal situations with \
+                           semantic load, such as a certain activity happening in real life, such as \
+                           crossing-zebra-cross, standing-still, playing-guitar. As such, actions are simply \
+                           defined by their type, the frame intervals in which the action happens, and any \
+                           additional action data (e.g. numbers, booleans, text as attributes of the actions)",
             "type": "object",
             "properties": {
                 "frame_intervals": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
+                    "items": {"$ref": "#/definitions/frame_interval"}
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "action_data": {"$ref": "#/definitions/action_data"},
                 "action_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -268,15 +349,19 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "event": {
+            "description": "An event is an instantaneous situation that happens without a temporal interval. \
+                           Events complement Actions providing a mechanism to specify triggers or to connect \
+                           actions and objects with causality relations.",
             "type": "object",
             "properties": {
                 "frame_intervals": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
+                    "items": {"$ref": "#/definitions/frame_interval"}
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "event_data": {"$ref": "#/definitions/event_data"},
                 "event_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -285,15 +370,19 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "context": {
+            "description": "A context is a type of element which defines any non spatial nor temporal annotation. \
+                           Contexts can be used to add richness to the contextual information of a scene, including \
+                           location, weather, application-related information",
             "type": "object",
             "properties": {
                 "frame_intervals": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
+                    "items": {"$ref": "#/definitions/frame_interval"}
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "coordinate_system": {"type": "string"},
                 "context_data": {"$ref": "#/definitions/context_data"},
                 "context_data_pointers": {"$ref": "#/definitions/element_data_pointers"}
@@ -302,28 +391,33 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "relation": {
+            "description": "A relation is a type of element which connects two or more other elements, using \
+                           RDF triples to structure the connection, with one or more subjects, a predicate and \
+                           one or more objects ",
             "type": "object",
             "properties": {
                 "frame_intervals": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
+                    "items": {"$ref": "#/definitions/frame_interval"}
                 },
                 "name": {"type": "string"},
                 "type": {"type": "string"},
                 "ontology_uid": {"type": "string"},
+                "resource_uid": {"$ref": "#/definitions/resource_uid"},
                 "rdf_objects": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/rdf_agent"}
+                    "items": {"$ref": "#/definitions/rdf_agent"}
                 },
                 "rdf_subjects": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/rdf_agent"}
+                    "items": {"$ref": "#/definitions/rdf_agent"}
                 },
             },
             "required": ["name", "type", "rdf_objects", "rdf_subjects"],
             "additionalProperties": false
         },
         "rdf_agent": {
+            "description": "This item specifies whether an RDF entry is a subject or an object in a RDF triple.",
             "type": "object",
             "properties": {
                 "type": {"type": "string"},
@@ -336,13 +430,17 @@ export const vcd_schema = {
                 "^": {"$ref": "#/definitions/element_data_pointer"}
             },
             "additionalProperties": false
-        },        
+        },
         "element_data_pointer": {
+            "description": "This item contains pointers to element_data of elements, indexed by name, and containing \
+                           information about the element_data type (e.g. bounding box, cuboid) and the frame intervals\
+                           in which this element_data exists within an element. \
+                           As a consequence, these pointers can be used to explore the JSON file rapidly",
             "type": "object",
             "properties": {
                 "frame_intervals": {
                     "type": "array",
-                    "item": {"$ref": "#/definitions/frame_interval"}
+                    "items": {"$ref": "#/definitions/frame_interval"}
                 },
                 "type": {
                     "type": "string",
@@ -354,14 +452,41 @@ export const vcd_schema = {
                     "patternProperties": {
                         "^": {
                             "type": "string",
-                            "enum": ["num", "text", "boolean", "vec"]                                                        
+                            "enum": ["num", "text", "boolean", "vec"]
                         }
                     }
                 }
             },
             "required": ["frame_intervals"]
         },
+        "tag_data": {
+            "oneOf": [{
+                "type": "object",
+                "properties": {
+                    "num": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/num"}
+                    },
+                    "vec": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/vec"}
+                    },
+                    "text": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/text"}
+                    },
+                    "boolean": {
+                        "type": "array",
+                        "items": {"$ref": "#/definitions/boolean"}
+                    }
+                },
+                "additionalProperties": false
+            }, {
+                "type": "string"
+            }]
+        },
         "action_data": {
+            "description": "Additional data to describe attributes of the action.",
             "type": "object",
             "properties": {
                 "num": {
@@ -384,6 +509,7 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "event_data": {
+            "description": "Additional data to describe attributes of the event.",
             "type": "object",
             "properties": {
                 "num": {
@@ -406,6 +532,7 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "context_data": {
+            "description": "Additional data to describe attributes of the context.",
             "type": "object",
             "properties": {
                 "num": {
@@ -428,6 +555,7 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "object_data": {
+            "description": "Additional data to describe attributes of the object.",
             "type": "object",
             "properties": {
                 "bbox": {
@@ -502,7 +630,8 @@ export const vcd_schema = {
             "additionalProperties": false
         },
         "coordinate_system": {
-            "description": "A coordinate_system is a 3D reference frame that act as placeholder of annotations.",
+            "description": "A coordinate system is a 3D reference frame. Spatial information of objects and their \
+                           can be defined with respect to coordinate systems.",
             "properties": {
                 "type": {"type": "string"},
                 "parent": {"type": "string"},
@@ -510,30 +639,91 @@ export const vcd_schema = {
                     "type": "array",
                     "items": {"type": "string"},
                 },
-                "pose_wrt_parent": {
-                    "description": "It is a 4x4 homogeneous matrix, to enable transform from\
-                                    3D Cartersian Systems easily. Note that the pose_children_wrt_parent_4x4 is\
-                                    the transform_parent_to_child_4x4:\
-                                    X_child = pose_child_wrt_parent_4x4 * X_parent\
-                                    X_child = transform_parent_to_child_4x4 * X_parent.\
-                                   NOTE: For camera or other projective systems (3D->2D) this pose is the extrinsic\
-                                   calibration, the projection itself is encoded as the intrinsic information, which\
-                                   is labeled inside the corresponding stream.",
-                    "type": "array",
-                    "items": {"type": "number"},
-                    "example": [1.0, 0.0, 0.0, 10.0,
-                                0.0, 1.0, 0.0, 5.0,
-                                0.0, 0.0, 1.0, 1.0,
-                                0.0, 0.0, 0.0, 1.0]
-                },
+                "pose_wrt_parent": {"$ref": "#/definitions/transform_data"},
                 "uid": {"type": "string"}
             },
             "required": ["type", "parent"],
-            "additionalProperties": false
+            "additionalProperties": true
+        },
+        "transform": {
+            "type": "object",
+            "properties": {
+                "src": {"type": "string"},
+                "dst": {"type": "string"},
+                "transform_src_to_dst": {"$ref": "#/definitions/transform_data"}
+            },
+            "required": ["src", "dst", "transform_src_to_dst"],
+            "additionalProperties": true
+        },
+        "transform_data": {
+            "oneOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "matrix4x4": {
+                            "description": "It is a 4x4 homogeneous matrix, to enable transform from\
+                                    3D Cartersian Systems easily. Note that the pose_child_wrt_parent_4x4 is\
+                                    the transform_child_to_parent_4x4:\
+                                    X_child = (pose_child_wrt_parent_4x4)^-1 * X_parent\
+                                    X_parent = transform_child_to_child_4x4 * X_child.",
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "example": [1.0, 0.0, 0.0, 10.0,
+                                        0.0, 1.0, 0.0, 5.0,
+                                        0.0, 0.0, 1.0, 1.0,
+                                        0.0, 0.0, 0.0, 1.0]
+                        },
+                    },
+                    "required": ["matrix4x4"],
+                    "additionalProperties": false
+                },
+                {
+                    "description": "A transform can be defined with a quaternion (x, y, z, w) that encondes the \
+                                   rotation of a coordinate system with respect to another, \
+                                   and a translation (x, y, z)",
+                    "type": "object",
+                    "properties": {
+                        "quaternion": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 4,
+                            "maxItems": 4
+                        },
+                        "translation": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 3,
+                            "maxItems": 3
+                        }
+                    },
+                    "required": ["quaternion", "translation"],
+                    "additionalProperties": false
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "euler_angles": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 3,
+                            "maxItems": 3
+                        },
+                        "translation": {
+                            "type": "array",
+                            "items": {"type": "number"},
+                            "minItems": 3,
+                            "maxItems": 3
+                        },
+                        "sequence": {"type": "string"}
+                    },
+                    "required": ["euler_angles", "translation"],
+                    "additionalProperties": false
+                }
+            ]
         },
         "stream": {
-            "type": "object",
             "description": "A stream describes the source of a data sequence, usually a sensor.",
+            "type": "object",
             "properties": {
                 "description": {"type": "string"},
                 "stream_properties": {"$ref": "#/definitions/stream_properties"},
@@ -555,15 +745,14 @@ export const vcd_schema = {
                         "height_px": {"type": "integer"},
                         "camera_matrix": {
                             "type": "array",
-                            "comment": "This is a 3x4 camera matrix which projects  \
-                                       3D homogeneous points (4x1) from Sensor Coordinate \
-                                       System (SCS) into the Image Coordinate Sysmte (ICS),\
-                                       plane points (3x1). \
-                                       This is the usual K matrix for camera projection, but\
-                                       extended from 3x3 to 3x4, to enable its usage to project\
-                                       4x1 homogeneous 3D points defined in the SCS into the ICS.\
-                                       The SCS follows as well the usual convention x-to-right, y-down, z-forward:\
-                                       x_ics = camera_matrix * X_scs",
+                            "comment": "This is a 3x4 camera matrix which projects\
+                            3D homogeneous points (4x1) from a sensor coordinate\
+                            System into the image plane (3x1) \
+                            This is the usual K matrix for camera projection (as in OpenCV), but \
+                            extended from 3x3 to 3x4, to enable its usage to project\
+                            4x1 homogeneous 3D points defined in the SCS into the ICS\
+                            The SCS follows as well the usual convention x-to-right, y-down, z-forward:\
+                            x_ics = camera_matrix * X_scs",
                             "minItems": 12,
                             "maxItems": 12,
                             "items": {"type": "number"},
@@ -592,11 +781,11 @@ export const vcd_schema = {
                     "properties": {
                         "width_px": {"type": "integer"},
                         "height_px": {"type": "integer"},
-                        "fov_deg": {"type": "number"},
-                        "center_x_px": {"type": "number"},
-                        "center_y_px": {"type": "number"},
-                        "radius_x_px": {"type": "number"},
-                        "radius_y_px": {"type": "number"},
+                        "fov_deg": {"type": ["number", "null"]},
+                        "center_x_px": {"type": ["number", "null"]},
+                        "center_y_px": {"type": ["number", "null"]},
+                        "radius_x_px": {"type": ["number", "null"]},
+                        "radius_y_px": {"type": ["number", "null"]},
                         "lens_coeffs": {
                             "type": "array",
                             "minItems": 4,
@@ -605,6 +794,9 @@ export const vcd_schema = {
                         }
                     },
                     "additionalProperties": true
+                },
+                "intrinsics_custom": {
+                    "type": "object"
                 }
             }],
             "sync": {
@@ -612,13 +804,13 @@ export const vcd_schema = {
                                If provided inside a certain frame, it can be used\
                                to specify timestamps in ISO8601 format,\
                                and a frame_stream of this stream.\
-                               E.g. at vcd's frame 34, for stream CAM_LEFT, the sync info\
+                               E.g. at openlabel's frame 34, for stream CAM_LEFT, the sync info\
                                contains timestamp=2020-04-09T04:57:57+00:00,\
                                and frame_stream=36 (which means that this CAM_LEFT is shifted\
-                               2 frame with respect the vcd's master frame indexes.\
+                               2 frame with respect the openlabel's master frame indexes.\
                                If provided at stream level, it can be used to specify\
                                a frame shift, e.g. the shift of that stream wrt to the\
-                               master vcd frame count.\
+                               master openlabel frame count.\
                                E.g. if the shift is constant for all frames, it is more compact\
                                to define the frame_shift=2 at stream level.",
                 "type": "object",
@@ -638,8 +830,9 @@ export const vcd_schema = {
         },
         "bbox": {
             "type": "object",
-            "description": "A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] is the centre of the bounding box, and\
-                            [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.",
+            "description": "A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] \
+                           is the centre of the bounding box, and [w, h] represent the width (horizontal,\
+                           x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.",
             "properties": {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
@@ -682,9 +875,10 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {"type": "number"},
+                "type": {"type": "string", "enum": ["value", "min", "max"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": true
         },
         "text": {
@@ -693,9 +887,10 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {"type": "string"},
+                "type": {"type": "string", "enum": ["value"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": true
         },
         "boolean": {
@@ -704,9 +899,10 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {"type": "boolean"},
+                "type": {"type": "string", "enum": ["value"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": true
         },
         "cuboid": {
@@ -715,10 +911,17 @@ export const vcd_schema = {
                 "name": {"type": "string"},
                 "coordinate_system": {"type": "string"},
                 "val": {
-                    "type": "array",
-                    "minItems": 9,
-                    "maxItems": 10,
-                    "items": {"type": "number"}
+                    "oneOf": [
+                        {
+                            "type": "array",
+                            "minItems": 9,
+                            "maxItems": 10,
+                            "items": {"type": "number"}
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 },
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
@@ -745,7 +948,7 @@ export const vcd_schema = {
                 "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
-                    "item": {"type": "number"}
+                    "items": {"type": "number"}
                 },
                 "channels": {"type": "number"},
                 "width": {"type": "number"},
@@ -776,16 +979,17 @@ export const vcd_schema = {
                 "coordinate_system": {"type": "string"},
                 "val": {
                     "type": "array",
-                    "item": {
+                    "items": {
                         "oneOf": [
                             {"type": "number"},
                             {"type": "string"}
                         ]
                     }
                 },
+                "type": {"type": "string", "enum": ["values", "range"]},
                 "attributes": {"$ref": "#/definitions/attributes"}
             },
-            "required": ["name", "val"],
+            "required": ["val"],
             "additionalProperties": true
         },
         "point2d": {
@@ -868,6 +1072,10 @@ export const vcd_schema = {
             "additionalProperties": true
         },
         "attributes": {
+            "description": "Attributes is the alias of element data that can be nested inside geometric \
+                           object data. \
+                           E.g. A certain bounding box object_data can have attributes related to its \
+                           score, visibility, etc. These values can be nested inside the bounding box as attributes",
             "type": "object",
             "additionalProperties": false,
             "properties": {
@@ -898,6 +1106,9 @@ export const vcd_schema = {
             }
         },
         "mesh": {
+            "description": "This is a special type of object data which encodes a point-line-area mesh. \
+                           It is intended to represent 3D meshes, where points, lines and areas composing the mesh \
+                           are interrelated, and can have their own properties",
             "type": "object",
             "properties": {
                 "name": {"type": "string"},
@@ -956,8 +1167,7 @@ export const vcd_schema = {
             },
             "additionalProperties": true
         },
-
     },
-    "required": ["vcd"],
+    "required": ["openlabel"],
     "additionalProperties": false
 }

@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-<meta name="generator" content="pdoc 0.9.1" />
+<meta name="generator" content="pdoc 0.10.0" />
 <title>vcd.utils API documentation</title>
-<meta name="description" content="VCD (Video Content Description) library v4.3.1 …" />
+<meta name="description" content="VCD (Video Content Description) library v5.0.0 …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,34 +22,34 @@
 <h1 class="title">Module <code>vcd.utils</code></h1>
 </header>
 <section id="section-intro">
-<p>VCD (Video Content Description) library v4.3.1</p>
+<p>VCD (Video Content Description) library v5.0.0</p>
 <p>Project website: <a href="http://vcd.vicomtech.org">http://vcd.vicomtech.org</a></p>
 <p>Copyright (C) 2021, Vicomtech (<a href="http://www.vicomtech.es/">http://www.vicomtech.es/</a>),
 (Spain) all rights reserved.</p>
-<p>VCD is a Python library to create and manage VCD content version 4.3.1.
+<p>VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-VCD (Video Content Description) library v4.3.1
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.1.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 &#34;&#34;&#34;
 
 import warnings
 import numpy as np
-
+import cv2 as cv
+import base64
 import math
-
 from bisect import bisect_left
 from enum import Enum
 
@@ -95,17 +95,9 @@ def consecutive(fi_a, fi_b):
 
 def is_inside_frame_intervals(frame_num, frame_intervals):
     for fi in frame_intervals:
-        if is_inside_frame_interval(frame_num, fi):
+        if fi[0] &lt;= frame_num &lt;= fi[1]:        
             return True
     return False
-
-
-def is_inside_frame_interval(frame_num, frame_interval):
-    return frame_interval[0] &lt;= frame_num &lt;= frame_interval[1]
-
-
-def is_inside(frame_num, frame_interval):
-    return frame_interval[&#39;frame_start&#39;] &lt;= frame_num &lt;= frame_interval[&#39;frame_end&#39;]
 
 
 def get_outer_frame_interval(frame_intervals):
@@ -213,7 +205,6 @@ def fuse_frame_interval_dict(frame_interval, frame_intervals):
 
     return frame_intervals_to_return
 
-
 def fuse_frame_intervals(frame_intervals):
     # This functions receives a list of frame_intervals and returns another one with
     # non-overlapping intervals
@@ -229,6 +220,14 @@ def fuse_frame_intervals(frame_intervals):
 
     if num_fis == 1:
         return frame_intervals
+    
+    if num_fis == 2:
+        fi1 = frame_intervals[0]
+        fi2 = frame_intervals[1]
+        if fi1[&#34;frame_end&#34;]&lt;=fi2[&#34;frame_start&#34;]:
+            # Typical case fi1 is before fi2 and fi2 is just one frame next
+            if fi1[&#34;frame_end&#34;] == fi2[&#34;frame_start&#34;] - 1:            
+                return [{&#34;frame_start&#34;: fi1[&#34;frame_start&#34;], &#34;frame_end&#34;: fi2[&#34;frame_end&#34;]}]
 
     # Read first element
     frame_intervals_fused = [frame_intervals[0]]
@@ -264,7 +263,7 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
                 continue
             else:
                 # So, we are removing 4 from [(4, 4)], let&#39;s return empty
-                return []
+                continue
         elif frame_num &lt; fi[&#39;frame_end&#39;]:
             # Inside! Need to split
             for f in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
@@ -283,6 +282,46 @@ def rm_frame_from_frame_intervals(frame_intervals, frame_num):
 ####################################################
 # ROTATION AND ODOMETRY UTILS
 ####################################################
+class QuaternionOrder(Enum):
+    XYZW = 1
+    WXYZ = 2
+
+
+def q2R(q, seq=QuaternionOrder.XYZW):
+    # Example call: R = q2R(np.array([x, y, z, w]).reshape(4,1))
+    assert(q.shape == (4,1))
+    if seq == QuaternionOrder.XYZW:
+        # Like in Scipy (e.g. https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.from_quat.html)
+        x = q[0, 0]
+        y = q[1, 0]
+        z = q[2, 0]
+        w = q[3, 0]
+    elif seq == QuaternionOrder.WXYZ:
+        w = q[0, 0]
+        x = q[1, 0]
+        y = q[2, 0]
+        z = q[3, 0]
+
+    return q2R(x, y, z, w)
+
+
+def q2R(x, y, z, w):
+    # https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion
+    x2 = x * x
+    y2 = y * y
+    z2 = z * z
+    xy = x * y
+    xz = x * z
+    yz = y * z
+    xw = x * w
+    yw = y * w
+    zw = z * w
+
+    R1 = np.array([[1 - 2 * y2 - 2 * z2, 2 * xy - 2 * zw, 2 * xz + 2 * yw],
+                   [2 * xy + 2 * zw, 1 - 2 * x2 - 2 * z2, 2 * yz - 2 * xw],
+                   [2 * xz - 2 * yw, 2 * yz + 2 * xw, 1 - 2 * x2 - 2 * y2]])
+    return R1
+
 def create_pose(R, C):
     # Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
     if C.shape[0] == 3:
@@ -622,6 +661,7 @@ def get_distortion_radius(distortion):
     else:
         return None
 
+
 ####################################################
 # Transforms
 ####################################################
@@ -633,6 +673,7 @@ def apply_transform(transform_JxM, data_MxN):
     data_out = transform_JxM.dot(data_MxN)  # output is JxN
     data_out[:, N] /= data_out[J-1, N]
     return data_out
+
 
 def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
     rows, cols = points3d_4xN.shape
@@ -648,19 +689,24 @@ def transform_points3d_4xN(points3d_4xN, T_src_to_dst):
 
 def transform_cuboid(cuboid, T_ref_to_dst):
     # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
-    assert(isinstance(cuboid, list))
-    if len(cuboid) == 10:
-        raise Exception(&#34;Quaternion transforms not supported yet.&#34;)
+    if isinstance(cuboid, tuple):
+        cuboid = list(cuboid)
 
-    assert(len(cuboid) == 9)
-    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
+    assert(isinstance(cuboid, list))
 
     # 1) Obtain pose from cuboid info
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
-    P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
-    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
+    if len(cuboid) == 10:
+        #raise Exception(&#34;Quaternion transforms not supported yet.&#34;)
+        x, y, z, qx, qy, qz, qw, sx, sy, sz = cuboid        
+        P_obj_wrt_ref = create_pose(R=q2R(qx, qy, qz, qw), C=np.array([[x, y, z]]).T)  # np.array
+    else:
+        assert(len(cuboid) == 9)               
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+        P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
+    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array    
 
-    # 2) Concatenate transforms
+    # 2) Concatenate transforms    
+    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
     T_obj_to_dst = T_ref_to_dst.dot(T_obj_to_ref)    # np.array
 
     # 3) Obtain new rotation and translation
@@ -695,13 +741,15 @@ def generate_cuboid_points_object_4x8(sx, sy, sz):
 def generate_cuboid_points_ref_4x8(cuboid):
     # Cuboid is (x, y, z, rx, ry, rz, sx, sy, sz)
     # This function converts to 8 4x1 points
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+    if len(cuboid) == 9:
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid        
+        R_obj_wrt_ref = euler2R([rz, ry, rx])
+    elif len(cuboid) == 10:
+        x, y, z, rx, ry, rz, rw, sx, sy, sz = cuboid
+        R_obj_wrt_ref = q2R(rx, ry, rz, rw)
 
     # Create base structure using sizes
     points_cuboid_4x8 = generate_cuboid_points_object_4x8(sx, sy, sz)
-
-    # Create rotation
-    R_obj_wrt_ref = euler2R([rz, ry, rx])
 
     # Create location
     C_ref = np.array([[x, y, z]]).T
@@ -712,6 +760,33 @@ def generate_cuboid_points_ref_4x8(cuboid):
 
     points_cuboid_lcs_4x8 = T_obj_to_ref.dot(points_cuboid_4x8)
     return points_cuboid_lcs_4x8
+
+
+def get_transform_as_matrix4x4(transform_data):
+    # This function receives a VCD 4.3.1 (OpenLABEL 1.0) pose item, which may specify a transform as a matrix4x4, but also as a quaternion+traslation
+    # or as a Euler rotation + traslation
+    # NOTE: transform_data is usually the pose_wrt_parent VCD entry
+    if &#39;matrix4x4&#39; in transform_data:
+        return np.array(transform_data[&#39;matrix4x4&#39;]).reshape(4, 4)
+    elif &#39;quaternion&#39; in transform_data:
+        # From quaternion and translation to matrix4x4
+        quaternion = transform_data[&#39;quaternion&#39;]
+        translation = transform_data[&#39;translation&#39;]
+        rotation = q2R(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
+        return create_pose(rotation, np.array(translation).reshape(3, 1))
+    elif &#39;euler_angles&#39; in transform_data:
+        # From Euler and translation to matrix4x4
+        euler_angles = transform_data[&#39;euler_angles&#39;]
+        translation = transform_data[&#39;translation&#39;]
+        eulerSeq = EulerSeq.ZYX
+        if &#39;sequence&#39; in transform_data:
+            sequence = transform_data[&#39;sequence&#39;]
+            eulerSeq = EulerSeq[sequence]
+        rotation = euler2R(euler_angles, eulerSeq)
+        return create_pose(rotation, np.array(translation).reshape(3, 1))        
+    else:
+        warnings.warn(&#34;WARNING: Trying to use get_transform_as_matrix4x4 on a non-valid VCD item.&#34;)
+
 
 ####################################################
 # Other
@@ -736,6 +811,7 @@ def is_inside_image(width, height, x, y):
 
 
 def bounding_rect(points2d_3xN):
+    # This function returns (x, y, w, h) being (x, y) the CENTER of the box, and (w, h) its sides
     x = points2d_3xN[0, :]
     y = points2d_3xN[1, :]
     x_min = np.min(x)
@@ -743,7 +819,9 @@ def bounding_rect(points2d_3xN):
     y_min = np.min(y)
     y_max = np.max(y)
 
-    return np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))
+    return (np.int0(np.array([(x_min + x_max)/2, (y_min + y_max)/2, x_max - x_min, y_max - y_min]))).tolist()
+
+    #return (np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))).tolist()
 
 
 def generate_grid(x_params, y_params, z_params):
@@ -791,7 +869,39 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
             if not (0 &lt;= x &lt; width and 0 &lt;= y &lt; height):
                 idx_valid[i] = False
                 points2d_3xN[:, i] = np.nan
-    return points2d_3xN, idx_valid</code></pre>
+    return points2d_3xN, idx_valid
+
+
+def rgb_to_hex(rgb):
+    return &#39;%02x%02x%02x&#39; % tuple(rgb)
+
+
+def hex_to_rgb(value):
+    value = value.lstrip(&#39;#&#39;)
+    lv = len(value)
+    return tuple(int(value[i:i+lv//3], 16) for i in range(0, lv, lv//3))
+
+
+####################################################
+# Images
+####################################################
+def image_to_base64(img):
+    &#34;&#34;&#34;
+    This function converts an OpenCV image, encodes it as PNG, and
+    converts the payload into a stringified base64 chain in utf-8
+    :param img: OpenCV image
+    :return: base64 utf-8 string
+    &#34;&#34;&#34;
+    compr_params = [int(cv.IMWRITE_PNG_COMPRESSION), 9]
+    result, payload = cv.imencode(&#39;.png&#39;, img, compr_params)
+    payload_b64_str = str(base64.b64encode(payload), &#39;utf-8&#39;)
+    return payload_b64_str
+
+
+def base64_to_image(payload_base64_str, flag=1):
+    payload_read = base64.b64decode(payload_base64_str)
+    img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), flag)
+    return img</code></pre>
 </details>
 </section>
 <section>
@@ -963,6 +1073,21 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
     return fi_tuples</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.base64_to_image"><code class="name flex">
+<span>def <span class="ident">base64_to_image</span></span>(<span>payload_base64_str, flag=1)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def base64_to_image(payload_base64_str, flag=1):
+    payload_read = base64.b64decode(payload_base64_str)
+    img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), flag)
+    return img</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.bounding_rect"><code class="name flex">
 <span>def <span class="ident">bounding_rect</span></span>(<span>points2d_3xN)</span>
 </code></dt>
@@ -973,6 +1098,7 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def bounding_rect(points2d_3xN):
+    # This function returns (x, y, w, h) being (x, y) the CENTER of the box, and (w, h) its sides
     x = points2d_3xN[0, :]
     y = points2d_3xN[1, :]
     x_min = np.min(x)
@@ -980,7 +1106,9 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
     y_min = np.min(y)
     y_max = np.max(y)
 
-    return np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))</code></pre>
+    return (np.int0(np.array([(x_min + x_max)/2, (y_min + y_max)/2, x_max - x_min, y_max - y_min]))).tolist()
+
+    #return (np.int0(np.array([x_min, y_min, x_max - x_min, y_max - y_min]))).tolist()</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.consecutive"><code class="name flex">
@@ -1380,6 +1508,14 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 
     if num_fis == 1:
         return frame_intervals
+    
+    if num_fis == 2:
+        fi1 = frame_intervals[0]
+        fi2 = frame_intervals[1]
+        if fi1[&#34;frame_end&#34;]&lt;=fi2[&#34;frame_start&#34;]:
+            # Typical case fi1 is before fi2 and fi2 is just one frame next
+            if fi1[&#34;frame_end&#34;] == fi2[&#34;frame_start&#34;] - 1:            
+                return [{&#34;frame_start&#34;: fi1[&#34;frame_start&#34;], &#34;frame_end&#34;: fi2[&#34;frame_end&#34;]}]
 
     # Read first element
     frame_intervals_fused = [frame_intervals[0]]
@@ -1421,13 +1557,15 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 <pre><code class="python">def generate_cuboid_points_ref_4x8(cuboid):
     # Cuboid is (x, y, z, rx, ry, rz, sx, sy, sz)
     # This function converts to 8 4x1 points
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+    if len(cuboid) == 9:
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid        
+        R_obj_wrt_ref = euler2R([rz, ry, rx])
+    elif len(cuboid) == 10:
+        x, y, z, rx, ry, rz, rw, sx, sy, sz = cuboid
+        R_obj_wrt_ref = q2R(rx, ry, rz, rw)
 
     # Create base structure using sizes
     points_cuboid_4x8 = generate_cuboid_points_object_4x8(sx, sy, sz)
-
-    # Create rotation
-    R_obj_wrt_ref = euler2R([rz, ry, rx])
 
     # Create location
     C_ref = np.array([[x, y, z]]).T
@@ -1572,6 +1710,41 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
         return None</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.get_transform_as_matrix4x4"><code class="name flex">
+<span>def <span class="ident">get_transform_as_matrix4x4</span></span>(<span>transform_data)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_transform_as_matrix4x4(transform_data):
+    # This function receives a VCD 4.3.1 (OpenLABEL 1.0) pose item, which may specify a transform as a matrix4x4, but also as a quaternion+traslation
+    # or as a Euler rotation + traslation
+    # NOTE: transform_data is usually the pose_wrt_parent VCD entry
+    if &#39;matrix4x4&#39; in transform_data:
+        return np.array(transform_data[&#39;matrix4x4&#39;]).reshape(4, 4)
+    elif &#39;quaternion&#39; in transform_data:
+        # From quaternion and translation to matrix4x4
+        quaternion = transform_data[&#39;quaternion&#39;]
+        translation = transform_data[&#39;translation&#39;]
+        rotation = q2R(quaternion[0], quaternion[1], quaternion[2], quaternion[3])
+        return create_pose(rotation, np.array(translation).reshape(3, 1))
+    elif &#39;euler_angles&#39; in transform_data:
+        # From Euler and translation to matrix4x4
+        euler_angles = transform_data[&#39;euler_angles&#39;]
+        translation = transform_data[&#39;translation&#39;]
+        eulerSeq = EulerSeq.ZYX
+        if &#39;sequence&#39; in transform_data:
+            sequence = transform_data[&#39;sequence&#39;]
+            eulerSeq = EulerSeq[sequence]
+        rotation = euler2R(euler_angles, eulerSeq)
+        return create_pose(rotation, np.array(translation).reshape(3, 1))        
+    else:
+        warnings.warn(&#34;WARNING: Trying to use get_transform_as_matrix4x4 on a non-valid VCD item.&#34;)</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.grid_as_4xN_points3d"><code class="name flex">
 <span>def <span class="ident">grid_as_4xN_points3d</span></span>(<span>xm, ym, zm)</span>
 </code></dt>
@@ -1589,6 +1762,21 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
     pad_row[0, :] = 1.0
     points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
     return points3d_vcs_4xN</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.hex_to_rgb"><code class="name flex">
+<span>def <span class="ident">hex_to_rgb</span></span>(<span>value)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def hex_to_rgb(value):
+    value = value.lstrip(&#39;#&#39;)
+    lv = len(value)
+    return tuple(int(value[i:i+lv//3], 16) for i in range(0, lv, lv//3))</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.homography_from_pose"><code class="name flex">
@@ -1619,6 +1807,31 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 </summary>
 <pre><code class="python">def identity(dim):
     return np.identity(dim, dtype=float)</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.image_to_base64"><code class="name flex">
+<span>def <span class="ident">image_to_base64</span></span>(<span>img)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>This function converts an OpenCV image, encodes it as PNG, and
+converts the payload into a stringified base64 chain in utf-8
+:param img: OpenCV image
+:return: base64 utf-8 string</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def image_to_base64(img):
+    &#34;&#34;&#34;
+    This function converts an OpenCV image, encodes it as PNG, and
+    converts the payload into a stringified base64 chain in utf-8
+    :param img: OpenCV image
+    :return: base64 utf-8 string
+    &#34;&#34;&#34;
+    compr_params = [int(cv.IMWRITE_PNG_COMPRESSION), 9]
+    result, payload = cv.imencode(&#39;.png&#39;, img, compr_params)
+    payload_b64_str = str(base64.b64encode(payload), &#39;utf-8&#39;)
+    return payload_b64_str</code></pre>
 </details>
 </dd>
 <dt id="vcd.utils.interpolate_pose"><code class="name flex">
@@ -1753,32 +1966,6 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
     return n &lt; 1e-4</code></pre>
 </details>
 </dd>
-<dt id="vcd.utils.is_inside"><code class="name flex">
-<span>def <span class="ident">is_inside</span></span>(<span>frame_num, frame_interval)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def is_inside(frame_num, frame_interval):
-    return frame_interval[&#39;frame_start&#39;] &lt;= frame_num &lt;= frame_interval[&#39;frame_end&#39;]</code></pre>
-</details>
-</dd>
-<dt id="vcd.utils.is_inside_frame_interval"><code class="name flex">
-<span>def <span class="ident">is_inside_frame_interval</span></span>(<span>frame_num, frame_interval)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def is_inside_frame_interval(frame_num, frame_interval):
-    return frame_interval[0] &lt;= frame_num &lt;= frame_interval[1]</code></pre>
-</details>
-</dd>
 <dt id="vcd.utils.is_inside_frame_intervals"><code class="name flex">
 <span>def <span class="ident">is_inside_frame_intervals</span></span>(<span>frame_num, frame_intervals)</span>
 </code></dt>
@@ -1790,7 +1977,7 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 </summary>
 <pre><code class="python">def is_inside_frame_intervals(frame_num, frame_intervals):
     for fi in frame_intervals:
-        if is_inside_frame_interval(frame_num, fi):
+        if fi[0] &lt;= frame_num &lt;= fi[1]:        
             return True
     return False</code></pre>
 </details>
@@ -1853,6 +2040,46 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
     return math.sqrt(ray[0]*ray[0] + ray[1]*ray[1])</code></pre>
 </details>
 </dd>
+<dt id="vcd.utils.q2R"><code class="name flex">
+<span>def <span class="ident">q2R</span></span>(<span>x, y, z, w)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def q2R(x, y, z, w):
+    # https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion
+    x2 = x * x
+    y2 = y * y
+    z2 = z * z
+    xy = x * y
+    xz = x * z
+    yz = y * z
+    xw = x * w
+    yw = y * w
+    zw = z * w
+
+    R1 = np.array([[1 - 2 * y2 - 2 * z2, 2 * xy - 2 * zw, 2 * xz + 2 * yw],
+                   [2 * xy + 2 * zw, 1 - 2 * x2 - 2 * z2, 2 * yz - 2 * xw],
+                   [2 * xz - 2 * yw, 2 * yz + 2 * xw, 1 - 2 * x2 - 2 * y2]])
+    return R1</code></pre>
+</details>
+</dd>
+<dt id="vcd.utils.rgb_to_hex"><code class="name flex">
+<span>def <span class="ident">rgb_to_hex</span></span>(<span>rgb)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def rgb_to_hex(rgb):
+    return &#39;%02x%02x%02x&#39; % tuple(rgb)</code></pre>
+</details>
+</dd>
 <dt id="vcd.utils.rm_frame_from_frame_intervals"><code class="name flex">
 <span>def <span class="ident">rm_frame_from_frame_intervals</span></span>(<span>frame_intervals, frame_num)</span>
 </code></dt>
@@ -1875,7 +2102,7 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
                 continue
             else:
                 # So, we are removing 4 from [(4, 4)], let&#39;s return empty
-                return []
+                continue
         elif frame_num &lt; fi[&#39;frame_end&#39;]:
             # Inside! Need to split
             for f in range(fi[&#39;frame_start&#39;], fi[&#39;frame_end&#39;] + 1):
@@ -1930,19 +2157,24 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 </summary>
 <pre><code class="python">def transform_cuboid(cuboid, T_ref_to_dst):
     # All transforms are assumed to be 4x4 matrices, in the form of numpy arrays
-    assert(isinstance(cuboid, list))
-    if len(cuboid) == 10:
-        raise Exception(&#34;Quaternion transforms not supported yet.&#34;)
+    if isinstance(cuboid, tuple):
+        cuboid = list(cuboid)
 
-    assert(len(cuboid) == 9)
-    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
+    assert(isinstance(cuboid, list))
 
     # 1) Obtain pose from cuboid info
-    x, y, z, rx, ry, rz, sx, sy, sz = cuboid
-    P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
-    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array
+    if len(cuboid) == 10:
+        #raise Exception(&#34;Quaternion transforms not supported yet.&#34;)
+        x, y, z, qx, qy, qz, qw, sx, sy, sz = cuboid        
+        P_obj_wrt_ref = create_pose(R=q2R(qx, qy, qz, qw), C=np.array([[x, y, z]]).T)  # np.array
+    else:
+        assert(len(cuboid) == 9)               
+        x, y, z, rx, ry, rz, sx, sy, sz = cuboid
+        P_obj_wrt_ref = create_pose(R=euler2R([rz, ry, rx], seq=EulerSeq.ZYX), C=np.array([[x, y, z]]).T)  # np.array
+    T_obj_to_ref = P_obj_wrt_ref  # SCL principles,   # np.array    
 
-    # 2) Concatenate transforms
+    # 2) Concatenate transforms    
+    T_ref_to_dst = np.array(T_ref_to_dst).reshape(4, 4)
     T_obj_to_dst = T_ref_to_dst.dot(T_obj_to_ref)    # np.array
 
     # 3) Obtain new rotation and translation
@@ -2083,6 +2315,36 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 </dd>
 </dl>
 </dd>
+<dt id="vcd.utils.QuaternionOrder"><code class="flex name class">
+<span>class <span class="ident">QuaternionOrder</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>An enumeration.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class QuaternionOrder(Enum):
+    XYZW = 1
+    WXYZ = 2</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="vcd.utils.QuaternionOrder.WXYZ"><code class="name">var <span class="ident">WXYZ</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="vcd.utils.QuaternionOrder.XYZW"><code class="name">var <span class="ident">XYZW</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 </dl>
 </section>
 </article>
@@ -2107,6 +2369,7 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 <li><code><a title="vcd.utils.as_frame_interval_dict" href="#vcd.utils.as_frame_interval_dict">as_frame_interval_dict</a></code></li>
 <li><code><a title="vcd.utils.as_frame_intervals_array_dict" href="#vcd.utils.as_frame_intervals_array_dict">as_frame_intervals_array_dict</a></code></li>
 <li><code><a title="vcd.utils.as_frame_intervals_array_tuples" href="#vcd.utils.as_frame_intervals_array_tuples">as_frame_intervals_array_tuples</a></code></li>
+<li><code><a title="vcd.utils.base64_to_image" href="#vcd.utils.base64_to_image">base64_to_image</a></code></li>
 <li><code><a title="vcd.utils.bounding_rect" href="#vcd.utils.bounding_rect">bounding_rect</a></code></li>
 <li><code><a title="vcd.utils.consecutive" href="#vcd.utils.consecutive">consecutive</a></code></li>
 <li><code><a title="vcd.utils.convert_oxts_to_pose" href="#vcd.utils.convert_oxts_to_pose">convert_oxts_to_pose</a></code></li>
@@ -2131,22 +2394,25 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 <li><code><a title="vcd.utils.get_key" href="#vcd.utils.get_key">get_key</a></code></li>
 <li><code><a title="vcd.utils.get_outer_frame_interval" href="#vcd.utils.get_outer_frame_interval">get_outer_frame_interval</a></code></li>
 <li><code><a title="vcd.utils.get_point3d_of_plane" href="#vcd.utils.get_point3d_of_plane">get_point3d_of_plane</a></code></li>
+<li><code><a title="vcd.utils.get_transform_as_matrix4x4" href="#vcd.utils.get_transform_as_matrix4x4">get_transform_as_matrix4x4</a></code></li>
 <li><code><a title="vcd.utils.grid_as_4xN_points3d" href="#vcd.utils.grid_as_4xN_points3d">grid_as_4xN_points3d</a></code></li>
+<li><code><a title="vcd.utils.hex_to_rgb" href="#vcd.utils.hex_to_rgb">hex_to_rgb</a></code></li>
 <li><code><a title="vcd.utils.homography_from_pose" href="#vcd.utils.homography_from_pose">homography_from_pose</a></code></li>
 <li><code><a title="vcd.utils.identity" href="#vcd.utils.identity">identity</a></code></li>
+<li><code><a title="vcd.utils.image_to_base64" href="#vcd.utils.image_to_base64">image_to_base64</a></code></li>
 <li><code><a title="vcd.utils.interpolate_pose" href="#vcd.utils.interpolate_pose">interpolate_pose</a></code></li>
 <li><code><a title="vcd.utils.intersection_between_frame_interval_arrays" href="#vcd.utils.intersection_between_frame_interval_arrays">intersection_between_frame_interval_arrays</a></code></li>
 <li><code><a title="vcd.utils.intersection_between_frame_intervals" href="#vcd.utils.intersection_between_frame_intervals">intersection_between_frame_intervals</a></code></li>
 <li><code><a title="vcd.utils.intersects" href="#vcd.utils.intersects">intersects</a></code></li>
 <li><code><a title="vcd.utils.inv" href="#vcd.utils.inv">inv</a></code></li>
 <li><code><a title="vcd.utils.isR" href="#vcd.utils.isR">isR</a></code></li>
-<li><code><a title="vcd.utils.is_inside" href="#vcd.utils.is_inside">is_inside</a></code></li>
-<li><code><a title="vcd.utils.is_inside_frame_interval" href="#vcd.utils.is_inside_frame_interval">is_inside_frame_interval</a></code></li>
 <li><code><a title="vcd.utils.is_inside_frame_intervals" href="#vcd.utils.is_inside_frame_intervals">is_inside_frame_intervals</a></code></li>
 <li><code><a title="vcd.utils.is_inside_image" href="#vcd.utils.is_inside_image">is_inside_image</a></code></li>
 <li><code><a title="vcd.utils.lat_to_scale" href="#vcd.utils.lat_to_scale">lat_to_scale</a></code></li>
 <li><code><a title="vcd.utils.latlon_to_mercator" href="#vcd.utils.latlon_to_mercator">latlon_to_mercator</a></code></li>
 <li><code><a title="vcd.utils.norm" href="#vcd.utils.norm">norm</a></code></li>
+<li><code><a title="vcd.utils.q2R" href="#vcd.utils.q2R">q2R</a></code></li>
+<li><code><a title="vcd.utils.rgb_to_hex" href="#vcd.utils.rgb_to_hex">rgb_to_hex</a></code></li>
 <li><code><a title="vcd.utils.rm_frame_from_frame_intervals" href="#vcd.utils.rm_frame_from_frame_intervals">rm_frame_from_frame_intervals</a></code></li>
 <li><code><a title="vcd.utils.round" href="#vcd.utils.round">round</a></code></li>
 <li><code><a title="vcd.utils.sort_frame_intervals" href="#vcd.utils.sort_frame_intervals">sort_frame_intervals</a></code></li>
@@ -2174,13 +2440,20 @@ def filter_outside(points2d_3xN, img_size, idx_valid):
 <li><code><a title="vcd.utils.EulerSeq.ZYZ" href="#vcd.utils.EulerSeq.ZYZ">ZYZ</a></code></li>
 </ul>
 </li>
+<li>
+<h4><code><a title="vcd.utils.QuaternionOrder" href="#vcd.utils.QuaternionOrder">QuaternionOrder</a></code></h4>
+<ul class="">
+<li><code><a title="vcd.utils.QuaternionOrder.WXYZ" href="#vcd.utils.QuaternionOrder.WXYZ">WXYZ</a></code></li>
+<li><code><a title="vcd.utils.QuaternionOrder.XYZW" href="#vcd.utils.QuaternionOrder.XYZW">XYZW</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </nav>
 </main>
 <footer id="footer">
-<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
 </footer>
 </body>
 </html>

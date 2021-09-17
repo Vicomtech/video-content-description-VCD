@@ -1,31 +1,32 @@
 """
-VCD (Video Content Description) library v4.3.1
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.1.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
 
 import unittest
 import os
+import inspect
+
 import vcd.core as core
-import vcd.schema as schema
 import vcd.types as types
 
-
-vcd_version_name = "vcd" + schema.vcd_schema_version.replace(".", "")
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
 
     def test_action_properties(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 2.- Create the Object
         uid_action1 = vcd.add_action(name="", semantic_type="#Running", frame_value=(0, 10))
@@ -47,13 +48,9 @@ class TestBasic(unittest.TestCase):
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="risk", val=0.7), frame_value=4)
         vcd.add_context_data(uid=uid_context2, context_data=types.num(name="weight", val=0.5), frame_value=4)
 
-        if not os.path.isfile('./etc/' + vcd_version_name + '_test_actions_with_action_data.json'):
-            vcd.save('./etc/' + vcd_version_name + '_test_actions_with_action_data.json', True)
-        vcd_read = core.VCD('./etc/' + vcd_version_name + '_test_actions_with_action_data.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
+        # Check equal to JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
