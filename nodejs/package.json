@@ -18,7 +18,8 @@
   "keywords": [
     "VCD",
     "Labeling",
-    "Node.js"
+    "Node.js",
+    "OpenLABEL"
   ],
   "author": "Marcos Nieto",
   "license": "ISC",

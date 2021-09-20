@@ -82,8 +82,8 @@ export class IntrinsicsPinhole extends Intrinsics{
 }
 
 export class IntrinsicsFisheye extends Intrinsics {	
-    constructor( widthPx: number, heightPx: number, lensCoeffsLx4: Array<number>, fovDeg: number, centerX: number, centerY: number,
-                 radiusX: number, radiusY: number, additionalItems){
+    constructor( widthPx: number, heightPx: number, lensCoeffsLx4: Array<number>, centerX: number, centerY: number,
+                 aspectRatio: number, additionalItems){
 		super();
 		if (!Number.isInteger(widthPx)){
 			console.warn("WARNING: widthPx is not integer");
@@ -97,10 +97,8 @@ export class IntrinsicsFisheye extends Intrinsics {
         this.data['intrinsics_fisheye']['width_px'] = widthPx
         this.data['intrinsics_fisheye']['height_px'] = heightPx
         this.data['intrinsics_fisheye']['center_x'] = centerX;
-        this.data['intrinsics_fisheye']['center_y'] = centerY;
-        this.data['intrinsics_fisheye']['radius_x'] = radiusX;
-        this.data['intrinsics_fisheye']['radius_y'] = radiusY;
-        this.data['intrinsics_fisheye']['fov_deg'] = fovDeg;
+        this.data['intrinsics_fisheye']['center_y'] = centerY;        
+        this.data['intrinsics_fisheye']['aspect_ratio'] = aspectRatio;
 
 		var num_coeffs = lensCoeffsLx4.length;
 		if(num_coeffs != 4){
