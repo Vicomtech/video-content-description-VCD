@@ -963,7 +963,8 @@ export class VCD {
         this.data['openlabel']['frames'][frameNum]['frame_properties'] = this.data['openlabel']['frames'][frameNum]['frame_properties'] || {};
 
         if (timestamp != null) {
-            if(timestamp instanceof String || timestamp === String) {
+            //if(timestamp instanceof String || timestamp === String) {
+            if(typeof timestamp == 'string') {
                 this.data['openlabel']['frames'][frameNum]['frame_properties']['timestamp'] = timestamp
             }
         }

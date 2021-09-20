@@ -127,8 +127,8 @@ test('test_create_streams_simple', () => {
     let frame_num=0;
     let dateStr;
     for (let t of t_data){
-        dateStr =t.getFullYear()+'-'+("00" + (t.getMonth() + 1)).slice(-2) + "-" +("00" + t.getDate()).slice(-2)+ " " +("00" + t.getHours()).slice(-2) + ":" +("00" + t.getMinutes()).slice(-2) + ":" +("00" + t.getSeconds()).slice(-2);      
-        vcd.addFrameProperties(frame_num,new String(dateStr));
+        dateStr =t.getFullYear().toString() +'-'+("00" + (t.getMonth() + 1)).slice(-2).toString()  + "-" +("00" + t.getDate()).slice(-2).toString() + " " +("00" + t.getHours()).slice(-2) + ":" +("00" + t.getMinutes()).slice(-2) + ":" +("00" + t.getSeconds()).slice(-2).toString() ;      
+        vcd.addFrameProperties(frame_num, dateStr);
         frame_num++;
     }
 
@@ -138,7 +138,7 @@ test('test_create_streams_simple', () => {
 
     frame_num=0;
     for (let t of t_data){
-        dateStr =t.getFullYear()+'-'+("00" + (t.getMonth() + 1)).slice(-2) + "-" +("00" + t.getDate()).slice(-2)+ " " +("00" + t.getHours()).slice(-2) + ":" +("00" + t.getMinutes()).slice(-2) + ":" +("00" + t.getSeconds()).slice(-2);      
+        dateStr =t.getFullYear().toString() +'-'+("00" + (t.getMonth() + 1)).slice(-2).toString()  + "-" +("00" + t.getDate()).slice(-2).toString() + " " +("00" + t.getHours()).slice(-2) + ":" +("00" + t.getMinutes()).slice(-2) + ":" +("00" + t.getSeconds()).slice(-2).toString() ;      
         vcd.addStreamProperties("Camera1",
                                     null,
                                     new types.IntrinsicsPinhole(
@@ -153,7 +153,7 @@ test('test_create_streams_simple', () => {
                                     new types.StreamSync(
                                     frame_num,
                                     frame_num + 1,  // Camera1's frames are shifted wrt to master count
-                                    new String(dateStr), //t.toString(),
+                                    dateStr, //t.toString(),
                                     null,
                                     null
                                         )
