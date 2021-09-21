@@ -20,10 +20,10 @@
     namespace fs = std::experimental::filesystem;
 #else
     #include <filesystem>
-    #ifdef _MSC_VER == 1900
-    namespace fs = std::experimental::filesystem;
+    #if _MSC_VER < 1910
+        namespace fs = std::experimental::filesystem;
     #else
-    namespace fs = std::filesystem;
+        namespace fs = std::filesystem;
     #endif
 #endif
 

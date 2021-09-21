@@ -12,7 +12,9 @@ include_directories( ${VCD_SOURCE_DIR}/modules/vcd_core/include)
 include_directories ( ${CMAKE_BINARY_DIR})  # to include setup_strings
 
 # Add demanded test cases
-add_subdirectory( test_basic )
+if(Linux)
+	add_subdirectory( test_basic )
+endif()
 add_subdirectory( test_action_properties )
 # add_subdirectory( test_converters )
 # add_subdirectory( test_image )

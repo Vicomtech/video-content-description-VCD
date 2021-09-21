@@ -43,6 +43,10 @@ ENDIF()
 #    add_definitions ("-std=c++14")
 #endif()
 
+IF(WINDOWS)
+    add_definitions(-D_HAS_AUTO_PTR_ETC=1)
+ENDIF()
+
 SET ( LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single output directory for building all libraries." FORCE )
 SET ( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single output directory for building all executables." FORCE )
 
