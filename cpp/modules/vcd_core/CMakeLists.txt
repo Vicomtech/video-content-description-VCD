@@ -27,9 +27,6 @@ if (ENABLE_GUID)
     # Set the building configuration depending on the platform
     if (UNIX)
         set(CROSSGUID_LIBS libxg.a uuid)
-    else()
-        set(CROSSGUID_LIBS ${CROSSGUID_PATH}/build/Release/crossguid.lib)
-        set(CROSSGUID_LIBS_DEBUG ${CROSSGUID_PATH}/build/Debug/crossguid-dgb.lib)
     endif()
 else()
     remove_definitions(-DENABLE_GUID)
@@ -60,13 +57,13 @@ if (ENABLE_GUID)
 #        add_dependencies(${MODULE_NAME} crossguid)
         target_link_libraries( ${MODULE_NAME} ${CROSSGUID_LIBS})
     else()
-        target_link_libraries( ${MODULE_NAME} optimized ${CROSSGUID_LIBS})
-        target_link_libraries( ${MODULE_NAME} debug ${CROSSGUID_LIBS_DEBUG})
+        add_dependencies(${MODULE_NAME} xg)
+        target_link_libraries( ${MODULE_NAME} PRIVATE xg)
     endif()
 endif()
 
 # set c++14 as the used c++ standard for this library
-DEFINE_CPP_STANDARD_AS_14(${MODULE_NAME})
+DEFINE_CPP_STANDARD_AS_17(${MODULE_NAME})
 
 # Include linter check to source files
 SET(SRC_TO_CHECK_LINT ${MODULE_SRCS} ${MODULE_HEADERS})
