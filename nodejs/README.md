@@ -85,10 +85,10 @@ import vcd.core as core
 myVCD = core.vcd('./tests/etc/openlabel100_test_scene_KITTI_Tracking_3.json')
 
 # Access data directly
-metadata = myVCD.data['vcd']['metadata']
+metadata = myVCD.data['openlabel']['metadata']
 
 # Modify data directly
-myVCD['vcd']['objects'][3]['type'] = "#Car"
+myVCD['openlabel']['objects'][3]['type'] = "#Car"
 ...
 
 # Serialize
@@ -207,6 +207,8 @@ VCD has evolved as follows:
 ## Related projects
 
 VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART, ACCURATE.
+
+The [DMD](https://dmd.vicomtech.org/) (Driver Monitoring Dataset) project also uses VCD! 
 
 If your project also uses VCD, let us know!
 
