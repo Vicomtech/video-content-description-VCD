@@ -191,6 +191,10 @@ SCENARIO("Create some basic content, without time information") {
         }
 
         THEN("Test guid based uid") {
+            // 0.- Check if UUID generator is active
+            const std::string test_uuid = vcd::UID::generate_uuid4();
+            REQUIRE(test_uuid != "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXX");
+
             // 1.- Create a VCD instance
             vcd::VCD_Inner vcd_impl;
 //            VCD_ptr vcd = VCD::create();
