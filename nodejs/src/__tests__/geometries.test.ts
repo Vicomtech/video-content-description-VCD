@@ -33,7 +33,7 @@ test('test_intrinsics', () => {
     // Fisheye
     vcd.addStream("CAM_FISHEYE", "", "Camera fisheye", StreamType.camera)
     vcd.addStreamProperties("CAM_FISHEYE", null, new types.IntrinsicsFisheye(
-        1280, 1080, [333.437012, 0.307729989, 2.4235599, 11.0495005], null, 0.0, 0.0, 0.0, 0.0,
+        1280, 1080, [333.437012, 0.307729989, 2.4235599, 11.0495005], 0.0, 0.0, 1.0,
         {"custom_property1":0.0}
     ))
     
