@@ -66,7 +66,7 @@ if (ENABLE_GUID)
     endif()
 endif()
 
-# set c++14 as the used c++ standard for this library
+# set c++17 as the used c++ standard for this library
 DEFINE_CPP_STANDARD_AS_17(${MODULE_NAME})
 
 # Include linter check to source files

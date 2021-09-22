@@ -39,7 +39,7 @@ endif()
 
 set_target_properties(${TEST_NAME} PROPERTIES FOLDER "vcd_tests")
 
-# set c++14 as the used c++ standard for this library
+# set c++17 as the used c++ standard for this library
 DEFINE_CPP_STANDARD_AS_17(${TEST_NAME})
 
 # Include linter check to source files
