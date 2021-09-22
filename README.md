@@ -226,9 +226,7 @@ Vicomtech created VCD in 2013, and since, has maintained VCD syntax and librarie
 VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autonoma del Pais Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
 
 Main developers:
-* Marcos Nieto - mnieto@vicomtech.org
-* Orti Senderos - osenderos@vicomtech.org
-* Jon Goenetxea - jgoenetxea@vicomtech.org
+* Marcos Nieto, Orti Senderos, Jon Goenetxea
 
 Contributors:
 Thanks to Andoni Mujika, Paola Cañas, Eider Irigoyen, Juan Diego Ortega, Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta and many others in Vicomtech.
