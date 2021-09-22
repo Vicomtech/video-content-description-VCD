@@ -1,3 +1,7 @@
 @PACKAGE_INIT@
 
+if (@MAKE_LIB_STATIC@)
+    add_definitions(-DVCD_STATIC)
+endif()
+
 include(${CMAKE_CURRENT_LIST_DIR}/vcd_coreTargets.cmake)

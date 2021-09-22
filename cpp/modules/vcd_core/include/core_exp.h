@@ -19,19 +19,22 @@
 // =====================================================================================
 // When the symbol vcd_core_EXPORTS is defined in a project functions and
 // classes are exported. In other cases they are imported from the DLL.
-
-#ifdef vcd_core_EXPORTS  // this is the DLL
-#if defined _WIN32 || defined _WIN64
-#define CORE_LIB __declspec(dllexport)
+#if defined VCD_STATIC
+    #define CORE_LIB
 #else
-#define CORE_LIB
-#endif
-#else  // this is the client of the DLL
-#if defined _WIN32 || defined _WIN64
-#define CORE_LIB __declspec(dllimport)
-#else
-#define CORE_LIB
-#endif
+    #ifdef vcd_core_EXPORTS  // this is the DLL
+        #if defined _WIN32 || defined _WIN64
+            #define CORE_LIB __declspec(dllexport)
+        #else
+            #define CORE_LIB
+        #endif
+    #else  // this is the client of the DLL
+        #if defined _WIN32 || defined _WIN64
+            #define CORE_LIB __declspec(dllimport)
+        #else
+            #define CORE_LIB
+        #endif
+    #endif
 #endif
 
 #endif  // CORE_EXP_H_

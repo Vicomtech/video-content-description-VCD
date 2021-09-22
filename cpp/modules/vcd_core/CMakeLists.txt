@@ -13,8 +13,10 @@ include_directories(${3RD_PARTY_PATH}/include/)
 
 if (MAKE_LIB_STATIC)
     set(LIB_TYPE STATIC)
+    add_definitions(-DVCD_STATIC)
 else()
     set(LIB_TYPE SHARED)
+    remove_definitions(-DVCD_STATIC)
 endif()
 
 # Generate dependencies
