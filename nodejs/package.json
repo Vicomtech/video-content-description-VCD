@@ -25,8 +25,8 @@
   "license": "ISC",
   "homepage": "https://github.com/Vicomtech/video-content-description-VCD#readme",
   "dependencies": {
-    "ajv": "^6.12.3",
-    "uuid": "^8.2.0"
+    "ajv": "^6.12.6",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",

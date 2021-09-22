@@ -222,11 +222,11 @@ export enum SetMode {
 
 
 /**
-* VCD 4.3.1
+* VCD 5.0.0
 *
-* NOTE: This is the Typescript version of VCD 4.3.1 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
+* NOTE: This is the Typescript version of VCD 5.0.0 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
 *
-* This class is the main manager of VCD 4 content.
+* This class is the main manager of VCD 5.0.0 content.
 * It can be created void, and add content (e.g. Objects) using the API
 * It can also be created by providing a JSON file.
 * ```
