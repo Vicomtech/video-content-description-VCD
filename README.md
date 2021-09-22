@@ -6,7 +6,7 @@ Originally, VCD focused on video content data, but has been extended to provide 
 
 VCD is defined as a structure of data, and as such, can be represented as a JSON Schema.
 
-The syntax(see [openlabel_schema_json-v1.0.0.json](https://github.com/Vicomtech/video-content-description-VCD/blob/master/schema/openlabel_schema_json-v1.0.0.json)), as a JSON Schema file, contains the full description of the VCD structure. This schema follows the ASAM OpenLABEL standard.
+The syntax(see [openlabel_json_schema-v1.0.0.json](https://github.com/Vicomtech/video-content-description-VCD/blob/master/schema/openlabel_json_schema-v1.0.0.json)), as a JSON Schema file, contains the full description of the VCD structure. This schema follows the ASAM OpenLABEL standard.
 
 ![VCD](https://github.com/Vicomtech/video-content-description-VCD/blob/master/doc/logo/image.svg?raw=true)
 
