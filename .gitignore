@@ -4,8 +4,9 @@ __pycache__/
 .vscode
 vcd.egg-info
 dist/
-lib/
+nodejs/lib/
 node_modules/
 build/
+/build-*
 package-lock.json
 jupyter/tutorial/.ipynb_checkpoints

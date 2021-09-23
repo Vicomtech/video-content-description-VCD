@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.1)
 
 ##############################
-set(TEST_NAME test_basic)
+set(TEST_NAME test_action_properties)
 PROJECT( ${TEST_NAME} )
 ##############################
 
@@ -20,7 +20,7 @@ include_directories(${SRC_PATH}/vcd_core/src)
 #---------------------------------------------------#
 # List source files in a variable so we can use it later more conveniently
 set(SOURCE_FILES
-    src/test_basic.cpp
+    src/test_action_properties.cpp
 )
 
 link_directories( ${CMAKE_BINARY_DIR}/bin )
@@ -39,13 +39,13 @@ endif()
 
 set_target_properties(${TEST_NAME} PROPERTIES FOLDER "vcd_tests")
 
-# set c++14 as the used c++ standard for this library
+# set c++17 as the used c++ standard for this library
 DEFINE_CPP_STANDARD_AS_17(${TEST_NAME})
 
 # Include linter check to source files
 ADD_LINT_CHECK_TO_TARGET(${TEST_NAME} "${SOURCE_FILES}")
 
 IF( BUILD_TESTS )
-     message("Adding test: RUN_test_objects at " ${EXECUTABLE_OUTPUT_PATH}/test_basic)
-     add_test( RUN_test_basic  ${EXECUTABLE_OUTPUT_PATH}/test_basic )
+     message("Adding test: RUN_test_objects at " ${EXECUTABLE_OUTPUT_PATH}/test_action_properties)
+     add_test( RUN_test_action_properties  ${EXECUTABLE_OUTPUT_PATH}/test_action_properties )
 ENDIF( BUILD_TESTS )

@@ -5,7 +5,7 @@
 cmake_minimum_required(VERSION 3.1)
 
 ##############################
-set(TEST_NAME test_basic)
+set(TEST_NAME test_uuid)
 PROJECT( ${TEST_NAME} )
 ##############################
 
@@ -20,7 +20,7 @@ include_directories(${SRC_PATH}/vcd_core/src)
 #---------------------------------------------------#
 # List source files in a variable so we can use it later more conveniently
 set(SOURCE_FILES
-    src/test_basic.cpp
+    src/test_uuid.cpp
 )
 
 link_directories( ${CMAKE_BINARY_DIR}/bin )
@@ -39,7 +39,7 @@ endif()
 
 set_target_properties(${TEST_NAME} PROPERTIES FOLDER "vcd_tests")
 
-# set c++14 as the used c++ standard for this library
+# set c++17 as the used c++ standard for this library
 DEFINE_CPP_STANDARD_AS_17(${TEST_NAME})
 
 # Include linter check to source files
