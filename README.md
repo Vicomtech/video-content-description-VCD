@@ -115,9 +115,9 @@ See examples in [nodejs/src/\__tests\__](https://github.com/Vicomtech/video-cont
 
 VCD is a toolkit with APIs in various programming languages (Python, Typescript, C++) which allows anyone to create, read, update and delete labels that follow the ASAM OpenLABEL standard v1.0.0. 
 
-Last version is VCD 5.0.0 compliant with OpenLABEL 1.0.0.
+Last version is VCD 5.0 compliant with OpenLABEL 1.0.0.
 
-Main changes at VCD 5.0.0 from VCD 4.3.1:
+Main changes at VCD 5.0 from VCD 4.3.1:
 * VCD schema is now OpenLABEL schema 1.0.0
 * Added support for scenario tagging
 * Improved performance
@@ -197,7 +197,7 @@ VCD has evolved as follows:
     * Multi-value attributes ('vec' of strings)
     * Typescript API
     * NPM and Pypi packages
-* VCD 5.0.0 (2021)
+* VCD 5.0 (2021)
     * VCD as toolkit to produce OpenLABEL compliant labels
     * Addition of C++ lite version
     * General improvements and consistency (Python, Typescript)
