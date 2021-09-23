@@ -137,14 +137,14 @@ SCENARIO("Add a set of actions to a VCD capture") {
             const std::string vcd_out_pretty = vcd->stringify(pretty);
 
             // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_actions_with_action_data_OUT.json";
+            string out_p = "openlabel100_test_actions_with_action_data_OUT.json";
             fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             o_p << vcd_out_pretty << std::endl;
             o_p.close();
 
             // Read reference JSON file
-            string ref_p = "vcd430_test_actions_with_action_data.json";
+            string ref_p = "openlabel100_test_actions_with_action_data.json";
             fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
             std::ifstream ref_file_data(vcd_refp_path);
             json ref_data;
@@ -157,10 +157,10 @@ SCENARIO("Add a set of actions to a VCD capture") {
             REQUIRE(check_json_level_both_sides(test_data, ref_data));
 
 
-//    if not os.path.isfile('./etc/vcd430_test_actions_with_action_data.json'):
-//                vcd.save('./etc/vcd430_test_actions_with_action_data.json',
+//    if not os.path.isfile('./etc/openlabel100_test_actions_with_action_data.json'):
+//                vcd.save('./etc/openlabel100_test_actions_with_action_data.json',
 //                         True)
-//      vcd_read = core.VCD('./etc/vcd430_test_actions_with_action_data.json',
+//      vcd_read = core.VCD('./etc/openlabel100_test_actions_with_action_data.json',
 //                                validation=True)
 //            vcd_read_stringified = vcd_read.stringify()
 //            vcd_stringified = vcd.stringify()

@@ -523,7 +523,7 @@ class VCD_Impl : public vcd::VCD {
     inline bool
     isFrameWithIndex(const size_t frame_index) {
         const std::string frame_index_str = std::to_string(frame_index);
-        return m_data["vcd"]["frames"].contains(frame_index_str);
+        return m_data["openlabel"]["frames"].contains(frame_index_str);
     }
 
     static size_t
