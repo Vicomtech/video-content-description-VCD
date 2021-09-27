@@ -1052,6 +1052,13 @@
                         },
                         {
                             "additionalProperties": true,
+                            "dependencies": {
+                                "boundary_list": {
+                                    "required": [
+                                        "boundary_mode"
+                                    ]
+                                }
+                            },
                             "properties": {
                                 "boundary_list": {
                                     "items": {
@@ -1060,6 +1067,10 @@
                                     "type": "array"
                                 },
                                 "boundary_mode": {
+                                    "enum": [
+                                        "include",
+                                        "exclude"
+                                    ],
                                     "type": "string"
                                 },
                                 "uri": {

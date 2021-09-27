@@ -157,10 +157,16 @@ openlabel_schema = {
                                     "type": "array",
                                     "items": {"type": "string"}
                                 },
-                                "boundary_mode": {"type": "string"}
+                                "boundary_mode": {
+                                    "type": "string",
+                                    "enum": ["include", "exclude"]
+                                }
                             },
                             "additionalProperties": True,
-                            "required": ["uri"]
+                            "required": ["uri"],
+                            "dependencies": {
+                                "boundary_list": {"required": ["boundary_mode"] }
+                            }
                         }]
                     },
             },
