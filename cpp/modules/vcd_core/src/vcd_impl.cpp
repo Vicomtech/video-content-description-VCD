@@ -913,7 +913,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
             update_vcd_frame_intervals(frame_index);
         }
         // 2.1.b) Add new data to existing frame
-        json* frame = get_frame(frame_index);
+        json* frame = get_frame(static_cast<int>(frame_index));
         if (frame == nullptr) {
             // ERROR: the frame does not exist!
             return;
@@ -1062,7 +1062,7 @@ VCD_Impl::set_element_data(const ElementType type, const std::string &uid_str,
     } else {
         // As there is a usable frame index defined, we have to include the
         // values in the specified frame.
-        json *frme_elem = get_frame(frame_index);
+        json *frme_elem = get_frame(static_cast<int>(frame_index));
         if (frme_elem == nullptr) {
             frme_elem = &add_frame(frame_index, S_ADD_MISSIED_FRAMES);
         }
