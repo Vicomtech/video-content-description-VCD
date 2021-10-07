@@ -899,13 +899,14 @@ openlabel_schema = {
                         "width_px": {"type": "integer"},
                         "height_px": {"type": "integer"},                        
                         "center_x_px": {"type": ["number", "null"]},
-                        "center_y_px": {"type": ["number", "null"]},
-                        "aspect_ratio": {"type": ["number", "null"]},                        
+                        "center_y_px": {"type": ["number", "null"]},                        
+                        "focal_length_x": {"type": ["number", "null"]},                        
+                        "focal_length_y": {"type": ["number", "null"]},
                         "lens_coeffs": {
-                            "description": "This is the list of 4 values for the lens coefficients.",
+                            "description": "This is the list of N values for the lens coefficients.",
                             "type": "array",
                             "minItems": 4,
-                            "maxItems": 4,
+                            "maxItems": 5,
                             "items": {"type": "number"}
                         }
                     },

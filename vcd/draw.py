@@ -83,9 +83,10 @@ class SetupViewer:
                     self.plot_cuboid(cuboid_cs, cuboid_vals, 'k')                    
                 
                 else:
-                    if 'cuboid' in object['object_data']:
-                        for cuboid in object['object_data']['cuboid']:
-                            self.plot_cuboid(cuboid['coordinate_system'], cuboid['val'], 'k')
+                    if 'object_data' in object:
+                        if 'cuboid' in object['object_data']:
+                            for cuboid in object['object_data']['cuboid']:
+                                self.plot_cuboid(cuboid['coordinate_system'], cuboid['val'], 'k')
 
         if axes is None:
             self.ax.set_xlim(-1.25, 4.25)

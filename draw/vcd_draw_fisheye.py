@@ -14,7 +14,7 @@ VCD is distributed under MIT License. See LICENSE.
 import os
 import sys
 sys.path.insert(0, "..")
-import screeninfo
+
 import cv2 as cv
 import numpy as np
 import math
@@ -36,8 +36,8 @@ def simple_setup_4_cams_fisheye():
     # Let's build the cameras
     img_width_px = 1280
     img_height_px = 966
-    cX = -0.302159995
-    cY = -3.44617009
+    cX = img_width_px/2.0 -0.302159995  # this is the center, not the deviation
+    cY = img_height_px/2.0 -3.44617009 # this is the center, not the deviation
     ################################
     # CAM_FRONT
     ################################
@@ -81,10 +81,11 @@ def simple_setup_4_cams_fisheye():
                               intrinsics=types.IntrinsicsFisheye(
                                   width_px=img_width_px,
                                   height_px=img_height_px,
-                                  lens_coeffs_1x4=list(d_1x4.flatten()),
+                                  lens_coeffs_1xN=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  aspect_ratio=1.0                                  
+                                  focal_length_x=1.0,
+                                  focal_length_y=1.0
                               )
                               )
     vcd.add_coordinate_system("CAM_FRONT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -123,10 +124,11 @@ def simple_setup_4_cams_fisheye():
                               intrinsics=types.IntrinsicsFisheye(
                                   width_px=img_width_px,
                                   height_px=img_height_px,
-                                  lens_coeffs_1x4=list(d_1x4.flatten()),
+                                  lens_coeffs_1xN=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  aspect_ratio=1.0
+                                  focal_length_x=1.0,
+                                  focal_length_y=1.0
                               )
                               )
     vcd.add_coordinate_system("CAM_REAR", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -165,10 +167,11 @@ def simple_setup_4_cams_fisheye():
                               intrinsics=types.IntrinsicsFisheye(
                                   width_px=img_width_px,
                                   height_px=img_height_px,
-                                  lens_coeffs_1x4=list(d_1x4.flatten()),
+                                  lens_coeffs_1xN=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  aspect_ratio=1.0
+                                  focal_length_x=1.0,
+                                  focal_length_y=1.0
                               )
                               )
     vcd.add_coordinate_system("CAM_LEFT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -207,10 +210,11 @@ def simple_setup_4_cams_fisheye():
                               intrinsics=types.IntrinsicsFisheye(
                                   width_px=img_width_px,
                                   height_px=img_height_px,
-                                  lens_coeffs_1x4=list(d_1x4.flatten()),
+                                  lens_coeffs_1xN=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  aspect_ratio=1.0
+                                  focal_length_x=1.0,
+                                  focal_length_y=1.0
                               )
                               )
     vcd.add_coordinate_system("CAM_RIGHT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -242,9 +246,6 @@ def draw_scene(vcd):
                 'Ego-car': (0, 0, 0),
                 'Wall': (0, 0, 255),
                 'Ground': (0, 255, 0)}
-
-    # Get the size of the screen
-    screen = screeninfo.get_monitors()[0]
 
     # Draw the images
     img_width_px = 1280

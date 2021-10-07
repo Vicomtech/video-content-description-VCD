@@ -14,7 +14,6 @@ VCD is distributed under MIT License. See LICENSE.
 import os
 import sys
 sys.path.insert(0, "..")
-import screeninfo
 import cv2 as cv
 import numpy as np
 import math
@@ -377,9 +376,6 @@ def draw_scene(vcd):
                 'Ego-car': (0, 0, 0),
                 'Wall': (0, 0, 255),
                 'Ground': (0, 255, 0)}
-
-    # Get the size of the screen
-    screen = screeninfo.get_monitors()[0]
 
     # Draw the images
     img_width_px = 960

@@ -594,6 +594,10 @@ def norm(ray):
     return math.sqrt(ray[0]*ray[0] + ray[1]*ray[1])
 
 
+def add_homogeneous_row(array_MxN):
+    N = array_MxN.shape[1]
+    return np.vstack((array_MxN, np.ones((1, N))))
+
 ####################################################
 # RADIAL DISTORTION
 ####################################################
