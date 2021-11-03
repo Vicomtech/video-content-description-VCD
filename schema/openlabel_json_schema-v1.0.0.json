@@ -1509,12 +1509,6 @@
                         "additionalProperties": true,
                         "description": "This JSON object defines an instance of the intrinsic parameters of a fisheye camera.",
                         "properties": {
-                            "aspect_ratio": {
-                                "type": [
-                                    "number",
-                                    "null"
-                                ]
-                            },
                             "center_x_px": {
                                 "type": [
                                     "number",
@@ -1527,15 +1521,27 @@
                                     "null"
                                 ]
                             },
+                            "focal_length_x": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
+                            "focal_length_y": {
+                                "type": [
+                                    "number",
+                                    "null"
+                                ]
+                            },
                             "height_px": {
                                 "type": "integer"
                             },
                             "lens_coeffs": {
-                                "description": "This is the list of 4 values for the lens coefficients.",
+                                "description": "This is the list of N values for the lens coefficients.",
                                 "items": {
                                     "type": "number"
                                 },
-                                "maxItems": 4,
+                                "maxItems": 5,
                                 "minItems": 4,
                                 "type": "array"
                             },
