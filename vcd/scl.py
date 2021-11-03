@@ -1665,21 +1665,57 @@ class CameraCylindrical(Camera):
         self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
         self.K_3x3_inv = utils.inv(self.K_3x3)
 
-    def project_points3d(self, points3d_4xN, remove_outside=False):
+    def project_points3d(self, points3d_4xN, apply_distortion=False, remove_outside=False):
+        # 1.- Select only those z > 0 (in front of the camera)
+        idx_in_front = points3d_4xN[2, :] > 1e-8
+        idx_valid = idx_in_front
+        #rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
+        rays3d_3xN_filt = points3d_4xN[0:3]#, idx_valid]
+
         # Two-step process: use Ray2LL and the LL2Pixel
-        lonlat_2xN = self.ray2LL(points3d_4xN)
-        points2d_3xN = self.LL2Pixel(lonlat_2xN)        
+        lonlat_2xN = self.ray2LL(rays3d_3xN_filt, idx_valid)
+        points2d_3xN = self.LL2Pixel(lonlat_2xN)
 
         # Declare as non-valid points outisde the limits of the image        
         N = points2d_3xN.shape[1]
-        idx_valid = [True] * N
         if remove_outside:
             points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size, idx_valid)
 
         return points2d_3xN, idx_valid
 
-    def reproject_points2d(self, points2d_3xN, plane_cs):
-        pass
+    def reproject_points2d(self, points2d_3xN, plane_cs, apply_undistorsion = True):
+        #Step one
+        rays3d_3xN = self.reproject_points2d_into_rays3d(points2d_3xN)
+        N = rays3d_3xN.shape[1]
+        idx_valid = [True] * N
+
+        #Step two
+        # Use Plucker intersection line-plane
+        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
+        P1 = np.vstack((0, 0, 0, 1))
+        P2array = np.vstack((rays3d_3xN, np.ones((1, N))))
+        # Plane equation in plucker coordinates (wrt to world)
+        P = np.asarray(plane_cs).reshape(4, 1)
+        # Line equation in plucker coordinates
+        p3dNx4 = np.array([])
+        count = 0
+        for P2 in P2array.T:
+            P2 = P2.reshape(4, 1)
+            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
+            # Intersection is a 3D point
+            p3Dlcs = np.matmul(L, P)
+            if p3Dlcs[3][0] != 0:
+                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
+            else:
+                # This is an infinite point: return direction vector instead
+                norm = np.linalg.norm(p3Dlcs[:3][0])
+                p3Dlcs /= norm
+                idx_valid[count] = False
+            p3dNx4 = np.append(p3dNx4, p3Dlcs)
+            count += 1
+        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
+        p3d_4xN = np.transpose(p3dNx4)
+        return p3d_4xN, idx_valid
 
     def reproject_points2d_into_rays3d(self, points2d_3xN):
         lonlat_2xN = self.pixel2LL(points2d_3xN)
@@ -1711,14 +1747,16 @@ class CameraCylindrical(Camera):
     # ----------------------------------------------
     # From 3D -> 2D
     # ----------------------------------------------
-    def ray2LL(self, ray3d_4xN):
+    def ray2LL(self, ray3d_4xN, idx_valid):
         # See http://paulbourke.net/dome/dualfish2sphere/ but modified so the camera model is z-optical axis, x-right, y-bottom
         X = ray3d_4xN[0, :]
         Y = ray3d_4xN[1, :]
         Z = ray3d_4xN[2, :]
 
-        lon_1xN = np.arctan2(Z, X)
-        lat_1xN = np.arctan2(-Y, np.sqrt(X*X + Z*Z))
+        lon_1xN = np.zeros(X.shape)
+        np.arctan2(Z, X, out=lon_1xN, where=idx_valid)
+        lat_1xN = np.zeros(Y.shape)
+        np.arctan2(-Y, np.sqrt(X*X + Z*Z), out=lat_1xN, where=idx_valid)
 
         #lon_1xN = np.arctan2(ray3d_4xN[1,:], ray3d_4xN[0,:])
         #lat_1xN = np.arctan2(ray3d_4xN[2,:], np.sqrt(ray3d_4xN[0,:]*ray3d_4xN[0,:] + ray3d_4xN[1,:]*ray3d_4xN[1,:]))
@@ -1730,4 +1768,4 @@ class CameraCylindrical(Camera):
         points2d_3xN = self.K_3x3 @ lonlat_3xN
         #px = self.mx*lon + self.nx
         #py = self.my*lat + self.ny
-        return points2d_3xN    
+        return points2d_3xN
