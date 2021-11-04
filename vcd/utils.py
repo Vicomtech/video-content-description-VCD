@@ -807,7 +807,7 @@ def grid_as_4xN_points3d(xm, ym, zm):
     xm_row = xm.reshape(1, -1)
     ym_row = ym.reshape(1, -1)
     zm_row = zm.reshape(1, -1)
-    pad_row = np.zeros(xm_row.shape, np.float)
+    pad_row = np.zeros(xm_row.shape, float)
     pad_row[0, :] = 1.0
     points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
     return points3d_vcs_4xN

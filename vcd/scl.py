@@ -1306,6 +1306,16 @@ class CameraFisheye(Camera):
         end = time.time()
         print("CameraFisheye: Compute remaps for undistortion... ", end - start)
 
+    def polynomial_with_offset(self, x, k1, k2, k3, k4, k5, k6, k7, k8, k9):
+        x2 = x * x
+        x3 = x2 * x
+        x4 = x3 * x
+        x5 = x4 * x
+        x6 = x5 * x
+        x7 = x6 * x
+        x8 = x7 * x
+        return k1 + x*k2 + x2*k3 + x3*k4 + x4*k5 + x5*k6 + x6*k7 + x7*k8 + x8*k9
+
     def radialpoly_model_function(self, x, k1, k2, k3, k4):
         x2 = x * x
         x3 = x2 * x
@@ -1322,39 +1332,44 @@ class CameraFisheye(Camera):
 
     def __apply_polynomial(self, x, k, model=None):
         if model == 'radial_poly':      
-            y = self.radialpoly_model_function(x, k[0], k[1], k[2], k[3])            
+            return self.radialpoly_model_function(x, k[0], k[1], k[2], k[3])            
         elif model == 'kannala':            
-            y = self.kannala_model_function(x, k[0], k[1], k[2], k[3], k[4])   
-        return y    
+            return self.kannala_model_function(x, k[0], k[1], k[2], k[3], k[4])   
+        elif model == 'polynomial_offset':
+            return self.polynomial_with_offset(x, k[0], k[1], k[2], k[3], k[4], k[5], k[6], k[7], k[8])  
+        else:
+            warnings.warn('Unsupported distortion model. Use radial_poly, kannala or polynomial_offset')
+            return None
     
     def __invert_polynomial(self, d, model, n=100):
         a = np.linspace(0, np.pi/2, num=n)        
         k_list = d.flatten().tolist()
         
-        if model == 'radial_poly':
-            dim = len(k_list) # so 4
-        elif model == 'kannala':
-            dim = 5 # reaching x^9, but maybe the inverse can be fitted with a 5 degrees polynomial
-
         rp = self.__apply_polynomial(a, k_list, model)  # direct distortion, using model
-        kp = np.polyfit(rp, a, dim-1)
+
+        # For the inverse polynomial, we can use numpy's polyfit, which fits p(x)=p(0)*x**deg + ... + p(deg)
+        dim = 9 # dimensions of the offset polynomial to represent the inverse distortion
+        kp = np.polyfit(rp, a, dim-1)  # polyfit return reversed coefficients with offset
         kp_list = kp.tolist()
-        kp_list.reverse()
-        a_rep = self.__apply_polynomial(rp, kp_list, 'radial_poly') #, model) # inverse distortion, using 5-degree polynomial
+        kp_list.reverse()  # kp_list[-1] is the offset
+        a_rep = self.__apply_polynomial(rp, kp_list, 'polynomial_offset')
 
         error_a = np.sum(np.abs(a-a_rep)) / n
         error_a_deg = error_a * 180 / np.pi
 
-        #fig, ax = plt.subplots()
-        #ax.plot(a_rep, rp)
-        #ax.set(xlabel='a_rep', ylabel='rp', title='Distortion')
-        #ax.grid()
+        #fig, (ax1, ax2) = plt.subplots(1, 2)
+        #fig.suptitle('Distortion')
+        #ax1.plot(a, rp)
+        #ax1.set(xlabel='a', ylabel='rp', title='Distortion direct')
+        #ax1.grid()
+        #ax2.plot(a_rep, rp)
+        #ax2.set(xlabel='a_rep', ylabel='rp', title='Distortion reprojected')
         #fig.savefig('distortion_ret.png')
         #plt.show()
 
         if error_a_deg > 1e-1:
             warnings.warn("WARNING: the inverse of the CameraFisheye distortion produces reprojection error > 1e-2 "
-                          "(i.e. higher than tenth of degree")
+                            "(i.e. higher than tenth of degree")
 
         return np.array(kp_list)
 
@@ -1401,9 +1416,9 @@ class CameraFisheye(Camera):
             X = rays3d_dist_3xN[0, i]
             Y = rays3d_dist_3xN[1, i]
             rp = utils.norm([X, Y])
-            a = self.__apply_polynomial(rp, self.d_inv_1xM.flatten().tolist()) #, self.model) # if we don't provide model, a generic polynomial function is applied
+            a = self.__apply_polynomial(rp, self.d_inv_1xM.flatten().tolist(), "polynomial_offset") # NOTE: the inverse polynomial is fixed to dim=4 with offset
             r = math.tan(a)
-            r_rp = np.float(r / rp)
+            r_rp = float(r / rp)
             if rp > 1e-8:
                 rays3d_und_3xN[0, i] = X * r_rp
                 rays3d_und_3xN[1, i] = Y * r_rp
@@ -1433,8 +1448,8 @@ class CameraFisheye(Camera):
             Z = rays3d_3xN[2, i]
             r = utils.norm([X, Y])
             a = math.atan2(r, Z)
-            rp = self.__apply_polynomial(a, self.d_1xN.flatten().tolist(), self.model)
-            rp_r = np.float(rp/r)
+            rp = self.__apply_polynomial(a, self.d_1xN.flatten().tolist(), self.model)  # direct distortion, use specified model
+            rp_r = float(rp/r)
             if r > 1e-8:
                 rays3d_dist_3xN[0, i] = X * rp_r
                 rays3d_dist_3xN[1, i] = Y * rp_r
