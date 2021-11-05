@@ -569,6 +569,85 @@ class TopView:
 
                             self.draw_points3d(_img, points3d_4xN_transformed, color)
                     ########################################
+                    # point3d - Single point in 3D
+                    ########################################
+                    elif object_data_key == "point3d":
+                        color = self.params.colorMap[object_class]
+                        point_name = object_data_item['name']
+
+                        if 'coordinate_system' in object_data_item:
+                            cs_data = object_data_item['coordinate_system']
+                        else:
+                            warnings.warn("WARNING: The point3d of this VCD don't have a coordinate_system.")
+                            # For simplicity, let's assume they are already expressed in the target cs
+                            cs_data = self.coordinate_system
+
+                        x = object_data_item['val'][0]
+                        y = object_data_item['val'][1]
+                        z = object_data_item['val'][2]
+                        points3d_4xN = np.array([x, y, z, 1]).reshape(4, 1)
+                        points_cs = object_data_item['coordinate_system']
+
+                        # First convert from the src coordinate system into the camera coordinate system
+                        points3d_4xN_transformed = self.scene.transform_points3d_4xN(points3d_4xN,
+                                                                                        points_cs,
+                                                                                        self.coordinate_system)
+
+                        if 'attributes' in object_data_item:
+                            for attr_type, attr_list in object_data_item['attributes'].items():
+                                if attr_type == 'vec':
+                                    for attr in attr_list:
+                                        if attr['name'] == 'color':
+                                            color = attr['val']
+
+                        self.draw_points3d(_img, points3d_4xN_transformed, color)
+
+                        if _drawTrajectory:
+                            fis_object = self.scene.vcd.get_object_data_frame_intervals(uid, point_name)
+                            if fis_object.empty():
+                                # So this object is static, let's project its geometry into the current transform
+                                fis = self.scene.vcd.get_frame_intervals().get_dict()
+                            else:
+                                fis = fis_object.get_dict()
+
+                            for fi in fis:
+                                prev_center = dict()
+                                for f in range(fi['frame_start'], _frameNum + 1):
+                                    object_data_item = self.scene.vcd.get_object_data(uid, point_name, f)
+
+                                    x = object_data_item['val'][0]
+                                    y = object_data_item['val'][1]
+                                    z = object_data_item['val'][2]
+                                    points3d_4xN = np.array([x, y, z, 1]).reshape(4, 1)
+                                    points3d_4xN_transformed = points3d_4xN
+                                    
+                                    if cs_data != self.coordinate_system:
+                                        src_cs = cs_data
+                                        dst_cs = self.coordinate_system
+                                        transform_src_dst, static = self.scene.get_transform(src_cs,
+                                                                                dst_cs, f)
+                                        if transform_src_dst is not None:
+                                            points3d_4xN_transformed = self.scene.transform_points3d_4xN(points3d_4xN,
+                                                                                        points_cs,
+                                                                                        self.coordinate_system)
+
+                                    name = object_data_item['name']
+
+                                    center = (points3d_4xN_transformed[0,0], points3d_4xN_transformed[1,0])
+                                    center_pix = self.point2Pixel(center)
+
+                                    # this is a dict to allow multiple trajectories
+                                    # (e.g. several cuboids per object)
+                                    if prev_center.get(name) is not None:
+                                        cv.line(_img, prev_center[name], center_pix, (0, 0, 0),
+                                                1, cv.LINE_AA)
+
+                                    cv.circle(_img, center_pix, 2,
+                                              self.params.colorMap[object_class], -1)
+
+                                    prev_center[name] = center_pix
+
+                    ########################################
                     # mesh - Point-line-area structure
                     ########################################
                     elif object_data_key == "mesh":
