@@ -360,8 +360,10 @@ class VCD:
                         if frames:  # So frames is not empty
                             self.data['openlabel']['frames'] = {int(key): value for key, value in frames.items()}
                 else:
-                    Exception(
+                    raise Exception(
                         "ERROR: This OpenLABEL file has version different than 1.0.0. This API is incompatible.")                
+            else:
+                raise Exception("ERROR: This JSON file does not have \"vcd\" nor \"openlabel\" at root level.")
 
             # Close file
             json_file.close()
