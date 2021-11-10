@@ -33,7 +33,11 @@ option( ADD_VCD_CORE "Add VCD core" ON)
 #option( BUILD_SAMPLES "Build samples" ON)
 option( BUILD_TESTS "Build tests" OFF)
 #option( BUILD_PERF "Build performance tests" OFF)
-option( MAKE_LIB_STATIC "Generate the library as static" OFF)
+# Static library needs to include some static dependencies in the final
+#   installation package (related with the uuid generation library),
+#   which are not included in this version.
+# option( MAKE_LIB_STATIC "Generate the library as static" OFF)
+set(MAKE_LIB_STATIC OFF)
 
 # Add support C++14 definitions in Ubuntu
 IF(UNIX AND NOT APPLE)
@@ -59,8 +63,8 @@ endif(BUILD_SAMPLES)
 
 if (BUILD_TESTS)
 ENABLE_TESTING() #This will generate the RUN_TESTS project in VS
-    add_subdirectory(${CMAKE_SOURCE_DIR}/3rdparty/Catch2/)
-    include_directories(${CMAKE_SOURCE_DIR}/3rdparty/Catch2/src/catch2)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/Catch2/)
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/Catch2/src/catch2)
     add_subdirectory(test)
 endif(BUILD_TESTS)
 
