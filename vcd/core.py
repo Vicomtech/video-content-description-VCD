@@ -316,8 +316,10 @@ class VCD:
                                 read_data['vcd']['metadata']['schema_version'] == "4.3.1":
 
                             # This is VCD 4.3.0 or VCD 4.3.1
-                            self.data = read_data                           
-                            
+                            self.data = read_data       
+
+                            warnings.warn("WARNING: Converting VCD 4.3.1 to OpenLABEL 1.0.0. A revision is recommended (specially for transforms and coordinate systems).")
+                                                
                             # 'vcd' content was loaded, need to change root to 'openlabel'
                             # Let's substitute the root from 'vcd' to 'openlabel', and update the schema version
                             self.data['openlabel'] = self.data.pop('vcd')

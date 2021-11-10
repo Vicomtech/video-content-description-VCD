@@ -4,9 +4,9 @@
 VCD is a metadata format designed to enable the description of scene information, particularly efficient for discrete data series, such as image or point-cloud sequences from sensor data.
 Originally, VCD focused on video content data, but has been extended to provide structures to describe, potentially, any type of information of a scene.
 
-VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
+VCD is defined as a structure of data, and as such, can be represented as a JSON Schema.
 
-The syntax(see [vcd_schema_json-v4.3.1.json](https://github.com/Vicomtech/video-content-description-VCD/blob/master/schema/vcd_schema_json-v4.3.1.json)), as a JSON Schema file, contains the full description of the VCD structure.
+The syntax(see [openlabel_json_schema-v1.0.0.json](https://github.com/Vicomtech/video-content-description-VCD/blob/master/schema/openlabel_json_schema-v1.0.0.json)), as a JSON Schema file, contains the full description of the VCD structure. This schema follows the ASAM OpenLABEL standard.
 
 ![VCD](https://github.com/Vicomtech/video-content-description-VCD/blob/master/doc/logo/image.svg?raw=true)
 
@@ -18,7 +18,7 @@ More details can be found at the project's website: https://vcd.vicomtech.org
 
 ### Python
 
-Using pip (Python >3.8)):
+Using pip (Python >3.6)):
 
 ```
 pip install vcd
@@ -33,51 +33,20 @@ python setup.py build
 python setup.py install
 ```
 
+To install previous versions of vcd, you can specify it via pip:
+
+```
+pip install vcd==4.3.1
+```
+
+NOTE: VCD version 4.3.1 requires Python 3.8.
+
 ### Typescript
 
 NPM packages can be used
 
 ```
 npm install vcd-ts
-```
-
-#### Development notes:
-
-1 Node.js needs to be installed (https://nodejs.org/en/download/)
-
-2 Install required dependencies using package.json file
-```
-cd nodejs
-npm install 
-```
-3 See which dependencies and devDependencies are installed
-```
-npm list --prod
-npm list --dev
-```
-
-#### Testing the VCD package locally using the nodejs-test project
-
-1 Compile the VCD package if not done already
-```
-cd ../nodejs
-npm run build
-```
-
-2 Load local NPM package (note the VCD package is under folder 'nodejs'). Make sure you have compiled the VCD package before:
-```
-cd ../nodejs-test
-npm install --save-dev ..\nodejs
-```
-
-3 Compile (creates a vcd-tester.js)
-```
-npm run build 
-```
-
-4 Run script calling Node.js
-```
-node vcd-tester.js
 ```
 
 ## Usage
@@ -113,13 +82,13 @@ The API contains useful functions that ensures the produced content is compliant
 import vcd.core as core
 
 # Load a VCD file
-myVCD = core.vcd('./tests/etc/vcd430_test_kitti_tracking_0_actions.json')
+myVCD = core.vcd('./tests/etc/openlabel100_test_scene_KITTI_Tracking_3.json')
 
 # Access data directly
-metadata = myVCD.data['vcd']['metadata']
+metadata = myVCD.data['openlabel']['metadata']
 
 # Modify data directly
-myVCD['vcd']['objects'][3]['type'] = "#Car"
+myVCD['openlabel']['objects'][3]['type'] = "#Car"
 ...
 
 # Serialize
@@ -144,9 +113,16 @@ See examples in [nodejs/src/\__tests\__](https://github.com/Vicomtech/video-cont
 
 ## Versions
 
-VCD is defined as a syntax, and as such, different versions imply differences in the syntax or data structure. In addition, each version has a dedicated library version compatible with it.
+VCD is a toolkit with APIs in various programming languages (Python, Typescript, C++) which allows anyone to create, read, update and delete labels that follow the ASAM OpenLABEL standard v1.0.0. 
 
-Last version is VCD 4.3.1.
+Last version is VCD 5.0.0 compliant with OpenLABEL 1.0.0.
+
+Main changes at VCD 5.0.0 from VCD 4.3.1:
+* VCD schema is now OpenLABEL schema 1.0.0
+* Added support for scenario tagging
+* Improved performance
+* Addition of C++ API (lite version)
+* Enhanced support for Quaternions
 
 Main changes at VCD 4.3.1 from VCD 4.3.0:
 * Bug fixing (npm package)
@@ -221,13 +197,20 @@ VCD has evolved as follows:
     * Multi-value attributes ('vec' of strings)
     * Typescript API
     * NPM and Pypi packages
+* VCD 5.0.0 (2021)
+    * VCD as toolkit to produce OpenLABEL compliant labels
+    * Addition of C++ lite version
+    * General improvements and consistency (Python, Typescript)
+    * Removed support for protobuf serialization
 
 
 ## Related projects
 
-VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART.
+VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART, ACCURATE.
 
-If your project also uses VCD, let me know!
+The [DMD](https://dmd.vicomtech.org/) (Driver Monitoring Dataset) project also uses VCD! 
+
+If your project also uses VCD, let us know!
 
 ## OpenLABEL
 
@@ -235,7 +218,8 @@ Along with the development of VCD, we are participating in the definition of the
 
 https://www.asam.net/project-detail/asam-openlabel-v100
 
-VCD 4.3.1 is shaped to be compliant with the format defined in OpenLABEL concept paper. As the standard evolves into a standardisation project, VCD will evolve as well to become the first labeling toolset compliant with the standard.
+VCD 5.0.0 is shaped to be compliant with the format defined in OpenLABEL v1.0.0.
+VCD is the first labeling toolset compliant with the standard and used during the ellaboration of the standard to produce samples and create the JSON schema.
 
 ## Credits
 
@@ -244,11 +228,15 @@ Vicomtech created VCD in 2013, and since, has maintained VCD syntax and librarie
 VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autonoma del Pais Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
 
 Main developers:
-* Marcos Nieto - mnieto@vicomtech.org
-* Orti Senderos - osenderos@vicomtech.org
+* Marcos Nieto, Orti Senderos, Jon Goenetxea
 
 Contributors:
-Thanks to Andoni Mujika, Juan Diego Ortega, Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta and many others in Vicomtech. 
+Thanks to Andoni Mujika, Paola Cañas, Eider Irigoyen, Juan Diego Ortega, Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta and many others in Vicomtech.
+
+Also thanks to Nicola Croce (Deepen.ai), Jason Zhang (Warwick University), Tim Raedsch (Understand.ai) and other colleagues in ASAM for their ideas and comments during the ellaboration of the OpenLABEL v1.0.0 standard.
+
+Finally, special thanks to Oihana Otaegui, as head of the ITS & Engineering department in Vicomtech. Without her lead this project would have never been possible. She believed in the VCD idea and supported me to carry on. Thanks Oihana! ; )
+
 
 ## License
 

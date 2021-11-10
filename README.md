@@ -4,9 +4,9 @@
 VCD is a metadata format designed to enable the description of scene information, particularly efficient for discrete data series, such as image or point-cloud sequences from sensor data.
 Originally, VCD focused on video content data, but has been extended to provide structures to describe, potentially, any type of information of a scene.
 
-VCD is defined as a structure of data, and as such, can be represented as a JSON Schema, or a Google's Protocol Buffer proto file.
+VCD is defined as a structure of data, and as such, can be represented as a JSON Schema.
 
-The syntax(see [openlabel_schema_json-v1.0.0.json](https://github.com/Vicomtech/video-content-description-VCD/blob/master/schema/openlabel_schema_json-v1.0.0.json)), as a JSON Schema file, contains the full description of the VCD structure. This schema follows the ASAM OpenLABEL standard.
+The syntax(see [openlabel_json_schema-v1.0.0.json](https://github.com/Vicomtech/video-content-description-VCD/blob/master/schema/openlabel_json_schema-v1.0.0.json)), as a JSON Schema file, contains the full description of the VCD structure. This schema follows the ASAM OpenLABEL standard.
 
 ![VCD](https://github.com/Vicomtech/video-content-description-VCD/blob/master/doc/logo/image.svg?raw=true)
 
@@ -85,10 +85,10 @@ import vcd.core as core
 myVCD = core.vcd('./tests/etc/openlabel100_test_scene_KITTI_Tracking_3.json')
 
 # Access data directly
-metadata = myVCD.data['vcd']['metadata']
+metadata = myVCD.data['openlabel']['metadata']
 
 # Modify data directly
-myVCD['vcd']['objects'][3]['type'] = "#Car"
+myVCD['openlabel']['objects'][3]['type'] = "#Car"
 ...
 
 # Serialize
@@ -208,6 +208,8 @@ VCD has evolved as follows:
 
 VCD has been used in the following projects: Cloud-LSVA, VI-DAS, inLane, P-REACT, EWISA, Viulib, begirale, SmaCS, HEADSTART, ACCURATE.
 
+The [DMD](https://dmd.vicomtech.org/) (Driver Monitoring Dataset) project also uses VCD! 
+
 If your project also uses VCD, let us know!
 
 ## OpenLABEL
@@ -226,9 +228,7 @@ Vicomtech created VCD in 2013, and since, has maintained VCD syntax and librarie
 VCD was registered at the "Registro territorial de la propiedad intelectual de la comunidad autonoma del Pais Vasco", under number 55-354-17, by the Basque Governement, at 2017/07/07.
 
 Main developers:
-* Marcos Nieto - mnieto@vicomtech.org
-* Orti Senderos - osenderos@vicomtech.org
-* Jon Goenetxea - jgoenetxea@vicomtech.org
+* Marcos Nieto, Orti Senderos, Jon Goenetxea
 
 Contributors:
 Thanks to Andoni Mujika, Paola Cañas, Eider Irigoyen, Juan Diego Ortega, Peter Leskovsky, Mikel Garcia, Gonzalo Pierola, Stefano Masneri, Lorena Garcia, Itziar Urbieta and many others in Vicomtech.
