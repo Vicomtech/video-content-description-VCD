@@ -59,6 +59,8 @@ endif(BUILD_SAMPLES)
 
 if (BUILD_TESTS)
 ENABLE_TESTING() #This will generate the RUN_TESTS project in VS
+    add_subdirectory(${CMAKE_SOURCE_DIR}/3rdparty/Catch2/)
+    include_directories(${CMAKE_SOURCE_DIR}/3rdparty/Catch2/src/catch2)
     add_subdirectory(test)
 endif(BUILD_TESTS)
 

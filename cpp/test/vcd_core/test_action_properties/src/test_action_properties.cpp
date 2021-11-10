@@ -11,9 +11,10 @@
 *
 */
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include <catch2/catch_test_macros.hpp>
 
 // -- Project -- //
+#include <iostream>
 #include <fstream>
 #if defined(__linux__)
     #include <experimental/filesystem>

@@ -25,6 +25,7 @@ set(SOURCE_FILES
 
 link_directories( ${CMAKE_BINARY_DIR}/bin )
 add_executable( ${TEST_NAME} ${SOURCE_FILES})
+target_link_libraries(${TEST_NAME} Catch2::Catch2WithMain)
 
 if(LINUX)
     # Include std::experimental::filesystem
