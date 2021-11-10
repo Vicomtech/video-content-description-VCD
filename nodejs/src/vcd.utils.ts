@@ -1,12 +1,12 @@
 /**
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 4.3.0.
+VCD is a library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -236,7 +236,7 @@ export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNu
             }
             else {
                 // So we have arrived here because frame_start and frame_end and frameNum coincides, so let's delete it entirely
-                return []
+                continue
             }
         }
         else if(frameNum < fi['frame_end']) {
@@ -260,3 +260,142 @@ export function rmFrameFromFrameIntervals(frameIntervals: Array<object>, frameNu
     return fiDictNew
 }
 
+export function createPose(R,C){
+    // Under SCL principles, P = (R C; 0 0 0 1), while T = (R^T -R^TC; 0 0 0 1)
+    var temp;
+    if(C.length == 3){
+        temp = R.map((v,i)=> v.concat(C[i]))
+        
+    }else if(C.length == 4){
+        C.pop()
+        temp = R.map((v,i)=> v.concat(C[i]))
+    }
+    let b= [0, 0, 0, 1]
+    temp.push([0,0,0,1])
+    let P=temp
+
+    return P
+    
+    
+}
+
+export enum EulerSeq {
+     // https://en.wikipedia.org/wiki/Euler_angles
+     ZXZ = 1,
+     XYX = 2,
+     YZY = 3,
+     ZYZ = 4,
+     XZX = 5,
+     YXY = 6,
+ 
+     XYZ = 7,
+     YZX = 8,
+     ZXY = 9,
+     XZY = 10,
+     ZYX = 11, // yaw, pitch, roll (in that order)
+     YXZ = 12,
+}
+
+export function Rx(angle_rad){
+    return [[1, 0, 0],
+            [0, Math.cos(angle_rad), -Math.sin(angle_rad)],
+            [0, Math.sin(angle_rad), Math.cos(angle_rad)]
+    ]
+
+}
+export function Ry(angle_rad){
+    return [[Math.cos(angle_rad), 0, Math.sin(angle_rad)],
+             [0, 1, 0],
+            [-Math.sin(angle_rad), 0, Math.cos(angle_rad)]
+    ]
+}
+export function Rz(angle_rad){
+    return [[Math.cos(angle_rad), -Math.sin(angle_rad), 0],
+            [Math.sin(angle_rad), Math.cos(angle_rad), 0],
+            [0, 0, 1]
+            ]
+}
+
+
+
+export function euler2R(a, seq=EulerSeq.ZYX){
+    // Proper or improper Euler angles to R
+    // Assuming right-hand rotation and radians
+
+
+    // The user introduces 3 angles a=(a[0], a[1], a[2]), and a meaning, e.g. "ZYX"
+    // So we can build the Rx, Ry, Rz according to the specified code
+
+    // e.g. a=(0.1, 0.3, 0.2), seq='ZYX', then R0=Rx(0.1), R1=Ry(0.3), R2=Rz(0.2)
+    // The application of the rotations in this function is
+    // R = R0*R1*R2, which must be read from right-to-left
+    // So first R2 is applied, then R1, then R0
+    // If the default 'zyx' sequence is selected, the user is providing a=(rz, ry, rx), and it is applied R=RZ*RY*RX
+
+    // e.g. a=(0.1, 0.4, 0.2), seq='xzz')
+    // R = Rx(0.1)*Rz(0.4)*Rz(0.2)
+
+     let R_0;
+     let R_1;
+     let R_2;
+
+   if (EulerSeq[seq].charAt(0) == "X"){
+         R_0 = Rx(a[0])
+    }else if(EulerSeq[seq].charAt(0) == "Y"){
+         R_0 = Ry(a[0])
+    }else{
+         R_0 = Rz(a[0])
+    }
+        
+    if (EulerSeq[seq].charAt(1) == "X"){
+         R_1 = Rx(a[1])
+    }else if(EulerSeq[seq].charAt(1) == "Y"){
+         R_1 = Ry(a[1])
+    }else{
+         R_1 = Rz(a[1])
+    }
+
+    if (EulerSeq[seq].charAt(2) == "X"){
+         R_2 = Rx(a[2])
+    }else if(EulerSeq[seq].charAt(2) == "Y"){
+         R_2 = Ry(a[2])
+    }else{
+         R_2 = Rz(a[2])
+    }
+
+    // Using here reverse composition, as this Rotation matrix is built to describe
+    // a pose matrix, which encodes the rotation and position of a coordinate system
+    // with respect to another.
+    // To transform points from origin to destination coordinate systems, the R^T is used
+    // which then swaps the order of the sequence to the expected order.
+    // NOTE: this formula cannot be applied if the rotation matrix is used to rotate points (active-alibi
+    // rotation), instead of rotating coordinate systems (passive-alias rotation)
+    
+   
+    let R=matrixDot(R_0, matrixDot(R_1,R_2))
+    
+
+    return R
+
+}
+
+export function flatten(array)
+{
+    if(array.length == 0)
+        return array;
+    else if(Array.isArray(array[0]))
+        return flatten(array[0]).concat(flatten(array.slice(1)));
+    else
+        return [array[0]].concat(flatten(array.slice(1)));
+}
+
+
+function matrixDot (A, B) {
+    var result = new Array(A.length).fill(0).map(row => new Array(B[0].length).fill(0));
+
+    return result.map((row, i) => {
+        return row.map((val, j) => {
+            return A[i].reduce((sum, elm, k) => sum + (elm*B[k][j]) ,0)
+        })
+    })
+}

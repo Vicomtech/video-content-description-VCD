@@ -1,15 +1,17 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
+
+
 
 from builtins import bool
 from enum import Enum
@@ -56,8 +58,7 @@ class IntrinsicsPinhole(Intrinsics):
 
 
 class IntrinsicsFisheye(Intrinsics):
-    def __init__(self, width_px, height_px, lens_coeffs_1x4, fov_deg, center_x, center_y,
-                 radius_x, radius_y, **additional_items):
+    def __init__(self, width_px, height_px, lens_coeffs_1x4, center_x, center_y, aspect_ratio, **additional_items):
         Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
@@ -65,17 +66,13 @@ class IntrinsicsFisheye(Intrinsics):
         self.data['intrinsics_fisheye']['width_px'] = width_px
         self.data['intrinsics_fisheye']['height_px'] = height_px
         assert (isinstance(lens_coeffs_1x4, list))
-        assert (isinstance(center_x, float))
-        assert (isinstance(center_y, float))
-        assert (isinstance(radius_x, float))
-        assert (isinstance(radius_y, float))
-        assert (isinstance(fov_deg, float))
+        assert (isinstance(center_x, (float, type(None))))
+        assert (isinstance(center_y, (float, type(None))))
+        assert (isinstance(aspect_ratio, (float, type(None))))        
 
         self.data['intrinsics_fisheye']['center_x'] = center_x
         self.data['intrinsics_fisheye']['center_y'] = center_y
-        self.data['intrinsics_fisheye']['radius_x'] = radius_x
-        self.data['intrinsics_fisheye']['radius_y'] = radius_y
-        self.data['intrinsics_fisheye']['fov_deg'] = fov_deg
+        self.data['intrinsics_fisheye']['aspect_ratio'] = aspect_ratio        
 
         assert (len(lens_coeffs_1x4) == 4)
         self.data['intrinsics_fisheye']['lens_coeffs_1x4'] = lens_coeffs_1x4
@@ -84,32 +81,69 @@ class IntrinsicsFisheye(Intrinsics):
             self.data['intrinsics_fisheye'].update(additional_items)
 
 
+class IntrinsicsCustom(Intrinsics):
+    def __init__(self, **additional_items):
+        Intrinsics.__init__(self)
+        self.data['intrinsics_custom'] = dict()
+        if additional_items is not None:
+            self.data['intrinsics_custom'].update(additional_items)
+
+
+class TransformDataType(Enum):
+    matrix_4x4 = 1
+    quat_and_trans_7x1 = 2
+    euler_and_trans_6x1 = 3
+    custom = 4
+
+
+class TransformData:
+    """
+    This class encodes the transform data in the form of 4x4 matrix, quaternion + translation, or
+    Euler angles + translation
+    """
+    def __init__(self, val, type, **additional_items):
+        assert(isinstance(val, list))
+        assert(isinstance(type, TransformDataType))
+
+        self.data = dict()
+        if type == TransformDataType.matrix_4x4:
+            self.data['matrix4x4'] = val
+        elif type == TransformDataType.quat_and_trans_7x1:
+            assert(len(val) == 7)
+            self.data['quaternion'] = val[0:4]
+            self.data['translation'] = val[4:7]
+        elif type == TransformDataType.euler_and_trans_6x1:
+            assert(len(val) == 6)
+            self.data['euler_angles'] = val[0:3]
+            self.data['translation'] = val[3:6]
+
+        if additional_items is not None:
+            self.data.update(additional_items)
+
+
+class PoseData(TransformData):
+    """
+    Equivalente to TransformData, but intended to be used when passive rotation and translation values are provided
+    """
+    def __init__(self, val, type, **additional_items):
+        TransformData.__init__(self, val, type, **additional_items)
+
+
 class Transform:
-    def __init__(self, src_name, dst_name, transform_src_to_dst_4x4, **additional_items):
-        assert (isinstance(transform_src_to_dst_4x4, list))
-        assert (len(transform_src_to_dst_4x4) == 16)
+    def __init__(self, src_name, dst_name, transform_src_to_dst, **additional_items):
         assert (isinstance(src_name, str))
         assert (isinstance(dst_name, str))
+        assert (isinstance(transform_src_to_dst, TransformData))
         self.data = dict()
         name = src_name + "_to_" + dst_name
         self.data[name] = dict()
+        self.data_additional = dict()  # this is useful to append only the additional_items
         self.data[name]['src'] = src_name
         self.data[name]['dst'] = dst_name
-        self.data[name]['transform_src_to_dst_4x4'] = transform_src_to_dst_4x4
+        self.data[name]['transform_src_to_dst'] = transform_src_to_dst.data
         if additional_items is not None:
             self.data[name].update(additional_items)
-
-
-class Pose(Transform):
-    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
-        # NOTE: the pose of subject_name system wrt to reference_name system is the transform
-        # from the reference_name system to the subject_name system
-        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
-
-
-class Extrinsics(Transform):
-    def __init__(self, subject_name, reference_name, pose_subject_wrt_reference_4x4, **additional_items):
-        Transform.__init__(reference_name, subject_name, pose_subject_wrt_reference_4x4, additional_items)
+            self.data_additional.update(additional_items)
 
 
 class StreamSync:
@@ -165,13 +199,20 @@ class Poly2DType(Enum):
 
 
 class ObjectData:
-    def __init__(self, name, coordinate_system=None):
-        assert(isinstance(name, str))
+    def __init__(self, name, coordinate_system=None, properties=None, type=None):
         self.data = dict()
-        self.data['name'] = name
+        if name is not None:
+            assert (isinstance(name, str))
+            self.data['name'] = name
         if coordinate_system is not None:
             assert (isinstance(coordinate_system, str))
             self.data['coordinate_system'] = coordinate_system
+        if properties is not None:
+            assert (isinstance(properties, dict))
+            self.data.update(properties)
+        if type is not None:
+            assert (isinstance(type, str))
+            self.data['type'] = type
 
     def add_attribute(self, object_data):
         assert(isinstance(object_data, ObjectData))
@@ -194,13 +235,13 @@ class ObjectData:
 
 
 class ObjectDataGeometry(ObjectData):
-    def __init__(self, name, coordinate_system=None):
-        ObjectData.__init__(self, name, coordinate_system)  # Calling parent class
+    def __init__(self, name, coordinate_system=None, properties=None):
+        ObjectData.__init__(self, name, coordinate_system, properties)  # Calling parent class
 
 
 class bbox(ObjectDataGeometry):
-    def __init__(self, name, val, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert (isinstance(val, (tuple, list)))
         assert (len(val) == 4)
         if isinstance(val, tuple):
@@ -211,8 +252,8 @@ class bbox(ObjectDataGeometry):
 
 
 class rbbox(ObjectDataGeometry):
-    def __init__(self, name, val, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert (isinstance(val, (tuple, list)))
         assert (len(val) == 5)
         if isinstance(val, tuple):
@@ -223,32 +264,32 @@ class rbbox(ObjectDataGeometry):
 
 
 class num(ObjectData):
-    def __init__(self, name, val, coordinate_system=None):
-        ObjectData.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert isinstance(val, (int, float))
         self.data['val'] = val
         self.type = ObjectDataType.num
 
 
 class text(ObjectData):
-    def __init__(self, name, val, coordinate_system=None):
-        ObjectData.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert(isinstance(val, str))
         self.data['val'] = val
         self.type = ObjectDataType.text
 
 
 class boolean(ObjectData):
-    def __init__(self, name, val, coordinate_system=None):
-        ObjectData.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert(isinstance(val, bool))
         self.data['val'] = val
         self.type = ObjectDataType.boolean
 
 
 class poly2d(ObjectDataGeometry):
-    def __init__(self, name, val, mode, closed, hierarchy=None, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, mode, closed, hierarchy=None, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(mode, Poly2DType))
         assert(isinstance(closed, bool))
@@ -273,8 +314,8 @@ class poly2d(ObjectDataGeometry):
 
 
 class poly3d(ObjectDataGeometry):
-    def __init__(self, name, val, closed, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, closed, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert (isinstance(val, (tuple, list)))
         assert (isinstance(closed, bool))
         if isinstance(val, tuple):
@@ -286,18 +327,21 @@ class poly3d(ObjectDataGeometry):
 
 
 class cuboid(ObjectDataGeometry):
-    def __init__(self, name, val, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
-        assert (isinstance(val, (tuple, list)))
-        assert (len(val) == 9 or len(val) == 10)
-        if len(val) == 9:
-            self.use_quaternion = False
-        else:
-            self.use_quaternion = True
+    def __init__(self, name, val, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
+        if val is not None:
+            assert (isinstance(val, (tuple, list)))
+            assert (len(val) == 9 or len(val) == 10)
+            if len(val) == 9:
+                self.use_quaternion = False
+            else:
+                self.use_quaternion = True
         if isinstance(val, tuple):
             self.data['val'] = list(val)
         elif isinstance(val, list):
             self.data['val'] = val
+        else:
+            self.data['val'] = None
         self.type = ObjectDataType.cuboid
 
 
@@ -316,8 +360,8 @@ class image(ObjectData):
     compr_params=[int(cv2.IMWRITE_PNG_COMPRESSION), 9]
     result, payload = cv2.imencode('.png', img, compr_params)
     '''
-    def __init__(self, name, val, mimeType, encoding, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, mimeType, encoding, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert(isinstance(val, str))
         assert(isinstance(mimeType, str))
         assert(isinstance(encoding, str))
@@ -328,8 +372,8 @@ class image(ObjectData):
 
 
 class mat(ObjectData):
-    def __init__(self, name, val, channels, width, height, dataType, coordinate_system=None):
-        ObjectData.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, channels, width, height, dataType, coordinate_system=None, properties=None):
+        ObjectData.__init__(self, name, coordinate_system, properties)
         assert (isinstance(val, (tuple, list)))
         assert(isinstance(width, int))
         assert (isinstance(height, int))
@@ -348,8 +392,8 @@ class mat(ObjectData):
 
 
 class binary(ObjectData):
-    def __init__(self, name, val, dataType, encoding, coordinate_system=None):
-        ObjectData.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, dataType, encoding, coordinate_system=None, properties=None):
+        ObjectData.__init__(self, name, coordinate_system, properties)
         assert(isinstance(val, str))
         assert(isinstance(dataType, str))
         assert(isinstance(encoding, str))
@@ -360,8 +404,8 @@ class binary(ObjectData):
 
 
 class vec(ObjectData):
-    def __init__(self, name, val, coordinate_system=None):
-        ObjectData.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, coordinate_system=None, properties=None, type=None):
+        ObjectData.__init__(self, name, coordinate_system, properties, type)
         assert (isinstance(val, (tuple, list)))
         if isinstance(val, tuple):
             self.data['val'] = val
@@ -371,8 +415,8 @@ class vec(ObjectData):
 
 
 class point2d(ObjectDataGeometry):
-    def __init__(self, name, val, id=None, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, id=None, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert (isinstance(val, (tuple, list)) and len(val) == 2)
         if isinstance(val, tuple):
             self.data['val'] = val
@@ -385,8 +429,8 @@ class point2d(ObjectDataGeometry):
 
 
 class point3d(ObjectDataGeometry):
-    def __init__(self, name, val, id=None, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, id=None, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert (isinstance(val, (tuple, list)) and len(val) == 3)
         if isinstance(val, tuple):
             self.data['val'] = val
@@ -399,8 +443,8 @@ class point3d(ObjectDataGeometry):
 
 
 class GeometricReference(ObjectDataGeometry):
-    def __init__(self, name, val, reference_type, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, val, reference_type, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         assert (isinstance(reference_type, ObjectDataType))
         self.data['reference_type'] = reference_type.name
         if val is not None:
@@ -409,23 +453,23 @@ class GeometricReference(ObjectDataGeometry):
 
 
 class lineReference(GeometricReference):
-    def __init__(self, name, val, reference_type, coordinate_system=None):
-        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)
+    def __init__(self, name, val, reference_type, coordinate_system=None, properties=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system, properties)
 
 
 class areaReference(GeometricReference):
-    def __init__(self, name, val, reference_type, coordinate_system=None):
-        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)
+    def __init__(self, name, val, reference_type, coordinate_system=None, properties=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system, properties)
 
 
 class volumeReference(GeometricReference):
-    def __init__(self, name, val, reference_type, coordinate_system=None):
-        GeometricReference.__init__(self, name, val, reference_type, coordinate_system)
+    def __init__(self, name, val, reference_type, coordinate_system=None, properties=None):
+        GeometricReference.__init__(self, name, val, reference_type, coordinate_system, properties)
 
 
 class mesh(ObjectDataGeometry):
-    def __init__(self, name, coordinate_system=None):
-        ObjectDataGeometry.__init__(self, name, coordinate_system)
+    def __init__(self, name, coordinate_system=None, properties=None):
+        ObjectDataGeometry.__init__(self, name, coordinate_system, properties)
         self.pid = "0"
         self.eid = "0"
         self.aid = "0"

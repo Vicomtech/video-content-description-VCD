@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -31,10 +31,16 @@ sys.path.insert(0, "../..")
 
 import vcd.core as core
 import vcd.types as types
+import vcd.schema as schema
 import vcd.serializer as serializer
 
+# NOTE: if donwloading from https: pip install pyopenssl
 
-def convert_town_center_to_VCD4():
+openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+vcd_version_name = openlabel_version_name
+
+
+def convert_town_center_to_VCD():
     if not os.path.isfile('./etc/townCentreXVID_groundTruth.top'):
         import urllib.request
         url = 'https://www.robots.ox.ac.uk/ActiveVision/Research/Projects/2009bbenfold_headpose/Datasets/TownCentre-groundtruth.top'
@@ -83,7 +89,8 @@ def convert_town_center_to_VCD4():
                 if headValid:
                     vcd.add_object_data(personNumber, head, frameNumber)
 
-    vcd_json_file_name = "./etc/vcd430_towncenter.json"
+    #vcd_json_file_name = "./etc/vcd430_towncenter.json"
+    vcd_json_file_name = './etc/' + vcd_version_name + '_towncenter.json'
     vcd.save(vcd_json_file_name, False)
 
     #vcd_proto_file_name = "./etc/vcd430_proto_towncenter.txt"
@@ -91,5 +98,5 @@ def convert_town_center_to_VCD4():
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
-    convert_town_center_to_VCD4()
+    convert_town_center_to_VCD()
 

@@ -1,21 +1,25 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
+import inspect
 import unittest
 import os
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
+
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 def get_mesh_geometry_as_string(vertexMap, edgeMap, areaMap):
@@ -49,6 +53,7 @@ def get_mesh_geometry_as_string(vertexMap, edgeMap, areaMap):
 
     return result_clean
 
+
 def generate_default_mesh(rows, cols):
     # Add vertex
     points = []
@@ -81,8 +86,8 @@ def generate_default_mesh(rows, cols):
     #print(string_mesh)
     return string_mesh
 
-class TestBasic(unittest.TestCase):
 
+class TestBasic(unittest.TestCase):
     def test_create_default_mesh_string(self):
         rows = 2
         cols = 4
@@ -95,9 +100,10 @@ class TestBasic(unittest.TestCase):
                            "[7,11,20,21]]]"
         self.assertEqual(val_4x2, expected_val_4x2)
 
-    def test_create_mesh_with_API(self):
+    def test_create_mesh(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
+        vcd.add_coordinate_system(name='world', cs_type=types.CoordinateSystemType.local_cs)
 
         # Mesh sample representation
         #
@@ -111,7 +117,7 @@ class TestBasic(unittest.TestCase):
         #
         # V0  [A0,A1]
 
-        mesh1 = types.mesh("parkslot1")
+        mesh1 = types.mesh(name="mesh1", coordinate_system='world')
 
         # Vertex
         # P0
@@ -187,7 +193,7 @@ class TestBasic(unittest.TestCase):
         a1.add_attribute(types.text("Empty", "park_slot_content"))
         mesh1.add_area(a1)
 
-        mesh_id = vcd.add_object("mesh1", "mesh")
+        mesh_id = vcd.add_object(name="parking1", semantic_type="ParkingLot")
         vcd.add_object_data(mesh_id, mesh1)
 
         string_mesh = mesh1.get_mesh_geometry_as_string()
@@ -195,12 +201,13 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(string_mesh, "[[[25,25,0],[26,25,0],[26,26,0],[25,26,0],[27,25,0],[27,26,0]],"
                                       "[[0,1],[1,2],[2,3],[3,0],[1,4],[4,5],[5,2]],[[0,1,2,3],[4,5,6,1]]]")
 
-        if not os.path.isfile('./etc/vcd430_test_mesh.json'):
-            vcd.save('./etc/vcd430_test_mesh.json', True)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_create_mesh_with_API_frames(self):
         # Load from previous test
-        vcd = core.VCD('./etc/vcd430_test_mesh.json')
+        vcd = core.OpenLABEL('./etc/' + openlabel_version_name + '_test_create_mesh.json')
 
         # Let's assume we know the structure of the mesh
         #
@@ -220,7 +227,7 @@ class TestBasic(unittest.TestCase):
 
         # Let's read static object_data
         # od_mesh = mesh1.data['object_data']['mesh']
-        od_mesh = vcd.get_object_data("0", "parkslot1", frame_num=None)
+        od_mesh = vcd.get_object_data("0", "mesh1", frame_num=None)
 
         vertices = od_mesh['point3d']
         edges = od_mesh['line_reference']
@@ -231,7 +238,7 @@ class TestBasic(unittest.TestCase):
         # and add it to the existing Object, specifying the frame
 
         for frame_num in range(0, 2):
-            mesh1_frame = types.mesh("parkslot1_dyn")
+            mesh1_frame = types.mesh("mesh1_dyn")
             for line_key, line_val in edges.items():
                 # If we want to add a line_reference attribute: Reconstruct line_reference
                 # Read existing info
@@ -251,10 +258,9 @@ class TestBasic(unittest.TestCase):
             # a static object_data
             vcd.add_object_data("0", mesh1_frame, frame_num)
 
-
-        # Save it
-        if not os.path.isfile('./etc/vcd430_test_mesh_frame.json'):
-            vcd.save('./etc/vcd430_test_mesh_frame.json', True)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()

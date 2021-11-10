@@ -1,28 +1,31 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
 
+import inspect
 import unittest
 import os
 import vcd.core as core
+import vcd.schema as schema
 import vcd.types as types
-import vcd.utils as utils
+
+from test_config import check_openlabel
+from test_config import openlabel_version_name
 
 
 class TestBasic(unittest.TestCase):
-
     # Semantics
     def test_semantics(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         ont_uid_0 = vcd.add_ontology("http://www.vicomtech.org/viulib/ontology")
         ont_uid_1 = vcd.add_ontology("http://www.alternativeURL.org/ontology")
@@ -63,22 +66,16 @@ class TestBasic(unittest.TestCase):
                 # print("Frame ", frameNum, ", dynamic only message: ", vcd.stringify_frame(frameNum, dynamic_only=True))
                 # print("Frame ", frameNum, ", full message: ", vcd.stringify_frame(frameNum, dynamic_only=False))
 
-        if not os.path.isfile('./etc/vcd430_test_semantics.json'):
-            vcd.save('./etc/vcd430_test_semantics.json', True)
-
-        vcd_read = core.VCD('./etc/vcd430_test_semantics.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     # Create some basic content, without time information, and do some basic search
     def test_actions(self):
         # 1.- Create a VCD instance
-        vcd_a = core.VCD()
-        vcd_b = core.VCD()
-        vcd_c = core.VCD()
+        vcd_a = core.OpenLABEL()
+        vcd_b = core.OpenLABEL()
+        vcd_c = core.OpenLABEL()
 
         # 2.- Add ontology
         vcd_a.add_ontology(ontology_name="http://vcd.vicomtech.org/ontology/automotive")
@@ -128,27 +125,14 @@ class TestBasic(unittest.TestCase):
         vcd_c.add_action_data(uid=uid_action1, action_data=types.num(name="subject", val=int(uid_pedestrian1)))
         vcd_c.add_action_data(uid=uid_action2, action_data=types.num(name="subject", val=int(uid_car1)))
 
-        if not os.path.isfile('./etc/vcd430_test_actions_a.json'):
-            vcd_a.save('./etc/vcd430_test_actions_a.json')
-
-        vcd_read = core.VCD('./etc/vcd430_test_actions_a.json')
-        self.assertEqual(vcd_read.stringify(False, False), vcd_a.stringify(False, False))
-
-        if not os.path.isfile('./etc/vcd430_test_actions_b.json'):
-            vcd_b.save('./etc/vcd430_test_actions_b.json')
-
-        vcd_read = core.VCD('./etc/vcd430_test_actions_b.json')
-        self.assertEqual(vcd_read.stringify(False, False), vcd_b.stringify(False, False))
-
-        if not os.path.isfile('./etc/vcd430_test_actions_c.json'):
-            vcd_c.save('./etc/vcd430_test_actions_c.json')
-
-        vcd_read = core.VCD('./etc/vcd430_test_actions_c.json')
-        self.assertEqual(vcd_read.stringify(False, False), vcd_c.stringify(False, False))
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd_a, './etc/' + openlabel_version_name + '_test_actions_a.json'))
+        self.assertTrue(check_openlabel(vcd_b, './etc/' + openlabel_version_name + '_test_actions_b.json'))
+        self.assertTrue(check_openlabel(vcd_c, './etc/' + openlabel_version_name + '_test_actions_c.json'))
 
     def test_relations(self):
         # This tests shows how relations can be created with and without frame interval information
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # Case 1: RDF elements don't have frame interval, but relation does
         # So objects don't appear in frames, but relation does. Reading the relation leads to the static objects
@@ -159,18 +143,14 @@ class TestBasic(unittest.TestCase):
                                        object_uid_1=uid1, object_uid_2=uid2,
                                        frame_value=(0, 10))
 
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 10)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_end'], 10)
-        for frame in vcd.data['vcd']['frames'].values():
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_end'], 10)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_end'], 10)
+        for frame in vcd.data['openlabel']['frames'].values():
             self.assertEqual(len(frame['relations']), 1)
 
-        if not os.path.isfile('./etc/vcd430_test_relations_1.json'):
-            vcd.save('./etc/vcd430_test_relations_1.json')
-
-        vcd_read = core.VCD('./etc/vcd430_test_relations_1.json')
-        self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_test_relations_1.json'))
 
         # Case 2: RDF elements defined with long frame intervals, and relation with smaller inner frame interval
         vcd = core.VCD()
@@ -182,19 +162,15 @@ class TestBasic(unittest.TestCase):
                                        object_uid_1=uid1, object_uid_2=uid2,
                                        frame_value=(7, 9))
 
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 15)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_start'], 7)
-        self.assertEqual(vcd.data['vcd']['relations']["0"]['frame_intervals'][0]['frame_end'], 9)
-        for frame_key, frame_val in vcd.data['vcd']['frames'].items():
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_end'], 15)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_start'], 7)
+        self.assertEqual(vcd.data['openlabel']['relations']["0"]['frame_intervals'][0]['frame_end'], 9)
+        for frame_key, frame_val in vcd.data['openlabel']['frames'].items():
             if 7 <= frame_key <= 9:
                 self.assertEqual(len(frame_val['relations']), 1)
 
-        if not os.path.isfile('./etc/vcd430_test_relations_2.json'):
-            vcd.save('./etc/vcd430_test_relations_2.json')
-
-        vcd_read = core.VCD('./etc/vcd430_test_relations_2.json')
-        self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_test_relations_2.json'))
 
         # Case 3: RDF elements have frame interval and relation doesn't (so it is left frame-less)
         vcd = core.VCD()
@@ -209,26 +185,19 @@ class TestBasic(unittest.TestCase):
         # The relation does not have frame information
         self.assertEqual('frame_intervals' in vcd.get_relation(uid4), False)
 
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_start'], 0)
-        self.assertEqual(vcd.data['vcd']['frame_intervals'][0]['frame_end'], 20)
-        for frame_key, frame_val in vcd.data['vcd']['frames'].items():
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_start'], 0)
+        self.assertEqual(vcd.data['openlabel']['frame_intervals'][0]['frame_end'], 20)
+        for frame_key, frame_val in vcd.data['openlabel']['frames'].items():
             if 0 <= frame_key <= 15:
                 self.assertEqual(frame_val.get('relations'), None)
 
-        if not os.path.isfile('./etc/vcd430_test_relations_3.json'):
-            vcd.save('./etc/vcd430_test_relations_3.json')
-
-        vcd_read = core.VCD('./etc/vcd430_test_relations_3.json')
-        self.assertEqual(vcd_read.stringify(False, False), vcd.stringify(False, False))
-
-        pass
-
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_test_relations_3.json'))
 
     def test_scene_KITTI_Tracking_3(self):
         sequence_number = 3
-        vcd_file_name = "./etc/vcd430_kitti_tracking_" + str(sequence_number).zfill(
+        vcd_file_name = './etc/' + openlabel_version_name + '_kitti_tracking_' + str(sequence_number).zfill(
             4) + ".json"
-        vcd = core.VCD(vcd_file_name)
+        vcd = core.OpenLABEL(vcd_file_name)
 
         frame_num_last = vcd.get_frame_intervals().get_outer()['frame_end']
 
@@ -311,9 +280,10 @@ class TestBasic(unittest.TestCase):
 
         vcd.add_relation_action_action(name="", semantic_type="meets", action_uid_1=uid_action_lane_change, action_uid_2=uid_action_drive_straight_4, frame_value=75)
 
-        # Store
-        if not os.path.isfile('./etc/vcd430_kitti_tracking_0003_actions.json'):
-            vcd.save('./etc/vcd430_kitti_tracking_0003_actions.json', validate=True)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
+
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
     print("Running " + os.path.basename(__file__))

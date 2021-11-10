@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -21,6 +21,8 @@ import math
 import numpy as np
 
 import vcd.core as core
+import vcd.scl as scl
+import vcd.schema as schema
 import vcd.types as types
 import vcd.utils as utils
 
@@ -134,8 +136,10 @@ class KITTI_Tracking_reader():
             vcd.add_transform(int(frames_1xN[0, i]), transform=types.Transform(
                 src_name="vehicle-iso8855",
                 dst_name="odom",
-                transform_src_to_dst_4x4=list(odometry_4x4xN[:, :, i].flatten())
-            ))
+                transform_src_to_dst=types.TransformData(
+                    val=list(odometry_4x4xN[:, :, i].flatten()),
+                    type=types.TransformDataType.matrix_4x4))
+            )
 
         #########################################
         # CREATE SENSORS coordinate system: LASER
@@ -149,7 +153,10 @@ class KITTI_Tracking_reader():
                        stream_type=core.StreamType.lidar)
         vcd.add_coordinate_system("VELO_TOP", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="vehicle-iso8855",
-                                  pose_wrt_parent=list(pose_velo_wrt_vehicle_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_velo_wrt_vehicle_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
         #########################################
         # CREATE SENSORS coordinate system: GPS/IMU
         #########################################
@@ -162,7 +169,10 @@ class KITTI_Tracking_reader():
                        stream_type=core.StreamType.other)
         vcd.add_coordinate_system("IMU", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="vehicle-iso8855",
-                                  pose_wrt_parent=list(pose_imu_wrt_vehicle_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_imu_wrt_vehicle_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
 
         #########################################
         # CREATE SENSORS coordinate system: CAM
@@ -203,7 +213,10 @@ class KITTI_Tracking_reader():
                                   )
         vcd.add_coordinate_system("CAM_LEFT", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="VELO_TOP",
-                                  pose_wrt_parent=list(pose_camleft_wrt_velo_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_camleft_wrt_velo_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
 
         # Virtually, cam_left and cam_right are defined as the same coordinate systems, so their scs are the same
         # But their projection matrices (3x4) include a right-most non-zero column which shifts 3d points when projected
@@ -229,11 +242,20 @@ class KITTI_Tracking_reader():
                                   )
         vcd.add_coordinate_system("CAM_RIGHT", cs_type=types.CoordinateSystemType.sensor_cs,
                                   parent_name="VELO_TOP",
-                                  pose_wrt_parent=list(pose_camleft_wrt_velo_4x4.flatten()))
+                                  pose_wrt_parent=types.PoseData(
+                                      val=list(pose_camleft_wrt_velo_4x4.flatten()),
+                                      type=types.TransformDataType.matrix_4x4)
+                                  )
+
+        #########################################
+        # Prepare SCL scripts to manage transforms
+        #########################################
+        scene = scl.Scene(vcd)
 
         #########################################
         # LABELS
         #########################################
+        cam_right = scene.get_camera("CAM_RIGHT")
         for row in object_reader:
             frameNum = int(row[0])
             #trackID = int(row[1]) + 1  # VCD can't handle negative ids
@@ -257,7 +279,7 @@ class KITTI_Tracking_reader():
                 name_box = "box2D" + str(count)
             else:
                 name_box = "box2D"
-            bounding_box = types.bbox(name=name_box,
+            bounding_box_left = types.bbox(name=name_box + "_left",
                                       val=(left + width/2, top + height/2, width, height),
                                       coordinate_system='CAM_LEFT')
             # see cs_overview.pdf
@@ -283,10 +305,11 @@ class KITTI_Tracking_reader():
             # y_corners = [0,   0,    0,    0,   -h,   -h,   -h,   -h  ]^T
             # z_corners = [w/2, -w/2, -w/2, w/2, w/2, -w/2, -w/2, w/2  ]^T
             # with l=length, h=height, and w=width.
-            cuboid = types.cuboid(name="box3D",
-                                  val=(utils.float_2dec(locX), utils.float_2dec(locY - dimH/2), utils.float_2dec(locZ),
+            cuboid_vals = [utils.float_2dec(locX), utils.float_2dec(locY - dimH/2), utils.float_2dec(locZ),
                                        0, utils.float_2dec(rotY), 0,
-                                       utils.float_2dec(dimL), utils.float_2dec(dimH), utils.float_2dec(dimW)),
+                                       utils.float_2dec(dimL), utils.float_2dec(dimH), utils.float_2dec(dimW)]
+            cuboid = types.cuboid(name="box3D",
+                                  val=cuboid_vals,
                                   coordinate_system="CAM_LEFT")
 
             if not vcd.has(core.ElementType.object, str(trackID)):
@@ -297,11 +320,30 @@ class KITTI_Tracking_reader():
                     vcd.add_object(name=semantic_class, semantic_type=semantic_class, uid=str(trackID),
                                    frame_value=frameNum)
 
-            vcd.add_object_data(str(trackID), bounding_box, frameNum)
+            vcd.add_object_data(str(trackID), bounding_box_left, frameNum)
             vcd.add_object_data(str(trackID), cuboid, frameNum)
             vcd.add_object_data(trackID, types.num(name="truncated", val=truncated), frameNum)
             vcd.add_object_data(trackID, types.num(name="occluded", val=occluded), frameNum)
             vcd.add_object_data(trackID, types.num(name="alpha", val=alpha), frameNum)
+
+            
+            # Adding CAM_RIGHT data: KITTI GT does not include these boxes explictly, but we can obtain them projecting from the 3D box
+            # NOTE 1: cuboids are expressed with respect to the CAM_LEFT coordinate system
+            # NOTE 2: (see above) CAM_LEFT and CAM_RIGHT are the same coordinate systems, they just differ in the intrinsics, therefore, no need to convert the 3D boxes
+            # NOTE 3: Can't project DontCare objects as the 3D cuboids are absurd
+            #cuboid_vals_right = scene.transform_cuboid(cuboid_vals, "CAM_LEFT", "CAM_RIGHT", frameNum)
+            if trackID != -1:  # Don'tCare objects 
+                points3d_4x8 = utils.generate_cuboid_points_ref_4x8(cuboid_vals)                
+                points2d_4x8, idx_valid = cam_right.project_points3d(points3d_4x8)
+                points2d_4x8_valid = points2d_4x8[:, idx_valid]
+                bbox_right_vals = utils.bounding_rect(points2d_4x8_valid)
+
+                bounding_box_right = types.bbox(name=name_box + '_right',
+                                        val=bbox_right_vals,
+                                        coordinate_system='CAM_RIGHT')
+
+                vcd.add_object_data(str(trackID), bounding_box_right, frameNum)            
+            
 
         #########################################
         # Ego-vehicle
@@ -332,13 +374,15 @@ def convert_KITTI_tracking_to_VCD4():
     # Draw/store scenes in VCD
     for count, key in enumerate(kitti_parser.vcds):
         # Store
+        openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+        vcd_base_name = openlabel_version_name
         vcd_file_name = os.path.join(kitti_tracking_output_vcd_path,
-                                     "vcd430_kitti_tracking_" + str(count).zfill(4) + ".json")
+                                     vcd_base_name + "_kitti_tracking_" + str(count).zfill(4) + ".json")
         print('Storing VCD file...' + vcd_file_name)
         kitti_parser.vcds[key].save(file_name=vcd_file_name)
 
-        if count == 0:  # Save a copy of the first trace to tests for further VCD tests
-            vcd_file_name = os.path.join("../../tests/etc", "vcd430_kitti_tracking_" + str(count).zfill(4) + ".json")
+        if count == 3:  # Save a copy of trace #003 to tests for further VCD tests
+            vcd_file_name = os.path.join("../../tests/etc", vcd_base_name + "_kitti_tracking_" + str(count).zfill(4) + ".json")
             kitti_parser.vcds[key].save(file_name=vcd_file_name)
 
 

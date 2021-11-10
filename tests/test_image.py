@@ -1,28 +1,36 @@
 """
-VCD (Video Content Description) library v4.3.0
+VCD (Video Content Description) library v5.0.0
 
 Project website: http://vcd.vicomtech.org
 
-Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
+Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 4.3.0.
+VCD is a Python library to create and manage VCD content version 5.0.0.
 VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
+import inspect
 import unittest
-import os
+
 import cv2 as cv
 import numpy as np
-from PIL import Image
-import json
+
 import base64
 import vcd.core as core
+
 import vcd.types as types
 import vcd.poly2d as poly
-import vcd.utils as utils
+
+from test_config import check_openlabel
+from test_config import openlabel_version_name
+
+show_images = False
+
+#############################################################################
+# See more examples of semantic segmentation in converters/mapillaryConverter
+#############################################################################
 
 def draw_basic_image(classes_colors):
     img = np.zeros((640, 480, 3), np.uint8)
@@ -34,10 +42,10 @@ def draw_basic_image(classes_colors):
 
     return img
 
-class TestBasic(unittest.TestCase):
 
+class TestBasic(unittest.TestCase):
     def test_polygon2D(self):
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         uid_obj1 = vcd.add_object('someName1', '#Some')
 
@@ -54,18 +62,13 @@ class TestBasic(unittest.TestCase):
                      types.Poly2DType.MODE_POLY2D_ABSOLUTE, False)
         vcd.add_object_data(uid_obj1, poly2)
 
-        if not os.path.isfile('./etc/vcd430_test_polygon2D.json'):
-            vcd.save('./etc/vcd430_test_polygon2D.json', True)
-
-        vcd_read = core.VCD('./etc/vcd430_test_polygon2D.json', validation=True)
-        vcd_read_stringified = vcd_read.stringify()
-        vcd_stringified = vcd.stringify()
-        # print(vcd_stringified)
-        self.assertEqual(vcd_read_stringified, vcd_stringified)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
     def test_create_image_png(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 2.- Create image
         colors = [(125, 32, 64), (98, 12, 65), (12, 200, 190)]
@@ -105,15 +108,16 @@ class TestBasic(unittest.TestCase):
 
         self.assertEqual(diff_val, 0)
 
-        if not os.path.isfile('./etc/vcd430_test_image.json'):
-            vcd.save('./etc/vcd430_test_image.json', True)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
         #cv.imshow('decoded_image', img_dec)
         #cv.waitKey(0)
 
     def test_contours(self):
         # 1.- Create a VCD instance
-        vcd = core.VCD()
+        vcd = core.OpenLABEL()
 
         # 1.- Create (color) image
         colors = [(125, 32, 64), (98, 12, 65), (12, 200, 190)]
@@ -147,14 +151,15 @@ class TestBasic(unittest.TestCase):
                                                  hierarchy=hierarchy_list)
                                     )
 
-        if not os.path.isfile('./etc/vcd430_test_contours.json'):
-            vcd.save('./etc/vcd430_test_contours.json', True)
+        # Check equal to reference JSON
+        self.assertTrue(check_openlabel(vcd, './etc/' + openlabel_version_name + '_' +
+                                        inspect.currentframe().f_code.co_name + '.json'))
 
         # 3.- Reconstruct the image from the VCD poly2d and hierarchies (using OpenCV)
         contours_dict = {}  # A dictionary of contours. Each key is one class type, each value, a contours array
         hierarchy_dict = {}
 
-        for object_key, object_val in vcd.data['vcd']['objects'].items():
+        for object_key, object_val in vcd.get_objects().items():
             # Assuming this is static (no frame info)
             contours_dict.setdefault(object_val['type'], [])
             hierarchy_dict.setdefault(object_val['type'], [])
@@ -195,185 +200,6 @@ class TestBasic(unittest.TestCase):
         # 4.- Check equals
         diff_val = np.sum(cv.absdiff(img, img_out))
         self.assertEqual(diff_val, 0)
-
-    def mapillary_image_analysis(self, img_name, labels):
-        #print(img_name)
-        vcd = core.VCD()
-        img_label = cv.imread('../converters/mapillaryConverter/labels/' + img_name)
-        img_instance = cv.imread('../converters/mapillaryConverter/instances/' + img_name, cv.IMREAD_GRAYSCALE)
-
-        imgPIL_instance = Image.open('../converters/mapillaryConverter/instances/' + img_name)
-        imgPIL_instance = np.array(imgPIL_instance, dtype=np.uint16)
-
-        label_path = '../converters/mapillaryConverter/labels/' + img_name
-        instance_path = '../converters/mapillaryConverter/instances/' + img_name
-
-        instance_image = Image.open(instance_path)
-
-        # convert labeled data to numpy arrays for better handling
-        instance_array = np.array(instance_image, dtype=np.uint16)
-
-        classes_colors = {}
-        for x in labels:
-            classes_colors[x['name']] = x['color']
-
-        # prepare arrays for instance and class retrieval
-        instance_ids_array = np.array(imgPIL_instance % 256, dtype=np.uint8)
-        instance_label_array = np.array(imgPIL_instance / 256, dtype=np.uint8)
-        img_instance_out = np.zeros((img_instance.shape[0], img_instance.shape[1], 3), np.uint8)
-        img_instance_out[np.where((img_instance_out == [0, 0, 0]).all(axis=2))] = [0, 255, 0]
-        img_class_out = np.zeros((img_instance.shape[0], img_instance.shape[1], 3), np.uint8)
-
-        instance_bgr = cv.cvtColor(instance_ids_array, cv.COLOR_GRAY2BGR)
-        final = np.zeros(img_label.shape, np.uint8)
-        cont = 0
-
-        #cv.namedWindow('image', cv.WINDOW_NORMAL)
-        #cv.resizeWindow('image', img_instance.shape[0], img_instance.shape[1])
-
-        # Get contours of each instance and retrieve it's class to write in vcd as instance -> True
-        for i in range(1, np.max(instance_ids_array) + 1):
-            seg = cv.inRange(instance_bgr, (i, i, i), (i, i, i))
-            if cv.countNonZero(seg) != 0:
-                contours, hierarchy = cv.findContours(seg, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-                cnt_id = 0
-                # Reverse point_color from bgr to rgb to get class
-                # Write class in vcd
-                for c in contours:
-                    extLeft = tuple(c[c[:, :, 0].argmin()][0])
-                    color = img_label[extLeft[1]][extLeft[0]]
-                    color = tuple([int(x) for x in color])
-                    color = list(color)
-                    instance_class = utils.get_key(classes_colors, color[::-1])
-
-                    if cnt_id == 0:
-                        uid = vcd.add_object("object " + str(cont), instance_class)
-                        vcd.add_object_data(uid, types.boolean('isInstance', True))
-
-                    c = c.flatten()
-                    hierarchy_list = hierarchy[0][cnt_id].tolist()
-                    # Write poly, hierarchy and instance
-                    polygon = types.poly2d('contour' + str(cnt_id), c.tolist(), types.Poly2DType.MODE_POLY2D_SRF6DCC, closed=True,
-                                           hierarchy=hierarchy_list)
-                    vcd.add_object_data(uid, polygon)
-                    cnt_id += 1
-                    cont += 1
-
-        # Get contours of each CLASS and write it in VCD as instance -> False
-        for class_val in labels:
-            # check all posible classes of mapillary
-            seg = cv.inRange(img_label, tuple(class_val['color'][::-1]), tuple(class_val['color'][::-1]))
-            if cv.countNonZero(seg) != 0:
-                contours, hierarchy = cv.findContours(seg, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
-                cv.drawContours(final, contours, -1, tuple(class_val['color'][::-1]), thickness=-1)
-
-                cnt_id = 0
-                instance_class = utils.get_key(classes_colors, class_val['color'])
-                uid = vcd.add_object("object " + str(cont), instance_class)
-                vcd.add_object_data(uid, types.boolean('isInstance', False))
-                for c in contours:
-                    c = c.flatten()
-                    hierarchy_list = hierarchy[0][cnt_id].tolist()
-                    polygon = types.poly2d('contour' + str(cnt_id), c.tolist(), types.Poly2DType.MODE_POLY2D_SRF6DCC, closed=True,
-                                           hierarchy=hierarchy_list)
-                    vcd.add_object_data(uid, polygon)
-                    cont += 1
-                    cnt_id += 1
-
-        #vcd.save('../converters/mapillaryConverter/vcd_files/' + img_name[0:len(img_name) - 4] + '.json', True)
-        vcd.save('../converters/mapillaryConverter/vcd_files/' + img_name[0:len(img_name) - 4] + '.json', False, False)
-
-        # 3.- Reconstruct the image from the VCD poly2d and hierarchies (using OpenCV)
-        contours_dict_instance = {}  # A dictionary of contours. Each key is one class type, each value, a contours array
-        hierarchy_dict_instance = {}
-
-        contours_dict_class = {}  # A dictionary of contours. Each key is one class type, each value, a contours array
-        hierarchy_dict_class = {}
-
-        for object_key, object_val in vcd.data['vcd']['objects'].items():
-            # Assuming this is static (no frame info)
-            contours_dict_instance.setdefault(object_val['type'], [])
-            contours_dict_class.setdefault(object_val['type'], [])
-            hierarchy_dict_instance.setdefault(object_val['type'], [])
-            hierarchy_dict_class.setdefault(object_val['type'], [])
-            if 'object_data' in object_val:
-                if 'boolean' in object_val['object_data']:
-                    if 'poly2d' in object_val['object_data']:
-                        for idx_pol, poly2d in enumerate(object_val['object_data']['poly2d']):
-                            val = poly2d['val']  # (x, y, rest, chain)
-                            mode = poly2d['mode']
-                            # closed = poly2d['closed']  # Not used in OpenCV
-                            hierarchy = poly2d['hierarchy']
-                            instance = object_val['object_data']['boolean'][0]['val']
-                            if mode == types.Poly2DType.MODE_POLY2D_SRF6DCC.name:
-                                vec = poly.getVecFromEncodedSRF6(int(val[0]), int(val[1]), int(val[2]), val[3])
-                            else:
-                                vec = val
-
-                            # Then, create contours, format as OpenCV expects
-                            num_coords = len(vec)
-                            num_points = int(num_coords / 2)
-
-                            contour = np.asarray(vec).reshape((num_points, 1, 2))
-                            if instance:
-                                contours_dict_instance[object_val['type']].append(contour)
-                                hierarchy_dict_instance[object_val['type']].append(hierarchy)
-                            else:
-                                contours_dict_class[object_val['type']].append(contour)
-                                hierarchy_dict_class[object_val['type']].append(hierarchy)
-
-        # Retrieve class img from VCD
-        for class_name, contours in contours_dict_class.items():
-            hierarchy_list = hierarchy_dict_class[class_name]
-            num_contours = len(contours)
-            hierarchy_array = np.asarray(hierarchy_list).reshape(num_contours, 1, 4)
-            color = classes_colors[class_name]
-            cv.drawContours(img_class_out, contours, -1, color[::-1], hierarchy=np.asarray([hierarchy_list]),
-                            thickness=-1)
-
-        # Retrieve instance img from VCD
-        for class_name, contours in contours_dict_instance.items():
-            hierarchy_list = hierarchy_dict_instance[class_name]
-            num_contours = len(contours)
-            hierarchy_array = np.asarray(hierarchy_list).reshape(num_contours, 1, 4)
-            color = classes_colors[class_name]
-
-            for c in contours:
-                cv.drawContours(img_instance_out, [c], -1, (0, 0, 0), thickness=-1)
-                # cv.drawContours(img_instance_out, [c], -1, color[::-1], thickness=-1)
-                # cv.drawContours(img_instance_out, [c], -1, (0, 255, 0), thickness=3)
-
-        x = cv.cvtColor(instance_ids_array, cv.COLOR_GRAY2BGR)
-        x[np.where((x == [0, 0, 0]).all(axis=2))] = [0, 255, 0]
-        img_instance = cv.cvtColor(img_instance, cv.COLOR_GRAY2BGR)
-        difference_instance = cv.subtract(img_instance_out, x)
-        difference_class = cv.subtract(img_label, img_class_out)
-        stack = np.hstack((img_instance, img_instance_out, difference_instance))
-        stack2 = np.hstack((img_label, img_class_out, difference_class))
-        vstack = np.vstack((stack, stack2))
-
-        # 4.- Check equals
-        difference_instance_sum = np.sum(difference_instance)
-        difference_class_sum = np.sum(difference_class)
-        self.assertEqual(difference_instance_sum, 0)
-        self.assertEqual(difference_class_sum, 0)
-
-        #cv.imshow('image', vstack)
-        #cv.waitKey(0)
-
-    def test_mapillary(self):
-        # Dump content from test_mapillary_SRF6.py at /mapillaryConverter
-        with open('../converters/mapillaryConverter/config.json') as f:
-            data = json.load(f)
-
-        labels = data['labels']
-        path = '../converters/mapillaryConverter/labels'
-
-        quick_test = True
-        for img_name in os.listdir(path):
-            self.mapillary_image_analysis(img_name, labels)
-            if quick_test:
-                break
 
 
 if __name__ == '__main__':  # This changes the command-line entry point to call unittest.main()
