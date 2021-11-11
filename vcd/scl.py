@@ -768,15 +768,13 @@ class CameraPinhole(Camera):
         N = points2d_3xN.shape[1]       
 
         # Get rays3d applying K^-1 and then undistortion
-        rays3d_dist_3xN = utils.inv(self.K_3x3).dot(points2d_3xN)
+        rays3d_dist_3xN = utils.normalize(utils.inv(self.K_3x3).dot(points2d_3xN))        
         rays3d_3xN = self.undistort_rays3d(rays3d_dist_3xN=rays3d_dist_3xN)        
 
         return rays3d_3xN
 
     def undistort_rays3d(self, rays3d_dist_3xN):
-        # TODO: NOT TESTED!
-        points2d_dist_3xN = rays3d_dist_3xN
-        #points2d_dist_3xN / points2d_dist_3xN[2, :]  # normalize so they are points
+        points2d_dist_3xN = rays3d_dist_3xN / rays3d_dist_3xN[2, :]          
         N = points2d_dist_3xN.shape[1]
         if N < 1 or not self.is_distorted():
             return points2d_dist_3xN
@@ -785,8 +783,8 @@ class CameraPinhole(Camera):
         temp1 = points2d_dist_3xN[0:2, :]
         temp2 = utils.from_MxN_to_OpenCV_Nx1xM(temp1)
 
-        # Use OpenCV functions        
-        temp3 = cv.undistortPoints(temp2, self.K_3x3, self.d_1xN)
+        # Use OpenCV functions (using an eye instead of K to work with rays instead of points)        
+        temp3 = cv.undistortPoints(temp2, np.eye(3), self.d_1xN)
 
         # Reshape to (3, N)
         temp3.shape = (N, 2)

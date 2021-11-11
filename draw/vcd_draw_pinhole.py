@@ -19,10 +19,9 @@ from vcd import types
 from vcd import utils
 from vcd import draw
 from vcd import scl
+from vcd import schema
 
 import matplotlib.pyplot as plt
-
-#vcd.save('./etc/' + openlabel_version_name + '_test_scl_camera_projection.json')
 
 def read_camera_pinhole():
     fs = cv.FileStorage("./etc/pinhole_camera.yml", cv.FILE_STORAGE_READ)
@@ -67,3 +66,9 @@ if __name__ == '__main__':
     print("Running " + os.path.basename(__file__))
     vcd = read_camera_pinhole()
     draw_scene(vcd)
+
+    openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+    vcd.save('../tests/etc/' + openlabel_version_name + '_test_scl_camera_pinhole.json')
+    
+
+
