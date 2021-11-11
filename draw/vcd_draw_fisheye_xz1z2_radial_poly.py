@@ -20,7 +20,7 @@ from vcd import utils
 from vcd import draw
 from vcd import scl
 
-from draw import vcd_draw_pinhole
+from draw import vcd_draw_pinhole_4cams
 import matplotlib.pyplot as plt
 
 
@@ -229,10 +229,10 @@ def draw_scene(vcd):
     img_width_px = 1280
     img_height_px = 966
 
-    img_front = cv.imread('./png/fisheye_xz1z2/front.jpg')
-    img_rear = cv.imread('./png/fisheye_xz1z2/rear.jpg')
-    img_left = cv.imread('./png/fisheye_xz1z2/left.jpg')
-    img_right = cv.imread('./png/fisheye_xz1z2/right.jpg')
+    img_front = 255 * np.ones((img_height_px, img_width_px, 3), np.uint8) #cv.imread('./png/fisheye_xz1z2/front.jpg')
+    img_rear = 255 * np.ones((img_height_px, img_width_px, 3), np.uint8) #cv.imread('./png/fisheye_xz1z2/rear.jpg')
+    img_left = 255 * np.ones((img_height_px, img_width_px, 3), np.uint8) #cv.imread('./png/fisheye_xz1z2/left.jpg')
+    img_right = 255 * np.ones((img_height_px, img_width_px, 3), np.uint8) #cv.imread('./png/fisheye_xz1z2/right.jpg')
 
     imageParams = draw.Image.Params(_colorMap=colorMap)
 
@@ -240,17 +240,6 @@ def draw_scene(vcd):
     drawer_rear.draw(img_rear, 0, _params=imageParams)
     drawer_left.draw(img_left, 0, _params=imageParams)
     drawer_right.draw(img_right, 0, _params=imageParams)
-
-    # Undistort
-    #cam_front = scene.get_camera("CAM_FRONT", compute_remaps=True)
-    #cam_rear = scene.get_camera("CAM_REAR", compute_remaps=True)
-    #cam_left = scene.get_camera("CAM_LEFT", compute_remaps=True)
-    #cam_right = scene.get_camera("CAM_RIGHT", compute_remaps=True)
-
-    #img_front_und = cam_front.undistort_image(img_front)
-    #img_rear_und = cam_rear.undistort_image(img_rear)
-    #img_left_und = cam_left.undistort_image(img_left)
-    #img_right_und = cam_right.undistort_image(img_right)
 
     # Draw the text
     textImg = frameInfoDrawer.draw(0, cols=400, rows=img_height_px * 2, _params=imageParams)
@@ -412,6 +401,6 @@ if __name__ == '__main__':
     print("Running " + os.path.basename(__file__))
 
     vcd = simple_setup_4_cams_fisheye()
-    vcd = add_some_objects(vcd)  # so let's add the same objects as in vcd_draw_pinhole
+    vcd = vcd_draw_pinhole_4cams.add_some_objects(vcd)  # so let's add the same objects as in vcd_draw_pinhole_4cams
 
     draw_scene(vcd)
