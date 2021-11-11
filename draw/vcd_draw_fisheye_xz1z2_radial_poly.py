@@ -19,6 +19,7 @@ from vcd import types
 from vcd import utils
 from vcd import draw
 from vcd import scl
+from vcd import schema
 
 from draw import vcd_draw_pinhole_4cams
 import matplotlib.pyplot as plt
@@ -404,3 +405,6 @@ if __name__ == '__main__':
     vcd = vcd_draw_pinhole_4cams.add_some_objects(vcd)  # so let's add the same objects as in vcd_draw_pinhole_4cams
 
     draw_scene(vcd)
+
+    openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
+    vcd.save('../tests/etc/' + openlabel_version_name + '_test_scl_camera_fisheye_xz1z2_radial_poly.json')
