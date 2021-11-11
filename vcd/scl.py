@@ -11,6 +11,7 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
+from os import stat
 import numpy as np
 import warnings
 import cv2 as cv
@@ -481,6 +482,38 @@ class Scene:
             return points2d_3xN, idx_valid
         return np.array([[]]), []
 
+    @staticmethod
+    def __plucker_line_plane_intersection(lines_3xN, plane_abcd):
+        # Plucker intersection between Line and Plane
+        # Use Plucker intersection line-plane
+        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
+        N = lines_3xN.shape[1]
+        idx_valid = [True] * N
+        P1 = np.vstack((0, 0, 0, 1))
+        P2array = np.vstack((lines_3xN, np.ones((1, N))))
+        # Plane equation in plucker coordinates (wrt to world)
+        P = np.asarray(plane_abcd).reshape(4, 1)
+        # Line equation in plucker coordinates
+        p3dNx4 = np.array([])
+        count = 0
+        for P2 in P2array.T:
+            P2 = P2.reshape(4, 1)
+            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
+            # Intersection is a 3D point
+            p3Dlcs = np.matmul(L, P)
+            if p3Dlcs[3][0] != 0:
+                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
+            else:
+                # This is an infinite point: return direction vector instead
+                norm = np.linalg.norm(p3Dlcs[:3][0])
+                p3Dlcs /= norm
+                idx_valid[count] = False
+            p3dNx4 = np.append(p3dNx4, p3Dlcs)
+            count += 1
+        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
+        p3d_4xN = np.transpose(p3dNx4)
+        return p3d_4xN, idx_valid
+
     def reproject_points2d_3xN_into_plane(self, points2d_3xN, plane, cs_cam, cs_dst, frameNum=None):
         # This function calls a camera (cs_cam) to reproject points2d in the image plane into
         # a plane defined in the cs_dst.
@@ -489,7 +522,11 @@ class Scene:
         cam = self.get_camera(cs_cam, frameNum)
         plane_cam = self.transform_plane(plane, cs_dst, cs_cam, frameNum) # first convert plane into cam cs
         N = points2d_3xN.shape[1]
-        points3d_3xN_cs_cam, idx_valid = cam.reproject_points2d_into_plane(points2d_3xN, plane_cam)
+        
+        # Reproject points as rays with camera
+        rays3d_3xN_cs_cam = cam.reproject_points2d(points2d_3xN)
+        points3d_3xN_cs_cam, idx_valid = self.__plucker_line_plane_intersection(rays3d_3xN_cs_cam, plane_cam)
+        
         if points3d_3xN_cs_cam.shape[1] > 0:
             points3d_3xN_cs_cam_filt = points3d_3xN_cs_cam[:, idx_valid]
             points3d_4xN_cs_dst_filt = self.transform_points3d_4xN(points3d_3xN_cs_cam_filt, cs_cam, cs_dst, frameNum)
@@ -497,6 +534,7 @@ class Scene:
             points3d_4xN_cs_dst[:, idx_valid] = points3d_4xN_cs_dst_filt
             return points3d_4xN_cs_dst, idx_valid
         return np.array([[]]), []
+        
 
     def reproject_points2d_3xN(self, points2d_3xN, cs_cam, frameNum=None):
         cam = self.get_camera(cs_cam, frameNum)        
@@ -615,10 +653,6 @@ class Camera(Sensor):
         pass
         
     def reproject_points2d(self, points2d_3xN):
-        pass
-
-    def reproject_points2d_into_plane(self, points2d_3xN, plane_cs):
-        # TODO: Reconsider if this function should be outside Camera, and Scene level
         pass
 
 
@@ -791,65 +825,6 @@ class CameraPinhole(Camera):
         points2d_und_3xN = np.vstack((temp3.T, np.ones((1, N))))
         rays3d_und_3xN = utils.normalize(points2d_und_3xN)
         return rays3d_und_3xN
-
-    def reproject_points2d_into_plane(self, points2d_3xN, plane_cs):
-        """
-        This function takes 2D points in the (distorted) image and traces back a 3D ray from the camera optical axis
-        through the point and gets the intersection with a defined world plane (in the form (a, b, c, d)).
-
-        This function takes distortion into consideration, by first undistorting the 2D points, and then raycasting
-        the 3D ray, free of distortion to apply Plücker formulation to obtain the intersection of a 3D line with
-        a 3D plane.
-
-        To manage tha case where the back-projection does not intersect the plane (which can happen for parallel set
-        -ups of infinite points), the function returns an array of booleans that define the validity of the projection.
-
-        :param points2D_3xN: array 2D points as 3XN array of homogeneous coordinates, representing points in the original
-        image
-        :param plane_cs: a plane expressed in general form (a, b, c, d) expressing a 3D plane in camera coordinate
-        system
-        :return: returns an array of 3D points (4xN array) in homogeneous coordinates, expressed in the camera
-        coordinate systems, belonging to the world plane; and a 1xN array of booleans.
-        """
-        # First, undistort point, so we can project back linear rays
-        points2d_und_3xN = points2d_3xN
-        if self.is_distorted():
-            points2d_und_3xN = self.undistort_points2d(points2d_3xN)
-
-        N = points2d_und_3xN.shape[1]
-        if N == 0:
-            return np.array([[]]), []
-        idx_valid = [True] * N
-
-        # Get ray 3D (expressed in camera coordinate system)
-        rays3d_3xN = utils.normalize(utils.inv(self.K_und_3x3) @ points2d_und_3xN)
-
-        # Use Plucker intersection line-plane
-        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
-        P1 = np.vstack((0, 0, 0, 1))
-        P2array = np.vstack((rays3d_3xN, np.ones((1, N))))
-        # Plane equation in plucker coordinates (wrt to world)
-        P = np.asarray(plane_cs).reshape(4, 1)
-        # Line equation in plucker coordinates
-        p3dNx4 = np.array([])
-        count = 0
-        for P2 in P2array.T:
-            P2 = P2.reshape(4, 1)
-            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
-            # Intersection is a 3D point
-            p3Dlcs = np.matmul(L, P)
-            if p3Dlcs[3][0] != 0:
-                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
-            else:
-                # This is an infinite point: return direction vector instead
-                norm = np.linalg.norm(p3Dlcs[:3][0])
-                p3Dlcs /= norm
-                idx_valid[count] = False
-            p3dNx4 = np.append(p3dNx4, p3Dlcs)
-            count += 1
-        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
-        p3d_4xN = np.transpose(p3dNx4)
-        return p3d_4xN, idx_valid
 
     #################################
     # Other public functions
@@ -1127,49 +1102,6 @@ class CameraFisheye(Camera):
 
         return rays3d_3xN
 
-    def reproject_points2d_into_plane(self, points2d_3xN, plane_cs, apply_undistorsion=True):
-        N = points2d_3xN.shape[1]
-        if N == 0:
-            return np.array([[]]), []
-        idx_valid = [True] * N
-
-        # Undistort rays
-        if apply_undistorsion:
-            # First, get rays3d applying K^-1
-            rays3d_dist_3xN = utils.inv(self.K_3x3).dot(points2d_3xN)
-            rays3d_3xN = self.undistort_rays3d(rays3d_dist_3xN=rays3d_dist_3xN)
-        else:
-            # For those cases where this function is given undistorted points
-            rays3d_dist_3xN = utils.inv(self.K_und_3x3).dot(points2d_3xN)
-            rays3d_3xN = rays3d_dist_3xN
-
-        # Use Plucker intersection line-plane
-        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
-        P1 = np.vstack((0, 0, 0, 1))
-        P2array = np.vstack((rays3d_3xN, np.ones((1, N))))
-        # Plane equation in plucker coordinates (wrt to world)
-        P = np.asarray(plane_cs).reshape(4, 1)
-        # Line equation in plucker coordinates
-        p3dNx4 = np.array([])
-        count = 0
-        for P2 in P2array.T:
-            P2 = P2.reshape(4, 1)
-            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
-            # Intersection is a 3D point
-            p3Dlcs = np.matmul(L, P)
-            if p3Dlcs[3][0] != 0:
-                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
-            else:
-                # This is an infinite point: return direction vector instead
-                norm = np.linalg.norm(p3Dlcs[:3][0])
-                p3Dlcs /= norm
-                idx_valid[count] = False
-            p3dNx4 = np.append(p3dNx4, p3Dlcs)
-            count += 1
-        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
-        p3d_4xN = np.transpose(p3dNx4)
-        return p3d_4xN, idx_valid
-
     #################################
     # Inner functions 
     #################################
@@ -1424,7 +1356,7 @@ class CameraCylindrical(Camera):
         '''
         return rays3d_3xN
 
-    def project_points3d(self, points3d_4xN, apply_distortion=False, remove_outside=False):
+    def project_points3d(self, points3d_4xN, remove_outside=False):
         # 1.- Select only those z > 0 (in front of the camera)
         idx_in_front = points3d_4xN[2, :] > 1e-8
         idx_valid = idx_in_front
@@ -1445,40 +1377,6 @@ class CameraCylindrical(Camera):
     def reproject_points2d(self, points2d_3xN):
         lonlat_2xN = self.__pixel2LL(points2d_3xN)
         return self.__LL2ray(lonlat_2xN)
-
-    def reproject_points2d_into_plane(self, points2d_3xN, plane_cs, apply_undistorsion = True):
-        #Step one
-        rays3d_3xN = self.reproject_points2d(points2d_3xN)
-        N = rays3d_3xN.shape[1]
-        idx_valid = [True] * N
-
-        #Step two
-        # Use Plucker intersection line-plane
-        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
-        P1 = np.vstack((0, 0, 0, 1))
-        P2array = np.vstack((rays3d_3xN, np.ones((1, N))))
-        # Plane equation in plucker coordinates (wrt to world)
-        P = np.asarray(plane_cs).reshape(4, 1)
-        # Line equation in plucker coordinates
-        p3dNx4 = np.array([])
-        count = 0
-        for P2 in P2array.T:
-            P2 = P2.reshape(4, 1)
-            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
-            # Intersection is a 3D point
-            p3Dlcs = np.matmul(L, P)
-            if p3Dlcs[3][0] != 0:
-                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
-            else:
-                # This is an infinite point: return direction vector instead
-                norm = np.linalg.norm(p3Dlcs[:3][0])
-                p3Dlcs /= norm
-                idx_valid[count] = False
-            p3dNx4 = np.append(p3dNx4, p3Dlcs)
-            count += 1
-        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
-        p3d_4xN = np.transpose(p3dNx4)
-        return p3d_4xN, idx_valid
 
     #################################
     # Inner functions
@@ -1531,3 +1429,58 @@ class CameraCylindrical(Camera):
         #px = self.mx*lon + self.nx
         #py = self.my*lat + self.ny
         return points2d_3xN
+
+
+class CameraOrthograhic(Camera):
+    def __init__(self, camera_intrinsics, name, description, uri):
+        Camera.__init__(self, camera_intrinsics['width_px'],
+                        camera_intrinsics['height_px'],
+                        name, description, uri)
+
+        self.img_size = (self.width, self.height)
+        self.xmax = camera_intrinsics['xmax']
+        self.xmin = camera_intrinsics['xmin']
+        self.ymax = camera_intrinsics['ymax']
+        self.ymin = camera_intrinsics['ymin']
+
+        # Create calibration matrix
+        self.K_3x4 = np.array([[self.width*(1.0/(self.xmax-self.xmin)), 0.0, self.width/2.0, 0.0],
+                               [0.0, self.height*(1.0/(self.ymax-self.ymin)), self.height/2.0, 0.0],
+                               [0.0, 0.0, 0.0, 0.0]])
+        self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
+        self.K_3x3_inv = utils.inv(self.K_3x3)
+
+    #################################
+    # Inherited functions
+    #################################
+    def distort_rays3d(self, rays3d_3xN):
+        # Orthographic cameras don't have distortion
+        return rays3d_3xN
+    
+    def project_points3d(self, points3d_4xN, remove_outside=False):
+        # 0.- Pre-filter
+        assert (points3d_4xN.ndim == 2)
+        N = points3d_4xN.shape[1]
+        if N == 0:
+            return np.array([[]]), []
+
+        # 1.- Select only those within limits
+        idx_in_inside = points3d_4xN[0, :] > self.xmin and points3d_4xN[0, :] < self.xmax and points3d_4xN[2, :] > 1e-8
+        idx_valid = idx_in_inside
+        rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
+        
+        # 2.- Project using calibration matrix
+        rays3d_4xN = np.vstack((rays3d_3xN_filt, np.ones(rays3d_3xN_filt.shape[1])))
+        points2d_3xN = self.K_3x4 @ rays3d_4xN
+        points2d_3xN /= points2d_3xN[2,:]
+
+        if remove_outside:
+            points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
+
+        return points2d_3xN, idx_valid
+
+    def reproject_points2d(self, points2d_3xN):
+        rays3d_3xN = utils.normalize(utils.inv(self.K_3x3) @ points2d_3xN)
+        return rays3d_3xN
+        
+    
