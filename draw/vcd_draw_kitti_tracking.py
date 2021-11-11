@@ -14,12 +14,8 @@ VCD is distributed under MIT License. See LICENSE.
 
 import copy
 import os
-import sys
-sys.path.insert(0, "..")
-#import screeninfo
 import cv2 as cv
 import numpy as np
-import math
 from vcd import core
 from vcd import draw
 from vcd import scl
@@ -27,6 +23,8 @@ from vcd import schema
 
 openlabel_version_name = "openlabel" + schema.openlabel_schema_version.replace(".", "")
 vcd_version_name = openlabel_version_name
+
+view_odom = False
 
 def draw_kitti_tracking(sequence_number, record_video, draw_images):
     # Get annotations
@@ -40,9 +38,6 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
     drawerCameraRight = draw.Image(scene, "CAM_RIGHT")
     
     frameInfoDrawer = draw.FrameInfoDrawer(vcd)
-
-    # Get the size of the screen
-    #screen = screeninfo.get_monitors()[0]    
 
     # Get video
     video_file_name_left = "../../../../data/kitti/tracking/video/left/" + str(sequence_number).zfill(4) + ".mp4"
@@ -101,12 +96,17 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
                                          stepX=5.0, stepY=5.0,
                                          ignore_classes={"DontCare"},
                                          draw_only_current_image=False)
-    drawerTopView2 = draw.TopView(scene, "odom", params=topviewParams2)
+    if view_odom:
+        drawerTopView2 = draw.TopView(scene, "odom", params=topviewParams2)
 
     # Video record
     if record_video:
-        video_writer = cv.VideoWriter("kitti_tracking_vcd_" + str(sequence_number).zfill(4) + '.mp4',
-                                      cv.VideoWriter_fourcc(*'mp4v'), 30.0, (video_width + 400, video_height*6))
+        if view_odom:
+            video_writer = cv.VideoWriter("kitti_tracking_vcd_" + str(sequence_number).zfill(4) + '.mp4',
+                                        cv.VideoWriter_fourcc(*'mp4v'), 30.0, (video_width + 400, video_height*6))
+        else:
+            video_writer = cv.VideoWriter("kitti_tracking_vcd_" + str(sequence_number).zfill(4) + '.mp4',
+                                        cv.VideoWriter_fourcc(*'mp4v'), 30.0, (video_width + 400, video_height*4))
 
     # Loop over video
     f = 0
@@ -122,9 +122,10 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
         if draw_images:
             drawerTopView1.add_images({'CAM_LEFT': img_left}, f)
         topView1 = drawerTopView1.draw(frameNum=f)
-        if draw_images:
-            drawerTopView2.add_images({'CAM_LEFT': img_left}, f)
-        topView2 = drawerTopView2.draw(frameNum=f)
+        if view_odom:
+            if draw_images:
+                drawerTopView2.add_images({'CAM_LEFT': img_left}, f)
+            topView2 = drawerTopView2.draw(frameNum=f)
 
         # Camera
         img_out_left = copy.deepcopy(img_left)
@@ -133,15 +134,23 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
         drawerCameraRight.draw(img_out_right, f, _params=imageParams)
 
         # VCD text viewer
-        textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height*6, _params=imageParams)
+        if view_odom:
+            textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height*6, _params=imageParams)
+        else:
+            textImg = frameInfoDrawer.draw(f, cols=400, rows=video_height*4, _params=imageParams)
 
         # Stack
         stack1 = np.vstack((img_out_left, img_out_right))
         stack1 = np.vstack((stack1, topView1))
-        stack1 = np.vstack((stack1, topView2))
+        if view_odom:
+            stack1 = np.vstack((stack1, topView2))
         mosaic = np.hstack((stack1, textImg))
         cv.imshow('KITTI Tracking', mosaic)
-        cv.waitKey(0)
+
+        if view_odom:
+            cv.waitKey(0)
+        else:
+            cv.waitKey(1)
 
         if record_video:
             video_writer.write(mosaic)
@@ -159,6 +168,6 @@ def draw_kitti_tracking(sequence_number, record_video, draw_images):
 if __name__ == "__main__":
     print("Running " + os.path.basename(__file__))
 
-    draw_kitti_tracking(sequence_number=0, record_video=False, draw_images=False)
+    draw_kitti_tracking(sequence_number=0, record_video=False, draw_images=True)
 
 

@@ -11,9 +11,6 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
-import sys
-sys.path.insert(0, "..")
 import cv2 as cv
 import numpy as np
 

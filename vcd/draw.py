@@ -284,7 +284,7 @@ class TopView:
 
                     if need_to_recompute_maps[cam_name]:
                         # Project into image
-                        points2d_dist_3xN, idx_valid = cam.project_points3d(points3d_cam_4xN)
+                        points2d_dist_3xN, idx_valid = cam.project_points3d(points3d_cam_4xN, remove_outside=True)
 
                         # Assign into map
                         self.images[cam_name]['mapX'][i, :] = points2d_dist_3xN[0, :]
@@ -503,7 +503,7 @@ class TopView:
                                                2,
                                                uid)
 
-                        if _drawTrajectory:
+                        if _drawTrajectory and _frameNum is not None:
                             fis_object = self.scene.vcd.get_object_data_frame_intervals(uid, cuboid_name)
                             if fis_object.empty():
                                 # So this object is static, let's project its cuboid into the current transform
@@ -602,7 +602,7 @@ class TopView:
 
                         self.draw_points3d(_img, points3d_4xN_transformed, color)
 
-                        if _drawTrajectory:
+                        if _drawTrajectory and _frameNum is not None:
                             fis_object = self.scene.vcd.get_object_data_frame_intervals(uid, point_name)
                             if fis_object.empty():
                                 # So this object is static, let's project its geometry into the current transform
@@ -835,20 +835,24 @@ class Image:
         if camera_coordinate_system is not None:
             assert (scene.vcd.has_coordinate_system(camera_coordinate_system))
         self.camera_coordinate_system = camera_coordinate_system
-        self.camera = self.scene.get_camera(self.camera_coordinate_system)
+        self.camera = self.scene.get_camera(self.camera_coordinate_system, compute_remaps=False)
         self.params = Image.Params()
 
     def draw_points3d(self, _img, points3d_4xN, _color):
         # this function may return LESS than N points IF 3D points are BEHIND the camera
-        points2d_3xN, idx_valid = self.camera.project_points3d(points3d_4xN)
+        points2d_3xN, idx_valid = self.camera.project_points3d(points3d_4xN, remove_outside=True)
         if points2d_3xN is None:
             return
         rows, cols = points2d_3xN.shape
+        img_rows, img_cols, img_channels = _img.shape
         for i in range(0, cols):
             if idx_valid[i]:
                 if np.isnan(points2d_3xN[0, i]) or np.isnan(points2d_3xN[1, i]):
                     continue
-                cv.circle(_img, (utils.round(points2d_3xN[0, i]), utils.round(points2d_3xN[1, i])), 2, _color, -1)
+                center = (utils.round(points2d_3xN[0, i]), utils.round(points2d_3xN[1, i]))                            
+                if not utils.is_inside_image(img_cols, img_rows, center[0], center[1]):
+                    continue
+                cv.circle(_img, (int(center[0]), int(center[1])), 2, _color, -1)
 
     def draw_cuboid(self, _img, _cuboid_vals, _class, _color):
         assert (isinstance(_cuboid_vals, list))
@@ -858,9 +862,10 @@ class Image:
         # Generate object coordinates
         points3d_4x8 = utils.generate_cuboid_points_ref_4x8(_cuboid_vals)
 
-        points2d_4x8, idx_valid = self.camera.project_points3d(points3d_4x8)  # this function may return LESS than 8 points IF 3D points are BEHIND the camera
+        points2d_4x8, idx_valid = self.camera.project_points3d(points3d_4x8, remove_outside=True)  # this function may return LESS than 8 points IF 3D points are BEHIND the camera
         if points2d_4x8 is None:
             return
+        img_rows, img_cols, img_channels = _img.shape
 
         pairs = ([0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [1, 5], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7], [7, 4])
         for count, pair in enumerate(pairs):
@@ -869,6 +874,10 @@ class Image:
                 #    continue
                 p_a = (utils.round(points2d_4x8[0, pair[0]]), utils.round(points2d_4x8[1, pair[0]]))
                 p_b = (utils.round(points2d_4x8[0, pair[1]]), utils.round(points2d_4x8[1, pair[1]]))
+
+                if not utils.is_inside_image(img_cols, img_rows, p_a[0], p_b[1]) or not utils.is_inside_image(img_cols, img_rows, p_b[0], p_b[1]):
+                    continue
+
                 cv.line(_img, p_a, p_b, _color, 1)
         pass
 
@@ -878,12 +887,14 @@ class Image:
 
         pta = (pt1[0], pt1[1] - 15)
         ptb = (pt2[0], pt1[1])
-
+        img_rows, img_cols, img_channels = _img.shape
         if add_border:
             cv.rectangle(_img, pta, ptb, _color, 2)
             cv.rectangle(_img, pta, ptb, _color, -1)
         cv.putText(_img, _object_class, (pta[0], pta[1] + 10), cv.FONT_HERSHEY_PLAIN, 0.6, (0,0,0), 1, cv.LINE_AA)
-        cv.rectangle(_img, pt1, pt2, _color, 2)
+
+        if utils.is_inside_image(img_cols, img_rows, pt1[0], pt1[1]) and utils.is_inside_image(img_cols, img_rows, pt2[0], pt2[1]):
+            cv.rectangle(_img, pt1, pt2, _color, 2)
 
     def draw_trajectory(self, _img, _object_id, _frameNum, _params):
         object_class = self.scene.vcd.get_object(_object_id)['type']
@@ -1013,12 +1024,13 @@ class Image:
                 point2d_prev = (x, y)
     '''
 
-    def draw(self, _img, _frameNum, _params=None):
+    def draw(self, _img, _frameNum=None, _params=None):
         if _params is not None:
             assert(isinstance(_params, Image.Params))
             self.params = _params
 
         # Explore objects at VCD
+        objects = None
         if _frameNum is not None:
             vcd_frame = self.scene.vcd.get_frame(_frameNum)
             if 'objects' in vcd_frame:

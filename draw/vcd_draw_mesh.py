@@ -11,15 +11,9 @@ VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
-import copy
 import os
-import sys
-sys.path.insert(0, "..")
-import screeninfo
 import cv2 as cv
 import numpy as np
-import math
 from vcd import core
 from vcd import draw
 from vcd import scl

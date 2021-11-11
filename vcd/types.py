@@ -28,8 +28,24 @@ class CoordinateSystemType(Enum):
 
 
 class FisheyeModel(Enum):
-    radial_poly = 1  # focal length is 1, distortion is 4 values
-    kannala = 2  # focal length not 1, distortion is 5 values (r(t) = k1t + k2t^3 + k3t^5 + k4t^7 + k5t^9 )
+    '''    
+    Any 3D point in space P=(X,Y,Z,1)^T has a radius with respect to the optical axis Z
+    r = ||X^2 + Y^2||
+    The angle of incidence to the optical center is
+    a = atan(r/Z)
+
+    The angle of incidence then spans from 0 to pi/2
+    The model of the lens relates the angle of incidence with the radius of the point in the image plane (in pixels):
+    "radial_poly" (4 distortion coefficients)
+        rp = k1*a + k2*a^2 + k3*a^3 + k4*a^4
+    "kannala" (5 distortion coefficients)
+        rp = k1*a + k2*a^3 + k3*a^5 + k4*a^7 + k5*a^9
+    "opencv_fisheye" (4 distortion coefficients, equivalent to Kannala with k1=1.0, so only the last 4 terms are used
+        rp = a + k1*a^3 + k2*a^5 + k3*a^7 + k4*a^9 
+    '''
+    radial_poly = 1  
+    kannala = 2  
+    opencv_fisheye = 3
 
 
 class Intrinsics:
@@ -83,15 +99,19 @@ class IntrinsicsFisheye(Intrinsics):
         self.data['intrinsics_fisheye']['lens_coeffs_1xN'] = lens_coeffs_1xN
 
         if fisheye_model is not None:
-            assert(isinstance(fisheye_model, FisheyeModel))
-            self.data['intrinsics_fisheye']['model'] = fisheye_model.name
+            assert(isinstance(fisheye_model, FisheyeModel))            
             if fisheye_model is FisheyeModel.radial_poly:
                 assert(len(lens_coeffs_1xN)==4)
             elif fisheye_model is FisheyeModel.kannala:
-                assert(len(lens_coeffs_1xN)==5)            
+                assert(len(lens_coeffs_1xN)==5)
+            elif fisheye_model is FisheyeModel.opencv_fisheye:
+                assert(len(lens_coeffs_1xN==4))
+            else:
+                raise Exception("ERROR: Fisheyemodel not supported. See types.FisheyeModel enum.")            
+            self.data['intrinsics_fisheye']['model'] = fisheye_model.name
         else:
             if len(lens_coeffs_1xN)==4:
-                self.data['intrinsics_fisheye']['model'] = FisheyeModel.radial_poly.name
+                self.data['intrinsics_fisheye']['model'] = FisheyeModel.opencv_fisheye.name
             elif len(lens_coeffs_1xN) ==5:
                 self.data['intrinsics_fisheye']['model'] = FisheyeModel.kannala.name
 

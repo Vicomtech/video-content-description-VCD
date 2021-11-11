@@ -12,11 +12,7 @@ VCD is distributed under MIT License. See LICENSE.
 """
 
 
-import sys
 from vcd.draw import SetupViewer
-sys.path.insert(0, "..")
-import cv2 as cv
-import numpy as np
 from scipy.spatial.transform import Rotation
 import matplotlib.pyplot as plt
 
@@ -42,7 +38,7 @@ size1 = [4.0, 1.6, 1.4]
 size2 = size1
 
 # Check:
-R = utils.euler2R(euler, seq=)
+R = utils.euler2R(euler, seq=utils.EulerSeq.ZYX)
 R_ = Rotation.from_euler('zyx', euler, degrees=False)
 quat = R_.as_quat().flatten().tolist()
 print(quat)

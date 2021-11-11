@@ -12,12 +12,8 @@ VCD is distributed under MIT License. See LICENSE.
 """
 
 import os
-import sys
-sys.path.insert(0, "..")
-import screeninfo
 import cv2 as cv
 import numpy as np
-import math
 from vcd import core
 from vcd import types
 from vcd import utils
@@ -72,7 +68,8 @@ def simple_setup_4_cams_fisheye():
                                   center_x=cX,
                                   center_y=cY,
                                   focal_length_x=1.0,
-                                  focal_length_y=1.0
+                                  focal_length_y=1.0,
+                                  fisheye_model=types.FisheyeModel.radial_poly
                               )
                               )
     vcd.add_coordinate_system("CAM_FRONT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -110,7 +107,10 @@ def simple_setup_4_cams_fisheye():
                                   lens_coeffs_1xN=list(d_1x4.flatten()),
                                   center_x=cX,
                                   center_y=cY,
-                                  aspect_ratio=1.0
+                                  aspect_ratio=1.0,
+                                  focal_length_x=1.0,
+                                  focal_length_y=1.0,
+                                  fisheye_model=types.FisheyeModel.radial_poly
                               )
                               )
     vcd.add_coordinate_system("CAM_REAR", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -149,7 +149,8 @@ def simple_setup_4_cams_fisheye():
                                   center_x=cX,
                                   center_y=cY,
                                   focal_length_x=1.0,
-                                  focal_length_y=1.0
+                                  focal_length_y=1.0,
+                                  fisheye_model=types.FisheyeModel.radial_poly
                               )
                               )
     vcd.add_coordinate_system("CAM_LEFT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -189,7 +190,8 @@ def simple_setup_4_cams_fisheye():
                                   center_x=cX,
                                   center_y=cY,
                                   focal_length_x=1.0,
-                                  focal_length_y=1.0
+                                  focal_length_y=1.0,
+                                  fisheye_model=types.FisheyeModel.radial_poly
                               )
                               )
     vcd.add_coordinate_system("CAM_RIGHT", cs_type=types.CoordinateSystemType.sensor_cs,
@@ -223,17 +225,14 @@ def draw_scene(vcd):
                 'Wall': (0, 0, 255),
                 'Ground': (0, 255, 0)}
 
-    # Get the size of the screen
-    screen = screeninfo.get_monitors()[0]
-
     # Draw the images
     img_width_px = 1280
     img_height_px = 966
 
-    img_front = cv.imread('./png/front.jpg')
-    img_rear = cv.imread('./png/rear.jpg')
-    img_left = cv.imread('./png/left.jpg')
-    img_right = cv.imread('./png/right.jpg')
+    img_front = cv.imread('./png/fisheye_xz1z2/front.jpg')
+    img_rear = cv.imread('./png/fisheye_xz1z2/rear.jpg')
+    img_left = cv.imread('./png/fisheye_xz1z2/left.jpg')
+    img_right = cv.imread('./png/fisheye_xz1z2/right.jpg')
 
     imageParams = draw.Image.Params(_colorMap=colorMap)
 
@@ -243,15 +242,15 @@ def draw_scene(vcd):
     drawer_right.draw(img_right, 0, _params=imageParams)
 
     # Undistort
-    cam_front = scene.get_camera("CAM_FRONT")
-    cam_rear = scene.get_camera("CAM_REAR")
-    cam_left = scene.get_camera("CAM_LEFT")
-    cam_right = scene.get_camera("CAM_RIGHT")
+    #cam_front = scene.get_camera("CAM_FRONT", compute_remaps=True)
+    #cam_rear = scene.get_camera("CAM_REAR", compute_remaps=True)
+    #cam_left = scene.get_camera("CAM_LEFT", compute_remaps=True)
+    #cam_right = scene.get_camera("CAM_RIGHT", compute_remaps=True)
 
-    img_front_und = cam_front.undistort_image(img_front)
-    img_rear_und = cam_rear.undistort_image(img_rear)
-    img_left_und = cam_left.undistort_image(img_left)
-    img_right_und = cam_right.undistort_image(img_right)
+    #img_front_und = cam_front.undistort_image(img_front)
+    #img_rear_und = cam_rear.undistort_image(img_rear)
+    #img_left_und = cam_left.undistort_image(img_left)
+    #img_right_und = cam_right.undistort_image(img_right)
 
     # Draw the text
     textImg = frameInfoDrawer.draw(0, cols=400, rows=img_height_px * 2, _params=imageParams)
@@ -260,9 +259,9 @@ def draw_scene(vcd):
     cv.line(mosaic, (mosaic.shape[1] // 2, 0), (mosaic.shape[1] // 2, mosaic.shape[0]), (0, 0, 0), 3)
     cv.line(mosaic, (0, mosaic.shape[0] // 2), (mosaic.shape[1], mosaic.shape[0] // 2), (0, 0, 0), 3)
 
-    mosaic_und = np.vstack((np.hstack((img_front_und, img_right_und)), np.hstack((img_left_und, img_rear_und))))
-    cv.line(mosaic_und, (mosaic_und.shape[1] // 2, 0), (mosaic_und.shape[1] // 2, mosaic_und.shape[0]), (0, 0, 0), 3)
-    cv.line(mosaic_und, (0, mosaic_und.shape[0] // 2), (mosaic_und.shape[1], mosaic_und.shape[0] // 2), (0, 0, 0), 3)
+    #mosaic_und = np.vstack((np.hstack((img_front_und, img_right_und)), np.hstack((img_left_und, img_rear_und))))
+    #cv.line(mosaic_und, (mosaic_und.shape[1] // 2, 0), (mosaic_und.shape[1] // 2, mosaic_und.shape[0]), (0, 0, 0), 3)
+    #cv.line(mosaic_und, (0, mosaic_und.shape[0] // 2), (mosaic_und.shape[1], mosaic_und.shape[0] // 2), (0, 0, 0), 3)
 
     # Draw the top view
     topview_width = 1280
@@ -283,8 +282,8 @@ def draw_scene(vcd):
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)
-    cv.namedWindow("Cameras Undistorted", cv.WINDOW_NORMAL)
-    cv.imshow("Cameras Undistorted", mosaic_und)
+    #cv.namedWindow("Cameras Undistorted", cv.WINDOW_NORMAL)
+    #cv.imshow("Cameras Undistorted", mosaic_und)
     cv.namedWindow("VCD info")
     cv.imshow("VCD info", textImg)
     cv.namedWindow("TopView iso8855")

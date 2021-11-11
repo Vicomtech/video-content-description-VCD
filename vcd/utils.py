@@ -589,6 +589,9 @@ def fromCameraMatrix3x4toCameraMatrix3x3(camera_matrix_3x4):
 def round(number_float):
     return int(np.round(number_float))
 
+def normalize(vals):
+    vals /= np.linalg.norm(vals)
+    return vals
 
 def norm(ray):
     return math.sqrt(ray[0]*ray[0] + ray[1]*ray[1])
