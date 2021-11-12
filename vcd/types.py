@@ -136,6 +136,26 @@ class IntrinsicsCylindrical(Intrinsics):
             self.data['intrinsics_cylindrical'].update(additional_items)
 
 
+class IntrinsicsOrthographic(Intrinsics):
+    def __init__(self, width_px, height_px, xmin, xmax, ymin, ymax, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data['intrinsics_orthographic'] = dict()
+        self.data['intrinsics_orthographic']['width_px'] = width_px
+        self.data['intrinsics_orthographic']['height_px'] = height_px
+        assert (isinstance(xmin, float))
+        assert (isinstance(xmax, float))
+        assert (isinstance(ymin, float))
+        assert (isinstance(ymax, float))
+        self.data['intrinsics_orthographic']['xmin'] = xmin
+        self.data['intrinsics_orthographic']['xmax'] = xmax
+        self.data['intrinsics_orthographic']['ymin'] = ymin
+        self.data['intrinsics_orthographic']['ymax'] = ymax
+
+        if additional_items is not None:
+            self.data['intrinsics_orthographic'].update(additional_items)
+
 class IntrinsicsCustom(Intrinsics):
     def __init__(self, **additional_items):
         Intrinsics.__init__(self)

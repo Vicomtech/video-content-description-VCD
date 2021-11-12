@@ -875,3 +875,14 @@ def base64_to_image(payload_base64_str, flag=1):
     payload_read = base64.b64decode(payload_base64_str)
     img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), flag)
     return img
+
+####################################################
+# Color maps
+####################################################
+colorMap_1 = {'Car': (0, 0, 255), 'Van': (255, 0, 0), 'Truck': (127, 127, 0),
+                'Pedestrian': (0, 255, 0), 'Person_sitting': (0, 127, 127),
+                'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (255, 255, 255),
+                'Cyclist': (0, 127, 255),
+                'Ego-car': (0, 0, 0),
+                'Wall': (0, 0, 255),
+                'Ground': (0, 255, 0)}

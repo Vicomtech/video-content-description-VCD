@@ -234,6 +234,21 @@ class Graph:
 
 
 class Scene:
+    '''
+    This class defines a scene by reading a VCD file that contains coordinate systems, cameras, and objects.
+    The Scene object brings projection functionalities such as creating warped images, converting objects from one coordinate system to another, etc.
+
+    # Load a VCD file and create a Scene
+    vcd = core.OpenLABEL('myOpenLABELfile.json')
+    scene = scl.Scene(vcd)
+
+    # Use the scene to get cameras
+    camera_front = scene.get_camera('front')
+
+    # Use cameras
+    camera_front.project_points3d(points3d_4xN)
+
+    '''
     def __init__(self, vcd):
         self.vcd = vcd
         self.cameras = dict()
@@ -309,8 +324,10 @@ class Scene:
                 camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
             elif 'intrinsics_cylindrical' in sp:
                 camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
+            elif 'intrinsics_orthographic' in sp:
+                camera = CameraOrthographic(sp['intrinsics_orthographic'], camera_name, description, uri)
             else:
-                warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye and CameraCylindrical. See types.py.")
+                warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye, CameraCylindrical and CameraOrthographic. See types.py.")
         else:
             # Read already created camera, or, if first time here, create one
             # Let's use f=-1
@@ -332,8 +349,10 @@ class Scene:
                             camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
                         elif 'intrinsics_cylindrical' in sp:
                             camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
+                        elif 'intrinsics_orthographic' in sp:
+                            camera = CameraOrthographic(sp['intrinsics_orthographic'], camera_name, description, uri)
                         else:
-                            warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye and CameraCylindrical. See types.py.")
+                            warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye, CameraCylindrical and CameraOrthographic. See types.py.")
             else:
                 return None        
 
@@ -754,7 +773,7 @@ class CameraPinhole(Camera):
         if N == 0:
             return np.array([[]]), []
 
-        # 1.- Select only those z > 0 (in front of the camera)
+        # 1.- Select only those z > 0 (in front of the camera) - this assumption is good for pinhole cameras
         idx_in_front = points3d_4xN[2, :] > 1e-8
         idx_valid = idx_in_front
         rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
@@ -1431,7 +1450,15 @@ class CameraCylindrical(Camera):
         return points2d_3xN
 
 
-class CameraOrthograhic(Camera):
+class CameraOrthographic(Camera):
+    '''
+    This is a special type of camera which does not project 3d entities using a pinhole nor distorted lens.
+    It does project 3d points into the Z_cam = 0 image plane keeping their X_cam and Y_cam values.
+    A rectangular frustrum is created defining the (xmax, xmin, ymax, ymin) clipping planes (in camera coordinate system).
+    To keep coherency with other Cameras in VCD, the camera model has Z-front, X-right, Y-bottom.
+
+    An additional scaling and centering camera calibration matrix is used to create images with desired number of pixels.
+    '''
     def __init__(self, camera_intrinsics, name, description, uri):
         Camera.__init__(self, camera_intrinsics['width_px'],
                         camera_intrinsics['height_px'],
@@ -1444,11 +1471,16 @@ class CameraOrthograhic(Camera):
         self.ymin = camera_intrinsics['ymin']
 
         # Create calibration matrix
-        self.K_3x4 = np.array([[self.width*(1.0/(self.xmax-self.xmin)), 0.0, self.width/2.0, 0.0],
-                               [0.0, self.height*(1.0/(self.ymax-self.ymin)), self.height/2.0, 0.0],
+        self.K_3x4 = np.array([[self.width*(1.0/(self.xmax-self.xmin)), 0.0, 0.0, self.width/2.0],
+                               [0.0, self.height*(1.0/(self.ymax-self.ymin)), 0.0, self.height/2.0],
                                [0.0, 0.0, 0.0, 0.0]])
-        self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
-        self.K_3x3_inv = utils.inv(self.K_3x3)
+        #self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
+        
+        # Note that the orthographic projection matrix is not invertible in homogeneous form. Let's do it manually
+        self.K_3x4_inv = np.array([[(self.xmax-self.xmin)/self.width, 0.0, -self.width/2.0, 0.0],
+                               [0.0, (self.ymax-self.ymin)/self.height, -self.height/2.0, 0.0],
+                               [0.0, 0.0, 0.0, 0.0]])                
+        self.K_3x3_inv = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4_inv)
 
     #################################
     # Inherited functions
@@ -1465,22 +1497,31 @@ class CameraOrthograhic(Camera):
             return np.array([[]]), []
 
         # 1.- Select only those within limits
-        idx_in_inside = points3d_4xN[0, :] > self.xmin and points3d_4xN[0, :] < self.xmax and points3d_4xN[2, :] > 1e-8
-        idx_valid = idx_in_inside
-        rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
+        idx_is_inside = (
+            (points3d_4xN[0, :] > self.xmin) &
+            (points3d_4xN[0, :] < self.xmax) &
+            (points3d_4xN[1, :] > self.ymin) &
+            (points3d_4xN[1, :] < self.ymax) &
+            (points3d_4xN[2, :] > 1e-8)
+        )
+        
+        idx_valid = idx_is_inside
+        #rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
         
         # 2.- Project using calibration matrix
-        rays3d_4xN = np.vstack((rays3d_3xN_filt, np.ones(rays3d_3xN_filt.shape[1])))
-        points2d_3xN = self.K_3x4 @ rays3d_4xN
-        points2d_3xN /= points2d_3xN[2,:]
+        #rays3d_4xN = np.vstack((rays3d_3xN_filt, np.ones(rays3d_3xN_filt.shape[1])))
+        #rays3d_4xN = np.vstack((rays3d_3xN_filt, np.ones(rays3d_3xN_filt.shape[1])))
+        
+        points2d_3xN = self.K_3x4 @ points3d_4xN
+        #points2d_3xN /= points2d_3xN[2,:] NOTE: Ortographic projection is no friend of homogeneous coordinates
 
         if remove_outside:
-            points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
+            points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, (self.width, self.height), idx_valid)
 
         return points2d_3xN, idx_valid
 
-    def reproject_points2d(self, points2d_3xN):
-        rays3d_3xN = utils.normalize(utils.inv(self.K_3x3) @ points2d_3xN)
+    def reproject_points2d(self, points2d_3xN):        
+        rays3d_3xN = utils.normalize(utils.inv(self.K_3x3_inv) @ points2d_3xN)
         return rays3d_3xN
         
     
