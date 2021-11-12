@@ -812,7 +812,7 @@ class Image:
     Devised to draw bboxes, it can also project 3D entities (e.g. cuboids) using the calibration parameters
     '''
     class Params:
-        def __init__(self, _draw_trajectory=False, _colorMap=None, _ignore_classes=None, _draw_types=None, _barrel=None):
+        def __init__(self, _draw_trajectory=False, _colorMap=None, _ignore_classes=None, _draw_types=None, _barrel=None, _thickness=None):
             if _colorMap is None:
                 self.colorMap = dict()
             else:
@@ -833,6 +833,11 @@ class Image:
                 self.draw_barrel = _barrel
             else:
                 self.draw_barrel = False
+
+            if _thickness is not None:
+                self.thickness = _thickness
+            else:
+                self.thickness = 1
 
     def __init__(self, scene, camera_coordinate_system=None):
         assert (isinstance(scene, scl.Scene))
@@ -859,7 +864,7 @@ class Image:
                     continue
                 cv.circle(_img, (int(center[0]), int(center[1])), 2, _color, -1)
 
-    def draw_cuboid(self, _img, _cuboid_vals, _class, _color):
+    def draw_cuboid(self, _img, _cuboid_vals, _class, _color, _thickness=1):
         assert (isinstance(_cuboid_vals, list))
         assert (len(_cuboid_vals) == 9)  # (X, Y, Z, RX, RY, RZ, SX, SY, SZ)
         # TODO cuboids with quaternions
@@ -883,8 +888,7 @@ class Image:
                 if not utils.is_inside_image(img_cols, img_rows, p_a[0], p_b[1]) or not utils.is_inside_image(img_cols, img_rows, p_b[0], p_b[1]):
                     continue
 
-                cv.line(_img, p_a, p_b, _color, 1)
-        pass
+                cv.line(_img, p_a, p_b, _color, _thickness)        
 
     def draw_bbox(self, _img, _bbox, _object_class, _color, add_border=False):
         pt1 = (int(round(_bbox[0] - _bbox[2]/2)), int(round(_bbox[1] - _bbox[3]/2)))
@@ -1096,7 +1100,7 @@ class Image:
                             cuboid_vals_transformed = self.scene.transform_cuboid(cuboid_vals,
                                                                                   cuboid_cs,
                                                                                   self.camera_coordinate_system)
-                            self.draw_cuboid(_img, cuboid_vals_transformed, "", self.params.colorMap[object_class])
+                            self.draw_cuboid(_img, cuboid_vals_transformed, "", self.params.colorMap[object_class], self.params.thickness)
                         ############################################
                         # mat as points3d_4xN
                         ############################################
@@ -1196,7 +1200,7 @@ class TopViewOrtho(Image):
             x_0 = self.camera.xmin
             x_1 = self.camera.xmax
             #points3d_4x2 = np.array([[x_0, y_0, 0.0, 1.0], [x_1, y_0, 0.0, 1.0]])
-            points3d_4x2 = np.array([[x_0, y_0], [x_1, y_0], [0.0, 0.0], [1.0, 1.0]])
+            points3d_4x2 = np.array([[x_0, x_1], [y_0, y_0], [0.0, 0.0], [1.0, 1.0]])
             points2d_3x2, _ = self.camera.project_points3d(points3d_4xN=points3d_4x2)
             self.draw_line(_img, (int(points2d_3x2[0,0]), int(points2d_3x2[1,0])), (int(points2d_3x2[0,1]), int(points2d_3x2[1,1])), (127, 127, 127))
         # Grid x (2/2)

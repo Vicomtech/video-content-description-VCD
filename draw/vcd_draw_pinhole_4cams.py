@@ -228,8 +228,8 @@ def simple_setup_4_cams_pinhole():
 
 def add_orthographic_camera(vcd):
     # Let's build the cameras
-    img_width_px = 1280
-    img_height_px = 1280
+    img_width_px = 1024
+    img_height_px = 1024
     
     ################################
     # VIRTUAL CAMERA LOOKING DOWN
@@ -237,8 +237,8 @@ def add_orthographic_camera(vcd):
     # Intrinsics & Extrinsics
     # ------------------------------
     ar = img_width_px/img_height_px
-    xmin = -30.0 # meters
-    xmax = 30.0
+    xmin = -25.0 # meters
+    xmax = 25.0
     ymin = -((xmax - xmin) / ar) / 2.0
     ymax = ((xmax - xmin) / ar) / 2.0
 
@@ -438,7 +438,7 @@ def draw_scene(vcd):
     img_rear = 255*np.ones((img_height_px, img_width_px, 3), np.uint8)
     img_left = 255*np.ones((img_height_px, img_width_px, 3), np.uint8)
     img_right = 255*np.ones((img_height_px, img_width_px, 3), np.uint8)
-    imageParams = draw.Image.Params(_colorMap=colorMap)
+    imageParams = draw.Image.Params(_colorMap=colorMap, _thickness=2)
 
     drawer_front.draw(img_front, 0, _params=imageParams)
     drawer_rear.draw(img_rear, 0, _params=imageParams)
@@ -486,7 +486,7 @@ def draw_scene(vcd):
 
     topView = drawerTopView.draw(frameNum=0)
 
-    topViewOrtho = drawerTopViewOrtho.draw(frameNum=0)
+    topViewOrtho = drawerTopViewOrtho.draw(frameNum=0, params=imageParams)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)
@@ -496,7 +496,6 @@ def draw_scene(vcd):
     cv.imshow("VCD info", textImg)
     cv.namedWindow("TopView", cv.WINDOW_NORMAL)
     cv.imshow("TopView", topView)
-    cv.namedWindow("TopViewOrtho", cv.WINDOW_NORMAL)
     cv.imshow("TopViewOrtho", topViewOrtho)
     cv.waitKey(0)
 
