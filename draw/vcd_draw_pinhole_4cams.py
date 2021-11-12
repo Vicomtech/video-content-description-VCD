@@ -486,7 +486,7 @@ def draw_scene(vcd):
 
     topView = drawerTopView.draw(frameNum=0)
 
-    topViewOrtho = drawerTopViewOrtho.draw(frameNum=0, params=imageParams)
+    topViewOrtho = drawerTopViewOrtho.draw(frameNum=0, params=imageParams, cs_names_to_draw=['vehicle-iso8855'])
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)
