@@ -901,6 +901,9 @@ class Image:
         if utils.is_inside_image(img_cols, img_rows, pt1[0], pt1[1]) and utils.is_inside_image(img_cols, img_rows, pt2[0], pt2[1]):
             cv.rectangle(_img, pt1, pt2, _color, 2)
 
+    def draw_line(self, _img, _pt1, _pt2, _color, _thickness=1):
+        cv.line(_img, _pt1, _pt2, _color, _thickness)
+
     def draw_trajectory(self, _img, _object_id, _frameNum, _params):
         object_class = self.scene.vcd.get_object(_object_id)['type']
         fis = (self.scene.vcd.get_element_frame_intervals(core.ElementType.object, _object_id)).get_dict()
@@ -1135,6 +1138,179 @@ class Image:
         # if self.params.draw_barrel:
         #    self.draw_barrel_distortion_grid(_img, (0, 255, 0), False, False)
 
+
+class TopViewOrtho(Image):
+    def __init__(self, scene, camera_coordinate_system=None, stepX=1.0, stepY=1.0):
+        super().__init__(scene, camera_coordinate_system=camera_coordinate_system)
+            
+        # Initialize image      
+        self.images = {}
+
+        # Grid config
+        self.stepX = stepX  # meters
+        self.stepY = stepY
+        self.gridTextColor = (0, 0, 0)
+
+    ##################################
+    # Public functions
+    ##################################
+    def draw(self, frameNum=None, params=None):
+        # Create image        
+        img = self.__reset_topView()
+
+        # Draw BEW
+        self.__draw_BEVs(img, frameNum)
+
+        # Draw base grid
+        self.__draw_topview_base(img)
+
+        # Draw objects
+        super().draw(img, frameNum, params)
+
+        # Draw frame info
+        self.__draw_info(img, frameNum)
+
+        return img
+
+    ##################################
+    # Internal functions
+    ##################################
+    def __reset_topView(self):
+        img = np.zeros((self.camera.width, self.camera.height, 3), np.uint8) 
+        img.fill(255)
+        return img 
+
+    def __draw_topview_base(self, _img):
+        # Grid x (1/2)
+        for x in np.arange(self.camera.xmin, self.camera.xmax + self.stepX, self.stepX):
+            x_0 = round(x)
+            y_0 = self.camera.ymin
+            y_1 = self.camera.ymax
+            #points3d_4x2 = np.array([[x_0, y_0, 0.0, 1.0], [x_0, y_1, 0.0, 1.0]])
+            points3d_4x2 = np.array([[x_0, x_0], [y_0, y_1], [0.0, 0.0], [1.0, 1.0]])
+            points2d_3x2, _ = self.camera.project_points3d(points3d_4xN=points3d_4x2)
+            self.draw_line(_img, (int(points2d_3x2[0,0]), int(points2d_3x2[1,0])), (int(points2d_3x2[0,1]), int(points2d_3x2[1,1])), (127, 127, 127))
+        # Grid y (1/2)
+        for y in np.arange(self.camera.ymin, self.camera.ymax + self.stepY, self.stepY):
+            y_0 = round(y)
+            x_0 = self.camera.xmin
+            x_1 = self.camera.xmax
+            #points3d_4x2 = np.array([[x_0, y_0, 0.0, 1.0], [x_1, y_0, 0.0, 1.0]])
+            points3d_4x2 = np.array([[x_0, y_0], [x_1, y_0], [0.0, 0.0], [1.0, 1.0]])
+            points2d_3x2, _ = self.camera.project_points3d(points3d_4xN=points3d_4x2)
+            self.draw_line(_img, (int(points2d_3x2[0,0]), int(points2d_3x2[1,0])), (int(points2d_3x2[0,1]), int(points2d_3x2[1,1])), (127, 127, 127))
+        # Grid x (2/2)
+        for x in np.arange(self.camera.xmin, self.camera.xmax + self.stepX, self.stepX):
+            x_0 = round(x)
+            y_0 = self.camera.ymin            
+            points3d_4x1 = np.array([[x_0], [y_0], [0.0], [1.0]])
+            points2d_3x1, _ = self.camera.project_points3d(points3d_4xN=points3d_4x1)
+            cv.putText(_img, str(round(x_0)) + " m", (int(points2d_3x1[0,0]) + 5, 15), cv.FONT_HERSHEY_PLAIN,
+                           0.6, self.gridTextColor, 1, cv.LINE_AA)  
+        # Grid y (2/2)
+        for y in np.arange(self.camera.ymin, self.camera.ymax + self.stepY, self.stepY):
+            y_0 = round(y)
+            x_0 = self.camera.xmin            
+            points3d_4x1 = np.array([[x_0], [y_0], [0.0], [1.0]])
+            points2d_3x1, _ = self.camera.project_points3d(points3d_4xN=points3d_4x1)
+            cv.putText(_img, str(round(y_0)) + " m", (5, int(points2d_3x1[1,0]) - 5), cv.FONT_HERSHEY_PLAIN,
+                           0.6, self.gridTextColor, 1, cv.LINE_AA)                   
+
+        # World origin
+        #cv.circle(self.topView, self.point2Pixel((0.0, 0.0)), 4, (255, 255, 255), -1)
+        #cv.line(self.topView, self.point2Pixel((0.0, 0.0)), self.point2Pixel((5.0, 0.0)), (0, 0, 255), 2)
+        #cv.line(self.topView, self.point2Pixel((0.0, 0.0)), self.point2Pixel((0.0, 5.0)), (0, 255, 0), 2)
+        #cv.putText(self.topView, "X", self.point2Pixel((5.0, -0.5)), cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 255), 1, cv.LINE_AA)
+        #cv.putText(self.topView, "Y", self.point2Pixel((-1.0, 5.0)), cv.FONT_HERSHEY_PLAIN, 1.0, (0, 255, 0), 1, cv.LINE_AA)
+
+    def __draw_BEV(self, cam_name):
+        img = self.images[cam_name]['img']
+
+        mapX = self.images[cam_name]['mapX']
+        mapY = self.images[cam_name]['mapY']
+        bev = cv.remap(img, mapX, mapY, interpolation=cv.INTER_LINEAR,
+                        borderMode=cv.BORDER_CONSTANT)
+
+        bev32 = np.float32(bev)
+        if 'weights' in self.images[cam_name]:
+            cv.multiply(self.images[cam_name]['weights'], bev32, bev32)
+
+        #cv.imshow('bev' + cam_name, bev)
+        #cv.waitKey(1)
+
+        #bev832 = np.uint8(bev32)
+        #cv.imshow('bev8' + cam_name, bev832)
+        #cv.waitKey(1)
+
+        return bev32
+
+    def __draw_BEVs(self, _img, _frameNum=None):
+        """
+        This function draws BEVs into the topview
+        :param _frameNum:
+        :return:
+        """
+        num_cams = len(self.images)
+        if num_cams == 0:
+            return
+
+        h = self.camera.height
+        w = self.camera.width
+        # Prepare image with drawing for this call
+        acc32 = np.zeros((h, w, 3), dtype=np.float32)  # black background
+
+        for cam_name in self.images:
+            if self.scene.get_camera(cam_name, _frameNum) is not None:
+                temp32 = self.__draw_BEV(cam_name=cam_name)
+                #mask = np.zeros((h, w), dtype=np.uint8)
+                #mask[temp32 > 0] = 255
+                #mask = (temp32 > 0)
+                if num_cams > 1:
+                    acc32 = cv.add(temp32, acc32)
+        if num_cams > 1:
+            acc32 /= self.images['weights_acc']
+        else:
+            acc32 = temp32
+        acc8 = np.uint8(acc32)
+        #cv.imshow('acc', acc8)
+        #cv.waitKey(1)
+
+        # Copy into topView only new pixels
+        nonzero = (acc8>0)
+        _img[nonzero] = acc8[nonzero]
+
+    def __draw_info(self, topView, frameNum=None):
+        h = topView.shape[0]
+        w = topView.shape[1]
+        w_margin = 250
+        h_margin = 140
+        h_step = 20
+        font_size = 0.8
+        cv.putText(topView, "Img. Size(px): " + str(w) + " x " + str(h),
+                   (w - w_margin, h - h_margin),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        if frameNum is None:
+            frameNum = -1
+        cv.putText(topView, "Frame: " + str(frameNum),
+                   (w - w_margin, h - h_margin + h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        cv.putText(topView, "CS: " + str(self.camera_coordinate_system),
+                   (w - w_margin, h - h_margin + 2*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+
+        cv.putText(topView, "RangeX (m): (" + str(self.camera.xmin) + ", " + str(self.camera.xmax) + ")",
+                   (w - w_margin, h - h_margin + 3*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        cv.putText(topView, "RangeY (m): (" + str(self.camera.ymin) + ", " + str(self.camera.ymax) + ")",
+                   (w - w_margin, h - h_margin + 4*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+
+        #cv.putText(topView, "OffsetX (px): (" + str(self.params.offsetX) + ", " + str(self.params.offsetX) + ")",
+        #           (w - w_margin, h - h_margin + 5*h_step),
+        #           cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        #cv.putText(topView, "OffsetY (px): (" + str(self.params.offsetY) + ", " + str(self.params.offsetY) + ")",
+        #           (w - w_margin, h - h_margin + 6*h_step),
+        #           cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
 
 class FrameInfoDrawer:
     # This class draws Element information in a window

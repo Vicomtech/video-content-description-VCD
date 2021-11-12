@@ -226,6 +226,63 @@ def simple_setup_4_cams_pinhole():
     return vcd
 
 
+def add_orthographic_camera(vcd):
+    # Let's build the cameras
+    img_width_px = 1280
+    img_height_px = 1280
+    
+    ################################
+    # VIRTUAL CAMERA LOOKING DOWN
+    ################################
+    # Intrinsics & Extrinsics
+    # ------------------------------
+    ar = img_width_px/img_height_px
+    xmin = -30.0 # meters
+    xmax = 30.0
+    ymin = -((xmax - xmin) / ar) / 2.0
+    ymax = ((xmax - xmin) / ar) / 2.0
+
+    R_scs_wrt_lcs = utils.euler2R([0, np.pi/2.0, 0])  # perfectly looking down
+    C_lcs = np.array([[0.0],  # frontal part of the car
+                      [0.0],  # centered in the symmetry axis of the car
+                      [3.0]])  # at some height over the car (it does not matter, really, this is ortographic projection)
+
+    P_scs_wrt_lcs = utils.create_pose(R_scs_wrt_lcs, C_lcs)
+    T_lcs_to_scs = utils.inv(P_scs_wrt_lcs)
+
+    # Extrinsics (2/2): Additional rotation, because usually cameras scs are (x-to-right, y-down, z-to-front)
+    # to match better with ics (x-to-right, y-bottom); while the lcs is (x-to-front, y-to-left, z-up)
+    T_scs_to_scsics = np.array([[0.0, -1.0, 0.0, 0.0],
+                                [0.0, 0.0, -1.0, 0.0],
+                                [1.0, 0.0, 0.0, 0.0],
+                                [0.0, 0.0, 0.0, 1.0]])
+    T_lcs_to_scs = T_scs_to_scsics.dot(T_lcs_to_scs)
+    P_scs_wrt_lcs = utils.inv(T_lcs_to_scs)
+    
+    vcd.add_stream(stream_name="CAM_ORTHO_BEV",
+                   uri="",
+                   description="Orthographic camera",
+                   stream_type=core.StreamType.camera)
+    vcd.add_stream_properties(stream_name="CAM_ORTHO_BEV",
+                              intrinsics=types.IntrinsicsOrthographic(
+                                  width_px=img_width_px,
+                                  height_px=img_height_px,
+                                  xmin=xmin,
+                                  xmax=xmax,
+                                  ymin=ymin,
+                                  ymax=ymax
+                              )
+                              )
+    vcd.add_coordinate_system("CAM_ORTHO_BEV", cs_type=types.CoordinateSystemType.sensor_cs,
+                              parent_name="vehicle-iso8855",
+                              pose_wrt_parent=types.PoseData(
+                                  val=list(P_scs_wrt_lcs.flatten()),
+                                  type=types.TransformDataType.matrix_4x4)
+                              )   
+
+    return vcd
+
+
 def add_some_objects(vcd):
     #########################################
     # Cuboids
@@ -425,8 +482,11 @@ def draw_scene(vcd):
                                         draw_grid=False)
     drawerTopView = draw.TopView(scene, "vehicle-iso8855", params=topviewParams)
 
+    drawerTopViewOrtho = draw.TopViewOrtho(scene, "CAM_ORTHO_BEV")
 
     topView = drawerTopView.draw(frameNum=0)
+
+    topViewOrtho = drawerTopViewOrtho.draw(frameNum=0)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)
@@ -436,6 +496,8 @@ def draw_scene(vcd):
     cv.imshow("VCD info", textImg)
     cv.namedWindow("TopView", cv.WINDOW_NORMAL)
     cv.imshow("TopView", topView)
+    cv.namedWindow("TopViewOrtho", cv.WINDOW_NORMAL)
+    cv.imshow("TopViewOrtho", topViewOrtho)
     cv.waitKey(0)
 
     fig1 = setupViewer.plot_setup()
@@ -444,6 +506,7 @@ def draw_scene(vcd):
 
 if __name__ == '__main__':
     print("Running " + os.path.basename(__file__))
-    vcd = simple_setup_4_cams_pinhole()
+    vcd = simple_setup_4_cams_pinhole()    
     vcd = add_some_objects(vcd)
+    vcd = add_orthographic_camera(vcd)
     draw_scene(vcd)
