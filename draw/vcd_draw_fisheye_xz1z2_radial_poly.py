@@ -267,7 +267,8 @@ def draw_scene(vcd):
                                         stepX=1.0, stepY=1.0,
                                         draw_grid=False)
     drawerTopView1 = draw.TopView(scene, "vehicle-iso8855", params=topviewParams)
-    drawerTopView1.add_images({'CAM_LEFT': img_left, 'CAM_FRONT': img_front, 'CAM_REAR': img_rear, 'CAM_RIGHT': img_right}, frameNum=0)
+    #drawerTopView1.add_images({'CAM_LEFT': img_left, 'CAM_FRONT': img_front, 'CAM_REAR': img_rear, 'CAM_RIGHT': img_right}, frameNum=0)
+    drawerTopView1.add_images({'CAM_LEFT': img_left}, frameNum=0)
     topView1 = drawerTopView1.draw(frameNum=0)
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)

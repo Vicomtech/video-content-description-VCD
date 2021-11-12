@@ -960,15 +960,16 @@ class CameraPinhole(Camera):
 
 class CameraFisheye(Camera):
     '''
-    Fisheye cameras, with field of view around 180º
-    Different distortion models are considered.
+    Fisheye cameras, with field of view around 180º.
+    Different distortion models are considered (see distort_rays3d)
     For simplicity, the projection process is splitted in two steps: ray distortion, and ray linear projection.
     '''
-    def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False):
+    def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False, limit_to_180_degrees=False):
         self.cx = camera_intrinsics['center_x']
         self.cy = camera_intrinsics['center_y']
         self.img_size_dist = (camera_intrinsics['width_px'], camera_intrinsics['height_px'])
         self.img_size_undist = (camera_intrinsics['width_px'], camera_intrinsics['height_px'])
+        self.limit_to_180_degrees = limit_to_180_degrees
 
         if 'focal_length_x' in camera_intrinsics:
             self.focal_length_x = camera_intrinsics['focal_length_x']
@@ -1084,22 +1085,20 @@ class CameraFisheye(Camera):
             return np.array([[]]), []
 
         # 1.- Select only those z > 0 (in front of the camera)
-        idx_in_front = points3d_4xN[2, :] > 1e-8
-        idx_valid = idx_in_front
+        if self.limit_to_180_degrees:
+            idx_in_front = points3d_4xN[2, :] > 1e-8
+            idx_valid = idx_in_front
+        else:
+            idx_valid = [True] * N
 
         # 2.- Distort rays3d if distorted
         rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
-        rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x', y', 1), convenient for dist.
         rays3d_3xN = np.full([3, N], np.nan)
         rays3d_3xN[:, idx_valid] = rays3d_3xN_filt
 
         # Now distort (only non-nans)
         rays3d_3xN_filt = rays3d_3xN[:, idx_valid]
         rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt)  # no nan should go into it
-
-        # DEBUG
-        #temp = self.undistort_rays3d(rays3d_3xN_filt_dist)
-        #error = np.linalg.norm(rays3d_3xN_filt - temp)
 
         # Add nans
         rays3d_3xN = np.full([3, N], np.nan)

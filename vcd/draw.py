@@ -24,6 +24,9 @@ import matplotlib.pyplot as plt
 
 
 class SetupViewer:
+    '''
+    This class offers Matplotlib routines to display the coordinate systems of the Scene.
+    '''
     def __init__(self, scene, coordinate_system):
         assert (isinstance(scene, scl.Scene))
         self.scene = scene
@@ -105,8 +108,10 @@ class SetupViewer:
 
 
 class TopView:
-    # This class draws a top view of the scene, assuming Z=0 is the ground plane (i.e. the topview sees the XY plane)
-    # Range and scale can be used to select a certain part of the XY plane
+    '''
+    This class draws a top view of the scene, assuming Z=0 is the ground plane (i.e. the topview sees the XY plane)
+    Range and scale can be used to select a certain part of the XY plane
+    '''
     class Params:
         '''
         Assuming cuboids are drawn top view, so Z coordinate is ignored
