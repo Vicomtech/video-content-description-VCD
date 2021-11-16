@@ -431,19 +431,13 @@ def draw_scene(vcd):
                 'Wall': (0, 0, 255),
                 'Ground': (0, 255, 0)}
 
-    # Draw the images
-    img_width_px = 960
-    img_height_px = 604
-    img_front = 255*np.ones((img_height_px, img_width_px, 3), np.uint8)
-    img_rear = 255*np.ones((img_height_px, img_width_px, 3), np.uint8)
-    img_left = 255*np.ones((img_height_px, img_width_px, 3), np.uint8)
-    img_right = 255*np.ones((img_height_px, img_width_px, 3), np.uint8)
+    # Draw the images    
     imageParams = draw.Image.Params(_colorMap=colorMap, _thickness=2)
 
-    drawer_front.draw(img_front, 0, _params=imageParams)
-    drawer_rear.draw(img_rear, 0, _params=imageParams)
-    drawer_left.draw(img_left, 0, _params=imageParams)
-    drawer_right.draw(img_right, 0, _params=imageParams)
+    img_front = drawer_front.draw(_img=None, _frameNum=0, _params=imageParams)
+    img_rear = drawer_rear.draw(_img=None, _frameNum=0, _params=imageParams)
+    img_left = drawer_left.draw(_img=None, _frameNum=0, _params=imageParams)
+    img_right = drawer_right.draw(_img=None, _frameNum=0, _params=imageParams)
 
     # Undistort
     cam_front = scene.get_camera("CAM_FRONT", compute_remaps=True)
@@ -457,6 +451,7 @@ def draw_scene(vcd):
     img_right_und = cam_right.undistort_image(img_right)
 
     # Draw the text
+    img_height_px, img_width_px, _ = img_front.shape
     textImg = frameInfoDrawer.draw(0, cols=400, rows=img_height_px * 2, _params=imageParams)
 
     mosaic = np.vstack((np.hstack((img_front, img_right)), np.hstack((img_left, img_rear))))
@@ -481,12 +476,11 @@ def draw_scene(vcd):
                                          stepX=1.0, stepY=1.0,
                                         draw_grid=False)
     drawerTopView = draw.TopView(scene, "vehicle-iso8855", params=topviewParams)
-
-    drawerTopViewOrtho = draw.TopViewOrtho(scene, "CAM_ORTHO_BEV")
-
     topView = drawerTopView.draw(frameNum=0)
 
-    topViewOrtho = drawerTopViewOrtho.draw(frameNum=0, params=imageParams, cs_names_to_draw=['vehicle-iso8855'])
+    # Top view orthographic    
+    drawerTopViewOrtho = draw.TopViewOrtho(scene, "CAM_ORTHO_BEV")        
+    topViewOrtho = drawerTopViewOrtho.draw(frameNum=0, _img=None, params=imageParams, cs_names_to_draw=['vehicle-iso8855'])
 
     cv.namedWindow("Cameras", cv.WINDOW_NORMAL)
     cv.imshow("Cameras", mosaic)

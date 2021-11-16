@@ -145,10 +145,10 @@ class TopView:
                 self.rangeY = rangeY
 
             self.scaleX = self.topViewSize[0] / (self.rangeX[1] - self.rangeX[0])
-            self.scaleY = -self.topViewSize[1] / (self.rangeY[1] - self.rangeY[0])
+            self.scaleY = -self.topViewSize[1] / (self.rangeY[1] - self.rangeY[0]) # Negative?
 
             self.offsetX = round(-self.rangeX[0] * self.scaleX)
-            self.offsetY = round(-self.rangeY[1] * self.scaleY)
+            self.offsetY = round(-self.rangeY[1] * self.scaleY)  # TODO: shouldn't it be -self.rangeY[0]?
 
             self.S = np.array([[self.scaleX, 0, self.offsetX],
                                [0, self.scaleY, self.offsetY],
@@ -848,6 +848,11 @@ class Image:
         self.camera = self.scene.get_camera(self.camera_coordinate_system, compute_remaps=False)
         self.params = Image.Params()
 
+    def reset_image(self):
+        img = np.zeros((self.camera.height, self.camera.width, 3), np.uint8) 
+        img.fill(255)
+        return img 
+
     def draw_points3d(self, _img, points3d_4xN, _color):
         # this function may return LESS than N points IF 3D points are BEHIND the camera
         points2d_3xN, idx_valid = self.camera.project_points3d(points3d_4xN, remove_outside=True)
@@ -1060,11 +1065,15 @@ class Image:
         cv.putText(_img, "Y", (int(y_axis[0,1]), int(y_axis[1,1])), cv.FONT_HERSHEY_DUPLEX, 0.8, (0, 255, 0), thickness, cv.LINE_AA)
         cv.putText(_img, "Z", (int(z_axis[0,1]), int(z_axis[1,1])), cv.FONT_HERSHEY_DUPLEX, 0.8, (255, 0, 0), thickness, cv.LINE_AA)
 
-
-    def draw(self, _img, _frameNum=None, _params=None):
+    def draw(self, _img=None, _frameNum=None, _params=None, **kwargs):
         if _params is not None:
             assert(isinstance(_params, Image.Params))
             self.params = _params
+
+        if _img is not None:
+            img = _img
+        else:
+            img = self.reset_image()
 
         # Explore objects at VCD
         objects = None
@@ -1120,9 +1129,9 @@ class Image:
                             # If several bounding boxes, let's write the bounding box name
                             #text = "(" + object_id + "," + name +")-(" + object_class + ")-(" + bbox_name +")"
                             text = object_id + " " + bbox_name
-                        self.draw_bbox(_img, bbox, text, self.params.colorMap[object_class], True)
+                        self.draw_bbox(img, bbox, text, self.params.colorMap[object_class], True)
                         if self.params.draw_trajectory:
-                            self.draw_trajectory(_img, object_id, _frameNum, _params)
+                            self.draw_trajectory(img, object_id, _frameNum, _params)
                     ############################################
                     # cuboid
                     ############################################
@@ -1133,7 +1142,7 @@ class Image:
                         cuboid_vals_transformed = self.scene.transform_cuboid(cuboid_vals,
                                                                                 cuboid_cs,
                                                                                 self.camera_coordinate_system)
-                        self.draw_cuboid(_img, cuboid_vals_transformed, "", self.params.colorMap[object_class], self.params.thickness)
+                        self.draw_cuboid(img, cuboid_vals_transformed, "", self.params.colorMap[object_class], self.params.thickness)
                     ############################################
                     # mat as points3d_4xN
                     ############################################
@@ -1158,22 +1167,24 @@ class Image:
                                             if attr['name'] == 'color':
                                                 color = attr['val']
 
-                            self.draw_points3d(_img, points3d_4xN_transformed, color)
+                            self.draw_points3d(img, points3d_4xN_transformed, color)
 
         # Draw info
         if self.camera_coordinate_system is not None:
             text = self.camera_coordinate_system
             margin = 20
-            cv.putText(_img, text,
+            cv.putText(img, text,
                        (margin, margin),
                        cv.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 0), 2, cv.LINE_AA)
-            cv.putText(_img, text,
+            cv.putText(img, text,
                        (margin, margin),
                        cv.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1, cv.LINE_AA)
 
         # Draw barrel
         # if self.params.draw_barrel:
         #    self.draw_barrel_distortion_grid(_img, (0, 255, 0), False, False)
+
+        return img
 
 
 class TopViewOrtho(Image):
@@ -1191,9 +1202,17 @@ class TopViewOrtho(Image):
     ##################################
     # Public functions
     ##################################
-    def draw(self, frameNum=None, params=None, cs_names_to_draw=None):
-        # Create image        
-        img = self.__reset_topView()
+    def draw(self, _img=None, frameNum=None, params=None, **kwargs):
+        # Create image
+        if _img is not None:
+            img = _img
+        else:
+            img = super().reset_image()
+
+         # Compute and draw warped images
+        for key, value in kwargs.items():
+            if key == 'add_images':
+                self.__add_images(value, frameNum)
 
         # Draw BEW
         self.__draw_BEVs(img, frameNum)
@@ -1202,9 +1221,10 @@ class TopViewOrtho(Image):
         self.__draw_topview_base(img)
 
         # Draw coordinate systems
-        if cs_names_to_draw is not None:
-            for cs_name in cs_names_to_draw:
-                self.draw_cs(img, cs_name, 2, 2)
+        for key, value in kwargs.items():
+            if key == 'cs_names_to_draw':
+                for cs_name in value:
+                    self.draw_cs(img, cs_name, 2, 2)
 
         # Draw objects
         super().draw(img, frameNum, params)
@@ -1217,11 +1237,69 @@ class TopViewOrtho(Image):
     ##################################
     # Internal functions
     ##################################
-    def __reset_topView(self):
-        img = np.zeros((self.camera.width, self.camera.height, 3), np.uint8) 
-        img.fill(255)
-        return img 
+    def __add_images(self, imgs, frameNum):
+        if imgs is not None:
+            h = self.camera.height  # this is the orthographic camera
+            w = self.camera.width
+            assert (isinstance(imgs, dict))
+            num_cams = len(imgs)
+            cams = {}
 
+            need_to_recompute_weights_acc = False
+            need_to_recompute_maps = {}
+            need_to_recompute_weights = {}
+
+            for cam_name, img in imgs.items():
+                assert self.scene.vcd.has_coordinate_system(cam_name)
+                cam = self.scene.get_camera(cam_name, frameNum, compute_remaps=False)  # this call creates an entry inside scene
+                cams[cam_name] = cam
+                self.images.setdefault(cam_name, {})
+                self.images[cam_name]['img'] = img
+                _, static = self.scene.get_transform(self.camera_coordinate_system, cam_name, frameNum)
+
+                # Compute distances to this camera and add to weight map
+                need_to_recompute_maps[cam_name] = False
+                need_to_recompute_weights[cam_name] = False
+
+                if (num_cams > 1 and not static) or (
+                       num_cams > 1 and static and 'weights' not in self.images[cam_name]):
+                    need_to_recompute_weights[cam_name] = True
+                    need_to_recompute_weights_acc = True
+
+                if (not static) or (static and 'mapX' not in self.images[cam_name]):
+                    need_to_recompute_maps[cam_name] = True
+
+                # For each camera, compute the remaps and weights
+                if need_to_recompute_maps:
+                    map_x, map_y = self.scene.create_img_projection_maps(cam_src_name=cam_name, cam_dst_name=self.camera.name, frameNum=frameNum)
+                    self.images[cam_name]['mapX'] = map_x
+                    self.images[cam_name]['mapY'] = map_y
+                
+                if need_to_recompute_weights[cam_name]:
+                    print(cam_name + ' top view weights computation...')
+                    #self.images[cam_name].setdefault('weights', np.zeros((h, w, 3), dtype=np.float32))
+                    #self.images[cam_name].setdefault('weights', (1.0/num_cams)*np.ones((h, w, 3), dtype=np.float32))
+
+                    # Weight according to distance to center point in image
+                    # Might be good for fisheye
+                    r_max_2 = (w/2)*(w/2) + (h/2)*(h/2)
+                    x = map_x[:,:,0]
+                    y = map_x[:,:,1]
+                    r_2 = (x - w/2)**2 + (y - h/2)**2  # this is a matrix 
+                    weights = 1 - r_2/r_max_2
+                    temp = np.zeros((h, w, 3), dtype=np.float32)
+                    temp[:,:,0] = weights
+                    temp[:,:,1] = weights
+                    temp[:,:,2] = weights
+                    self.images[cam_name].setdefault('weights', temp)
+
+
+            # Compute accumulated weights if more than 1 camera
+            if need_to_recompute_weights_acc:
+                self.images['weights_acc'] = np.ones((h, w, 3), dtype=np.float32)
+                #for idx, (cam_name, cam) in enumerate(cams.items()):
+                #    self.images['weights_acc'] = cv.add(self.images[cam_name]['weights'], self.images['weights_acc'])
+        
     def __draw_topview_base(self, _img):
         # Grid x (1/2)
         for x in np.arange(self.camera.xmin, self.camera.xmax + self.stepX, self.stepX):
@@ -1280,7 +1358,7 @@ class TopViewOrtho(Image):
         #cv.imshow('bev' + cam_name, bev)
         #cv.waitKey(1)
 
-        #bev832 = np.uint8(bev32)
+        bev832 = np.uint8(bev32)
         #cv.imshow('bev8' + cam_name, bev832)
         #cv.waitKey(1)
 
@@ -1353,6 +1431,7 @@ class TopViewOrtho(Image):
         #cv.putText(topView, "OffsetY (px): (" + str(self.params.offsetY) + ", " + str(self.params.offsetY) + ")",
         #           (w - w_margin, h - h_margin + 6*h_step),
         #           cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+
 
 class FrameInfoDrawer:
     # This class draws Element information in a window

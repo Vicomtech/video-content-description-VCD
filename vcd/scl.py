@@ -321,7 +321,7 @@ class Scene:
             if 'intrinsics_pinhole' in sp:
                 camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
             elif 'intrinsics_fisheye' in sp:
-                camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
+                camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps, limit_to_180_degrees=True)
             elif 'intrinsics_cylindrical' in sp:
                 camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
             elif 'intrinsics_orthographic' in sp:
@@ -346,7 +346,7 @@ class Scene:
                         if 'intrinsics_pinhole' in sp:
                             camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
                         elif 'intrinsics_fisheye' in sp:
-                            camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
+                            camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps, limit_to_180_degrees=True)
                         elif 'intrinsics_cylindrical' in sp:
                             camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
                         elif 'intrinsics_orthographic' in sp:
@@ -581,7 +581,14 @@ class Scene:
         rays3d_dst_3xN = cam_dst.reproject_points2d(points2d_dst_3xN)
 
         # Convert into cam_src coordinate system
-        rays3d_src_4xN = self.transform_points3d_4xN(utils.add_homogeneous_row(rays3d_dst_3xN), cam_dst_name, cam_src_name, frameNum)
+        if cam_dst.__class__ is CameraOrthographic:
+            N = rays3d_dst_3xN.shape[1]            
+            points3d_z0_4xN = np.vstack((rays3d_dst_3xN[0, :], rays3d_dst_3xN[1, :], np.zeros(N), rays3d_dst_3xN[2, :]))
+            points3d_4xN = points3d_z0_4xN
+        else:
+            points3d_4xN = utils.add_homogeneous_row(rays3d_dst_3xN)
+
+        rays3d_src_4xN = self.transform_points3d_4xN(points3d_4xN, cam_dst_name, cam_src_name, frameNum)
         rays3d_src_4xN /= rays3d_src_4xN[3, :]        
 
         # Project into cam_src
@@ -601,30 +608,7 @@ class Scene:
 
         # Return
         return map_x, map_y
-
-
-
-
-        """generates maps for cv2.remap to remap from one camera to another
-        u_map = np.zeros((destination_cam.height, destination_cam.width, 1), dtype=np.float32)
-        v_map = np.zeros((destination_cam.height, destination_cam.width, 1), dtype=np.float32)
-
-        destination_points_b = np.arange(destination_cam.height)
-
-        for u_px in range(destination_cam.width):
-            destination_points_a = np.ones(destination_cam.height) * u_px
-            destination_points = np.vstack((destination_points_a, destination_points_b)).T
-
-            source_points = source_cam.project_3d_to_2d(
-                destination_cam.project_2d_to_3d(destination_points, norm=np.array([1])))
-
-            u_map.T[0][u_px] = source_points.T[0]
-            v_map.T[0][u_px] = source_points.T[1]
-
-        map1, map2 = cv2.convertMaps(u_map, v_map, dstmap1type=cv2.CV_16SC2, nninterpolation=False)
-        return map1, map2
-        """
-
+        
 
 class Sensor:
     def __init__(self, name, description, uri, **properties):
@@ -1470,15 +1454,28 @@ class CameraOrthographic(Camera):
         self.ymin = camera_intrinsics['ymin']
 
         # Create calibration matrix
-        self.K_3x4 = np.array([[self.width*(1.0/(self.xmax-self.xmin)), 0.0, 0.0, self.width/2.0],
-                               [0.0, self.height*(1.0/(self.ymax-self.ymin)), 0.0, self.height/2.0],
-                               [0.0, 0.0, 0.0, 0.0]])
+        sx = self.width*(1.0/(self.xmax-self.xmin))
+        sy = self.height*(1.0/(self.ymax-self.ymin))
+        cx = -self.xmin * sx
+        cy = -self.ymin * sy
+        #self.K_3x3 = np.array([[sx, 0.0, cx],
+        #                       [0.0, sy, cy],
+        #                       [0.0, 0.0,1.0]])
+
+        self.K_3x4 = np.array([[sx, 0.0, 0.0, cx],
+                               [0.0, sy, 0.0, cy],
+                               [0.0, 0.0, 0.0, 1.0]])
+        # NOTE: K_3x3 has no meaning for an orthographic camera, because it is not a pinhole model, and then
+        # there are no rays going through the optical center. 4x1 need to be used along with K_3x4
         #self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
-        
+        #         
         # Note that the orthographic projection matrix is not invertible in homogeneous form. Let's do it manually
-        self.K_3x4_inv = np.array([[(self.xmax-self.xmin)/self.width, 0.0, -self.width/2.0, 0.0],
-                               [0.0, (self.ymax-self.ymin)/self.height, -self.height/2.0, 0.0],
-                               [0.0, 0.0, 0.0, 0.0]])                
+        sx_inv = 1/sx
+        sy_inv = 1/sy
+
+        self.K_3x4_inv = np.array([[sx_inv, 0.0, self.xmin, 0.0],
+                               [0.0, sy_inv, self.ymin, 0.0],
+                               [0.0, 0.0, 1.0, 0.0]])                
         self.K_3x3_inv = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4_inv)
 
     #################################
@@ -1520,7 +1517,8 @@ class CameraOrthographic(Camera):
         return points2d_3xN, idx_valid
 
     def reproject_points2d(self, points2d_3xN):        
-        rays3d_3xN = utils.normalize(utils.inv(self.K_3x3_inv) @ points2d_3xN)
+        rays3d_3xN = self.K_3x3_inv @ points2d_3xN
+        #rays3d_3xN = utils.normalize(rays3d_3xN)
         return rays3d_3xN
         
     
