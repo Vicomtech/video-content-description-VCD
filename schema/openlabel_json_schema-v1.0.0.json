@@ -1053,17 +1053,14 @@
                         {
                             "additionalProperties": true,
                             "properties": {
-                                "subset_excluded": {
+                                "boundary_list": {
                                     "items": {
                                         "type": "string"
                                     },
                                     "type": "array"
                                 },
-                                "subset_included": {
-                                    "items": {
-                                        "type": "string"
-                                    },
-                                    "type": "array"
+                                "boundary_mode": {
+                                    "type": "string"
                                 },
                                 "uri": {
                                     "type": "string"

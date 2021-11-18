@@ -1,0 +1,9 @@
+[submodule "cpp/3rdparty/json"]
+	path = cpp/3rdparty/json
+	url = git@github.com:nlohmann/json.git
+[submodule "cpp/3rdparty/crossguid"]
+	path = cpp/3rdparty/crossguid
+	url = https://github.com/graeme-hill/crossguid.git
+[submodule "cpp/3rdparty/Catch2"]
+	path = cpp/3rdparty/Catch2
+	url = git@github.com:catchorg/Catch2.git

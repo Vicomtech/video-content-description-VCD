@@ -133,13 +133,12 @@ export const openlabel_schema = {
                             "type": "object",
                             "properties": {
                                 "uri": {"type": "string"},
-                                "subset_included": {
+                                "boundary_list": {
                                     "type": "array",
                                     "items": {"type": "string"}
                                 },
-                                "subset_excluded": {
-                                    "type": "array",
-                                    "items": {"type": "string"}
+                                "boundary_mode": {
+                                    "type": "string"
                                 }
                             },
                             "additionalProperties": true,
