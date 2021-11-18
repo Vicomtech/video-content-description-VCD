@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v5.0.0
+VCD (Video Content Description) library v5.0.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 5.0.0.
+VCD is a Python library to create and manage VCD content version 5.0.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -589,10 +589,17 @@ def fromCameraMatrix3x4toCameraMatrix3x3(camera_matrix_3x4):
 def round(number_float):
     return int(np.round(number_float))
 
+def normalize(vals):
+    vals /= np.linalg.norm(vals)
+    return vals
 
 def norm(ray):
     return math.sqrt(ray[0]*ray[0] + ray[1]*ray[1])
 
+
+def add_homogeneous_row(array_MxN):
+    N = array_MxN.shape[1]
+    return np.vstack((array_MxN, np.ones((1, N))))
 
 ####################################################
 # RADIAL DISTORTION
@@ -803,7 +810,7 @@ def grid_as_4xN_points3d(xm, ym, zm):
     xm_row = xm.reshape(1, -1)
     ym_row = ym.reshape(1, -1)
     zm_row = zm.reshape(1, -1)
-    pad_row = np.zeros(xm_row.shape, np.float)
+    pad_row = np.zeros(xm_row.shape, float)
     pad_row[0, :] = 1.0
     points3d_vcs_4xN = np.concatenate([xm_row, ym_row, zm_row, pad_row])
     return points3d_vcs_4xN
@@ -868,3 +875,14 @@ def base64_to_image(payload_base64_str, flag=1):
     payload_read = base64.b64decode(payload_base64_str)
     img = cv.imdecode(np.frombuffer(payload_read, dtype=np.uint8), flag)
     return img
+
+####################################################
+# Color maps
+####################################################
+colorMap_1 = {'Car': (0, 0, 255), 'Van': (255, 0, 0), 'Truck': (127, 127, 0),
+                'Pedestrian': (0, 255, 0), 'Person_sitting': (0, 127, 127),
+                'Tram': (127, 0, 127), 'Misc': (127, 127, 127), 'DontCare': (255, 255, 255),
+                'Cyclist': (0, 127, 255),
+                'Ego-car': (0, 0, 0),
+                'Wall': (0, 0, 255),
+                'Ground': (0, 255, 0)}

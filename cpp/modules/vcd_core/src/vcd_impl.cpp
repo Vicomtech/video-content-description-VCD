@@ -69,9 +69,9 @@ VCD_Impl::setUseUUID(const bool val) {
 
 void
 VCD_Impl::reset() {
-    m_data["vcd"] = json::object();  // = json::object();
-    m_data["vcd"]["metadata"] = json::object();
-    m_data["vcd"]["metadata"]["schema_version"] = "4.3.0";
+    m_data["openlabel"] = json::object();  // = json::object();
+    m_data["openlabel"]["metadata"] = json::object();
+    m_data["openlabel"]["metadata"]["schema_version"] = "4.3.0";
 
     m_lastUIDbyType[ElementType::object]   = -1;
     m_lastUIDbyType[ElementType::action]   = -1;
@@ -82,7 +82,7 @@ VCD_Impl::reset() {
     // this->fis = FrameIntervals(0);  // works
     // this->fis = FrameIntervals({0, 10});  // works
     // this->fis = FrameIntervals({{0, 10}});  // works
-    // data["vcd"]["frame_intervals"] = this->fis.get_dict();
+    // data["openlabel"]["frame_intervals"] = this->fis.get_dict();
 }
 
 std::string
@@ -129,18 +129,18 @@ VCD_Impl::update_vcd_frame_intervals(const size_t frame_index) {
     //       interval is defined from the first to the final interval value.
     // This function creates the union of existing VCD with the input
     // frameIntervals
-    if (!m_data["vcd"].contains("frame_intervals")) {
-        m_data["vcd"]["frame_intervals"] = json::array();
-//        m_data["vcd"]["frame_intervals"].push_back({
+    if (!m_data["openlabel"].contains("frame_intervals")) {
+        m_data["openlabel"]["frame_intervals"] = json::array();
+//        m_data["openlabel"]["frame_intervals"].push_back({
 //                        {"frame_start", frame_index},
 //                        {"frame_end", frame_index}
 //                    });
-        appendFrameIntervalToArray(m_data["vcd"]["frame_intervals"],
+        appendFrameIntervalToArray(m_data["openlabel"]["frame_intervals"],
                                    frame_index);
     }
-    const int cur_value = m_data["vcd"]["frame_intervals"][0]["frame_end"];
+    const int cur_value = m_data["openlabel"]["frame_intervals"][0]["frame_end"];
     const int max_value = std::max(cur_value, static_cast<int>(frame_index));
-    m_data["vcd"]["frame_intervals"][0]["frame_end"] = max_value;
+    m_data["openlabel"]["frame_intervals"][0]["frame_end"] = max_value;
 }
 
 void
@@ -191,24 +191,24 @@ VCD_Impl::update_element_frame_intervals_no_gap(json &element,
 
 json&
 VCD_Impl::add_frame(const size_t frame_num, const bool addMissedFrames) {
-    if (!m_data["vcd"].contains("frames")) {
-        m_data["vcd"]["frames"] = json::object({});
+    if (!m_data["openlabel"].contains("frames")) {
+        m_data["openlabel"]["frames"] = json::object({});
     }
     const std::string frm_num_str = std::to_string(frame_num);
-    if (!m_data["vcd"]["frames"].contains(frm_num_str)) {
+    if (!m_data["openlabel"]["frames"].contains(frm_num_str)) {
         // Fill the frames between the last index and the current index
         bool is_first_frame = (frame_num == 0);
         if (addMissedFrames && !is_first_frame) {
             add_missed_frames(frame_num);
         }
         // Include the current frame
-        m_data["vcd"]["frames"][frm_num_str] = json::object({});
+        m_data["openlabel"]["frames"][frm_num_str] = json::object({});
         // Include holistic elements
         if (!m_holiElemes.empty()) {
-            includeHoliElems(m_data["vcd"]["frames"][frm_num_str]);
+            includeHoliElems(m_data["openlabel"]["frames"][frm_num_str]);
         }
     }
-    return m_data["vcd"]["frames"][frm_num_str];
+    return m_data["openlabel"]["frames"][frm_num_str];
 }
 
 void
@@ -244,7 +244,7 @@ VCD_Impl::updateHoliFrameIntervals(const size_t frame_num) {
         // Include element uids
         const ElementType type = static_cast<ElementType>(type_i);
         const std::string typeKey = ElementTypeName[type] + "s";
-        json& type_element = m_data["vcd"][typeKey];
+        json& type_element = m_data["openlabel"][typeKey];
         for (const auto& uid : m_holiElemes.uids[type]) {
             auto& element = type_element[uid];
             update_element_frame_intervals_no_gap(element, frame_num);
@@ -258,7 +258,7 @@ VCD_Impl::add_missed_frames(const size_t frame_num) {
     // Check if there are holistic elements
     const bool areHoliElems = !m_holiElemes.empty();
     if (!is_first_frame && areHoliElems) {
-        json &frame_list = m_data["vcd"]["frames"];
+        json &frame_list = m_data["openlabel"]["frames"];
         // Find the previous frame index
         size_t prev_frame_num = frame_num - 1;
         bool frm_found = frame_list.contains(std::to_string(prev_frame_num));
@@ -281,31 +281,31 @@ VCD_Impl::add_missed_frames(const size_t frame_num) {
 // Manage metadata
 void
 VCD_Impl::add_annotator(const std::string &annotator) {
-    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    auto &meta = setDefault(m_data["openlabel"], "metadata", json::object());
     meta["annotator"] = annotator;
 }
 
 void
 VCD_Impl::add_comment(const std::string &comment) {
-    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    auto &meta = setDefault(m_data["openlabel"], "metadata", json::object());
     meta["comment"] = comment;
 }
 
 void
 VCD_Impl::add_file_version(const std::string &version) {
-    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    auto &meta = setDefault(m_data["openlabel"], "metadata", json::object());
     meta["file_version"] = version;
 }
 
 void
 VCD_Impl::add_name(const std::string &name) {
-    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    auto &meta = setDefault(m_data["openlabel"], "metadata", json::object());
     meta["name"] = name;
 }
 
 void
 VCD_Impl::add_metadata_properties(const vcd::meta_props &properties) {
-    auto &meta = setDefault(m_data["vcd"], "metadata", json::object());
+    auto &meta = setDefault(m_data["openlabel"], "metadata", json::object());
     for (const auto &elem : properties) {
         const std::string &key = elem.first;
         const std::string &value = elem.second;
@@ -320,10 +320,10 @@ VCD_Impl::add_object(const std::string& name,
     const std::string uid = add_object(name, null_frame_index, args);
 
     // Check if the element must be holistic
-    const bool arePrevFrames = m_data["vcd"].contains("frames");
+    const bool arePrevFrames = m_data["openlabel"].contains("frames");
     if (arePrevFrames) {
         m_holiElemes.addUid(uid, ElementType::object);
-        json& frame = m_data["vcd"]["frames"][std::to_string(m_curFrameIndex)];
+        json& frame = m_data["openlabel"]["frames"][std::to_string(m_curFrameIndex)];
         includeElemUidToFrame(ElementType::object, uid, frame);
     }
 
@@ -464,10 +464,10 @@ VCD_Impl::add_action(const std::string& name,
     const std::string uid = add_action(name, null_frame_index, args);
 
     // Check if the element must be holistic
-    const bool arePrevFrames = m_data["vcd"].contains("frames");
+    const bool arePrevFrames = m_data["openlabel"].contains("frames");
     if (arePrevFrames) {
         m_holiElemes.addUid(uid, ElementType::action);
-        json& frame = m_data["vcd"]["frames"][std::to_string(m_curFrameIndex)];
+        json& frame = m_data["openlabel"]["frames"][std::to_string(m_curFrameIndex)];
         includeElemUidToFrame(ElementType::action, uid, frame);
     }
 
@@ -555,10 +555,10 @@ VCD_Impl::add_context(const std::string& name,
     const std::string uid = add_context(name, null_frame_index, args);
 
     // Check if the element must be holistic
-    const bool arePrevFrames = m_data["vcd"].contains("frames");
+    const bool arePrevFrames = m_data["openlabel"].contains("frames");
     if (arePrevFrames) {
         m_holiElemes.addUid(uid, ElementType::context);
-        json& frame = m_data["vcd"]["frames"][std::to_string(m_curFrameIndex)];
+        json& frame = m_data["openlabel"]["frames"][std::to_string(m_curFrameIndex)];
         includeElemUidToFrame(ElementType::context, uid, frame);
     }
 
@@ -641,7 +641,7 @@ VCD_Impl::add_context_data(const std::string &uid_str,
 
 ont_uid
 VCD_Impl::add_ontology(const std::string &ontology) {
-    json& ontologies = setDefault(m_data["vcd"], "ontologies", json::object());
+    json& ontologies = setDefault(m_data["openlabel"], "ontologies", json::object());
     // Check if ontology already exists
     for (const auto &ont : ontologies.items()) {
         if (ont.value() == ontology) {
@@ -660,7 +660,7 @@ VCD_Impl::add_coordinate_system(const std::string& name,
                                 const std::string& parent_name,
                                 const std::vector<float>& pose_wrt_parent) {
     // Create entry
-    json& coord_sys = setDefault(m_data["vcd"], "coordinate_systems",
+    json& coord_sys = setDefault(m_data["openlabel"], "coordinate_systems",
                                  json::object());
 
     // Check if coordinate system already exists
@@ -744,25 +744,25 @@ VCD_Impl::get_uid_to_assign(const ElementType type, const UID &uid) {
 
 json*
 VCD_Impl::get_metadata() {
-    if (!m_data["vcd"].contains("metadata")) {
+    if (!m_data["openlabel"].contains("metadata")) {
         return nullptr;
     } else {
-        return &m_data["vcd"]["metadata"];
+        return &m_data["openlabel"]["metadata"];
     }
 }
 
 json*
 VCD_Impl::get_frame(const int frame_num) {
-    if (!m_data["vcd"].contains("frames")) {
+    if (!m_data["openlabel"].contains("frames")) {
         return nullptr;
     } else {
-        const json &frames = m_data["vcd"]["frames"];
+        const json &frames = m_data["openlabel"]["frames"];
         const std::string frame_key = std::to_string(frame_num);
         // First check if the current frame exists in the list
         const bool frame_exists = frames.contains(frame_key);
         if (frame_exists) {
             // Then get the frame if it exists
-            return &m_data["vcd"]["frames"][std::to_string(frame_num)];
+            return &m_data["openlabel"]["frames"][std::to_string(frame_num)];
         } else {
             return nullptr;
         }
@@ -772,15 +772,15 @@ VCD_Impl::get_frame(const int frame_num) {
 json*
 VCD_Impl::get_element(const ElementType type, const std::string &uid_str) {
     const std::string key = ElementTypeName[type] + "s";
-    if (!m_data["vcd"].contains(key)) {
+    if (!m_data["openlabel"].contains(key)) {
         std::cerr << "WARNING: trying to get a "
                   << ElementTypeName[type] << " but this VCD has none."
                   << std::endl;
         return nullptr;
     }
 //    const std::string uid_str = uid.asStr();
-    if (m_data["vcd"][key].contains(uid_str)) {
-        return &(m_data["vcd"][key][uid_str]);
+    if (m_data["openlabel"][key].contains(uid_str)) {
+        return &(m_data["openlabel"][key][uid_str]);
     } else {
         std::cerr << "WARNING: trying to get non-existing "
                   << ElementTypeName[type]
@@ -792,8 +792,8 @@ VCD_Impl::get_element(const ElementType type, const std::string &uid_str) {
 size_t
 VCD_Impl::get_num_elements(const ElementType type) {
     const std::string key = ElementTypeName[type] + "s";
-    if (m_data["vcd"].contains(key)) {
-        return m_data["vcd"][key].size();
+    if (m_data["openlabel"].contains(key)) {
+        return m_data["openlabel"][key].size();
     } else {
         return 0;
     }
@@ -849,7 +849,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
     const bool element_existed = has(type, uid_str);
     const bool fi_is_good = !isFrameIndexNone(frame_index);
     const std::string typeKey = ElementTypeName[type] + "s";
-    auto& typeLst = setDefault(m_data["vcd"], typeKey, json::object());
+    auto& typeLst = setDefault(m_data["openlabel"], typeKey, json::object());
     auto& element = setDefault(typeLst, uid_str, json::object());
 
     // 2.- Copy from arguments
@@ -913,7 +913,7 @@ VCD_Impl::set_element_at_root_and_frames(const ElementType type,
             update_vcd_frame_intervals(frame_index);
         }
         // 2.1.b) Add new data to existing frame
-        json* frame = get_frame(frame_index);
+        json* frame = get_frame(static_cast<int>(frame_index));
         if (frame == nullptr) {
             // ERROR: the frame does not exist!
             return;
@@ -1062,7 +1062,7 @@ VCD_Impl::set_element_data(const ElementType type, const std::string &uid_str,
     } else {
         // As there is a usable frame index defined, we have to include the
         // values in the specified frame.
-        json *frme_elem = get_frame(frame_index);
+        json *frme_elem = get_frame(static_cast<int>(frame_index));
         if (frme_elem == nullptr) {
             frme_elem = &add_frame(frame_index, S_ADD_MISSIED_FRAMES);
         }
@@ -1152,11 +1152,11 @@ VCD_Impl::set_element_data_pointers(const ElementType type, json &element,
 bool
 VCD_Impl::has(const ElementType type, const std::string &uid_str) const {
     const std::string key = ElementTypeName[type] + "s";
-    if (!m_data["vcd"].contains(key)) {
+    if (!m_data["openlabel"].contains(key)) {
         return false;
     } else {
 //        const std::string uid_str = uid.asStr();
-        if (m_data["vcd"][key].contains(uid_str)) {
+        if (m_data["openlabel"][key].contains(uid_str)) {
             return true;
         } else {
             return false;
@@ -1166,9 +1166,9 @@ VCD_Impl::has(const ElementType type, const std::string &uid_str) const {
 
 bool
 VCD_Impl::hasOntology(const std::string &ont_uid_str) const {
-    if (m_data["vcd"].contains("ontologies")) {
-        if (m_data["vcd"]["ontologies"].contains(ont_uid_str)) {
-            return m_data["vcd"]["ontologies"][ont_uid_str].empty();
+    if (m_data["openlabel"].contains("ontologies")) {
+        if (m_data["openlabel"]["ontologies"].contains(ont_uid_str)) {
+            return m_data["openlabel"]["ontologies"][ont_uid_str].empty();
         }
     }
     return false;
@@ -1176,8 +1176,8 @@ VCD_Impl::hasOntology(const std::string &ont_uid_str) const {
 
 bool
 VCD_Impl::hasCoordSys(const std::string &coord_system) const {
-    if (m_data["vcd"].contains("coordinate_systems")) {
-        if (m_data["vcd"]["coordinate_systems"].contains(coord_system)) {
+    if (m_data["openlabel"].contains("coordinate_systems")) {
+        if (m_data["openlabel"]["coordinate_systems"].contains(coord_system)) {
             return true;
         }
     }
@@ -1193,11 +1193,11 @@ VCD_Impl::has_element_data(const ElementType type, const std::string &uid_str,
 //        const std::string uid_str = uid.asStr();
         const std::string key = ElementTypeName[type] + "s";
         const std::string data_key = ElementTypeName[type] + "_data_pointers";
-        if (!m_data["vcd"][key][uid_str].contains(data_key)) {
+        if (!m_data["openlabel"][key][uid_str].contains(data_key)) {
             return false;
         }
         const std::string &name = element_data.getName();
-        return m_data["vcd"][key][uid_str][data_key].contains(name);
+        return m_data["openlabel"][key][uid_str][data_key].contains(name);
     }
 }
 

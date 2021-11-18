@@ -1,12 +1,12 @@
 /**
-VCD (Video Content Description) library v5.0.0
+VCD (Video Content Description) library v5.0.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2020, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a library to create and manage VCD content version 5.0.0.
+VCD is a library to create and manage VCD content version 5.0.1.
 VCD is distributed under MIT License. See LICENSE.
 
 */
@@ -222,11 +222,11 @@ export enum SetMode {
 
 
 /**
-* VCD 5.0.0
+* VCD 5.0.1
 *
-* NOTE: This is the Typescript version of VCD 5.0.0 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
+* NOTE: This is the Typescript version of VCD 5.0.1 API. Compatibility with VCD 4.2.0 JSON files is not implemented.
 *
-* This class is the main manager of VCD 5.0.0 content.
+* This class is the main manager of VCD 5.0.1 content.
 * It can be created void, and add content (e.g. Objects) using the API
 * It can also be created by providing a JSON file.
 * ```

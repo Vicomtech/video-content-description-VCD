@@ -10,9 +10,9 @@ set(MAIN_PROJECT_BUILD_PATH ${PROJECT_BINARY_DIR})
 #---------------------------------------------------#
 #              Control version                	    #
 #---------------------------------------------------#
-set(VCD_MAJOR_VERSION 4)
-set(VCD_MINOR_VERSION 3)  #Schema changes
-set(VCD_VERSION_PATCH 0)  #c++ library changes
+set(VCD_MAJOR_VERSION 5)
+set(VCD_MINOR_VERSION 0)  #Schema changes
+set(VCD_VERSION_PATCH 1)  #c++ library changes
 set(VCD_PROJECT_VERSION ${VCD_MAJOR_VERSION}.${VCD_MINOR_VERSION}.${VCD_VERSION_PATCH})
 message(VCD_MAJOR_VERSION: ${VCD_MAJOR_VERSION})
 message(VCD_MINOR_VERSION: ${VCD_MINOR_VERSION})
@@ -31,13 +31,17 @@ INCLUDE(${CMAKE_SCRIPT_PATH}/CMake_compilation_config.cmake)
 # Options
 option( ADD_VCD_CORE "Add VCD core" ON)
 #option( BUILD_SAMPLES "Build samples" ON)
-option( BUILD_TESTS "Build tests" OFF)
+option( BUILD_TESTS "Build tests" ON)
 #option( BUILD_PERF "Build performance tests" OFF)
 # Static library needs to include some static dependencies in the final
 #   installation package (related with the uuid generation library),
 #   which are not included in this version.
 # option( MAKE_LIB_STATIC "Generate the library as static" OFF)
 set(MAKE_LIB_STATIC OFF)
+
+message( ADD_VCD_CORE: ${ADD_VCD_CORE})
+message( BUILD_TESTS: ${BUILD_TESTS})
+message( MAKE_LIB_STATIC: ${MAKE_LIB_STATIC})
 
 # Add support C++14 definitions in Ubuntu
 IF(UNIX AND NOT APPLE)

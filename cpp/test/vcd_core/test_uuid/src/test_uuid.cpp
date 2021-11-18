@@ -143,9 +143,9 @@ SCENARIO("Create some basic content, without time information") {
             // print(vcd.stringify(False))
             const std::string ref_json =
                     "{"
-                    "\"vcd\":{"
+                    "\"openlabel\":{"
                     "   \"metadata\":{"
-                    "       \"schema_version\":\"4.3.0\""
+                    "       \"schema_version\":\"1.0.0\""
                     "   },"
                     "   \"objects\":{"
                     "       \"0\":{"
