@@ -4,7 +4,7 @@
     "definitions": {
         "action": {
             "additionalProperties": false,
-            "description": "An action is a type of element intended to describe temporal situations with semantic load, as a certain activity happening in real life, such as crossing-zebra-cross, standing-still, playing-guitar, etc. As such, actions are simply defined by their type, the frame intervals in which the action happens, and any additional action data (e.g. numbers, booleans, text as attributes of the actions)",
+            "description": "An action is a type of element intended to describe temporal situations with semantic load as a certain activity happening in real life, such as crossing-zebra-cross, standing-still, playing-guitar. As such, actions are defined by their type, the frame intervals in which the action happens, and any additional action data, for example, numbers, booleans, text as attributes of the actions.",
             "properties": {
                 "action_data": {
                     "$ref": "#/definitions/action_data"
@@ -20,7 +20,7 @@
                     "type": "array"
                 },
                 "name": {
-                    "description": "Name of the action (it is a friendly name, not used for indexing).",
+                    "description": "Name of the action. It is a friendly name and not used for indexing.",
                     "type": "string"
                 },
                 "ontology_uid": {
@@ -88,9 +88,11 @@
                     "type": "string"
                 },
                 "reference_type": {
+                    "description": "This is the type of the reference as a string with the name of the element data (e.g. line_reference)",
                     "type": "string"
                 },
                 "val": {
+                    "description": "The array of indexes of the references of type reference_type.",
                     "items": {
                         "type": "number"
                     },
@@ -101,7 +103,7 @@
         },
         "attributes": {
             "additionalProperties": false,
-            "description": "Attributes is the alias of element data that can be nested inside geometric object data. E.g. A certain bounding box can have attributes related to its score, visibility, etc. These values can be nested inside the bounding box as attributes",
+            "description": "Attributes is the alias of element data that can be nested inside geometric object data. For example, a certain bounding box can have attributes related to its score, visibility, etc. These values can be nested inside the bounding box as attributes.",
             "properties": {
                 "boolean": {
                     "items": {
@@ -132,13 +134,13 @@
         },
         "bbox": {
             "additionalProperties": true,
-            "description": "A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] is the centre of the bounding box, and [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively.",
+            "description": "A 2D bounding box is defined as a 4-dimensional vector [x, y, w, h], where [x, y] is the center of the bounding box and [w, h] represent the width (horizontal, x-coordinate dimension) and height (vertical, y-coordinate dimension), respectively.",
             "properties": {
                 "attributes": {
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -146,6 +148,7 @@
                     "type": "string"
                 },
                 "val": {
+                    "description": "The array of 4 values that define the [x, y, w, h] values of the bbox.",
                     "items": {
                         "type": "number"
                     },
@@ -168,7 +171,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "data_type": {
@@ -176,7 +179,7 @@
                     "type": "string"
                 },
                 "encoding": {
-                    "description": "This is a string that declares the encoding type of the bytes for this binary payload, e.g. \"base64\".",
+                    "description": "This is a string that declares the encoding type of the bytes for this binary payload, for example, \"base64\".",
                     "type": "string"
                 },
                 "name": {
@@ -204,7 +207,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -212,7 +215,7 @@
                     "type": "string"
                 },
                 "type": {
-                    "description": "This attribute specifies how the boolean shall be considered. In this schema only possible option is as a value.",
+                    "description": "This attribute specifies how the boolean shall be considered. In this schema the only possible option is as a value.",
                     "enum": [
                         "value"
                     ],
@@ -230,7 +233,7 @@
         },
         "context": {
             "additionalProperties": false,
-            "description": "A context is a type of element which defines any non spatial nor temporal annotation. Contexts can be used to add richness to the contextual information of a scene, including location, weather, application-related information",
+            "description": "A context is a type of element which defines any nonspatial or temporal annotation. Contexts can be used to add richness to the contextual information of a scene, including location, weather, application-related information.",
             "properties": {
                 "context_data": {
                     "$ref": "#/definitions/context_data"
@@ -246,7 +249,7 @@
                     "type": "array"
                 },
                 "name": {
-                    "description": "Name of the context (it is a friendly name, not used for indexing).",
+                    "description": "Name of the context. It is a friendly name and not used for indexing.",
                     "type": "string"
                 },
                 "ontology_uid": {
@@ -304,7 +307,7 @@
         },
         "coordinate_system": {
             "additionalProperties": true,
-            "description": "A coordinate system is a 3D reference frame. Spatial information of objects and their propertiescan be defined with respect to coordinate systems.",
+            "description": "A coordinate system is a 3D reference frame. Spatial information on objects and their properties can be defined with respect to coordinate systems.",
             "properties": {
                 "children": {
                     "description": "List of children of this coordinate system.",
@@ -315,14 +318,14 @@
                     "type": "array"
                 },
                 "parent": {
-                    "description": "This is the string UID of the parent coordinate system this coordinate system is refered to.",
+                    "description": "This is the string UID of the parent coordinate system this coordinate system is referring to.",
                     "type": "string"
                 },
                 "pose_wrt_parent": {
                     "$ref": "#/definitions/transform_data"
                 },
                 "type": {
-                    "description": "This is a string that describes the type of the coordinate system (e.g. \"local\", \"geo\").",
+                    "description": "This is a string that describes the type of the coordinate system, for example, \"local\", \"geo\").",
                     "type": "string"
                 }
             },
@@ -333,7 +336,7 @@
         },
         "coordinate_systems": {
             "additionalProperties": false,
-            "description": "This is a JSON object which contains OpenLABEL coordinate systems. Coordinate system keys can be any string (e.g. friendly coordinate system name).",
+            "description": "This is a JSON object which contains OpenLABEL coordinate systems. Coordinate system keys can be any string, for example, a friendly coordinate system name.",
             "patternProperties": {
                 "^": {
                     "$ref": "#/definitions/coordinate_system"
@@ -349,7 +352,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -357,9 +360,9 @@
                     "type": "string"
                 },
                 "val": {
+                    "description": "List of values encoding the position, rotation and dimensions. Two options are supported, using 9 or 10 values. If 9 values are used, the format is (x, y, z, rx, ry, rz, sx, sy, sz), where (x, y, z) encodes the position, (rx, ry, rz) encodes the Euler angles that encode the rotation, and (sx, sy, sz) are the dimensions of the cuboid in its object coordinate system. If 10 values are used, then the format is (x, y, z, qx, qy, qz, qw, sx, sy, sz) with the only difference of the rotation values which are the 4 values of a quaternion.",
                     "oneOf": [
                         {
-                            "description": "List of values encoding the position, rotation and dimensions. Two options are supported, using 9 or 10 values. If 9 values are used, the format is (x, y, z, rx, ry, rz, sx, sy, sz), where (x, y, z) encodes the position, (rx, ry, rz) encodes the Euler angles that encode the rotation, and (sx, sy, sz) are the dimensions of the cuboid in its object coordinate system. If 10 values are used, then the format is (x, y, z, qx, qy, qz, qw, sx, sy, sz) with the only difference of the rotation values which are the 4 values of a quaternion.",
                             "items": {
                                 "type": "number"
                             },
@@ -380,10 +383,10 @@
             "type": "object"
         },
         "element_data_pointer": {
-            "description": "This item contains pointers to element data of elements, indexed by \"name\", and containing information about the element data type (e.g. bounding box, cuboid) and the frame intervalsin which this element_data exists within an element. As a consequence, these pointers can be used to explore element data dynamic information within the JSON content.",
+            "description": "This item contains pointers to element data of elements, indexed by \"name\", and containing information about the element data type, for example, bounding box, cuboid, and the frame intervals in which this element_data exists within an element. That means, these pointers can be used to explore element data dynamic information within the JSON content.",
             "properties": {
                 "attribute_pointers": {
-                    "description": "This is a JSON object which contains pointers to the attributes of the element data pointed by this pointer. The attribute pointers keys shall be the \"name\" of the attribute of the element data this pointer points to.",
+                    "description": "This is a JSON object which contains pointers to the attributes of the element data pointed by this pointer. The attributes pointer keys shall be the \"name\" of the attribute of the element data this pointer points to.",
                     "patternProperties": {
                         "^": {
                             "description": "The attribute pointer values are strings which define the type of the attribute.",
@@ -399,7 +402,7 @@
                     "type": "object"
                 },
                 "frame_intervals": {
-                    "description": "List of frame intervals of the element data pointed by this pointer",
+                    "description": "List of frame intervals of the element data pointed by this pointer.",
                     "items": {
                         "$ref": "#/definitions/frame_interval"
                     },
@@ -446,7 +449,7 @@
         },
         "event": {
             "additionalProperties": false,
-            "description": "An event is an instantaneous situation that happens without a temporal interval. Events complement Actions providing a mechanism to specify triggers or to connect actions and objects with causality relations.",
+            "description": "An event is an instantaneous situation that happens without a temporal interval. Events complement actions providing a mechanism to specify triggers or to connect actions and objects with causality relations.",
             "properties": {
                 "event_data": {
                     "$ref": "#/definitions/event_data"
@@ -455,14 +458,14 @@
                     "$ref": "#/definitions/element_data_pointers"
                 },
                 "frame_intervals": {
-                    "description": "The array of frame intervals where this event exists or is defined. Note that events are thought to be instantaneous, therefore usually they will be defined for a single frame interval where the starting and ending frames are the same.",
+                    "description": "The array of frame intervals where this event exists or is defined. Note that events are thought to be instantaneous. That means, they are defined for a single frame interval where the starting and ending frames are the same.",
                     "items": {
                         "$ref": "#/definitions/frame_interval"
                     },
                     "type": "array"
                 },
                 "name": {
-                    "description": "Name of the event (it is a friendly name, not used for indexing).",
+                    "description": "Name of the event. It is a friendly name and not used for indexing.",
                     "type": "string"
                 },
                 "ontology_uid": {
@@ -520,11 +523,11 @@
         },
         "frame": {
             "additionalProperties": false,
-            "description": "A frame is a container of dynamic (time-wise) information.",
+            "description": "A frame is a container of dynamic, timewise, information.",
             "properties": {
                 "actions": {
                     "additionalProperties": false,
-                    "description": "This is a JSON object that contains dynamic information of OpenLABEL actions. Action keys are strings containing numerical UIDs or 32 bytes UUIDs. Action values may contain an \"action_data\" JSON object.",
+                    "description": "This is a JSON object that contains dynamic information on OpenLABEL actions. Action keys are strings containing numerical UIDs or 32 bytes UUIDs. Action values may contain an \"action_data\" JSON object.",
                     "patternProperties": {
                         "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "additionalProperties": false,
@@ -540,7 +543,7 @@
                 },
                 "contexts": {
                     "additionalProperties": false,
-                    "description": "This is a JSON object that contains dynamic information of OpenLABEL contexts. Context keys are strings containing numerical UIDs or 32 bytes UUIDs. Context values may contain an \"context_data\" JSON object.",
+                    "description": "This is a JSON object that contains dynamic information on OpenLABEL contexts. Context keys are strings containing numerical UIDs or 32 bytes UUIDs. Context values may contain a \"context_data\" JSON object.",
                     "patternProperties": {
                         "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "additionalProperties": false,
@@ -556,7 +559,7 @@
                 },
                 "events": {
                     "additionalProperties": false,
-                    "description": "This is a JSON object that contains dynamic information of OpenLABEL events. Event keys are strings containing numerical UIDs or 32 bytes UUIDs. Event values may contain an \"event_data\" JSON object.",
+                    "description": "This is a JSON object that contains dynamic information on OpenLABEL events. Event keys are strings containing numerical UIDs or 32 bytes UUIDs. Event values may contain an \"event_data\" JSON object.",
                     "patternProperties": {
                         "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "additionalProperties": false,
@@ -576,7 +579,7 @@
                     "properties": {
                         "streams": {
                             "additionalProperties": false,
-                            "description": "Streams is a JSON object which contains OpenLABEL streams, with specific information for this frame. Stream keys can be any string (e.g. friendly stream name).",
+                            "description": "Streams is a JSON object which contains OpenLABEL streams with specific information for this frame. Stream keys can be any string, for example, a friendly stream name.",
                             "patternProperties": {
                                 "^": {
                                     "$ref": "#/definitions/stream"
@@ -597,7 +600,7 @@
                         },
                         "transforms": {
                             "additionalProperties": false,
-                            "description": "Transforms is a JSON object which contains OpenLABEL transforms specific for this frame. Transform keys can be any string (e.g. friendly name of a transform).",
+                            "description": "Transforms is a JSON object which contains OpenLABEL transforms specific for this frame. Transform keys can be any string, for example, a friendly name of a transform.",
                             "patternProperties": {
                                 "^": {
                                     "$ref": "#/definitions/transform"
@@ -610,7 +613,7 @@
                 },
                 "objects": {
                     "additionalProperties": false,
-                    "description": "This is a JSON object that contains dynamic information of OpenLABEL objects. Object keys are strings containing numerical UIDs or 32 bytes UUIDs. Object values may contain an \"object_data\" JSON object.",
+                    "description": "This is a JSON object that contains dynamic information on OpenLABEL objects. Object keys are strings containing numerical UIDs or 32 bytes UUIDs. Object values may contain an \"object_data\" JSON object.",
                     "patternProperties": {
                         "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                             "additionalProperties": false,
@@ -637,7 +640,7 @@
         },
         "frame_interval": {
             "additionalProperties": false,
-            "description": "A frame interval defines an starting and ending frame number, as a closed interval (i.e. the interval includes the limit frame numbers).",
+            "description": "A frame interval defines a starting and ending frame number as a closed interval. That means the interval includes the limit frame numbers.",
             "properties": {
                 "frame_end": {
                     "description": "Ending frame number of the interval.",
@@ -658,15 +661,15 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "encoding": {
-                    "description": "This is a string that declares the encoding type of the bytes for this image, e.g. \"base64\".",
+                    "description": "This is a string that declares the encoding type of the bytes for this image, for example, \"base64\".",
                     "type": "string"
                 },
                 "mime_type": {
-                    "description": "This is a string that declares the MIME (Multipurpose internat Mail Extensions) of the image, e.g. \"image/gif\".",
+                    "description": "This is a string that declares the MIME (multipurpose internet mail extensions) of the image, for example, \"image/gif\".",
                     "type": "string"
                 },
                 "name": {
@@ -698,9 +701,11 @@
                     "type": "string"
                 },
                 "reference_type": {
+                    "description": "This is the type of the reference as a string with the name of the element data (e.g. point3d)",
                     "type": "string"
                 },
                 "val": {
+                    "description": "The array of indexes of the references of type reference_type.",
                     "items": {
                         "type": "number"
                     },
@@ -723,15 +728,15 @@
                     "type": "number"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "data_type": {
-                    "description": "This is a string that declares the type of the numerical values of the matrix, e.g. \"float\".",
+                    "description": "This is a string that declares the type of the numerical values of the matrix, for example, \"float\".",
                     "type": "string"
                 },
                 "height": {
-                    "description": "Height of the matrix (number of rows).",
+                    "description": "Height of the matrix. Expressed in number of rows.",
                     "type": "number"
                 },
                 "name": {
@@ -746,7 +751,7 @@
                     "type": "array"
                 },
                 "width": {
-                    "description": "Width of the matrix (number of columns).",
+                    "description": "Width of the matrix. Expressed in number of columns.",
                     "type": "number"
                 }
             },
@@ -762,7 +767,7 @@
         },
         "mesh": {
             "additionalProperties": true,
-            "description": "A mesh encodes a point-line-area structure. It is intended to represent flat 3D meshes, such as several connected parking lots, where points, lines and areas composing the mesh are interrelated, and can have their own properties.",
+            "description": "A mesh encodes a point-line-area structure. It is intended to represent flat 3D meshes, such as several connected parking lots, where points, lines and areas composing the mesh are interrelated and can have their own properties.",
             "properties": {
                 "area_reference": {
                     "additionalProperties": false,
@@ -775,7 +780,7 @@
                     "type": "object"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "line_reference": {
@@ -807,7 +812,7 @@
         },
         "metadata": {
             "additionalProperties": true,
-            "description": "This JSON object contains information (metadata) about the annotation file itself including the schema_version, file_version, annotator, etc.",
+            "description": "This JSON object contains information, that is, metadata, about the annotation file itself.",
             "properties": {
                 "annotator": {
                     "description": "Name or description of the annotator that created the annotations.",
@@ -831,6 +836,10 @@
                         "1.0.0"
                     ],
                     "type": "string"
+                },
+                "tagged_file": {
+                    "description": "File name or URI of the data file being tagged.",
+                    "type": "string"
                 }
             },
             "required": [
@@ -846,7 +855,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -854,7 +863,7 @@
                     "type": "string"
                 },
                 "type": {
-                    "description": "This attribute specifies whether the number shall be considered as a value, a minimum or a maximum in its context.",
+                    "description": "This attribute specifies whether the number shall be considered as a value, a minimum, or a maximum in its context.",
                     "enum": [
                         "value",
                         "min",
@@ -874,7 +883,7 @@
         },
         "object": {
             "additionalProperties": false,
-            "description": "An object is the main type of annotation element, and is designed to represent spatio-temporal entities, such as physical objects in the real world. Objects must have a name and type.Objects can have static and dynamic data. Objects are the only type of elements that can have geometric data, such as bounding boxes, cuboids, polylines, images, etc.",
+            "description": "An object is the main type of annotation element. Object is designed to represent spatiotemporal entities, such as physical objects in the real world. Objects shall have a name and type. Objects may have static and dynamic data. Objects are the only type of elements that may have geometric data, such as bounding boxes, cuboids, polylines, images, etc.",
             "properties": {
                 "coordinate_system": {
                     "description": "This is the string key of the coordinate system this object is referenced with respect to.",
@@ -888,7 +897,7 @@
                     "type": "array"
                 },
                 "name": {
-                    "description": "Name of the object (it is a friendly name, not used for indexing).",
+                    "description": "Name of the object. It is a friendly name and not used for indexing.",
                     "type": "string"
                 },
                 "object_data": {
@@ -1043,7 +1052,7 @@
         },
         "ontologies": {
             "additionalProperties": false,
-            "description": "This is the JSON object of OpenLABEL ontologies. Ontology keys are strings containing numerical UIDs or 32 bytes UUIDs. Ontology values can be any of: strings (e.g. encoding a URI), or JSON objects containing a URI string, and optional lists of included and excluded terms.",
+            "description": "This is the JSON object of OpenLABEL ontologies. Ontology keys are strings containing numerical UIDs or 32 bytes UUIDs. Ontology values may be strings, for example, encoding a URI. JSON objects containing a URI string and optional lists of included and excluded terms.",
             "patternProperties": {
                 "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                     "oneOf": [
@@ -1133,7 +1142,7 @@
                 },
                 "frames": {
                     "additionalProperties": false,
-                    "description": "This is the JSON object of frames that contain the dynamic (time-wise) annotations. Keys are strings containing numerical frame identifiers (denoted as master frame numbers).",
+                    "description": "This is the JSON object of frames that contain the dynamic, timewise, annotations. Keys are strings containing numerical frame identifiers, which are denoted as master frame numbers.",
                     "patternProperties": {
                         "^[0-9]+$": {
                             "$ref": "#/definitions/frame"
@@ -1197,7 +1206,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "id": {
@@ -1209,7 +1218,7 @@
                     "type": "string"
                 },
                 "val": {
-                    "description": "List of two coordinates to define the point, e.g. (x, y).",
+                    "description": "List of two coordinates to define the point, for example, x, y.",
                     "items": {
                         "type": "number"
                     },
@@ -1232,7 +1241,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "id": {
@@ -1244,7 +1253,7 @@
                     "type": "string"
                 },
                 "val": {
-                    "description": "List of three coordinates to define the point, e.g. (x, y, z).",
+                    "description": "List of three coordinates to define the point, for example, x, y, z.",
                     "items": {
                         "type": "number"
                     },
@@ -1271,11 +1280,11 @@
                     "type": "boolean"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "hierarchy": {
-                    "description": "Hierarchy of the 2D polyline in the context of a set of 2D polylines. See https://docs.opencv.org/4.5.2/d9/d8b/tutorial_py_contours_hierarchy.html",
+                    "description": "Hierarchy of the 2D polyline in the context of a set of 2D polylines.",
                     "items": {
                         "type": "integer"
                     },
@@ -1325,10 +1334,11 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "closed": {
+                    "description": "A boolean that defines whether the polyline is closed or not. In case it is closed, it is assumed that the last point of the sequence is connected with the first one.",
                     "type": "boolean"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -1336,6 +1346,7 @@
                     "type": "string"
                 },
                 "val": {
+                    "description": "List of numerical values of the polyline, according to its mode.",
                     "items": {
                         "type": "number"
                     },
@@ -1351,13 +1362,13 @@
         },
         "rbbox": {
             "additionalProperties": true,
-            "description": "A 2D rotated bounding box is defined as a 5-dimensional vector [x, y, w, h, alpha], where [x, y] is the centre of the bounding box, and [w, h] represent the width (horizontal, x-coordinate dimension), and height (vertical, y-coordinate dimension), respectively. The angle alpha, in radians, represents the rotation of the rotated bounding box, and is defined as a right-handed rotation, i.e. positive from x to y axes, and with the origin of rotation placed at the center of the bounding box (i.e. [x, y]).",
+            "description": "A 2D rotated bounding box is defined as a 5-dimensional vector [x, y, w, h, alpha], where [x, y] is the center of the bounding box and [w, h] represent the width (horizontal, x-coordinate dimension) and height (vertical, y-coordinate dimension), respectively. The angle alpha, in radians, represents the rotation of the rotated bounding box, and is defined as a right-handed rotation, that is, positive from x to y axes, and with the origin of rotation placed at the center of the bounding box (that is, [x, y]).",
             "properties": {
                 "attributes": {
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -1365,6 +1376,7 @@
                     "type": "string"
                 },
                 "val": {
+                    "description": "The array of 5 values that define the [x, y, w, h, alpha] values of the bbox.",
                     "items": {
                         "type": "number"
                     },
@@ -1401,7 +1413,7 @@
         },
         "relation": {
             "additionalProperties": false,
-            "description": "A relation is a type of element which connects two or more other elements (e.g. objects, actions, contexts or events), using RDF triples to structure the connection, with one or more subjects, a predicate and one or more semantic objects ",
+            "description": "A relation is a type of element which connects two or more other elements, for example, objects, actions, contexts, or events. RDF triples are used to structure the connection with one or more subjects, a predicate, and one or more semantic objects.",
             "properties": {
                 "frame_intervals": {
                     "description": "The array of frame intervals where this relation exists or is defined.",
@@ -1411,7 +1423,7 @@
                     "type": "array"
                 },
                 "name": {
-                    "description": "Name of the relation (it is a friendly name, not used for indexing).",
+                    "description": "Name of the relation. It is a friendly name and not used for indexing.",
                     "type": "string"
                 },
                 "ontology_uid": {
@@ -1459,7 +1471,7 @@
         },
         "resources": {
             "additionalProperties": false,
-            "description": "This is the JSON object of OpenLABEL resources. Resource keys are strings containing numerical UIDs or 32 bytes UUIDs. Resource values are strings that describe an external resource (e.g. file name, URLs) that might be used to link data of this OpenLABEL annotation content with external existing content.",
+            "description": "This is the JSON object of OpenLABEL resources. Resource keys are strings containing numerical UIDs or 32 bytes UUIDs. Resource values are strings that describe an external resource, for example, file name, URLs, that may be used to link data of the OpenLABEL annotation content with external existing content.",
             "patternProperties": {
                 "^(-?[0-9]+|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})$": {
                     "type": "string"
@@ -1490,7 +1502,7 @@
                     "type": "string"
                 },
                 "uri": {
-                    "description": "A string encoding the URI (e.g. a URL) or file name (e.g. a video file name) the stream corresponds to.",
+                    "description": "A string encoding the URI, for example, a URL, or file name, for example, a video file name, the stream corresponds to.",
                     "type": "string"
                 }
             },
@@ -1510,30 +1522,35 @@
                         "description": "This JSON object defines an instance of the intrinsic parameters of a fisheye camera.",
                         "properties": {
                             "center_x_px": {
+                                "description": "x-coordinate (horizontal) of the principal point of projection.",
                                 "type": [
                                     "number",
                                     "null"
                                 ]
                             },
                             "center_y_px": {
+                                "description": "y-coordinate (vertical) of the principal point of projection.",
                                 "type": [
                                     "number",
                                     "null"
                                 ]
                             },
                             "focal_length_x": {
+                                "description": "Horizontal focal length (x-axis) in pixels.",
                                 "type": [
                                     "number",
                                     "null"
                                 ]
                             },
                             "focal_length_y": {
+                                "description": "Vertical focal length (y-axis) in pixels.",
                                 "type": [
                                     "number",
                                     "null"
                                 ]
                             },
                             "height_px": {
+                                "description": "Height of the image frame in pixels.",
                                 "type": "integer"
                             },
                             "lens_coeffs": {
@@ -1546,6 +1563,7 @@
                                 "type": "array"
                             },
                             "width_px": {
+                                "description": "Width of the image frame in pixels.",
                                 "type": "integer"
                             }
                         },
@@ -1556,7 +1574,7 @@
                         "description": "This JSON object defines an instance of the intrinsic parameters of a pinhole camera.",
                         "properties": {
                             "camera_matrix": {
-                                "description": "This is a 3x4 camera matrix which projects  3D homogeneous points (4x1) from a camera coordinate system (ccs) into the image plane (3x1)This is the usual K matrix for camera projection (as in OpenCV), butextended from 3x3 to 3x4, to enable its direct utilisation to project4x1 homogeneous 3D points.The matrix is defined to follows the camera model: x-to-right, y-down, z-forward so,x_img = camera_matrix * X_ccs",
+                                "description": "This is a 3x4 camera matrix which projects 3D homogeneous points (4x1) from a camera coordinate system into the image plane (3x1). This is the usual K matrix for camera projection as in OpenCV. It is extended from 3x3 to 3x4 to enable its direct utilisation to project 4x1 homogeneous 3D points. The matrix is defined to follow the camera model: x-to-right, y-down, z-forward. The following equation applies: x_img = camera_matrix * X_ccs.",
                                 "items": {
                                     "type": "number"
                                 },
@@ -1565,7 +1583,7 @@
                                 "type": "array"
                             },
                             "distortion_coeffs": {
-                                "description": "This is the array 1xN radial and tangential distortion coefficients. See https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html",
+                                "description": "This is the array 1xN radial and tangential distortion coefficients.",
                                 "items": {
                                     "type": "number"
                                 },
@@ -1590,7 +1608,7 @@
                     {
                         "properties": {
                             "frame_stream": {
-                                "description": "This is the internal frame number inside the strem this OpenLABEL frame corresponds to.",
+                                "description": "This is the internal frame number inside the stream this OpenLABEL frame corresponds to.",
                                 "type": "integer"
                             },
                             "timestamp": {
@@ -1621,7 +1639,7 @@
         },
         "streams": {
             "additionalProperties": false,
-            "description": "This is a JSON object which contains OpenLABEL streams. Stream keys can be any string (e.g. friendly stream name).",
+            "description": "This is a JSON object which contains OpenLABEL streams. Stream keys can be any string, for example, a friendly stream name.",
             "patternProperties": {
                 "^": {
                     "$ref": "#/definitions/stream"
@@ -1631,7 +1649,7 @@
         },
         "tag": {
             "additionalProperties": true,
-            "description": "A tag is a special type of label that can be attached to any type of content, such as images, data containers, folders, etc. In OpenLABEL its main purpose is to allow adding metadata to scenario descriptions.",
+            "description": "A tag is a special type of label that can be attached to any type of content, such as images, data containers, folders. In ASAM OpenLABEL the main purpose of a tag is to allow adding metadata to scenario descriptions.",
             "properties": {
                 "ontology_uid": {
                     "description": "This is the UID of the ontology where the type of this tag is defined.",
@@ -1649,7 +1667,8 @@
                 }
             },
             "required": [
-                "type"
+                "type",
+                "ontology_uid"
             ],
             "type": "object"
         },
@@ -1703,7 +1722,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -1711,7 +1730,7 @@
                     "type": "string"
                 },
                 "type": {
-                    "description": "This attribute specifies how the text shall be considered. In this schema only possible option is as a value.",
+                    "description": "This attribute specifies how the text shall be considered. The only possible option is as a value.",
                     "enum": [
                         "value"
                     ],
@@ -1732,11 +1751,11 @@
             "description": "This is a JSON object with information about this transform.",
             "properties": {
                 "dst": {
-                    "description": "The string UID (name) of the destination coordinate system for geometric data converted with this transform.",
+                    "description": "The string UID, that is, the name, of the destination coordinate system for geometric data converted with this transform.",
                     "type": "string"
                 },
                 "src": {
-                    "description": "The string UID (name) of the source coordinate system of geometrical data this transform converts.",
+                    "description": "The string UID, that is, the name, of the source coordinate system of geometrical data this transform converts.",
                     "type": "string"
                 },
                 "transform_src_to_dst": {
@@ -1757,7 +1776,7 @@
                     "additionalProperties": false,
                     "properties": {
                         "matrix4x4": {
-                            "description": "Flattened list of 16 entries encoding a 4x4 homogeneous matrix, to enable transform 3D column homogeneous vectors 4x1 using right-multiplication of matrices: X_dst = matrix_4x4 * X_src.",
+                            "description": "Flattened list of 16 entries encoding a 4x4 homogeneous matrix to enable transform 3D column homogeneous vectors 4x1 using right-multiplication of matrices: X_dst = matrix_4x4 * X_src.",
                             "items": {
                                 "type": "number"
                             },
@@ -1771,7 +1790,7 @@
                 },
                 {
                     "additionalProperties": false,
-                    "description": "A transform can be defined with a quaternion to encodes the rotation of a coordinate system with respect to another, and a translation.",
+                    "description": "A transform can be defined with a quaternion to encode the rotation of a coordinate system with respect to another, and a translation.",
                     "properties": {
                         "quaternion": {
                             "description": "List of 4 values encoding a quaternion (x, y, z, w).",
@@ -1812,7 +1831,7 @@
                             "type": "array"
                         },
                         "sequence": {
-                            "description": "The sequence as a string of 3 characters defining the axis of the Euler angles and their order of application, e.g. \"ZYX\". Default assumption is \"ZYX\".",
+                            "description": "The sequence as a string of 3 characters defining the axis of the Euler angles and their order of application, for example, \"ZYX\". The default is \"ZYX\".",
                             "type": "string"
                         },
                         "translation": {
@@ -1841,7 +1860,7 @@
                     "$ref": "#/definitions/attributes"
                 },
                 "coordinate_system": {
-                    "description": "Name of the coordinate system this object data is expressed with respect to.",
+                    "description": "Name of the coordinate system in respect of which this object data is expressed.",
                     "type": "string"
                 },
                 "name": {
@@ -1849,7 +1868,7 @@
                     "type": "string"
                 },
                 "type": {
-                    "description": "This attribute specifies whether the vector shall be considered as a descriptor of individual values, or as a definition of a range.",
+                    "description": "This attribute specifies whether the vector shall be considered as a descriptor of individual values or as a definition of a range.",
                     "enum": [
                         "values",
                         "range"
@@ -1857,6 +1876,7 @@
                     "type": "string"
                 },
                 "val": {
+                    "description": "The numerical values of the vector (list) of numbers.",
                     "items": {
                         "oneOf": [
                             {

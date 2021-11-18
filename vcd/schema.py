@@ -1689,7 +1689,7 @@ openlabel_schema = {
                 }
             },
             "required": [
-                "type"
+                "type", "ontology_uid"
             ],
             "type": "object"
         },
