@@ -15,6 +15,7 @@
 
 #include <string>
 #include <fstream>
+#include <sstream>
 
 #include <nlohmann/json.hpp>
 
@@ -65,7 +66,7 @@ check_json_level(const json &data_a, const json &data_b) {
         const float a = data_a.get<float>();
         const float b = data_b.get<float>();
         const float sim = abs(a - b);
-        const float threshold = 0.001;
+        const float threshold = 0.001f;
         return sim < threshold;
     } else if (data_a.is_null()) {
         return data_b.is_null();

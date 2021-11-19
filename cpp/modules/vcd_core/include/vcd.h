@@ -13,6 +13,7 @@
 #ifndef _VCD_H_
 #define _VCD_H_
 
+#include <nlohmann/json.hpp>
 #include <string>
 #include <memory>
 #include <map>
@@ -22,7 +23,7 @@
 
 namespace vcd {
 
-class VCD_UID {
+class CORE_LIB VCD_UID {
  public:
     ~VCD_UID();
 
@@ -37,8 +38,21 @@ class VCD_UID {
 
     virtual bool
     isNone() const = 0;
+
+    virtual void
+    withInt(const int val) = 0;
+
+    virtual void
+    withStr(const std::string &val) = 0;
+
+    static std::string
+    generate_uuid4();
+
+    static bool
+    check_uuid4(const std::string &uuid);
 };
 
+using json = nlohmann::json;
 using ont_uid = std::string;
 using obj_uid = std::string;
 using act_uid = std::string;
@@ -82,7 +96,16 @@ enum Poly2DTypes {
     // MODE_POLY2D_RS6FCC = 6
 };
 
-class VCD {
+enum ElementType {
+    object = 0,
+    action = 1,
+    event = 2,
+    context = 3,
+    relation = 4,
+    ET_size
+};
+
+class CORE_LIB VCD {
  public:
     virtual
     ~VCD();
@@ -248,11 +271,21 @@ class VCD {
     add_coordinate_system(const std::string& name,
                           const CoordinateSystemType cs_type,
                           const std::string& parent_name = "",
-                          const std::vector<float>& pose_wrt_parent = {}) = 0;
+                          const std::vector<float>& pose_wrt_parent_matrix4x4
+                          = {}) = 0;
 
     // Getters
     virtual size_t
     get_num_objects() = 0;
+
+    virtual json*
+    get_metadata() = 0;
+
+    virtual json*
+    get_element(const ElementType type, const std::string &uid_str) = 0;
+
+    virtual json*
+    get_object(const std::string &uid_str) = 0;
 
     // Object data generators
 
@@ -422,10 +455,10 @@ class VCD {
                         const size_t frame_index = -1) = 0;
 
     // Instance creation factories
-    static CORE_LIB std::unique_ptr<VCD>
+    static std::unique_ptr<VCD>
     create(const std::string& fileName, const bool validation = false);
 
-    static CORE_LIB std::unique_ptr<VCD>
+    static std::unique_ptr<VCD>
     create(const bool validation = false);
 };
 using VCD_ptr = std::unique_ptr<VCD>;

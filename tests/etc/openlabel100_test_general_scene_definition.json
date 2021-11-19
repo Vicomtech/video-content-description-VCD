@@ -1,33 +1,37 @@
 {
-    "vcd": {
+    "openlabel": {
         "coordinate_systems": {
             "ChildOdometry": {
                 "children": [],
                 "parent": "MainOdometry",
-                "pose_wrt_parent": [],
+                "pose_wrt_parent": {
+                    "matrix4x4": []
+                },
                 "type": "scene_cs"
             },
             "ChildOdometry2": {
                 "children": [],
                 "parent": "MainOdometry",
-                "pose_wrt_parent": [
-                    1.0,
-                    0.0,
-                    0.0,
-                    0.7599999904632568,
-                    0.0,
-                    1.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    0.0,
-                    1.0,
-                    1.7300000190734863,
-                    0.0,
-                    0.0,
-                    0.0,
-                    1.0
-                ],
+                "pose_wrt_parent": {
+                    "matrix4x4": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.7599999904632568,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.7300000190734863,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
                 "type": "scene_cs"
             },
             "MainOdometry": {
@@ -36,7 +40,9 @@
                     "ChildOdometry2"
                 ],
                 "parent": "",
-                "pose_wrt_parent": [],
+                "pose_wrt_parent": {
+                    "matrix4x4": []
+                },
                 "type": "scene_cs"
             }
         },
@@ -215,7 +221,7 @@
             }
         },
         "metadata": {
-            "schema_version": "4.3.0"
+            "schema_version": "1.0.0"
         },
         "objects": {
             "0": {

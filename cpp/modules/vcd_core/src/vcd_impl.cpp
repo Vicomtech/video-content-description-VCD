@@ -71,7 +71,7 @@ void
 VCD_Impl::reset() {
     m_data["openlabel"] = json::object();  // = json::object();
     m_data["openlabel"]["metadata"] = json::object();
-    m_data["openlabel"]["metadata"]["schema_version"] = "4.3.0";
+    m_data["openlabel"]["metadata"]["schema_version"] = "1.0.0";
 
     m_lastUIDbyType[ElementType::object]   = -1;
     m_lastUIDbyType[ElementType::action]   = -1;
@@ -138,7 +138,8 @@ VCD_Impl::update_vcd_frame_intervals(const size_t frame_index) {
         appendFrameIntervalToArray(m_data["openlabel"]["frame_intervals"],
                                    frame_index);
     }
-    const int cur_value = m_data["openlabel"]["frame_intervals"][0]["frame_end"];
+    const int cur_value = m_data["openlabel"]["frame_intervals"]
+                         [0]["frame_end"];
     const int max_value = std::max(cur_value, static_cast<int>(frame_index));
     m_data["openlabel"]["frame_intervals"][0]["frame_end"] = max_value;
 }
@@ -323,7 +324,8 @@ VCD_Impl::add_object(const std::string& name,
     const bool arePrevFrames = m_data["openlabel"].contains("frames");
     if (arePrevFrames) {
         m_holiElemes.addUid(uid, ElementType::object);
-        json& frame = m_data["openlabel"]["frames"][std::to_string(m_curFrameIndex)];
+        json& frame = m_data["openlabel"]["frames"]
+            [std::to_string(m_curFrameIndex)];
         includeElemUidToFrame(ElementType::object, uid, frame);
     }
 
@@ -467,7 +469,8 @@ VCD_Impl::add_action(const std::string& name,
     const bool arePrevFrames = m_data["openlabel"].contains("frames");
     if (arePrevFrames) {
         m_holiElemes.addUid(uid, ElementType::action);
-        json& frame = m_data["openlabel"]["frames"][std::to_string(m_curFrameIndex)];
+        json& frame = m_data["openlabel"]["frames"]
+            [std::to_string(m_curFrameIndex)];
         includeElemUidToFrame(ElementType::action, uid, frame);
     }
 
@@ -558,7 +561,8 @@ VCD_Impl::add_context(const std::string& name,
     const bool arePrevFrames = m_data["openlabel"].contains("frames");
     if (arePrevFrames) {
         m_holiElemes.addUid(uid, ElementType::context);
-        json& frame = m_data["openlabel"]["frames"][std::to_string(m_curFrameIndex)];
+        json& frame = m_data["openlabel"]["frames"]
+            [std::to_string(m_curFrameIndex)];
         includeElemUidToFrame(ElementType::context, uid, frame);
     }
 
@@ -641,7 +645,8 @@ VCD_Impl::add_context_data(const std::string &uid_str,
 
 ont_uid
 VCD_Impl::add_ontology(const std::string &ontology) {
-    json& ontologies = setDefault(m_data["openlabel"], "ontologies", json::object());
+    json& ontologies = setDefault(m_data["openlabel"],
+                                 "ontologies", json::object());
     // Check if ontology already exists
     for (const auto &ont : ontologies.items()) {
         if (ont.value() == ontology) {
@@ -658,7 +663,8 @@ coord_uid
 VCD_Impl::add_coordinate_system(const std::string& name,
                                 const CoordinateSystemType cs_type,
                                 const std::string& parent_name,
-                                const std::vector<float>& pose_wrt_parent) {
+                                const std::vector<float>&
+                                    pose_wrt_parent_matrix4x4) {
     // Create entry
     json& coord_sys = setDefault(m_data["openlabel"], "coordinate_systems",
                                  json::object());
@@ -674,14 +680,18 @@ VCD_Impl::add_coordinate_system(const std::string& name,
     }
 
     std::vector<float> fixed_pose;
-    if (pose_wrt_parent.size() == 16) {
-        fixed_pose = pose_wrt_parent;
+    if (pose_wrt_parent_matrix4x4.size() == 16) {
+        fixed_pose = pose_wrt_parent_matrix4x4;
     }
+
     // Define the coordinate system object
     coord_sys[name.c_str()] = json::object({
             {"type", CoordinateSystemTypeName[cs_type]},
             {"parent", parent_name.c_str()},
-            {"pose_wrt_parent", fixed_pose},
+            {"pose_wrt_parent", json::object({
+                                {"matrix4x4", fixed_pose}
+                                })
+            },
             {"children", json::array()}
     });
 
@@ -1245,32 +1255,7 @@ UID::withStr(const std::string &val) {
     }
 }
 
-/** @brief Generate a Version 4 UUID according to RFC-4122
- *
- * Uses the openssl RAND_bytes function to generate a
- * Version 4 UUID.
- *
- * @param buffer A buffer that is at least 38 bytes long.
- * @retval 1 on success, 0 otherwise.
- */
-std::string
-UID::generate_uuid4() {
-#ifdef ENABLE_GUID
-    std::string guid = xg::newGuid().str();
-#else
-    std::string guid("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXX");
-#endif
 
-    return guid;
-}
-
-bool
-UID::check_uuid4(const std::string &uuid) {
-    const std::string reg_ex_uid =
-            "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-"
-            "[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-    return regex_match(uuid, std::regex(reg_ex_uid));
-}
 
 void UID::set(const std::string &uidStr, const int uidInt, const bool isUUID) {
     m_uidStr = uidStr;

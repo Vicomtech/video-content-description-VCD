@@ -1,5 +1,5 @@
 {
-    "vcd": {
+    "openlabel": {
         "frame_intervals": [
             {
                 "frame_end": 9,
@@ -142,7 +142,7 @@
             }
         },
         "metadata": {
-            "schema_version": "4.3.0"
+            "schema_version": "1.0.0"
         },
         "objects": {
             "0": {

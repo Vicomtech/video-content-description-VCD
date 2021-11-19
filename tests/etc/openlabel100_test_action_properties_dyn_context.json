@@ -1,0 +1,250 @@
+{
+  "openlabel": {
+    "metadata": {
+      "schema_version": "1.0.0"
+    },
+    "actions": {
+      "0": {
+        "name": "",
+        "type": "#Running",
+        "frame_intervals": [{
+            "frame_start": 0,
+            "frame_end": 10
+          }
+        ],
+        "action_data_pointers": {
+          "confidence": {
+            "type": "num",
+            "frame_intervals": [{
+                "frame_start": 0,
+                "frame_end": 0
+              }
+            ]
+          },
+          "confidence_vec": {
+            "type": "vec",
+            "frame_intervals": [{
+                "frame_start": 0,
+                "frame_end": 0
+              }
+            ]
+          },
+          "annotation": {
+            "type": "text",
+            "frame_intervals": [{
+                "frame_start": 0,
+                "frame_end": 0
+              }
+            ]
+          },
+          "validated": {
+            "type": "boolean",
+            "frame_intervals": [{
+                "frame_start": 1,
+                "frame_end": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "frames": {
+      "0": {
+        "actions": {
+          "0": {
+            "action_data": {
+              "num": [{
+                  "name": "confidence",
+                  "val": 0.98
+                }
+              ],
+              "vec": [{
+                  "name": "confidence_vec",
+                  "val": [0.98, 0.97]
+                }
+              ],
+              "text": [{
+                  "name": "annotation",
+                  "val": "Manual"
+                }
+              ]
+            }
+          }
+        },
+        "objects": {
+          "0": {}
+        },
+        "contexts": {
+          "0": {}
+        }
+      },
+      "1": {
+        "actions": {
+          "0": {
+            "action_data": {
+              "boolean": [{
+                  "name": "validated",
+                  "val": true
+                }
+              ]
+            }
+          }
+        },
+        "objects": {
+          "0": {}
+        },
+        "contexts": {
+          "0": {}
+        }
+      },
+      "2": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        },
+        "contexts": {
+          "0": {}
+        }
+      },
+      "3": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        },
+        "contexts": {
+          "0": {}
+        }
+      },
+      "4": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        },
+        "contexts": {
+          "0": {
+            "context_data": {
+              "num": [{
+                  "name": "risk",
+                  "val": 0.7
+                }, {
+                  "name": "weight",
+                  "val": 0.5
+                }
+              ]
+            }
+          }
+        }
+      },
+      "5": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        },
+        "contexts": {
+          "0": {}
+        }
+      },
+      "6": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        }
+      },
+      "7": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        }
+      },
+      "8": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        }
+      },
+      "9": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        }
+      },
+      "10": {
+        "actions": {
+          "0": {}
+        },
+        "objects": {
+          "0": {}
+        }
+      }
+    },
+    "frame_intervals": [{
+        "frame_start": 0,
+        "frame_end": 10
+      }
+    ],
+    "objects": {
+      "0": {
+        "name": "Marcos",
+        "type": "#Person",
+        "object_data": {
+          "text": [{
+              "name": "Position",
+              "val": "#Researcher"
+            }
+          ]
+        },
+        "object_data_pointers": {
+          "Position": {
+            "type": "text",
+            "frame_intervals": []
+          }
+        }
+      }
+    },
+    "contexts": {
+      "0": {
+        "name": "",
+        "type": "#Highway",
+        "frame_intervals": [{
+            "frame_start": 0,
+            "frame_end": 5
+          }
+        ],
+        "context_data_pointers": {
+          "risk": {
+            "type": "num",
+            "frame_intervals": [{
+                "frame_start": 4,
+                "frame_end": 4
+              }
+            ]
+          },
+          "weight": {
+            "type": "num",
+            "frame_intervals": [{
+                "frame_start": 4,
+                "frame_end": 4
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
