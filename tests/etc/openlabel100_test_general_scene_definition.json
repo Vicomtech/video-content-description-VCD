@@ -1,0 +1,251 @@
+{
+    "openlabel": {
+        "coordinate_systems": {
+            "ChildOdometry": {
+                "children": [],
+                "parent": "MainOdometry",
+                "pose_wrt_parent": {
+                    "matrix4x4": []
+                },
+                "type": "scene_cs"
+            },
+            "ChildOdometry2": {
+                "children": [],
+                "parent": "MainOdometry",
+                "pose_wrt_parent": {
+                    "matrix4x4": [
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.7599999904632568,
+                        0.0,
+                        1.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0,
+                        1.7300000190734863,
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "type": "scene_cs"
+            },
+            "MainOdometry": {
+                "children": [
+                    "ChildOdometry",
+                    "ChildOdometry2"
+                ],
+                "parent": "",
+                "pose_wrt_parent": {
+                    "matrix4x4": []
+                },
+                "type": "scene_cs"
+            }
+        },
+        "frame_intervals": [
+            {
+                "frame_end": 30,
+                "frame_start": 0
+            }
+        ],
+        "frames": {
+            "0": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "1": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "10": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "11": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "12": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "13": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "14": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "15": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "16": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "17": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "18": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "19": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "2": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "20": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "21": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "22": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "23": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "24": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "25": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "26": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "27": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "28": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "29": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "3": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "30": {
+                "objects": {
+                    "0": {},
+                    "1": {}
+                }
+            },
+            "4": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "5": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "6": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "7": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "8": {
+                "objects": {
+                    "0": {}
+                }
+            },
+            "9": {
+                "objects": {
+                    "0": {}
+                }
+            }
+        },
+        "metadata": {
+            "schema_version": "1.0.0"
+        },
+        "objects": {
+            "0": {
+                "coordinate_system": "ChildOdometry2",
+                "frame_intervals": [
+                    {
+                        "frame_end": 30,
+                        "frame_start": 0
+                    }
+                ],
+                "name": "",
+                "type": "#Pedestrian"
+            },
+            "1": {
+                "coordinate_system": "MainOdometry",
+                "frame_intervals": [
+                    {
+                        "frame_end": 30,
+                        "frame_start": 20
+                    }
+                ],
+                "name": "",
+                "type": "#Car"
+            }
+        }
+    }
+}

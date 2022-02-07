@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v5.0.0
+VCD (Video Content Description) library v5.0.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 5.0.0.
+VCD is a Python library to create and manage VCD content version 5.0.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -25,6 +25,27 @@ class CoordinateSystemType(Enum):
     geo_utm = 4  # In UTM coordinates
     geo_wgs84 = 5  # In WGS84 elliptical Earth coordinates
     custom = 6  # Any other coordinate system
+
+
+class FisheyeModel(Enum):
+    '''    
+    Any 3D point in space P=(X,Y,Z,1)^T has a radius with respect to the optical axis Z
+    r = ||X^2 + Y^2||
+    The angle of incidence to the optical center is
+    a = atan(r/Z)
+
+    The angle of incidence then spans from 0 to pi/2
+    The model of the lens relates the angle of incidence with the radius of the point in the image plane (in pixels):
+    "radial_poly" (4 distortion coefficients)
+        rp = k1*a + k2*a^2 + k3*a^3 + k4*a^4
+    "kannala" (5 distortion coefficients)
+        rp = k1*a + k2*a^3 + k3*a^5 + k4*a^7 + k5*a^9
+    "opencv_fisheye" (4 distortion coefficients, equivalent to Kannala with k1=1.0, so only the last 4 terms are used
+        rp = a + k1*a^3 + k2*a^5 + k3*a^7 + k4*a^9 
+    '''
+    radial_poly = 1  
+    kannala = 2  
+    opencv_fisheye = 3
 
 
 class Intrinsics:
@@ -58,28 +79,82 @@ class IntrinsicsPinhole(Intrinsics):
 
 
 class IntrinsicsFisheye(Intrinsics):
-    def __init__(self, width_px, height_px, lens_coeffs_1x4, center_x, center_y, aspect_ratio, **additional_items):
+    def __init__(self, width_px, height_px, lens_coeffs_1xN, center_x, center_y, focal_length_x, focal_length_y, fisheye_model=None, **additional_items):
         Intrinsics.__init__(self)
         assert (isinstance(width_px, int))
         assert (isinstance(height_px, int))
         self.data['intrinsics_fisheye'] = dict()
         self.data['intrinsics_fisheye']['width_px'] = width_px
         self.data['intrinsics_fisheye']['height_px'] = height_px
-        assert (isinstance(lens_coeffs_1x4, list))
+        assert (isinstance(lens_coeffs_1xN, list))
         assert (isinstance(center_x, (float, type(None))))
         assert (isinstance(center_y, (float, type(None))))
-        assert (isinstance(aspect_ratio, (float, type(None))))        
+        assert (isinstance(focal_length_x, (float, type(None))))
+        assert (isinstance(focal_length_y, (float, type(None))))
 
         self.data['intrinsics_fisheye']['center_x'] = center_x
         self.data['intrinsics_fisheye']['center_y'] = center_y
-        self.data['intrinsics_fisheye']['aspect_ratio'] = aspect_ratio        
+        self.data['intrinsics_fisheye']['focal_length_x'] = focal_length_x
+        self.data['intrinsics_fisheye']['focal_length_y'] = focal_length_y 
+        self.data['intrinsics_fisheye']['lens_coeffs_1xN'] = lens_coeffs_1xN
 
-        assert (len(lens_coeffs_1x4) == 4)
-        self.data['intrinsics_fisheye']['lens_coeffs_1x4'] = lens_coeffs_1x4
+        if fisheye_model is not None:
+            assert(isinstance(fisheye_model, FisheyeModel))            
+            if fisheye_model is FisheyeModel.radial_poly:
+                assert(len(lens_coeffs_1xN)==4)
+            elif fisheye_model is FisheyeModel.kannala:
+                assert(len(lens_coeffs_1xN)==5)
+            elif fisheye_model is FisheyeModel.opencv_fisheye:
+                assert(len(lens_coeffs_1xN==4))
+            else:
+                raise Exception("ERROR: Fisheyemodel not supported. See types.FisheyeModel enum.")            
+            self.data['intrinsics_fisheye']['model'] = fisheye_model.name
+        else:
+            if len(lens_coeffs_1xN)==4:
+                self.data['intrinsics_fisheye']['model'] = FisheyeModel.opencv_fisheye.name
+            elif len(lens_coeffs_1xN) ==5:
+                self.data['intrinsics_fisheye']['model'] = FisheyeModel.kannala.name
 
         if additional_items is not None:
             self.data['intrinsics_fisheye'].update(additional_items)
 
+
+class IntrinsicsCylindrical(Intrinsics):
+    def __init__(self, width_px, height_px, fov_horz_rad, fov_vert_rad, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data['intrinsics_cylindrical'] = dict()
+        self.data['intrinsics_cylindrical']['width_px'] = width_px
+        self.data['intrinsics_cylindrical']['height_px'] = height_px
+        assert (isinstance(fov_horz_rad, float))
+        assert (isinstance(fov_vert_rad, float))
+        self.data['intrinsics_cylindrical']['fov_horz_rad'] = fov_horz_rad
+        self.data['intrinsics_cylindrical']['fov_vert_rad'] = fov_vert_rad
+
+        if additional_items is not None:
+            self.data['intrinsics_cylindrical'].update(additional_items)
+
+
+class IntrinsicsOrthographic(Intrinsics):
+    def __init__(self, width_px, height_px, xmin, xmax, ymin, ymax, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data['intrinsics_orthographic'] = dict()
+        self.data['intrinsics_orthographic']['width_px'] = width_px
+        self.data['intrinsics_orthographic']['height_px'] = height_px
+        assert (isinstance(xmin, float))
+        assert (isinstance(xmax, float))
+        assert (isinstance(ymin, float))
+        assert (isinstance(ymax, float))
+        self.data['intrinsics_orthographic']['xmin'] = xmin
+        self.data['intrinsics_orthographic']['xmax'] = xmax
+        self.data['intrinsics_orthographic']['ymin'] = ymin
+        self.data['intrinsics_orthographic']['ymax'] = ymax
+
+        if additional_items is not None:
+            self.data['intrinsics_orthographic'].update(additional_items)
 
 class IntrinsicsCustom(Intrinsics):
     def __init__(self, **additional_items):

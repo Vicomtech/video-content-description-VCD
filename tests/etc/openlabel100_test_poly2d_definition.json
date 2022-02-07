@@ -1,0 +1,69 @@
+{
+    "openlabel": {
+        "metadata": {
+            "schema_version": "1.0.0"
+        },
+        "objects": {
+            "0": {
+                "name": "marcos",
+                "object_data": {
+                    "poly2d": [
+                        {
+                            "closed": true,
+                            "mode": "MODE_POLY2D_ABSOLUTE",
+                            "name": "square",
+                            "val": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    1
+                                ],
+                                [
+                                    0,
+                                    1
+                                ]
+                            ]
+                        },
+                        {
+                            "closed": true,
+                            "mode": "MODE_POLY2D_ABSOLUTE",
+                            "name": "triangle",
+                            "val": [
+                                [
+                                    0,
+                                    0
+                                ],
+                                [
+                                    2,
+                                    0
+                                ],
+                                [
+                                    1,
+                                    2
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "square": {
+                        "frame_intervals": [],
+                        "type": "poly2d"
+                    },
+                    "triangle": {
+                        "frame_intervals": [],
+                        "type": "poly2d"
+                    }
+                },
+                "type": "person"
+            }
+        }
+    }
+}

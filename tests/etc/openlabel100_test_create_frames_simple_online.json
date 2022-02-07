@@ -1,0 +1,200 @@
+{
+    "openlabel": {
+        "frame_intervals": [
+            {
+                "frame_end": 9,
+                "frame_start": 0
+            }
+        ],
+        "frames": {
+            "0": {
+                "objects": {
+                    "0": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "name": "body",
+                                    "val": [
+                                        0,
+                                        0,
+                                        60,
+                                        120
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "1": {
+                "objects": {
+                    "0": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "name": "body",
+                                    "val": [
+                                        0,
+                                        0,
+                                        62,
+                                        124
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "2": {
+                "objects": {
+                    "0": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "name": "body",
+                                    "val": [
+                                        0,
+                                        0,
+                                        70,
+                                        128
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "5": {
+                "objects": {
+                    "0": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "name": "body",
+                                    "val": [
+                                        0,
+                                        0,
+                                        100,
+                                        160
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "7": {
+                "objects": {
+                    "1": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "name": "body",
+                                    "val": [
+                                        0,
+                                        0,
+                                        200,
+                                        190
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "8": {
+                "objects": {
+                    "1": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "name": "body",
+                                    "val": [
+                                        0,
+                                        0,
+                                        180,
+                                        185
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "9": {
+                "objects": {
+                    "1": {
+                        "object_data": {
+                            "bbox": [
+                                {
+                                    "name": "body",
+                                    "val": [
+                                        0,
+                                        0,
+                                        160,
+                                        179
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "metadata": {
+            "schema_version": "1.0.0"
+        },
+        "objects": {
+            "0": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 2,
+                        "frame_start": 0
+                    },
+                    {
+                        "frame_end": 5,
+                        "frame_start": 5
+                    }
+                ],
+                "name": "marcos",
+                "object_data_pointers": {
+                    "body": {
+                        "frame_intervals": [
+                            {
+                                "frame_end": 2,
+                                "frame_start": 0
+                            },
+                            {
+                                "frame_end": 5,
+                                "frame_start": 5
+                            }
+                        ],
+                        "type": "bbox"
+                    }
+                },
+                "type": "person"
+            },
+            "1": {
+                "frame_intervals": [
+                    {
+                        "frame_end": 9,
+                        "frame_start": 7
+                    }
+                ],
+                "name": "peter",
+                "object_data_pointers": {
+                    "body": {
+                        "frame_intervals": [
+                            {
+                                "frame_end": 9,
+                                "frame_start": 7
+                            }
+                        ],
+                        "type": "bbox"
+                    }
+                },
+                "type": "person"
+            }
+        }
+    }
+}

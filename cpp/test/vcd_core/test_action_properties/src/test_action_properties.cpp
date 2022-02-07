@@ -16,6 +16,7 @@
 // -- Project -- //
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #if defined(__linux__)
     #include <experimental/filesystem>
     namespace fs = std::experimental::filesystem;
@@ -33,8 +34,6 @@
 #include "vcd.h"
 #include "vcd_types.h"
 #include "test_utils.h"
-
-#include "vcd_impl.h"
 
 static char asset_path[] = TEST_ASSET_FOLDER;
 
@@ -70,7 +69,6 @@ SCENARIO("Add a set of actions to a VCD capture") {
             std::string uid_context2 = vcd->add_context("", ctx2_args);
             ctx2_args.uid = uid_context2;
 
-
             // Include running in the first frame to force holistic element
             // definitions.
             vcd->add_action("", 0, running_args);
@@ -87,14 +85,6 @@ SCENARIO("Add a set of actions to a VCD capture") {
             vcd->add_text_to_object(uid_object1, "Position", "#Researcher");
 
             //  2.3 - Contexts
-            // Holistic
-            vcd::element_args ctx1_args;
-            ctx1_args.semantic_type = "#Sunny";
-            std::string uid_context1 = vcd->add_context("", ctx1_args);
-            ctx1_args.uid = uid_context1;
-            vcd->add_text_to_context(uid_context1, "category", "#Weather");
-            vcd->add_text_to_context(uid_context1, "annotation", "Manual");
-
             const size_t num_frames = 10;
             for (size_t frame_i = 0; frame_i <= num_frames; ++frame_i) {
                 // Simulate action detection
@@ -104,7 +94,7 @@ SCENARIO("Add a set of actions to a VCD capture") {
                     vcd->add_num_to_action(uid_action1,
                                            "confidence", 0.98, frame_i);
                     vcd->add_vec_to_action(uid_action1,
-                                           "confidence_vec", {0.98, 0.97},
+                                           "confidence_vec", {0.98f, 0.97f},
                                            frame_i);
                     vcd->add_text_to_action(uid_action1,
                                             "annotation", "Manual", frame_i);
@@ -138,14 +128,18 @@ SCENARIO("Add a set of actions to a VCD capture") {
             const std::string vcd_out_pretty = vcd->stringify(pretty);
 
             // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_actions_with_action_data_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            string out_p =
+            "openlabel100_test_action_properties_dyn_context_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path)
+                                    / fs::path("out")
+                                    / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             o_p << vcd_out_pretty << std::endl;
             o_p.close();
 
             // Read reference JSON file
-            string ref_p = "vcd430_test_actions_with_action_data.json";
+            string ref_p =
+                "openlabel100_test_action_properties_dyn_context.json";
             fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
             std::ifstream ref_file_data(vcd_refp_path);
             json ref_data;
@@ -156,19 +150,6 @@ SCENARIO("Add a set of actions to a VCD capture") {
             json test_data = json::parse(vcd_out_pretty);
 
             REQUIRE(check_json_level_both_sides(test_data, ref_data));
-
-
-//    if not os.path.isfile('./etc/vcd430_test_actions_with_action_data.json'):
-//                vcd.save('./etc/vcd430_test_actions_with_action_data.json',
-//                         True)
-//      vcd_read = core.VCD('./etc/vcd430_test_actions_with_action_data.json',
-//                                validation=True)
-//            vcd_read_stringified = vcd_read.stringify()
-//            vcd_stringified = vcd.stringify()
-//            // print(vcd_stringified)
-//            self.assertEqual(vcd_read_stringified, vcd_stringified)
-
-//                    REQUIRE(vcd.get() != nullptr);
         }
     }
 }

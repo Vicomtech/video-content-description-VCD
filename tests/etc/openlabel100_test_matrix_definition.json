@@ -1,0 +1,81 @@
+{
+    "openlabel": {
+        "metadata": {
+            "schema_version": "1.0.0"
+        },
+        "objects": {
+            "0": {
+                "name": "marcos",
+                "object_data": {
+                    "mat": [
+                        {
+                            "channels": 1,
+                            "data_type": "float",
+                            "height": 3,
+                            "name": "3x3",
+                            "val": [
+                                1.0,
+                                2.0,
+                                3.0,
+                                4.0,
+                                5.0,
+                                6.0,
+                                7.0,
+                                8.0,
+                                9.0
+                            ],
+                            "width": 3
+                        },
+                        {
+                            "channels": 3,
+                            "data_type": "float",
+                            "height": 3,
+                            "name": "3x3x3",
+                            "val": [
+                                1.0,
+                                2.0,
+                                3.0,
+                                4.0,
+                                5.0,
+                                6.0,
+                                7.0,
+                                8.0,
+                                9.0,
+                                1.0,
+                                2.0,
+                                3.0,
+                                4.0,
+                                5.0,
+                                6.0,
+                                7.0,
+                                8.0,
+                                9.0,
+                                1.0,
+                                2.0,
+                                3.0,
+                                4.0,
+                                5.0,
+                                6.0,
+                                7.0,
+                                8.0,
+                                9.0
+                            ],
+                            "width": 3
+                        }
+                    ]
+                },
+                "object_data_pointers": {
+                    "3x3": {
+                        "frame_intervals": [],
+                        "type": "mat"
+                    },
+                    "3x3x3": {
+                        "frame_intervals": [],
+                        "type": "mat"
+                    }
+                },
+                "type": "person"
+            }
+        }
+    }
+}

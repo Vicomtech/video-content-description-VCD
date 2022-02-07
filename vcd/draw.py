@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v5.0.0
+VCD (Video Content Description) library v5.0.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 5.0.0.
+VCD is a Python library to create and manage VCD content version 5.0.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -24,6 +24,9 @@ import matplotlib.pyplot as plt
 
 
 class SetupViewer:
+    '''
+    This class offers Matplotlib routines to display the coordinate systems of the Scene.
+    '''
     def __init__(self, scene, coordinate_system):
         assert (isinstance(scene, scl.Scene))
         self.scene = scene
@@ -83,9 +86,10 @@ class SetupViewer:
                     self.plot_cuboid(cuboid_cs, cuboid_vals, 'k')                    
                 
                 else:
-                    if 'cuboid' in object['object_data']:
-                        for cuboid in object['object_data']['cuboid']:
-                            self.plot_cuboid(cuboid['coordinate_system'], cuboid['val'], 'k')
+                    if 'object_data' in object:
+                        if 'cuboid' in object['object_data']:
+                            for cuboid in object['object_data']['cuboid']:
+                                self.plot_cuboid(cuboid['coordinate_system'], cuboid['val'], 'k')
 
         if axes is None:
             self.ax.set_xlim(-1.25, 4.25)
@@ -104,8 +108,10 @@ class SetupViewer:
 
 
 class TopView:
-    # This class draws a top view of the scene, assuming Z=0 is the ground plane (i.e. the topview sees the XY plane)
-    # Range and scale can be used to select a certain part of the XY plane
+    '''
+    This class draws a top view of the scene, assuming Z=0 is the ground plane (i.e. the topview sees the XY plane)
+    Range and scale can be used to select a certain part of the XY plane
+    '''
     class Params:
         '''
         Assuming cuboids are drawn top view, so Z coordinate is ignored
@@ -139,10 +145,10 @@ class TopView:
                 self.rangeY = rangeY
 
             self.scaleX = self.topViewSize[0] / (self.rangeX[1] - self.rangeX[0])
-            self.scaleY = -self.topViewSize[1] / (self.rangeY[1] - self.rangeY[0])
+            self.scaleY = -self.topViewSize[1] / (self.rangeY[1] - self.rangeY[0]) # Negative?
 
             self.offsetX = round(-self.rangeX[0] * self.scaleX)
-            self.offsetY = round(-self.rangeY[1] * self.scaleY)
+            self.offsetY = round(-self.rangeY[1] * self.scaleY)  # TODO: shouldn't it be -self.rangeY[0]?
 
             self.S = np.array([[self.scaleX, 0, self.offsetX],
                                [0, self.scaleY, self.offsetY],
@@ -283,7 +289,7 @@ class TopView:
 
                     if need_to_recompute_maps[cam_name]:
                         # Project into image
-                        points2d_dist_3xN, idx_valid = cam.project_points3d(points3d_cam_4xN)
+                        points2d_dist_3xN, idx_valid = cam.project_points3d(points3d_cam_4xN, remove_outside=True)
 
                         # Assign into map
                         self.images[cam_name]['mapX'][i, :] = points2d_dist_3xN[0, :]
@@ -502,7 +508,7 @@ class TopView:
                                                2,
                                                uid)
 
-                        if _drawTrajectory:
+                        if _drawTrajectory and _frameNum is not None:
                             fis_object = self.scene.vcd.get_object_data_frame_intervals(uid, cuboid_name)
                             if fis_object.empty():
                                 # So this object is static, let's project its cuboid into the current transform
@@ -567,6 +573,85 @@ class TopView:
                                                 color = attr['val']
 
                             self.draw_points3d(_img, points3d_4xN_transformed, color)
+                    ########################################
+                    # point3d - Single point in 3D
+                    ########################################
+                    elif object_data_key == "point3d":
+                        color = self.params.colorMap[object_class]
+                        point_name = object_data_item['name']
+
+                        if 'coordinate_system' in object_data_item:
+                            cs_data = object_data_item['coordinate_system']
+                        else:
+                            warnings.warn("WARNING: The point3d of this VCD don't have a coordinate_system.")
+                            # For simplicity, let's assume they are already expressed in the target cs
+                            cs_data = self.coordinate_system
+
+                        x = object_data_item['val'][0]
+                        y = object_data_item['val'][1]
+                        z = object_data_item['val'][2]
+                        points3d_4xN = np.array([x, y, z, 1]).reshape(4, 1)
+                        points_cs = object_data_item['coordinate_system']
+
+                        # First convert from the src coordinate system into the camera coordinate system
+                        points3d_4xN_transformed = self.scene.transform_points3d_4xN(points3d_4xN,
+                                                                                        points_cs,
+                                                                                        self.coordinate_system)
+
+                        if 'attributes' in object_data_item:
+                            for attr_type, attr_list in object_data_item['attributes'].items():
+                                if attr_type == 'vec':
+                                    for attr in attr_list:
+                                        if attr['name'] == 'color':
+                                            color = attr['val']
+
+                        self.draw_points3d(_img, points3d_4xN_transformed, color)
+
+                        if _drawTrajectory and _frameNum is not None:
+                            fis_object = self.scene.vcd.get_object_data_frame_intervals(uid, point_name)
+                            if fis_object.empty():
+                                # So this object is static, let's project its geometry into the current transform
+                                fis = self.scene.vcd.get_frame_intervals().get_dict()
+                            else:
+                                fis = fis_object.get_dict()
+
+                            for fi in fis:
+                                prev_center = dict()
+                                for f in range(fi['frame_start'], _frameNum + 1):
+                                    object_data_item = self.scene.vcd.get_object_data(uid, point_name, f)
+
+                                    x = object_data_item['val'][0]
+                                    y = object_data_item['val'][1]
+                                    z = object_data_item['val'][2]
+                                    points3d_4xN = np.array([x, y, z, 1]).reshape(4, 1)
+                                    points3d_4xN_transformed = points3d_4xN
+                                    
+                                    if cs_data != self.coordinate_system:
+                                        src_cs = cs_data
+                                        dst_cs = self.coordinate_system
+                                        transform_src_dst, static = self.scene.get_transform(src_cs,
+                                                                                dst_cs, f)
+                                        if transform_src_dst is not None:
+                                            points3d_4xN_transformed = self.scene.transform_points3d_4xN(points3d_4xN,
+                                                                                        points_cs,
+                                                                                        self.coordinate_system)
+
+                                    name = object_data_item['name']
+
+                                    center = (points3d_4xN_transformed[0,0], points3d_4xN_transformed[1,0])
+                                    center_pix = self.point2Pixel(center)
+
+                                    # this is a dict to allow multiple trajectories
+                                    # (e.g. several cuboids per object)
+                                    if prev_center.get(name) is not None:
+                                        cv.line(_img, prev_center[name], center_pix, (0, 0, 0),
+                                                1, cv.LINE_AA)
+
+                                    cv.circle(_img, center_pix, 2,
+                                              self.params.colorMap[object_class], -1)
+
+                                    prev_center[name] = center_pix
+
                     ########################################
                     # mesh - Point-line-area structure
                     ########################################
@@ -727,7 +812,7 @@ class Image:
     Devised to draw bboxes, it can also project 3D entities (e.g. cuboids) using the calibration parameters
     '''
     class Params:
-        def __init__(self, _draw_trajectory=False, _colorMap=None, _ignore_classes=None, _draw_types=None, _barrel=None):
+        def __init__(self, _draw_trajectory=False, _colorMap=None, _ignore_classes=None, _draw_types=None, _barrel=None, _thickness=None):
             if _colorMap is None:
                 self.colorMap = dict()
             else:
@@ -749,28 +834,42 @@ class Image:
             else:
                 self.draw_barrel = False
 
+            if _thickness is not None:
+                self.thickness = _thickness
+            else:
+                self.thickness = 1
+
     def __init__(self, scene, camera_coordinate_system=None):
         assert (isinstance(scene, scl.Scene))
         self.scene = scene
         if camera_coordinate_system is not None:
             assert (scene.vcd.has_coordinate_system(camera_coordinate_system))
         self.camera_coordinate_system = camera_coordinate_system
-        self.camera = self.scene.get_camera(self.camera_coordinate_system)
+        self.camera = self.scene.get_camera(self.camera_coordinate_system, compute_remaps=False)
         self.params = Image.Params()
+
+    def reset_image(self):
+        img = np.zeros((self.camera.height, self.camera.width, 3), np.uint8) 
+        img.fill(255)
+        return img 
 
     def draw_points3d(self, _img, points3d_4xN, _color):
         # this function may return LESS than N points IF 3D points are BEHIND the camera
-        points2d_3xN, idx_valid = self.camera.project_points3d(points3d_4xN)
+        points2d_3xN, idx_valid = self.camera.project_points3d(points3d_4xN, remove_outside=True)
         if points2d_3xN is None:
             return
         rows, cols = points2d_3xN.shape
+        img_rows, img_cols, img_channels = _img.shape
         for i in range(0, cols):
             if idx_valid[i]:
                 if np.isnan(points2d_3xN[0, i]) or np.isnan(points2d_3xN[1, i]):
                     continue
-                cv.circle(_img, (utils.round(points2d_3xN[0, i]), utils.round(points2d_3xN[1, i])), 2, _color, -1)
+                center = (utils.round(points2d_3xN[0, i]), utils.round(points2d_3xN[1, i]))                            
+                if not utils.is_inside_image(img_cols, img_rows, center[0], center[1]):
+                    continue
+                cv.circle(_img, (int(center[0]), int(center[1])), 2, _color, -1)
 
-    def draw_cuboid(self, _img, _cuboid_vals, _class, _color):
+    def draw_cuboid(self, _img, _cuboid_vals, _class, _color, _thickness=1):
         assert (isinstance(_cuboid_vals, list))
         assert (len(_cuboid_vals) == 9)  # (X, Y, Z, RX, RY, RZ, SX, SY, SZ)
         # TODO cuboids with quaternions
@@ -778,9 +877,10 @@ class Image:
         # Generate object coordinates
         points3d_4x8 = utils.generate_cuboid_points_ref_4x8(_cuboid_vals)
 
-        points2d_4x8, idx_valid = self.camera.project_points3d(points3d_4x8)  # this function may return LESS than 8 points IF 3D points are BEHIND the camera
+        points2d_4x8, idx_valid = self.camera.project_points3d(points3d_4x8, remove_outside=True)  # this function may return LESS than 8 points IF 3D points are BEHIND the camera
         if points2d_4x8 is None:
             return
+        img_rows, img_cols, img_channels = _img.shape
 
         pairs = ([0, 1], [1, 2], [2, 3], [3, 0], [0, 4], [1, 5], [2, 6], [3, 7], [4, 5], [5, 6], [6, 7], [7, 4])
         for count, pair in enumerate(pairs):
@@ -789,8 +889,11 @@ class Image:
                 #    continue
                 p_a = (utils.round(points2d_4x8[0, pair[0]]), utils.round(points2d_4x8[1, pair[0]]))
                 p_b = (utils.round(points2d_4x8[0, pair[1]]), utils.round(points2d_4x8[1, pair[1]]))
-                cv.line(_img, p_a, p_b, _color, 1)
-        pass
+
+                if not utils.is_inside_image(img_cols, img_rows, p_a[0], p_b[1]) or not utils.is_inside_image(img_cols, img_rows, p_b[0], p_b[1]):
+                    continue
+
+                cv.line(_img, p_a, p_b, _color, _thickness)        
 
     def draw_bbox(self, _img, _bbox, _object_class, _color, add_border=False):
         pt1 = (int(round(_bbox[0] - _bbox[2]/2)), int(round(_bbox[1] - _bbox[3]/2)))
@@ -798,12 +901,17 @@ class Image:
 
         pta = (pt1[0], pt1[1] - 15)
         ptb = (pt2[0], pt1[1])
-
+        img_rows, img_cols, img_channels = _img.shape
         if add_border:
             cv.rectangle(_img, pta, ptb, _color, 2)
             cv.rectangle(_img, pta, ptb, _color, -1)
         cv.putText(_img, _object_class, (pta[0], pta[1] + 10), cv.FONT_HERSHEY_PLAIN, 0.6, (0,0,0), 1, cv.LINE_AA)
-        cv.rectangle(_img, pt1, pt2, _color, 2)
+
+        if utils.is_inside_image(img_cols, img_rows, pt1[0], pt1[1]) and utils.is_inside_image(img_cols, img_rows, pt2[0], pt2[1]):
+            cv.rectangle(_img, pt1, pt2, _color, 2)
+
+    def draw_line(self, _img, _pt1, _pt2, _color, _thickness=1):
+        cv.line(_img, _pt1, _pt2, _color, _thickness)
 
     def draw_trajectory(self, _img, _object_id, _frameNum, _params):
         object_class = self.scene.vcd.get_object(_object_id)['type']
@@ -933,12 +1041,42 @@ class Image:
                 point2d_prev = (x, y)
     '''
 
-    def draw(self, _img, _frameNum, _params=None):
+    def draw_cs(self, _img, cs_name, length=1.0, thickness=1):
+        '''
+        This function draws a coordinate system, as 3 lines of 1 meter length (Red, Green, Blue) corresponding to
+        the X-axis, Y-axis, and Z-axis of the coordinate system
+        '''
+        if not self.scene.vcd.has_coordinate_system(cs_name):
+            warnings.warn("WARNING: Trying to draw coordinate system" + cs_name + " not existing in VCD.")
+
+        x_axis_as_points3d_4x2 = np.array([[0.0, length], [0.0, 0.0], [0.0, 0.0], [1.0, 1.0]])
+        y_axis_as_points3d_4x2 = np.array([[0.0, 0.0], [0.0, length], [0.0, 0.0], [1.0, 1.0]])
+        z_axis_as_points3d_4x2 = np.array([[0.0, 0.0], [0.0, 0.0], [0.0, length], [1.0, 1.0]])        
+        
+        x_axis, _ = self.scene.project_points3d_4xN(x_axis_as_points3d_4x2, cs_name, cs_cam=self.camera_coordinate_system)
+        y_axis, _ = self.scene.project_points3d_4xN(y_axis_as_points3d_4x2, cs_name, cs_cam=self.camera_coordinate_system)
+        z_axis, _ = self.scene.project_points3d_4xN(z_axis_as_points3d_4x2, cs_name, cs_cam=self.camera_coordinate_system)
+        
+        self.draw_line(_img, (int(x_axis[0,0]), int(x_axis[1,0])), (int(x_axis[0,1]), int(x_axis[1,1])), (0, 0, 255), thickness)
+        self.draw_line(_img, (int(y_axis[0,0]), int(y_axis[1,0])), (int(y_axis[0,1]), int(y_axis[1,1])), (0, 255, 0), thickness)
+        self.draw_line(_img, (int(z_axis[0,0]), int(z_axis[1,0])), (int(z_axis[0,1]), int(z_axis[1,1])), (255, 0, 0), thickness)
+
+        cv.putText(_img, "X", (int(x_axis[0,1]), int(x_axis[1,1])), cv.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 255), thickness, cv.LINE_AA)
+        cv.putText(_img, "Y", (int(y_axis[0,1]), int(y_axis[1,1])), cv.FONT_HERSHEY_DUPLEX, 0.8, (0, 255, 0), thickness, cv.LINE_AA)
+        cv.putText(_img, "Z", (int(z_axis[0,1]), int(z_axis[1,1])), cv.FONT_HERSHEY_DUPLEX, 0.8, (255, 0, 0), thickness, cv.LINE_AA)
+
+    def draw(self, _img=None, _frameNum=None, _params=None, **kwargs):
         if _params is not None:
             assert(isinstance(_params, Image.Params))
             self.params = _params
 
+        if _img is not None:
+            img = _img
+        else:
+            img = self.reset_image()
+
         # Explore objects at VCD
+        objects = None
         if _frameNum is not None:
             vcd_frame = self.scene.vcd.get_frame(_frameNum)
             if 'objects' in vcd_frame:
@@ -962,81 +1100,337 @@ class Image:
                 # Let's create a new entry for this class
                 self.params.colorMap[object_class] = (randint(0, 255), randint(0, 255), randint(0, 255))
 
-            # Get current value at this frame
-            if "object_data" in object:
-                for object_data_key in object['object_data'].keys():
-                    for object_data_item in object['object_data'][object_data_key]:
-                        ############################################
-                        # bbox
-                        ############################################
-                        if object_data_key == "bbox":
-                            bbox = object_data_item['val']
-                            bbox_name = object_data_item['name']
-                            if 'coordinate_system' in object_data_item:  # Check if this bbox corresponds to this camera
-                                if object_data_item['coordinate_system'] != self.camera_coordinate_system:
-                                    continue
-                                
-                            if len(object['object_data'][object_data_key]) == 1:
-                                # Only one bbox, let's write the class name
-                                text = object_id + " " + object_class
-                            else:
-                                # If several bounding boxes, let's write the bounding box name
-                                #text = "(" + object_id + "," + name +")-(" + object_class + ")-(" + bbox_name +")"
-                                text = object_id + " " + bbox_name
-                            self.draw_bbox(_img, bbox, text, self.params.colorMap[object_class], True)
-                            if self.params.draw_trajectory:
-                                self.draw_trajectory(_img, object_id, _frameNum, _params)
-                        ############################################
-                        # cuboid
-                        ############################################
-                        elif object_data_key == "cuboid":
-                            # Read coordinate system of this cuboid, and transform into camera coordinate system
-                            cuboid_cs = object_data_item['coordinate_system']
-                            cuboid_vals = object_data_item['val']
-                            cuboid_vals_transformed = self.scene.transform_cuboid(cuboid_vals,
-                                                                                  cuboid_cs,
-                                                                                  self.camera_coordinate_system)
-                            self.draw_cuboid(_img, cuboid_vals_transformed, "", self.params.colorMap[object_class])
-                        ############################################
-                        # mat as points3d_4xN
-                        ############################################
-                        elif object_data_key == "mat":
-                            width = object_data_item['width']
-                            height = object_data_item['height']
+            # Get current value at this frame   
+            if 'object_data' in object:
+                object_data = object['object_data'] 
+            else:
+                # Check if the object has an object_data in root
+                object_ = self.scene.vcd.get_object(object_id)
+                if 'object_data' in object_:
+                    object_data = object_['object_data']
 
-                            if height == 4:
-                                # These are points 4xN
-                                color = self.params.colorMap[object_class]
-                                points3d_4xN = np.array(object_data_item['val']).reshape(height, width)
-                                points_cs = object_data_item['coordinate_system']
+            # Loop over object data            
+            for object_data_key in object_data.keys():
+                for object_data_item in object_data[object_data_key]:
+                    ############################################
+                    # bbox
+                    ############################################
+                    if object_data_key == "bbox":
+                        bbox = object_data_item['val']
+                        bbox_name = object_data_item['name']
+                        if 'coordinate_system' in object_data_item:  # Check if this bbox corresponds to this camera
+                            if object_data_item['coordinate_system'] != self.camera_coordinate_system:
+                                continue
+                            
+                        if len(object_data[object_data_key]) == 1:
+                            # Only one bbox, let's write the class name
+                            text = object_id + " " + object_class
+                        else:
+                            # If several bounding boxes, let's write the bounding box name
+                            #text = "(" + object_id + "," + name +")-(" + object_class + ")-(" + bbox_name +")"
+                            text = object_id + " " + bbox_name
+                        self.draw_bbox(img, bbox, text, self.params.colorMap[object_class], True)
+                        if self.params.draw_trajectory:
+                            self.draw_trajectory(img, object_id, _frameNum, _params)
+                    ############################################
+                    # cuboid
+                    ############################################
+                    elif object_data_key == "cuboid":
+                        # Read coordinate system of this cuboid, and transform into camera coordinate system
+                        cuboid_cs = object_data_item['coordinate_system']
+                        cuboid_vals = object_data_item['val']
+                        cuboid_vals_transformed = self.scene.transform_cuboid(cuboid_vals,
+                                                                                cuboid_cs,
+                                                                                self.camera_coordinate_system)
+                        self.draw_cuboid(img, cuboid_vals_transformed, "", self.params.colorMap[object_class], self.params.thickness)
+                    ############################################
+                    # mat as points3d_4xN
+                    ############################################
+                    elif object_data_key == "mat":
+                        width = object_data_item['width']
+                        height = object_data_item['height']
 
-                                # First convert from the src coordinate system into the camera coordinate system
-                                points3d_4xN_transformed = self.scene.transform_points3d_4xN(points3d_4xN,
-                                                                  points_cs, self.camera_coordinate_system)
+                        if height == 4:
+                            # These are points 4xN
+                            color = self.params.colorMap[object_class]
+                            points3d_4xN = np.array(object_data_item['val']).reshape(height, width)
+                            points_cs = object_data_item['coordinate_system']
 
-                                if 'attributes' in object_data_item:
-                                    for attr_type, attr_list in object_data_item['attributes'].items():
-                                        if attr_type == 'vec':
-                                            for attr in attr_list:
-                                                if attr['name'] == 'color':
-                                                    color = attr['val']
+                            # First convert from the src coordinate system into the camera coordinate system
+                            points3d_4xN_transformed = self.scene.transform_points3d_4xN(points3d_4xN,
+                                                                points_cs, self.camera_coordinate_system)
 
-                                self.draw_points3d(_img, points3d_4xN_transformed, color)
+                            if 'attributes' in object_data_item:
+                                for attr_type, attr_list in object_data_item['attributes'].items():
+                                    if attr_type == 'vec':
+                                        for attr in attr_list:
+                                            if attr['name'] == 'color':
+                                                color = attr['val']
+
+                            self.draw_points3d(img, points3d_4xN_transformed, color)
 
         # Draw info
         if self.camera_coordinate_system is not None:
             text = self.camera_coordinate_system
             margin = 20
-            cv.putText(_img, text,
+            cv.putText(img, text,
                        (margin, margin),
                        cv.FONT_HERSHEY_DUPLEX, 0.8, (0, 0, 0), 2, cv.LINE_AA)
-            cv.putText(_img, text,
+            cv.putText(img, text,
                        (margin, margin),
                        cv.FONT_HERSHEY_DUPLEX, 0.8, (255, 255, 255), 1, cv.LINE_AA)
 
         # Draw barrel
         # if self.params.draw_barrel:
         #    self.draw_barrel_distortion_grid(_img, (0, 255, 0), False, False)
+
+        return img
+
+
+class TopViewOrtho(Image):
+    def __init__(self, scene, camera_coordinate_system=None, stepX=1.0, stepY=1.0):
+        super().__init__(scene, camera_coordinate_system=camera_coordinate_system)
+            
+        # Initialize image      
+        self.images = {}
+
+        # Grid config
+        self.stepX = stepX  # meters
+        self.stepY = stepY
+        self.gridTextColor = (0, 0, 0)
+
+    ##################################
+    # Public functions
+    ##################################
+    def draw(self, _img=None, frameNum=None, params=None, **kwargs):
+        # Create image
+        if _img is not None:
+            img = _img
+        else:
+            img = super().reset_image()
+
+         # Compute and draw warped images
+        for key, value in kwargs.items():
+            if key == 'add_images':
+                self.__add_images(value, frameNum)
+
+        # Draw BEW
+        self.__draw_BEVs(img, frameNum)
+
+        # Draw base grid
+        self.__draw_topview_base(img)
+
+        # Draw coordinate systems
+        for key, value in kwargs.items():
+            if key == 'cs_names_to_draw':
+                for cs_name in value:
+                    self.draw_cs(img, cs_name, 2, 2)
+
+        # Draw objects
+        super().draw(img, frameNum, params)
+
+        # Draw frame info
+        self.__draw_info(img, frameNum)
+
+        return img
+
+    ##################################
+    # Internal functions
+    ##################################
+    def __add_images(self, imgs, frameNum):
+        if imgs is not None:
+            h = self.camera.height  # this is the orthographic camera
+            w = self.camera.width
+            assert (isinstance(imgs, dict))
+            num_cams = len(imgs)
+            cams = {}
+
+            need_to_recompute_weights_acc = False
+            need_to_recompute_maps = {}
+            need_to_recompute_weights = {}
+
+            for cam_name, img in imgs.items():
+                assert self.scene.vcd.has_coordinate_system(cam_name)
+                cam = self.scene.get_camera(cam_name, frameNum, compute_remaps=False)  # this call creates an entry inside scene
+                cams[cam_name] = cam
+                self.images.setdefault(cam_name, {})
+                self.images[cam_name]['img'] = img
+                _, static = self.scene.get_transform(self.camera_coordinate_system, cam_name, frameNum)
+
+                # Compute distances to this camera and add to weight map
+                need_to_recompute_maps[cam_name] = False
+                need_to_recompute_weights[cam_name] = False
+
+                if (num_cams > 1 and not static) or (
+                       num_cams > 1 and static and 'weights' not in self.images[cam_name]):
+                    need_to_recompute_weights[cam_name] = True
+                    need_to_recompute_weights_acc = True
+
+                if (not static) or (static and 'mapX' not in self.images[cam_name]):
+                    need_to_recompute_maps[cam_name] = True
+
+                # For each camera, compute the remaps and weights
+                if need_to_recompute_maps:
+                    map_x, map_y = self.scene.create_img_projection_maps(cam_src_name=cam_name, cam_dst_name=self.camera.name, frameNum=frameNum)
+                    self.images[cam_name]['mapX'] = map_x
+                    self.images[cam_name]['mapY'] = map_y
+                
+                if need_to_recompute_weights[cam_name]:
+                    print(cam_name + ' top view weights computation...')
+                    #self.images[cam_name].setdefault('weights', np.zeros((h, w, 3), dtype=np.float32))
+                    #self.images[cam_name].setdefault('weights', (1.0/num_cams)*np.ones((h, w, 3), dtype=np.float32))
+
+                    # Weight according to distance to center point in image
+                    # Might be good for fisheye
+                    r_max_2 = (w/2)*(w/2) + (h/2)*(h/2)
+                    x = map_x[:,:,0]
+                    y = map_x[:,:,1]
+                    r_2 = (x - w/2)**2 + (y - h/2)**2  # this is a matrix 
+                    weights = 1 - r_2/r_max_2
+                    temp = np.zeros((h, w, 3), dtype=np.float32)
+                    temp[:,:,0] = weights
+                    temp[:,:,1] = weights
+                    temp[:,:,2] = weights
+                    self.images[cam_name].setdefault('weights', temp)
+
+
+            # Compute accumulated weights if more than 1 camera
+            if need_to_recompute_weights_acc:
+                self.images['weights_acc'] = np.ones((h, w, 3), dtype=np.float32)
+                #for idx, (cam_name, cam) in enumerate(cams.items()):
+                #    self.images['weights_acc'] = cv.add(self.images[cam_name]['weights'], self.images['weights_acc'])
+        
+    def __draw_topview_base(self, _img):
+        # Grid x (1/2)
+        for x in np.arange(self.camera.xmin, self.camera.xmax + self.stepX, self.stepX):
+            x_0 = round(x)
+            y_0 = self.camera.ymin
+            y_1 = self.camera.ymax
+            #points3d_4x2 = np.array([[x_0, y_0, 0.0, 1.0], [x_0, y_1, 0.0, 1.0]])
+            points3d_4x2 = np.array([[x_0, x_0], [y_0, y_1], [0.0, 0.0], [1.0, 1.0]])
+            points2d_3x2, _ = self.camera.project_points3d(points3d_4xN=points3d_4x2)
+            self.draw_line(_img, (int(points2d_3x2[0,0]), int(points2d_3x2[1,0])), (int(points2d_3x2[0,1]), int(points2d_3x2[1,1])), (127, 127, 127))
+        # Grid y (1/2)
+        for y in np.arange(self.camera.ymin, self.camera.ymax + self.stepY, self.stepY):
+            y_0 = round(y)
+            x_0 = self.camera.xmin
+            x_1 = self.camera.xmax
+            #points3d_4x2 = np.array([[x_0, y_0, 0.0, 1.0], [x_1, y_0, 0.0, 1.0]])
+            points3d_4x2 = np.array([[x_0, x_1], [y_0, y_0], [0.0, 0.0], [1.0, 1.0]])
+            points2d_3x2, _ = self.camera.project_points3d(points3d_4xN=points3d_4x2)
+            self.draw_line(_img, (int(points2d_3x2[0,0]), int(points2d_3x2[1,0])), (int(points2d_3x2[0,1]), int(points2d_3x2[1,1])), (127, 127, 127))
+        # Grid x (2/2)
+        for x in np.arange(self.camera.xmin, self.camera.xmax + self.stepX, self.stepX):
+            x_0 = round(x)
+            y_0 = self.camera.ymin            
+            points3d_4x1 = np.array([[x_0], [y_0], [0.0], [1.0]])
+            points2d_3x1, _ = self.camera.project_points3d(points3d_4xN=points3d_4x1)
+            cv.putText(_img, str(round(x_0)) + " m", (int(points2d_3x1[0,0]) + 5, 15), cv.FONT_HERSHEY_PLAIN,
+                           0.6, self.gridTextColor, 1, cv.LINE_AA)  
+        # Grid y (2/2)
+        for y in np.arange(self.camera.ymin, self.camera.ymax + self.stepY, self.stepY):
+            y_0 = round(y)
+            x_0 = self.camera.xmin            
+            points3d_4x1 = np.array([[x_0], [y_0], [0.0], [1.0]])
+            points2d_3x1, _ = self.camera.project_points3d(points3d_4xN=points3d_4x1)
+            cv.putText(_img, str(round(y_0)) + " m", (5, int(points2d_3x1[1,0]) - 5), cv.FONT_HERSHEY_PLAIN,
+                           0.6, self.gridTextColor, 1, cv.LINE_AA)                   
+
+        # World origin
+        #cv.circle(self.topView, self.point2Pixel((0.0, 0.0)), 4, (255, 255, 255), -1)
+        #cv.line(self.topView, self.point2Pixel((0.0, 0.0)), self.point2Pixel((5.0, 0.0)), (0, 0, 255), 2)
+        #cv.line(self.topView, self.point2Pixel((0.0, 0.0)), self.point2Pixel((0.0, 5.0)), (0, 255, 0), 2)
+        #cv.putText(self.topView, "X", self.point2Pixel((5.0, -0.5)), cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 255), 1, cv.LINE_AA)
+        #cv.putText(self.topView, "Y", self.point2Pixel((-1.0, 5.0)), cv.FONT_HERSHEY_PLAIN, 1.0, (0, 255, 0), 1, cv.LINE_AA)
+
+    def __draw_BEV(self, cam_name):
+        img = self.images[cam_name]['img']
+
+        mapX = self.images[cam_name]['mapX']
+        mapY = self.images[cam_name]['mapY']
+        bev = cv.remap(img, mapX, mapY, interpolation=cv.INTER_LINEAR,
+                        borderMode=cv.BORDER_CONSTANT)
+
+        bev32 = np.float32(bev)
+        if 'weights' in self.images[cam_name]:
+            cv.multiply(self.images[cam_name]['weights'], bev32, bev32)
+
+        #cv.imshow('bev' + cam_name, bev)
+        #cv.waitKey(1)
+
+        bev832 = np.uint8(bev32)
+        #cv.imshow('bev8' + cam_name, bev832)
+        #cv.waitKey(1)
+
+        return bev32
+
+    def __draw_BEVs(self, _img, _frameNum=None):
+        """
+        This function draws BEVs into the topview
+        :param _frameNum:
+        :return:
+        """
+        num_cams = len(self.images)
+        if num_cams == 0:
+            return
+
+        h = self.camera.height
+        w = self.camera.width
+        # Prepare image with drawing for this call
+        acc32 = np.zeros((h, w, 3), dtype=np.float32)  # black background
+
+        for cam_name in self.images:
+            if self.scene.get_camera(cam_name, _frameNum) is not None:
+                temp32 = self.__draw_BEV(cam_name=cam_name)
+                #mask = np.zeros((h, w), dtype=np.uint8)
+                #mask[temp32 > 0] = 255
+                #mask = (temp32 > 0)
+                if num_cams > 1:
+                    acc32 = cv.add(temp32, acc32)
+        if num_cams > 1:
+            acc32 /= self.images['weights_acc']
+        else:
+            acc32 = temp32
+        acc8 = np.uint8(acc32)
+        #cv.imshow('acc', acc8)
+        #cv.waitKey(1)
+
+        # Copy into topView only new pixels
+        nonzero = (acc8>0)
+        _img[nonzero] = acc8[nonzero]
+
+    def __draw_info(self, topView, frameNum=None):
+        h = topView.shape[0]
+        w = topView.shape[1]
+        w_margin = 250
+        h_margin = 140
+        h_step = 20
+        font_size = 0.8
+        cv.putText(topView, "Img. Size(px): " + str(w) + " x " + str(h),
+                   (w - w_margin, h - h_margin),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        if frameNum is None:
+            frameNum = -1
+        cv.putText(topView, "Frame: " + str(frameNum),
+                   (w - w_margin, h - h_margin + h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        cv.putText(topView, "CS: " + str(self.camera_coordinate_system),
+                   (w - w_margin, h - h_margin + 2*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+
+        cv.putText(topView, "RangeX (m): (" + str(self.camera.xmin) + ", " + str(self.camera.xmax) + ")",
+                   (w - w_margin, h - h_margin + 3*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        cv.putText(topView, "RangeY (m): (" + str(self.camera.ymin) + ", " + str(self.camera.ymax) + ")",
+                   (w - w_margin, h - h_margin + 4*h_step),
+                   cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+
+        #cv.putText(topView, "OffsetX (px): (" + str(self.params.offsetX) + ", " + str(self.params.offsetX) + ")",
+        #           (w - w_margin, h - h_margin + 5*h_step),
+        #           cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
+        #cv.putText(topView, "OffsetY (px): (" + str(self.params.offsetY) + ", " + str(self.params.offsetY) + ")",
+        #           (w - w_margin, h - h_margin + 6*h_step),
+        #           cv.FONT_HERSHEY_PLAIN, font_size, (0, 0, 0), 1, cv.LINE_AA)
 
 
 class FrameInfoDrawer:

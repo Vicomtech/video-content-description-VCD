@@ -3,9 +3,13 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
+# Check version
+with open(file="vcd.version") as f:
+    vcd_version = f.readlines()[0]   # e.g. "5.0.1"    
+
 setuptools.setup(
     name="vcd",
-    version="5.0.0",
+    version=vcd_version,
     author="Marcos Nieto",
     author_email="mnieto@vicomtech.org",
     description="Video Content Description (VCD) library",

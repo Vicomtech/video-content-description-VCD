@@ -1,20 +1,16 @@
 """
-VCD (Video Content Description) library v5.0.0
+VCD (Video Content Description) library v5.0.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 5.0.0.
+VCD is a Python library to create and manage VCD content version 5.0.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
 
-
-import sys
-sys.path.insert(0, "..")
-import screeninfo
 import cv2 as cv
 import numpy as np
 
@@ -35,16 +31,12 @@ def draw_bboxes(vcd_file_name, image_file_name, save_image):
     #textDrawer = draw.TextDrawer()
     frameInfoDrawer = draw.FrameInfoDrawer(vcd)
 
-    # Get the size of the screen
-    screen = screeninfo.get_monitors()[0]
-
     # Get image
     img = cv.imread(image_file_name)
     height, width = img.shape[:2]
 
     cv.namedWindow('Bounding boxes', cv.WINDOW_NORMAL)
-    cv.moveWindow('Bounding boxes', screen.x + screen.width // 8, screen.y + screen.height // 8)
-    cv.resizeWindow('Bounding boxes', (int(3 * screen.width / 4), int(3 * screen.height / 4)))
+    cv.resizeWindow('Bounding boxes', width, height)
 
     # Prepare color map
     colorMap = {'Car': (0, 230, 118), 'Bus': (143, 131, 0), 'Semaphore': (0, 171, 255), 'ZebraCross': (91, 24, 194)}

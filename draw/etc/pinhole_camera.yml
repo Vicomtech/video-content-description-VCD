@@ -1,0 +1,22 @@
+%YAML:1.0
+---
+calibrated: 1
+sensor_width: 1.
+sensor_height: 1.
+image_width: 1280
+image_height: 1024
+fisheye: 0
+camera_matrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 1.6239981402529377e+03, 0., 5.8009290614278507e+02, 0.,
+       1.6239981402529377e+03, 5.1882921323878338e+02, 0., 0., 1. ]
+distortion_coefficients: !!opencv-matrix
+   rows: 1
+   cols: 5
+   dt: d
+   data: [ -6.3915150661847042e-01, 1.0889430189769431e+00,
+       -6.8258772248369305e-03, -7.1592598755019395e-03,
+       -2.0196944663212810e+00 ]
+calibration_error: 1.2610722157660241e+00

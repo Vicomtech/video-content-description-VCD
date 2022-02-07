@@ -15,6 +15,7 @@
 
 // -- Project -- //
 #include <fstream>
+#include <sstream>
 #include <iostream>
 #if defined(__linux__)
     #include <experimental/filesystem>
@@ -34,8 +35,6 @@
 #include "vcd_types.h"
 #include "test_utils.h"
 
-#include "vcd_impl.h"
-
 static char asset_path[] = TEST_ASSET_FOLDER;
 
 using vcd::VCD;
@@ -48,30 +47,6 @@ using vcd::types::Boolean;
 using std::string;
 
 using nlohmann::json;
-
-// Indirection class to get inner elements of vcd instance
-namespace vcd {
-class VCD_Inner : public vcd::VCD_Impl {
- public:
-    VCD_Inner() : vcd::VCD_Impl("") {
-    }
-
-    json*
-    get_inner_element(const vcd::ElementType type, const std::string &uid_str) {
-        return get_element(type, uid_str);
-    }
-
-    json*
-    get_object(const std::string &uid_str) {
-        return vcd::VCD_Impl::get_object(uid_str);
-    }
-
-    json*
-    get_metadata() {
-        return vcd::VCD_Impl::get_metadata();
-    }
-};
-}  // namespace vcd
 
 std::string
 getStreamAsString(const std::istream& in) {
@@ -134,42 +109,27 @@ SCENARIO("Create some basic content, without time information, and do some "
             }
             // 4.- Write into string
             VCD_ptr vcd_tst = VCD::create();
-            const std::string vcd_string_pretty = vcd->stringify();
             const bool indent = false;
             const std::string vcd_string_nopretty = vcd->stringify(indent);
 
             // (AVOID RIGHT NOW) 5.- We can ask VCD
 
-            // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_create_search_simple_pretty_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
-            std::ofstream o_p(vcd_outp_path);
-            o_p << vcd_string_pretty << std::endl;
-            o_p.close();
-
-         string out_np = "vcd430_test_create_search_simple_nopretty_OUT.json";
-            fs::path vcd_outnp_path = fs::path(asset_path) / fs::path(out_np);
+            string out_np = "openlabel100_test_create_search_simple_OUT.json";
+            fs::path vcd_outnp_path = fs::path(asset_path)
+                                      / fs::path("out")
+                                      / fs::path(out_np);
             std::ofstream o_np(vcd_outnp_path);
             o_np << vcd_string_nopretty << std::endl;
             o_np.close();
 
             // Get the reference JSON text
             //  - No pretty version
-            char vcd_np[] = "vcd430_test_create_search_simple_nopretty.json";
+            char vcd_np[] = "openlabel100_test_create_search_simple.json";
             fs::path vcd_np_path = fs::path(asset_path) / fs::path(vcd_np);
-//            std::cout << vcd_np_path.c_str() << std::endl;
             REQUIRE(fs::exists(vcd_np_path));
             // Compare both json definition
             CHECK(compare_json_files(vcd_outnp_path.string(),
                                      vcd_np_path.string()));
-
-            //  - Pretty version
-            char vcd_p[] = "vcd430_test_create_search_simple_pretty.json";
-            fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
-            REQUIRE(fs::exists(vcd_p_path));
-            // Compare both json definition
-            CHECK(compare_json_files(vcd_outp_path.string(),
-                                     vcd_p_path.string()));
         }
 
         THEN("Write into string") {
@@ -204,8 +164,11 @@ SCENARIO("Create some basic content, without time information, and do some "
             vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 99, 99}, 5);
 
             // 4.- Save the json info into a file for comparisson
-            string out_p = "vcd430_test_create_frames_simple_pretty_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            string out_p =
+                "openlabel100_test_create_frames_simple_online_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path)
+                                    / fs::path("out")
+                                    / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             const std::string vcd_string_pretty = vcd->stringify();
             o_p << vcd_string_pretty << std::endl;
@@ -213,7 +176,7 @@ SCENARIO("Create some basic content, without time information, and do some "
 
             // 5.- Compare with reference json files
             //  - Pretty version
-            char vcd_p[] = "vcd430_test_create_frames_simple_pretty.json";
+            char vcd_p[] = "openlabel100_test_create_frames_simple_online.json";
             fs::path vcd_p_path = fs::path(asset_path) / fs::path(vcd_p);
             REQUIRE(fs::exists(vcd_p_path));
             // Compare both json definition
@@ -255,23 +218,24 @@ SCENARIO("Create some basic content, without time information, and do some "
             vcd->add_bbox_to_object(uid_peter, "body", {0, 0, 99, 99}, 5);
 
             // 4.- Save the json info into a file for comparisson
-            string out_p = "vcd430_test_create_frames_uuid_pretty_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
-            std::ofstream o_p(vcd_outp_path);
-            const std::string json_string = vcd->stringify();
-            o_p << json_string << std::endl;
-            o_p.close();
+            // string out_p = "openlabel100_test_create_frames_uuid_OUT.json";
+            // fs::path vcd_outp_path = fs::path(asset_path)
+            // / fs::path("out")  / fs::path(out_p);
+            // std::ofstream o_p(vcd_outp_path);
+            // const std::string json_string = vcd->stringify();
+            // o_p << json_string << std::endl;
+            // o_p.close();
 
             // 5.- Check if the uuid values are stored in the file
             const std::string json_string_ugly = vcd->stringify(false);
             json data = json::parse(json_string_ugly);
 
-            REQUIRE(data.contains("vcd"));
-            REQUIRE(data["vcd"].contains("objects"));
+            REQUIRE(data.contains("openlabel"));
+            REQUIRE(data["openlabel"].contains("objects"));
 
             // Check the size of uuid values
             size_t cont = 0;
-            for (auto& el : data["vcd"]["objects"].items()) {
+            for (auto& el : data["openlabel"]["objects"].items()) {
                 CHECK(el.key().size() == 36);
                 ++cont;
             }
@@ -294,40 +258,49 @@ SCENARIO("Create some basic content, without time information, and do some "
                                 "http://www.vicomtech.org/viulib/ontology");
             const vcd::ont_uid ont_uid_2 = vcd->add_ontology(
                                 "http://www.alternativeURL.org/ontology");
-            const vcd::ont_uid ont_uid_1_bis = vcd->add_ontology(
-                                "http://www.vicomtech.org/viulib/ontology");
+            // const vcd::ont_uid ont_uid_1_bis = vcd->add_ontology(
+            //                    "http://www.vicomtech.org/viulib/ontology");
 
-            REQUIRE(ont_uid_1 == ont_uid_1_bis);
+            // REQUIRE(ont_uid_1 == ont_uid_1_bis);
             REQUIRE(ont_uid_1 != ont_uid_2);
 
             // 3.- Create the Object
+            vcd::element_args carlota_args;
+            carlota_args.semantic_type = "#Car";
+            carlota_args.ontology_uid = ont_uid_1;
+            const std::string uid_carlota = vcd->add_object(
+                                            "CARLOTA", carlota_args);
+            vcd->add_text_to_object(uid_carlota, "brand", "Toyota");
+            vcd->add_text_to_object(uid_carlota, "model", "Prius");
+
             vcd::element_args marcos_args;
-            marcos_args.semantic_type = "person";
-            marcos_args.ontology_uid = ont_uid_1;
-            const std::string uid_marcos = vcd->add_object("marcos",
+            marcos_args.semantic_type = "#Person";
+            marcos_args.ontology_uid = ont_uid_2;
+            const std::string uid_marcos = vcd->add_object("Marcos",
                                                            marcos_args);
-            CHECK(uid_marcos == "0");
+            CHECK(uid_marcos == "1");
 
             // 4.- Add some data to the object
             // Define the internal objects for marcos
-            vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30});
-            vcd->add_bbox_to_object(uid_marcos, "body", {0, 0, 60, 120});
-            vcd->add_vec_to_object(uid_marcos, "speed", {0.0f, 0.2f});
-            vcd->add_num_to_object(uid_marcos, "accel", 0.1);
+            vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30}, 2);
+            vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30}, 3);
+            vcd->add_bbox_to_object(uid_marcos, "head", {10, 10, 30, 30}, 4);
 
             // Generate json data
             const bool pretty = true;
             const std::string vcd_out_pretty = vcd->stringify(pretty);
 
             // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_ontology_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            string out_p = "openlabel100_test_ontology_list_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path)
+                                    / fs::path("out")
+                                    / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             o_p << vcd_out_pretty << std::endl;
             o_p.close();
 
             // Read reference JSON file
-            string ref_p = "vcd430_test_ontology.json";
+            string ref_p = "openlabel100_test_ontology_list.json";
             fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
             std::ifstream ref_file_data(vcd_refp_path);
             json ref_data;
@@ -369,14 +342,16 @@ SCENARIO("Create some basic content, without time information, and do some "
             const std::string vcd_out_pretty = vcd->stringify(pretty);
 
             // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_objects_without_data_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            string out_p = "openlabel100_test_objects_without_data_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path)
+                                    / fs::path("out")
+                                    / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             o_p << vcd_out_pretty << std::endl;
             o_p.close();
 
             // Read reference JSON file
-            string ref_p = "vcd430_test_objects_without_data.json";
+            string ref_p = "openlabel100_test_objects_without_data.json";
             fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
             std::ifstream ref_file_data(vcd_refp_path);
             json ref_data;
@@ -394,11 +369,15 @@ SCENARIO("Create some basic content, without time information, and do some "
         THEN("VCD loads and saves properly") {
             // 1.- Create VCD from file
             VCD_ptr vcd = VCD::create();
-            const string ref_file = "vcd430_test_create_search_mid.json";
+            const string ref_file =
+                "openlabel100_test_create_search_mid.json";
             fs::path vcd_r_path = fs::path(asset_path) / fs::path(ref_file);
             vcd->load(vcd_r_path.string());
-            const string gen_file = "vcd430_test_create_search_mid_TEST.json";
-            fs::path vcd_g_path = fs::path(asset_path) / fs::path(gen_file);
+            const string gen_file =
+                "openlabel100_test_create_search_mid_TEST.json";
+            fs::path vcd_g_path = fs::path(asset_path)
+                                / fs::path("out")
+                                / fs::path(gen_file);
             vcd->save(vcd_g_path.string());
             // 2.- Re-load generated file
             VCD_ptr vcd2 = VCD::create();
@@ -414,7 +393,7 @@ SCENARIO("Create some basic content, without time information, and do some "
     GIVEN("Extra metadata values") {
         THEN("The metadata can be updated") {
             // 1.- Create VCD from file
-            vcd::VCD_Inner vcd;
+            vcd::VCD_ptr vcd = VCD::create();
 
             const std::string annotator = "Algorithm001";
             const std::string comment =
@@ -423,18 +402,18 @@ SCENARIO("Create some basic content, without time information, and do some "
             const std::string file_version = "2.0";
             // A friendly name
             const std::string name = "vcd_" + file_version + "-" + annotator;
-            vcd.add_annotator(annotator);
-            vcd.add_comment(comment);
-            vcd.add_file_version(file_version);
-            vcd.add_name(name);
+            vcd->add_annotator(annotator);
+            vcd->add_comment(comment);
+            vcd->add_file_version(file_version);
+            vcd->add_name(name);
 
             // Other customized metadata can be added as well
             vcd::meta_props props = {
                 {"target", "Test track"},
                 {"origin", "synthetic"}};
-            vcd.add_metadata_properties(props);
+            vcd->add_metadata_properties(props);
 
-            json *meta = vcd.get_metadata();
+            json *meta = vcd->get_metadata();
             REQUIRE((*meta)["annotator"] == annotator);
             REQUIRE((*meta)["comment"] == comment);
         }
@@ -443,10 +422,10 @@ SCENARIO("Create some basic content, without time information, and do some "
     GIVEN("A simulated event set") {
         THEN("Simulate an online operation during 1000 frames") {
             // And cut-off every 100 frames into a new VCD
-            std::vector<vcd::VCD_Inner> vcds;
+            std::vector<vcd::VCD_ptr> vcds;
             vcds.reserve(10);
             vcd::obj_uid uid = "-1";
-            vcd::VCD *vcd_cur = nullptr;
+            vcd::VCD* vcd_cur = nullptr;
             // Define carlota arguments
             vcd::element_args carlota_args;
             carlota_args.semantic_type = "Car";
@@ -455,8 +434,8 @@ SCENARIO("Create some basic content, without time information, and do some "
                 int frame_num_i = static_cast<int>(frame_num);
                 if (frame_num % 100 == 0) {
                     // Create new VCD
-                    vcds.emplace_back();
-                    vcd_cur = &vcds.back();
+                    vcds.emplace_back(VCD::create());
+                    vcd_cur = vcds.back().get();
                     // Optionally we could here dump into JSON file
                     if (frame_num == 0) {
                         // leave VCD to assign uid = 0
@@ -481,8 +460,8 @@ SCENARIO("Create some basic content, without time information, and do some "
             }
             json* obj = nullptr;
             for (auto& vcd_this : vcds) {
-                REQUIRE(vcd_this.get_num_objects() == 1);
-                obj = vcd_this.get_object(uid);
+                REQUIRE(vcd_this->get_num_objects() == 1);
+                obj = vcd_this->get_object(uid);
                 REQUIRE(obj != nullptr);
                 REQUIRE((*obj)["name"] == "CARLOTA");
                 REQUIRE((*obj)["type"] == "Car");
@@ -548,14 +527,17 @@ SCENARIO("Create some basic content, without time information, and do some "
             const std::string vcd_out_pretty = vcd->stringify(pretty);
 
             // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_general_scene_definition_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            string out_p =
+                "openlabel100_test_general_scene_definition_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path)
+                                    / fs::path("out")
+                                    / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             o_p << vcd_out_pretty << std::endl;
             o_p.close();
 
             // Read reference JSON file
-            string ref_p = "vcd430_test_general_scene_definition.json";
+            string ref_p = "openlabel100_test_general_scene_definition.json";
             fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
             std::ifstream ref_file_data(vcd_refp_path);
             json ref_data;
@@ -607,14 +589,16 @@ SCENARIO("Create some basic content, without time information, and do some "
             const std::string vcd_out_pretty = vcd->stringify(pretty);
 
             // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_poly2d_definition_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            string out_p = "openlabel100_test_poly2d_definition_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path)
+                                    / fs::path("out")
+                                    / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             o_p << vcd_out_pretty << std::endl;
             o_p.close();
 
             // Read reference JSON file
-            string ref_p = "vcd430_test_poly2d_definition.json";
+            string ref_p = "openlabel100_test_poly2d_definition.json";
             fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
             std::ifstream ref_file_data(vcd_refp_path);
             json ref_data;
@@ -633,7 +617,7 @@ SCENARIO("Create some basic content, without time information, and do some "
             using vcd::CoordinateSystemType;
             VCD_ptr vcd = VCD::create();
 
-            // reate the Object
+            // create the Object
             vcd::element_args marcos_args;
             marcos_args.semantic_type = "person";
             std::string uid_marcos = vcd->add_object("marcos", marcos_args);
@@ -663,14 +647,16 @@ SCENARIO("Create some basic content, without time information, and do some "
             const std::string vcd_out_pretty = vcd->stringify(pretty);
 
             // Save the json info into a file for comparisson
-            string out_p = "vcd430_test_matrix_definition_OUT.json";
-            fs::path vcd_outp_path = fs::path(asset_path) / fs::path(out_p);
+            string out_p = "openlabel100_test_matrix_definition_OUT.json";
+            fs::path vcd_outp_path = fs::path(asset_path)
+                                    / fs::path("out")
+                                    / fs::path(out_p);
             std::ofstream o_p(vcd_outp_path);
             o_p << vcd_out_pretty << std::endl;
             o_p.close();
 
             // Read reference JSON file
-            string ref_p = "vcd430_test_matrix_definition.json";
+            string ref_p = "openlabel100_test_matrix_definition.json";
             fs::path vcd_refp_path = fs::path(asset_path) / fs::path(ref_p);
             std::ifstream ref_file_data(vcd_refp_path);
             json ref_data;
@@ -683,18 +669,4 @@ SCENARIO("Create some basic content, without time information, and do some "
             REQUIRE(check_json_level(ref_data, test_data));
         }
     }
-
-    /*GIVEN("Read and write some VCD content") {
-        std::string fileName = vcd::SetupStrings::testDataPath +
-                            "/vcd430_test_create_search_simple_nopretty.json";
-        VCD vcd(fileName);
-
-        std::string json_string = vcd.stringify(false);
-        std::cout << json_string << std::endl;
-
-        std::string fileNameOut = vcd::SetupStrings::testDataPath +
-                           "vcd430_test_create_search_simple_nopretty_out.json";
-        vcd.save(fileNameOut, false);
-    }
-    */
 }

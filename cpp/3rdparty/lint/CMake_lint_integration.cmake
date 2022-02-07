@@ -16,10 +16,10 @@ set(IGNORED_STYLES ${IGNORED_STYLES}-runtime/references,)
 function(ADD_LINT_CHECK_TO_TARGET NAME_OF_TARGET_TO_BE_CHECKED SOURCES_LIST)
 
     set(TARGET_NAME ${NAME_OF_TARGET_TO_BE_CHECKED}_lint_check)
-
-    if(NOT PYTHONINTERP_FOUND)
-        FIND_PACKAGE( PythonInterp 2 )
-        if(NOT PYTHONINTERP_FOUND)
+    if(NOT PYTHON_FOUND)
+        FIND_PACKAGE( Python 3 )
+        if(NOT PYTHON_FOUND)
+          MESSAGE("Python executable NOT found inside the function")
           return()
         else()
           MESSAGE("Python executable found inside the function")
@@ -31,13 +31,15 @@ function(ADD_LINT_CHECK_TO_TARGET NAME_OF_TARGET_TO_BE_CHECKED SOURCES_LIST)
     list(REMOVE_DUPLICATES SOURCES_LIST)
     list(SORT SOURCES_LIST)
 
+    
     MESSAGE("Ignored elements ${IGNORED_STYLES}")
 
     IF( MSVC )
+        MESSAGE(Python_EXECUTABLE: ${Python_EXECUTABLE})
         add_custom_target(${TARGET_NAME}
         COMMAND "${CMAKE_COMMAND}" -E chdir
                 "${CMAKE_CURRENT_SOURCE_DIR}"
-                "${PYTHON_EXECUTABLE}"
+                "${Python_EXECUTABLE}"
                 "${LINTER_PATH}/cpplint.py"
                 "--filter=${IGNORED_STYLES}"
                 "--counting=detailed"

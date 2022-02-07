@@ -26,15 +26,6 @@ namespace vcd {
 typedef std::array<int, 2> Tuple;
 typedef std::vector<Tuple> ArrayNx2;
 
-enum ElementType {
-    object = 0,
-    action = 1,
-    event = 2,
-    context = 3,
-    relation = 4,
-    ET_size
-};
-
 const std::string
 ElementTypeName[] {
     "object",
@@ -85,12 +76,6 @@ class UID : public VCD_UID {
 
     void
     withStr(const std::string &val);
-
-    static std::string
-    generate_uuid4();
-
-    static bool
-    check_uuid4(const std::string &uuid);
 
  private:
     void set(const std::string &uidStr, const int uidInt, const bool isUUID);
@@ -407,7 +392,8 @@ class VCD_Impl : public vcd::VCD {
     add_coordinate_system(const std::string& name,
                       const CoordinateSystemType cs_type,
                       const std::string& parent_name = "",
-                      const std::vector<float>& pose_wrt_parent = {}) override;
+                      const std::vector<float>& pose_wrt_parent_matrix4x4 = {})
+                      override;
 
     // Getters
     size_t
@@ -523,7 +509,7 @@ class VCD_Impl : public vcd::VCD {
     inline bool
     isFrameWithIndex(const size_t frame_index) {
         const std::string frame_index_str = std::to_string(frame_index);
-        return m_data["vcd"]["frames"].contains(frame_index_str);
+        return m_data["openlabel"]["frames"].contains(frame_index_str);
     }
 
     static size_t

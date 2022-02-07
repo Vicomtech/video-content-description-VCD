@@ -1,16 +1,17 @@
 """
-VCD (Video Content Description) library v5.0.0
+VCD (Video Content Description) library v5.0.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 5.0.0.
+VCD is a Python library to create and manage VCD content version 5.0.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
 
+from os import stat
 import numpy as np
 import warnings
 import cv2 as cv
@@ -18,11 +19,14 @@ from collections import deque, namedtuple
 import time
 
 from numpy import float64
+from scipy.optimize import curve_fit
 
 import vcd.utils as utils
 import math
 
-from vcd.types import areaReference
+from matplotlib import pyplot as plt
+
+from vcd.types import areaReference, FisheyeModel
 
 ''' ######################################################    
     Basic principles of SCL (Scene Configuration Library)
@@ -230,291 +234,45 @@ class Graph:
 
 
 class Scene:
+    '''
+    This class defines a scene by reading a VCD file that contains coordinate systems, cameras, and objects.
+    The Scene object brings projection functionalities such as creating warped images, converting objects from one coordinate system to another, etc.
+
+    # Load a VCD file and create a Scene
+    vcd = core.OpenLABEL('myOpenLABELfile.json')
+    scene = scl.Scene(vcd)
+
+    # Use the scene to get cameras
+    camera_front = scene.get_camera('front')
+
+    # Use cameras
+    camera_front.project_points3d(points3d_4xN)
+
+    '''
     def __init__(self, vcd):
         self.vcd = vcd
         self.cameras = dict()
 
-    def camera_roi_z0(self, camera_name, cs, frameNum):
-        """
-        This function computes the region of the image which maps into the reference (cs) Z=0 plane
-        by checking whether the re-projected point lies in front or behind the camera
-        :param cam_name: camera name
-        :param frameNum: frame num
-        :return: polygon 2D
-        """
-        # Working on undistorted coordinates
-        hline, points = self.compute_horizon_line(camera_name=camera_name, cs=cs, frameNum=frameNum)
-        cam = self.get_camera(camera_name=camera_name, frameNum=frameNum)
-        width = cam.img_size_undist[0]
-        height = cam.img_size_undist[1]
+    #########################################
+    # Inner functions
+    #########################################
+    def __get_transform_chain(self, cs_src, cs_dst):
+        # Create graph with the poses defined for each coordinate_system
+        # These are poses valid "statically"
+        lista = []
+        root = self.vcd.get_root()
+        for cs_name, cs_body in root['coordinate_systems'].items():
+            for child in cs_body['children']:
+                lista.append((cs_name, child, 1))
+                lista.append((child, cs_name, 1))
 
-        # Create 2 contours going through the limits of the image and using points
-        # Then check which of them contains points which are projected in Z>0 in camera coordinate system
-        polygon = []
-        if len(points) == 0:
-            # So, the line at the infinite is NOT inside the limits of the image
-            # Let's then check if any point inside the image produces a Z>0 (if not, this camera is pointing to the sky)
-            point2d_dist_3x1 = np.array([[width / 2, height / 2, 1]]).transpose()
+        graph = Graph(lista)
+        result = graph.dijkstra(cs_src, cs_dst)
+        return result
 
-            # Reproject into self.coordinate_system Z=0 plane
-            point3d_4x1, valid = self.reproject_points2d_3xN(points2d_3xN=point2d_dist_3x1, plane=(0, 0, 1, 0),
-                                                             cs_cam=camera_name, cs_dst=cs, frameNum=frameNum,
-                                                             apply_undistorsion=False)
-            # Transform back to camera coordinate system
-            point3d_4x1 = self.transform_points3d_4xN(points3d_4xN=point3d_4x1, cs_src=cs, cs_dst=camera_name,
-                                                      frameNum=frameNum)
-            in_front = point3d_4x1[2, 0] > 0
-            if in_front:
-                polygon.append((0, 0))
-                polygon.append((width - 1, 0))
-                polygon.append((width - 1, height - 1))
-                polygon.append((0, height - 1))
-
-                return polygon
-        else:
-            # Ok, so the horizon line is INSIDE the limits of the undistorted domain
-            # There are 6 possible configurations
-            points_code = []
-            U = None
-            L = None
-            R = None
-            B = None
-            for idx, point in enumerate(points):
-                if point[1] == 0:  # So points[0] is U
-                    points_code.append('U')
-                    U = point
-                elif point[0] == width:
-                    points_code.append('R')
-                    R = point
-                elif point[1] == height:
-                    points_code.append('B')
-                    B = point
-                else:
-                    points_code.append('L')
-                    L = point
-            UL = (0, 0)
-            UR = (width - 1, 0)
-            BR = (width - 1, height - 1)
-            BL = (0, height - 1)
-
-            polygon_A = []
-            polygon_B = []
-            if 'U' in points_code and 'L' in points_code:
-                # Case 0: LU
-                polygon_A.append(UL)
-                polygon_A.append(U)
-                polygon_A.append(L)
-                polygon_A.append(U)
-                polygon_B.append(UR)
-                polygon_B.append(BR)
-                polygon_B.append(BL)
-                polygon_B.append(L)
-            elif 'U' in points_code and 'B' in points_code:
-                # Case 1: BU
-                polygon_A.append(UL)
-                polygon_A.append(U)
-                polygon_A.append(B)
-                polygon_A.append(BL)
-                polygon_B.append(U)
-                polygon_B.append(UR)
-                polygon_B.append(BR)
-                polygon_B.append(B)
-            elif 'U' in points_code and 'R' in points_code:
-                # Case 2: RU
-                polygon_A.append(U)
-                polygon_A.append(UR)
-                polygon_A.append(R)
-                polygon_B.append(UL)
-                polygon_B.append(U)
-                polygon_B.append(R)
-                polygon_B.append(BR)
-                polygon_B.append(BL)
-            elif 'L' in points_code and 'B' in points_code:
-                # Case 3: LB
-                polygon_A.append(L)
-                polygon_A.append(B)
-                polygon_A.append(BL)
-                polygon_B.append(UL)
-                polygon_B.append(UR)
-                polygon_B.append(BR)
-                polygon_B.append(B)
-                polygon_B.append(L)
-            elif 'L' in points_code and 'R' in points_code:
-                # Case 4: LR
-                polygon_A.append(UL)
-                polygon_A.append(UR)
-                polygon_A.append(R)
-                polygon_A.append(L)
-                polygon_B.append(L)
-                polygon_B.append(R)
-                polygon_B.append(BR)
-                polygon_B.append(BL)
-            else:
-                # Case 5: BR
-                polygon_A.append(B)
-                polygon_A.append(R)
-                polygon_A.append(BR)
-                polygon_B.append(UL)
-                polygon_B.append(UR)
-                polygon_B.append(R)
-                polygon_B.append(B)
-                polygon_B.append(BR)
-
-            # Now test whether polygon or polygon_other contain points which project to z>0 camera
-            point_A = (sum(x for x, y in polygon_A), sum(y for x, y in polygon_A))
-            point_A = (point_A[0]/len(polygon_A), point_A[1]/len(polygon_A))
-
-            point_B = (sum(x for x, y in polygon_B), sum(y for x, y in polygon_B))
-            point_B = (point_B[0] / len(polygon_B), point_B[1] / len(polygon_B))
-
-            # Reproject into self.coordinate_system Z=0 plane
-            point_A_3x1 = np.array([[point_A[0], point_A[1], 1]]).transpose()
-            point_A_3d_4x1, valid = self.reproject_points2d_3xN(points2d_3xN=point_A_3x1, plane=(0, 0, 1, 0),
-                                                                cs_cam=camera_name, cs_dst=cs, frameNum=frameNum,
-                                                                apply_undistorsion=False)
-            # Transform back to camera coordinate system
-            point_A_3d_4x1 = self.transform_points3d_4xN(points3d_4xN=point_A_3d_4x1, cs_src=cs, cs_dst=camera_name,
-                                                               frameNum=frameNum)
-            in_front_A = point_A_3d_4x1[2, 0] > 0
-
-            if in_front_A:
-                polygon = polygon_A
-            else:
-                # Check if B
-                point_B_3x1 = np.array([[point_B[0], point_B[1], 1]]).transpose()
-                point_B_3d_4x1, valid = self.reproject_points2d_3xN(points2d_3xN=point_B_3x1, plane=(0, 0, 1, 0),
-                                                                    cs_cam=camera_name, cs_dst=cs, frameNum=frameNum,
-                                                                    apply_undistorsion=False)
-                # Transform back to camera coordinate system
-                point_B_3d_4x1 = self.transform_points3d_4xN(points3d_4xN=point_B_3d_4x1, cs_src=cs, cs_dst=camera_name,
-                                                               frameNum=frameNum)
-                in_front_B = point_B_3d_4x1[2, 0] > 0
-
-                if in_front_B:
-                    polygon = polygon_B
-                else:
-                    # This should not happen... something's wrong
-                    pass
-
-        N = len(polygon)
-        points2d_3xN = np.ones((3, N), dtype=np.int32)
-        count = 0
-        for point in polygon:
-            points2d_3xN[0, count] = utils.round(point[0])
-            points2d_3xN[1, count] = utils.round(point[1])
-            count += 1
-
-        return points2d_3xN
-
-    def compute_horizon_line(self, camera_name, cs, frameNum=None):
-        """
-        This function computes the horizon line (as the projection of the infinite Z=0) for a camera at a certain
-        frameNum, in image coordinates.
-        It works by creating 2 virtual infinite points in the Z=0, and projecting them into the image and clipping
-        it adequately.
-        Works using undistorted coordinates (otherwise, the horizon line is not a line but a curve).
-        :param camera_name: camera name
-        :param frameNum: frame number
-        :return: line in general form (a, b, c), and array of points, all in undistorted domain
-        """
-        if frameNum is None:
-            f = -1
-        else:
-            f = frameNum
-
-        # Perhaps already computed
-        # TODO check if we really need to store this computation
-        if camera_name in self.cameras:
-            if f in self.cameras[camera_name]:
-                if 'hline' in self.cameras[camera_name][f]:
-                    return self.cameras[camera_name][f]['hline']
-
-        # Compute
-        cam = self.get_camera(camera_name=camera_name, frameNum=frameNum)
-        width = cam.width
-        height = cam.height
-
-        # Select points in the infinite that belong to the Z=0 plane
-        # Let's propose several infinite points in all 360º directions
-        steps = 60
-        step = 2*np.pi / steps
-        points3d_inf = np.zeros((4, steps))
-        for s in range(0, steps):
-            angle = step*s
-            x = np.cos(angle)
-            y = np.sin(angle)
-            points3d_inf[0, s] = x
-            points3d_inf[1, s] = y
-
-        # Convert from cs to camera_cs
-        points3d_inf = self.transform_points3d_4xN(points3d_4xN=points3d_inf,
-                                                   cs_src=cs, cs_dst=camera_name,
-                                                   frameNum=frameNum)
-
-        # Project in the camera (USING UNDISTORTED FRAME)
-        points2d_inf, valid = cam.project_points3d(points3d_4xN=points3d_inf, apply_distortion=False)
-        points2d_inf = points2d_inf[:, valid]
-        if points2d_inf.shape[1] < 2:
-            return np.array([[]]), []
-
-        ## From here on we have at least 2 valid infinite points projected in the image
-        #points2d_inf = cam.undistort_points2d(points2d_dist_3xN=points2d_inf)
-
-        # Let's choose two points (first and last) to define the line (ideally all of them should lie in the same line)
-        n = points2d_inf.shape[1]
-        # TODO: test all lie in the same line
-
-        line = np.cross(points2d_inf[:, 0], points2d_inf[:, -1])
-        line = line / np.linalg.norm(line)
-
-        a = line[0]
-        b = line[1]
-        c = line[2]
-
-        # ax + by + c = 0
-        num_points_touch = 0
-        points_horz = []
-        if abs(a) < 1e-8:
-            # There is no intersection with X
-            point_int_x0 = (0, -c / b)
-            point_int_xW = (width, -c / b)
-            if 0 <= -c / b < height:
-                num_points_touch = 2
-                points_horz.append(point_int_x0)
-                points_horz.append(point_int_xW)
-
-        elif abs(b) < 1e-8:
-            # There is no intersection with Y
-            point_int_y0 = (-c / a, 0)
-            point_int_yH = (-c / a, height)
-            if 0 <= -c / a < width:
-                num_points_touch = 2
-                points_horz.append(point_int_y0)
-                points_horz.append(point_int_yH)
-        else:
-            P1 = (0, -c / b)
-            if 0 <= P1[1] < height:
-                points_horz.append(P1)
-            P2 = (width, -(c + a * width) / b)
-            if 0 <= P2[1] < height:
-                points_horz.append(P2)
-            P3 = (-c / a, 0)
-            if 0 <= P3[0] < width:
-                points_horz.append(P3)
-            P4 = (-(c + b * height) / a, height)
-            if 0 <= P4[0] < width:
-                points_horz.append(P4)
-
-            assert (len(points_horz) == 2 or len(
-                points_horz) == 0)  # a line can only intersect a rectangle in 2 points! (or none)
-
-        # Store for next time
-        self.cameras.setdefault(camera_name, {})
-        self.cameras[camera_name].setdefault(frameNum, {})
-        self.cameras[camera_name][frameNum]['hline'] = line, points_horz
-
-        return line, points_horz
-
+    #########################################
+    # Public functions
+    #########################################
     def get_camera(self, camera_name, frameNum=None, compute_remaps=False):
         """
         This function explores the VCD content searching for the camera parameters of camera "camera_name", specific
@@ -534,60 +292,76 @@ class Scene:
         else:
             f = frameNum
 
-        if camera_name in self.cameras:
-            if f in self.cameras[camera_name]:
-                return self.cameras[camera_name][f]['cam']
-
-        # Create camera m
-        camera = None
+        # Read basic info about streams
         root = self.vcd.get_root()
         if 'streams' in root:
             if camera_name in root['streams']:
                 uri = root['streams'][camera_name]['uri']
                 description = root['streams'][camera_name]['description']
-                if 'stream_properties' in root['streams'][camera_name]:
-                    sp = root['streams'][camera_name]['stream_properties']
-                    if 'intrinsics_pinhole' in sp:
-                        camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
-                    elif 'intrinsics_fisheye' in sp:
-                        camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
-        else:
-            return None
 
+        # Check if dynamic intrinsics
+        dynamic_intrinsics = False
         if frameNum is not None:
-            vcd_frame = self.vcd.get_frame(frameNum)
-
+            vcd_frame = self.vcd.get_frame(frameNum)    
             if 'frame_properties' in vcd_frame:
                 if 'streams' in vcd_frame['frame_properties']:
                     if camera_name in vcd_frame['frame_properties']['streams']:
                         if 'stream_properties' in vcd_frame['frame_properties']['streams'][camera_name]:
                             sp = vcd_frame['frame_properties']['streams'][camera_name][
                                 'stream_properties']
+                            dynamic_intrinsics = True  # SO, there are dynamic intrinsics!
+        
+        # Read intrinsics and create/read existing camera
+        camera = None
+        if dynamic_intrinsics:
+            # Create new camera
+            vcd_frame = self.vcd.get_frame(frameNum)
+            sp = vcd_frame['frame_properties']['streams'][camera_name][
+                                'stream_properties']    
+            if 'intrinsics_pinhole' in sp:
+                camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
+            elif 'intrinsics_fisheye' in sp:
+                camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps, limit_to_180_degrees=True)
+            elif 'intrinsics_cylindrical' in sp:
+                camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
+            elif 'intrinsics_orthographic' in sp:
+                camera = CameraOrthographic(sp['intrinsics_orthographic'], camera_name, description, uri)
+            else:
+                warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye, CameraCylindrical and CameraOrthographic. See types.py.")
+        else:
+            # Read already created camera, or, if first time here, create one
+            # Let's use f=-1
+            f = -1
+            if camera_name in self.cameras:
+                if f in self.cameras[camera_name]:                    
+                    return self.cameras[camera_name][f]['cam']  # return the one labeled as f=-1
+
+            # Create camera m if needed
+            if 'streams' in root:
+                if camera_name in root['streams']:
+                    uri = root['streams'][camera_name]['uri']
+                    description = root['streams'][camera_name]['description']
+                    if 'stream_properties' in root['streams'][camera_name]:
+                        sp = root['streams'][camera_name]['stream_properties']
                         if 'intrinsics_pinhole' in sp:
                             camera = CameraPinhole(sp['intrinsics_pinhole'], camera_name, description, uri, compute_remaps)
                         elif 'intrinsics_fisheye' in sp:
-                            camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps)
+                            camera = CameraFisheye(sp['intrinsics_fisheye'], camera_name, description, uri, compute_remaps, limit_to_180_degrees=True)
+                        elif 'intrinsics_cylindrical' in sp:
+                            camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
+                        elif 'intrinsics_orthographic' in sp:
+                            camera = CameraOrthographic(sp['intrinsics_orthographic'], camera_name, description, uri)
+                        else:
+                            warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye, CameraCylindrical and CameraOrthographic. See types.py.")
+            else:
+                return None        
 
-        # Update store
+        # Update store (f is -1 if static intrinsics are found, otherwise, a specific frameNum is used)
         self.cameras.setdefault(camera_name, {})
         self.cameras[camera_name].setdefault(f, {})
         self.cameras[camera_name][f]['cam'] = camera
 
         return camera
-
-    def __get_transform_chain(self, cs_src, cs_dst):
-        # Create graph with the poses defined for each coordinate_system
-        # These are poses valid "statically"
-        lista = []
-        root = self.vcd.get_root()
-        for cs_name, cs_body in root['coordinate_systems'].items():
-            for child in cs_body['children']:
-                lista.append((cs_name, child, 1))
-                lista.append((child, cs_name, 1))
-
-        graph = Graph(lista)
-        result = graph.dijkstra(cs_src, cs_dst)
-        return result
 
     def get_transform(self, cs_src, cs_dst, frameNum=None):
         """
@@ -705,7 +479,7 @@ class Scene:
         else:
             return plane_abcd
 
-    def project_points3d_4xN(self, points3d_4xN, cs_src, cs_cam, frameNum=None, apply_distortion=True, remove_outside=False):
+    def project_points3d_4xN(self, points3d_4xN, cs_src, cs_cam, frameNum=None, remove_outside=False):
         """
         This function projects 3D points into a given camera, specifying the origin coordinate system of the points,
         and a certain frame number. Optionally, distortion can be applied or not (e.g. sometimes is useful to project
@@ -714,7 +488,6 @@ class Scene:
         :param cs_src: name of coordinate system of the points
         :param cs_cam: name of the camera
         :param frameNum: frame number (if None, static camera info is seeked)
-        :param apply_distortion: default to True, if False, projection is carried out into undistorted domain
         :param remove_outside: flag to invalidate points outside the limits of the image domain
         :return: array of 3xN 2D points in image coordinates (distorted or undistorted according to apply_distortion),
         and array of boolean declaring points valid or not
@@ -724,13 +497,43 @@ class Scene:
                                                              frameNum=frameNum)
         if points3d_camera_cs_4xN is not None:
             cam = self.get_camera(camera_name=cs_cam, frameNum=frameNum)
-            points2d_3xN, idx_valid = cam.project_points3d(points3d_4xN=points3d_camera_cs_4xN,
-                                                           apply_distortion=apply_distortion,
-                                                           remove_outside=remove_outside)
+            points2d_3xN, idx_valid = cam.project_points3d(points3d_4xN=points3d_camera_cs_4xN, remove_outside=remove_outside)
             return points2d_3xN, idx_valid
         return np.array([[]]), []
 
-    def reproject_points2d_3xN(self, points2d_3xN, plane, cs_cam, cs_dst, frameNum=None, apply_undistorsion=True):
+    @staticmethod
+    def __plucker_line_plane_intersection(lines_3xN, plane_abcd):
+        # Plucker intersection between Line and Plane
+        # Use Plucker intersection line-plane
+        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
+        N = lines_3xN.shape[1]
+        idx_valid = [True] * N
+        P1 = np.vstack((0, 0, 0, 1))
+        P2array = np.vstack((lines_3xN, np.ones((1, N))))
+        # Plane equation in plucker coordinates (wrt to world)
+        P = np.asarray(plane_abcd).reshape(4, 1)
+        # Line equation in plucker coordinates
+        p3dNx4 = np.array([])
+        count = 0
+        for P2 in P2array.T:
+            P2 = P2.reshape(4, 1)
+            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
+            # Intersection is a 3D point
+            p3Dlcs = np.matmul(L, P)
+            if p3Dlcs[3][0] != 0:
+                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
+            else:
+                # This is an infinite point: return direction vector instead
+                norm = np.linalg.norm(p3Dlcs[:3][0])
+                p3Dlcs /= norm
+                idx_valid[count] = False
+            p3dNx4 = np.append(p3dNx4, p3Dlcs)
+            count += 1
+        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
+        p3d_4xN = np.transpose(p3dNx4)
+        return p3d_4xN, idx_valid
+
+    def reproject_points2d_3xN_into_plane(self, points2d_3xN, plane, cs_cam, cs_dst, frameNum=None):
         # This function calls a camera (cs_cam) to reproject points2d in the image plane into
         # a plane defined in the cs_dst.
         # The obtained 3D points are expressed in cs_dst.
@@ -738,7 +541,11 @@ class Scene:
         cam = self.get_camera(cs_cam, frameNum)
         plane_cam = self.transform_plane(plane, cs_dst, cs_cam, frameNum) # first convert plane into cam cs
         N = points2d_3xN.shape[1]
-        points3d_3xN_cs_cam, idx_valid = cam.reproject_points2d(points2d_3xN, plane_cam, apply_undistorsion)
+        
+        # Reproject points as rays with camera
+        rays3d_3xN_cs_cam = cam.reproject_points2d(points2d_3xN)
+        points3d_3xN_cs_cam, idx_valid = self.__plucker_line_plane_intersection(rays3d_3xN_cs_cam, plane_cam)
+        
         if points3d_3xN_cs_cam.shape[1] > 0:
             points3d_3xN_cs_cam_filt = points3d_3xN_cs_cam[:, idx_valid]
             points3d_4xN_cs_dst_filt = self.transform_points3d_4xN(points3d_3xN_cs_cam_filt, cs_cam, cs_dst, frameNum)
@@ -746,7 +553,62 @@ class Scene:
             points3d_4xN_cs_dst[:, idx_valid] = points3d_4xN_cs_dst_filt
             return points3d_4xN_cs_dst, idx_valid
         return np.array([[]]), []
+        
 
+    def reproject_points2d_3xN(self, points2d_3xN, cs_cam, frameNum=None):
+        cam = self.get_camera(cs_cam, frameNum)        
+        rays3d_3xN = cam.reproject_points2d(points2d_3xN)
+        return rays3d_3xN
+        
+    def create_img_projection_maps(self, cam_src_name, cam_dst_name, frameNum):
+        ''' In SCL, extrinsic and intrinsic parameters are detached.
+            Extrinsic parameters are defined at the VCD's coordinate systems.
+            Intrinsic parameters are defined as VCD's stream_properties
+
+            To create the projection maps, we need to take 2D pixels from cam_src, convert to 3D rays,
+            then transform into 3D rays in cam_dst coordinate system, and then project into 2D pixels            
+        '''
+        # Get cameras
+        cam_src = self.get_camera(cam_src_name, frameNum)
+        cam_dst = self.get_camera(cam_dst_name, frameNum)
+
+        # Get all pixels of dst image domain as a 3xN array        
+        X, Y = np.mgrid[0:cam_dst.width:1, 0:cam_dst.height:1]        
+
+        points2d_dst_3xN = np.row_stack((X.T.ravel(), Y.T.ravel(), np.ones(cam_dst.width * cam_dst.height, dtype=int))).reshape(3, cam_dst.width * cam_dst.height)
+
+        # Reproject as rays3d in cam_dst coordinate system
+        rays3d_dst_3xN = cam_dst.reproject_points2d(points2d_dst_3xN)
+
+        # Convert into cam_src coordinate system
+        if cam_dst.__class__ is CameraOrthographic:
+            N = rays3d_dst_3xN.shape[1]            
+            points3d_z0_4xN = np.vstack((rays3d_dst_3xN[0, :], rays3d_dst_3xN[1, :], np.zeros(N), rays3d_dst_3xN[2, :]))
+            points3d_4xN = points3d_z0_4xN
+        else:
+            points3d_4xN = utils.add_homogeneous_row(rays3d_dst_3xN)
+
+        rays3d_src_4xN = self.transform_points3d_4xN(points3d_4xN, cam_dst_name, cam_src_name, frameNum)
+        rays3d_src_4xN /= rays3d_src_4xN[3, :]        
+
+        # Project into cam_src
+        points2d_src_3xN, idx_valid = cam_src.project_points3d(rays3d_src_4xN)
+
+        # Create maps for cv2.remap
+        #u_map = np.zeros((cam_dst.height, cam_dst.width, 1), dtype=np.float32)        
+        #v_map = np.zeros((cam_dst.height, cam_dst.width, 1), dtype=np.float32)        
+
+        u_map = points2d_src_3xN[0, :].reshape(cam_dst.height, cam_dst.width, 1).astype('float32')
+        v_map = points2d_src_3xN[1, :].reshape(cam_dst.height, cam_dst.width, 1).astype('float32')
+
+        # Optimization
+        map_x, map_y = cv.convertMaps(u_map, v_map, dstmap1type=cv.CV_16SC2, nninterpolation=False)
+
+        # Application would then be: cv.remap(image, map_x, map_y, interpolation=interp, borderMode=cv.BORDER_REFLECT)
+
+        # Return
+        return map_x, map_y
+        
 
 class Sensor:
     def __init__(self, name, description, uri, **properties):
@@ -780,10 +642,20 @@ class Camera(Sensor):
         self.use_opencv = False
         pass
 
-    def project_points3d(self, points3d_4xN, apply_distortion=True, remove_outside=False):
+    def distort_rays3d(self, rays3d_3xN):
+        '''
+        This function distort rays3d using the distortion parameters of the camera.
+        As a result distorted rays3d are created which can then be projected using the camera calibration matrix.
+
+        :param rays3d_3xN: Array with N 3D rays, each of them as column (rx, ry, rz) 
+        :return: rays3d_dist_3xN: Array with N distorted 3D rays, each of them as column (rx', ry', rz')
+        '''
         pass
 
-    def reproject_points2d(self, points2d_3xN, plane_cs):
+    def project_points3d(self, points3d_4xN, remove_outside=False):
+        pass
+        
+    def reproject_points2d(self, points2d_3xN):
         pass
 
 
@@ -794,57 +666,35 @@ class CameraPinhole(Camera):
     - Linear projection: using the camera_matrix (K)
     - Radial/Tangential/... distortion: using distortion coefficients
 
-    If distortion has 4 coefficients, it is assumed to be "fisheye" type, as in:
-    https://docs.opencv.org/3.4/db/d58/group__calib3d__fisheye.html
-    Otherwise (5 or more), it is assumed to be traditional "radial" distortion, as in:
+    Distortion is assumed to be radial, as in:
     https://docs.opencv.org/4.2.0/d9/d0c/group__calib3d.html
-    '"""
+    """
     def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False):
         self.K_3x4 = np.array(camera_intrinsics['camera_matrix_3x4']).reshape(3, 4)
         rows, cols, = self.K_3x4.shape
         assert (rows == 3 and cols == 4)
         self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
         d_list = camera_intrinsics['distortion_coeffs_1xN']
-        self.d_1xN = np.array(d_list).reshape(1, len(d_list))
-
-        self.is_fisheye = len(d_list) == 4
+        self.d_1xN = np.array(d_list).reshape(1, len(d_list)) 
 
         self.r_limit = None
-        if self.is_distorted() and not self.is_fisheye:
-            self.r_limit = utils.get_distortion_radius(self.d_1xN)
+        if self.is_distorted():
+            self.r_limit = utils.get_distortion_radius(self.d_1xN)       
 
         # Pre-compute undistortion maps (LUTs)
         self.img_size_dist = (camera_intrinsics['width_px'], camera_intrinsics['height_px'])
         self.img_size_undist = (camera_intrinsics['width_px'], camera_intrinsics['height_px'])
 
-        if self.is_distorted():
-            # TODO: Add img_size_undist to user-defined params
-            if self.is_fisheye:
-                self.K_und_3x3 = cv.fisheye.estimateNewCameraMatrixForUndistortRectify(self.K_3x3, self.d_1xN,
-                                                                                       self.img_size_dist, np.eye(3),
-                                                                                       balance=1,
-                                                                                       new_size=self.img_size_undist, fov_scale=1)
-
-                self.mapX_to_und_16SC2 = None
-                self.mapY_to_und_16SC2 = None
-                if compute_remaps:
-                    # NOTE: using m1type=cv.CV_16SC2 leads to fixed point representation, which is reported to be faster, but
-                    # less accurate. In addition, interpreting the maps in 16SC2 is not trivial because there are indices
-                    # of interpolated values (see https://docs.opencv.org/3.1.0/da/d54/group__imgproc__transform.html#gab75ef31ce5cdfb5c44b6da5f3b908ea4)
-                    print("CameraPinhole(fisheye): Compute remaps for undistortion...")
-                    self.__compute_remaps()
-
-            else:
-                # alpha = 0.0 means NO black points in undistorted image
-                # alpha = 1.0 means ALL distorted points inside limits of undistorted image
-                aux = cv.getOptimalNewCameraMatrix(self.K_3x3, self.d_1xN, self.img_size_dist, alpha=0.0,
-                                                              newImgSize=self.img_size_undist)
-                self.K_und_3x3 = aux[0]
-                self.mapX_to_und_16SC2 = None
-                self.mapY_to_und_16SC2 = None
-                if compute_remaps:
-                    self.__compute_remaps()
-
+        if self.is_distorted():                        
+            # alpha = 0.0 means NO black points in undistorted image
+            # alpha = 1.0 means ALL distorted points inside limits of undistorted image
+            aux = cv.getOptimalNewCameraMatrix(self.K_3x3, self.d_1xN, self.img_size_dist, alpha=0.0,
+                                                            newImgSize=self.img_size_undist)
+            self.K_und_3x3 = aux[0]
+            self.mapX_to_und_16SC2 = None
+            self.mapY_to_und_16SC2 = None
+            if compute_remaps:
+                self.__compute_remaps()
         else:
             self.K_und_3x3 = self.K_3x3
 
@@ -854,45 +704,134 @@ class CameraPinhole(Camera):
                         camera_intrinsics['height_px'],
                         name, description, uri)
 
-    def __has_remaps(self):
-        if self.mapX_to_und_16SC2 is None or self.mapY_to_und_16SC2 is None:
-            return False
-        return True
+    #################################
+    # Inherited functions
+    #################################
+    def distort_rays3d(self, rays3d_3xN):
+        """
+        This function distort 3d rays according to the distortion function.
+        :param rays3d_3xN: 3d rays as 3xN arrays
+        :return: distorted 3d rays as 3xN arrays after applying distortion function.
+        """
+        N = rays3d_3xN.shape[1]
+        if N == 0 or not self.is_distorted():
+            rays3d_dist_3xN = np.array([[]])
+            return rays3d_dist_3xN
 
-    def __compute_remaps(self):
-        start = time.time()
-        self.mapX_to_und_16SC2, self.mapY_to_und_16SC2 = cv.initUndistortRectifyMap(self.K_3x3, self.d_1xN,
-                                                                                    R=np.eye(3),
-                                                                                    newCameraMatrix=self.K_und_3x3,
-                                                                                    size=self.img_size_undist,
-                                                                                    m1type=cv.CV_16SC2)
-        end = time.time()
-        print("CameraPinhole(radial): Compute remaps for undistortion... ", end - start)
+        # Normalize so last coordinate is 1
+        rays3d_3xN[0:3, :] = rays3d_3xN[0:3, :] / rays3d_3xN[2, :]
+       
+        # NOTE: there is no cv.distortPoints() function as in cv.fisheye.distortPoints()
+        # It is though possible to distort points using OpenCV by using cv.projectPoints function
+        # As we don't want to use K matrices here, let's use an eye, so the results are rays and not points
+        aux = cv.projectPoints(objectPoints=rays3d_3xN,
+                                rvec=np.array([[[0., 0., 0.]]]),
+                                tvec=np.array([[[0., 0., 0.]]]),
+                                cameraMatrix=np.eye(3),
+                                distCoeffs=self.d_1xN)
+        rays3d_dist_3xN = utils.from_OpenCV_Nx1xM_to_MxN(aux[0])
+        rays3d_dist_3xN = np.vstack((rays3d_dist_3xN.transpose(), np.ones((1, N))))
 
-    def __test_undistortion(self, img, img_und):
-        # Let's test if we project a 3D point into the distorted image
-        # and into the undistorted image
-        # And convert from one into another
-        # Conclusions would be: we can work in any domain (distorted or undistorted), and
-        # keep the ability to project and reproject 3D points
+        return rays3d_dist_3xN
 
-        # 1.- Create some points
-        N = 100
-        points3d_4xN = np.ones((3, N))
-        points3d_4xN[0:3, :] = points3d_4xN[0:3, :]*np.random.random((3, N))*10
+    def project_points3d(self, points3d_4xN, remove_outside=False):
+        """
+        This function projects 3D points into 2D points using the camera projection.
+        All coordinates as homogeneous coordinates, and all 3D elements expressed wrt the camera coordinate system.
 
-        # 2.- Project points into distorted image
-        points2d_3xN_dist, idx_valid = self.project_points3d(points3d_4xN)
-        points2d_3xN_dist = points2d_3xN_dist[:, idx_valid]
+        First, the 3D points are understood as 3D rays.
+        If distorted, the rays3D are distorted into distorted rays3D.
 
-        # 3.- Draw into image
-        for i in range(0, points2d_3xN_dist.shape[1]):
-            cv.circle(img, (utils.round(points2d_3xN_dist[0, i]),
-                            utils.round(points2d_3xN_dist[1, i])), 2, (255, 0, 0), -1)
+        The calibration matrix K_3x3 or K_3x3_und (according to apply_distortion) is applied to produce points.
 
-        # 4.- Undistort these points
-        points2d_3xN_dist_und = self.undistort_points2d(points2d_3xN_dist)
+        Points outside limits are removed if remove_outside is True.
 
+        :param points3d_4xN: 3D points in camera cs, homogeneous coordinates
+        :param apply_distortion: flag to determine whether to project into distorted or undistorted domain
+        :param remove_outside: flag to remove points that fall outside the limits of the target image
+        :return: 2D points in image plane, as 3xN array, in hom. coordinates, and boolean array of valid
+        """
+        # 0.- Pre-filter
+        assert (points3d_4xN.ndim == 2)
+        N = points3d_4xN.shape[1]
+        if N == 0:
+            return np.array([[]]), []
+
+        # 1.- Select only those z > 0 (in front of the camera) - this assumption is good for pinhole cameras
+        idx_in_front = points3d_4xN[2, :] > 1e-8
+        idx_valid = idx_in_front
+        rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
+
+        # 2.- Distort rays3d if distorted        
+        rays3d_3xN = np.full([3, N], np.nan) # init with NaN       
+        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt  # copy filtered points
+
+        if self.is_distorted():
+            # Cameras with distortion: need to first apply distortion model            
+            # Pinhole distortion
+            if self.r_limit is not None:                    
+                # Some cameras have a valid radius limit: extreme points are wierdly distorted, it is better to keep them as NaN
+                for i in range(0, N):
+                    if idx_valid[i]:  # ignore those already filtered
+                        xp = rays3d_3xN[0, i] / rays3d_3xN[2, i]  # this is x'=x/z as in opencv docs
+                        yp = rays3d_3xN[1, i] / rays3d_3xN[2, i]  # this is y'=y/z
+                        r = np.sqrt(xp * xp + yp * yp)
+
+                        if r >= self.r_limit * 0.8:  # 0.8 to also remove very close to limit
+                            idx_valid[i] = False
+                            rays3d_3xN[:, i] = np.nan
+
+            # Now distort (only non-nans)
+            rays3d_3xN_filt = rays3d_3xN[:, idx_valid]
+            rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt) # no nan should go into it
+
+            # Add nans
+            rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
+
+        # 3.- Project using calibration matrix
+        rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
+        points2d_3xN = self.K_3x4 @ rays3d_4xN
+        points2d_3xN /= points2d_3xN[2,:]
+
+        if remove_outside:
+            points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
+
+        return points2d_3xN, idx_valid
+
+    def reproject_points2d(self, points2d_3xN):
+        '''
+        This function reprojects points in the image domain as rays in 3D coordinates (camera coordinate system)
+        '''
+        N = points2d_3xN.shape[1]       
+
+        # Get rays3d applying K^-1 and then undistortion
+        rays3d_dist_3xN = utils.normalize(utils.inv(self.K_3x3).dot(points2d_3xN))        
+        rays3d_3xN = self.undistort_rays3d(rays3d_dist_3xN=rays3d_dist_3xN)        
+
+        return rays3d_3xN
+
+    def undistort_rays3d(self, rays3d_dist_3xN):
+        points2d_dist_3xN = rays3d_dist_3xN / rays3d_dist_3xN[2, :]          
+        N = points2d_dist_3xN.shape[1]
+        if N < 1 or not self.is_distorted():
+            return points2d_dist_3xN
+
+        # Change shape from (3, N) to (N, 1, 2) so we can use OpenCV, removing homogeneous coordinate
+        temp1 = points2d_dist_3xN[0:2, :]
+        temp2 = utils.from_MxN_to_OpenCV_Nx1xM(temp1)
+
+        # Use OpenCV functions (using an eye instead of K to work with rays instead of points)        
+        temp3 = cv.undistortPoints(temp2, np.eye(3), self.d_1xN)
+
+        # Reshape to (3, N)
+        temp3.shape = (N, 2)
+        points2d_und_3xN = np.vstack((temp3.T, np.ones((1, N))))
+        rays3d_und_3xN = utils.normalize(points2d_und_3xN)
+        return rays3d_und_3xN
+
+    #################################
+    # Other public functions
+    #################################
     def undistort_image(self, img):
         if not self.is_distorted():
             return img
@@ -901,13 +840,6 @@ class CameraPinhole(Camera):
         # cv.remap works for both models cv. and cv.fisheye
         return cv.remap(img, self.mapX_to_und_16SC2, self.mapY_to_und_16SC2, interpolation=cv.INTER_LINEAR,
                         borderMode=cv.BORDER_CONSTANT)
-
-    def get_rays3d(self, point2d_3xN, K_3x3):
-        rays3d_3xN = np.matmul((np.linalg.inv(K_3x3)), point2d_3xN)
-        rays3d_3xN /= np.linalg.norm(rays3d_3xN)
-        #ray3d_4xN = np.vstack((ray, np.ones((1, point2d_3xN.shape[1]))))
-        #return ray3d_4xN
-        return rays3d_3xN
 
     def is_distorted(self):
         return np.count_nonzero(self.d_1xN) > 0
@@ -918,9 +850,9 @@ class CameraPinhole(Camera):
         :param points2d_und_3xN: undistorted points 3xN homogeneous coordinates
         :return: distorted points 3xN homogeneous coordinates
         """
-        rays3d_und_3xN = utils.inv(self.K_und_3x3).dot(points2d_und_3xN)
+        rays3d_und_3xN = utils.inv(self.K_und_3x3) @ points2d_und_3xN
         rays3d_dist_3xN = self.distort_rays3d(rays3d_und_3xN)
-        points2d_dist_3xN = self.K_3x3.dot(rays3d_dist_3xN)
+        points2d_dist_3xN = self.K_3x3 @ rays3d_dist_3xN
         return points2d_dist_3xN
 
     def undistort_points2d(self, points2d_dist_3xN):
@@ -947,19 +879,17 @@ class CameraPinhole(Camera):
         temp1 = points2d_dist_3xN[0:2, :]
         temp2 = utils.from_MxN_to_OpenCV_Nx1xM(temp1)
 
-        # Use OpenCV functions
-        if self.is_fisheye:
-            temp3 = cv.fisheye.undistortPoints(temp2, self.K_3x3, self.d_1xN)
-        else:
-            temp3 = cv.undistortPoints(temp2, self.K_3x3, self.d_1xN)
+        # Use OpenCV functions        
+        temp3 = cv.undistortPoints(temp2, self.K_3x3, self.d_1xN)
 
         # Reshape to (3, N)
         temp3.shape = (N, 2)
         points2d_und_3xN = np.vstack((temp3.T, np.ones((1, N))))
 
         # Map into undistorted domain by using K_3x3_und
-        points2d_und_3xN = self.K_und_3x3.dot(points2d_und_3xN)
+        points2d_und_3xN = self.K_und_3x3 @ points2d_und_3xN
 
+        # TODO: Add this test to test_scl.py
         test = False
         if test:
             points2d_dist_re_3xN = self.distort_points2d(points2d_und_3xN)
@@ -968,217 +898,101 @@ class CameraPinhole(Camera):
 
         return points2d_und_3xN
 
-    def distort_rays3d(self, rays3d_3xN):
-        """
-        This function distort 3d rays according to the distortion function.
-        :param rays3d_3xN: 3d rays as 3xN arrays
-        :return: distorted 3d rays as 3xN arrays after applying distortion function.
-        """
-        N = rays3d_3xN.shape[1]
-        if N == 0 or not self.is_distorted():
-            rays3d_dist_3xN = np.array([[]])
-            return rays3d_dist_3xN
+    #################################
+    # Inner functions 
+    #################################
+    def __has_remaps(self):
+        if self.mapX_to_und_16SC2 is None or self.mapY_to_und_16SC2 is None:
+            return False
+        return True
 
-        # Normalize so last coordinate is 1
-        rays3d_3xN[0:3, :] = rays3d_3xN[0:3, :] / rays3d_3xN[2, :]
+    def __compute_remaps(self):
+        start = time.time()
+        self.mapX_to_und_16SC2, self.mapY_to_und_16SC2 = cv.initUndistortRectifyMap(self.K_3x3, self.d_1xN,
+                                                                                    R=np.eye(3),
+                                                                                    newCameraMatrix=self.K_und_3x3,
+                                                                                    size=self.img_size_undist,
+                                                                                    m1type=cv.CV_16SC2)
+        end = time.time()
+        print("CameraPinhole(radial): Compute remaps for undistortion... ", end - start)
 
-        if self.is_fisheye:
-            temp0 = rays3d_3xN[0:2, :]  # remove homogeneous coordinate
-            temp1 = utils.from_MxN_to_OpenCV_Nx1xM(temp0)  # Change shape to (N, 1, 2)
-            temp2 = cv.fisheye.distortPoints(temp1, np.eye(3), self.d_1xN)  # apply distortion using an identity K
-            temp2.shape = (N, 2)  # reshape to 2xN
-            rays3d_dist_3xN = np.vstack((temp2.T, np.ones((1, temp2.shape[0]))))  # add homog. row so it is 3xN
-        else:
-            # NOTE: there is no cv.distortPoints() function as in cv.fisheye.distortPoints()
-            # It is though possible to distort points using OpenCV by using cv.projectPoints function
-            # As we don't want to use K matrices here, let's use an eye, so the results are rays and not points
-            aux = cv.projectPoints(objectPoints=rays3d_3xN,
-                                   rvec=np.array([[[0., 0., 0.]]]),
-                                   tvec=np.array([[[0., 0., 0.]]]),
-                                   cameraMatrix=np.eye(3),
-                                   distCoeffs=self.d_1xN)
-            rays3d_dist_3xN = utils.from_OpenCV_Nx1xM_to_MxN(aux[0])
-            rays3d_dist_3xN = np.vstack((rays3d_dist_3xN.transpose(), np.ones((1, N))))
+    def __test_undistortion(self, img, img_und):
+        # TODO: Move this to the set of tests
+        # Let's test if we project a 3D point into the distorted image
+        # and into the undistorted image
+        # And convert from one into another
+        # Conclusions would be: we can work in any domain (distorted or undistorted), and
+        # keep the ability to project and reproject 3D points
 
-        return rays3d_dist_3xN
+        # 1.- Create some points
+        N = 100
+        points3d_4xN = np.ones((3, N))
+        points3d_4xN[0:3, :] = points3d_4xN[0:3, :]*np.random.random((3, N))*10
 
-    def project_points3d(self, points3d_4xN, apply_distortion=True, remove_outside=False):
-        """
-        This function projects 3D points into 2D points using the camera projection.
-        All coordinates as homogeneous coordinates, and all 3D elements expressed wrt the camera coordinate system.
+        # 2.- Project points into distorted image
+        points2d_3xN_dist, idx_valid = self.project_points3d(points3d_4xN)
+        points2d_3xN_dist = points2d_3xN_dist[:, idx_valid]
 
-        If apply_distortion is False, the projection produces points in the undistorted image.
-        If apply_distortion is True, the distortion process (if any) is applied into the distorted image.
+        # 3.- Draw into image
+        for i in range(0, points2d_3xN_dist.shape[1]):
+            cv.circle(img, (utils.round(points2d_3xN_dist[0, i]),
+                            utils.round(points2d_3xN_dist[1, i])), 2, (255, 0, 0), -1)
 
-        First, the 3D points are understood as 3D rays.
-        If distorted, the rays3D are distorted into distorted rays3D.
-
-        The calibration matrix K_3x3 or K_3x3_und (according to apply_distortion) is applied to produce points.
-
-        Points outside limits are removed if remove_outside is True.
-
-        :param points3d_4xN: 3D points in camera cs, homogeneous coordinates
-        :param apply_distortion: flag to determine whether to project into distorted or undistorted domain
-        :param remove_outside: flag to remove points that fall outside the limits of the target image
-        :return: 2D points in image plane, as 3xN array, in hom. coordinates, and boolean array of valid
-        """
-
-        # 0.- Pre-filter
-        assert (points3d_4xN.ndim == 2)
-        N = points3d_4xN.shape[1]
-        if N == 0:
-            return np.array([[]]), []
-
-        # 1.- Select only those z > 0 (in front of the camera)
-        idx_in_front = points3d_4xN[2, :] > 1e-8
-        idx_valid = idx_in_front
-        rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
-
-        # 2.- Distort rays3d if distorted        
-        rays3d_3xN = np.full([3, N], np.nan) # init with NaN       
-        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt  # copy filtered points
-
-        if self.is_distorted():
-            # Cameras with distortion: need to first apply distortion model
-            if not self.is_fisheye:
-                # Pinhole distortion
-                if self.r_limit is not None:
-                    #rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x', y', 1), convenient for dist.     (this is done inside distort_rays)   
-                    
-                    # Some cameras have a valid radius limit: extreme points are wierdly distorted, it is better to keep them as NaN
-                    for i in range(0, N):
-                        if idx_valid[i]:  # ignore those already filtered
-                            xp = rays3d_3xN[0, i] / rays3d_3xN[2, i]  # this is x'=x/z as in opencv docs
-                            yp = rays3d_3xN[1, i] / rays3d_3xN[2, i]  # this is y'=y/z
-                            r = np.sqrt(xp * xp + yp * yp)
-
-                            if r >= self.r_limit * 0.8:  # 0.8 to also remove very close to limit
-                                idx_valid[i] = False
-                                rays3d_3xN[:, i] = np.nan
-
-            if apply_distortion:
-                # Now distort (only non-nans)
-                rays3d_3xN_filt = rays3d_3xN[:, idx_valid]
-                rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt) # no nan should go into it
-
-                # Add nans
-                #rays3d_3xN = np.full([3, N], np.nan)
-                rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
-
-        # 3.- Project using calibration matrix
-        if apply_distortion:
-            #points2d_3xN = self.K_3x3 @ rays3d_3xN    
-
-            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
-            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
-            points2d_3xN = self.K_3x4 @ rays3d_4xN
-            points2d_3xN /= points2d_3xN[2,:]
-
-            if remove_outside:
-                points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
-        else:
-            #points2d_3xN = self.K_und_3x3 @ rays3d_3xN
-            
-            #rays3d_3xN /= np.linalg.norm(rays3d_3xN)  # normalize to 1
-            rays3d_4xN = np.vstack((rays3d_3xN, np.ones(rays3d_3xN.shape[1])))
-            points2d_3xN = self.K_und_3x4 @ rays3d_4xN
-            points2d_3xN /= points2d_3xN[2,:]
-
-            if remove_outside:
-                points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_undist, idx_valid)
-
-        return points2d_3xN, idx_valid
-
-    def reproject_points2d(self, points2d_3xN, plane_cs, apply_undistorsion = True):
-        """
-        This function takes 2D points in the (distorted) image and traces back a 3D ray from the camera optical axis
-        through the point and gets the intersection with a defined world plane (in the form (a, b, c, d)).
-
-        This function takes distortion into consideration, by first undistorting the 2D points, and then raycasting
-        the 3D ray, free of distortion to apply Plücker formulation to obtain the intersection of a 3D line with
-        a 3D plane.
-
-        To manage tha case where the back-projection does not intersect the plane (which can happen for parallel set
-        -ups of infinite points), the function returns an array of booleans that define the validity of the projection.
-
-        :param points2D_3xN: array 2D points as 3XN array of homogeneous coordinates, representing points in the original
-        image
-        :param plane_cs: a plane expressed in general form (a, b, c, d) expressing a 3D plane in camera coordinate
-        system
-        :return: returns an array of 3D points (4xN array) in homogeneous coordinates, expressed in the camera
-        coordinate systems, belonging to the world plane; and a 1xN array of booleans.
-        """
-        # First, undistort point, so we can project back linear rays
-        points2d_und_3xN = points2d_3xN
-        if self.is_distorted() and apply_undistorsion:
-            points2d_und_3xN = self.undistort_points2d(points2d_3xN)
-
-        N = points2d_und_3xN.shape[1]
-        if N == 0:
-            return np.array([[]]), []
-        idx_valid = [True] * N
-
-        # Get ray 3D (expressed in camera coordinate system)
-        rays3d_3xN = self.get_rays3d(points2d_und_3xN, self.K_und_3x3)
-
-        # Use Plucker intersection line-plane
-        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
-        P1 = np.vstack((0, 0, 0, 1))
-        P2array = np.vstack((rays3d_3xN, np.ones((1, N))))
-        # Plane equation in plucker coordinates (wrt to world)
-        P = np.asarray(plane_cs).reshape(4, 1)
-        # Line equation in plucker coordinates
-        p3dNx4 = np.array([])
-        count = 0
-        for P2 in P2array.T:
-            P2 = P2.reshape(4, 1)
-            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
-            # Intersection is a 3D point
-            p3Dlcs = np.matmul(L, P)
-            if p3Dlcs[3][0] != 0:
-                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
-            else:
-                # This is an infinite point: return direction vector instead
-                norm = np.linalg.norm(p3Dlcs[:3][0])
-                p3Dlcs /= norm
-                idx_valid[count] = False
-            p3dNx4 = np.append(p3dNx4, p3Dlcs)
-            count += 1
-        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
-        p3d_4xN = np.transpose(p3dNx4)
-        return p3d_4xN, idx_valid
+        # 4.- Undistort these points
+        points2d_3xN_dist_und = self.undistort_points2d(points2d_3xN_dist)
 
 
 class CameraFisheye(Camera):
-    def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False):
+    '''
+    Fisheye cameras, with field of view around 180º.
+    Different distortion models are considered (see distort_rays3d)
+    For simplicity, the projection process is splitted in two steps: ray distortion, and ray linear projection.
+    '''
+    def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False, limit_to_180_degrees=False):
         self.cx = camera_intrinsics['center_x']
         self.cy = camera_intrinsics['center_y']
         self.img_size_dist = (camera_intrinsics['width_px'], camera_intrinsics['height_px'])
         self.img_size_undist = (camera_intrinsics['width_px'], camera_intrinsics['height_px'])
+        self.limit_to_180_degrees = limit_to_180_degrees
 
-        # Note: This K_3x4 has focal length 1.0 because this way we can split the projection process
-        # in two steps, first distort the rays using teh angle of incidence-to-radius polynomial
-        # and second, apply the conversion to the image plane, which under this model is just a translation in pixels,
-        # and not a linear projection as with the CameraPinhole model
-        self.K_3x4 = np.array([[1.0, 0.0, self.img_size_dist[0] / 2.0 + self.cx, 0.0],
-                               [0.0, 1.0, self.img_size_dist[1] / 2.0 + self.cy, 0.0],
+        if 'focal_length_x' in camera_intrinsics:
+            self.focal_length_x = camera_intrinsics['focal_length_x']
+            if 'focal_length_y' in camera_intrinsics:
+                self.focal_length_y = camera_intrinsics['focal_length_y']
+                self.aspect_ratio = self.focal_length_x / self.focal_length_y
+            elif 'aspect_ratio' in camera_intrinsics:
+                self.aspect_ratio = camera_intrinsics['aspect_ratio']
+                self.focal_length_y = self.focal_length_x / self.aspect_ratio
+            else:
+                self.focal_length_y = self.focal_length_x
+                self.aspect_ratio = 1.0
+        else:
+            self.focal_length_x = 1.0
+            self.focal_length_y = 1.0
+            self.aspect_ratio = 1.0
+        
+        self.K_3x4 = np.array([[self.focal_length_x, 0.0, self.cx, 0.0],
+                               [0.0, self.focal_length_y, self.cy, 0.0],
                                [0.0, 0.0, 1.0, 0.0]])
         self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
 
         # Direct distortion (from angle of incidence to radius in image)
-        self.d_1x4 = np.array(camera_intrinsics['lens_coeffs_1x4']).reshape(1, 4)
+        dist_lenght = len(camera_intrinsics['lens_coeffs_1xN'])
+        self.d_1xN = np.array(camera_intrinsics['lens_coeffs_1xN']).reshape(1, dist_lenght)
+        self.model = camera_intrinsics['model']
 
         # Inverse distortion (from radius in image to incidence angle)
-        self.d_inv_1x4 = self.__invert_polynomial(self.d_1x4)
+        self.error_a_deg = 0.0
+        self.d_inv_1xM = self.__invert_polynomial(self.d_1xN, self.model)  # M is not necessarily N, we can use any polynomial to invert
+        if compute_remaps:
+            self.K_und_3x3 = self.estimate_new_camera_matrix_for_undistort_rectify(img_size_orig=self.img_size_dist,
+                                                                                balance=0.9,
+                                                                                img_size_dst=self.img_size_undist,
+                                                                                fov_scale=1.0)
+            self.K_und_3x4 = utils.fromCameraMatrix3x3toCameraMatrix3x4(self.K_und_3x3)
 
-        self.K_und_3x3 = self.estimate_new_camera_matrix_for_undistort_rectify(img_size_orig=self.img_size_dist,
-                                                                               balance=0.9,
-                                                                               img_size_dst=self.img_size_undist,
-                                                                               fov_scale=1.0)
-        self.K_und_3x4 = utils.fromCameraMatrix3x3toCameraMatrix3x4(self.K_und_3x3)
-
-        self.mapX_to_und_16SC2 = None
-        self.mapY_to_und_16SC2 = None
+            self.mapX_to_und_16SC2 = None
+            self.mapY_to_und_16SC2 = None
 
         if compute_remaps:
             self.__compute_remaps()
@@ -1187,6 +1001,112 @@ class CameraFisheye(Camera):
                         camera_intrinsics['height_px'],
                         name, description, uri)
 
+    #################################
+    # Inherited functions
+    #################################
+    def distort_rays3d(self, rays3d_3xN):
+        """
+        This function projects 3d points in camera coordinate system using the angle-of-incidence projection model.
+        Any 3D point in space P=(X,Y,Z,1)^T has a radius with respect to the optical axis Z
+        r = ||X^2 + Y^2||
+        The angle of incidence to the optical center is
+        a = atan(r/Z)
+
+        The angle of incidence then spans from 0 to pi/2
+        The model of the lens relates the angle of incidence with the radius of the point in the image plane (in pixels):
+        "radial_poly" (4 distortion coefficients)
+            rp = k1*a + k2*a^2 + k3*a^3 + k4*a^4
+        "kannala" (5 distortion coefficients)
+            rp = k1*a + k2*a^3 + k3*a^5 + k4*a^7 + k5*a^9
+        "opencv_fisheye" (4 distortion coefficients, equivalent to Kannala with k1=1.0, so only the last 4 terms are used
+            rp = a + k1*a^3 + k2*a^5 + k3*a^7 + k4*a^9         
+
+        Then, the distorted 3d rays are computed as:
+        ray_dist = (X*rp/r, Y*rp/r, 1)
+
+        :param rays3d_3xN: 3d rays as 3xN arrays
+        :return: distorted 3d rays as 3xN arrays after applying distortion function.
+        """
+        N = rays3d_3xN.shape[1]
+        if N == 0 or not self.is_distorted():
+            rays3d_dist_3xN = np.array([[]])
+            return rays3d_dist_3xN
+
+        rays3d_dist_3xN = np.zeros((3, N))
+        for i in range(0, N):
+            X = rays3d_3xN[0, i]
+            Y = rays3d_3xN[1, i]
+            Z = rays3d_3xN[2, i]
+            r = utils.norm([X, Y])
+            a = math.atan2(r, Z)
+            rp = self.__apply_polynomial(a, self.d_1xN.flatten().tolist(), self.model)  # direct distortion, use specified model
+            rp_r = float(rp/r)
+            if r > 1e-8:
+                rays3d_dist_3xN[0, i] = X * rp_r
+                rays3d_dist_3xN[1, i] = Y * rp_r
+                rays3d_dist_3xN[2, i] = 1
+            else:
+                rays3d_dist_3xN[0, i] = 0
+                rays3d_dist_3xN[1, i] = 0
+                rays3d_dist_3xN[2, i] = 1
+
+        return rays3d_dist_3xN
+
+    def project_points3d(self, points3d_4xN, remove_outside=False):
+        """
+        This function projects 3d points in camera coordinate system into the image plane.
+        First, 3d points P=(X,Y,Z,1)^T are treated as 3d rays, and distorted using the angle of incidence equation.
+        Distorted 3d rays are then projected using the linear camera calibration matrix K.        
+
+        :param points3d_4xN: 3D points in camera coordinate system        
+        :param remove_outside: filter out points that fall outside the limits of the image frame.
+        :return: 2D points in image plane, as 3xN array, in hom. coordinates, and boolean array of valid
+        """
+        # 0.- Pre-filter
+        assert (points3d_4xN.ndim == 2)
+        N = points3d_4xN.shape[1]
+        if N == 0:
+            return np.array([[]]), []
+
+        # 1.- Select only those z > 0 (in front of the camera)
+        if self.limit_to_180_degrees:
+            idx_in_front = points3d_4xN[2, :] > 1e-8
+            idx_valid = idx_in_front
+        else:
+            idx_valid = [True] * N
+
+        # 2.- Distort rays3d if distorted
+        rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
+        rays3d_3xN = np.full([3, N], np.nan)
+        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt
+
+        # Now distort (only non-nans)
+        rays3d_3xN_filt = rays3d_3xN[:, idx_valid]
+        rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt)  # no nan should go into it
+
+        # Add nans
+        rays3d_3xN = np.full([3, N], np.nan)
+        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
+
+        # 3.- Project using calibration matrix        
+        points2d_3xN = self.K_3x3.dot(rays3d_3xN)
+        if remove_outside:
+            points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)        
+
+        return points2d_3xN, idx_valid
+
+    def reproject_points2d(self, points2d_3xN):
+        N = points2d_3xN.shape[1]       
+
+        # Get rays3d applying K^-1 and then undistortion
+        rays3d_dist_3xN = utils.inv(self.K_3x3).dot(points2d_3xN)
+        rays3d_3xN = self.undistort_rays3d(rays3d_dist_3xN=rays3d_dist_3xN)
+
+        return rays3d_3xN
+
+    #################################
+    # Inner functions 
+    #################################
     def __has_remaps(self):
         if self.mapX_to_und_16SC2 is None or self.mapY_to_und_16SC2 is None:
             return False
@@ -1199,37 +1119,76 @@ class CameraFisheye(Camera):
         end = time.time()
         print("CameraFisheye: Compute remaps for undistortion... ", end - start)
 
-    def __apply_polynomial(self, x, k1, k2, k3, k4):
+    def __polynomial_with_offset(self, x, k1, k2, k3, k4, k5, k6, k7, k8, k9):
         x2 = x * x
         x3 = x2 * x
         x4 = x3 * x
-        y = x * k1 + x2 * k2 + x3 * k3 + x4 * k4
-        return y
+        x5 = x4 * x
+        x6 = x5 * x
+        x7 = x6 * x
+        x8 = x7 * x
+        return k1 + x*k2 + x2*k3 + x3*k4 + x4*k5 + x5*k6 + x6*k7 + x7*k8 + x8*k9
 
-    def __invert_polynomial(self, d, n=100):
-        a = np.linspace(0, np.pi/2, num=n)
-        k1 = d[0, 0]
-        k2 = d[0, 1]
-        k3 = d[0, 2]
-        k4 = d[0, 3]
-        rp = self.__apply_polynomial(a, k1, k2, k3, k4)
-        kp = np.polyfit(rp, a, 4)
-        kp1 = kp[3]
-        kp2 = kp[2]
-        kp3 = kp[1]
-        kp4 = kp[0]
+    def __radialpoly_model_function(self, x, k1, k2, k3, k4):
+        x2 = x * x
+        x3 = x2 * x
+        x4 = x3 * x
+        return x * k1 + x2 * k2 + x3 * k3 + x4 * k4
 
-        a_rep = self.__apply_polynomial(rp, kp1, kp2, kp3, kp4)
+    def __kannala_model_function(self, x, k1, k2, k3, k4, k5):
+        x2 = x * x
+        x3 = x2 * x
+        x5 = x3 * x2
+        x7 = x5 * x2
+        x9 = x7 * x2
+        return x * k1 + x3 * k2 + x5 * k3 + x7 * k4 + x9 * k5
+
+    def __apply_polynomial(self, x, k, model=None):
+        if model == 'radial_poly':      
+            return self.__radialpoly_model_function(x, k[0], k[1], k[2], k[3])            
+        elif model == 'kannala':            
+            return self.__kannala_model_function(x, k[0], k[1], k[2], k[3], k[4])   
+        elif model == 'polynomial_offset':
+            return self.__polynomial_with_offset(x, k[0], k[1], k[2], k[3], k[4], k[5], k[6], k[7], k[8])  
+        else:
+            warnings.warn('Unsupported distortion model. Use radial_poly, kannala or polynomial_offset')
+            return None
+    
+    def __invert_polynomial(self, d, model, n=100):
+        a = np.linspace(0, np.pi/2, num=n)        
+        k_list = d.flatten().tolist()
+        
+        rp = self.__apply_polynomial(a, k_list, model)  # direct distortion, using model
+
+        # For the inverse polynomial, we can use numpy's polyfit, which fits p(x)=p(0)*x**deg + ... + p(deg)
+        dim = 9 # dimensions of the offset polynomial to represent the inverse distortion
+        kp = np.polyfit(rp, a, dim-1)  # polyfit return reversed coefficients with offset
+        kp_list = kp.tolist()
+        kp_list.reverse()  # kp_list[-1] is the offset
+        a_rep = self.__apply_polynomial(rp, kp_list, 'polynomial_offset')
 
         error_a = np.sum(np.abs(a-a_rep)) / n
-        error_a_deg = error_a * 180 / np.pi
+        self.error_a_deg = error_a * 180 / np.pi
 
-        if error_a_deg > 1e-1:
+        #fig, (ax1, ax2) = plt.subplots(1, 2)
+        #fig.suptitle('Distortion')
+        #ax1.plot(a, rp)
+        #ax1.set(xlabel='a', ylabel='rp', title='Distortion direct')
+        #ax1.grid()
+        #ax2.plot(a_rep, rp)
+        #ax2.set(xlabel='a_rep', ylabel='rp', title='Distortion reprojected')
+        #fig.savefig('distortion_ret.png')
+        #plt.show()
+
+        if self.error_a_deg > 1e-1:
             warnings.warn("WARNING: the inverse of the CameraFisheye distortion produces reprojection error > 1e-2 "
-                          "(i.e. higher than tenth of degree")
+                            "(i.e. higher than tenth of degree")
 
-        return np.array([[kp1, kp2, kp3, kp4]])
+        return np.array(kp_list)
 
+    #################################
+    # Other public functions
+    #################################
     def undistort_image(self, img):
         if not self.is_distorted():
             return img
@@ -1255,7 +1214,7 @@ class CameraFisheye(Camera):
         return points2d_dist_3xN
 
     def is_distorted(self):
-        return np.count_nonzero(self.d_1x4) > 0
+        return np.count_nonzero(self.d_1xN) > 0
 
     def undistort_rays3d(self, rays3d_dist_3xN):
         """
@@ -1273,12 +1232,9 @@ class CameraFisheye(Camera):
             X = rays3d_dist_3xN[0, i]
             Y = rays3d_dist_3xN[1, i]
             rp = utils.norm([X, Y])
-            a = self.__apply_polynomial(rp, self.d_inv_1x4[0, 0],
-                                         self.d_inv_1x4[0, 1],
-                                         self.d_inv_1x4[0, 2],
-                                         self.d_inv_1x4[0, 3])
+            a = self.__apply_polynomial(rp, self.d_inv_1xM.flatten().tolist(), "polynomial_offset") # NOTE: the inverse polynomial is fixed to dim=4 with offset
             r = math.tan(a)
-            r_rp = np.float(r / rp)
+            r_rp = float(r / rp)
             if rp > 1e-8:
                 rays3d_und_3xN[0, i] = X * r_rp
                 rays3d_und_3xN[1, i] = Y * r_rp
@@ -1289,102 +1245,6 @@ class CameraFisheye(Camera):
                 rays3d_und_3xN[2, i] = 1
 
         return rays3d_und_3xN
-
-    def distort_rays3d(self, rays3d_3xN):
-        """
-        This function distort 3d rays according to the distortion function.
-        :param rays3d_3xN: 3d rays as 3xN arrays
-        :return: distorted 3d rays as 3xN arrays after applying distortion function.
-        """
-        N = rays3d_3xN.shape[1]
-        if N == 0 or not self.is_distorted():
-            rays3d_dist_3xN = np.array([[]])
-            return rays3d_dist_3xN
-
-        rays3d_dist_3xN = np.zeros((3, N))
-        for i in range(0, N):
-            X = rays3d_3xN[0, i]
-            Y = rays3d_3xN[1, i]
-            Z = rays3d_3xN[2, i]
-            r = utils.norm([X, Y])
-            a = math.atan2(r, Z)
-            rp = self.__apply_polynomial(a, self.d_1x4[0, 0], self.d_1x4[0, 1], self.d_1x4[0, 2], self.d_1x4[0, 3])
-            rp_r = np.float(rp/r)
-            if r > 1e-8:
-                rays3d_dist_3xN[0, i] = X*rp_r
-                rays3d_dist_3xN[1, i] = Y*rp_r
-                rays3d_dist_3xN[2, i] = 1
-            else:
-                rays3d_dist_3xN[0, i] = 0
-                rays3d_dist_3xN[1, i] = 0
-                rays3d_dist_3xN[2, i] = 1
-
-        return rays3d_dist_3xN
-
-    def project_points3d(self, points3d_4xN, apply_distortion=True, remove_outside=False):
-        """
-        This function projects 3d points in camera coordinate system using the angle-of-incidence projection model.
-        Any 3D point in space P=(X,Y,Z,1)^T has a radius with respect to the optical axis Z
-        r = ||X^2 + Y^2||
-        The angle of incidence to the optical center is
-        a = atan(r/Z)
-        The angle of incidence then spans from 0 to pi/2
-        The model of the lens relates the angle of incidence with the radius of the point in the image plane (in pixels):
-        rp = k1*a + k2*a^2 + k3*a^3 + k4*a^4
-        Then, the point in the image plane is recovered from rp as:
-        p = (X*rp/r + w/2 + cx, Y*rp/r + h/2 + cy)
-
-        If apply_distortion is True, the projection creates points in the distorted domain.
-        If apply_distortion is False, the projection creates points in the undistorted domain (NOT IMPLEMENTED!).
-
-        :param points3d_4xN: 3D points in camera coordinate system
-        :param apply_distortion: boolean to obtain points in the distorted domain.
-        :param remove_outside: filter out points that fall outside the limits of the image frame.
-        :return: 2D points in image plane, as 3xN array, in hom. coordinates, and boolean array of valid
-        """
-        # 0.- Pre-filter
-        assert (points3d_4xN.ndim == 2)
-        N = points3d_4xN.shape[1]
-        if N == 0:
-            return np.array([[]]), []
-
-        # 1.- Select only those z > 0 (in front of the camera)
-        idx_in_front = points3d_4xN[2, :] > 1e-8
-        idx_valid = idx_in_front
-
-        # 2.- Distort rays3d if distorted
-        rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
-        rays3d_3xN_filt = rays3d_3xN_filt[0:3, :] / rays3d_3xN_filt[2, :]  # so (x', y', 1), convenient for dist.
-        rays3d_3xN = np.full([3, N], np.nan)
-        rays3d_3xN[:, idx_valid] = rays3d_3xN_filt
-
-        if apply_distortion:
-            # Now distort (only non-nans)
-            rays3d_3xN_filt = rays3d_3xN[:, idx_valid]
-            rays3d_3xN_filt_dist = self.distort_rays3d(rays3d_3xN_filt)  # no nan should go into it
-
-
-            # DEBUG
-            #temp = self.undistort_rays3d(rays3d_3xN_filt_dist)
-            #error = np.linalg.norm(rays3d_3xN_filt - temp)
-
-            # Add nans
-            rays3d_3xN = np.full([3, N], np.nan)
-            rays3d_3xN[:, idx_valid] = rays3d_3xN_filt_dist
-
-        # 3.- Project using calibration matrix
-        if apply_distortion:
-            points2d_3xN = self.K_3x3.dot(rays3d_3xN)
-            if remove_outside:
-                points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_dist, idx_valid)
-        else:
-            if not self.__has_remaps():
-                self.__compute_remaps()
-            points2d_3xN = self.K_und_3x3.dot(rays3d_3xN)
-            if remove_outside:
-                points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size_undist, idx_valid)
-
-        return points2d_3xN, idx_valid
 
     def init_undistort_rectify_map(self, K_und_3x3, img_size_undist):
         # Create maps
@@ -1433,7 +1293,7 @@ class CameraFisheye(Camera):
         minx = float('inf')
         miny = float('inf')
         maxx = -float('inf')
-        maxy = -float('inf');
+        maxy = -float('inf')
         for i in range(0, 4):
             miny = min(miny, rays3d_und_3xN[1, i])
             maxy = max(maxy, rays3d_und_3xN[1, i])
@@ -1464,45 +1324,201 @@ class CameraFisheye(Camera):
 
         return K_new
 
-    def reproject_points2d(self, points2d_3xN, plane_cs, apply_undistorsion=True):
+
+class CameraCylindrical(Camera):
+    def __init__(self, camera_intrinsics, name, description, uri):
+        Camera.__init__(self, camera_intrinsics['width_px'],
+                        camera_intrinsics['height_px'],
+                        name, description, uri)
+
+        self.img_size = (self.width, self.height)
+        self.fovh = camera_intrinsics['fov_horz_rad']
+        self.fovv = camera_intrinsics['fov_vert_rad']
+        
+        # Converting from [fovh, 0] into [0, width]
+        self.mx = -self.width / self.fovh
+        self.nx = self.width
+        # Converting from [fovv/2, -fovv/2] into [0, height]
+        self.my = -self.height / self.fovv
+        self.ny = self.height/2.0
+
+        # Create calibration matrix
+        self.K_3x4 = np.array([[self.mx, 0.0, self.nx, 0.0],
+                               [0.0, self.my, self.ny, 0.0],
+                               [0.0, 0.0, 1.0, 0.0]])
+        self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
+        self.K_3x3_inv = utils.inv(self.K_3x3)
+
+    #################################
+    # Inherited functions
+    #################################
+    def distort_rays3d(self, rays3d_3xN):
+        '''
+        Cylindrical cameras don't have distortion
+        '''
+        return rays3d_3xN
+
+    def project_points3d(self, points3d_4xN, remove_outside=False):
+        # 1.- Select only those z > 0 (in front of the camera)
+        idx_in_front = points3d_4xN[2, :] > 1e-8
+        idx_valid = idx_in_front
+        #rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
+        rays3d_3xN_filt = points3d_4xN[0:3]#, idx_valid]
+
+        # Two-step process: use Ray2LL and the LL2Pixel
+        lonlat_2xN = self.__ray2LL(rays3d_3xN_filt, idx_valid)
+        points2d_3xN = self.__LL2Pixel(lonlat_2xN)
+
+        # Declare as non-valid points outisde the limits of the image        
         N = points2d_3xN.shape[1]
+        if remove_outside:
+            points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, self.img_size, idx_valid)
+
+        return points2d_3xN, idx_valid
+
+    def reproject_points2d(self, points2d_3xN):
+        lonlat_2xN = self.__pixel2LL(points2d_3xN)
+        return self.__LL2ray(lonlat_2xN)
+
+    #################################
+    # Inner functions
+    #################################
+    # ----------------------------------------------#
+    #                From 2D --> 3D                 #
+    # ----------------------------------------------#
+    def __LL2ray(self, lonlat_2xN):        
+        lon = lonlat_2xN[0, :]
+        lat = lonlat_2xN[1, :]        
+        x = np.cos(lon) * np.cos(lat)
+        y = -np.sin(lat)        
+        z = np.sin(lon) * np.cos(lat)        
+
+        points3d_3xN = np.vstack((np.vstack((x, y)), z))
+        return points3d_3xN
+
+    def __pixel2LL(self, points2d_3xN):
+        # See LL2Ray
+        #lon = (1/self.mx)*(x-self.nx)
+        #lat = (1/self.my)*(y-self.ny)
+
+        lonlat_3xN = self.K_3x3_inv @ points2d_3xN
+        lonlat_3xN /= lonlat_3xN[2,:]
+
+        return lonlat_3xN[0:2, :]    
+
+    # ----------------------------------------------
+    # From 3D -> 2D
+    # ----------------------------------------------
+    def __ray2LL(self, ray3d_4xN, idx_valid):
+        # See http://paulbourke.net/dome/dualfish2sphere/ but modified so the camera model is z-optical axis, x-right, y-bottom
+        X = ray3d_4xN[0, :]
+        Y = ray3d_4xN[1, :]
+        Z = ray3d_4xN[2, :]
+
+        lon_1xN = np.zeros(X.shape)
+        np.arctan2(Z, X, out=lon_1xN, where=idx_valid)
+        lat_1xN = np.zeros(Y.shape)
+        np.arctan2(-Y, np.sqrt(X*X + Z*Z), out=lat_1xN, where=idx_valid)
+
+        #lon_1xN = np.arctan2(ray3d_4xN[1,:], ray3d_4xN[0,:])
+        #lat_1xN = np.arctan2(ray3d_4xN[2,:], np.sqrt(ray3d_4xN[0,:]*ray3d_4xN[0,:] + ray3d_4xN[1,:]*ray3d_4xN[1,:]))
+        lonlat_2xN = np.vstack((lon_1xN, lat_1xN))
+        return lonlat_2xN
+
+    def __LL2Pixel(self, lonlat_2xN):
+        lonlat_3xN = np.vstack((lonlat_2xN, np.ones((1, lonlat_2xN.shape[1]))))
+        points2d_3xN = self.K_3x3 @ lonlat_3xN
+        #px = self.mx*lon + self.nx
+        #py = self.my*lat + self.ny
+        return points2d_3xN
+
+
+class CameraOrthographic(Camera):
+    '''
+    This is a special type of camera which does not project 3d entities using a pinhole nor distorted lens.
+    It does project 3d points into the Z_cam = 0 image plane keeping their X_cam and Y_cam values.
+    A rectangular frustrum is created defining the (xmax, xmin, ymax, ymin) clipping planes (in camera coordinate system).
+    To keep coherency with other Cameras in VCD, the camera model has Z-front, X-right, Y-bottom.
+
+    An additional scaling and centering camera calibration matrix is used to create images with desired number of pixels.
+    '''
+    def __init__(self, camera_intrinsics, name, description, uri):
+        Camera.__init__(self, camera_intrinsics['width_px'],
+                        camera_intrinsics['height_px'],
+                        name, description, uri)
+
+        self.img_size = (self.width, self.height)
+        self.xmax = camera_intrinsics['xmax']
+        self.xmin = camera_intrinsics['xmin']
+        self.ymax = camera_intrinsics['ymax']
+        self.ymin = camera_intrinsics['ymin']
+
+        # Create calibration matrix
+        sx = self.width*(1.0/(self.xmax-self.xmin))
+        sy = self.height*(1.0/(self.ymax-self.ymin))
+        cx = -self.xmin * sx
+        cy = -self.ymin * sy
+        #self.K_3x3 = np.array([[sx, 0.0, cx],
+        #                       [0.0, sy, cy],
+        #                       [0.0, 0.0,1.0]])
+
+        self.K_3x4 = np.array([[sx, 0.0, 0.0, cx],
+                               [0.0, sy, 0.0, cy],
+                               [0.0, 0.0, 0.0, 1.0]])
+        # NOTE: K_3x3 has no meaning for an orthographic camera, because it is not a pinhole model, and then
+        # there are no rays going through the optical center. 4x1 need to be used along with K_3x4
+        #self.K_3x3 = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4)
+        #         
+        # Note that the orthographic projection matrix is not invertible in homogeneous form. Let's do it manually
+        sx_inv = 1/sx
+        sy_inv = 1/sy
+
+        self.K_3x4_inv = np.array([[sx_inv, 0.0, self.xmin, 0.0],
+                               [0.0, sy_inv, self.ymin, 0.0],
+                               [0.0, 0.0, 1.0, 0.0]])                
+        self.K_3x3_inv = utils.fromCameraMatrix3x4toCameraMatrix3x3(self.K_3x4_inv)
+
+    #################################
+    # Inherited functions
+    #################################
+    def distort_rays3d(self, rays3d_3xN):
+        # Orthographic cameras don't have distortion
+        return rays3d_3xN
+    
+    def project_points3d(self, points3d_4xN, remove_outside=False):
+        # 0.- Pre-filter
+        assert (points3d_4xN.ndim == 2)
+        N = points3d_4xN.shape[1]
         if N == 0:
             return np.array([[]]), []
-        idx_valid = [True] * N
 
-        # Undistort rays
-        if apply_undistorsion:
-            # First, get rays3d applying K^-1
-            rays3d_dist_3xN = utils.inv(self.K_3x3).dot(points2d_3xN)
-            rays3d_3xN = self.undistort_rays3d(rays3d_dist_3xN=rays3d_dist_3xN)
-        else:
-            # For those cases where this function is given undistorted points
-            rays3d_dist_3xN = utils.inv(self.K_und_3x3).dot(points2d_3xN)
-            rays3d_3xN = rays3d_dist_3xN
+        # 1.- Select only those within limits
+        idx_is_inside = (
+            (points3d_4xN[0, :] > self.xmin) &
+            (points3d_4xN[0, :] < self.xmax) &
+            (points3d_4xN[1, :] > self.ymin) &
+            (points3d_4xN[1, :] < self.ymax) &
+            (points3d_4xN[2, :] > 1e-8)
+        )
+        
+        idx_valid = idx_is_inside
+        #rays3d_3xN_filt = points3d_4xN[0:3, idx_valid]
+        
+        # 2.- Project using calibration matrix
+        #rays3d_4xN = np.vstack((rays3d_3xN_filt, np.ones(rays3d_3xN_filt.shape[1])))
+        #rays3d_4xN = np.vstack((rays3d_3xN_filt, np.ones(rays3d_3xN_filt.shape[1])))
+        
+        points2d_3xN = self.K_3x4 @ points3d_4xN
+        #points2d_3xN /= points2d_3xN[2,:] NOTE: Ortographic projection is no friend of homogeneous coordinates
 
-        # Use Plucker intersection line-plane
-        # Create Plucker line using 2 points: origin of camera and origin of camera + ray
-        P1 = np.vstack((0, 0, 0, 1))
-        P2array = np.vstack((rays3d_3xN, np.ones((1, N))))
-        # Plane equation in plucker coordinates (wrt to world)
-        P = np.asarray(plane_cs).reshape(4, 1)
-        # Line equation in plucker coordinates
-        p3dNx4 = np.array([])
-        count = 0
-        for P2 in P2array.T:
-            P2 = P2.reshape(4, 1)
-            L = np.matmul(P1, np.transpose(P2)) - np.matmul(P2, np.transpose(P1))
-            # Intersection is a 3D point
-            p3Dlcs = np.matmul(L, P)
-            if p3Dlcs[3][0] != 0:
-                p3Dlcs /= p3Dlcs[3][0]  # homogeneous
-            else:
-                # This is an infinite point: return direction vector instead
-                norm = np.linalg.norm(p3Dlcs[:3][0])
-                p3Dlcs /= norm
-                idx_valid[count] = False
-            p3dNx4 = np.append(p3dNx4, p3Dlcs)
-            count += 1
-        p3dNx4 = p3dNx4.reshape(p3dNx4.shape[0] // 4, 4)
-        p3d_4xN = np.transpose(p3dNx4)
-        return p3d_4xN, idx_valid
+        if remove_outside:
+            points2d_3xN, idx_valid = utils.filter_outside(points2d_3xN, (self.width, self.height), idx_valid)
+
+        return points2d_3xN, idx_valid
+
+    def reproject_points2d(self, points2d_3xN):        
+        rays3d_3xN = self.K_3x3_inv @ points2d_3xN
+        #rays3d_3xN = utils.normalize(rays3d_3xN)
+        return rays3d_3xN
+        
+    

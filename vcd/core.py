@@ -1,12 +1,12 @@
 """
-VCD (Video Content Description) library v5.0.0
+VCD (Video Content Description) library v5.0.1
 
 Project website: http://vcd.vicomtech.org
 
 Copyright (C) 2021, Vicomtech (http://www.vicomtech.es/),
 (Spain) all rights reserved.
 
-VCD is a Python library to create and manage VCD content version 5.0.0.
+VCD is a Python library to create and manage VCD content version 5.0.1.
 VCD is distributed under MIT License. See LICENSE.
 
 """
@@ -360,8 +360,10 @@ class VCD:
                         if frames:  # So frames is not empty
                             self.data['openlabel']['frames'] = {int(key): value for key, value in frames.items()}
                 else:
-                    Exception(
+                    raise Exception(
                         "ERROR: This OpenLABEL file has version different than 1.0.0. This API is incompatible.")                
+            else:
+                raise Exception("ERROR: This JSON file does not have \"vcd\" nor \"openlabel\" at root level.")
 
             # Close file
             json_file.close()
