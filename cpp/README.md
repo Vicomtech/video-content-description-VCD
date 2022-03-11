@@ -12,7 +12,7 @@ To build and install the VCD-C++ library, first, generate the project using CMak
 First, open a terminal, and clone the repository content to your machine on the desired folder:
 
 ```
-$ git clone git@github.com:Vicomtech/video-content-description-VCD.git
+$ git clone git@github.com:Vicomtech/video-content-description-VCD.git --recurse-submodules
 ```
 
 Then go to the C++ version folder:
