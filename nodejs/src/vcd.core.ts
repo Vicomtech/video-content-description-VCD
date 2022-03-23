@@ -1940,7 +1940,7 @@ export class VCD {
                             }
                         }
                         //delete element[elementTypeName + '_data'][prop][idx_to_remove]
-                        element[elementTypeName + '_data'][prop].splice(idx_to_remove, 1)  // because we want to extract the element and not left it null
+                        if(idx_to_remove !== null && idx_to_remove !== undefined) element[elementTypeName + '_data'][prop].splice(idx_to_remove, 1); // because we want to extract the element and not left it null
                         if (element[elementTypeName + '_data'][prop].length == 0)
                             delete element[elementTypeName + '_data'][prop]  // e.g. 'bbox': [] is empty so let's delete it
                             if (Object.keys(element[elementTypeName + '_data']).length == 0)
