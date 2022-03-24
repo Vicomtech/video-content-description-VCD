@@ -326,6 +326,8 @@ class Scene:
                 camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
             elif 'intrinsics_orthographic' in sp:
                 camera = CameraOrthographic(sp['intrinsics_orthographic'], camera_name, description, uri)
+            elif 'intrinsics_cubemap' in sp:
+                camera = CameraCubemap(sp['intrinsics_cubemap'], camera_name, description, uri, compute_remaps)
             else:
                 warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye, CameraCylindrical and CameraOrthographic. See types.py.")
         else:
@@ -351,6 +353,8 @@ class Scene:
                             camera = CameraCylindrical(sp['intrinsics_cylindrical'], camera_name, description, uri)
                         elif 'intrinsics_orthographic' in sp:
                             camera = CameraOrthographic(sp['intrinsics_orthographic'], camera_name, description, uri)
+                        elif 'intrinsics_cubemap' in sp:
+                            camera = CameraCubemap(sp['intrinsics_cubemap'], camera_name, description, uri, compute_remaps)
                         else:
                             warnings.warn("WARNING: SCL does not support customized camera models. Supported types are CameraPinhole, CameraFisheye, CameraCylindrical and CameraOrthographic. See types.py.")
             else:
@@ -560,7 +564,7 @@ class Scene:
         rays3d_3xN = cam.reproject_points2d(points2d_3xN)
         return rays3d_3xN
         
-    def create_img_projection_maps(self, cam_src_name, cam_dst_name, frameNum):
+    def create_img_projection_maps(self, cam_src_name, cam_dst_name, frameNum, filterZNeg = False):
         ''' In SCL, extrinsic and intrinsic parameters are detached.
             Extrinsic parameters are defined at the VCD's coordinate systems.
             Intrinsic parameters are defined as VCD's stream_properties
@@ -579,6 +583,17 @@ class Scene:
 
         # Reproject as rays3d in cam_dst coordinate system
         rays3d_dst_3xN = cam_dst.reproject_points2d(points2d_dst_3xN)
+
+        if filterZNeg:
+            '''
+            Filter Z negative rays.
+            From camera reprojection matrix, x = z * ( u - cx) / fx.
+            Z is negative if and only if x and (u - cx) / fx have opposite signs.
+            '''
+            cx = cam_dst.K_3x3[0,2]
+            fx = cam_dst.K_3x3[0,0]
+            is_z_negative  = rays3d_dst_3xN[0,:] * (points2d_dst_3xN[0,:] - cx) / fx < 0
+            rays3d_dst_3xN[:, np.where(is_z_negative)] = np.nan
 
         # Convert into cam_src coordinate system
         if cam_dst.__class__ is CameraOrthographic:
@@ -1520,5 +1535,140 @@ class CameraOrthographic(Camera):
         rays3d_3xN = self.K_3x3_inv @ points2d_3xN
         #rays3d_3xN = utils.normalize(rays3d_3xN)
         return rays3d_3xN
+
+
+class CameraCubemap(Camera):
+    """
+    The Cubemap camera model defines 6 pinhole cameras all same calibration
+    with FOV 90ยบ
+    It is intended to build fisheye images from it.
+    """
+    def __init__(self, camera_intrinsics, name, description, uri, compute_remaps=False):
         
-    
+        # Define rotation angles for each Pinhole camera
+        R_front   = utils.euler2R([0,       0,             0])
+        R_back    = utils.euler2R([0,    -np.pi,           0])
+        R_top     = utils.euler2R([0,       0,      -np.pi/2])
+        R_bottom  = utils.euler2R([0,       0,     np.pi / 2])
+        R_left    = utils.euler2R([0,   np.pi / 2,         0])
+        R_right   = utils.euler2R([0,  -np.pi / 2,         0])
+        
+        # Obtain pose for each Pinhole camera
+        C        = np.array([0,0,0]).reshape(3, 1)
+        P_front  = utils.create_pose(R_front,  C)
+        P_back   = utils.create_pose(R_back,   C)
+        P_left   = utils.create_pose(R_left,   C)
+        P_right  = utils.create_pose(R_right,  C)
+        P_top    = utils.create_pose(R_top,    C)
+        P_bottom = utils.create_pose(R_bottom, C)
+
+        self.cameras = {"frontal": (CameraPinhole(camera_intrinsics=camera_intrinsics, name=name, description=description, uri=uri, compute_remaps=compute_remaps), P_front),
+        "back":   (CameraPinhole(camera_intrinsics=camera_intrinsics, name=name, description=description, uri=uri, compute_remaps=compute_remaps), P_back),
+        "left":   (CameraPinhole(camera_intrinsics=camera_intrinsics, name=name, description=description, uri=uri, compute_remaps=compute_remaps), P_left),
+        "right":  (CameraPinhole(camera_intrinsics=camera_intrinsics, name=name, description=description, uri=uri, compute_remaps=compute_remaps), P_right),
+        "top":    (CameraPinhole(camera_intrinsics=camera_intrinsics, name=name, description=description, uri=uri, compute_remaps=compute_remaps), P_top),
+        "bottom": (CameraPinhole(camera_intrinsics=camera_intrinsics, name=name, description=description, uri=uri, compute_remaps=compute_remaps), P_bottom)}
+
+    def project_points3d(self, points3d_4xN, remove_outside=True):
+
+        # Choose which pinhole camera
+        x = points3d_4xN[0,:]
+        y = points3d_4xN[1,:]
+        z = points3d_4xN[2,:]
+
+        max_axis = np.maximum.reduce([abs(x), abs(y), abs(z)])
+
+        RIGHT   = 0
+        LEFT    = 1
+        BOTTOM  = 2
+        TOP     = 3
+        FRONTAL = 4
+        BACK    = 5
+
+        face = np.full(( points3d_4xN.shape), None)
+        face[:, np.where(np.isclose(max_axis,  x))]     = RIGHT     # right
+        face[:, np.where(np.isclose(max_axis, -x))]     = LEFT      # left
+        face[:, np.where(np.isclose(max_axis,  y))]     = BOTTOM    # bottom
+        face[:, np.where(np.isclose(max_axis, -y))]     = TOP       # top
+        face[:, np.where(np.isclose(max_axis,  z))]     = FRONTAL   # frontal
+        face[:, np.where(np.isclose(max_axis, -z))]     = BACK      # back
+ 
+        # Apply
+        frontal_points = points3d_4xN[:, np.all(face == FRONTAL, axis = 0)]
+        right_points   = points3d_4xN[:, np.all(face == RIGHT, axis = 0)]
+        left_points    = points3d_4xN[:, np.all(face == LEFT, axis = 0)]
+        bottom_points  = points3d_4xN[:, np.all(face == BOTTOM, axis = 0)]
+        top_points     = points3d_4xN[:, np.all(face == TOP, axis = 0)]
+        back_points    = points3d_4xN[:, np.all(face == BACK, axis = 0)]
+
+
+        right_points  = utils.transform_points3d_4xN(right_points,  self.cameras["right"][1])
+        left_points   = utils.transform_points3d_4xN(left_points,   self.cameras["left"][1])
+        bottom_points = utils.transform_points3d_4xN(bottom_points, self.cameras["bottom"][1])
+        top_points    = utils.transform_points3d_4xN(top_points,    self.cameras["top"][1])
+        back_points  = utils.transform_points3d_4xN(back_points,    self.cameras["back"][1])
+
+        points2d_3xN   = np.zeros((3, points3d_4xN.shape[1]))
+
+        if (frontal_points.size != 0):
+            front_cords, _   = self.cameras["frontal"][0].project_points3d(points3d_4xN=frontal_points)
+            # Add cubemap offset of frontal pinhole
+            front_cords[0,:] = front_cords[0, :] + self.cameras["frontal"][0].img_size_undist[0]
+            front_cords[1,:] = front_cords[1, :] + self.cameras["frontal"][0].img_size_undist[1]
+            points2d_3xN[:, np.all(face == FRONTAL, axis = 0)] = front_cords
+        
+        if (left_points.size != 0):
+            left_cords, _   = self.cameras["left"][0].project_points3d(points3d_4xN=left_points)
+            left_cords[1,:] = left_cords[1,:] + self.cameras["left"][0].img_size_undist[0]
+            left_cords[0,:] = left_cords[0,:]
+            points2d_3xN[:, np.all(face == LEFT, axis = 0)] = left_cords
+
+        if (right_points.size != 0):
+            right_cords, _   = self.cameras["right"][0].project_points3d(points3d_4xN=right_points)
+            right_cords[1,:] = right_cords[1,:] + self.cameras["right"][0].img_size_undist[0]
+            right_cords[0,:] = right_cords[0,:] + 2 * self.cameras["right"][0].img_size_undist[1]
+            points2d_3xN[:, np.all(face == RIGHT, axis = 0)] = right_cords
+
+
+        if (bottom_points.size != 0):
+            bottom_cords, _   = self.cameras["bottom"][0].project_points3d(points3d_4xN=bottom_points)
+            bottom_cords[1,:] = bottom_cords[1,:] + 2 * self.cameras["bottom"][0].img_size_undist[0]
+            bottom_cords[0,:] = bottom_cords[0,:] + self.cameras["bottom"][0].img_size_undist[1]
+            points2d_3xN[:, np.all(face == BOTTOM, axis = 0)] = bottom_cords
+
+        if (top_points.size != 0):
+            top_cords, _    = self.cameras["top"][0].project_points3d(points3d_4xN=top_points)
+            #top_cords[1,:] = top_cords[1,:] + self.cameras["top"][0].img_size_undist[0]
+            top_cords[0,:]  = top_cords[0,:] + self.cameras["top"][0].img_size_undist[1]
+            points2d_3xN[:, np.all(face == TOP, axis = 0)] = top_cords
+
+        if (back_points.size != 0):
+            back_cords, _ = self.cameras["back"][0].project_points3d(points3d_4xN=back_points)
+            back_cords[1,:] = back_cords[1,:] + self.cameras["back"][0].img_size_undist[0]
+            back_cords[0,:] = back_cords[0,:] + 3 * self.cameras["back"][0].img_size_undist[1]
+            points2d_3xN[:, np.all(face == 5, axis = 0)] = back_cords
+       
+        
+        # Consider only points behind camera (>180º)
+        idx_valid = []
+
+        return points2d_3xN, idx_valid
+
+    def reproject_points2d(self, points2d_3xN):
+        '''
+        Note: The cubemap camera is used as a step in order to generate fisheye cameras. Therefore there is no use
+        in reprojecting points in the cubemap image domain as rays in 3D coordinates. That is why the reprojection
+        function has not been implemented for this camera model.
+        '''
+        pass
+
+
+    def distort_rays3d(self, rays3d_3xN):
+        '''
+        This function distort rays3d using the distortion parameters of the camera.
+        As a result distorted rays3d are created which can then be projected using the camera calibration matrix.
+
+        :param rays3d_3xN: Array with N 3D rays, each of them as column (rx, ry, rz) 
+        :return: rays3d_dist_3xN: Array with N distorted 3D rays, each of them as column (rx', ry', rz')
+        '''
+        pass

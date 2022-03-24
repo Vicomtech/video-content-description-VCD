@@ -156,6 +156,31 @@ class IntrinsicsOrthographic(Intrinsics):
         if additional_items is not None:
             self.data['intrinsics_orthographic'].update(additional_items)
 
+class IntrinsicsCubemap(Intrinsics):
+    def __init__(self, width_px, height_px, camera_matrix_3x4, distortion_coeffs_1xN=None, **additional_items):
+        Intrinsics.__init__(self)
+        assert (isinstance(width_px, int))
+        assert (isinstance(height_px, int))
+        self.data['intrinsics_cubemap'] = dict()
+        self.data['intrinsics_cubemap']['width_px'] = width_px
+        self.data['intrinsics_cubemap']['height_px'] = height_px
+        assert (isinstance(camera_matrix_3x4, list))
+
+        assert(len(camera_matrix_3x4) == 12)
+        self.data['intrinsics_cubemap']['camera_matrix_3x4'] = camera_matrix_3x4
+
+        if distortion_coeffs_1xN is None:
+            distortion_coeffs_1xN = []
+        else:
+            assert (isinstance(distortion_coeffs_1xN, list))
+            num_coeffs = len(distortion_coeffs_1xN)
+            assert(4 <= num_coeffs <= 14)
+        self.data['intrinsics_cubemap']['distortion_coeffs_1xN'] = distortion_coeffs_1xN
+
+        if additional_items is not None:
+            self.data['intrinsics_cubemap'].update(additional_items)
+
+
 class IntrinsicsCustom(Intrinsics):
     def __init__(self, **additional_items):
         Intrinsics.__init__(self)
