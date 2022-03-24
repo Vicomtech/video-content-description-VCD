@@ -602,7 +602,7 @@ class Scene:
             points3d_4xN = points3d_z0_4xN
         else:
             points3d_4xN = utils.add_homogeneous_row(rays3d_dst_3xN)
-
+        
         rays3d_src_4xN = self.transform_points3d_4xN(points3d_4xN, cam_dst_name, cam_src_name, frameNum)
         rays3d_src_4xN /= rays3d_src_4xN[3, :]        
 
